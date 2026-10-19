@@ -1,0 +1,64 @@
+{
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "canonical_status": "clean",
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "machine": "arm64",
+  "precision_backend": "__float128",
+  "compiler_versions": {
+    "/opt/homebrew/bin/gcc-16": "gcc-16 (Homebrew GCC 16.2.0) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "/opt/homebrew/bin/g++-16": "g++-16 (Homebrew GCC 16.2.0) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "/opt/homebrew/bin/gfortran-16": "GNU Fortran (Homebrew GCC 16.2.0) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+  },
+  "instrumentation_sha256": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed",
+  "build_manifest_sha256": "eafbe010b9b2b6af8d1d230530c822e83dbd6658b03c86373ba8c4dff17cf4cc",
+  "files": {
+    "checks/precision.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/checks/precision.json",
+      "snapshot": "results/reference_inputs/precision.json",
+      "sha256": "da8e763e0eb1f27f0a3f1022c784115b9703152ef9cce65da11faba8f783d622"
+    },
+    "export_reference.cc": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/export_reference.cc",
+      "snapshot": "results/reference_inputs/export_reference.cc",
+      "sha256": "06b609fe7c0a9f5466ffebbb908908e94bbddbd5e00be303060c200a6fdbca11"
+    },
+    "REPORT.md": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/REPORT.md",
+      "snapshot": "results/reference_inputs/REPORT.md",
+      "sha256": "d2f72a19ed21e61ff4705730878fbdb0d2be128b74b3f62627d4b947570fb75e"
+    },
+    "outputs/barycentric.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/barycentric.json",
+      "snapshot": "results/reference_inputs/barycentric.json",
+      "sha256": "1fc08fece76a70953be3833a19f31d8d22c319f63035b0c0a9989cd07c06283b",
+      "derived_tsv": "results/reference_inputs/test1.tim-standard.tsv",
+      "derived_tsv_sha256": "27a63cd1cc4ba80272a6aa47ee2fbbf197bffb1f9ed0e602406a610641b7c440",
+      "availability": "available"
+    },
+    "outputs/barycentric_4ns.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/barycentric_4ns.json",
+      "snapshot": "results/reference_inputs/barycentric_4ns.json",
+      "sha256": "a1ecfb699e9ce604e638a34557e3f7a31b7eec2daee22084146863a632411209",
+      "derived_tsv": "results/reference_inputs/test1.tim-subtractBATs.tsv",
+      "derived_tsv_sha256": "d874f3c0f9f58f593382ab5df2ccf7e3b3015c8f88ab64f8ec567d087670ea3a",
+      "availability": "available"
+    },
+    "outputs/terrestrial.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/terrestrial.json",
+      "snapshot": "results/reference_inputs/terrestrial.json",
+      "sha256": "92821e622e771f03d33df94106b5530b38c4f620e673a00a11ef082eaa470e1c",
+      "derived_tsv": "results/reference_inputs/test2.tim-standard.tsv",
+      "derived_tsv_sha256": "4e5699e927998f7d25eb4fc636449c21d72477e6b098fd499f8804395bd0e2d4",
+      "availability": "provisional_uninitialized_upstream_state"
+    },
+    "outputs/long_span.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/long_span.json",
+      "snapshot": "results/reference_inputs/long_span.json",
+      "sha256": "d9bd24182b7a01ca892aec4772b3c999ab92b649763b81583a44f609806b7b4c",
+      "derived_tsv": "results/reference_inputs/long_span.tsv",
+      "derived_tsv_sha256": "c1b72889d37244d631e15163ede30f7b153575adf12aeb4bc7ba241b9fd9a98b",
+      "availability": "available"
+    }
+  },
+  "scope": "A completed exports; terrestrial remains provisional. Re-evaluate exported bbat through phase only, not observatory corrections."
+}

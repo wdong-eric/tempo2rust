@@ -1,0 +1,3 @@
+Initial sandbox fetch failed: index.crates.io DNS unavailable.
+Approved retry fetched the pinned dependencies successfully.
+Cargo.lock records the resolved packages and registry checksums.

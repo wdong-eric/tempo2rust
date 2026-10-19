@@ -1,0 +1,13 @@
+case	value
+epoch_36_digits	56000.7891239850938920868723499999978
+epoch_default_format	56000.8
+recovered_1e-9_s	1.00000000000000024241955688680834421e-09
+recovered_-1e-9_s	-1.00000000000000024241955688680834421e-09
+recovered_4e-9_s	3.99999999999999987915691216970665703e-09
+recovered_-4e-9_s	-3.99999999999999987915691216970665703e-09
+parse_"bad"	OK:0
+parse_"1junk"	OK:1
+parse_"1D-3"	OK:1
+parse_"NaN"	OK:nan
+parse_"inf"	OK:inf
+parse_"1\0junk"	ERROR:nul byte found in provided data at position: 1

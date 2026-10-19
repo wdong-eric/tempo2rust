@@ -1,0 +1,75 @@
+error[E0658]: the type `f128` is unstable
+ --> probes/builtin_arithmetic.rs:4:38
+  |
+4 |     let epoch = std::hint::black_box(56000.78912398509389208687235_f128);
+  |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: the type `f128` is unstable
+ --> probes/builtin_arithmetic.rs:5:38
+  |
+5 |     let delay = std::hint::black_box(1e-9_f128);
+  |                                      ^^^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: the type `f128` is unstable
+ --> probes/builtin_arithmetic.rs:8:41
+  |
+8 |     assert!((recovered - delay).abs() < 1e-12_f128);
+  |                                         ^^^^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:7:83
+  |
+7 |     println!("epoch={:032x} delay={:032x} recovered={:032x} error={:032x}", epoch.to_bits(), delay.to_bits(), recovered.to_bits(), (r...
+  |                                                                                   ^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:7:100
+  |
+7 |     println!("epoch={:032x} delay={:032x} recovered={:032x} error={:032x}", epoch.to_bits(), delay.to_bits(), recovered.to_bits(), (r...
+  |                                                                                                    ^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:7:121
+  |
+7 |     println!("epoch={:032x} delay={:032x} recovered={:032x} error={:032x}", epoch.to_bits(), delay.to_bits(), recovered.to_bits(), (r...
+  |                                                                                                                         ^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:7:150
+  |
+7 | ...s(), delay.to_bits(), recovered.to_bits(), (recovered-delay).to_bits());
+  |                                                                 ^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:8:33
+  |
+8 |     assert!((recovered - delay).abs() < 1e-12_f128);
+  |                                 ^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error[E0658]: use of unstable library feature `f128`
+ --> probes/builtin_arithmetic.rs:9:74
+  |
+9 |     println!("f128 arithmetic passed; recovered bits={:032x}", recovered.to_bits());
+  |                                                                          ^^^^^^^
+  |
+  = note: see issue #116909 <https://github.com/rust-lang/rust/issues/116909> for more information
+
+error: aborting due to 9 previous errors
+
+For more information about this error, try `rustc --explain E0658`.

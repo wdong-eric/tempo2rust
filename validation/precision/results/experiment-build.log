@@ -1,0 +1,3 @@
+   Compiling tempo2-precision-study v0.1.0 (/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.00s
+     Running `target/release/tempo2-precision-study`

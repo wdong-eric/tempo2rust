@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "engine": {
+    "name": "tempo2-rust",
+    "version": "0.1.0",
+    "numeric_backend": "Rug 1.30.0 / MPFR",
+    "significand_bits": 128,
+    "arithmetic_rounding": "nearest, ties to even; pulse selection uses signed half then truncation",
+    "support_profile": "M1a isolated TCB @ F0-F3",
+    "source_correspondence": "TEMPO2 fda6ad4a9753ad7dc5d291406f2f310a9161423f; accepted reference 7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572"
+  },
+  "input": {
+    "par": {
+      "path": "rust/tests/reference/fixtures/original/test1.par",
+      "sha256": "c3ac6a628beeea72e9cae2d98cfb7b08ba126834e12058ee1af9a74db65c870e",
+      "text": "PSRJ           J0000-0000\nRAJ             01:00:00.00000\nDECJ           -00:00:00.00000\nF0             1.00\nPEPOCH         50000.0\nPOSEPOCH         50000.0\nDMEPOCH         50000.0\nDM             100.0\nEPHVER         5\nCLK            TT(TAI)\nEPHEM          DE405\nTZRMJD 50000.0\nTZRFREQ 1400.0\nTZRSITE @\n"
+    },
+    "tim": {
+      "path": "rust/tests/reference/fixtures/original/test1.tim",
+      "sha256": "420ea336f60b68faa268fbb7ba0b9dce2a4b8792c00b9ff9861187264756d9aa",
+      "text": "FORMAT 1\ntest 1400.0 50000.00 10.0 @\ntest 1400.0 50000.01 10.0 @\ntest 1400.0 50000.04000462962962962963 10.0 @\n"
+    },
+    "parameters": {
+      "DECJ": {
+        "value": "-0",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 3,
+          "keyword": "DECJ",
+          "tokens": [
+            "-00:00:00.00000"
+          ],
+          "raw_line": "DECJ           -00:00:00.00000"
+        }
+      },
+      "DM": {
+        "value": "100.0000000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 8,
+          "keyword": "DM",
+          "tokens": [
+            "100.0"
+          ],
+          "raw_line": "DM             100.0"
+        }
+      },
+      "DMEPOCH": {
+        "value": "50000.00000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 7,
+          "keyword": "DMEPOCH",
+          "tokens": [
+            "50000.0"
+          ],
+          "raw_line": "DMEPOCH         50000.0"
+        }
+      },
+      "EPHVER": {
+        "value": "5.000000000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 9,
+          "keyword": "EPHVER",
+          "tokens": [
+            "5"
+          ],
+          "raw_line": "EPHVER         5"
+        }
+      },
+      "F0": {
+        "value": "1.000000000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 4,
+          "keyword": "F0",
+          "tokens": [
+            "1.00"
+          ],
+          "raw_line": "F0             1.00"
+        }
+      },
+      "F1": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "F2": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "F3": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "PEPOCH": {
+        "value": "50000.00000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 5,
+          "keyword": "PEPOCH",
+          "tokens": [
+            "50000.0"
+          ],
+          "raw_line": "PEPOCH         50000.0"
+        }
+      },
+      "POSEPOCH": {
+        "value": "50000.00000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 6,
+          "keyword": "POSEPOCH",
+          "tokens": [
+            "50000.0"
+          ],
+          "raw_line": "POSEPOCH         50000.0"
+        }
+      },
+      "RAJ": {
+        "value": "2.617993877991494078294465452927397564054e-1",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 2,
+          "keyword": "RAJ",
+          "tokens": [
+            "01:00:00.00000"
+          ],
+          "raw_line": "RAJ             01:00:00.00000"
+        }
+      },
+      "TZRFRQ": {
+        "value": "1400.000000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 13,
+          "keyword": "TZRFREQ",
+          "tokens": [
+            "1400.0"
+          ],
+          "raw_line": "TZRFREQ 1400.0"
+        }
+      },
+      "TZRMJD": {
+        "value": "50000.00000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 12,
+          "keyword": "TZRMJD",
+          "tokens": [
+            "50000.0"
+          ],
+          "raw_line": "TZRMJD 50000.0"
+        }
+      }
+    },
+    "text_parameters": {
+      "CLK": {
+        "line": 10,
+        "keyword": "CLK",
+        "tokens": [
+          "TT(TAI)"
+        ],
+        "raw_line": "CLK            TT(TAI)"
+      },
+      "EPHEM": {
+        "line": 11,
+        "keyword": "EPHEM",
+        "tokens": [
+          "DE405"
+        ],
+        "raw_line": "EPHEM          DE405"
+      },
+      "PSRJ": {
+        "line": 1,
+        "keyword": "PSRJ",
+        "tokens": [
+          "J0000-0000"
+        ],
+        "raw_line": "PSRJ           J0000-0000"
+      },
+      "TZRSITE": {
+        "line": 14,
+        "keyword": "TZRSITE",
+        "tokens": [
+          "@"
+        ],
+        "raw_line": "TZRSITE @"
+      }
+    },
+    "observations": [
+      {
+        "original": {
+          "index": 0,
+          "line": 2,
+          "name": "test",
+          "raw_line": "test 1400.0 50000.00 10.0 @",
+          "frequency_mhz_text": "1400.0",
+          "sat_mjd_text": "50000.00",
+          "toa_error_us_text": "10.0",
+          "site": "@"
+        },
+        "sat_mjd": "50000.00000000000000000000000000000000000",
+        "frequency_mhz": 1400.0,
+        "toa_error_us": 10.0
+      },
+      {
+        "original": {
+          "index": 1,
+          "line": 3,
+          "name": "test",
+          "raw_line": "test 1400.0 50000.01 10.0 @",
+          "frequency_mhz_text": "1400.0",
+          "sat_mjd_text": "50000.01",
+          "toa_error_us_text": "10.0",
+          "site": "@"
+        },
+        "sat_mjd": "50000.01000000000000000000000000000000001",
+        "frequency_mhz": 1400.0,
+        "toa_error_us": 10.0
+      },
+      {
+        "original": {
+          "index": 2,
+          "line": 4,
+          "name": "test",
+          "raw_line": "test 1400.0 50000.04000462962962962963 10.0 @",
+          "frequency_mhz_text": "1400.0",
+          "sat_mjd_text": "50000.04000462962962962963",
+          "toa_error_us_text": "10.0",
+          "site": "@"
+        },
+        "sat_mjd": "50000.04000462962962962962999999999999992",
+        "frequency_mhz": 1400.0,
+        "toa_error_us": 10.0
+      }
+    ],
+    "conventions": {
+      "time_scale": "TCB",
+      "units_resolution": "UNITS omitted; initialiseOne SI_UNITS/TCB default retained with EPHVER 5",
+      "phase_reference": "signed fractional reduced phase of first input TOA",
+      "remove_mean": false,
+      "fit_performed": false,
+      "input_order": "original; no cuts or sorting",
+      "corrections": "@ bypasses clock and propagation; isolated subset has BAT = BBAT = SAT"
+    }
+  },
+  "reference_phase_turn": "0",
+  "observations": [
+    {
+      "index": 0,
+      "sat_mjd": "50000.00000000000000000000000000000000000",
+      "bat_mjd": "50000.00000000000000000000000000000000000",
+      "bbat_mjd": "50000.00000000000000000000000000000000000",
+      "phase_turn": "0",
+      "nphase_turn": "0",
+      "pulse_number": "0",
+      "residual_s": "0"
+    },
+    {
+      "index": 1,
+      "sat_mjd": "50000.01000000000000000000000000000000001",
+      "bat_mjd": "50000.01000000000000000000000000000000001",
+      "bbat_mjd": "50000.01000000000000000000000000000000001",
+      "phase_turn": "864.0000000000000000000000000000006656014",
+      "nphase_turn": "864",
+      "pulse_number": "864",
+      "residual_s": "6.656013887802287108161459769573508812868e-31"
+    },
+    {
+      "index": 2,
+      "sat_mjd": "50000.04000462962962962962999999999999992",
+      "bat_mjd": "50000.04000462962962962962999999999999992",
+      "bbat_mjd": "50000.04000462962962962962999999999999992",
+      "phase_turn": "3456.400000000000000031999999999992932123",
+      "nphase_turn": "3456",
+      "pulse_number": "3456",
+      "residual_s": "4.000000000000000319999999999929321234945e-1"
+    }
+  ]
+}

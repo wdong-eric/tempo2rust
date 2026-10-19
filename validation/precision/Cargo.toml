@@ -1,0 +1,13 @@
+[package]
+name = "tempo2-precision-study"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+qd = "=0.8.0"
+rug = { version = "=1.30.0", default-features = false, features = ["float", "integer", "std"] }
+num-traits = "=0.2.19"
+
+[profile.release]
+debug = 1

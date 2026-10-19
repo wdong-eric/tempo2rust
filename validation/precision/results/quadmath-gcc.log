@@ -1,0 +1,5 @@
+   Compiling f128_internal v0.2.2
+   Compiling f128_input v0.2.1
+   Compiling f128 v0.2.9
+   Compiling quadmath-feasibility v0.1.0 (/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/probes/quadmath)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.28s

@@ -1,0 +1,998 @@
+--- preProcess.C
++++ preProcess.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -290,7 +291,7 @@
+         if (strlen(dmfile)>0)
+         {
+             float tt;
+-            fdmin = fopen(dmfile,"r");
++            fdmin = reference_fopen(dmfile,"r");
+             ndm=0;
+             while (!feof(fdmin))
+             {
+@@ -453,7 +454,7 @@
+             FILE *fin;
+             double mjd1,mjd2;
+             char flag1[MAX_STRLEN],flag2[MAX_STRLEN],flag3[MAX_STRLEN];
+-            if (!(fin = fopen(modifyFname,"r")))
++            if (!(fin = reference_fopen(modifyFname,"r")))
+             {
+                 printf("Unable to open >%s< to modify the flags\n",modifyFname);
+                 exit(1);
+@@ -568,7 +569,7 @@
+     int nread;
+     FILE *fin;
+ 
+-    if (!(fin = fopen(fname,"r")))
++    if (!(fin = reference_fopen(fname,"r")))
+     {
+         printf("Unable to open select file: >%s<\n",fname);
+         exit(1);
+@@ -977,7 +978,7 @@
+     double e0;
+     double tobs;
+ 
+-    if (!(fin = fopen(psr[p].whiteNoiseModelFile,"r")))
++    if (!(fin = reference_fopen(psr[p].whiteNoiseModelFile,"r")))
+     {
+         printf("ERROR: Unable to open file white noise model file >%s<\n",psr[p].whiteNoiseModelFile);
+         exit(1);
+--- TKfit.C
++++ TKfit.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -207,7 +208,7 @@
+ 
+     if((writeResiduals&1) && white_data!=NULL && data != NULL){
+         logdbg("Writing out whitened residuals");
+-        FILE* wFile=fopen("prefit.res","w");
++        FILE* wFile=reference_fopen("prefit.res","w");
+         if (!wFile){
+             printf("Unable to write out whitened residuals: cannot open file prefit.res\n");
+         }
+@@ -222,7 +223,7 @@
+     }
+     if(writeResiduals&2){
+         logdbg("Writing out design matrix");
+-        FILE * wFile=fopen("design.matrix","w");
++        FILE * wFile=reference_fopen("design.matrix","w");
+         if (!wFile){
+             printf("Unable to write out design matrix: cannot open file design.matrix\n");
+         }
+@@ -236,7 +237,7 @@
+             }
+             fclose(wFile);
+         }
+-        wFile=fopen("constraints.matrix","w");
++        wFile=reference_fopen("constraints.matrix","w");
+         if (!wFile){
+             printf("Unable to write out constraints matrix: cannot open file constraints.matrix\n");
+         }
+@@ -285,8 +286,8 @@
+         }
+         if(writeResiduals&2){
+             logdbg("Writing out augmented design matrix");
+-            FILE * wFile=fopen("adesign.matrix","w");
+-            FILE * yFile=fopen("awhite.res","w");
++            FILE * wFile=reference_fopen("adesign.matrix","w");
++            FILE * yFile=reference_fopen("awhite.res","w");
+             if (!wFile){
+                 printf("Unable to write out augmented design matrix: cannot open file adesign.matrix\n");
+             }
+@@ -395,7 +396,7 @@
+ 
+             if(debugFlag==1) {
+                 FILE *fout;
+-                fout = fopen("cvm.matrix","w");
++                fout = reference_fopen("cvm.matrix","w");
+                 if (!fout){
+                     printf("Unable to open file cvm.matrix for writing\n");
+                 }
+@@ -464,7 +465,7 @@
+ 
+     if (writeResiduals&4){
+         double sum,sum_w;
+-        FILE* wFile=fopen("postfit.res","w");
++        FILE* wFile=reference_fopen("postfit.res","w");
+         if (!wFile){
+             printf("Unable to open file postfit.res for writing\n");
+         }
+@@ -486,7 +487,7 @@
+         }
+         if (computeParam) {
+             FILE *fout;
+-            fout = fopen("param.vals","w");
++            fout = reference_fopen("param.vals","w");
+             if (!fout){
+                 printf("Unable to open file param.vals for writing\n");
+             }
+@@ -497,7 +498,7 @@
+         }
+         if (computeCVM) {
+             FILE *fout;
+-            fout = fopen("cov.matrix","w");
++            fout = reference_fopen("cov.matrix","w");
+             if (!fout){
+                 printf("Unable to open file cov.matrix for writing\n");
+             }
+--- readTimfile.C
++++ readTimfile.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -92,7 +93,7 @@
+         if (strcmp(psr[0].deleteFileName,"NONE")!=0)
+         {
+             logdbg("In checking for deleted points");
+-            if (!(fin = fopen(psr[0].deleteFileName,"r")))
++            if (!(fin = reference_fopen(psr[0].deleteFileName,"r")))
+                 printf("Warning: unable to open %s\n",psr[0].deleteFileName);
+             else
+             {
+@@ -152,7 +153,7 @@
+     char oldLine[1000];
+ 
+     /* Attempt to open .tim file, exit if not possible */
+-    if (!(fin = fopen(timname,"r")))
++    if (!(fin = reference_fopen(timname,"r")))
+     {
+         printf("ERROR [FILE4]: Unable to open timfile >%s<\n",timname);
+         exit(1);
+@@ -179,7 +180,7 @@
+                 format = 2;
+         }
+         fclose(fin);
+-        fin = fopen(timname,"r");  /* Could use rewind instead */
++        fin = reference_fopen(timname,"r");  /* Could use rewind instead */
+     }
+     if (format==2)
+     {
+@@ -673,7 +674,7 @@
+     double interim_error;
+     longdouble oldsat;
+ 
+-    if (!(fout = fopen(timname,"w")))
++    if (!(fout = reference_fopen(timname,"w")))
+     {
+         printf("Sorry, unable to write to file %s\n",timname);
+         return;
+--- textOutput.C
++++ textOutput.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -76,7 +77,7 @@
+         /* Determine RMS value */
+         if (outRes==1) 
+         {
+-            fout = fopen("residuals.dat","w");
++            fout = reference_fopen("residuals.dat","w");
+             if (!fout){
+                 printf("Unable to open file residuals.dat for writing\n");
+             }
+@@ -542,7 +543,7 @@
+             printf("Dispersion measure values:\n");
+             char dmfname[MAX_STRLEN];
+             sprintf(dmfname,"%s.dm",psr[p].name);
+-            FILE *dmfile=fopen(dmfname,"w");
++            FILE *dmfile=reference_fopen(dmfname,"w");
+             double sum=0;
+             for (i=0;i<(int)psr[p].dmoffsDMnum;i++){
+                 printf("_DM\t % 7.1f % 10.3g % 10.3g % 5.2f\n",psr[p].dmoffsDM_mjd[i],psr[p].dmoffsDM[i],psr[p].dmoffsDM_error[i],psr[p].dmoffsDM_weight[i]);
+@@ -553,7 +554,7 @@
+             printf("Mean DMOFF = %lg\n",sum/(double)psr[p].dmoffsDMnum);
+ 
+             sprintf(dmfname,"%s.cm",psr[p].name);
+-            dmfile=fopen(dmfname,"w");
++            dmfile=reference_fopen(dmfname,"w");
+             sum=0;
+             double eee;
+             for (i=0;i<(int)psr[p].dmoffsCMnum;i++){
+@@ -584,7 +585,7 @@
+             printf("Clock offsets\n");
+             for (i=0;i<psr[p].clkOffsN;i++)
+                 printf("%.2f %.10g %.10g\n",psr[p].clk_offsT[i],psr[p].clk_offsV[i],psr[p].clk_offsE[i]);
+-            fout = fopen("clockOffset.dat","w");
++            fout = reference_fopen("clockOffset.dat","w");
+             if (!fout){
+                 printf("Unable to open file clockOffset.dat for writing\n");
+             }
+@@ -600,7 +601,7 @@
+             printf("Interpolated function\n");
+             for (i=0;i<psr[p].ifuncN;i++)
+                 printf("%.2f %.10g %.10g %.3f\n",psr[p].ifuncT[i],psr[p].ifuncV[i],psr[p].ifuncE[i],psr[p].ifunc_weights[i]);
+-            fout = fopen("ifunc.dat","w");
++            fout = reference_fopen("ifunc.dat","w");
+             if (!fout){
+                 printf("Unable to open file ifunc.dat for writing\n");
+             }
+@@ -619,7 +620,7 @@
+             printf("Telescope x function\n");
+             for (i=0;i<psr[p].nTelDX;i++)
+                 printf("%.2f %.10g %.10g\n",psr[p].telDX_t[i],psr[p].telDX_v[i],psr[p].telDX_e[i]);
+-            fout = fopen("telescopeXYZ.dat","w");
++            fout = reference_fopen("telescopeXYZ.dat","w");
+             if (!fout){
+                 printf("Unable to open file telescopeXYZ.dat for writing\n");
+             }
+@@ -670,7 +671,7 @@
+         {
+             FILE *fout;
+             int fileout=1;
+-            if (!(fout = fopen("aplus_t2.dat","w")))
++            if (!(fout = reference_fopen("aplus_t2.dat","w")))
+                 fileout=0;
+             printf("---------------------------------------\n");
+             printf("Interpolated quadrupolar plus function\n");
+@@ -687,7 +688,7 @@
+         {
+             FILE *fout;
+             int fileout=1;
+-            if (!(fout = fopen("across_t2.dat","w")))
++            if (!(fout = reference_fopen("across_t2.dat","w")))
+                 fileout=0;
+ 
+             printf("---------------------------------------\n");
+@@ -1160,7 +1161,7 @@
+         // Write out covariance matrix for global parameters
+         if (p==0 && psr[0].globalNfit > 0)
+         {
+-            FILE *fout = fopen("global_covar.cvm","w");
++            FILE *fout = reference_fopen("global_covar.cvm","w");
+             if (!fout){
+                 logwarn("Unable to open global_covar.cvm for writing");
+             }
+@@ -1203,7 +1204,7 @@
+         {
+             if (p==0)
+             {		
+-                FILE *fout = fopen("aplus_across.cvm","w");
++                FILE *fout = reference_fopen("aplus_across.cvm","w");
+                 if (!fout){
+                     logwarn("Unable to open aplus_across.cvm for writing");
+                 }
+@@ -1262,7 +1263,7 @@
+                             printf("in here 4\n");*/
+                 }
+             }
+-            if (!(fout2 = fopen(fname2,"w")))
++            if (!(fout2 = reference_fopen(fname2,"w")))
+             {
+                 printf("Sorry, unable to write to file %s\n",fname2);
+             }
+--- formResiduals.C
++++ formResiduals.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -373,7 +374,7 @@
+     }
+ 
+     FILE *avgfile;
+-    avgfile=fopen("avg.dat", "w");
++    avgfile=reference_fopen("avg.dat", "w");
+     for(int o=0;o<psr[0].nobs;o++){
+         fprintf(avgfile,  "%.9lf %.3e %3e \n", psr[0].obsn[o].averagebat, psr[0].obsn[o].averageres, psr[0].obsn[o].averageerr);
+     }
+--- jpleph.c
++++ jpleph.c
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ /* jpleph.cpp: JPL ephemeris functions
+ 
+    Copyright (C) 2011, Project Pluto
+@@ -701,7 +702,7 @@
+     unsigned i, j;
+     long de_version;
+     char title[84];
+-    FILE *ifile = fopen( ephemeris_filename, "rb");
++    FILE *ifile = reference_fopen( ephemeris_filename, "rb");
+     struct jpl_eph_data *rval;
+     struct jpl_eph_data temp_data;
+ 
+--- toa2utc.C
++++ toa2utc.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -185,7 +186,7 @@
+         }
+         if (found==0) /* Must read the file */
+         {
+-            if (!(fin = fopen(fname[i],"r")))
++            if (!(fin = reference_fopen(fname[i],"r")))
+             {
+                 printf("Unable to open clock correction file >%s<\n",fname[i]);
+                 exit(1);
+@@ -300,7 +301,7 @@
+     if (time==0)
+     {
+         time=1; /* Don't do see on any subsequent calls to toa2utc_nist */
+-        if (!(fin = fopen(clockFile,"r")))
++        if (!(fin = reference_fopen(clockFile,"r")))
+         {
+             printf("ERROR [FILE5]: Unable to open file %s\n",clockFile);
+             exit(1);
+--- readEphemeris.C
++++ readEphemeris.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -153,7 +154,7 @@
+ 
+         // FILE *planetfile;
+ 
+-        // planetfile=fopen("planet.dat", "w");
++        // planetfile=reference_fopen("planet.dat", "w");
+ 
+         for (i=0;i<psr[p].nobs;i++)
+         {	  
+--- utc2tai.C
++++ utc2tai.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -71,7 +72,7 @@
+     /* Read the leap second file and store in arrays */
+     strcpy(fname,getenv(TEMPO2_ENVIRON));
+     strcat(fname,LEAPSECOND_FILE);
+-    if (!(fin = fopen(fname,"r")))
++    if (!(fin = reference_fopen(fname,"r")))
+     {
+         printf("ERROR [FILE6]: Unable to open the leap second file: %s\n",LEAPSECOND_FILE);
+         exit(1);
+--- tai2ut1.C
++++ tai2ut1.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -136,7 +137,7 @@
+         strcpy(fname,getenv(TEMPO2_ENVIRON));
+         strcat(fname,UT1_FILE);
+ 
+-        fin = fopen(fname,"r");
++        fin = reference_fopen(fname,"r");
+         if (!fin)
+         {
+             fprintf(stderr, "Could not open UT1 file: %s\n", fname);
+--- readParfile.C
++++ readParfile.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -139,7 +140,7 @@
+ 
+     for (p=0;p<npsr;p++)
+     {
+-        if (!(fin = fopen(tpar[0],"r")))
++        if (!(fin = reference_fopen(tpar[0],"r")))
+         {
+             printf("ERROR: unable to open file >%s<\n",tpar[0]);
+             exit(1);
+@@ -2604,10 +2605,10 @@
+         }
+         psr[p].nJumps=0;
+ 
+-        if (!(fin = fopen(parFile[p],"r")))
++        if (!(fin = reference_fopen(parFile[p],"r")))
+         {
+             /* Attempt to read fixed format header from tim file */
+-            if (!(fin = fopen(timFile[p],"r")))
++            if (!(fin = reference_fopen(timFile[p],"r")))
+             {
+                 printf("ERROR [FILE3]: Unable to open parfile %s for pulsar %d\n",parFile[p],p);
+                 exit(1);
+--- polyco.C
++++ polyco.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -117,8 +118,8 @@
+     strcat(fname3,"polyco.tim");
+ 
+     /* erase any existing files */
+-    fclose(fopen(fname1,"w"));
+-    fclose(fopen(fname2,"w"));
++    fclose(reference_fopen(fname1,"w"));
++    fclose(reference_fopen(fname2,"w"));
+ 
+     /* special flag for barycenter polycos */
+     bool bary = strcmp(sitename,"@")==0 || strcasecmp(sitename,"bat")==0;
+@@ -317,8 +318,8 @@
+     strcpy(fname2,polyco_file);
+     strcat(fname1,"polyco_new.dat");
+     strcat(fname2,"newpolyco.dat");
+-    fout = fopen(fname1,"a");
+-    fout2 = fopen(fname2,"a");
++    fout = reference_fopen(fname1,"a");
++    fout2 = reference_fopen(fname2,"a");
+ 
+     /* Note: throughout we are ignoring the first 'TOA' */
+     for (i=1;i<psr->nobs;i++)
+--- clkcorr.C
++++ clkcorr.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -167,7 +168,7 @@
+ 
+ static void addIndexedClockFile(const std::string &filePath, int defaultBadnessOffset)
+ {
+-  FILE *f = std::fopen(filePath.c_str(), "r");
++  FILE *f = reference_fopen(filePath.c_str(), "r");
+   if (f == NULL)
+   {
+     std::fprintf(stderr, "Fatal Error: Unable to open file %s for reading: %s\n",
+--- observatory.C
++++ observatory.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ 
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+@@ -67,7 +68,7 @@
+     void
+ readObservatoryFile(char *fname)
+ {
+-    FILE *f = fopen(fname, "r");
++    FILE *f = reference_fopen(fname, "r");
+     char line[1024];
+     observatory newObs;
+     int nread, iline=0;
+@@ -155,7 +156,7 @@
+     int ichar, nread;
+ 
+ 
+-    f = fopen(fname, "r");
++    f = reference_fopen(fname, "r");
+     if (!f)
+     {
+         fprintf(stderr, "Unable to open observatory aliases file %s : %s\n",
+--- readJBO_bat.C
++++ readJBO_bat.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -58,7 +59,7 @@
+     if (displayCVSversion == 1) CVSdisplayVersion("readJBO_bat.C","readJBO_bat()",CVS_verNum);
+ 
+     printf("Attempting to read %s\n",fname);
+-    FILE *batfile = fopen(fname,"r");
++    FILE *batfile = reference_fopen(fname,"r");
+ 
+     int irecord=0;
+     int dmyi=0;
+--- ifteph.C
++++ ifteph.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -138,7 +139,7 @@
+     //    fclose(ifte.f);  
+ 
+     //time=1;
+-    f = fopen(fname, "r");
++    f = reference_fopen(fname, "r");
+     if (!f)
+     {
+         fprintf(stderr, "Error opening time ephemeris file '%s' : %s\n",
+--- eop.C
++++ eop.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -67,7 +68,7 @@
+     // open file
+     //  sprintf(fname, "%s/%s", getenv("TEMPO2"), EOPC04_FILE);
+     sprintf(fname, "%s/%s", getenv("TEMPO2"), eopcFile);
+-    f = fopen(fname, "r");
++    f = reference_fopen(fname, "r");
+     if (!f)
+     {
+         fprintf(stderr, "Fatal Error: Unable to open file %s for reading: %s\n",
+--- tabulatedfunction.C
++++ tabulatedfunction.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -48,7 +49,7 @@
+     func->samples.clear();
+ 
+     /*   sprintf(fname, "%s/clock2/%s.clk", getenv("TEMPO2"), fileName); */
+-    f = fopen(fileName, "r");
++    f = reference_fopen(fileName, "r");
+     if (f==NULL)
+     {
+         fprintf(stderr, "Fatal Error: Unable to open file %s for reading: %s\n",
+--- tempo2pred.c
++++ tempo2pred.c
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ //  Copyright (C) 2006,2007,2008,2009, George Hobbs, Russel Edwards
+ 
+ /*
+@@ -38,7 +39,7 @@
+     int
+ T2Predictor_Read(T2Predictor *t2p, char *fname)
+ {
+-    FILE *f = fopen(fname, "r");
++    FILE *f = reference_fopen(fname, "r");
+     int ret;
+     if (!f)
+         return -1;
+@@ -74,7 +75,7 @@
+     void
+ T2Predictor_Write(const T2Predictor *t2p, char *fname)
+ {
+-    FILE *f = fopen(fname, "w");
++    FILE *f = reference_fopen(fname, "w");
+     if (!f)
+     {
+         fprintf(stderr, "Fatal error: T2Predictor_Write unable to open file %s\n",
+--- sw_delay.C
++++ sw_delay.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -200,7 +201,7 @@
+ {
+     FILE *fin;
+     int n=0;
+-    if (!(fin = fopen(fname,"r")))
++    if (!(fin = reference_fopen(fname,"r")))
+     {
+         printf("Unable to open file %s\n",fname);
+         exit(1);
+--- global.C
++++ global.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -67,7 +68,7 @@
+ 	const char *CVS_verNum = "$Id$";
+ 	if (displayCVSversion == 1) CVSdisplayVersion((char *)"global.C",(char *)"extra_delays()",CVS_verNum);
+ 
+-	calculate_bclt(psr,npsr);/* 3. Calculate bclt  */
++	{ reference_stage("calculate_bclt"); calculate_bclt(psr,npsr); }/* 3. Calculate bclt  */
+ 	/*  shapiro_delay(psr,npsr); */ /* 1. Calculate the Shapiro delay */
+ 	/* dm_delays(psr,npsr); */    /* 2. Extra dispersion measure delays */  
+ }
+@@ -78,22 +79,22 @@
+ 	if (displayCVSversion == 1) CVSdisplayVersion((char *)"global.C",(char *)"clock_corrections()",CVS_verNum);
+ 
+ 	logtchk("Calling toa2utc");
+-	toa2utc(psr,npsr);        /* 1. UTC(Observatory) -> UTC(NIST) */
++	{ reference_stage("toa2utc"); toa2utc(psr,npsr); }        /* 1. UTC(Observatory) -> UTC(NIST) */
+ 	logtchk("Calling tai2ut1");
+ 	//   utc2tai(psr,npsr);     /* 2. UTC(NIST) -> TAI              */
+-	tai2ut1(psr,npsr);        /* 3. TAI -> UT1                    */
++	{ reference_stage("tai2ut1"); tai2ut1(psr,npsr); }        /* 3. TAI -> UT1                    */
+ 	//   tai2tt(psr,npsr);      /* 4. TAI -> TT                     */
+ 	logtchk("Calling tt2tb");
+ 	//tt2tb(psr,npsr);          /* 5. Rough estimate of TT-TB (+-2.2 microsec) */
+ 	if(psr[0].useCalceph ==0)
+ 	{
+ 
+-		tt2tb(psr,npsr);         
++		{ reference_stage("tt2tb"); tt2tb(psr,npsr); }         
+ 	}
+ 	else
+ 	{
+ 		tt2tb_calceph(psr,npsr);
+-		tt2tb(psr,npsr);
++		{ reference_stage("tt2tb"); tt2tb(psr,npsr); }
+ 	}
+ 
+ 
+@@ -106,27 +107,27 @@
+ 	if (displayCVSversion == 1) CVSdisplayVersion((char *)"global.C",(char *)"ephemeris_routines()",CVS_verNum);
+ 
+ 	logtchk("call vectorPulsar()");
+-	vectorPulsar(psr,npsr);   /* 1. Form a vector pointing at the pulsar */
++	{ reference_stage("vectorPulsar"); vectorPulsar(psr,npsr); }   /* 1. Form a vector pointing at the pulsar */
+ 	logtchk("call readEphemeris()");
+ 	if (psr[0].useCalceph == 0)
+-		readEphemeris(psr,npsr,0);/* 2. Read the ephemeris */
++		{ reference_stage("readEphemeris"); readEphemeris(psr,npsr,0); }/* 2. Read the ephemeris */
+ 	else
+ 		readEphemeris_calceph(psr,npsr);
+ 	logtchk("call get_obsCoord()");
+-	get_obsCoord(psr,npsr);   /* 3. Get Coordinate of observatory relative to Earth's centre */
++	{ reference_stage("get_obsCoord"); get_obsCoord(psr,npsr); }   /* 3. Get Coordinate of observatory relative to Earth's centre */
+ 	logtchk("call tt2tb()");
+ 	if  (psr[0].useCalceph == 0)
+ 	{
+-		tt2tb(psr,npsr);          /* Observatory/time-dependent part of TT-TB */
+-	}
+-	else
+-	{
+-		tt2tb(psr,npsr); 
++		{ reference_stage("tt2tb"); tt2tb(psr,npsr); }          /* Observatory/time-dependent part of TT-TB */
++	}
++	else
++	{
++		{ reference_stage("tt2tb"); tt2tb(psr,npsr); } 
+ 		tt2tb_calceph(psr,npsr);
+ 	}
+ 	logtchk("call readEphemeris()");
+ 	if (psr[0].useCalceph == 0)
+-		readEphemeris(psr,npsr,0);  /* Re-evaluate ephemeris with correct TB */ 
++		{ reference_stage("readEphemeris"); readEphemeris(psr,npsr,0); }  /* Re-evaluate ephemeris with correct TB */ 
+ 	else
+ 		readEphemeris_calceph(psr,npsr);
+ }
+@@ -147,9 +148,9 @@
+     logtchk("call extra_delays()");
+     extra_delays(psr,npsr);               /* Other time delays  ... */
+     logtchk("call formBats()");
+-    formBats(psr,npsr);                   /* Form Barycentric arrival times */
++    { reference_stage("formBats"); formBats(psr,npsr); }                   /* Form Barycentric arrival times */
+     logtchk("call secularMotion()");
+-    secularMotion(psr,npsr);
++    { reference_stage("secularMotion"); secularMotion(psr,npsr); }
+     logtchk("exit formBatsAll()");
+ 
+     refphs_clean(psr,npsr); // remove reference phase observation if required.
+@@ -168,7 +169,7 @@
+ 	vectorPulsar(psr, npsr);
+ 	calculate_bclt(psr, npsr);
+ 	formBats(psr, npsr);
+-	secularMotion(psr,npsr); 
++	{ reference_stage("secularMotion"); secularMotion(psr,npsr); } 
+ }
+ 
+ 
+--- cholesky.C
++++ cholesky.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -137,7 +138,7 @@
+             fprintf(LOG_OUTFILE,"\n");
+         }
+         fprintf(LOG_OUTFILE,"\n");
+-        FILE* mFile = fopen("chol.covarMatrix","w");
++        FILE* mFile = reference_fopen("chol.covarMatrix","w");
+         for (i=0;i<np;i++)
+         { 
+             for (j=0;j<np;j++) fprintf(mFile,"%d %d %.28lg\n",i,j,m[i][j]); 
+@@ -384,7 +385,7 @@
+     logmsg("Parsing '%s' as covariance function",fname);
+ 
+     logtchk("reading covariance function from disk, ndays = %d",ndays);
+-    if (!(fin = fopen(fname,"r")))
++    if (!(fin = reference_fopen(fname,"r")))
+     {
+         logerr("Unable to open covariance function file: %s",fname);
+         exit(1);
+@@ -563,7 +564,7 @@
+ 
+     if(debugFlag){
+         logdbg("Write cholesky_L");
+-        FILE* file=fopen("chol.L","w");
++        FILE* file=reference_fopen("chol.L","w");
+         for(i =0;i<np;i++){
+             for(j =0;j<np;j++){
+                 fprintf(file,"%d %d %lg\n",i,j,cholesky_L[i][j]);
+@@ -648,7 +649,7 @@
+     FILE *fin;
+     double dummy;
+ 
+-    if (!(fin = fopen(fileName,"r")))
++    if (!(fin = reference_fopen(fileName,"r")))
+     {
+         printf("ERROR: Unable to open ECM file: %s\n",fileName);
+         exit(1);
+@@ -854,7 +855,7 @@
+     }
+ 
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(int i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -881,7 +882,7 @@
+     }
+ 
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(int i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -910,7 +911,7 @@
+     }
+ 
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(int i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -935,7 +936,7 @@
+         logerr("Ndays in != Ndays out!");
+     }
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -958,7 +959,7 @@
+         logerr("Ndays in != Ndays out!");
+     }
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -980,7 +981,7 @@
+         logerr("Ndays in != Ndays out!");
+     }
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+@@ -1003,7 +1004,7 @@
+         logerr("Ndays in != Ndays out!");
+     }
+     if(debugFlag){
+-        FILE* outFile = fopen("newDCF","w");
++        FILE* outFile = reference_fopen("newDCF","w");
+         for(i=0;i<ndays;i++){
+             fprintf(outFile,"%lg\n",covarFunc[i]);
+         }
+--- choleskyRoutines.C
++++ choleskyRoutines.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ /* Routines based around the TEMPO2 use of the Cholesky algorithm    */
+ /* These have been put together by G. Hobbs, W. Coles and R. Shannon */
+ 
+@@ -331,7 +332,7 @@
+     /*  if(writeFiles)
+         {
+         FILE *fout;
+-        fout = fopen("interp.dat","w");
++        fout = reference_fopen("interp.dat","w");
+         for (i=0;i<*nInterp;i++)
+         fprintf(fout,"%g %g\n",interpX[i],interpY[i]);
+         fclose(fout);
+@@ -686,7 +687,7 @@
+     double delta=1.0/365.25;
+     double N=(double)npts;
+     //int noTF=0;
+-//    FILE* tf = fopen("testf","w");
++//    FILE* tf = reference_fopen("testf","w");
+ //    if (!tf) {logwarn("Warning: unable to open output file: testf\n"); noTF=1;}
+ 
+     if (useBeta==0)
+@@ -919,7 +920,7 @@
+ {
+     FILE *fout;
+ 
+-    fout = fopen(fname,"w");
++    fout = reference_fopen(fname,"w");
+     fprintf(fout,"MODEL 1\n");
+     fprintf(fout,"ALPHA %g\n",alpha);
+     fprintf(fout,"FC %g\n",fc);
+--- choleskyAutomatic.C
++++ choleskyAutomatic.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ /* Routines based around the TEMPO2 use of the Cholesky algorithm    */
+ /* These have been put together by G. Hobbs, W. Coles and R. Shannon */
+ 
+@@ -125,7 +126,7 @@
+         sprintf(covname,"%d.cov",realflag);
+         //sprintf(covname,"%s.cov", psr->name);
+         //fprintf(stderr, "%s", covname);
+-        covfile=fopen(covname, "r");
++        covfile=reference_fopen(covname, "r");
+         fscanf(covfile, "%lf %d %lf %lf %d", &expSmooth, &usePreWhitening, &modelFc, &modelAlpha, &modelNfit);
+         //fprintf(stderr, "%f %d %g %f %d\n", expSmooth, usePreWhitening, modelFc, modelAlpha, modelNfit);
+         fclose(covfile);
+@@ -216,7 +217,7 @@
+             //getWhiteNoiseLevel(nPreWhiteSpec,preWhiteSpecY, nLast, whiteNoiseLevel);
+             T2getWhiteNoiseLevel(nHighFreqSpec, highFreqSpecY, nLast, whiteNoiseLevel);
+ 
+-            specfile=fopen("comp.dat", "w");
++            specfile=reference_fopen("comp.dat", "w");
+             for(i=0;i<nPreWhiteSpec;i++)
+             {
+                 fprintf(specfile, "%.3le %.3le %.3le %.3le\n",preWhiteSpecX[i], preWhiteSpecY[i] ,highFreqSpecX[i],highFreqSpecY[i]);
+@@ -358,7 +359,7 @@
+ 
+     printf("Have nCholWspec = %d\n",nCholWspec);
+ 
+-    specfile=fopen("compchol.dat", "w");
++    specfile=reference_fopen("compchol.dat", "w");
+     for(i=0;i<nCholWspec;i++)
+     {
+         fprintf(specfile, "%.3le %.3le \n",cholWspecX[i], cholWspecY[i]);
+@@ -411,7 +412,7 @@
+ 
+ 
+ 
+-    specfile=fopen("cholSpec.dat", "w");
++    specfile=reference_fopen("cholSpec.dat", "w");
+     for(i=0;i<nCholSpec;i++)
+     {
+         fprintf(specfile, "%.3le %.3le \n",cholSpecX[i], cholSpecY[i]);
+@@ -509,7 +510,7 @@
+ 
+     FILE *covarfile;
+ 
+-    covarfile=fopen(outname, "w");
++    covarfile=reference_fopen(outname, "w");
+ 
+ 
+     fprintf(covarfile, "%.15g\n", errorScaleFactor);
+--- t2fit.C
++++ t2fit.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #include "config.h"
+ #include "t2fit.h"
+ #include "t2fit_stdFitFuncs.h"
+@@ -143,7 +144,7 @@
+                 psr_x,psr_toaidx, psr_ndata);
+ 
+         if(writeResiduals&2){
+-            FILE *fp = fopen("param.labels","w");
++            FILE *fp = reference_fopen("param.labels","w");
+             ///TODO
+             for(unsigned ip=0; ip < psr[ipsr].fitinfo.nParams; ++ip){
+                 fprintf(fp,"%d %s %d\n",ip,label_str[psr[ipsr].fitinfo.paramIndex[ip]],psr[ipsr].fitinfo.paramCounters[ip]);
+@@ -696,16 +697,16 @@
+             if (_writeResiduals&4 ) {
+                 switch(param) {
+                     case param_f:
+-                        metafile=fopen("tnred_subtract.meta","w");
++                        metafile=reference_fopen("tnred_subtract.meta","w");
+                         break;
+                     case param_dm:
+-                        metafile=fopen("tnreddm_subtract.meta","w");
++                        metafile=reference_fopen("tnreddm_subtract.meta","w");
+                         break;
+                     case param_cm:
+-                        metafile=fopen("tnredcm_subtract.meta","w");
++                        metafile=reference_fopen("tnredcm_subtract.meta","w");
+                         break;
+                     default:
+-                        metafile=fopen("tnred_subtract.meta","w");
++                        metafile=reference_fopen("tnred_subtract.meta","w");
+                         break;
+                 }
+             }
+--- t2fit_nestlike.C
++++ t2fit_nestlike.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #include <cmath>
+ #include <assert.h>
+ #include <string.h>
+@@ -337,7 +338,7 @@
+             double maxtspan = psr[ipsr].param[param_finish].val[0] - psr[ipsr].param[param_start].val[0];
+             double freq = ((double)(k+1.0))/(maxtspan);
+             FILE *fout;
+-            fout = fopen("swgp.meta","w");
++            fout = reference_fopen("swgp.meta","w");
+             if (!fout){
+                 printf("Unable to open file swgp.meta for writing\n");
+             }
+@@ -373,7 +374,7 @@
+         //printf("WAVEEPOCH %.18lg\n",(double)psr[ipsr].param[param_pepoch].val[0]);
+         if (writeResiduals&4){
+             FILE *fout;
+-            fout = fopen("tnred.meta","w");
++            fout = reference_fopen("tnred.meta","w");
+             if (!fout){
+                 printf("Unable to open file tnred.meta for writing\n");
+             }
+@@ -411,7 +412,7 @@
+             double maxtspan = psr[ipsr].param[param_finish].val[0] - psr[ipsr].param[param_start].val[0];
+             double freq = ((double)(k+1.0))/(maxtspan);
+             FILE *fout;
+-            fout = fopen("tnreddm.meta","w");
++            fout = reference_fopen("tnreddm.meta","w");
+             if (!fout){
+                 printf("Unable to open file tnred.meta for writing\n");
+             }
+@@ -443,7 +444,7 @@
+             double maxtspan = psr[ipsr].param[param_finish].val[0] - psr[ipsr].param[param_start].val[0];
+             double freq = ((double)(k+1.0))/(maxtspan);
+             FILE *fout; 
+-            fout = fopen("tnreddm.meta","w");
++            fout = reference_fopen("tnreddm.meta","w");
+             if (!fout){
+                 printf("Unable to open file tnred.meta for writing\n");
+             }
+--- tempo2.C
++++ tempo2.C
+@@ -1,3 +1,4 @@
++#include "resource_trace.h"
+ #ifdef HAVE_CONFIG_H
+ #include <config.h>
+ #endif
+@@ -166,7 +167,7 @@
+                 strcpy(oldCommandLine[k-i],commandLine[k]);
+ 
+             snprintf(str,MAX_FILELEN,"%s/alias.dat",getenv(TEMPO2_ENVIRON));	  
+-            if ((alias = fopen(str,"r")))
++            if ((alias = reference_fopen(str,"r")))
+             {
+                 while (!feof(alias))
+                 {
+@@ -209,7 +210,7 @@
+             char timeval[200];
+             strcpy(timeval,asctime (timeinfo));
+             strcpy(&timeval[(int)strlen(timeval)-1],"");
+-            fout = fopen(commandfile,"a");
++            fout = reference_fopen(commandfile,"a");
+             fprintf(fout,"[%s]>> ",timeval);
+             for(i=0;i<argc;i++){
+                 fprintf(fout," %s ",commandLine[i]);
+@@ -483,7 +484,7 @@
+             ChebyModelSet_Construct(&cms, psr, sitename, mjd_start, mjd_end,
+                     seg_length, seg_length*0.1, 
+                     freq_start, freq_end, ntimecoeff, nfreqcoeff);
+-            FILE *f = fopen("t2pred.dat", "w");
++            FILE *f = reference_fopen("t2pred.dat", "w");
+             if (!f)
+             {
+                 fprintf(stderr, "Could not open t2pred.dat for writing!\n");
+@@ -540,7 +541,7 @@
+             //	  printf("WARNING: SIMULATING GAUSSIAN NOISE\n");
+             //	  {
+             //	    FILE *fin;
+-            //	    fin = fopen("tempRes.dat","r");
++            //	    fin = reference_fopen("tempRes.dat","r");
+             //	    for (i=0;i<psr[0].nobs;i++)
+             //	      {
+             //		fscanf(fin,"%Lf %Lf",&psr[0].obsn[i].sat,&psr[0].obsn[i].residual);

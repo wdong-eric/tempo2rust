@@ -1,0 +1,152 @@
+config	binary_model	NONE
+config	calc_shapiro	1
+config	clock	TT(TAI)
+config	correct_troposphere	1
+config	dilate_frequency	1
+config	eop_file	/earth/eopc04_IAU2000.62-now
+config	ephemeris	DE405
+config	fit_mode	0
+config	fit_performed	false
+config	ipm	1
+config	jpl_ephemeris	$RUNTIME/ephemeris/DE405.1950.2050
+config	mode	standard
+config	no_warnings	0
+config	planet_shapiro	1
+config	refphs	0
+config	remove_mean	0
+config	solar_wind_model	0
+config	solar_wind_ne_cm3	4
+config	storage_initialization	upstream initialise only; no added zero fill
+config	t2c_method	1
+config	time_ephemeris	IF99
+config	tzrsite	@
+config	units	TCB
+config	use_calceph	0
+param	DECJ	1	0	-0	DECJ (rad)
+param	DM	1	0	100	DM (cm^-3 pc)
+param	DMEPOCH	1	0	50000	DMEPOCH (MJD)
+param	EPHVER	1	0	5	EPHVER
+param	F0	1	0	1	F0 (s^-1)
+param	F1	0	0	0	F1 (s^-2)
+param	F10	0	0	0	F10 (s^-11)
+param	F11	0	0	0	F11 (s^-12)
+param	F12	0	0	0	F12 (s^-13)
+param	F2	0	0	0	F2 (s^-3)
+param	F3	0	0	0	F3 (s^-4)
+param	F4	0	0	0	F4 (s^-5)
+param	F5	0	0	0	F5 (s^-6)
+param	F6	0	0	0	F6 (s^-7)
+param	F7	0	0	0	F7 (s^-8)
+param	F8	0	0	0	F8 (s^-9)
+param	F9	0	0	0	F9 (s^-10)
+param	PEPOCH	1	0	50000	PEPOCH (MJD)
+param	POSEPOCH	1	0	50000	POSEPOCH (MJD)
+param	RAJ	1	0	0.261799387799149407829446545292739756	RAJ (rad)
+param	TRACK	0	0	0	TRACK (MJD)
+param	TZRFRQ	1	0	1400	TZRFRQ (MHz)
+param	TZRMJD	1	0	50000	TZRMJD
+obs	bats	0	bat_mjd	50000
+obs	bats	0	bbat_mjd	50000
+obs	bats	0	clockCorr	0
+obs	bats	0	delayCorr	0
+obs	bats	0	deleted	0
+obs	bats	0	fname	test
+obs	bats	0	frequency_mhz	1400
+obs	bats	0	sat_mjd	50000
+obs	bats	0	shklovskii_s	0
+obs	bats	0	site	@
+obs	bats	0	toa_error_us	10
+obs	bats	1	bat_mjd	50000.0100000000000000000000000000018
+obs	bats	1	bbat_mjd	50000.0100000000000000000000000000018
+obs	bats	1	clockCorr	0
+obs	bats	1	delayCorr	0
+obs	bats	1	deleted	0
+obs	bats	1	fname	test
+obs	bats	1	frequency_mhz	1400
+obs	bats	1	sat_mjd	50000.0100000000000000000000000000018
+obs	bats	1	shklovskii_s	0
+obs	bats	1	site	@
+obs	bats	1	toa_error_us	10
+obs	bats	2	bat_mjd	50000.0400046296296296296300000000022
+obs	bats	2	bbat_mjd	50000.0400046296296296296300000000022
+obs	bats	2	clockCorr	0
+obs	bats	2	delayCorr	0
+obs	bats	2	deleted	0
+obs	bats	2	fname	test
+obs	bats	2	frequency_mhz	1400
+obs	bats	2	sat_mjd	50000.0400046296296296296300000000022
+obs	bats	2	shklovskii_s	0
+obs	bats	2	site	@
+obs	bats	2	toa_error_us	10
+obs	parsed	0	clockCorr	0
+obs	parsed	0	delayCorr	0
+obs	parsed	0	deleted	0
+obs	parsed	0	fname	test
+obs	parsed	0	frequency_mhz	1400
+obs	parsed	0	sat_mjd	50000
+obs	parsed	0	site	@
+obs	parsed	0	toa_error_us	10
+obs	parsed	1	clockCorr	0
+obs	parsed	1	delayCorr	0
+obs	parsed	1	deleted	0
+obs	parsed	1	fname	test
+obs	parsed	1	frequency_mhz	1400
+obs	parsed	1	sat_mjd	50000.0100000000000000000000000000018
+obs	parsed	1	site	@
+obs	parsed	1	toa_error_us	10
+obs	parsed	2	clockCorr	0
+obs	parsed	2	delayCorr	0
+obs	parsed	2	deleted	0
+obs	parsed	2	fname	test
+obs	parsed	2	frequency_mhz	1400
+obs	parsed	2	sat_mjd	50000.0400046296296296296300000000022
+obs	parsed	2	site	@
+obs	parsed	2	toa_error_us	10
+obs	residuals	0	bat_mjd	50000
+obs	residuals	0	bbat_mjd	50000
+obs	residuals	0	binary_delay_s	0
+obs	residuals	0	clockCorr	0
+obs	residuals	0	delayCorr	0
+obs	residuals	0	deleted	0
+obs	residuals	0	fname	test
+obs	residuals	0	frequency_mhz	1400
+obs	residuals	0	nphase_turn	0
+obs	residuals	0	phase_turn	0
+obs	residuals	0	pulse_number	0
+obs	residuals	0	residual_s	0
+obs	residuals	0	sat_mjd	50000
+obs	residuals	0	shklovskii_s	0
+obs	residuals	0	site	@
+obs	residuals	0	toa_error_us	10
+obs	residuals	1	bat_mjd	50000.0100000000000000000000000000018
+obs	residuals	1	bbat_mjd	50000.0100000000000000000000000000018
+obs	residuals	1	binary_delay_s	0
+obs	residuals	1	clockCorr	0
+obs	residuals	1	delayCorr	0
+obs	residuals	1	deleted	0
+obs	residuals	1	fname	test
+obs	residuals	1	frequency_mhz	1400
+obs	residuals	1	nphase_turn	864
+obs	residuals	1	phase_turn	864.000000000000000000000000152672984
+obs	residuals	1	pulse_number	864
+obs	residuals	1	residual_s	1.52672984152853740772164299610569316e-25
+obs	residuals	1	sat_mjd	50000.0100000000000000000000000000018
+obs	residuals	1	shklovskii_s	0
+obs	residuals	1	site	@
+obs	residuals	1	toa_error_us	10
+obs	residuals	2	bat_mjd	50000.0400046296296296296300000000022
+obs	residuals	2	bbat_mjd	50000.0400046296296296296300000000022
+obs	residuals	2	binary_delay_s	0
+obs	residuals	2	clockCorr	0
+obs	residuals	2	delayCorr	0
+obs	residuals	2	deleted	0
+obs	residuals	2	fname	test
+obs	residuals	2	frequency_mhz	1400
+obs	residuals	2	nphase_turn	3456
+obs	residuals	2	phase_turn	3456.40000000000000003200000018924005
+obs	residuals	2	pulse_number	3456
+obs	residuals	2	residual_s	0.400000000000000032000000189240046988
+obs	residuals	2	sat_mjd	50000.0400046296296296296300000000022
+obs	residuals	2	shklovskii_s	0
+obs	residuals	2	site	@
+obs	residuals	2	toa_error_us	10

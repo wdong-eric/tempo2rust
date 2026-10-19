@@ -1,0 +1,39 @@
+error[E0277]: the trait bound `f128: FromStr` is not satisfied
+ --> probes/builtin_io_math.rs:3:51
+  |
+3 |     let x: f128 = "56000.78912398509389208687235".parse().unwrap();
+  |                                                   ^^^^^ the trait `FromStr` is not implemented for `f128`
+  |
+  = help: the following other types implement trait `FromStr`:
+            f16
+            f32
+            f64
+            i128
+            i16
+            i32
+            i64
+            i8
+          and 7 others
+
+error[E0277]: `f128` doesn't implement `std::fmt::Display`
+ --> probes/builtin_io_math.rs:4:15
+  |
+4 |     println!("{x:.36}");
+  |               ^^^^^^^ `f128` cannot be formatted with the default formatter
+  |
+  = help: the trait `std::fmt::Display` is not implemented for `f128`
+  = note: in format strings you may be able to use `{:?}` (or `{:#?}` for pretty-print) instead
+  = help: the following other types implement trait `std::fmt::Display`:
+            f16
+            f32
+            f64
+            i128
+            i16
+            i32
+            i64
+            i8
+          and 7 others
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0277`.

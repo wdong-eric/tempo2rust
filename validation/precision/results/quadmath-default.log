@@ -1,0 +1,68 @@
+   Compiling f128_internal v0.2.2
+warning: f128_internal@0.2.2: clang: warning: -lgfortran: 'linker' input unused [-Wunused-command-line-argument]
+warning: f128_internal@0.2.2: clang: warning: -lquadmath: 'linker' input unused [-Wunused-command-line-argument]
+warning: f128_internal@0.2.2: src/f128.c:2:10: fatal error: 'quadmath.h' file not found
+warning: f128_internal@0.2.2:     2 | #include <quadmath.h>
+warning: f128_internal@0.2.2:       |          ^~~~~~~~~~~~
+warning: f128_internal@0.2.2: 1 error generated.
+error: failed to run custom build command for `f128_internal v0.2.2`
+
+Caused by:
+  process didn't exit successfully: `/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/probes/quadmath/target/debug/build/f128_internal-1a24639eef05b5bb/build-script-build` (exit status: 1)
+  --- stdout
+  cargo:rerun-if-env-changed=CC_FORCE_DISABLE
+  CC_FORCE_DISABLE = None
+  cargo:rerun-if-env-changed=CC_aarch64-apple-darwin
+  CC_aarch64-apple-darwin = None
+  cargo:rerun-if-env-changed=CC_aarch64_apple_darwin
+  CC_aarch64_apple_darwin = None
+  cargo:rerun-if-env-changed=HOST_CC
+  HOST_CC = None
+  cargo:rerun-if-env-changed=CC
+  CC = None
+  cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+  cargo:rerun-if-env-changed=CPATH
+  cargo:rerun-if-env-changed=C_INCLUDE_PATH
+  cargo:rerun-if-env-changed=CPLUS_INCLUDE_PATH
+  cargo:rerun-if-env-changed=OBJC_INCLUDE_PATH
+  cargo:rerun-if-env-changed=OBJCPLUS_INCLUDE_PATH
+  cargo:rerun-if-env-changed=COMPILER_PATH
+  cargo:rerun-if-env-changed=SOURCE_DATE_EPOCH
+  cargo:rerun-if-env-changed=CCC_OVERRIDE_OPTIONS
+  cargo:rerun-if-env-changed=CLANG_NO_DEFAULT_CONFIG
+  cargo:rerun-if-env-changed=DEVELOPER_DIR
+  cargo:rerun-if-env-changed=TOOLCHAINS
+  cargo:rerun-if-env-changed=SDKROOT
+  cargo:rerun-if-env-changed=RC_DEBUG_OPTIONS
+  cargo:rerun-if-env-changed=RC_DEBUG_PREFIX_MAP
+  cargo:rerun-if-env-changed=MACOSX_DEPLOYMENT_TARGET
+  cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+  CRATE_CC_NO_DEFAULTS = None
+  CRATE_CC_NO_DEFAULTS = None
+  MACOSX_DEPLOYMENT_TARGET = None
+  cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+  cargo:rerun-if-env-changed=CFLAGS
+  CFLAGS = None
+  cargo:rerun-if-env-changed=HOST_CFLAGS
+  HOST_CFLAGS = None
+  cargo:rerun-if-env-changed=CFLAGS_aarch64_apple_darwin
+  CFLAGS_aarch64_apple_darwin = None
+  cargo:rerun-if-env-changed=CFLAGS_aarch64-apple-darwin
+  CFLAGS_aarch64-apple-darwin = None
+  CFLAGS = None
+  HOST_CFLAGS = None
+  CFLAGS_aarch64_apple_darwin = None
+  CFLAGS_aarch64-apple-darwin = None
+  cargo:warning=clang: warning: -lgfortran: 'linker' input unused [-Wunused-command-line-argument]
+  cargo:warning=clang: warning: -lquadmath: 'linker' input unused [-Wunused-command-line-argument]
+  cargo:warning=src/f128.c:2:10: fatal error: 'quadmath.h' file not found
+  cargo:warning=    2 | #include <quadmath.h>
+  cargo:warning=      |          ^~~~~~~~~~~~
+  cargo:warning=1 error generated.
+
+  --- stderr
+
+
+  error occurred in cc-rs: command did not execute successfully (status code exit status: 1): "cc" "-O0" "-ffunction-sections" "-fdata-sections" "-fPIC" "-g" "-gdwarf-2" "-fno-omit-frame-pointer" "-mno-omit-leaf-frame-pointer" "--target=arm64-apple-macosx" "-mmacosx-version-min=27.0" "-Wall" "-Wextra" "-Bstatic" "-lgfortran" "-lquadmath" "-o" "/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/probes/quadmath/target/debug/build/f128_internal-d06bd177933c952c/out/e3b1d530bc9cf22b-f128.o" "-c" "src/f128.c"
+
+

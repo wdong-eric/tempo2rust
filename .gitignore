@@ -1,0 +1,10 @@
+# Independently versioned reference repositories.
+/tempo2/
+/validation/reference/
+
+# Cargo/native build caches and generated local artifacts.
+**/target/
+**/.cargo-home/
+**/build/
+**/__pycache__/
+.DS_Store

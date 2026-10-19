@@ -1,0 +1,100 @@
+error[E0277]: the trait bound `Quad: FromStr` is not satisfied
+    --> probes/qd_missing.rs:3:51
+     |
+   3 |     let x: Quad = "56000.78912398509389208687235".parse().unwrap();
+     |                                                   ^^^^^ the trait `FromStr` is not implemented for `Quad`
+     |
+     = help: the following other types implement trait `FromStr`:
+               ByteString
+               CString
+               Complex<T>
+               IpAddr
+               Ipv4Addr
+               Ipv6Addr
+               NonZero<i128>
+               NonZero<i16>
+             and 33 others
+note: required by a bound in `__core::str::<impl str>::parse`
+    --> /Users/Eric.Dong/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/core/src/str/mod.rs:2765:21
+     |
+2765 |     pub fn parse<F: FromStr>(&self) -> Result<F, F::Err> {
+     |                     ^^^^^^^ required by this bound in `__core::str::<impl str>::parse`
+
+error[E0277]: `Quad` doesn't implement `std::fmt::Display`
+ --> probes/qd_missing.rs:4:15
+  |
+4 |     println!("{x:.36}");
+  |               ^^^^^^^ `Quad` cannot be formatted with the default formatter
+  |
+  = help: the trait `std::fmt::Display` is not implemented for `Quad`
+  = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+
+error[E0599]: no method named `sin` found for struct `Quad<T>` in the current scope
+ --> probes/qd_missing.rs:5:29
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                             ^^^ method not found in `Quad`
+  |
+help: some of the expressions' fields have a method of the same name
+  |
+5 |     std::hint::black_box((x.0.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                             ++
+5 |     std::hint::black_box((x.1.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                             ++
+
+error[E0599]: no method named `cos` found for struct `Quad<T>` in the current scope
+ --> probes/qd_missing.rs:5:38
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                      ^^^ method not found in `Quad`
+  |
+help: some of the expressions' fields have a method of the same name
+  |
+5 |     std::hint::black_box((x.sin(), x.0.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                      ++
+5 |     std::hint::black_box((x.sin(), x.1.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                      ++
+
+error[E0599]: no method named `atan2` found for struct `Quad<T>` in the current scope
+ --> probes/qd_missing.rs:5:47
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                               ^^^^^ method not found in `Quad`
+  |
+help: some of the expressions' fields have a method of the same name
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.0.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                               ++
+5 |     std::hint::black_box((x.sin(), x.cos(), x.1.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                               ++
+
+error[E0599]: no method named `floor` found for struct `Quad<T>` in the current scope
+ --> probes/qd_missing.rs:5:67
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                                                   ^^^^^ method not found in `Quad`
+  |
+help: some of the expressions' fields have a method of the same name
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.0.floor(), x.round()));
+  |                                                                   ++
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.1.floor(), x.round()));
+  |                                                                   ++
+
+error[E0599]: no method named `round` found for struct `Quad<T>` in the current scope
+ --> probes/qd_missing.rs:5:78
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.round()));
+  |                                                                              ^^^^^ method not found in `Quad`
+  |
+help: some of the expressions' fields have a method of the same name
+  |
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.0.round()));
+  |                                                                              ++
+5 |     std::hint::black_box((x.sin(), x.cos(), x.atan2(Quad::ONE), x.floor(), x.1.round()));
+  |                                                                              ++
+
+error: aborting due to 7 previous errors
+
+Some errors have detailed explanations: E0277, E0599.
+For more information about an error, try `rustc --explain E0277`.

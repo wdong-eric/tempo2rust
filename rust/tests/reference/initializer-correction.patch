@@ -1,0 +1,10 @@
+--- a/initialise.C
++++ b/initialise.C
+@@ -120,6 +120,7 @@
+     psr->nWhite = 0;  /* No whitening by default */
+     psr->nQuad  = 0;  /* No quadrupolar function */
+     psr->ifuncN = 0;  /* No interpolation functions by default */
++    psr->ne_sw_ifuncN = 0;  /* No solar-wind interpolation samples by default */
+     psr->orbifuncN = 0;  /* No interpolation functions by default */
+     psr->clkOffsN = 0;/* No clock offsets by default */
+     psr->nTelDX = 0;

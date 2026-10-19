@@ -1,0 +1,1 @@
+Darwin BatBook-Pro.local 25.6.0 Darwin Kernel Version 25.6.0: Tue Aug 18 17:49:53 PDT 2026; root:xnu-12377.161.15.700.19~2/RELEASE_ARM64_T6030 arm64

@@ -1,0 +1,123 @@
+{
+  "artifacts": {
+    "build.py": "abcdb632b1451e003d83bf6a40b15b9c8079cd200f9c241594c525b01977f757",
+    "build_manifest.json": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+    "check_reference.py": "f742e43b10322f6868d0f1ea0f1369d9964322745e2e9c630fa886b03f15c283",
+    "compare.py": "67fc9cbcdc6e5185ca06789b1b2b638c51746b774864b5044e1715213d476679",
+    "diagnose_reference.py": "c8890db3c62a3c59e9537cef5f7e305dab12b1928073cbaf90ec9b6c1325e821",
+    "export_reference.cc": "953e210079d69034a6e3fc626fe586d0b063f0779b94660057d15636bc2f44b4",
+    "initialization_probe.cc": "c90a3d3339c4fef087890197785ec9a8774bc19c9a97d52be6d5cb36af81752a",
+    "initializer-correction.patch": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c",
+    "instrumentation.patch": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed",
+    "precision_probe.cc": "e942b8068cd56734909230bc6108a4a1f2fb047650b6b0b1b19d11dc9bd25ed5",
+    "resource_trace.cc": "141ee2f5e35d28152f582d1853d07c183b1862a56a5bb28572a6492dec905212",
+    "resource_trace.h": "5ea16f7f359bb8bc4bbcb17ebc29915182592be7f9cc990b24930d5fc267d65e",
+    "run_reference.py": "b088c148d0f452e2eaa3d20beeed0bcfa61ac0b03486564e9c90b6d99a3e4985",
+    "schema.json": "39de24bd60d7d33ea88a776771e0932fca1182913c3973b95a6f3708e9a46043"
+  },
+  "conventions": {
+    "ephemeris": "DE405 + IF99 TIMEEPH_short.te405 from the pinned source runtime",
+    "fit_performed": false,
+    "phase_reference": "first eligible input TOA fractional spin phase, REFPHS_MEAN enum 0; TZR parameters do not activate REFPHS_TZR",
+    "remove_mean": false,
+    "runtime_updates": "none; no external runtime downloads or installation used",
+    "selection": "all declared TOAs, original order; no START/FINISH cuts",
+    "time_scale": "TCB model units; @ inputs already barycentric; pks/7 SAT is observatory clock time corrected to TT(TAI), then TCB",
+    "units_resolution": "test1 omits UNITS and retains initialiseOne SI_UNITS/TCB; EPHVER=5 does not activate TEMPO1 under preprocessing; long_span explicitly supplies UNITS TCB"
+  },
+  "derivative_changes": {
+    "long_span.par": "test1.par with F0 replaced by 123.456789123456789123456789 Hz; F1=-1.23456789123456789e-15 Hz/s and F2=3.456789123456789e-27 Hz/s^2 added; explicit UNITS TCB appended",
+    "long_span.tim": "four named @ TOAs spanning 40 years with long decimal fractions and a 4ns adjacent pair; first TOA remains the phase reference despite nonchronological order",
+    "solar_wind_samples.par": "test1.par plus _NE_SW samples (49000,2,0.25) and (51000,6,0.5); regression only, not a golden fixture"
+  },
+  "fixture_contract_status": "barycentric contract adopted in decision 0001; terrestrial budgets proposed; M0 pending central A2 review",
+  "fixtures": [
+    {
+      "availability": "available",
+      "name": "barycentric",
+      "output": "outputs/barycentric.json",
+      "par": "fixtures/original/test1.par",
+      "pipeline": "standard",
+      "sha256": "a9bac02d3ebeb4a65935f208b6e1ca8a58362d604d66a1fb55b9ea2f788a675e",
+      "status": "completed",
+      "tim": "fixtures/original/test1.tim"
+    },
+    {
+      "availability": "available",
+      "name": "barycentric_4ns",
+      "output": "outputs/barycentric_4ns.json",
+      "par": "fixtures/original/test1.par",
+      "pipeline": "subtractBATs",
+      "sha256": "44a2dfbbb294e932fc66657f2ca8b47f866d17bb26b337c11e6ebe8786e4d9af",
+      "status": "completed",
+      "tim": "fixtures/original/test1.tim"
+    },
+    {
+      "availability": "available",
+      "name": "long_span",
+      "output": "outputs/long_span.json",
+      "par": "fixtures/long_span.par",
+      "pipeline": "standard",
+      "sha256": "d62cc4cfd2a702a255f0c0d3b392c4cf9f93a2ba10feb84964feabca14069b44",
+      "status": "completed",
+      "tim": "fixtures/long_span.tim"
+    },
+    {
+      "availability": "candidate_declared_meteorology_defaults",
+      "name": "terrestrial",
+      "output": "outputs/terrestrial.json",
+      "par": "fixtures/original/test1.par",
+      "pipeline": "standard",
+      "sha256": "c19aac714e38521c5dd309dbf50f815f49430171430206d7af969fc790043d83",
+      "status": "completed",
+      "tim": "fixtures/original/test2.tim"
+    },
+    {
+      "availability": "candidate_declared_meteorology_defaults",
+      "name": "terrestrial_4ns",
+      "output": "outputs/terrestrial_4ns.json",
+      "par": "fixtures/original/test1.par",
+      "pipeline": "offsetSATs",
+      "sha256": "5455b5dc4d387ec8bea42a43665dffe0b3d7a39ced47e0f131395d003adb62eb",
+      "status": "completed",
+      "tim": "fixtures/original/test2.tim"
+    },
+    {
+      "availability": "smoke_only",
+      "name": "example1",
+      "output": "outputs/example1.json",
+      "par": "fixtures/original/example1.par",
+      "pipeline": "preprocess",
+      "sha256": "d9c46d81a4a18a5d0a14fad81986cad005ba77828b2b670e4e6eebae95e9756d",
+      "status": "completed",
+      "tim": "fixtures/original/example1.tim"
+    }
+  ],
+  "limitations": [
+    "corrected terrestrial exports are compatibility candidates with declared meteorology defaults; budgets await central review",
+    "DDH/DE414 checkIdeal remains above its original 1ns threshold; broader path not validated",
+    "meteorology tables cover only MJD 53000-53001; upstream defaults apply to all minimal terrestrial TOAs",
+    "float128 does not change upstream binary64 delay/interpolation subroutines",
+    "only the actual Darwin arm64 environment was executed"
+  ],
+  "original_inputs": "fixtures/original/test1.par,test1.tim,test2.tim copied byte-for-byte from tests/test_data; example1.par,tim from T2runtime/example_data",
+  "reference_identity": {
+    "base_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "build_manifest_sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+    "correction_sha256": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c",
+    "instrumentation_sha256": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed"
+  },
+  "regression_inputs": {
+    "fixtures/solar_wind_samples.par": "f879d569b92ee0c3acf1e2c0b1aac62072001cebb376a268f7a6e5b2ec7fa67e"
+  },
+  "schema_version": 2,
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_repository": "https://github.com/wdong-eric/tempo2.git",
+  "verification_artifacts": {
+    "checks/ddh.json": "d1fdd35a4cdacc386cd91bfce2b55e09994c914fc2c2ea3c7194ed5e223cca97",
+    "checks/missing-runtime.json": "581e55fc0dcf8d4c444c230af37513fd65a25281f17ec0a628f368dae13f134c",
+    "checks/precision.json": "da8e763e0eb1f27f0a3f1022c784115b9703152ef9cce65da11faba8f783d622",
+    "checks/results.json": "975ec496b5e0935a5e413d9b213f40fcaae80a2cf32315f2be2cd4ce2bbd6783",
+    "checks/upstream.json": "0313d9a3c06a6b30a51f8d82e450a0edd8ccc0614ac66e929a59f2e7c5bee290"
+  }
+}

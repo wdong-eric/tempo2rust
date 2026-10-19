@@ -1,0 +1,9 @@
+case	qd	rug128	interpretation
+sqrt(-1)	Quad(NaN, NaN)	-NaN	diagnostic; timing boundary must reject invalid results
+ln(0)	Quad(-inf, 0.0)	-inf	diagnostic; timing boundary must reject invalid results
+ln(-1)	Quad(NaN, NaN)	-NaN	diagnostic; timing boundary must reject invalid results
+1/0	Quad(NaN, NaN)	inf	diagnostic; timing boundary must reject invalid results
+exp(709)	Quad(inf, 0.0)	8.218407461554972189241372386597816393254e307	diagnostic; timing boundary must reject invalid results
+exp(-709)	Quad(0.0, 0.0)	1.216780750623423065516434670348719978490e-308	diagnostic; timing boundary must reject invalid results
+inherent_le_same_hi	true	false	qd inherent le ignores low limb when highs equal
+operator_le_same_hi	false	false	derived PartialOrd differs from inherent le

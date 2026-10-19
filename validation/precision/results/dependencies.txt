@@ -1,0 +1,26 @@
+tempo2-precision-study v0.1.0 (/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision)
+├── num-traits v0.2.19
+│   [build-dependencies]
+│   └── autocfg v1.5.1
+├── qd v0.8.0
+│   ├── bytemuck v1.25.2
+│   ├── libm v0.2.16
+│   ├── num-traits v0.2.19 (*)
+│   └── pulp v0.22.3
+│       ├── bytemuck v1.25.2
+│       ├── cfg-if v1.0.5
+│       ├── libm v0.2.16
+│       ├── num-complex v0.4.6
+│       │   ├── bytemuck v1.25.2
+│       │   └── num-traits v0.2.19 (*)
+│       ├── paste v1.0.15 (proc-macro)
+│       ├── pulp-wasm-simd-flag v0.1.1
+│       └── reborrow v0.5.5
+│       [build-dependencies]
+│       └── version_check v0.9.5
+└── rug v1.30.0
+    ├── az v1.3.0
+    ├── gmp-mpfr-sys v1.7.1
+    │   └── libc v0.2.191
+    ├── libc v0.2.191
+    └── libm v0.2.16

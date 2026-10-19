@@ -1,0 +1,9 @@
+    Updating crates.io index
+     Locking 9 packages to latest Rust 1.97.1 compatible versions
+ Downloading crates ...
+  Downloaded shlex v2.0.1
+  Downloaded find-msvc-tools v0.1.15
+  Downloaded cc v1.9.0
+  Downloaded f128_input v0.2.1
+  Downloaded f128 v0.2.9
+  Downloaded f128_internal v0.2.2

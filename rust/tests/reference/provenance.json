@@ -1,0 +1,62 @@
+{
+  "reference_revision": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+  "base_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "files": {
+    "schema.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/schema.json",
+      "sha256": "39de24bd60d7d33ea88a776771e0932fca1182913c3973b95a6f3708e9a46043"
+    },
+    "compare.py": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/compare.py",
+      "sha256": "67fc9cbcdc6e5185ca06789b1b2b638c51746b774864b5044e1715213d476679"
+    },
+    "build_manifest.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build_manifest.json",
+      "sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8"
+    },
+    "manifest.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/manifest.json",
+      "sha256": "4f5ef112f977ec4a30b84bfb2e891748a5003198a0aa388ec8b45af74ff4c9ed"
+    },
+    "initializer-correction.patch": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/initializer-correction.patch",
+      "sha256": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c"
+    },
+    "instrumentation.patch": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/instrumentation.patch",
+      "sha256": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed"
+    },
+    "REPORT.md": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/REPORT.md",
+      "sha256": "ce9cc98f444ae770e1acbff167a713ff973f849e6f65e77cfec50ca146095880"
+    },
+    "outputs/barycentric.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/barycentric.json",
+      "sha256": "a9bac02d3ebeb4a65935f208b6e1ca8a58362d604d66a1fb55b9ea2f788a675e"
+    },
+    "outputs/barycentric_4ns.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/barycentric_4ns.json",
+      "sha256": "44a2dfbbb294e932fc66657f2ca8b47f866d17bb26b337c11e6ebe8786e4d9af"
+    },
+    "outputs/long_span.json": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/outputs/long_span.json",
+      "sha256": "d62cc4cfd2a702a255f0c0d3b392c4cf9f93a2ba10feb84964feabca14069b44"
+    },
+    "fixtures/original/test1.par": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/original/test1.par",
+      "sha256": "c3ac6a628beeea72e9cae2d98cfb7b08ba126834e12058ee1af9a74db65c870e"
+    },
+    "fixtures/original/test1.tim": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/original/test1.tim",
+      "sha256": "420ea336f60b68faa268fbb7ba0b9dce2a4b8792c00b9ff9861187264756d9aa"
+    },
+    "fixtures/long_span.par": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/long_span.par",
+      "sha256": "e9bc0b29c4c0c3ede738354140a2fcc107d59b0cd0cb60e04e8ca319738047d7"
+    },
+    "fixtures/long_span.tim": {
+      "source": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/long_span.tim",
+      "sha256": "9bcb67f159409d43a0956ab02ae770d7f530c53751ab5a2baa63c4faa412d040"
+    }
+  }
+}

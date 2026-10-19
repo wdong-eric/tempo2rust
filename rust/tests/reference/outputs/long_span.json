@@ -1,0 +1,507 @@
+{
+  "availability": "available",
+  "build_manifest_sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+  "command": [
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/export_reference",
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/long_span.par",
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/long_span.tim",
+    "standard",
+    "OUTPUT.tsv"
+  ],
+  "comparison_profile": "barycentric-v1",
+  "configuration": {
+    "binary_model": "NONE",
+    "calc_shapiro": "1",
+    "clock": "TT(TAI)",
+    "correct_troposphere": "1",
+    "dilate_frequency": "1",
+    "ephemeris": "DE405",
+    "fit_performed": "false",
+    "ipm": "1",
+    "planet_shapiro": "1",
+    "refphs": "0",
+    "remove_mean": "0",
+    "solar_wind_model": "0",
+    "solar_wind_ne_cm3": "4",
+    "t2c_method": "1",
+    "time_ephemeris": "IF99",
+    "tzrsite": "@",
+    "units": "TCB"
+  },
+  "engine_provenance": {
+    "eop_file": "/earth/eopc04_IAU2000.62-now",
+    "fit_mode": "0",
+    "jpl_ephemeris": "$RUNTIME/ephemeris/DE405.1950.2050",
+    "mode": "standard",
+    "no_warnings": "0",
+    "solar_wind_sample_count": "0",
+    "storage_initialization": "corrected initialise; no added zero fill",
+    "use_calceph": "0"
+  },
+  "executable_sha256": "04f2df5b63b73990fb5640285ce8fa245a3f2377e0711824a4bbd59c31260c24",
+  "fixture": "long_span",
+  "input_files": {
+    "fixtures/long_span.par": {
+      "sha256": "e9bc0b29c4c0c3ede738354140a2fcc107d59b0cd0cb60e04e8ca319738047d7"
+    },
+    "fixtures/long_span.tim": {
+      "sha256": "9bcb67f159409d43a0956ab02ae770d7f530c53751ab5a2baa63c4faa412d040"
+    }
+  },
+  "original_observations": [
+    {
+      "frequency_mhz_text": "1400",
+      "index": 0,
+      "line": 2,
+      "name": "reference",
+      "raw_line": "reference 1400 50000.123456789123456789123456789 10 @",
+      "sat_mjd_text": "50000.123456789123456789123456789",
+      "site": "@",
+      "toa_error_us_text": "10"
+    },
+    {
+      "frequency_mhz_text": "1400",
+      "index": 1,
+      "line": 3,
+      "name": "early",
+      "raw_line": "early 1400 42695.987654321987654321987654321 10 @",
+      "sat_mjd_text": "42695.987654321987654321987654321",
+      "site": "@",
+      "toa_error_us_text": "10"
+    },
+    {
+      "frequency_mhz_text": "1400",
+      "index": 2,
+      "line": 4,
+      "name": "late",
+      "raw_line": "late 1400 57305.246813579246813579246813579 10 @",
+      "sat_mjd_text": "57305.246813579246813579246813579",
+      "site": "@",
+      "toa_error_us_text": "10"
+    },
+    {
+      "frequency_mhz_text": "1400",
+      "index": 3,
+      "line": 5,
+      "name": "late_4ns",
+      "raw_line": "late_4ns 1400 57305.2468135792468598755431098752962962963 10 @",
+      "sat_mjd_text": "57305.2468135792468598755431098752962962963",
+      "site": "@",
+      "toa_error_us_text": "10"
+    }
+  ],
+  "parameters": {
+    "DECJ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DECJ (rad)",
+      "value": "-0"
+    },
+    "DM": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DM (cm^-3 pc)",
+      "value": "100"
+    },
+    "DMEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DMEPOCH (MJD)",
+      "value": "50000"
+    },
+    "EPHVER": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "EPHVER",
+      "value": "5"
+    },
+    "F0": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "F0 (s^-1)",
+      "value": "123.456789123456789123456789000000002"
+    },
+    "F1": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "F1 (s^-2)",
+      "value": "-1.23456789123456788999999999999999999e-15"
+    },
+    "F10": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F10 (s^-11)",
+      "value": "0"
+    },
+    "F11": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F11 (s^-12)",
+      "value": "0"
+    },
+    "F12": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F12 (s^-13)",
+      "value": "0"
+    },
+    "F2": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "F2 (s^-3)",
+      "value": "3.45678912345678900000000000000000012e-27"
+    },
+    "F3": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F3 (s^-4)",
+      "value": "0"
+    },
+    "F4": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F4 (s^-5)",
+      "value": "0"
+    },
+    "F5": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F5 (s^-6)",
+      "value": "0"
+    },
+    "F6": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F6 (s^-7)",
+      "value": "0"
+    },
+    "F7": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F7 (s^-8)",
+      "value": "0"
+    },
+    "F8": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F8 (s^-9)",
+      "value": "0"
+    },
+    "F9": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F9 (s^-10)",
+      "value": "0"
+    },
+    "PEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "PEPOCH (MJD)",
+      "value": "50000"
+    },
+    "POSEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "POSEPOCH (MJD)",
+      "value": "50000"
+    },
+    "RAJ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "RAJ (rad)",
+      "value": "0.261799387799149407829446545292739756"
+    },
+    "TRACK": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "TRACK (MJD)",
+      "value": "0"
+    },
+    "TZRFRQ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "TZRFRQ (MHz)",
+      "value": "1400"
+    },
+    "TZRMJD": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "TZRMJD",
+      "value": "50000"
+    }
+  },
+  "reference_identity": {
+    "base_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "build_manifest_sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+    "correction_sha256": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c",
+    "instrumentation_sha256": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed"
+  },
+  "resources": {
+    "events": [
+      {
+        "caller": "readParfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/long_span.par",
+        "stage": "readParfile"
+      },
+      {
+        "caller": "readTimfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/long_span.tim",
+        "stage": "readTimfile"
+      },
+      {
+        "caller": "readTimfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/long_span.tim",
+        "stage": "readTimfile"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      }
+    ],
+    "files": {
+      "$REFERENCE/fixtures/long_span.par": {
+        "coverage": null,
+        "sha256": "e9bc0b29c4c0c3ede738354140a2fcc107d59b0cd0cb60e04e8ca319738047d7",
+        "size_bytes": 413
+      },
+      "$REFERENCE/fixtures/long_span.tim": {
+        "coverage": null,
+        "sha256": "9bcb67f159409d43a0956ab02ae770d7f530c53751ab5a2baa63c4faa412d040",
+        "size_bytes": 225
+      },
+      "$RUNTIME/ephemeris/DE405.1950.2050": {
+        "coverage": {
+          "end_mjd": "69808.0",
+          "source": "binary header",
+          "start_mjd": "33264.0"
+        },
+        "sha256": "86786f07aeddc1c5b6ddb24d8c65930803458938c6a2f920e8ea72a86da7479c",
+        "size_bytes": 9316736
+      },
+      "$RUNTIME/ephemeris/TIMEEPH_short.te405": {
+        "coverage": {
+          "end_mjd": "69808.0",
+          "source": "binary header",
+          "start_mjd": "38736.0"
+        },
+        "sha256": "a455fe86dd66c173ebb5a58a6fe12f65b3e9c21c2000be235b669f84d5561565",
+        "size_bytes": 1759184
+      }
+    }
+  },
+  "returncode": 0,
+  "runtime_root": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/T2runtime",
+  "schema_version": 2,
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "stages": {
+    "bats": [
+      {
+        "bat_mjd": "50000.1234567891234567891234567890032",
+        "bbat_mjd": "50000.1234567891234567891234567890032",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "reference",
+        "frequency_mhz": "1400",
+        "sat_mjd": "50000.1234567891234567891234567890032",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "42695.9876543219876543219876543210022",
+        "bbat_mjd": "42695.9876543219876543219876543210022",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "early",
+        "frequency_mhz": "1400",
+        "sat_mjd": "42695.9876543219876543219876543210022",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "57305.2468135792468135792468135790001",
+        "bbat_mjd": "57305.2468135792468135792468135790001",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late",
+        "frequency_mhz": "1400",
+        "sat_mjd": "57305.2468135792468135792468135790001",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "57305.246813579246859875543109875295",
+        "bbat_mjd": "57305.246813579246859875543109875295",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late_4ns",
+        "frequency_mhz": "1400",
+        "sat_mjd": "57305.246813579246859875543109875295",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      }
+    ],
+    "parsed": [
+      {
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "reference",
+        "frequency_mhz": "1400",
+        "sat_mjd": "50000.1234567891234567891234567890032",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "early",
+        "frequency_mhz": "1400",
+        "sat_mjd": "42695.9876543219876543219876543210022",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late",
+        "frequency_mhz": "1400",
+        "sat_mjd": "57305.2468135792468135792468135790001",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late_4ns",
+        "frequency_mhz": "1400",
+        "sat_mjd": "57305.246813579246859875543109875295",
+        "site": "@",
+        "toa_error_us": "10"
+      }
+    ],
+    "residuals": [
+      {
+        "bat_mjd": "50000.1234567891234567891234567890032",
+        "bbat_mjd": "50000.1234567891234567891234567890032",
+        "binary_delay_s": "0",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "reference",
+        "frequency_mhz": "1400",
+        "nphase_turn": "1316872",
+        "phase_turn": "1316872",
+        "pulse_number": "1316872",
+        "residual_s": "0",
+        "sat_mjd": "50000.1234567891234567891234567890032",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "42695.9876543219876543219876543210022",
+        "bbat_mjd": "42695.9876543219876543219876543210022",
+        "binary_delay_s": "0",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "early",
+        "frequency_mhz": "1400",
+        "nphase_turn": "-277768636",
+        "phase_turn": "-77909464635.8805707598694626575402158",
+        "pulse_number": "-77909464636",
+        "residual_s": "0.000967376852893104990194112441262908373",
+        "sat_mjd": "42695.9876543219876543219876543210022",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "57305.2468135792468135792468135790001",
+        "bbat_mjd": "57305.2468135792468135792468135790001",
+        "binary_delay_s": "0",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late",
+        "frequency_mhz": "1400",
+        "nphase_turn": "290935801",
+        "phase_turn": "77922631800.8300898872065176974938107",
+        "pulse_number": "77922631801",
+        "residual_s": "-0.00137627192477500925212547055010805316",
+        "sat_mjd": "57305.2468135792468135792468135790001",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      },
+      {
+        "bat_mjd": "57305.246813579246859875543109875295",
+        "bbat_mjd": "57305.246813579246859875543109875295",
+        "binary_delay_s": "0",
+        "clockCorr": "0",
+        "delayCorr": "0",
+        "deleted": "0",
+        "fname": "late_4ns",
+        "frequency_mhz": "1400",
+        "nphase_turn": "290935801",
+        "phase_turn": "77922631800.8300903810336710771699017",
+        "pulse_number": "77922631801",
+        "residual_s": "-0.00137626792477503447674931874405173484",
+        "sat_mjd": "57305.246813579246859875543109875295",
+        "shklovskii_s": "0",
+        "site": "@",
+        "toa_error_us": "10"
+      }
+    ]
+  },
+  "status": "completed",
+  "warnings": []
+}

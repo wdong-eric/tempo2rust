@@ -1,0 +1,9 @@
+backend	workload	items_per_trial	trials	min_ns_per_item	median_ns_per_item	max_ns_per_item
+qd_assisted	source_F0_to_F3_phase	10000	7	94.033	187.742	234.821
+rug128	source_F0_to_F3_phase	10000	7	988.487	1074.208	1602.942
+qd_assisted	add_then_subtract_1ns	10000	7	3.204	3.221	3.354
+rug128	add_then_subtract_1ns	10000	7	40.833	40.867	41.608
+rug128	parse_finite_decimal	10000	7	305.325	307.883	309.079
+qd_assisted	parse_via_MPFR512_split	10000	7	448.633	452.592	455.846
+rug128	decimal_serialize	10000	7	367.550	368.808	372.225
+qd_assisted	decimal_via_MPFR512_sum	10000	7	656.008	658.342	661.442

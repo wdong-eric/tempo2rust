@@ -1,0 +1,505 @@
+{
+  "schema_version": 2,
+  "status": "Barycentric comparison contract adopted by decision 0001; corrected terrestrial fields/budgets are proposals; M0 pending central review.",
+  "encoding": "All scientific scalar values are decimal strings. __float128 serialized with 36 significant digits and checked by exact strtoflt128 round trip. Integers and metadata flags compare exactly. Python comparisons use Decimal with 90-digit context.",
+  "identity": "fixture + original_observations[index].line; retain input order, original decimal tokens, raw line, and input hashes",
+  "stages": {
+    "parsed": "immediately after readParfile/readTimfile, before optional preProcessSimple",
+    "bats": "after formBatsAll including secularMotion",
+    "residuals": "immediately after formResiduals(...,0), no t2Fit",
+    "direct_initial": "manual BAT=BBAT=SAT as upstream subtractBATs, then residuals",
+    "aligned": "SAT -= residual/86400; BAT=BBAT=SAT; recompute residuals",
+    "perturbed": "add exactly decimal 4e-9/86400 to all but first aligned SAT; recompute residuals",
+    "offset_4ns": "add 4ns to every original SAT, then formBatsAll",
+    "slope_plus": "original SAT +1ms, then formBatsAll",
+    "slope_minus": "original SAT -1ms, then formBatsAll"
+  },
+  "prefitResidual": "Intentionally unavailable. t2Fit_getFitData copies residual into prefitResidual only when fitting begins; no fit is performed.",
+  "comparison_rationale": "Same-build regeneration is exact. Decision 0001 adopts the stated barycentric absolute gates (epochs scaled to seconds), exact identities/flags/counts and relative parameter gate 1e-30 with exact zero. Terrestrial budgets remain proposals. These engineering gates do not assert physical accuracy; tighter analytic checks are independent diagnostics.",
+  "observation_fields": {
+    "fname": {
+      "unit": "text",
+      "comparison": "exact",
+      "meaning": "Parsed TOA filename/site; original line and index are the stable identity, filenames can repeat.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "site": {
+      "unit": "text",
+      "comparison": "exact",
+      "meaning": "Parsed TOA filename/site; original line and index are the stable identity, filenames can repeat.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "deleted": {
+      "unit": "integer flag",
+      "comparison": "exact",
+      "meaning": "Upstream flags from readTimfile; no selection or reordering is applied.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "clockCorr": {
+      "unit": "integer flag",
+      "comparison": "exact",
+      "meaning": "Upstream flags from readTimfile; no selection or reordering is applied.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "delayCorr": {
+      "unit": "integer flag",
+      "comparison": "exact",
+      "meaning": "Upstream flags from readTimfile; no selection or reordering is applied.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "pulse_number": {
+      "unit": "integer turns",
+      "comparison": "exact",
+      "meaning": "Signed int64 pulseN, decimal integer text; formResiduals phase count including integral F0*time term.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "nphase_turn": {
+      "unit": "integer turns",
+      "comparison": "exact",
+      "meaning": "Nearest integer of reduced phase5 after reference subtraction; not the full pulse count.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "sat_mjd": {
+      "unit": "day (MJD)",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s",
+      "initialization": "readTimfile; modified only by declared perturbations",
+      "meaning": "Original or scenario-modified arrival epoch. For @ observations SAT is already barycentric TCB. For pks/7 terrestrial observations SAT is in the observatory clock realization; it is not TCB.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "bat_mjd": {
+      "unit": "day (MJD)",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s",
+      "initialization": "formBats (or declared direct BAT=SAT experiment)",
+      "meaning": "Infinite-frequency solar-system barycentric arrival epoch, TCB in all declared fixtures. Observatory clock and propagation corrections transform terrestrial SAT to BAT; for @, BAT=SAT.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "bbat_mjd": {
+      "unit": "day (MJD)",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s",
+      "initialization": "secularMotion (or declared direct BBAT=SAT experiment)",
+      "meaning": "BAT minus secular-motion delay, TCB in all declared fixtures; equals BAT in the declared barycentric cases.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "bat_correction_day": {
+      "unit": "day",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s",
+      "initialization": "formBats",
+      "meaning": "Combined clock and timing-delay correction; only present for delayCorr=1.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "frequency_mhz": {
+      "unit": "MHz",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-9",
+      "difference_scale": "1",
+      "comparison_unit": "MHz",
+      "initialization": "readTimfile",
+      "meaning": "Parsed observing frequency (stored binary64).",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "toa_error_us": {
+      "unit": "microsecond",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "microsecond",
+      "initialization": "readTimfile",
+      "meaning": "Reported uncertainty, no fit or weighting applied.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "frequency_ssb_hz": {
+      "unit": "Hz",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-5",
+      "difference_scale": "1",
+      "comparison_unit": "Hz",
+      "initialization": "dm_delays",
+      "meaning": "Barycentric observing frequency; omitted for @ where upstream has different units.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "clock_tt_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "toa2utc",
+      "meaning": "Sum of correctionsTT, accumulated upstream in binary64.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "tt_tb_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "final tt2tb in ephemeris_routines",
+      "meaning": "TT-to-TCB and TT-to-Teph offsets after observatory term.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "tt_teph_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "final tt2tb in ephemeris_routines",
+      "meaning": "TT-to-TCB and TT-to-Teph offsets after observatory term.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "roemer_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "calculate_bclt",
+      "meaning": "Geometric light time including active astrometric terms.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_sun_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_jupiter_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_saturn_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_venus_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_uranus_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shapiro_neptune_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "shapiro_delay in calculate_bclt",
+      "meaning": "Signed Shapiro correction as stored, subtracted by formBats; individual terms need not be positive.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "troposphere_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "calculate_bclt",
+      "meaning": "Stored atmospheric, interstellar DM and solar-wind delays, respectively, subtracted by formBats; signs preserved.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "dispersion_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "calculate_bclt",
+      "meaning": "Stored atmospheric, interstellar DM and solar-wind delays, respectively, subtracted by formBats; signs preserved.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "solar_dispersion_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "calculate_bclt",
+      "meaning": "Stored atmospheric, interstellar DM and solar-wind delays, respectively, subtracted by formBats; signs preserved.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "shklovskii_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "secularMotion",
+      "meaning": "Secular-motion contribution subtracted from BAT to get BBAT; zero here.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "binary_delay_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "formResiduals",
+      "meaning": "torb, zero for these isolated fixtures.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "residual_s": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "formResiduals(..., removeMean=0)",
+      "meaning": "Fixed-parameter residual; first eligible TOA fractional phase reference. No fit and no mean subtraction.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "phase_turn": {
+      "unit": "turn",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-10",
+      "difference_scale": "1",
+      "comparison_unit": "turn",
+      "initialization": "formResiduals",
+      "meaning": "Full upstream phase after subtraction of first eligible TOA fractional phase. Absolute 1e-10 turns is <1ps at long-span F0 and 0.1ns at F0=1Hz.",
+      "gate_status": "adopted barycentric; proposed terrestrial"
+    },
+    "earth_ssb_light_s_0": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "earth_ssb_light_s_1": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "earth_ssb_light_s_2": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "observatory_earth_light_s_0": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "observatory_earth_light_s_1": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    },
+    "observatory_earth_light_s_2": {
+      "unit": "light-second",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second",
+      "initialization": "ephemeris_routines",
+      "meaning": "Cartesian components 0,1,2 of position vectors; upstream double, same equatorial barycentric axes.",
+      "gate_status": "proposed terrestrial / diagnostic only"
+    }
+  },
+  "observation_field_patterns": {
+    "clock_to_[0-9]+": {
+      "unit": "clock label",
+      "comparison": "exact",
+      "meaning": "Destination clock of each active correction in applied order.",
+      "gate_status": "proposed terrestrial; unsupported in initial barycentric fixtures"
+    },
+    "clock_step_s_[0-9]+": {
+      "unit": "s",
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s",
+      "initialization": "getClockCorrections",
+      "meaning": "Applied clock step; binary64 upstream.",
+      "gate_status": "proposed terrestrial; unsupported in initial barycentric fixtures"
+    },
+    "flag_id_[0-9]+": {
+      "unit": "text",
+      "comparison": "exact",
+      "meaning": "TIM flag ID/value in original order (not supported in declared initial fixtures).",
+      "gate_status": "proposed terrestrial; unsupported in initial barycentric fixtures"
+    },
+    "flag_value_[0-9]+": {
+      "unit": "text",
+      "comparison": "exact",
+      "meaning": "TIM flag ID/value in original order (not supported in declared initial fixtures).",
+      "gate_status": "proposed terrestrial; unsupported in initial barycentric fixtures"
+    }
+  },
+  "reference_identity": {
+    "base_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "correction_sha256": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c",
+    "description": "Expected goldens must carry this correction plus instrumentation and build manifest hashes. Actual engines retain their own provenance."
+  },
+  "engine_provenance": "Engine build/compiler/dependencies, allocation/initialization policy, scenario name, resource paths/reads, diagnostic verbosity, legacy fit mode, diagnostic solar-wind sample count and parameter display labels are retained but excluded from scientific comparison. C need not fabricate them or read unused resources.",
+  "barycentric_projection": {
+    "profile": "barycentric-v1",
+    "fixtures": [
+      "barycentric",
+      "barycentric_4ns",
+      "long_span"
+    ],
+    "configuration_fields": [
+      "binary_model",
+      "calc_shapiro",
+      "clock",
+      "correct_troposphere",
+      "dilate_frequency",
+      "ephemeris",
+      "fit_performed",
+      "ipm",
+      "planet_shapiro",
+      "refphs",
+      "remove_mean",
+      "solar_wind_model",
+      "solar_wind_ne_cm3",
+      "t2c_method",
+      "time_ephemeris",
+      "tzrsite",
+      "units"
+    ],
+    "parameters": [
+      "F0",
+      "F1",
+      "F2",
+      "F3",
+      "PEPOCH",
+      "RAJ",
+      "DECJ",
+      "POSEPOCH",
+      "DM",
+      "DMEPOCH",
+      "EPHVER",
+      "TZRMJD",
+      "TZRFRQ"
+    ],
+    "parameter_comparison": {
+      "flags": "set and fit_flag exact",
+      "value_relative_tolerance": "1e-30",
+      "zero": "exact"
+    },
+    "inactive_parameters": "RAJ, DECJ, POSEPOCH, DM, DMEPOCH and TZR fields are explicitly preserved for these @ fixtures; EPHVER participates in the legacy units resolution. This projection does not enable their terrestrial calculations.",
+    "omittable_legacy_parameters": [
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F12",
+      "TRACK"
+    ],
+    "omittable_legacy_parameter_rule": "If present, set=0, fit_flag=0 and value=0 are required. Any supplied higher derivative or TRACK is unsupported, even if zero.",
+    "parsed_fields": [
+      "fname",
+      "site",
+      "deleted",
+      "clockCorr",
+      "delayCorr",
+      "sat_mjd",
+      "frequency_mhz",
+      "toa_error_us"
+    ],
+    "bats_fields": [
+      "bat_mjd",
+      "bbat_mjd"
+    ],
+    "residual_fields": [
+      "phase_turn",
+      "nphase_turn",
+      "pulse_number",
+      "residual_s"
+    ],
+    "omittable_zero_fields": [
+      "binary_delay_s",
+      "shklovskii_s"
+    ],
+    "omittable_zero_field_rule": "If present these must be zero; NONE binary model and @ inputs are required. No synthetic zero fields required of C.",
+    "stages_by_fixture": {
+      "barycentric": [
+        "parsed",
+        "bats",
+        "residuals"
+      ],
+      "long_span": [
+        "parsed",
+        "bats",
+        "residuals"
+      ],
+      "barycentric_4ns": [
+        "parsed",
+        "direct_initial",
+        "aligned",
+        "perturbed"
+      ]
+    },
+    "adapter_contract": "C maps its owned input/result to this explicit projection, preserving original_observations exactly. For aligned/4ns stages it must evaluate the published stage epochs (and retain original input identity), implementing the declared perturbations in its test adapter. Unknown scientific fields/settings, unsupported supplied parameters, deleted TOAs and non-@ sites are rejected. This comparator checks fixture agreement, not completeness of a production input parser."
+  },
+  "availability": "Only available + barycentric-v1 is a comparison golden here. Corrected terrestrial-candidate and smoke-only profiles are refused, even if availability is relabeled. Failed results and schema-v1 uncorrected exports are refused."
+}

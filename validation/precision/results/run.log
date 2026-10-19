@@ -1,0 +1,5 @@
+   Compiling tempo2-precision-study v0.1.0 (/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision)
+    Finished `release` profile [optimized + debuginfo] target(s) in 1.16s
+     Running `target/release/tempo2-precision-study`
+1460 numerical rows; 92 failed gates (qd/control); Rug128 failures 0; reference convergence failures 0
+Native qd parser unavailable, missing API compile probes are separate; assisted qd results are not a native I/O pass.
