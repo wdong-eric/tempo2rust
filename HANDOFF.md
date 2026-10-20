@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 20 October 2026 for M1b acceptance. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 20 October 2026 for the M2 fitting contract and Assignment E release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The immediate objective is one supported calculation path with demonstrated numerical agreement and useful failure behavior. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -8,13 +8,15 @@ The immediate objective is one supported calculation path with demonstrated nume
 
 Workspace: `/Users/Eric.Dong/Downloads/tempo2rust`.
 
-The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted; Assignment D is complete.** Decision 0006 identifies the corrected D delivery and closes both resource findings from decision 0005. M2 requires its own central contract before release.
+The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted; Assignment D is complete. Assignment E is released for M2 implementation; M2 acceptance remains pending.** Decision 0006 closes D's resource findings; decision 0007 adopts the fitting contract and prepares dispatch.
 
-`tempo2/` and `validation/reference/` are independent Git repositories. The primary project repository tracks the central documents, Rust crate, and precision study and ignores those two nested repositories. The bootstrap and initial commit `49e122c` are complete. All three repositories were clean at the M1a review; the primary repository now contains staged delivery/planning files and unstaged corrections, while both independent repositories remain clean. M1b acceptance is bound to the report/source-manifest hashes in decision 0006. Preserve existing histories and do not flatten or implicitly stage either nested repository.
+`tempo2/` and `validation/reference/` are independent Git repositories. The primary project repository tracks the central documents, Rust crate and precision study, and ignores those two nested repositories. E's new fitting-validation directory will also be tracked by the primary repository. The accepted D delivery is now committed as `3f08a8c` (implementation), `31d55bf` (validation) and `87f3933` (design/acceptance documentation), preserving the report/source-manifest hashes in decision 0006. Both independent repositories remain clean. Preserve existing histories and do not flatten or implicitly stage either nested repository. Inspect live Git status before starting new work.
 
 The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0001-reference-and-m1a-contract.md). [M0 acceptance and C release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0002-m0-acceptance-and-c-release.md) pins the reference evidence; [M1a acceptance](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0003-m1a-acceptance.md) records the accepted Rust implementation. [M1b contract and D release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0004-m1b-contract-and-d-release.md) adopts the terrestrial contract and the user's compatibility rule. Later decisions supersede earlier pending-gate wording and historical submission status.
 
 [M1b central review and bounded correction](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0005-m1b-review-and-resource-correction.md) records the original findings and required correction. [M1b acceptance](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0006-m1b-acceptance.md) closes both findings after debug/release checks and accepts the declared macOS arm64 PKS path. Scientific policy and tolerances are unchanged.
+
+[M2 fitting contract and E release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) defines ZERO/F0–F3 fitting, the source SVD and mixed-precision boundaries, weighting, uncertainty rescaling, iteration behavior, fitting fixtures, comparison gates and invalid-fit errors. The linked source probe supports these decisions. No separate implementation chat has been created by that document.
 
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
@@ -27,8 +29,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [A2 Reference correction](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/01a-reference-correction.md) | `/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/` | Delivered and accepted for M0 at `7795d53` | Updated `REPORT.md` and new revision |
 | [C Barycentric timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/03-barycentric-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Delivered at `49e122c`; M1a accepted in decision 0003 | `M1A_REPORT.md` inside the owned directory |
 | [D Observatory timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/04-observatory-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Complete; corrected delivery accepted for M1b in decision 0006 | `M1B_REPORT.md` and correction evidence |
+| [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Released by decision 0007; handoff ready for a separate chat | `rust/M2_REPORT.md` and fitting reference/verification evidence |
 
-A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete and accepted, with TEMPO2's meteorology fallback, valid numerical behavior and comparison gates preserved. C and D were sequential owners of the same Rust crate. The reference and precision directories remain inputs to implementation work; report needed changes to their owners rather than silently changing comparison evidence. The next implementation assignment awaits the central M2 contract.
+A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete and accepted, with TEMPO2's meteorology fallback, valid numerical behavior and comparison gates preserved. E follows C and D as the next owner of the Rust crate and creates fitting evidence in its separate directory. The accepted reference and precision directories remain read-only inputs to implementation work; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
@@ -58,7 +61,8 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | M1a acceptance | Accepted 20 October 2026 at `49e122c` for the declared macOS arm64 path | Decision 0003 records source review, artifact identity, comparisons and coverage limits |
 | M1b fixture scope and release | Adopted PKS path; D released by decision 0004 | A2 identity/configuration; source-compatible meteorology; SOFA/JPL boundary; stage budgets |
 | M1b acceptance | Accepted 20 October 2026 for the declared macOS arm64 PKS path | Decision 0006 pins the corrected delivery; both resource findings closed, numerical outputs unchanged, debug/release recovery verified |
-| M2 contract and release | Pending central design | Selected fit parameters/derivatives, weighting and iteration conventions, reference fixtures, fit-output gates and invalid-fit behavior |
+| M2 contract and release | Adopted; E released by decision 0007 | Pinned source inspection and executable probe; ZERO/F0–F3, source SVD, MODE/NITS, raw covariance/rescaled errors, separate fit fixtures and gates |
+| M2 acceptance | Pending implementation and central review | E's source, identical-input solver checks, end-to-end fitting comparisons, invalid-fit recovery and unchanged M1a/M1b behavior |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
@@ -83,7 +87,7 @@ The central chat updates this table when a decision is made. Implementation chat
 | M3 | Additional models and directives are supported in fixture-driven batches with an explicit compatibility table |
 | M4 | Supported workflows install reproducibly and have documented library and CLI behavior, provenance, robustness tests, and declared platform coverage |
 
-M2 through M4 receive detailed implementation briefs after the preceding interfaces and coverage are known. Earlier time and token estimates are planning hypotheses; use A through D's measured effort to update them.
+M2's detailed brief is now available as Assignment E. M3 and M4 receive detailed briefs after the preceding interfaces and coverage are known. Earlier time and token estimates are planning hypotheses; use delivered assignments' measured effort to update them.
 
 ## Required return report
 
@@ -125,3 +129,5 @@ For D, historical initial dispatch under decision 0004; its bounded correction i
 ```text
 Implement Assignment D in /Users/Eric.Dong/Downloads/tempo2rust. D is released by /Users/Eric.Dong/Downloads/tempo2rust/decisions/0004-m1b-contract-and-d-release.md. Read that contract, /Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md, /Users/Eric.Dong/Downloads/tempo2rust/handoffs/04-observatory-core.md, and rust/M1A_REPORT.md. Own the Rust PKS observatory path. Follow existing TEMPO2 decisions unless demonstrated wrong or prone to errors, and explain each intentional departure in comments beside the changed code. Retain the normal meteorology fallback with warnings and provenance; do not introduce the rejected strict-weather policy or an opt-in switch. Preserve the accepted barycentric path, staged planning changes and independent reference repositories. Deliver stage comparisons, resource/fallback/recovery checks and rust/M1B_REPORT.md. Shared design changes and M1b acceptance remain in the central planning chat.
 ```
+
+For E, ready for a separate implementation chat: use the [complete dispatch prompt](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) in its handoff. Decision 0007 is the adopted contract; E delivers evidence for central M2 acceptance.

@@ -8,6 +8,8 @@ The [adopted M1b contract](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0004-
 
 The accepted delivery is the corrected working tree described in [M1B_REPORT.md](/Users/Eric.Dong/Downloads/tempo2rust/rust/M1B_REPORT.md), including its decision 0005 correction section. There is no separate D commit. Project HEAD remains the M1a base `49e122c3648e5cb91bae17233a062a444a10f9e4`; the following artifact hashes identify the accepted D delivery.
 
+**Subsequent Git record, 20 October 2026:** At the user's request, this same delivery was committed in stages as `3f08a8c` (implementation), `31d55bf` (validation) and `87f3933` (design/acceptance documentation). The hashes below remain unchanged. The paragraphs describing the working tree/index retain the state at the original acceptance review. [Decision 0007](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) subsequently adopts M2's contract and releases E.
+
 | Artifact | SHA-256 |
 | --- | --- |
 | `rust/M1B_REPORT.md` | `6ce3be793fef035361075238d6f291568c0a86613b40d3e39715b743514d4b62` |
