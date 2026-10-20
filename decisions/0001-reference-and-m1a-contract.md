@@ -1,11 +1,13 @@
 # Reference configuration and initial Rust contract
 
-Central design decision, 19 October 2026, originally recorded after reviewing Assignment A at `5289797` and Assignment B. The decisions below settle the initial design. **M0 is now accepted and C released by [decision 0002](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0002-m0-acceptance-and-c-release.md)** after review of A2 at `7795d53`; that decision pins the corrected evidence and acceptance scope.
+Central design decision, 19 October 2026, originally recorded after reviewing Assignment A at `5289797` and Assignment B. The decisions below settle the initial design. **M0 is now accepted and C released by [decision 0002](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0002-m0-acceptance-and-c-release.md)** after review of A2 at `7795d53`; that decision pins the corrected evidence and acceptance scope.
+
+Status update, 20 October 2026: [decision 0003](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0003-m1a-acceptance.md) accepts C at `49e122c` for M1a. The design below remains in force. D requires a separate terrestrial contract and release.
 
 ## Evidence reviewed
 
-- [A report](/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/REPORT.md), manifests, comparison code, initializer reproducer, stage logs, and diagnostic test results. All six fixture output hashes and every artifact hash listed in A's manifest matched the files reviewed.
-- [B report](/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/REPORT.md), source, operation audit, numerical TSV, dependency versions, and reference snapshot provenance. All 28 files listed in B's artifact manifest matched. Recomputing all 1,460 saved numerical verdicts with Decimal arithmetic reproduced the recorded decisions: 516 Rug128 passes, 324 high-precision convergence passes, 7 independent polynomial-identity passes, 92 MPFR113 replay passes, 425 assisted-qd passes and 16 failures, and 4 binary64-control passes and 76 failures.
+- [A report](/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/REPORT.md), manifests, comparison code, initializer reproducer, stage logs, and diagnostic test results. All six fixture output hashes and every artifact hash listed in A's manifest matched the files reviewed.
+- [B report](/Users/Eric.Dong/Downloads/tempo2rust/validation/precision/REPORT.md), source, operation audit, numerical TSV, dependency versions, and reference snapshot provenance. All 28 files listed in B's artifact manifest matched. Recomputing all 1,460 saved numerical verdicts with Decimal arithmetic reproduced the recorded decisions: 516 Rug128 passes, 324 high-precision convergence passes, 7 independent polynomial-identity passes, 92 MPFR113 replay passes, 425 assisted-qd passes and 16 failures, and 4 binary64-control passes and 76 failures.
 - The B report reviewed has SHA-256 `fb6d91a8f25d9482195c70eabebdcbb8c4d4243bd270128f0e70a2f89ebbee5e`. Its 23 phase-replay observation/stage records include 16 barycentric records and 7 provisional terrestrial records. Replaying phase from exported BBAT does not validate the terrestrial correction chain.
 
 This review checked saved evidence and relevant source; it did not rebuild either experiment or rerun timing calculations. Both studies executed only on macOS arm64.
@@ -20,15 +22,15 @@ The source baseline stays `fda6ad4a9753ad7dc5d291406f2f310a9161423f`. A2 produce
 
 Approve setting `psr->ne_sw_ifuncN = 0` in `initialiseOne`, next to the analogous interpolation counts. This restores the empty-collection invariant before parsing. It is supported by three independent observations:
 
-1. [initialiseOne](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/initialise.C:119) initializes adjacent counts but omits this one.
-2. [The parser](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/readParfile.C:1226) uses the count as the next `_NE_SW` array index and increments it.
-3. [The delay calculation](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/dm_delays.C:320) treats a positive count as evidence of interpolation data. A's poisoned-storage reproducer and isolated correction demonstrate the failure and its removal.
+1. [initialiseOne](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/initialise.C:119) initializes adjacent counts but omits this one.
+2. [The parser](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/readParfile.C:1226) uses the count as the next `_NE_SW` array index and increments it.
+3. [The delay calculation](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/dm_delays.C:320) treats a positive count as evidence of interpolation data. A's poisoned-storage reproducer and isolated correction demonstrate the failure and its removal.
 
 Apply the correction at initialization, not after parsing, so supplied solar-wind samples remain active. Retain IPM, NE_SW, SWM, and existing delay formulas. Do not substitute zero solar-wind density, disable IPM, or blanket-zero the pulsar structure to conceal the omission. A2 implemented the correction in its disposable reference source, recorded the source patch separately from instrumentation, and supplied both empty-state and supplied-samples regressions.
 
 ## Remaining ideal-fixture failure
 
-Keep the DDH ideal fixture as a failing upstream regression against the original 1 ns threshold. A2 records a first failing residual of approximately 1.13759 ns and a maximum absolute residual of 4.59896 ns; 120 of 284 TOAs fail. The fixture is [test3.par](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/test_data/test3.par:13), which uses DDH, DE414, and a broader model than the initial isolated-pulsar path. The assertion fails before fitting.
+Keep the DDH ideal fixture as a failing upstream regression against the original 1 ns threshold. A2 records a first failing residual of approximately 1.13759 ns and a maximum absolute residual of 4.59896 ns; 120 of 284 TOAs fail. The fixture is [test3.par](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/test_data/test3.par:13), which uses DDH, DE414, and a broader model than the initial isolated-pulsar path. The assertion fails before fitting.
 
 The cause remains unknown; the fixture's binary model does not establish that the binary calculation is at fault. Record this as an open broader-coverage issue. It does not by itself reject the independently checked barycentric fixtures or require a looser Rust agreement tolerance. A2 preserved the failing TOAs and stage values and completed the bounded localization recorded in decision 0002. Complete causal diagnosis is required before claiming validation of that broader path, not before beginning the declared M1a path. If evidence implicates a component shared with the selected fixtures, reconsider their acceptance explicitly.
 
@@ -91,12 +93,12 @@ The supported barycentric path requires no observatory resource context. It may 
 
 ## Workspace Git organization
 
-Adopt one primary project repository at `/Users/Eric.Dong/Downloads/tempo2-rust` for the central documents, the Rust crate, and the precision study. Preserve the independent repositories at `tempo2/` and `validation/reference/`; ignore those two directories in the parent repository. Their revisions and artifact identities are recorded, and relevant small golden fixtures/provenance are copied into Rust tests for self-contained M1a checks. Do not flatten, move, or implicitly stage either nested repository.
+Adopt one primary project repository at `/Users/Eric.Dong/Downloads/tempo2rust` for the central documents, the Rust crate, and the precision study. Preserve the independent repositories at `tempo2/` and `validation/reference/`; ignore those two directories in the parent repository. Their revisions and artifact identities are recorded, and relevant small golden fixtures/provenance are copied into Rust tests for self-contained M1a checks. Do not flatten, move, or implicitly stage either nested repository.
 
 C may initialize the parent repository and its root `.gitignore` after M0 is accepted, if no parent project repository has since been created. Keep Cargo caches, native build trees, and generated large binaries out. Use explicit staging paths and inspect the dry run; do not commit another chat's in-progress changes. Creating remotes, pushing, and reorganizing the independent reference history are outside this bootstrap. The existing A commit remains intact. The central documents remain local until that bootstrap occurs.
 
 ## Gate and next assignment
 
-[A2 Reference correction and regeneration](/Users/Eric.Dong/Downloads/tempo2-rust/handoffs/01a-reference-correction.md) is complete and accepted for M0 at `7795d53`. The three barycentric fixtures are numerically unchanged, so B's backend decision remains supported without another experiment.
+[A2 Reference correction and regeneration](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/01a-reference-correction.md) is complete and accepted for M0 at `7795d53`. The three barycentric fixtures are numerically unchanged, so B's backend decision remains supported without another experiment.
 
-[Decision 0002](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0002-m0-acceptance-and-c-release.md) releases C. The open DDH causal diagnosis, broader model coverage, Linux execution, terrestrial stage budgets, and production meteorology policy remain explicitly scoped future work.
+[Decision 0002](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0002-m0-acceptance-and-c-release.md) releases C. The open DDH causal diagnosis, broader model coverage, Linux execution, terrestrial stage budgets, and production meteorology policy remain explicitly scoped future work.

@@ -1,6 +1,8 @@
 # M0 acceptance and Assignment C release
 
-Central decision, 19 October 2026. **M0 is accepted for the declared macOS arm64 reference and initial barycentric path. Assignment C is released for implementation.** The numerical representation, scientific conventions, tolerances, library/CLI interface, and Git layout in [decision 0001](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0001-reference-and-m1a-contract.md) remain in force. M1a and M1b are not accepted.
+Central decision, 19 October 2026. **M0 is accepted for the declared macOS arm64 reference and initial barycentric path. Assignment C is released for implementation.** The numerical representation, scientific conventions, tolerances, library/CLI interface, and Git layout in [decision 0001](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0001-reference-and-m1a-contract.md) remain in force. At this decision's original date, M1a and M1b were not accepted.
+
+Status update, 20 October 2026: [decision 0003](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0003-m1a-acceptance.md) accepts M1a at `49e122c`. The reference acceptance below remains unchanged; its C release is historical. M1b remains pending and D is not released.
 
 ## Accepted reference identity
 
@@ -17,7 +19,7 @@ Accept A2 at independent reference-repository revision `7795d53eeca32ef3dbb61c2b
 | Schema 2 | `39de24bd60d7d33ea88a776771e0932fca1182913c3973b95a6f3708e9a46043` |
 | Comparator | `67fc9cbcdc6e5185ca06789b1b2b638c51746b774864b5044e1715213d476679` |
 
-The [A2 report](/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/REPORT.md) and reference manifests intentionally retain their submission-time statement that M0 awaits central review. This decision records the subsequent acceptance; do not edit the accepted reference snapshot merely to replace that historical status.
+The [A2 report](/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/REPORT.md) and reference manifests intentionally retain their submission-time statement that M0 awaits central review. This decision records the subsequent acceptance; do not edit the accepted reference snapshot merely to replace that historical status.
 
 ## Acceptance evidence
 
@@ -29,11 +31,11 @@ The corrected build's recorded checks pass the 113-bit precision probes, all fou
 
 The central review exercised the comparator in memory: all three accepted fixtures compare successfully; a reduced independent-engine projection passes; half-budget and double-budget perturbations give the expected outcomes for seven scalar quantities; altered full/reduced pulse counts fail; terrestrial and smoke-only exports remain rejected after availability relabeling. These are checks of the comparison contract, not a Rust timing implementation.
 
-The central review did not rebuild or rerun TEMPO2 calculations. It inspected the regression/test implementation and recorded execution evidence, checked current artifact identity, and reran the read-only comparisons above. This is sufficient for this gate. The [B report](/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/REPORT.md) still has the previously reviewed hash `fb6d91a8f25d9482195c70eabebdcbb8c4d4243bd270128f0e70a2f89ebbee5e`. Exact preservation of the barycentric values means its backend decision does not need another experiment for A2.
+The central review did not rebuild or rerun TEMPO2 calculations. It inspected the regression/test implementation and recorded execution evidence, checked current artifact identity, and reran the read-only comparisons above. This is sufficient for this gate. The [B report](/Users/Eric.Dong/Downloads/tempo2rust/validation/precision/REPORT.md) still has the previously reviewed hash `fb6d91a8f25d9482195c70eabebdcbb8c4d4243bd270128f0e70a2f89ebbee5e`. Exact preservation of the barycentric values means its backend decision does not need another experiment for A2.
 
 ## Fixtures and comparison projection accepted for C
 
-Adopt [schema 2](/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/schema.json), its `barycentric-v1` projection, and the associated [comparator](/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/compare.py) for these fixtures only:
+Adopt [schema 2](/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/schema.json), its `barycentric-v1` projection, and the associated [comparator](/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/compare.py) for these fixtures only:
 
 | Fixture | Required stages | Export SHA-256 |
 | --- | --- | --- |
@@ -57,6 +59,6 @@ Copy the needed input files, three goldens, schema/comparator, and a compact pro
 
 ## Release and next return
 
-Proceed with [Assignment C](/Users/Eric.Dong/Downloads/tempo2-rust/handoffs/03-barycentric-core.md): one Rust library and CLI, Rug `Float` at 128-bit significand, checked pulse counts, source-corresponding phase arithmetic, strict supported-input handling, and the accepted comparisons. The root Git bootstrap is now permitted under decision 0001. Preserve the independent reference repositories and other chats' changes.
+Proceed with [Assignment C](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/03-barycentric-core.md): one Rust library and CLI, Rug `Float` at 128-bit significand, checked pulse counts, source-corresponding phase arithmetic, strict supported-input handling, and the accepted comparisons. The root Git bootstrap is now permitted under decision 0001. Preserve the independent reference repositories and other chats' changes.
 
 C returns `rust/M1A_REPORT.md`, supported-parameter/directive tables, source correspondence, reproducible commands, and measured errors. The central chat accepts M1a before D begins. This release authorizes the implementation assignment; it does not create or message a chat.

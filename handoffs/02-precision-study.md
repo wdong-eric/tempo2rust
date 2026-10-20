@@ -1,10 +1,10 @@
 # Numerical precision study
 
-Assignment B is delivered and reviewed. This is the historical study brief; [decision 0001](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0001-reference-and-m1a-contract.md) selects Rug128 for the initial core using its evidence. Read the [shared handoff](/Users/Eric.Dong/Downloads/tempo2-rust/HANDOFF.md) for the current milestone gate. The original assignment below records the question and experiment scope.
+Assignment B is delivered and reviewed. This is the historical study brief; [decision 0001](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0001-reference-and-m1a-contract.md) selects Rug128 for the initial core using its evidence. Read the [shared handoff](/Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md) for the current milestone gate. The original assignment below records the question and experiment scope.
 
 ## Ownership
 
-Write only within `/Users/Eric.Dong/Downloads/tempo2-rust/validation/precision/`. Own a small isolated experiment, its dependency lockfile and reproduction instructions, comparison results, and `REPORT.md`. Other chats share this workspace; preserve their edits. Do not create or alter the production Rust crate, reference outputs, or central decision table.
+Write only within `/Users/Eric.Dong/Downloads/tempo2rust/validation/precision/`. Own a small isolated experiment, its dependency lockfile and reproduction instructions, comparison results, and `REPORT.md`. Other chats share this workspace; preserve their edits. Do not create or alter the production Rust crate, reference outputs, or central decision table.
 
 This study can run alongside A. Start with exact decimal inputs and independent high-precision calculations. Consume A's reference outputs when available, while keeping independent arithmetic accuracy and TEMPO2 behavioral agreement separate.
 
@@ -25,7 +25,7 @@ The alternatives have different purposes:
 
 Sources checked during planning: [qd documentation](https://docs.rs/qd), [Rug documentation](https://docs.rs/rug/latest/rug/), [built-in f128 documentation](https://doc.rust-lang.org/std/primitive.f128.html), and [f128 crate repository](https://github.com/jkarns275/f128). Refresh facts against the versions actually evaluated. Do not spend the study reviving all alternatives; prototype `qd` and the independent reference first, and reject unsuitable candidates with concrete evidence.
 
-TEMPO2 itself contains an older, inactive `dd_real` alternative in [TKlongdouble.ld.h](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/TKlongdouble.ld.h:13). This is evidence that double-double was contemplated, not proof that the branch works in the pinned build or that the Rust crate has equivalent semantics.
+TEMPO2 itself contains an older, inactive `dd_real` alternative in [TKlongdouble.ld.h](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/TKlongdouble.ld.h:13). This is evidence that double-double was contemplated, not proof that the branch works in the pinned build or that the Rust crate has equivalent semantics.
 
 ## Work sequence
 

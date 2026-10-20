@@ -1,17 +1,17 @@
 # TEMPO2 reference baseline
 
-Assignment A was delivered at reference-repository commit `5289797` and reviewed centrally. This is the historical initial brief. The current follow-up is [A2](/Users/Eric.Dong/Downloads/tempo2-rust/handoffs/01a-reference-correction.md). Read the [shared handoff](/Users/Eric.Dong/Downloads/tempo2-rust/HANDOFF.md) for current decisions.
+Assignment A was delivered at reference-repository commit `5289797` and reviewed centrally. This is the historical initial brief. The current follow-up is [A2](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/01a-reference-correction.md). Read the [shared handoff](/Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md) for current decisions.
 
 ## Ownership
 
-Write only within `/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/`. Own the reference build instructions, exporter, fixture manifests, comparison utilities needed by the reference work, and `REPORT.md`. Other chats share this workspace; preserve their edits. Read the canonical TEMPO2 checkout without changing it. If bootstrap or configure writes into the source, use a disposable source copy inside your owned directory and record its origin and any patches.
+Write only within `/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/`. Own the reference build instructions, exporter, fixture manifests, comparison utilities needed by the reference work, and `REPORT.md`. Other chats share this workspace; preserve their edits. Read the canonical TEMPO2 checkout without changing it. If bootstrap or configure writes into the source, use a disposable source copy inside your owned directory and record its origin and any patches.
 
 ## Sources to inspect
 
-- [Build definition](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/Makefile.am:42) and [configuration](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/configure.ac:66).
-- [Precision abstractions](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/TKlongdouble.ld.h:13), [float128 abstraction](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/TKlongdouble.float128.h:9), and [formatting helper](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/TKlongdouble.C:39).
-- [Barycentric residual tests](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/testTempo2.C:360), [observatory residual tests](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/testTempo2.C:427), and [end-to-end tests](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/testEndToEnd.C:7).
-- [Calculation sequence](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/global.C:134) and [residual implementation](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/formResiduals.C:396).
+- [Build definition](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/Makefile.am:42) and [configuration](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/configure.ac:66).
+- [Precision abstractions](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/TKlongdouble.ld.h:13), [float128 abstraction](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/TKlongdouble.float128.h:9), and [formatting helper](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/TKlongdouble.C:39).
+- [Barycentric residual tests](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/testTempo2.C:360), [observatory residual tests](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/testTempo2.C:427), and [end-to-end tests](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/testEndToEnd.C:7).
+- [Calculation sequence](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/global.C:134) and [residual implementation](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/formResiduals.C:396).
 
 ## Work sequence
 
@@ -24,7 +24,7 @@ Write only within `/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/`
 
 ## Initial fixtures
 
-Start with `/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/test_data/test1.par` paired with `test1.tim` in the same directory. Then use the same parameter file with `test2.tim` for the terrestrial path. The existing test driver defines the invocation and preprocessing sequence; inspect it instead of assuming all tests call the normal CLI pipeline identically.
+Start with `/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/test_data/test1.par` paired with `test1.tim` in the same directory. Then use the same parameter file with `test2.tim` for the terrestrial path. The existing test driver defines the invocation and preprocessing sequence; inspect it instead of assuming all tests call the normal CLI pipeline identically.
 
 Retain the original input files. If explicit configuration or a smaller fixture is needed, create a named derivative in your owned directory and document every change and its reason. Add a small long-span spin case and the existing 4 ns perturbation case where needed for precision evaluation. Use the bundled `T2runtime/example_data/example1.par` and `.tim` as a later smoke example if the minimal fixtures are established.
 
@@ -38,8 +38,8 @@ Use enough decimal digits for the selected backend. Encode precision-sensitive v
 
 - The default `print_longdouble` helper uses `%Lg` or `%Qg` without an explicit precision. Do not use that output unexamined as a golden numerical serialization.
 - `subtractBATs` tests a 4 ns residual response in seconds. Preserve that physical contract with an explicitly justified tolerance.
-- In [offsetSATs](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/testTempo2.C:486), the difference is expressed in days while `TEST_DELTA` is the shared value `1e-9`. The expected offset is already inside the absolute value; the original brief misstated that detail. The threshold is nevertheless 86.4 microseconds, not 1 ns. Express the new diagnostic in seconds and account for the terrestrial transformation's response.
-- [gracefulBadFit](/Users/Eric.Dong/Downloads/tempo2-rust/tempo2/tests/testEndToEnd.C:171) ends with a tautological assertion. It is not evidence of a correct error status or diagnostic.
+- In [offsetSATs](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/testTempo2.C:486), the difference is expressed in days while `TEST_DELTA` is the shared value `1e-9`. The expected offset is already inside the absolute value; the original brief misstated that detail. The threshold is nevertheless 86.4 microseconds, not 1 ns. Express the new diagnostic in seconds and account for the terrestrial transformation's response.
+- [gracefulBadFit](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/tests/testEndToEnd.C:171) ends with a tautological assertion. It is not evidence of a correct error status or diagnostic.
 - Some macOS compiler/OpenMP combinations disable the upstream tests. A disabled test is not a pass.
 
 ## Completion criteria

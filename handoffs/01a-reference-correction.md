@@ -1,12 +1,12 @@
 # Reference correction and regeneration
 
-**Completed at `7795d53` and accepted for M0 in [decision 0002](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0002-m0-acceptance-and-c-release.md).** The assignment and dispatch below are retained as historical requirements. C is now released; do not redispatch A2 merely because its original return report says central review is pending.
+**Completed at `7795d53` and accepted for M0 in [decision 0002](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0002-m0-acceptance-and-c-release.md).** The assignment and dispatch below are retained as historical requirements. C has since completed M1a, accepted in [decision 0003](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0003-m1a-acceptance.md); do not redispatch A2 merely because its original return report says central review is pending.
 
-Assignment A2 continued the reference work under the [central design](/Users/Eric.Dong/Downloads/tempo2-rust/decisions/0001-reference-and-m1a-contract.md) and [shared handoff](/Users/Eric.Dong/Downloads/tempo2-rust/HANDOFF.md). Its approved scientific correction was to initialize the missing count before parsing.
+Assignment A2 continued the reference work under the [central design](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0001-reference-and-m1a-contract.md) and [shared handoff](/Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md). Its approved scientific correction was to initialize the missing count before parsing.
 
 ## Ownership and reference identity
 
-Own only `/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/`, continuing from assignment commit `5289797`. Other chats share the workspace; preserve their edits. The canonical TEMPO2 repository and central documents remain unchanged by this assignment.
+Own only `/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/`, continuing from assignment commit `5289797`. Other chats share the workspace; preserve their edits. The canonical TEMPO2 repository and central documents remain unchanged by this assignment.
 
 Create a separate recorded source-correction patch that adds `ne_sw_ifuncN = 0` in `initialiseOne` alongside the related interpolation counts. Apply it to the disposable build source before instrumentation. Preserve the base source commit and include both patch identities in the manifest. Make the corrected build the canonical current reference; the earlier uncorrected evidence remains recoverable from commit `5289797`. Keep any retained uncorrected diagnostic reproduction explicitly identified as such.
 
@@ -30,5 +30,5 @@ Terrestrial exports become candidates for central adoption only when the correct
 ## Dispatch prompt
 
 ```text
-Continue Assignment A as A2 in /Users/Eric.Dong/Downloads/tempo2-rust/validation/reference. Read /Users/Eric.Dong/Downloads/tempo2-rust/HANDOFF.md, /Users/Eric.Dong/Downloads/tempo2-rust/decisions/0001-reference-and-m1a-contract.md, and /Users/Eric.Dong/Downloads/tempo2-rust/handoffs/01a-reference-correction.md. Implement the approved initializer correction only in the disposable reference source with a recorded patch and regressions, regenerate the evidence, and update the schema and report as specified. Preserve the canonical TEMPO2 checkout and the original failing DDH threshold. Return your report and revision for central review; M0 remains pending.
+Continue Assignment A as A2 in /Users/Eric.Dong/Downloads/tempo2rust/validation/reference. Read /Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md, /Users/Eric.Dong/Downloads/tempo2rust/decisions/0001-reference-and-m1a-contract.md, and /Users/Eric.Dong/Downloads/tempo2rust/handoffs/01a-reference-correction.md. Implement the approved initializer correction only in the disposable reference source with a recorded patch and regressions, regenerate the evidence, and update the schema and report as specified. Preserve the canonical TEMPO2 checkout and the original failing DDH threshold. Return your report and revision for central review; M0 remains pending.
 ```

@@ -1,0 +1,63 @@
+{
+  "review_date": "2026-10-20",
+  "decision": "M1b pending; correct DE405 and IF99 malformed-step failures",
+  "platform": "macOS arm64",
+  "project_base_commit": "49e122c3648e5cb91bae17233a062a444a10f9e4",
+  "report_sha256": "e5ec95c44ac15abb43e072f89ec2122f850f500afc2b56fd3951c641edb1489e",
+  "source_manifest_sha256": "75529426e3c634ef346fbc68dcdb6cb152d01f2113a9ddf3dec0d13ee9034097",
+  "identity_checks": {
+    "source_files_matching": 96,
+    "runtime_resources_matching": 80,
+    "terrestrial_fixtures_matching": 2,
+    "canonical_native_manifest_entries_matching": 41,
+    "naming_equivalence_output_hashes_matching": 10
+  },
+  "central_reruns": {
+    "rust_tests_passed": 16,
+    "m1a_fixture_comparisons_passed": 3,
+    "fresh_terrestrial_exports_byte_identical": true,
+    "terrestrial_scalar_comparisons": [490, 1162],
+    "comparator_mutations_passed": 184,
+    "saved_signed_errors_maxima_and_response_reproduced": true
+  },
+  "jpl_short_read_probe": {
+    "call_order": ["valid", "short_read", "repeated_short_read", "valid_recovery"],
+    "original_statuses": [0, -2, 0, 0],
+    "retained_statuses": [0, -2, -2, 0],
+    "original_recovered_position_difference": "0",
+    "retained_recovered_position_difference": "0"
+  },
+  "malformed_step_probes": [
+    {
+      "resource": "ephemeris/DE405.1950.2050",
+      "byte_offset": 2668,
+      "encoding": "big-endian binary64",
+      "original_step_days": "32",
+      "mutated_step_days": "1e-300",
+      "cli_returncode": -10,
+      "signal": "SIGBUS",
+      "stdout_bytes": 0,
+      "stderr": "",
+      "restored_valid_cli_returncode": 0,
+      "restored_valid_stdout_byte_identical": true
+    },
+    {
+      "resource": "ephemeris/TIMEEPH_short.te405",
+      "byte_offset": 280,
+      "encoding": "big-endian binary64",
+      "original_step_days": "32",
+      "mutated_step_days": "1e-300",
+      "cli_returncode": 101,
+      "stdout_bytes": 0,
+      "panic_location": "src/ifteph.rs:129:13",
+      "panic_message": "attempt to add with overflow",
+      "restored_valid_cli_returncode": 0,
+      "restored_valid_stdout_byte_identical": true
+    }
+  ],
+  "not_rerun_centrally": [
+    "full verify_m1b.py evidence-writing workflow",
+    "formatting and Clippy",
+    "all delivered public resource and CLI cases"
+  ]
+}
