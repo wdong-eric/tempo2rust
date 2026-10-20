@@ -1,0 +1,41 @@
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.107
+   Compiling libc v0.2.191
+   Compiling unicode-ident v1.0.26
+   Compiling typenum v1.20.1
+   Compiling quote v1.0.47
+   Compiling gmp-mpfr-sys v1.7.1
+   Compiling serde_core v1.0.229
+   Compiling libm v0.2.16
+   Compiling zmij v1.0.23
+   Compiling rug v1.30.0
+   Compiling serde_json v1.0.151
+   Compiling serde v1.0.229
+   Compiling generic-array v0.14.7
+   Compiling cfg-if v1.0.5
+   Compiling itoa v1.0.18
+   Compiling az v1.3.0
+   Compiling memchr v2.8.3
+   Compiling tempo2-rust v0.1.0 (/Users/Eric.Dong/Downloads/tempo2rust/rust)
+   Compiling syn v3.0.6
+   Compiling serde_derive v1.0.229
+   Compiling cpufeatures v0.2.17
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+    Finished `release` profile [optimized] target(s) in 7.73s
+     Running unittests src/lib.rs (target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
+
+running 8 tests
+test resource_tests::eop_upper_boundary_recovers_and_leap_is_not_interpolated ... ok
+test resource_tests::ifte_endianness_derivative_boundaries_and_recovery ... ok
+test resource_tests::ifte_record_grid_rejects_impossible_steps_and_recovers ... ok
+test resource_tests::table_steps_endpoints_and_invalid_data ... ok
+test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
+test resource_tests::native_read_failure_recovers_without_stale_cached_record ... ok
+test resource_tests::jpl_record_grid_bounds_and_endpoints_recover ... ok
+test resource_tests::clock_routes_coverage_ties_fallback_and_recovery ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+

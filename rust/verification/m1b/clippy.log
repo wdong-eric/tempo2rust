@@ -1,0 +1,4 @@
+    Checking gmp-mpfr-sys v1.7.1
+    Checking rug v1.30.0
+    Checking tempo2-rust v0.1.0 (/Users/Eric.Dong/Downloads/tempo2rust/rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.75s

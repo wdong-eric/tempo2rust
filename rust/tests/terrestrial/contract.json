@@ -1,0 +1,319 @@
+{
+  "profile": "terrestrial-v1",
+  "decision": "0004",
+  "stages_by_fixture": {
+    "terrestrial": [
+      "parsed",
+      "bats",
+      "residuals"
+    ],
+    "terrestrial_4ns": [
+      "parsed",
+      "bats",
+      "residuals",
+      "offset_4ns",
+      "slope_plus",
+      "slope_minus"
+    ]
+  },
+  "parsed_fields": [
+    "clockCorr",
+    "delayCorr",
+    "deleted",
+    "fname",
+    "frequency_mhz",
+    "sat_mjd",
+    "site",
+    "toa_error_us"
+  ],
+  "bats_fields": [
+    "bat_correction_day",
+    "bat_mjd",
+    "bbat_mjd",
+    "clock_tt_s",
+    "dispersion_s",
+    "earth_ssb_light_s_0",
+    "earth_ssb_light_s_1",
+    "earth_ssb_light_s_2",
+    "frequency_ssb_hz",
+    "observatory_earth_light_s_0",
+    "observatory_earth_light_s_1",
+    "observatory_earth_light_s_2",
+    "roemer_s",
+    "shapiro_jupiter_s",
+    "shapiro_neptune_s",
+    "shapiro_saturn_s",
+    "shapiro_sun_s",
+    "shapiro_uranus_s",
+    "shapiro_venus_s",
+    "shklovskii_s",
+    "solar_dispersion_s",
+    "troposphere_s",
+    "tt_tb_s",
+    "tt_teph_s"
+  ],
+  "residual_fields": [
+    "binary_delay_s",
+    "nphase_turn",
+    "phase_turn",
+    "pulse_number",
+    "residual_s"
+  ],
+  "parameters": [
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "PEPOCH",
+    "RAJ",
+    "DECJ",
+    "POSEPOCH",
+    "DM",
+    "DMEPOCH",
+    "EPHVER",
+    "TZRMJD",
+    "TZRFRQ"
+  ],
+  "omittable_legacy_parameters": [
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "TRACK"
+  ],
+  "required_resources": [
+    "observatory/observatories.dat",
+    "earth/eopc04_IAU2000.62-now",
+    "ephemeris/DE405.1950.2050",
+    "ephemeris/TIMEEPH_short.te405",
+    "atmosphere/pks.sap",
+    "atmosphere/pks.zwd",
+    "clock/gps2gps_usno.clk",
+    "clock/gps2gpst.clk",
+    "clock/gps_usno2utc.clk",
+    "clock/gpst2utc.clk",
+    "clock/nist2utc.clk",
+    "clock/pks2gps.clk",
+    "clock/pks2tid.clk",
+    "clock/tai2tt_tai.clk",
+    "clock/tid2nist.clk",
+    "clock/utc2tai.clk"
+  ],
+  "fields": {
+    "fname": {
+      "comparison": "exact"
+    },
+    "site": {
+      "comparison": "exact"
+    },
+    "deleted": {
+      "comparison": "exact"
+    },
+    "clockCorr": {
+      "comparison": "exact"
+    },
+    "delayCorr": {
+      "comparison": "exact"
+    },
+    "pulse_number": {
+      "comparison": "exact"
+    },
+    "nphase_turn": {
+      "comparison": "exact"
+    },
+    "sat_mjd": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s"
+    },
+    "bat_mjd": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s"
+    },
+    "bbat_mjd": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s"
+    },
+    "bat_correction_day": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "86400",
+      "comparison_unit": "s"
+    },
+    "frequency_mhz": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-9",
+      "difference_scale": "1",
+      "comparison_unit": "MHz"
+    },
+    "toa_error_us": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "microsecond"
+    },
+    "frequency_ssb_hz": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-5",
+      "difference_scale": "1",
+      "comparison_unit": "Hz"
+    },
+    "clock_tt_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "tt_tb_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "tt_teph_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "roemer_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_sun_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_jupiter_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_saturn_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_venus_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_uranus_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shapiro_neptune_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "troposphere_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "dispersion_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "solar_dispersion_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "shklovskii_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "binary_delay_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "residual_s": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "s"
+    },
+    "phase_turn": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-10",
+      "difference_scale": "1",
+      "comparison_unit": "turn"
+    },
+    "earth_ssb_light_s_0": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "earth_ssb_light_s_1": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "earth_ssb_light_s_2": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "observatory_earth_light_s_0": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "observatory_earth_light_s_1": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "observatory_earth_light_s_2": {
+      "comparison": "absolute",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1",
+      "comparison_unit": "light-second"
+    },
+    "clock_step_s_*": {
+      "comparison": "absolute",
+      "comparison_unit": "s",
+      "absolute_tolerance": "1e-12",
+      "difference_scale": "1"
+    },
+    "clock_to_*": {
+      "comparison": "exact"
+    }
+  }
+}

@@ -1,0 +1,3922 @@
+[
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "bat_correction_day",
+    "signed_difference": "-5.6843418086566961511273811200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "bat_mjd",
+    "signed_difference": "-5.684341808681892547200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "bbat_mjd",
+    "signed_difference": "-5.684341808681892547200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_step_s_0",
+    "signed_difference": "-1.530E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_step_s_1",
+    "signed_difference": "-4.082E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_step_s_2",
+    "signed_difference": "-2.0E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "clock_tt_s",
+    "signed_difference": "9.91E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "dispersion_s",
+    "signed_difference": "-4.679E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "3.623E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "3.645E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "1.952E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-3.104E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "2.410E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "5.38E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "roemer_s",
+    "signed_difference": "-5.68434188608080148695859E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "sat_mjd",
+    "signed_difference": "0E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "3.508E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "9.53E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-3.656E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_sun_s",
+    "signed_difference": "-8.47032947254300339069344E-22",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-2.950E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-3.936E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "solar_dispersion_s",
+    "signed_difference": "7.279189390466643538869549E-23",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "troposphere_s",
+    "signed_difference": "-1.049E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.41229E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 0,
+    "field": "tt_teph_s",
+    "signed_difference": "-3.059E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "bat_correction_day",
+    "signed_difference": "5.6843418854190569954915433600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "bat_mjd",
+    "signed_difference": "5.684341885425156268800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "bbat_mjd",
+    "signed_difference": "5.684341885425156268800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_step_s_0",
+    "signed_difference": "3.228E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_step_s_1",
+    "signed_difference": "2.580E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_step_s_2",
+    "signed_difference": "-2.055E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "clock_tt_s",
+    "signed_difference": "-4.214E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "dispersion_s",
+    "signed_difference": "-3.845E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-2.866E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "2.478E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "1.65E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.103E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-3.775E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-4.479E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "roemer_s",
+    "signed_difference": "5.68434188608080148695142E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "sat_mjd",
+    "signed_difference": "-1.5551913600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-9.71E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "4.778E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-3.6189151799194960775621404E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_sun_s",
+    "signed_difference": "6.41E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-1.996E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.194E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "solar_dispersion_s",
+    "signed_difference": "6.61744490042422139897215E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "troposphere_s",
+    "signed_difference": "4.597E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "tt_tb_s",
+    "signed_difference": "4.29578E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 1,
+    "field": "tt_teph_s",
+    "signed_difference": "1.204E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "bat_correction_day",
+    "signed_difference": "-1.5246593050555219881600E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "bat_mjd",
+    "signed_difference": "-1.524647426572800E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "bbat_mjd",
+    "signed_difference": "-1.524647426572800E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_step_s_0",
+    "signed_difference": "1.360E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_step_s_1",
+    "signed_difference": "2.106E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_step_s_2",
+    "signed_difference": "-4.686E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "clock_tt_s",
+    "signed_difference": "8.85E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "dispersion_s",
+    "signed_difference": "6.64E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-1.362E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-5.62E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "3.248E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-37",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-31",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.593E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "2.440E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "1.825E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "roemer_s",
+    "signed_difference": "-6.10E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "sat_mjd",
+    "signed_difference": "1.7280432000E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-2.057E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "3.333E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "1.312E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_sun_s",
+    "signed_difference": "1.97E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-1.73E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.102E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "solar_dispersion_s",
+    "signed_difference": "1.5246593050577406103231580E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "troposphere_s",
+    "signed_difference": "4.051E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.16507E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 2,
+    "field": "tt_teph_s",
+    "signed_difference": "4.629E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "bat_correction_day",
+    "signed_difference": "-6.617444914006156800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "bat_mjd",
+    "signed_difference": "-7.03869436800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "bbat_mjd",
+    "signed_difference": "-7.03869436800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_step_s_0",
+    "signed_difference": "-3.402E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_step_s_1",
+    "signed_difference": "-2.777E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_step_s_2",
+    "signed_difference": "2.302E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "clock_tt_s",
+    "signed_difference": "4.668E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "dispersion_s",
+    "signed_difference": "3.590E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-3.633E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-4.116E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "-4.070E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "4.820E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-3.994E-40",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-1.074E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "roemer_s",
+    "signed_difference": "-4.912E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-4.111E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "2.06795153138256918714337E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "4.3426982159033952930747176E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_sun_s",
+    "signed_difference": "3.46E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "1.16E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.515E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "solar_dispersion_s",
+    "signed_difference": "6.61744490042422139900585E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "troposphere_s",
+    "signed_difference": "1.409E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "tt_tb_s",
+    "signed_difference": "8.7403E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 3,
+    "field": "tt_teph_s",
+    "signed_difference": "-1.640E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "bat_correction_day",
+    "signed_difference": "-5.6843418854190569960131401600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "bat_mjd",
+    "signed_difference": "-5.684341885448086137600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "bbat_mjd",
+    "signed_difference": "-5.684341885448086137600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_step_s_0",
+    "signed_difference": "-3.900E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_step_s_2",
+    "signed_difference": "3.36E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "clock_tt_s",
+    "signed_difference": "-3.625E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "dispersion_s",
+    "signed_difference": "-5.90E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "2.217E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-2.094E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "4.101E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "2.038E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-9.00E-40",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "3.008E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "roemer_s",
+    "signed_difference": "-5.68434188608080148695620E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "2.092E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-1.129E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "7.89E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_sun_s",
+    "signed_difference": "3.498E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "4.675E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shapiro_venus_s",
+    "signed_difference": "6.46234853557052870990814E-27",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "solar_dispersion_s",
+    "signed_difference": "-6.61744490042422139897784E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "troposphere_s",
+    "signed_difference": "-7.04E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "tt_tb_s",
+    "signed_difference": "-6.267E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 4,
+    "field": "tt_teph_s",
+    "signed_difference": "1.972E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "bat_correction_day",
+    "signed_difference": "-1.626825600E-33",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "bat_mjd",
+    "signed_difference": "1.5071097600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "bbat_mjd",
+    "signed_difference": "1.5071097600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_step_s_0",
+    "signed_difference": "-2.056E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_step_s_2",
+    "signed_difference": "2.86E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "clock_tt_s",
+    "signed_difference": "4.087E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "dispersion_s",
+    "signed_difference": "1.859E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "1.802E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "4.88E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "2.861E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.962E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-2.516E-41",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-1.007E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "roemer_s",
+    "signed_difference": "-1.519E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "sat_mjd",
+    "signed_difference": "-7.776691200E-26",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-3.343E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-3.928E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "2.728E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_sun_s",
+    "signed_difference": "2.864E-41",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "3.313E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-2.362E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "solar_dispersion_s",
+    "signed_difference": "4.081E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "troposphere_s",
+    "signed_difference": "2.207E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "tt_tb_s",
+    "signed_difference": "2.1420E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 5,
+    "field": "tt_teph_s",
+    "signed_difference": "-1.032E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "bat_correction_day",
+    "signed_difference": "5.6843418807868455688279996800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "bat_mjd",
+    "signed_difference": "5.684341880781332006400E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "bbat_mjd",
+    "signed_difference": "5.684341880781332006400E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_step_s_0",
+    "signed_difference": "3.83E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_step_s_2",
+    "signed_difference": "1.827E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "clock_tt_s",
+    "signed_difference": "2.083E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "dispersion_s",
+    "signed_difference": "3.257E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-1.0E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "2.860E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "7.24E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-4.864E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-4.852E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "9.58E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "roemer_s",
+    "signed_difference": "5.68434188608080148692466E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "sat_mjd",
+    "signed_difference": "1.9007308800E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "2.868E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-7.84E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-4.172E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_sun_s",
+    "signed_difference": "-4.79E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "1.328E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-3.122E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "solar_dispersion_s",
+    "signed_difference": "5.29395592033937711915187E-23",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "troposphere_s",
+    "signed_difference": "-4.466E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.8816E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "bats",
+    "toa": 6,
+    "field": "tt_teph_s",
+    "signed_difference": "1.959E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 0,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 0,
+    "field": "sat_mjd",
+    "signed_difference": "0E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 0,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 1,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 1,
+    "field": "sat_mjd",
+    "signed_difference": "-1.5551913600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 1,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 2,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-37",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 2,
+    "field": "sat_mjd",
+    "signed_difference": "1.7280432000E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 2,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 3,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 3,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 3,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 4,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 4,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 4,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 5,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 5,
+    "field": "sat_mjd",
+    "signed_difference": "-7.776691200E-26",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 5,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 6,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "parsed",
+    "toa": 6,
+    "field": "sat_mjd",
+    "signed_difference": "1.9007308800E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "parsed",
+    "toa": 6,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "bat_correction_day",
+    "signed_difference": "-5.6843418086566961511273811200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "bat_mjd",
+    "signed_difference": "-5.684341808681892547200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "bbat_mjd",
+    "signed_difference": "-5.684341808681892547200E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_step_s_0",
+    "signed_difference": "-1.530E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_step_s_1",
+    "signed_difference": "-4.082E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_step_s_2",
+    "signed_difference": "-2.0E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "clock_tt_s",
+    "signed_difference": "9.91E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "dispersion_s",
+    "signed_difference": "-4.679E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "3.623E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "3.645E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "1.952E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-3.104E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "2.410E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "5.38E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "phase_turn",
+    "signed_difference": "0E-37",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "residual_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "roemer_s",
+    "signed_difference": "-5.68434188608080148695859E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "sat_mjd",
+    "signed_difference": "0E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "3.508E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "9.53E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-3.656E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_sun_s",
+    "signed_difference": "-8.47032947254300339069344E-22",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-2.950E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-3.936E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "solar_dispersion_s",
+    "signed_difference": "7.279189390466643538869549E-23",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "troposphere_s",
+    "signed_difference": "-1.049E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.41229E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 0,
+    "field": "tt_teph_s",
+    "signed_difference": "-3.059E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "bat_correction_day",
+    "signed_difference": "5.6843418854190569954915433600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "bat_mjd",
+    "signed_difference": "5.684341885425156268800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "bbat_mjd",
+    "signed_difference": "5.684341885425156268800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_step_s_0",
+    "signed_difference": "3.228E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_step_s_1",
+    "signed_difference": "2.580E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_step_s_2",
+    "signed_difference": "-2.055E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "clock_tt_s",
+    "signed_difference": "-4.214E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "dispersion_s",
+    "signed_difference": "-3.845E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-2.866E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "2.478E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "1.65E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.103E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-3.775E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-4.479E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "phase_turn",
+    "signed_difference": "1.13686836941064559947971E-13",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "residual_s",
+    "signed_difference": "1.13686836941064559950026880243E-13",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "roemer_s",
+    "signed_difference": "5.68434188608080148695142E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "sat_mjd",
+    "signed_difference": "-1.5551913600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-9.71E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "4.778E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-3.6189151799194960775621404E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_sun_s",
+    "signed_difference": "6.41E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-1.996E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.194E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "solar_dispersion_s",
+    "signed_difference": "6.61744490042422139897215E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "troposphere_s",
+    "signed_difference": "4.597E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "tt_tb_s",
+    "signed_difference": "4.29578E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 1,
+    "field": "tt_teph_s",
+    "signed_difference": "1.204E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "bat_correction_day",
+    "signed_difference": "-1.5246593050555219881600E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "bat_mjd",
+    "signed_difference": "-1.524647426572800E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "bbat_mjd",
+    "signed_difference": "-1.524647426572800E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_step_s_0",
+    "signed_difference": "1.360E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_step_s_1",
+    "signed_difference": "2.106E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_step_s_2",
+    "signed_difference": "-4.686E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "clock_tt_s",
+    "signed_difference": "8.85E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "dispersion_s",
+    "signed_difference": "6.64E-36",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-1.362E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-5.62E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "3.248E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-37",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-31",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.593E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "2.440E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "1.825E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "phase_turn",
+    "signed_difference": "5.6843402840337188146404E-14",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "residual_s",
+    "signed_difference": "5.68434028403371881441257360E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "roemer_s",
+    "signed_difference": "-6.10E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "sat_mjd",
+    "signed_difference": "1.7280432000E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-2.057E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "3.333E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "1.312E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_sun_s",
+    "signed_difference": "1.97E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "-1.73E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.102E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "solar_dispersion_s",
+    "signed_difference": "1.5246593050577406103231580E-20",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "troposphere_s",
+    "signed_difference": "4.051E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.16507E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 2,
+    "field": "tt_teph_s",
+    "signed_difference": "4.629E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "bat_correction_day",
+    "signed_difference": "-6.617444914006156800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "bat_mjd",
+    "signed_difference": "-7.03869436800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "bbat_mjd",
+    "signed_difference": "-7.03869436800E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_step_s_0",
+    "signed_difference": "-3.402E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_step_s_1",
+    "signed_difference": "-2.777E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_step_s_2",
+    "signed_difference": "2.302E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "clock_tt_s",
+    "signed_difference": "4.668E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "dispersion_s",
+    "signed_difference": "3.590E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-3.633E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-4.116E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "-4.070E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "4.820E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-3.994E-40",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-1.074E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "phase_turn",
+    "signed_difference": "5.6843418079779602909336E-14",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "residual_s",
+    "signed_difference": "5.68434180797796029078322764E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "roemer_s",
+    "signed_difference": "-4.912E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-4.111E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "2.06795153138256918714337E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "4.3426982159033952930747176E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_sun_s",
+    "signed_difference": "3.46E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "1.16E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-4.515E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "solar_dispersion_s",
+    "signed_difference": "6.61744490042422139900585E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "troposphere_s",
+    "signed_difference": "1.409E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "tt_tb_s",
+    "signed_difference": "8.7403E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 3,
+    "field": "tt_teph_s",
+    "signed_difference": "-1.640E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "bat_correction_day",
+    "signed_difference": "-5.6843418854190569960131401600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "bat_mjd",
+    "signed_difference": "-5.684341885448086137600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "bbat_mjd",
+    "signed_difference": "-5.684341885448086137600E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_step_s_0",
+    "signed_difference": "-3.900E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_step_s_2",
+    "signed_difference": "3.36E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "clock_tt_s",
+    "signed_difference": "-3.625E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "dispersion_s",
+    "signed_difference": "-5.90E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "2.217E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "-2.094E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "4.101E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "2.038E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-9.00E-40",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "3.008E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "phase_turn",
+    "signed_difference": "-7.676740164E-22",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "residual_s",
+    "signed_difference": "-7.676656375777334147E-22",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "roemer_s",
+    "signed_difference": "-5.68434188608080148695620E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "sat_mjd",
+    "signed_difference": "-1.9008691200E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "2.092E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-1.129E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "7.89E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_sun_s",
+    "signed_difference": "3.498E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "4.675E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shapiro_venus_s",
+    "signed_difference": "6.46234853557052870990814E-27",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "solar_dispersion_s",
+    "signed_difference": "-6.61744490042422139897784E-24",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "troposphere_s",
+    "signed_difference": "-7.04E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "tt_tb_s",
+    "signed_difference": "-6.267E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 4,
+    "field": "tt_teph_s",
+    "signed_difference": "1.972E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "bat_correction_day",
+    "signed_difference": "-1.626825600E-33",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "bat_mjd",
+    "signed_difference": "1.5071097600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "bbat_mjd",
+    "signed_difference": "1.5071097600E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_step_s_0",
+    "signed_difference": "-2.056E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_step_s_2",
+    "signed_difference": "2.86E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "clock_tt_s",
+    "signed_difference": "4.087E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "dispersion_s",
+    "signed_difference": "1.859E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "1.802E-34",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "4.88E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "2.861E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-2.962E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-2.516E-41",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "-1.007E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "phase_turn",
+    "signed_difference": "5.68434180869545155E-14",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "residual_s",
+    "signed_difference": "5.68434180869655353413119993E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "roemer_s",
+    "signed_difference": "-1.519E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "sat_mjd",
+    "signed_difference": "-7.776691200E-26",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "-3.343E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-3.928E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "2.728E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_sun_s",
+    "signed_difference": "2.864E-41",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "3.313E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-2.362E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "solar_dispersion_s",
+    "signed_difference": "4.081E-43",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "troposphere_s",
+    "signed_difference": "2.207E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "tt_tb_s",
+    "signed_difference": "2.1420E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 5,
+    "field": "tt_teph_s",
+    "signed_difference": "-1.032E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "bat_correction_day",
+    "signed_difference": "5.6843418807868455688279996800E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "bat_mjd",
+    "signed_difference": "5.684341880781332006400E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "bbat_mjd",
+    "signed_difference": "5.684341880781332006400E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "binary_delay_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_step_s_0",
+    "signed_difference": "3.83E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_step_s_1",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_step_s_2",
+    "signed_difference": "1.827E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_step_s_3",
+    "signed_difference": "0E-38",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_step_s_4",
+    "signed_difference": "3.364E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "clock_tt_s",
+    "signed_difference": "2.083E-35",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "dispersion_s",
+    "signed_difference": "3.257E-37",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "earth_ssb_light_s_0",
+    "signed_difference": "-1.0E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "earth_ssb_light_s_1",
+    "signed_difference": "2.860E-35",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "earth_ssb_light_s_2",
+    "signed_difference": "7.24E-36",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "frequency_mhz",
+    "signed_difference": "0E-36",
+    "unit": "MHz",
+    "gate": "1e-9"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "frequency_ssb_hz",
+    "signed_difference": "0E-30",
+    "unit": "Hz",
+    "gate": "1e-5"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "observatory_earth_light_s_0",
+    "signed_difference": "-4.864E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "observatory_earth_light_s_1",
+    "signed_difference": "-4.852E-38",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "observatory_earth_light_s_2",
+    "signed_difference": "9.58E-39",
+    "unit": "light-second",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "phase_turn",
+    "signed_difference": "1.136868368946092457E-13",
+    "unit": "turn",
+    "gate": "1e-10"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "residual_s",
+    "signed_difference": "1.136868368946242697721567168E-13",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "roemer_s",
+    "signed_difference": "5.68434188608080148692466E-14",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "sat_mjd",
+    "signed_difference": "1.9007308800E-25",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_jupiter_s",
+    "signed_difference": "2.868E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_neptune_s",
+    "signed_difference": "-7.84E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_saturn_s",
+    "signed_difference": "-4.172E-45",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_sun_s",
+    "signed_difference": "-4.79E-42",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_uranus_s",
+    "signed_difference": "1.328E-46",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shapiro_venus_s",
+    "signed_difference": "-3.122E-47",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "shklovskii_s",
+    "signed_difference": "0",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "solar_dispersion_s",
+    "signed_difference": "5.29395592033937711915187E-23",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "toa_error_us",
+    "signed_difference": "0E-38",
+    "unit": "microsecond",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "troposphere_s",
+    "signed_difference": "-4.466E-44",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "tt_tb_s",
+    "signed_difference": "-5.8816E-34",
+    "unit": "s",
+    "gate": "1e-12"
+  },
+  {
+    "stage": "residuals",
+    "toa": 6,
+    "field": "tt_teph_s",
+    "signed_difference": "1.959E-39",
+    "unit": "s",
+    "gate": "1e-12"
+  }
+]

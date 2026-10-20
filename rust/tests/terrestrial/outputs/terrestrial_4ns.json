@@ -1,0 +1,3592 @@
+{
+  "availability": "candidate_declared_meteorology_defaults",
+  "build_manifest_sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+  "command": [
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/export_reference",
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/original/test1.par",
+    "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/fixtures/original/test2.tim",
+    "offsetSATs",
+    "OUTPUT.tsv"
+  ],
+  "comparison_profile": "terrestrial-candidate",
+  "configuration": {
+    "binary_model": "NONE",
+    "calc_shapiro": "1",
+    "clock": "TT(TAI)",
+    "correct_troposphere": "1",
+    "dilate_frequency": "1",
+    "ephemeris": "DE405",
+    "fit_performed": "false",
+    "ipm": "1",
+    "planet_shapiro": "1",
+    "refphs": "0",
+    "remove_mean": "0",
+    "solar_wind_model": "0",
+    "solar_wind_ne_cm3": "4",
+    "t2c_method": "1",
+    "time_ephemeris": "IF99",
+    "tzrsite": "@",
+    "units": "TCB"
+  },
+  "engine_provenance": {
+    "eop_file": "/earth/eopc04_IAU2000.62-now",
+    "fit_mode": "0",
+    "jpl_ephemeris": "$RUNTIME/ephemeris/DE405.1950.2050",
+    "mode": "offsetSATs",
+    "no_warnings": "0",
+    "solar_wind_sample_count": "0",
+    "storage_initialization": "corrected initialise; no added zero fill",
+    "use_calceph": "0"
+  },
+  "executable_sha256": "04f2df5b63b73990fb5640285ce8fa245a3f2377e0711824a4bbd59c31260c24",
+  "fixture": "terrestrial_4ns",
+  "input_files": {
+    "fixtures/original/test1.par": {
+      "sha256": "c3ac6a628beeea72e9cae2d98cfb7b08ba126834e12058ee1af9a74db65c870e"
+    },
+    "fixtures/original/test2.tim": {
+      "sha256": "a98a19d15548942602249e9a3936f1e8bef2f32a7c3393164048676bcefca751"
+    }
+  },
+  "original_observations": [
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 0,
+      "line": 2,
+      "name": "test",
+      "raw_line": "test 1400.0 50000.00 10.0 pks",
+      "sat_mjd_text": "50000.00",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 1,
+      "line": 3,
+      "name": "test",
+      "raw_line": "test 1400.0 50000.01 10.0 pks",
+      "sat_mjd_text": "50000.01",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "100.0",
+      "index": 2,
+      "line": 4,
+      "name": "test",
+      "raw_line": "test 100.0  50000.06 10.0 pks",
+      "sat_mjd_text": "50000.06",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 3,
+      "line": 5,
+      "name": "test",
+      "raw_line": "test 1400.0 50000.04000462962962962963 10.0 pks",
+      "sat_mjd_text": "50000.04000462962962962963",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 4,
+      "line": 6,
+      "name": "test",
+      "raw_line": "test 1400.0 54000.04000462962962962963 10.0 pks",
+      "sat_mjd_text": "54000.04000462962962962963",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 5,
+      "line": 7,
+      "name": "test",
+      "raw_line": "test 1400.0 56000.11111111111111111111 10.0 pks",
+      "sat_mjd_text": "56000.11111111111111111111",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    },
+    {
+      "frequency_mhz_text": "1400.0",
+      "index": 6,
+      "line": 8,
+      "name": "test",
+      "raw_line": "test 1400.0 56000.78912398509389208687235 10.0 pks",
+      "sat_mjd_text": "56000.78912398509389208687235",
+      "site": "pks",
+      "toa_error_us_text": "10.0"
+    }
+  ],
+  "parameters": {
+    "DECJ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DECJ (rad)",
+      "value": "-0"
+    },
+    "DM": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DM (cm^-3 pc)",
+      "value": "100"
+    },
+    "DMEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "DMEPOCH (MJD)",
+      "value": "50000"
+    },
+    "EPHVER": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "EPHVER",
+      "value": "5"
+    },
+    "F0": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "F0 (s^-1)",
+      "value": "1"
+    },
+    "F1": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F1 (s^-2)",
+      "value": "0"
+    },
+    "F10": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F10 (s^-11)",
+      "value": "0"
+    },
+    "F11": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F11 (s^-12)",
+      "value": "0"
+    },
+    "F12": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F12 (s^-13)",
+      "value": "0"
+    },
+    "F2": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F2 (s^-3)",
+      "value": "0"
+    },
+    "F3": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F3 (s^-4)",
+      "value": "0"
+    },
+    "F4": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F4 (s^-5)",
+      "value": "0"
+    },
+    "F5": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F5 (s^-6)",
+      "value": "0"
+    },
+    "F6": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F6 (s^-7)",
+      "value": "0"
+    },
+    "F7": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F7 (s^-8)",
+      "value": "0"
+    },
+    "F8": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F8 (s^-9)",
+      "value": "0"
+    },
+    "F9": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "F9 (s^-10)",
+      "value": "0"
+    },
+    "PEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "PEPOCH (MJD)",
+      "value": "50000"
+    },
+    "POSEPOCH": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "POSEPOCH (MJD)",
+      "value": "50000"
+    },
+    "RAJ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "RAJ (rad)",
+      "value": "0.261799387799149407829446545292739756"
+    },
+    "TRACK": {
+      "fit_flag": 0,
+      "set": 0,
+      "upstream_label": "TRACK (MJD)",
+      "value": "0"
+    },
+    "TZRFRQ": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "TZRFRQ (MHz)",
+      "value": "1400"
+    },
+    "TZRMJD": {
+      "fit_flag": 0,
+      "set": 1,
+      "upstream_label": "TZRMJD",
+      "value": "50000"
+    }
+  },
+  "reference_identity": {
+    "base_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "build_manifest_sha256": "a5daa986c6c054c7fa314271b5fa918cedc3f7412707a9cc7670ec3306d92dc8",
+    "correction_sha256": "9d86ce0571e33aa28d0167137f37ee0afe524579a7b5e16dc81fee0d033c7b1c",
+    "instrumentation_sha256": "32cc90af950a01d49f9faacf80f1edeb4d393ecbec477aa0bd19076a0a3479ed"
+  },
+  "resources": {
+    "events": [
+      {
+        "caller": "readParfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/original/test1.par",
+        "stage": "readParfile"
+      },
+      {
+        "caller": "readTimfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/original/test2.tim",
+        "stage": "readTimfile"
+      },
+      {
+        "caller": "readTimfile.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$REFERENCE/fixtures/original/test2.tim",
+        "stage": "readTimfile"
+      },
+      {
+        "caller": "observatory.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/observatory/observatories.dat",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "observatory.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/observatory/oldcodes.dat",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "observatory.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/observatory/aliases",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ao2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ao2nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/aus2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ced2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/coe2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/eff2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/effedd2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/effix2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gb1402nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gb8532nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gbt2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps2gps_usno.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps2gpst.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps_usno2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gpst2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/hob2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jb2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jb422jb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jb422jbafb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbafb2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbafb2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbdfb2jb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbm42gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbmk22jb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbmk2dfb2jbdfb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbmk2roach2jbroach.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/jbroach2jb.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/leap2effix.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/mk2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/mo2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ncy2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ncyobs2obspm.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/nist2tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/nist2tt_nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/nist2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/obspm2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/obspm2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2aus.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2tid.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2tt_toasim.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/ptb2tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/srt2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm01.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm05.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm06.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2003.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2004.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2004ext.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2010.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2011.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2012.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2013.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2014.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2015.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2016.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2017.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2018.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2019.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2020.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2021.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2022.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2023.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm2024.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_bipm92.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tid2nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/utc2tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/utc2ut1.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/vla2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/vla2nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "clkcorr.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/wsrt2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2tid.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tid2nist.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/nist2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/utc2tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/tai2tt_tai.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/pks2gps.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps2gps_usno.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps_usno2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gps2gpst.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/clock/gpst2utc.clk",
+        "stage": "toa2utc"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "eop.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/earth/eopc04_IAU2000.62-now",
+        "stage": "get_obsCoord"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/atmosphere/pks.zwd",
+        "stage": "calculate_bclt"
+      },
+      {
+        "caller": "tabulatedfunction.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/atmosphere/pks.sap",
+        "stage": "calculate_bclt"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      },
+      {
+        "caller": "ifteph.C",
+        "errno": 0,
+        "mode": "r",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/TIMEEPH_short.te405",
+        "stage": "tt2tb"
+      },
+      {
+        "caller": "jpleph.c",
+        "errno": 0,
+        "mode": "rb",
+        "opened": true,
+        "path": "$RUNTIME/ephemeris/DE405.1950.2050",
+        "stage": "readEphemeris"
+      }
+    ],
+    "files": {
+      "$REFERENCE/fixtures/original/test1.par": {
+        "coverage": null,
+        "sha256": "c3ac6a628beeea72e9cae2d98cfb7b08ba126834e12058ee1af9a74db65c870e",
+        "size_bytes": 302
+      },
+      "$REFERENCE/fixtures/original/test2.tim": {
+        "coverage": null,
+        "sha256": "a98a19d15548942602249e9a3936f1e8bef2f32a7c3393164048676bcefca751",
+        "size_bytes": 294
+      },
+      "$RUNTIME/atmosphere/pks.sap": {
+        "coverage": {
+          "end_mjd": "53001.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "53000.0"
+        },
+        "sha256": "0914f2e01901851091940c245300eb4c4e962a553119b891becc62367c6a26d3",
+        "size_bytes": 130
+      },
+      "$RUNTIME/atmosphere/pks.zwd": {
+        "coverage": {
+          "end_mjd": "53001.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "53000.0"
+        },
+        "sha256": "ece1466813980e84ef2705e497210c1efd7e13bc5b203779df43335071a9222d",
+        "size_bytes": 96
+      },
+      "$RUNTIME/clock/ao2gps.clk": {
+        "coverage": {
+          "end_mjd": "58835.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50155.00000"
+        },
+        "sha256": "41e37426cd251033d56271e59a1d70ea9bb356d1ed040e474ecb1cff9585ba7b",
+        "size_bytes": 206819
+      },
+      "$RUNTIME/clock/ao2nist.clk": {
+        "coverage": {
+          "end_mjd": "49685.39000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "45302.81000"
+        },
+        "sha256": "0226f490a76a5ae604939b88efef6ef269749ce85dc764619b9d910485fef33c",
+        "size_bytes": 23796
+      },
+      "$RUNTIME/clock/aus2utc.clk": {
+        "coverage": {
+          "end_mjd": "56989.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50169.00000"
+        },
+        "sha256": "a2545f219771b512761b4975a0f17cda1ce16d71ebe4a95142fbaf0682dea3d2",
+        "size_bytes": 122475
+      },
+      "$RUNTIME/clock/ced2gps.clk": {
+        "coverage": {
+          "end_mjd": "99999.000000000000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "54101.000000000000000"
+        },
+        "sha256": "1035ffeab100b737a2492ff55f83b73f88265c4287dfe3b690b5b5ab25f300e2",
+        "size_bytes": 9116708
+      },
+      "$RUNTIME/clock/coe2utc.clk": {
+        "coverage": {
+          "end_mjd": "99999",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "40000"
+        },
+        "sha256": "0724f6b6515b4fa4ba6b8085fe28eb50d97d015acbce41ec6e8f83b728b8dd0a",
+        "size_bytes": 130
+      },
+      "$RUNTIME/clock/eff2gps.clk": {
+        "coverage": {
+          "end_mjd": "60000.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "49320.00000"
+        },
+        "sha256": "8d73168d713531c3ed7a1a3b14d16b100fd8bff8bd9512ff31b2feebd32bc424",
+        "size_bytes": 112826
+      },
+      "$RUNTIME/clock/effedd2gps.clk": {
+        "coverage": {
+          "end_mjd": "60668.500000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "55562.500000"
+        },
+        "sha256": "a0b081aaea8501767fa591ab45f4db148e114f61084309c0bb7c4cd58312c39f",
+        "size_bytes": 316442
+      },
+      "$RUNTIME/clock/effix2gps.clk": {
+        "coverage": {
+          "end_mjd": "60599.500000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "55562.500000"
+        },
+        "sha256": "ef3297deddaeec857bd2ec5a71dddc9b6e3a01c19df9cd7931c599eddd071b56",
+        "size_bytes": 311674
+      },
+      "$RUNTIME/clock/gb1402nist.clk": {
+        "coverage": {
+          "end_mjd": "51390.50000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "49320.50000"
+        },
+        "sha256": "25f1a04cdd80a5848f393d10fc1efab48fb95265396cd7a02aeddf165d2622a3",
+        "size_bytes": 40809
+      },
+      "$RUNTIME/clock/gb8532nist.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50633.99000"
+        },
+        "sha256": "2fe7d2992a7a5f32edd5e363b224b6819114dae91e1d76f4af6fe6ff48b82757",
+        "size_bytes": 404
+      },
+      "$RUNTIME/clock/gbt2gps.clk": {
+        "coverage": {
+          "end_mjd": "58904.50000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "51909.50000"
+        },
+        "sha256": "92e1daa7d297e4bc0a29a40f01ddca65be52eba826d1b5a63ba8054167166d55",
+        "size_bytes": 169809
+      },
+      "$RUNTIME/clock/gps2gps_usno.clk": {
+        "coverage": {
+          "end_mjd": "99999",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "55559"
+        },
+        "sha256": "55e806258932e74f0f0cb3dab24707f3911930abea86269c7f81cf42d65385fb",
+        "size_bytes": 41
+      },
+      "$RUNTIME/clock/gps2gpst.clk": {
+        "coverage": {
+          "end_mjd": "55559",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "48988.00000"
+        },
+        "sha256": "cabd3334962915b75f2ee9275715171638578209e3aa9bcad5b08d409b0560c9",
+        "size_bytes": 381
+      },
+      "$RUNTIME/clock/gps_usno2utc.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "55559.00000"
+        },
+        "sha256": "ab8f0a4955594d906b66cf357aa99fa15867613fe5a65f2483cb065dd7ba4c26",
+        "size_bytes": 141354
+      },
+      "$RUNTIME/clock/gpst2utc.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "48988.00000"
+        },
+        "sha256": "4f5fca14e843f748dc2a8d34187982f2e5faa6c6d36188e62f8795a4e42881de",
+        "size_bytes": 322665
+      },
+      "$RUNTIME/clock/hob2gps.clk": {
+        "coverage": {
+          "end_mjd": "99999.000000000000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "53801.511718750000000"
+        },
+        "sha256": "0101592e48ade4226df486bc67118d3f2f98bbd174938770d7e4dc7ee9f301c9",
+        "size_bytes": 24210759
+      },
+      "$RUNTIME/clock/jb2gps.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "54021.38189810"
+        },
+        "sha256": "09a55a987541ae48458b9cca10d8840acbfb0a0e425a8d891e9c2c456ec1abca",
+        "size_bytes": 4631667
+      },
+      "$RUNTIME/clock/jb422jb.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "55000.00000000"
+        },
+        "sha256": "cf7b43341f51f43a6a5dfce5f67a4b9f0b6ea38d0a4782db5395ab9ca417cb57",
+        "size_bytes": 83
+      },
+      "$RUNTIME/clock/jb422jbafb.clk": {
+        "coverage": {
+          "end_mjd": "55000.00000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "40000.00000000"
+        },
+        "sha256": "365c7165010ea9eca774a86c2ae9ed8ff40955f51c2f7edeac11623557c34459",
+        "size_bytes": 89
+      },
+      "$RUNTIME/clock/jbafb2gps.clk": {
+        "coverage": {
+          "end_mjd": "60000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50169.0"
+        },
+        "sha256": "635dd3e5ecc9ab93193804736ca73283bb482e8ad695c5e0364482ceae575b2c",
+        "size_bytes": 49
+      },
+      "$RUNTIME/clock/jbafb2utc.clk": {
+        "coverage": {
+          "end_mjd": "50169.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "40000.0"
+        },
+        "sha256": "4a3c614e10bece46ce971f80b1ef8e2d3509a4c7661ca1323f8546076de35829",
+        "size_bytes": 44
+      },
+      "$RUNTIME/clock/jbdfb2jb.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "54021.38189810"
+        },
+        "sha256": "1378ac96c8d275c3e48544abe826cc265805fb4c3f7164846a000ed1243ceb7a",
+        "size_bytes": 1466
+      },
+      "$RUNTIME/clock/jbm42gps.clk": {
+        "coverage": {
+          "end_mjd": "51461.48000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50452.23000"
+        },
+        "sha256": "ae09f33b75a520096d4fac2d378080ce11f3030ac85708303b27befdd68c6629",
+        "size_bytes": 8455
+      },
+      "$RUNTIME/clock/jbmk22jb.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00000"
+        },
+        "sha256": "ea6e8ff409ffd3977477781013720a983c2e0c5bf3c961969580ba8dbaa05d03",
+        "size_bytes": 78
+      },
+      "$RUNTIME/clock/jbmk2dfb2jbdfb.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00000"
+        },
+        "sha256": "e0a7eaeb7de77861c2b4060f9aaf4af108154af2c88d5f65096a8f6a199cb93e",
+        "size_bytes": 81
+      },
+      "$RUNTIME/clock/jbmk2roach2jbroach.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00000"
+        },
+        "sha256": "b43e3422b7c9e8b2694b3c5911432046120a4b1ba374fdb53e8025669dee0e97",
+        "size_bytes": 85
+      },
+      "$RUNTIME/clock/jbroach2jb.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "54021.38189810"
+        },
+        "sha256": "55e3f92250d228d24c26b25426fc1c4929e57eb8915ede604a0b2dc52ceea6ec",
+        "size_bytes": 934
+      },
+      "$RUNTIME/clock/leap2effix.clk": {
+        "coverage": {
+          "end_mjd": "99999.0000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0"
+        },
+        "sha256": "d8a46bf592b5a43e40e6e8c1c9383892f8869d6b21bfdf612c846c37f388caba",
+        "size_bytes": 389
+      },
+      "$RUNTIME/clock/mk2utc.clk": {
+        "coverage": {
+          "end_mjd": "61149.958333",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "58484.000057"
+        },
+        "sha256": "34eacbd557afe470e1ae4ddd22318ae5638c76a8c34dd7a59d4d59ee23540c34",
+        "size_bytes": 6192539
+      },
+      "$RUNTIME/clock/mo2gps.clk": {
+        "coverage": {
+          "end_mjd": "65000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "53000.0"
+        },
+        "sha256": "a7ac099e09db6b79152b1da2071c056ff90ed9a17507333681ce56d80b0e245f",
+        "size_bytes": 6339
+      },
+      "$RUNTIME/clock/ncy2gps.clk": {
+        "coverage": {
+          "end_mjd": "65000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "53000"
+        },
+        "sha256": "71083f79b36016297a1a80908658549dd88047629e278925053c1e7f73209800",
+        "size_bytes": 43
+      },
+      "$RUNTIME/clock/ncyobs2obspm.clk": {
+        "coverage": {
+          "end_mjd": "99999.999999",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "47299.572920"
+        },
+        "sha256": "7d7d3aabd4ca7ca07792aeac442bc05f8666a10d07375bb058d829d2c7d14e8b",
+        "size_bytes": 555227
+      },
+      "$RUNTIME/clock/nist2tai.clk": {
+        "coverage": {
+          "end_mjd": "53824.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50659.00000"
+        },
+        "sha256": "888baeb63e28377a4d9820e47ef2e2d6ebe5307fc7d62d9c9a9a7bcca78a2e41",
+        "size_bytes": 26920
+      },
+      "$RUNTIME/clock/nist2tt_nist.clk": {
+        "coverage": {
+          "end_mjd": "99999.000000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "37300.000000000"
+        },
+        "sha256": "b6455d27341e6c4d09ff4f6260bd91db3a6dd424716bc55f89e0bcc64e55247a",
+        "size_bytes": 2922
+      },
+      "$RUNTIME/clock/nist2utc.clk": {
+        "coverage": {
+          "end_mjd": "58599.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "45989.00000"
+        },
+        "sha256": "a25ebc8f954f6f21f68948e6f84a2b79664496e6927e966a7b4b67c8de59ef46",
+        "size_bytes": 75817
+      },
+      "$RUNTIME/clock/obspm2gps.clk": {
+        "coverage": {
+          "end_mjd": "99999.999999",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "52974.000000"
+        },
+        "sha256": "f1a89b4bb20e4ddaab9b9dfcaa576c9eb9ee783a7305ceed64a8895ebbc7262c",
+        "size_bytes": 233465
+      },
+      "$RUNTIME/clock/obspm2utc.clk": {
+        "coverage": {
+          "end_mjd": "52973.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "40000.000000"
+        },
+        "sha256": "7e58d72b7f452cf23b5dc23f9c0c767735ea0fddf91cef1bb8b057a8a338340e",
+        "size_bytes": 113
+      },
+      "$RUNTIME/clock/pks2aus.clk": {
+        "coverage": {
+          "end_mjd": "57199.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "52240.00000"
+        },
+        "sha256": "268511fe66a4d379d407bdb0a2b80e347f2f352fa2e36a41c0add3a564e66735",
+        "size_bytes": 6044865
+      },
+      "$RUNTIME/clock/pks2gps.clk": {
+        "coverage": {
+          "end_mjd": "60644.08347",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00521"
+        },
+        "sha256": "4592e421f977f1d90be0ba0f3bbe7fc7a004c06189226cae4436ff12e6f73198",
+        "size_bytes": 1309868
+      },
+      "$RUNTIME/clock/pks2tid.clk": {
+        "coverage": {
+          "end_mjd": "50844.72917",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00"
+        },
+        "sha256": "f64887e8c7ea5a9a538d6fbb64205006e2dd61f366dd903c93a2e806a3527d5e",
+        "size_bytes": 73961
+      },
+      "$RUNTIME/clock/pks2tt_toasim.clk": {
+        "coverage": {
+          "end_mjd": "99999.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00000"
+        },
+        "sha256": "ec768e77d9219602a778eebf71c035a3dee4510622e258b7890970a090451f05",
+        "size_bytes": 108
+      },
+      "$RUNTIME/clock/ptb2tai.clk": {
+        "coverage": {
+          "end_mjd": "53824.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "50659.00000"
+        },
+        "sha256": "bd644439f9537611b2337248e00e2c16cf315732da43ca569107225ac039a15a",
+        "size_bytes": 26919
+      },
+      "$RUNTIME/clock/srt2gps.clk": {
+        "coverage": {
+          "end_mjd": "58828.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "56371"
+        },
+        "sha256": "1d60523d55e801aa4983e190e509cf7cd3dfd76ebf8550d60ac4f36edfd04777",
+        "size_bytes": 92797
+      },
+      "$RUNTIME/clock/tai2tt_bipm01.clk": {
+        "coverage": {
+          "end_mjd": "51899.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "a46df9fc4b0c1ed82aae205a92acf319ad09a6173a76a44cc1486dc9ceb0c214",
+        "size_bytes": 19662
+      },
+      "$RUNTIME/clock/tai2tt_bipm05.clk": {
+        "coverage": {
+          "end_mjd": "53729.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "741e6292d8f738a4e2605922a09f2599b8b687f421a6f1873ab933ab271a1a82",
+        "size_bytes": 23507
+      },
+      "$RUNTIME/clock/tai2tt_bipm06.clk": {
+        "coverage": {
+          "end_mjd": "54099.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "12b85d43646942c716af64379088b7796c6a704ca55f9ba06bef4b0a3b0c030b",
+        "size_bytes": 24286
+      },
+      "$RUNTIME/clock/tai2tt_bipm2003.clk": {
+        "coverage": {
+          "end_mjd": "52849.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "4cd68afc42b88e0b375d70c75a84409febac24ef6e77e6918635423d28b54894",
+        "size_bytes": 22021
+      },
+      "$RUNTIME/clock/tai2tt_bipm2004.clk": {
+        "coverage": {
+          "end_mjd": "53239.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "211e6514a3f10f839c19df73fa48f9ff0216e69e3c03b08ce8c8913c8a4e5240",
+        "size_bytes": 22542
+      },
+      "$RUNTIME/clock/tai2tt_bipm2004ext.clk": {
+        "coverage": {
+          "end_mjd": "60000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "f951785a160a2b1bf9ff3c73f9e9503499738665c9a23a49e319b9b227b9b7d4",
+        "size_bytes": 22681
+      },
+      "$RUNTIME/clock/tai2tt_bipm2010.clk": {
+        "coverage": {
+          "end_mjd": "55559.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "ac9d5bbc493ba259d0519ce4818dda34a1f077a4cb48186a1f624058651ff161",
+        "size_bytes": 28129
+      },
+      "$RUNTIME/clock/tai2tt_bipm2011.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "66682444379a4ffd938fd93f3219503f29fad0ab6e7392ddd2f94fea211d0cde",
+        "size_bytes": 29683
+      },
+      "$RUNTIME/clock/tai2tt_bipm2012.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "65b9d84dafe26bef5205e7f1bb6c885804aefa826c202fd00787cfaf6459dfd3",
+        "size_bytes": 30271
+      },
+      "$RUNTIME/clock/tai2tt_bipm2013.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "b87cf53a3e1ba5230056fd2a3b3341061b0f23c324fd0841faa1e9efd6984c6c",
+        "size_bytes": 29662
+      },
+      "$RUNTIME/clock/tai2tt_bipm2014.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "830df3ccf2128b4f5ea9de81ba6f7f594ded18d7e9c6226bfee06de0941b52dc",
+        "size_bytes": 30395
+      },
+      "$RUNTIME/clock/tai2tt_bipm2015.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "038dae3e947e86a4ae0ab079d109bedca5797152d3507fc632389e37df22d764",
+        "size_bytes": 31151
+      },
+      "$RUNTIME/clock/tai2tt_bipm2016.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "44979.0"
+        },
+        "sha256": "587b24a9ff4dc87ece267b8f5e206eb14cb3652751950d110720ed702ddbc7a3",
+        "size_bytes": 29141
+      },
+      "$RUNTIME/clock/tai2tt_bipm2017.clk": {
+        "coverage": {
+          "end_mjd": "90000.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "b0154d6da6faac6b71e0e3131090b58abe6e96e0ff6618f9c745267a277c087e",
+        "size_bytes": 36828
+      },
+      "$RUNTIME/clock/tai2tt_bipm2018.clk": {
+        "coverage": {
+          "end_mjd": "90000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589"
+        },
+        "sha256": "47869a659f5c77b7d22e51362d86d908f9a27a22bbf5375160735b7b2bf6dbca",
+        "size_bytes": 33546
+      },
+      "$RUNTIME/clock/tai2tt_bipm2019.clk": {
+        "coverage": {
+          "end_mjd": "90000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589"
+        },
+        "sha256": "a7626d10fc51e68ace910373ecb425d8e30d714de47cb84feb6e9222e982271d",
+        "size_bytes": 36459
+      },
+      "$RUNTIME/clock/tai2tt_bipm2020.clk": {
+        "coverage": {
+          "end_mjd": "60209.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.000000"
+        },
+        "sha256": "7419cfc442f207c5e6c15bd151720891e532f96c8641aae4edc076a28c0bb1b9",
+        "size_bytes": 73787
+      },
+      "$RUNTIME/clock/tai2tt_bipm2021.clk": {
+        "coverage": {
+          "end_mjd": "60579.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.000000"
+        },
+        "sha256": "14a85a50f4ae37a0202202f55a9c8ee5f10b36caec6cfdea4220115f151125f5",
+        "size_bytes": 74785
+      },
+      "$RUNTIME/clock/tai2tt_bipm2022.clk": {
+        "coverage": {
+          "end_mjd": "60939.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.000000"
+        },
+        "sha256": "3008fb0db51eea448aeb913dd9329c59aea76850a5adde1dddeeb972b3757f80",
+        "size_bytes": 75758
+      },
+      "$RUNTIME/clock/tai2tt_bipm2023.clk": {
+        "coverage": {
+          "end_mjd": "61309.000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.000000"
+        },
+        "sha256": "8a6f7524e27c187475d09c90e31cdbc4bda8f0547109555bde0ccaa9415578fe",
+        "size_bytes": 76759
+      },
+      "$RUNTIME/clock/tai2tt_bipm2024.clk": {
+        "coverage": {
+          "end_mjd": "61669.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.00000"
+        },
+        "sha256": "ec071a094fef0e67a9ed5941b7b13f7ae892047ee92744ef7c78d100d48a8118",
+        "size_bytes": 80566
+      },
+      "$RUNTIME/clock/tai2tt_bipm92.clk": {
+        "coverage": {
+          "end_mjd": "48619.0",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "42589.0"
+        },
+        "sha256": "299edb1b6a9166f5d7228979120e2190fccc3b0060d4c4c19738510930d74b05",
+        "size_bytes": 12722
+      },
+      "$RUNTIME/clock/tai2tt_tai.clk": {
+        "coverage": {
+          "end_mjd": "1000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0"
+        },
+        "sha256": "46161bbb915b3b4fa4e910f327833795df3950410b18e01cd6118648dff8699a",
+        "size_bytes": 100
+      },
+      "$RUNTIME/clock/tid2nist.clk": {
+        "coverage": {
+          "end_mjd": "50844.72917",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "0.00"
+        },
+        "sha256": "bfa0b852aa00203a950e099ef694eafe86a5750f4987f97014a6122f94226cf7",
+        "size_bytes": 8264
+      },
+      "$RUNTIME/clock/utc2tai.clk": {
+        "coverage": {
+          "end_mjd": "99999.000000000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "37300.000000000"
+        },
+        "sha256": "cade8c0b65ad37682e8e265a10e7587454faf9c5a1d77009458daacf940847bf",
+        "size_bytes": 3089
+      },
+      "$RUNTIME/clock/utc2ut1.clk": {
+        "coverage": {
+          "end_mjd": "53290",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "37665"
+        },
+        "sha256": "eeec70d9ec426846e1d17a786187cda191f87a85421c3bd1de7d85b8712eb4b1",
+        "size_bytes": 242540
+      },
+      "$RUNTIME/clock/vla2gps.clk": {
+        "coverage": {
+          "end_mjd": "60716.20000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "57054.60000"
+        },
+        "sha256": "46d7568b65f742610ac4f7f4efc52881af08f68928a8d6384e84253e9d0231d6",
+        "size_bytes": 88382
+      },
+      "$RUNTIME/clock/vla2nist.clk": {
+        "coverage": {
+          "end_mjd": "49304.00000",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "48191.17000"
+        },
+        "sha256": "62ba0962620250c7c0df8a4a8df40ade041424cf67adc453db92b7a3668b76b6",
+        "size_bytes": 669
+      },
+      "$RUNTIME/clock/wsrt2gps.clk": {
+        "coverage": {
+          "end_mjd": "57202.1",
+          "out_of_order_count": 0,
+          "source": "first and last table samples as used by TabulatedFunction; not independently validated historical coverage",
+          "start_mjd": "51179.5"
+        },
+        "sha256": "72f512aa3c5f26b434708ebdd1b62718145f52e77d7ac2cc03628203ec296319",
+        "size_bytes": 190939
+      },
+      "$RUNTIME/earth/eopc04_IAU2000.62-now": {
+        "coverage": {
+          "end_mjd": "61163",
+          "source": "format-1 EOP samples used by load_EOP (years after 1966)",
+          "start_mjd": "39491"
+        },
+        "sha256": "5b45e19bc066cc77b446a484917c1ba78779ab1269a2ba83a1ef4f68004887a1",
+        "size_bytes": 3666741
+      },
+      "$RUNTIME/ephemeris/DE405.1950.2050": {
+        "coverage": {
+          "end_mjd": "69808.0",
+          "source": "binary header",
+          "start_mjd": "33264.0"
+        },
+        "sha256": "86786f07aeddc1c5b6ddb24d8c65930803458938c6a2f920e8ea72a86da7479c",
+        "size_bytes": 9316736
+      },
+      "$RUNTIME/ephemeris/TIMEEPH_short.te405": {
+        "coverage": {
+          "end_mjd": "69808.0",
+          "source": "binary header",
+          "start_mjd": "38736.0"
+        },
+        "sha256": "a455fe86dd66c173ebb5a58a6fe12f65b3e9c21c2000be235b669f84d5561565",
+        "size_bytes": 1759184
+      },
+      "$RUNTIME/observatory/aliases": {
+        "coverage": null,
+        "sha256": "a5678d9a6028d07f30d022e7e8e436d65ef9b590cf8c6c04d7b27167ce975a03",
+        "size_bytes": 791
+      },
+      "$RUNTIME/observatory/observatories.dat": {
+        "coverage": null,
+        "sha256": "ed77c5ac542a846b3a0c367e0e057e368464040735721f9546bb6a76a9d31aa9",
+        "size_bytes": 10695
+      },
+      "$RUNTIME/observatory/oldcodes.dat": {
+        "coverage": null,
+        "sha256": "ca6ed52348eee26e4c0f17424bf1aa30b3082b77f2c8dc8784d63085ba905e09",
+        "size_bytes": 988
+      }
+    }
+  },
+  "returncode": 0,
+  "runtime_root": "/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/T2runtime",
+  "schema_version": 2,
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "stages": {
+    "bats": [
+      {
+        "bat_correction_day": "0.00653752541684182102436784049678380622",
+        "bat_mjd": "50000.0065375254168418210243678404997",
+        "bbat_mjd": "50000.0065375254168418210243678404997",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40123456790123470367781348400182395e-06",
+        "clock_step_s_1": "-3.69904761904523517725232881550589958e-07",
+        "clock_step_s_2": "2.57107142857175100976672559591543199e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972545713806084677344188094139",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700165312337734713210579684528057",
+        "earth_ssb_light_s_0": "476.892919000721008160326164215803146",
+        "earth_ssb_light_s_1": "131.595318539883493258457747288048267",
+        "earth_ssb_light_s_2": "57.0872973330544297709820966701954603",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009169.4815332889556884765625",
+        "observatory_earth_light_s_0": "-0.0173599513409842254318959930969867855",
+        "observatory_earth_light_s_1": "0.00418694369238094363933067043603841739",
+        "observatory_earth_light_s_2": "-0.0115281814691796258981471012816655275",
+        "roemer_s": "494.686876757056836595438653603196144",
+        "sat_mjd": "50000",
+        "shapiro_jupiter_s": "-2.04970014799353250444856973291191116e-08",
+        "shapiro_neptune_s": "-1.64596297369258219629636756550479862e-09",
+        "shapiro_saturn_s": "6.96922707489380369054561849929485887e-10",
+        "shapiro_sun_s": "-6.78444919964380270348660098567172838e-06",
+        "shapiro_uranus_s": "-1.16807319557427732115280120218448259e-09",
+        "shapiro_venus_s": "-2.83953494783094800280737482212553026e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11965603851144220535205383443289051e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.04222843904533351243965830505884551e-08",
+        "tt_tb_s": "9.18301539250002302646655649067933185",
+        "tt_teph_s": "-0.00168485179643500845164671986253779323"
+      },
+      {
+        "bat_correction_day": "0.00653746019994877998618942796370585145",
+        "bat_mjd": "50000.016537460199948779986189427963",
+        "bbat_mjd": "50000.016537460199948779986189427963",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40109135802466217674781129298722249e-06",
+        "clock_step_s_1": "-3.69986666666444962752932894972657252e-07",
+        "clock_step_s_2": "2.57096071428601405193116024444632828e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972546315777890413301065564156",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700189160016039036094070979743265",
+        "earth_ssb_light_s_0": "476.867425582116140958532923832535744",
+        "earth_ssb_light_s_1": "131.67059569007173536192567553371191",
+        "earth_ssb_light_s_2": "57.1199392834553165698707744013518095",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009090.627165317535400390625",
+        "observatory_earth_light_s_0": "-0.01758909032721425735878995055827545",
+        "observatory_earth_light_s_1": "0.003085328111536824510080512240506323",
+        "observatory_earth_light_s_2": "-0.0115283141844809075560185362974152667",
+        "roemer_s": "494.68122871539844709332101047039032",
+        "sat_mjd": "50000.0100000000000000000000000000018",
+        "shapiro_jupiter_s": "-2.04970474487360027527628312691773682e-08",
+        "shapiro_neptune_s": "-1.64596550994087944698797696595161597e-09",
+        "shapiro_saturn_s": "6.96757842185791552266691160585389275e-10",
+        "shapiro_sun_s": "-6.78437442505575899378677390272329717e-06",
+        "shapiro_uranus_s": "-1.16807656634530366005324117850347476e-09",
+        "shapiro_venus_s": "-2.83942190720884195875511631921618311e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11968266861904290368650064478595052e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.0097693277299307241065239580148083e-08",
+        "tt_tb_s": "9.18302871878656592734305275167192305",
+        "tt_teph_s": "-0.00168492200089198000505230634615827512"
+      },
+      {
+        "bat_correction_day": "0.0060593471382738035216008947428748692",
+        "bat_mjd": "50000.0660593471382738035216008947415",
+        "bbat_mjd": "50000.0660593471382738035216008947415",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40037530864200875923577215009796504e-06",
+        "clock_step_s_1": "-3.70396190475933020943666122704041044e-07",
+        "clock_step_s_2": "2.57040714285749105928114885931401457e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972549325707973366661462932825",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "41.4932626544743925478542223572731018",
+        "earth_ssb_light_s_0": "476.739746352644317539670737460255623",
+        "earth_ssb_light_s_1": "132.046924845263276893092552199959755",
+        "earth_ssb_light_s_2": "57.2831244846978293594474962446838617",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "frequency_ssb_hz": "100000618.50709657371044158935546875",
+        "observatory_earth_light_s_0": "-0.0176791196846869946845970389404101297",
+        "observatory_earth_light_s_1": "-0.00251761158958910356148175324619842286",
+        "observatory_earth_light_s_2": "-0.0115285617094815669159135751442590845",
+        "roemer_s": "494.65376409357708098468719981610775",
+        "sat_mjd": "50000.059999999999999999999999999998",
+        "shapiro_jupiter_s": "-2.04972792551691826905000060532122119e-08",
+        "shapiro_neptune_s": "-1.64597820348440546061993374138887267e-09",
+        "shapiro_saturn_s": "6.95934173292728768678291621416730217e-10",
+        "shapiro_sun_s": "-6.78401800114596341395849926625416515e-06",
+        "shapiro_uranus_s": "-1.16809343479095734011677310199613794e-09",
+        "shapiro_venus_s": "-2.83885851157480768546905586834972791e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "8.07482458448382478771558623531490184e-06",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.22545071173631774569040206457337661e-09",
+        "tt_tb_s": "9.18309531175869014643718903583249926",
+        "tt_teph_s": "-0.00168531148376652672137010480213348274"
+      },
+      {
+        "bat_correction_day": "0.00653726804455900679357166605282446311",
+        "bat_mjd": "50000.0465418976741886364235716660577",
+        "bbat_mjd": "50000.0465418976741886364235716660577",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40066166209422754323544492438546882e-06",
+        "clock_step_s_1": "-3.70232418870994063813480070418426848e-07",
+        "clock_step_s_2": "2.57062852017230671303111330227436637e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972548121977524715475738048553",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700265743829524334174152500054333",
+        "earth_ssb_light_s_0": "476.790848642823675618274137377738953",
+        "earth_ssb_light_s_1": "131.896439359311500538751715794205666",
+        "earth_ssb_light_s_2": "57.2178704292292223954063956625759602",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400008837.3963901996612548828125",
+        "observatory_earth_light_s_0": "-0.0178553612699204090896731855764301145",
+        "observatory_earth_light_s_1": "-0.000275776988264721560021458524047943683",
+        "observatory_earth_light_s_2": "-0.0115285470465369133119537536913412623",
+        "roemer_s": "494.664586598859955302032176405191422",
+        "sat_mjd": "50000.0400046296296296296300000000022",
+        "shapiro_jupiter_s": "-2.04971861155881189877847955863390816e-08",
+        "shapiro_neptune_s": "-1.64597312396413145613310750268705809e-09",
+        "shapiro_saturn_s": "6.96263485505388998169603344674761722e-10",
+        "shapiro_sun_s": "-6.78415693589977381847177032025975052e-06",
+        "shapiro_uranus_s": "-1.16808668494312974454566690440471613e-09",
+        "shapiro_venus_s": "-2.83908343411579596635898494419870518e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11975968437991405426489390558669745e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.4430479442045676380270067509954679e-09",
+        "tt_tb_s": "9.18306868692410037147693774202801027",
+        "tt_teph_s": "-0.001685149538435741240621768000096381"
+      },
+      {
+        "bat_correction_day": "0.00651160575573621722901672343414027316",
+        "bat_mjd": "54000.0465162353853658468590167234375",
+        "bbat_mjd": "54000.0465162353853658468590167234375",
+        "clockCorr": "1",
+        "clock_step_s_0": "-7.45536696902210178761866675445357799e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-6.04799398149407333530228641940533485e-09",
+        "clock_step_s_3": "33",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "65.1839992484153043506012181751430035",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211712787994421947068701683747349307",
+        "earth_ssb_light_s_0": "502.254354860787202596839051693677902",
+        "earth_ssb_light_s_1": "-7.86850219289129437783003595541231334",
+        "earth_ssb_light_s_2": "-3.47208638533011981763820585911162198",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1399967433.3770601749420166015625",
+        "observatory_earth_light_s_0": "-0.0171195529468062025701957651335760602",
+        "observatory_earth_light_s_1": "0.00512130434126279506651391315585897246",
+        "observatory_earth_light_s_2": "-0.0115104528484550553552034912740964501",
+        "roemer_s": "483.088723775011089855979662388563156",
+        "sat_mjd": "54000.0400046296296296296300000000022",
+        "shapiro_jupiter_s": "-2.25865614928204989806884438229353518e-08",
+        "shapiro_neptune_s": "-1.31343989768128611674724010971015281e-09",
+        "shapiro_saturn_s": "-7.77347374038994881483625152846644868e-09",
+        "shapiro_sun_s": "-6.67068551368742631841983470319945582e-06",
+        "shapiro_uranus_s": "-4.61632756285243205635484642444105186e-10",
+        "shapiro_venus_s": "-2.82511889343345230759536952575003486e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.14460290381771301861963004414118883e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.07455344542356647497627429154593015e-08",
+        "tt_tb_s": "14.541720388028813582144638460228649",
+        "tt_teph_s": "-0.00162991077796251150784645478353240833"
+      },
+      {
+        "bat_correction_day": "-0.0044206010620401625628861437968556193",
+        "bat_mjd": "56000.1066905100490709485471138562014",
+        "bbat_mjd": "56000.1066905100490709485471138562014",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.33341650622957682387307058388681291e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.14444444444088732478620123816058507e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996635139016234461450949311256",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688029160143925677672882557089906",
+        "earth_ssb_light_s_0": "-494.636118901166071282204939052462578",
+        "earth_ssb_light_s_1": "48.791015438633735357143450528383255",
+        "earth_ssb_light_s_2": "21.1486153894427957311563659459352493",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400049300.4254200458526611328125",
+        "observatory_earth_light_s_0": "0.0178479009219567122390692759381636279",
+        "observatory_earth_light_s_1": "7.10039381769521794202093545322895807e-05",
+        "observatory_earth_light_s_2": "-0.0115431697185662714144616103340013069",
+        "roemer_s": "-465.136499711000112711190013214945793",
+        "sat_mjd": "56000.1111111111111111111100000000009",
+        "shapiro_jupiter_s": "5.30021038981448626198893591776432899e-09",
+        "shapiro_neptune_s": "-1.07203474018741874714006501466455681e-09",
+        "shapiro_saturn_s": "-8.05386155133954974412071036457896889e-09",
+        "shapiro_sun_s": "2.68842644373375382830636953768177477e-05",
+        "shapiro_uranus_s": "3.82490412081687492017413226421469925e-10",
+        "shapiro_venus_s": "5.92097213788788823851871487485354958e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.21794149572245758631725302476023209e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "9.47580877423279473644838761647174463e-09",
+        "tt_tb_s": "17.2242835285267190101020667618684125",
+        "tt_teph_s": "0.00153975627038870251095392660545257968"
+      },
+      {
+        "bat_correction_day": "-0.00444466430936361680151246543843809787",
+        "bat_mjd": "56000.7846793207845284700708375345622",
+        "bbat_mjd": "56000.7846793207845284700708375345622",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.34925772987653768159591527106555553e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.41564959403476691644131898149827631e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996616585750643935170955955982",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.21168877416432632654341716715862276",
+        "earth_ssb_light_s_0": "-495.330792906557348942442331463098526",
+        "earth_ssb_light_s_1": "43.4582606573435370478364347945898771",
+        "earth_ssb_light_s_2": "18.8364941370227327865904953796416521",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400046836.80044460296630859375",
+        "observatory_earth_light_s_0": "-0.00756848572725245857112374991970682458",
+        "observatory_earth_light_s_1": "-0.016185742652685367048981390780681977",
+        "observatory_earth_light_s_2": "-0.0115124773445276617350740977485656913",
+        "roemer_s": "-467.216479673823187113157473504543304",
+        "sat_mjd": "56000.7891239850938920868723499999978",
+        "shapiro_jupiter_s": "5.19206859975380024662660539600499143e-09",
+        "shapiro_neptune_s": "-1.07141846124295051175615954840462593e-09",
+        "shapiro_saturn_s": "-8.05207308507312884600381781147193649e-09",
+        "shapiro_sun_s": "2.74966002165870872426568782831424187e-05",
+        "shapiro_uranus_s": "3.85014144984669970323355551254759961e-10",
+        "shapiro_venus_s": "5.81268252880288902427922437541528379e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.32924618183616853240880959288738872e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.41869405374754085269858039906366864e-08",
+        "tt_tb_s": "17.2252002691620603277140795397847027",
+        "tt_teph_s": "0.00154819756912273251946154939417965579"
+      }
+    ],
+    "offset_4ns": [
+      {
+        "bat_correction_day": "0.00653752541684182102436280197109516378",
+        "bat_mjd": "50000.0065375254168881173206590982642",
+        "bbat_mjd": "50000.0065375254168881173206590982642",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40123456790123470367781348400182395e-06",
+        "clock_step_s_1": "-3.69904761904523517725232881550589958e-07",
+        "clock_step_s_2": "2.57107142857175100976672559591543199e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972545713806084677344188094139",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700165312337734713210579684528057",
+        "earth_ssb_light_s_0": "476.892919000721008160326164215803146",
+        "earth_ssb_light_s_1": "131.595318539883493258457747288048267",
+        "earth_ssb_light_s_2": "57.0872973330544297709820966701954603",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009169.4815332889556884765625",
+        "observatory_earth_light_s_0": "-0.0173599513409854432077761288155670627",
+        "observatory_earth_light_s_1": "0.00418694369237588518567472206655111222",
+        "observatory_earth_light_s_2": "-0.0115281814691796276328705772584726219",
+        "roemer_s": "494.686876757056836595438653603196144",
+        "sat_mjd": "50000.0000000000000462962962962962949",
+        "shapiro_jupiter_s": "-2.04970014799353250444856973291191116e-08",
+        "shapiro_neptune_s": "-1.64596297369258219629636756550479862e-09",
+        "shapiro_saturn_s": "6.96922707489380369054561849929485887e-10",
+        "shapiro_sun_s": "-6.78444919964380270348660098567172838e-06",
+        "shapiro_uranus_s": "-1.16807319557427732115280120218448259e-09",
+        "shapiro_venus_s": "-2.83953494783094800280737482212553026e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11965603851144220535205383443289051e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.04222843904516873806163774194601113e-08",
+        "tt_tb_s": "9.18301539250002302603287561496082118",
+        "tt_teph_s": "-0.00168485179643500888532758885673956684"
+      },
+      {
+        "bat_correction_day": "0.00653746019994877998618690209490524934",
+        "bat_mjd": "50000.0165374601999950762824831983947",
+        "bbat_mjd": "50000.0165374601999950762824831983947",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40109135802466217674781129298722249e-06",
+        "clock_step_s_1": "-3.69986666666444962752932894972657252e-07",
+        "clock_step_s_2": "2.57096071428601405193116024444632828e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972546315777890413301065564156",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700189160016039036094070979743265",
+        "earth_ssb_light_s_0": "476.867425582116140958532923832535744",
+        "earth_ssb_light_s_1": "131.67059569007173536192567553371191",
+        "earth_ssb_light_s_2": "57.1199392834553165698707744013518095",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009090.627165317535400390625",
+        "observatory_earth_light_s_0": "-0.0175890903272151802316791702196496772",
+        "observatory_earth_light_s_1": "0.0030853281115315735021187304454315381",
+        "observatory_earth_light_s_2": "-0.0115283141844809075560185362974152667",
+        "roemer_s": "494.68122871539844709332101047039032",
+        "sat_mjd": "50000.0100000000000462962962962962967",
+        "shapiro_jupiter_s": "-2.04970474487360027527628312691773682e-08",
+        "shapiro_neptune_s": "-1.64596550994087944698797696595161597e-09",
+        "shapiro_saturn_s": "6.96757842185791552266691160585389275e-10",
+        "shapiro_sun_s": "-6.78437442505575899378677390272329717e-06",
+        "shapiro_uranus_s": "-1.16807656634530366005324117850347476e-09",
+        "shapiro_venus_s": "-2.83942190720884195875511631921618311e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11968266861904290368650064478595052e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.00976932772979126145524751754882498e-08",
+        "tt_tb_s": "9.18302871878656592712621231381266925",
+        "tt_teph_s": "-0.00168492200089198022189274084325916192"
+      },
+      {
+        "bat_correction_day": "0.00605934713827380417950333173753318843",
+        "bat_mjd": "50000.066059347138320100475799628028",
+        "bbat_mjd": "50000.066059347138320100475799628028",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40037530864200875923577215009796504e-06",
+        "clock_step_s_1": "-3.70396190475933020943666122704041044e-07",
+        "clock_step_s_2": "2.57040714285749105928114885931401457e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972549325707973366661462932825",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "41.4932626544743925478542223572731018",
+        "earth_ssb_light_s_0": "476.739746352644317539670737460255623",
+        "earth_ssb_light_s_1": "132.046924845263276893092552199959755",
+        "earth_ssb_light_s_2": "57.2831244846978293594474962446838617",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "frequency_ssb_hz": "100000618.50709657371044158935546875",
+        "observatory_earth_light_s_0": "-0.0176791196846862591618432247742020991",
+        "observatory_earth_light_s_1": "-0.00251761158959425569020540436326882627",
+        "observatory_earth_light_s_2": "-0.0115285617094815669159135751442590845",
+        "roemer_s": "494.65376409357713782810606062412262",
+        "sat_mjd": "50000.0600000000000462962962962962929",
+        "shapiro_jupiter_s": "-2.04972792551691826905000060532122119e-08",
+        "shapiro_neptune_s": "-1.64597820348440546061993374138887267e-09",
+        "shapiro_saturn_s": "6.95934173292728768678291621416730217e-10",
+        "shapiro_sun_s": "-6.78401800114596426099144652055450422e-06",
+        "shapiro_uranus_s": "-1.16809343479095734011677310199613794e-09",
+        "shapiro_venus_s": "-2.83885851157480768546905586834972791e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "8.07482458448382309364969172671422371e-06",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.22545071173599349089028127772482701e-09",
+        "tt_tb_s": "9.18309531175869014578666772225473479",
+        "tt_teph_s": "-0.00168531148376652737189140829343614314"
+      },
+      {
+        "bat_correction_day": "0.00653726804455900679356663859450605335",
+        "bat_mjd": "50000.0465418976742349327198629348915",
+        "bbat_mjd": "50000.0465418976742349327198629348915",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40066166209422754323544492438546882e-06",
+        "clock_step_s_1": "-3.70232418870994063813480070418426848e-07",
+        "clock_step_s_2": "2.57062852017230671303111330227436637e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972548121977524715475738048553",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700265743829524334174152500054333",
+        "earth_ssb_light_s_0": "476.790848642823675618274137377738953",
+        "earth_ssb_light_s_1": "131.896439359311500538751715794205666",
+        "earth_ssb_light_s_2": "57.2178704292292223954063956625759602",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400008837.3963901996612548828125",
+        "observatory_earth_light_s_0": "-0.0178553612699203292923932906433037715",
+        "observatory_earth_light_s_1": "-0.000275776988269927031491995927936500266",
+        "observatory_earth_light_s_2": "-0.0115285470465369133119537536913412623",
+        "roemer_s": "494.664586598859955302032176405191422",
+        "sat_mjd": "50000.0400046296296759259262962962971",
+        "shapiro_jupiter_s": "-2.04971861155881189877847955863390816e-08",
+        "shapiro_neptune_s": "-1.64597312396413145613310750268705809e-09",
+        "shapiro_saturn_s": "6.96263485505388998169603344674761722e-10",
+        "shapiro_sun_s": "-6.78415693589977381847177032025975052e-06",
+        "shapiro_uranus_s": "-1.16808668494312974454566690440471613e-09",
+        "shapiro_venus_s": "-2.83908343411579596635898494419870518e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11975968437991405426489390558669745e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.4430479442038761150349124198592754e-09",
+        "tt_tb_s": "9.18306868692410037104325686630950114",
+        "tt_teph_s": "-0.0016851495384357416743026369942981546"
+      },
+      {
+        "bat_correction_day": "0.00651160575573621722900917206008659713",
+        "bat_mjd": "54000.0465162353854121431553054683582",
+        "bbat_mjd": "54000.0465162353854121431553054683582",
+        "clockCorr": "1",
+        "clock_step_s_0": "-7.45536696902210178761866675445357799e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-6.04799398149407333530228641940533485e-09",
+        "clock_step_s_3": "33",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "65.1839992484153043506012181751430035",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211712787994421947068701683747349307",
+        "earth_ssb_light_s_0": "502.254354860787202596839051693677902",
+        "earth_ssb_light_s_1": "-7.86850219289129437783003595541231334",
+        "earth_ssb_light_s_2": "-3.47208638533011981763820585911162198",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1399967433.3770601749420166015625",
+        "observatory_earth_light_s_0": "-0.0171195529468076979018320571412914433",
+        "observatory_earth_light_s_1": "0.00512130434125780947124395581226963259",
+        "observatory_earth_light_s_2": "-0.0115104528484550536204800152972893557",
+        "roemer_s": "483.088723775011089855979662388563156",
+        "sat_mjd": "54000.0400046296296759259262962962971",
+        "shapiro_jupiter_s": "-2.25865614928204989806884438229353518e-08",
+        "shapiro_neptune_s": "-1.31343989768128611674724010971015281e-09",
+        "shapiro_saturn_s": "-7.77347374038994881483625152846644868e-09",
+        "shapiro_sun_s": "-6.67068551368742631841983470319945582e-06",
+        "shapiro_uranus_s": "-4.61632756285243205635484642444105186e-10",
+        "shapiro_venus_s": "-2.82511889343345230759536952575003486e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.14460290381771301861963004414118883e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.07455344542337473451028449973089496e-08",
+        "tt_tb_s": "14.5417203880288135814941171466508845",
+        "tt_teph_s": "-0.00162991077796251215836775827483506873"
+      },
+      {
+        "bat_correction_day": "-0.00442060106204016256288362545310086765",
+        "bat_mjd": "56000.1066905100491172448434126708432",
+        "bbat_mjd": "56000.1066905100491172448434126708432",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.33341650622957682387307058388681291e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.14444444444088732478620123816058507e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996635139016234461450949311256",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688029160143925677672882557089906",
+        "earth_ssb_light_s_0": "-494.636118901166071282204939052462578",
+        "earth_ssb_light_s_1": "48.791015438633735357143450528383255",
+        "earth_ssb_light_s_2": "21.1486153894427957311563659459352493",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400049300.4254200458526611328125",
+        "observatory_earth_light_s_0": "0.0178479009219566914223875642164784949",
+        "observatory_earth_light_s_1": "7.10039381822824696658541521188112711e-05",
+        "observatory_earth_light_s_2": "-0.0115431697185662714144616103340013069",
+        "roemer_s": "-465.136499711000112711190013214945793",
+        "sat_mjd": "56000.1111111111111574074062962962958",
+        "shapiro_jupiter_s": "5.30021038981448626198893591776432899e-09",
+        "shapiro_neptune_s": "-1.07203474018741874714006501466455681e-09",
+        "shapiro_saturn_s": "-8.05386155133954974412071036457896889e-09",
+        "shapiro_sun_s": "2.68842644373375382830636953768177477e-05",
+        "shapiro_uranus_s": "3.82490412081687492017413226421469925e-10",
+        "shapiro_venus_s": "5.92097213788788823851871487485354958e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.21794149572245758631725302476023209e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "9.47580877423205027389708989156436036e-09",
+        "tt_tb_s": "17.2242835285267190103189071997276663",
+        "tt_teph_s": "0.00153975627038870272779436110255346648"
+      },
+      {
+        "bat_correction_day": "-0.00444466430936361680150739089592695033",
+        "bat_mjd": "56000.7846793207845747663671389053974",
+        "bbat_mjd": "56000.7846793207845747663671389053974",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.34925772987653768159591527106555553e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.41564959403476691644131898149827631e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996616585750643935170955955982",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.21168877416432632654341716715862276",
+        "earth_ssb_light_s_0": "-495.330792906557348942442331463098526",
+        "earth_ssb_light_s_1": "43.4582606573435370478364347945898771",
+        "earth_ssb_light_s_2": "18.8364941370227327865904953796416521",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400046836.80044460296630859375",
+        "observatory_earth_light_s_0": "-0.00756848572724785808446545942729244416",
+        "observatory_earth_light_s_1": "-0.016185742652687514636644650067864859",
+        "observatory_earth_light_s_2": "-0.0115124773445276686739680016557940689",
+        "roemer_s": "-467.216479673823187113157473504543304",
+        "sat_mjd": "56000.7891239850939383831686462962927",
+        "shapiro_jupiter_s": "5.19206859975380024662660539600499143e-09",
+        "shapiro_neptune_s": "-1.07141846124295051175615954840462593e-09",
+        "shapiro_saturn_s": "-8.05207308507312884600381781147193649e-09",
+        "shapiro_sun_s": "2.74966002165870872426568782831424187e-05",
+        "shapiro_uranus_s": "3.85014144984669970323355551254759961e-10",
+        "shapiro_venus_s": "5.81268252880288902427922437541528379e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.32924618183616853240880959288738872e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.41869405374801681242304341118778965e-08",
+        "tt_tb_s": "17.2252002691620603281477604155032103",
+        "tt_teph_s": "0.00154819756912273295314241838838142939"
+      }
+    ],
+    "parsed": [
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "50000",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "50000.0100000000000000000000000000018",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "sat_mjd": "50000.059999999999999999999999999998",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "50000.0400046296296296296300000000022",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "54000.0400046296296296296300000000022",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "56000.1111111111111111111100000000009",
+        "site": "pks",
+        "toa_error_us": "10"
+      },
+      {
+        "clockCorr": "1",
+        "delayCorr": "1",
+        "deleted": "0",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "sat_mjd": "56000.7891239850938920868723499999978",
+        "site": "pks",
+        "toa_error_us": "10"
+      }
+    ],
+    "residuals": [
+      {
+        "bat_correction_day": "0.00653752541684182102436784049678380622",
+        "bat_mjd": "50000.0065375254168418210243678404997",
+        "bbat_mjd": "50000.0065375254168418210243678404997",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40123456790123470367781348400182395e-06",
+        "clock_step_s_1": "-3.69904761904523517725232881550589958e-07",
+        "clock_step_s_2": "2.57107142857175100976672559591543199e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972545713806084677344188094139",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700165312337734713210579684528057",
+        "earth_ssb_light_s_0": "476.892919000721008160326164215803146",
+        "earth_ssb_light_s_1": "131.595318539883493258457747288048267",
+        "earth_ssb_light_s_2": "57.0872973330544297709820966701954603",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009169.4815332889556884765625",
+        "nphase_turn": "564",
+        "observatory_earth_light_s_0": "-0.0173599513409842254318959930969867855",
+        "observatory_earth_light_s_1": "0.00418694369238094363933067043603841739",
+        "observatory_earth_light_s_2": "-0.0115281814691796258981471012816655275",
+        "phase_turn": "564",
+        "pulse_number": "564",
+        "residual_s": "0",
+        "roemer_s": "494.686876757056836595438653603196144",
+        "sat_mjd": "50000",
+        "shapiro_jupiter_s": "-2.04970014799353250444856973291191116e-08",
+        "shapiro_neptune_s": "-1.64596297369258219629636756550479862e-09",
+        "shapiro_saturn_s": "6.96922707489380369054561849929485887e-10",
+        "shapiro_sun_s": "-6.78444919964380270348660098567172838e-06",
+        "shapiro_uranus_s": "-1.16807319557427732115280120218448259e-09",
+        "shapiro_venus_s": "-2.83953494783094800280737482212553026e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11965603851144220535205383443289051e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.04222843904533351243965830505884551e-08",
+        "tt_tb_s": "9.18301539250002302646655649067933185",
+        "tt_teph_s": "-0.00168485179643500845164671986253779323"
+      },
+      {
+        "bat_correction_day": "0.00653746019994877998618942796370585145",
+        "bat_mjd": "50000.016537460199948779986189427963",
+        "bbat_mjd": "50000.016537460199948779986189427963",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40109135802466217674781129298722249e-06",
+        "clock_step_s_1": "-3.69986666666444962752932894972657252e-07",
+        "clock_step_s_2": "2.57096071428601405193116024444632828e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972546315777890413301065564156",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700189160016039036094070979743265",
+        "earth_ssb_light_s_0": "476.867425582116140958532923832535744",
+        "earth_ssb_light_s_1": "131.67059569007173536192567553371191",
+        "earth_ssb_light_s_2": "57.1199392834553165698707744013518095",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009090.627165317535400390625",
+        "nphase_turn": "1428",
+        "observatory_earth_light_s_0": "-0.01758909032721425735878995055827545",
+        "observatory_earth_light_s_1": "0.003085328111536824510080512240506323",
+        "observatory_earth_light_s_2": "-0.0115283141844809075560185362974152667",
+        "phase_turn": "1427.99436526044125430138515683504783",
+        "pulse_number": "1428",
+        "residual_s": "-0.00563473955874569861484316495217205624",
+        "roemer_s": "494.68122871539844709332101047039032",
+        "sat_mjd": "50000.0100000000000000000000000000018",
+        "shapiro_jupiter_s": "-2.04970474487360027527628312691773682e-08",
+        "shapiro_neptune_s": "-1.64596550994087944698797696595161597e-09",
+        "shapiro_saturn_s": "6.96757842185791552266691160585389275e-10",
+        "shapiro_sun_s": "-6.78437442505575899378677390272329717e-06",
+        "shapiro_uranus_s": "-1.16807656634530366005324117850347476e-09",
+        "shapiro_venus_s": "-2.83942190720884195875511631921618311e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11968266861904290368650064478595052e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.0097693277299307241065239580148083e-08",
+        "tt_tb_s": "9.18302871878656592734305275167192305",
+        "tt_teph_s": "-0.00168492200089198000505230634615827512"
+      },
+      {
+        "bat_correction_day": "0.0060593471382738035216008947428748692",
+        "bat_mjd": "50000.0660593471382738035216008947415",
+        "bbat_mjd": "50000.0660593471382738035216008947415",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40037530864200875923577215009796504e-06",
+        "clock_step_s_1": "-3.70396190475933020943666122704041044e-07",
+        "clock_step_s_2": "2.57040714285749105928114885931401457e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972549325707973366661462932825",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "41.4932626544743925478542223572731018",
+        "earth_ssb_light_s_0": "476.739746352644317539670737460255623",
+        "earth_ssb_light_s_1": "132.046924845263276893092552199959755",
+        "earth_ssb_light_s_2": "57.2831244846978293594474962446838617",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "frequency_ssb_hz": "100000618.50709657371044158935546875",
+        "nphase_turn": "5707",
+        "observatory_earth_light_s_0": "-0.0176791196846869946845970389404101297",
+        "observatory_earth_light_s_1": "-0.00251761158958910356148175324619842286",
+        "observatory_earth_light_s_2": "-0.0115285617094815669159135751442590845",
+        "phase_turn": "5706.68539673172328776093588649899095",
+        "pulse_number": "5707",
+        "residual_s": "-0.314603268276712239064113501009047722",
+        "roemer_s": "494.65376409357708098468719981610775",
+        "sat_mjd": "50000.059999999999999999999999999998",
+        "shapiro_jupiter_s": "-2.04972792551691826905000060532122119e-08",
+        "shapiro_neptune_s": "-1.64597820348440546061993374138887267e-09",
+        "shapiro_saturn_s": "6.95934173292728768678291621416730217e-10",
+        "shapiro_sun_s": "-6.78401800114596341395849926625416515e-06",
+        "shapiro_uranus_s": "-1.16809343479095734011677310199613794e-09",
+        "shapiro_venus_s": "-2.83885851157480768546905586834972791e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "8.07482458448382478771558623531490184e-06",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.22545071173631774569040206457337661e-09",
+        "tt_tb_s": "9.18309531175869014643718903583249926",
+        "tt_teph_s": "-0.00168531148376652672137010480213348274"
+      },
+      {
+        "bat_correction_day": "0.00653726804455900679357166605282446311",
+        "bat_mjd": "50000.0465418976741886364235716660577",
+        "bbat_mjd": "50000.0465418976741886364235716660577",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40066166209422754323544492438546882e-06",
+        "clock_step_s_1": "-3.70232418870994063813480070418426848e-07",
+        "clock_step_s_2": "2.57062852017230671303111330227436637e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972548121977524715475738048553",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700265743829524334174152500054333",
+        "earth_ssb_light_s_0": "476.790848642823675618274137377738953",
+        "earth_ssb_light_s_1": "131.896439359311500538751715794205666",
+        "earth_ssb_light_s_2": "57.2178704292292223954063956625759602",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400008837.3963901996612548828125",
+        "nphase_turn": "4020",
+        "observatory_earth_light_s_0": "-0.0178553612699204090896731855764301145",
+        "observatory_earth_light_s_1": "-0.000275776988264721560021458524047943683",
+        "observatory_earth_light_s_2": "-0.0115285470465369133119537536913412623",
+        "phase_turn": "4020.37776303476485049121052821182761",
+        "pulse_number": "4020",
+        "residual_s": "0.377763034764850491210528211827611504",
+        "roemer_s": "494.664586598859955302032176405191422",
+        "sat_mjd": "50000.0400046296296296296300000000022",
+        "shapiro_jupiter_s": "-2.04971861155881189877847955863390816e-08",
+        "shapiro_neptune_s": "-1.64597312396413145613310750268705809e-09",
+        "shapiro_saturn_s": "6.96263485505388998169603344674761722e-10",
+        "shapiro_sun_s": "-6.78415693589977381847177032025975052e-06",
+        "shapiro_uranus_s": "-1.16808668494312974454566690440471613e-09",
+        "shapiro_venus_s": "-2.83908343411579596635898494419870518e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11975968437991405426489390558669745e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.4430479442045676380270067509954679e-09",
+        "tt_tb_s": "9.18306868692410037147693774202801027",
+        "tt_teph_s": "-0.001685149538435741240621768000096381"
+      },
+      {
+        "bat_correction_day": "0.00651160575573621722901672343414027316",
+        "bat_mjd": "54000.0465162353853658468590167234375",
+        "bbat_mjd": "54000.0465162353853658468590167234375",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-7.45536696902210178761866675445357799e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-6.04799398149407333530228641940533485e-09",
+        "clock_step_s_3": "33",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "65.1839992484153043506012181751430035",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211712787994421947068701683747349307",
+        "earth_ssb_light_s_0": "502.254354860787202596839051693677902",
+        "earth_ssb_light_s_1": "-7.86850219289129437783003595541231334",
+        "earth_ssb_light_s_2": "-3.47208638533011981763820585911162198",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1399967433.3770601749420166015625",
+        "nphase_turn": "4018",
+        "observatory_earth_light_s_0": "-0.0171195529468062025701957651335760602",
+        "observatory_earth_light_s_1": "0.00512130434126279506651391315585897246",
+        "observatory_earth_light_s_2": "-0.0115104528484550553552034912740964501",
+        "phase_turn": "345604018.160541280475832113663485838",
+        "pulse_number": "345604018",
+        "residual_s": "0.160541280475832113663485829620958217",
+        "roemer_s": "483.088723775011089855979662388563156",
+        "sat_mjd": "54000.0400046296296296296300000000022",
+        "shapiro_jupiter_s": "-2.25865614928204989806884438229353518e-08",
+        "shapiro_neptune_s": "-1.31343989768128611674724010971015281e-09",
+        "shapiro_saturn_s": "-7.77347374038994881483625152846644868e-09",
+        "shapiro_sun_s": "-6.67068551368742631841983470319945582e-06",
+        "shapiro_uranus_s": "-4.61632756285243205635484642444105186e-10",
+        "shapiro_venus_s": "-2.82511889343345230759536952575003486e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.14460290381771301861963004414118883e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.07455344542356647497627429154593015e-08",
+        "tt_tb_s": "14.541720388028813582144638460228649",
+        "tt_teph_s": "-0.00162991077796251150784645478353240833"
+      },
+      {
+        "bat_correction_day": "-0.0044206010620401625628861437968556193",
+        "bat_mjd": "56000.1066905100490709485471138562014",
+        "bbat_mjd": "56000.1066905100490709485471138562014",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.33341650622957682387307058388681291e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.14444444444088732478620123816058507e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996635139016234461450949311256",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688029160143925677672882557089906",
+        "earth_ssb_light_s_0": "-494.636118901166071282204939052462578",
+        "earth_ssb_light_s_1": "48.791015438633735357143450528383255",
+        "earth_ssb_light_s_2": "21.1486153894427957311563659459352493",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400049300.4254200458526611328125",
+        "nphase_turn": "9217",
+        "observatory_earth_light_s_0": "0.0178479009219567122390692759381636279",
+        "observatory_earth_light_s_1": "7.10039381769521794202093545322895807e-05",
+        "observatory_earth_light_s_2": "-0.0115431697185662714144616103340013069",
+        "phase_turn": "518409217.217872224596617965255756642",
+        "pulse_number": "518409217",
+        "residual_s": "0.217872224596617965255756630980413625",
+        "roemer_s": "-465.136499711000112711190013214945793",
+        "sat_mjd": "56000.1111111111111111111100000000009",
+        "shapiro_jupiter_s": "5.30021038981448626198893591776432899e-09",
+        "shapiro_neptune_s": "-1.07203474018741874714006501466455681e-09",
+        "shapiro_saturn_s": "-8.05386155133954974412071036457896889e-09",
+        "shapiro_sun_s": "2.68842644373375382830636953768177477e-05",
+        "shapiro_uranus_s": "3.82490412081687492017413226421469925e-10",
+        "shapiro_venus_s": "5.92097213788788823851871487485354958e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.21794149572245758631725302476023209e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "9.47580877423279473644838761647174463e-09",
+        "tt_tb_s": "17.2242835285267190101020667618684125",
+        "tt_teph_s": "0.00153975627038870251095392660545257968"
+      },
+      {
+        "bat_correction_day": "-0.00444466430936361680151246543843809787",
+        "bat_mjd": "56000.7846793207845284700708375345622",
+        "bbat_mjd": "56000.7846793207845284700708375345622",
+        "binary_delay_s": "0",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.34925772987653768159591527106555553e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.41564959403476691644131898149827631e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996616585750643935170955955982",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.21168877416432632654341716715862276",
+        "earth_ssb_light_s_0": "-495.330792906557348942442331463098526",
+        "earth_ssb_light_s_1": "43.4582606573435370478364347945898771",
+        "earth_ssb_light_s_2": "18.8364941370227327865904953796416521",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400046836.80044460296630859375",
+        "nphase_turn": "67795",
+        "observatory_earth_light_s_0": "-0.00756848572725245857112374991970682458",
+        "observatory_earth_light_s_1": "-0.016185742652685367048981390780681977",
+        "observatory_earth_light_s_2": "-0.0115124773445276617350740977485656913",
+        "phase_turn": "518467795.451119768126477614981567023",
+        "pulse_number": "518467795",
+        "residual_s": "0.45111976812647761498156700797518577",
+        "roemer_s": "-467.216479673823187113157473504543304",
+        "sat_mjd": "56000.7891239850938920868723499999978",
+        "shapiro_jupiter_s": "5.19206859975380024662660539600499143e-09",
+        "shapiro_neptune_s": "-1.07141846124295051175615954840462593e-09",
+        "shapiro_saturn_s": "-8.05207308507312884600381781147193649e-09",
+        "shapiro_sun_s": "2.74966002165870872426568782831424187e-05",
+        "shapiro_uranus_s": "3.85014144984669970323355551254759961e-10",
+        "shapiro_venus_s": "5.81268252880288902427922437541528379e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.32924618183616853240880959288738872e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.41869405374754085269858039906366864e-08",
+        "tt_tb_s": "17.2252002691620603277140795397847027",
+        "tt_teph_s": "0.00154819756912273251946154939417965579"
+      }
+    ],
+    "slope_minus": [
+      {
+        "bat_correction_day": "0.00653752541691802879124041079318551769",
+        "bat_mjd": "50000.006537513842843954717166336722",
+        "bbat_mjd": "50000.006537513842843954717166336722",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40123456806701514508147789206393696e-06",
+        "clock_step_s_1": "-3.69904761809710143620493925584180595e-07",
+        "clock_step_s_2": "2.57107142869991437387569170386000805e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972545713806084677344188094139",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700165312310784049287804009509273",
+        "earth_ssb_light_s_0": "476.892919030391055912332376465201378",
+        "earth_ssb_light_s_1": "131.595318452247170171176549047231674",
+        "earth_ssb_light_s_2": "57.0872972950532542313339945394545794",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009169.4816224575042724609375",
+        "observatory_earth_light_s_0": "-0.0173599510356992128845554645977244945",
+        "observatory_earth_light_s_1": "0.00418694495862264454144607839225500356",
+        "observatory_earth_light_s_2": "-0.0115281814690104209703003235176765884",
+        "roemer_s": "494.686876763656584898853907361626625",
+        "sat_mjd": "49999.9999999884259259259259259259266",
+        "shapiro_jupiter_s": "-2.04970014798818461635229189838833253e-08",
+        "shapiro_neptune_s": "-1.64596297368962936830470639496242641e-09",
+        "shapiro_saturn_s": "6.9692270768137033339661497193711151e-10",
+        "shapiro_sun_s": "-6.7844491997314214856164803213456338e-06",
+        "shapiro_uranus_s": "-1.16807319557035338312200277715181135e-09",
+        "shapiro_venus_s": "-2.83953494796259508976489629068705694e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11965603848020720367756146700760622e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.04222848022914048570046406899484992e-08",
+        "tt_tb_s": "9.18301539248459833065897343883667273",
+        "tt_teph_s": "-0.0016848517963556617661746717118376182"
+      },
+      {
+        "bat_correction_day": "0.006537460200024336477909320580266204",
+        "bat_mjd": "50000.016537448625950262403835246506",
+        "bbat_mjd": "50000.016537448625950262403835246506",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.4010913581904426181514757010493355e-06",
+        "clock_step_s_1": "-3.6998666657163164158775314240001908e-07",
+        "clock_step_s_2": "2.57096071441417774691237137360197429e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972546315777890413301065564156",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700189159987950393571054519270547",
+        "earth_ssb_light_s_0": "476.867425611802616458589909598231316",
+        "earth_ssb_light_s_1": "131.670595602439789217896759510040283",
+        "earth_ssb_light_s_2": "57.1199392454560310738997941371053457",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009090.62725830078125",
+        "observatory_earth_light_s_0": "-0.0175890901022603303449631795274399337",
+        "observatory_earth_light_s_1": "0.00308532939448754412944952996156189329",
+        "observatory_earth_light_s_2": "-0.011528314184343002243848808063830802",
+        "roemer_s": "494.681228721941920412064064294099808",
+        "sat_mjd": "50000.0099999884259259259259259259284",
+        "shapiro_jupiter_s": "-2.04970474486824014490693950758457009e-08",
+        "shapiro_neptune_s": "-1.64596550993792641220116265715232504e-09",
+        "shapiro_saturn_s": "6.96757842377712240232442966525244418e-10",
+        "shapiro_sun_s": "-6.78437442514210045023219375348588756e-06",
+        "shapiro_uranus_s": "-1.16807656634137889484183020044312865e-09",
+        "shapiro_venus_s": "-2.8394219073403630299161941624678661e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11968266858834126807098246960542332e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.00976936184374013314575424418544081e-08",
+        "tt_tb_s": "9.18302871877114497702035284273639281",
+        "tt_teph_s": "-0.00168492200080888783475518977184037794"
+      },
+      {
+        "bat_correction_day": "0.0060593471383430558788983667033755495",
+        "bat_mjd": "50000.0660593355642689818048242926308",
+        "bbat_mjd": "50000.0660593355642689818048242926308",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40037530880768501558692427921837265e-06",
+        "clock_step_s_1": "-3.70396190381179256782590188123993613e-07",
+        "clock_step_s_2": "2.57040714298557402143457481296859313e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972549325707973366661462932825",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "41.4932626544681255609248182736337185",
+        "earth_ssb_light_s_0": "476.739746381222346371941966935992241",
+        "earth_ssb_light_s_1": "132.046924761157725924931582994759083",
+        "earth_ssb_light_s_2": "57.2831244482276815688237547874450684",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "frequency_ssb_hz": "100000618.5071041285991668701171875",
+        "observatory_earth_light_s_0": "-0.0176791198683058405072276997316294",
+        "observatory_earth_light_s_1": "-0.00251761030007326006355250491708375193",
+        "observatory_earth_light_s_2": "-0.0115285617095058235542781588378602464",
+        "roemer_s": "494.653764099569627887831302359700203",
+        "sat_mjd": "50000.0599999884259259259259259259246",
+        "shapiro_jupiter_s": "-2.04972792551170306072397627643669193e-08",
+        "shapiro_neptune_s": "-1.64597820348156678355280488866563271e-09",
+        "shapiro_saturn_s": "6.95934173476655686601907537035087425e-10",
+        "shapiro_sun_s": "-6.78401800122234460997715579932965113e-06",
+        "shapiro_uranus_s": "-1.16809343478718477613807188102796816e-09",
+        "shapiro_venus_s": "-2.83885851170040116743588164414222497e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "8.0748245844314036126759120959306415e-06",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.22545079282804927248531120381747073e-09",
+        "tt_tb_s": "9.18309531174327971721256160070133106",
+        "tt_teph_s": "-0.00168531148367113709635178864232329943"
+      },
+      {
+        "bat_correction_day": "0.00653726804463247452929593653188288004",
+        "bat_mjd": "50000.0465418861001880300852218624596",
+        "bbat_mjd": "50000.0465418861001880300852218624596",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40066166225990379958659705350587643e-06",
+        "clock_step_s_1": "-3.70232418776240299652404135838379418e-07",
+        "clock_step_s_2": "2.57062852030038967518453925592894493e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972548121977524715475738048553",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700265743798854423118882550625131",
+        "earth_ssb_light_s_0": "476.790848672559661736158886924386024",
+        "earth_ssb_light_s_1": "131.896439271692713646189076825976372",
+        "earth_ssb_light_s_2": "57.2178703912356638738856418058276176",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400008837.396491527557373046875",
+        "observatory_earth_light_s_0": "-0.0178553612900621029579983911617091508",
+        "observatory_earth_light_s_1": "-0.000275775685897145688470905033895519409",
+        "observatory_earth_light_s_2": "-0.0115285470464957032210584486620064126",
+        "roemer_s": "494.664586605222950765892164781689644",
+        "sat_mjd": "50000.0400046180555555555559259259288",
+        "shapiro_jupiter_s": "-2.04971861155340577716707799096201859e-08",
+        "shapiro_neptune_s": "-1.64597312396117511262384298177706768e-09",
+        "shapiro_saturn_s": "6.96263485697159863046906483477005781e-10",
+        "shapiro_sun_s": "-6.78415693598205290490215854659616923e-06",
+        "shapiro_uranus_s": "-1.16808668493920125702149943771983309e-09",
+        "shapiro_venus_s": "-2.83908343424689439992583647487275856e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.1197596843509269986230756461706437e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.44304811674610047293036989204256804e-09",
+        "tt_tb_s": "9.18306868690868634942309541690505122",
+        "tt_teph_s": "-0.00168514953834394444476263430487961159"
+      },
+      {
+        "bat_correction_day": "0.00651160575546536747974132042959348751",
+        "bat_mjd": "54000.0465162238110209230356672463565",
+        "bbat_mjd": "54000.0465162238110209230356672463565",
+        "clockCorr": "1",
+        "clock_step_s_0": "-7.45536697206949657415269664545443007e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-6.04799399653347832195047291577172377e-09",
+        "clock_step_s_3": "33",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "65.1839992484153043506012181751430035",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211712787994395856827622992568649352",
+        "earth_ssb_light_s_0": "502.25435486035684107264387421309948",
+        "earth_ssb_light_s_1": "-7.86850228428366360589052419527433813",
+        "earth_ssb_light_s_2": "-3.47208642495619335122114534897264093",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1399967433.3771464824676513671875",
+        "observatory_earth_light_s_0": "-0.0171195525733155821945796759564473177",
+        "observatory_earth_light_s_1": "0.00512130558908950594965148184201098047",
+        "observatory_earth_light_s_2": "-0.0115104528487583613466371801337118086",
+        "roemer_s": "483.088723751624968372198054566979408",
+        "sat_mjd": "54000.0400046180555555555559259259288",
+        "shapiro_jupiter_s": "-2.25865614927191858992629489933171016e-08",
+        "shapiro_neptune_s": "-1.31343989767551673876983587993484345e-09",
+        "shapiro_saturn_s": "-7.77347374039241546742288465699291522e-09",
+        "shapiro_sun_s": "-6.67068551347238667596859645891882451e-06",
+        "shapiro_uranus_s": "-4.61632756272835393049612658192574696e-10",
+        "shapiro_venus_s": "-2.82511889327703891611012756296056141e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.14460290387200187483822031407620923e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.07455349349272759068844618505697563e-08",
+        "tt_tb_s": "14.5417203880134903732998524667094037",
+        "tt_teph_s": "-0.00162991077777990150433906624272140107"
+      },
+      {
+        "bat_correction_day": "-0.00442060106163018734046615068883588965",
+        "bat_mjd": "56000.10669049847540684969545977524",
+        "bbat_mjd": "56000.10669049847540684969545977524",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.33341650196968878405799196346093183e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.1444444398104679812863423933383053e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996635139016234461450949311256",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688029160174845388908693166740704",
+        "earth_ssb_light_s_0": "-494.636118888653186331794131547212601",
+        "earth_ssb_light_s_1": "48.7910155301376988745687413029372692",
+        "earth_ssb_light_s_2": "21.148615429116190966851718258112669",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400049300.4253177642822265625",
+        "observatory_earth_light_s_0": "0.0178479009271217473053816604533494683",
+        "observatory_earth_light_s_1": "7.10026356638506129679774825369520386e-05",
+        "observatory_earth_light_s_2": "-0.0115431697185920546094850536178455513",
+        "roemer_s": "-465.13649967556273168156621977686882",
+        "sat_mjd": "56000.1111110995370370370359259259275",
+        "shapiro_jupiter_s": "5.30021039165849849485747413463561373e-09",
+        "shapiro_neptune_s": "-1.07203474019785611210925911786608425e-09",
+        "shapiro_saturn_s": "-8.05386155136996352088306008612864084e-09",
+        "shapiro_sun_s": "2.68842644271432155479197023684179157e-05",
+        "shapiro_uranus_s": "3.82490412039076109942356558778144178e-10",
+        "shapiro_venus_s": "5.92097213975650345944278264755122367e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.21794149389859130418021929478933352e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "9.47580895589678638649685989440649148e-09",
+        "tt_tb_s": "17.2242835285112179240103111488918335",
+        "tt_teph_s": "0.0015397562703916589134378600789432312"
+      },
+      {
+        "bat_correction_day": "-0.00444466430897408188116809133398712545",
+        "bat_mjd": "56000.7846793092108439309171078345918",
+        "bbat_mjd": "56000.7846793092108439309171078345918",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.34925772660497350798866665957942423e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.4156495894043471593511538601621591e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996616585750643935170955955982",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688774164292520252317331141966861",
+        "earth_ssb_light_s_0": "-495.330792895215381577145308256149292",
+        "earth_ssb_light_s_1": "43.4582607489650882826026645489037037",
+        "earth_ssb_light_s_2": "18.836494176747009987593628466129303",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400046836.8005564212799072265625",
+        "observatory_earth_light_s_0": "-0.00756848690754719985451792751973698614",
+        "observatory_earth_light_s_1": "-0.0161857421018050534611276702889881562",
+        "observatory_earth_light_s_2": "-0.0115124773430824670766847717118253058",
+        "roemer_s": "-467.216479640151760577282402664422989",
+        "sat_mjd": "56000.7891239735198180127982759259245",
+        "shapiro_jupiter_s": "5.19206860162209519355725029329980125e-09",
+        "shapiro_neptune_s": "-1.07141846125354049154836968521216714e-09",
+        "shapiro_saturn_s": "-8.05207308510260790867398261174900376e-09",
+        "shapiro_sun_s": "2.74966002058733639042565483068258914e-05",
+        "shapiro_uranus_s": "3.85014144941014634616468678121516817e-10",
+        "shapiro_venus_s": "5.81268253065282547299607909192976788e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.32924617985241736993923819878937742e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.41869393172809300351397507767431394e-08",
+        "tt_tb_s": "17.2252002691464074132003414445278442",
+        "tt_teph_s": "0.00154819756897386050231713028324520565"
+      }
+    ],
+    "slope_plus": [
+      {
+        "bat_correction_day": "0.00653752541676838176489397778628054461",
+        "bat_mjd": "50000.006537536990842455838968051859",
+        "bbat_mjd": "50000.006537536990842455838968051859",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40123456773545426227414907593971094e-06",
+        "clock_step_s_1": "-3.69904761999336891829971837516999322e-07",
+        "clock_step_s_2": "2.57107142844358764565775948797085593e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972545713806084677344188094139",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700165312364518843679661586065777",
+        "earth_ssb_light_s_0": "476.892918972237850994133623316884041",
+        "earth_ssb_light_s_1": "131.595318624014396391430636867880821",
+        "earth_ssb_light_s_2": "57.0872973695355767631554044783115387",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009169.481444835662841796875",
+        "observatory_earth_light_s_0": "-0.0173599516462691408347218668950517895",
+        "observatory_earth_light_s_1": "0.00418694242613922278789528874654024548",
+        "observatory_earth_light_s_2": "-0.011528181469348832560717355022461561",
+        "roemer_s": "494.686876750696285398589679971337318",
+        "sat_mjd": "50000.0000000115740740740740740740734",
+        "shapiro_jupiter_s": "-2.04970014799865043633455782574187554e-08",
+        "shapiro_neptune_s": "-1.64596297369541404912344285574972089e-09",
+        "shapiro_saturn_s": "6.96922707305216670680602630139196738e-10",
+        "shapiro_sun_s": "-6.78444919955920274678073597640626247e-06",
+        "shapiro_uranus_s": "-1.16807319557804119973507061636206622e-09",
+        "shapiro_venus_s": "-2.8395349477044795188488327967457083e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11965603854164885608902027785277467e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.04222839786153497642110058200512479e-08",
+        "tt_tb_s": "9.18301539251544948540371223335791541",
+        "tt_teph_s": "-0.00168485179651436836438527233639206315"
+      },
+      {
+        "bat_correction_day": "0.00653746019987322351470800584721005424",
+        "bat_mjd": "50000.0165374717739472975887820799223",
+        "bbat_mjd": "50000.0165374717739472975887820799223",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40109135785898592039665916386681488e-06",
+        "clock_step_s_1": "-3.69986666761198726914008829552704682e-07",
+        "clock_step_s_2": "2.57096071415793142064997931200281966e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972546315777890413301065564156",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700189160044155434192703069129493",
+        "earth_ssb_light_s_0": "476.867425552429665458475938066840172",
+        "earth_ssb_light_s_1": "131.670595777703681505954591557383537",
+        "earth_ssb_light_s_2": "57.1199393214546020658417546655982733",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400009090.62707233428955078125",
+        "observatory_earth_light_s_0": "-0.0175890905521681149836776825168271898",
+        "observatory_earth_light_s_1": "0.00308532682858596351074820240967255813",
+        "observatory_earth_light_s_2": "-0.0115283141846188128681882645309997315",
+        "roemer_s": "494.681228708854973774577956646680832",
+        "sat_mjd": "50000.0100000115740740740740740740751",
+        "shapiro_jupiter_s": "-2.0497047448789607365178717674619735e-08",
+        "shapiro_neptune_s": "-1.64596550994383248177479127475090689e-09",
+        "shapiro_saturn_s": "6.96757841993879239504641454050742205e-10",
+        "shapiro_sun_s": "-6.78437442496941923140724856056138492e-06",
+        "shapiro_uranus_s": "-1.1680765663492286320598052948207396e-09",
+        "shapiro_venus_s": "-2.83942190707732088759403847596450013e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11968266864974387755752877754433783e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.00976929361612528553423392637701517e-08",
+        "tt_tb_s": "9.18302871880198865402259206085791797",
+        "tt_teph_s": "-0.00168492200097507217534942292047617229"
+      },
+      {
+        "bat_correction_day": "0.00605934713820173874333267900025230795",
+        "bat_mjd": "50000.0660593587122758128174067530694",
+        "bbat_mjd": "50000.0660593587122758128174067530694",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40037530847622831783210774203585203e-06",
+        "clock_step_s_1": "-3.70396190570746395048405078670450408e-07",
+        "clock_step_s_2": "2.5704071427293276951721827513694385e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972549325707973366661462932825",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "41.493262654480588480510050430893898",
+        "earth_ssb_light_s_0": "476.73974632287558961252216249704361",
+        "earth_ssb_light_s_1": "132.046924932873281477441196329891682",
+        "earth_ssb_light_s_2": "57.283124522687579371904575964435935",
+        "fname": "test",
+        "frequency_mhz": "100",
+        "frequency_ssb_hz": "100000618.5070891082286834716796875",
+        "observatory_earth_light_s_0": "-0.0176791195010680621257925793088361388",
+        "observatory_earth_light_s_1": "-0.00251761287910493448266580074346165929",
+        "observatory_earth_light_s_2": "-0.0115285617094573068081020394970437337",
+        "roemer_s": "494.653764087341471622494282200932503",
+        "sat_mjd": "50000.0600000115740740740740740740714",
+        "shapiro_jupiter_s": "-2.04972792552236111748059952742187506e-08",
+        "shapiro_neptune_s": "-1.64597820348736469926134219789572513e-09",
+        "shapiro_saturn_s": "6.95934173100981064858139967389382557e-10",
+        "shapiro_sun_s": "-6.784018001066530358230885489057016e-06",
+        "shapiro_uranus_s": "-1.1680934347948895499536970573055579e-09",
+        "shapiro_venus_s": "-2.83885851144401782904477783042157383e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "8.07482458453825681897204208370411038e-06",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.22545063064463750409347121304512451e-09",
+        "tt_tb_s": "9.1830953117740988136164459694240151",
+        "tt_teph_s": "-0.00168531148386190203491974415328513714"
+      },
+      {
+        "bat_correction_day": "0.00653726804448833977647630669644360554",
+        "bat_mjd": "50000.0465419092481920434805503807718",
+        "bbat_mjd": "50000.0465419092481920434805503807718",
+        "clockCorr": "1",
+        "clock_step_s_0": "-2.40066166192844710183178051632335581e-06",
+        "clock_step_s_1": "-3.70232418965807437918219026384836212e-07",
+        "clock_step_s_2": "2.57062852004414367979439221554086026e-08",
+        "clock_step_s_3": "29",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(TID)",
+        "clock_to_1": "UTC(NIST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "61.1839972548121977524715475738048553",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211700265743860527312136809996445663",
+        "earth_ssb_light_s_0": "476.790848614277194883470656350255013",
+        "earth_ssb_light_s_1": "131.896439443425521176322945393621922",
+        "earth_ssb_light_s_2": "57.2178704657030365865466592367738485",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400008837.3962876796722412109375",
+        "observatory_earth_light_s_0": "-0.0178553612497786215462802772435679799",
+        "observatory_earth_light_s_1": "-0.00027577829063223227102144563538388411",
+        "observatory_earth_light_s_2": "-0.011528547046578123402849058720676112",
+        "roemer_s": "494.664586592738942272262647747993469",
+        "sat_mjd": "50000.0400046412037037037040740740756",
+        "shapiro_jupiter_s": "-2.04971861156398971854081649066753323e-08",
+        "shapiro_neptune_s": "-1.64597312396696682447778614329959856e-09",
+        "shapiro_saturn_s": "6.96263485321451637090753947082009262e-10",
+        "shapiro_sun_s": "-6.78415693582053642735497228644092615e-06",
+        "shapiro_uranus_s": "-1.16808668494689775903099908372067411e-09",
+        "shapiro_venus_s": "-2.83908343398988712178362332660516341e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.11975968440787672943612649553019045e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-9.44304777166309105140529721583025902e-09",
+        "tt_tb_s": "9.18306868693951437900247073058090167",
+        "tt_teph_s": "-0.00168514953852755256479001300107256611"
+      },
+      {
+        "bat_correction_day": "0.00651160575599592064212242066488738036",
+        "bat_mjd": "54000.0465162469596996243461964947412",
+        "bbat_mjd": "54000.0465162469596996243461964947412",
+        "clockCorr": "1",
+        "clock_step_s_0": "-7.45536696597278953025028994106016e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-6.04799396644521036553016860460446624e-09",
+        "clock_step_s_3": "33",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPST)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "65.1839992484153043506012181751430035",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211712787994448481398990224988665432",
+        "earth_ssb_light_s_0": "502.254354861200226878281682729721069",
+        "earth_ssb_light_s_1": "-7.86850210515463732718899336759932339",
+        "earth_ssb_light_s_2": "-3.47208634728908949185210985888261348",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1399967433.3769724369049072265625",
+        "observatory_earth_light_s_0": "-0.0171195533202967327401911035167358932",
+        "observatory_earth_light_s_1": "0.00512130309343605642780072884079345386",
+        "observatory_earth_light_s_2": "-0.0115104528481517476290463264376739971",
+        "roemer_s": "483.088723797434170137421460822224617",
+        "sat_mjd": "54000.0400046412037037037040740740756",
+        "shapiro_jupiter_s": "-2.25865614929176397631042211809615505e-08",
+        "shapiro_neptune_s": "-1.31343989768682098902098555613963612e-09",
+        "shapiro_saturn_s": "-7.77347374038757811520067455115026722e-09",
+        "shapiro_sun_s": "-6.67068551389344421294986739456867042e-06",
+        "shapiro_uranus_s": "-4.61632756297147833914982963048165461e-10",
+        "shapiro_venus_s": "-2.82511889358355844690989465251861382e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "4.14460290376578261976355096671276179e-08",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.07455339735441677435655562981679789e-08",
+        "tt_tb_s": "14.5417203880441350014053183440828909",
+        "tt_teph_s": "-0.00162991077814513473862034764749751048"
+      },
+      {
+        "bat_correction_day": "-0.00442060106245013708595039889710119623",
+        "bat_mjd": "56000.1066905216227350480981236751749",
+        "bbat_mjd": "56000.1066905216227350480981236751749",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.333416510489464863688149204312694e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.14444444907130666828606008298286484e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996635139016234461450949311256",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688029160112978210861456318525597",
+        "earth_ssb_light_s_0": "-494.636118913678956232615746557712555",
+        "earth_ssb_light_s_1": "48.7910153471297718397181597538292408",
+        "earth_ssb_light_s_2": "21.148615349769404048174692434258759",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400049300.425522327423095703125",
+        "observatory_earth_light_s_0": "0.0178479009167915730893483328145521227",
+        "observatory_earth_light_s_1": "7.10052406900561988798564749814090646e-05",
+        "observatory_earth_light_s_2": "-0.0115431697185404882194381670501570625",
+        "roemer_s": "-465.136499746437436897394945845007896",
+        "sat_mjd": "56000.1111111226851851851840740740743",
+        "shapiro_jupiter_s": "5.30021038797045252242447132217349759e-09",
+        "shapiro_neptune_s": "-1.07203474017698138217087091146302938e-09",
+        "shapiro_saturn_s": "-8.05386155130913596735836064302929693e-09",
+        "shapiro_sun_s": "2.68842644475318474656805323164121546e-05",
+        "shapiro_uranus_s": "3.82490412124296082357902527596392982e-10",
+        "shapiro_venus_s": "5.92097213601926784771581864573290754e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.21794149754631910389395844929172341e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "9.47580859256886429776524426258493827e-09",
+        "tt_tb_s": "17.2242835285422236493411820510644316",
+        "tt_teph_s": "0.00153975627038574654215086212616370176"
+      },
+      {
+        "bat_correction_day": "-0.00444466430975315036588399257695707442",
+        "bat_mjd": "56000.7846793323582130105805400814942",
+        "bbat_mjd": "56000.7846793323582130105805400814942",
+        "clockCorr": "1",
+        "clock_step_s_0": "-3.34925773314810238459875591648939874e-07",
+        "clock_step_s_1": "0",
+        "clock_step_s_2": "-3.41564959866518625994117782632055608e-09",
+        "clock_step_s_3": "34",
+        "clock_step_s_4": "32.1839999999999974988895701244473457",
+        "clock_to_0": "UTC(GPS)",
+        "clock_to_1": "UTC(GPS_USNO)",
+        "clock_to_2": "UTC",
+        "clock_to_3": "TAI",
+        "clock_to_4": "TT(TAI)",
+        "clock_tt_s": "66.1839996616585750643935170955955982",
+        "delayCorr": "1",
+        "deleted": "0",
+        "dispersion_s": "0.211688774164360216101243850062019192",
+        "earth_ssb_light_s_0": "-495.33079291789925946432049386203289",
+        "earth_ssb_light_s_1": "43.4582605657219929184975626412779093",
+        "earth_ssb_light_s_2": "18.8364940972984520328736834926530719",
+        "fname": "test",
+        "frequency_mhz": "1400",
+        "frequency_ssb_hz": "1400046836.800332546234130859375",
+        "observatory_earth_light_s_0": "-0.00756848454695767391964267289949930273",
+        "observatory_earth_light_s_1": "-0.0161857432035655939006613124320210773",
+        "observatory_earth_light_s_2": "-0.01151247734597286159763385171572736",
+        "roemer_s": "-467.216479707494499962194822728633881",
+        "sat_mjd": "56000.7891239966679661609464240740712",
+        "shapiro_jupiter_s": "5.19206859788549289198677220329505855e-09",
+        "shapiro_neptune_s": "-1.07141846123236073875910254985400344e-09",
+        "shapiro_saturn_s": "-8.05207308504365143769487811725021897e-09",
+        "shapiro_sun_s": "2.74966002273008241335843643282643711e-05",
+        "shapiro_uranus_s": "3.85014145028327890969656652599487079e-10",
+        "shapiro_venus_s": "5.81268252695294999062295543068931572e-11",
+        "shklovskii_s": "0",
+        "site": "pks",
+        "solar_dispersion_s": "3.32924618381992551822989336030023111e-07",
+        "toa_error_us": "10",
+        "troposphere_s": "-1.418694175767016660587890012788434e-08",
+        "tt_tb_s": "17.2252002691777167947246559976832367",
+        "tt_teph_s": "0.00154819756927160431976553400801321914"
+      }
+    ]
+  },
+  "status": "completed",
+  "warnings": [
+    "[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 50000.0",
+    "[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 50000.0",
+    "[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed."
+  ]
+}

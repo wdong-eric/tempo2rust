@@ -1,0 +1,32 @@
+{
+  "original": {
+    "command": [
+      "/opt/homebrew/bin/gcc-16",
+      "-O2",
+      "-I",
+      "../tempo2",
+      "target/native-recovery/probe.c",
+      "../tempo2/jpleph.c",
+      "-o",
+      "target/native-recovery/original"
+    ],
+    "jpleph_sha256": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+    "good_first_failure_repeated_failure_recovery_delta": "0 -2 0 0 0"
+  },
+  "retained": {
+    "command": [
+      "/opt/homebrew/bin/gcc-16",
+      "-O2",
+      "-I",
+      "native",
+      "target/native-recovery/probe.c",
+      "native/jpleph.c",
+      "-o",
+      "target/native-recovery/retained"
+    ],
+    "jpleph_sha256": "d8ae1becbab4585af6b2b76abbeac1599fe17f9a452ac3f4d7da694eb930d88d",
+    "good_first_failure_repeated_failure_recovery_delta": "0 -2 -2 0 0"
+  },
+  "probe_source": "#include <stdio.h>\n#include \"jpleph.h\"\nint main(int argc,char **argv) {\n    double a[6],b[6];\n    void *e=jpl_init_ephemeris(argv[1],NULL,NULL);\n    if(!e) return 2;\n    double end=jpl_get_double(e,JPL_EPHEM_END_JD);\n    int good=jpl_pleph(e,2450000.5,3,12,a,1);\n    int failed=jpl_pleph(e,end-8,3,12,b,1);\n    int repeated=jpl_pleph(e,end-8,3,12,b,1);\n    int recovered=jpl_pleph(e,2450000.5,3,12,b,1);\n    printf(\"%d %d %d %d %.17g\\n\",good,failed,repeated,recovered,b[0]-a[0]);\n    jpl_close_ephemeris(e);return 0;\n}\n",
+  "fixture": "Copy pinned DE405 and truncate final 4000 bytes; bad JD = header end - 8 days"
+}
