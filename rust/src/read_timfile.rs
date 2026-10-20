@@ -67,10 +67,13 @@ pub(crate) fn read_timfile(tim: &SourceFile) -> Result<Vec<Observation>, TimingE
         if tokens.len() != 5 {
             return Err(error(tokens[0], "expected name frequency_MHz MJD uncertainty_us @; directives and flags are unsupported".into()));
         }
-        if tokens[4] != "@" {
+        if tokens[4] != "@" && !tokens[4].eq_ignore_ascii_case("pks") {
             return Err(error(
                 "site",
-                format!("only barycentric @ is supported, got {:?}", tokens[4]),
+                format!(
+                    "only barycentric @ or PKS is supported, got {:?}",
+                    tokens[4]
+                ),
             ));
         }
         let sat = parse_longdouble(tokens[2]).map_err(|e| error("MJD", e))?;

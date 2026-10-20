@@ -2,6 +2,10 @@
 use crate::longdouble::normalized_decimal;
 use rug::Float;
 
+pub(crate) fn dot_product(a: [f64; 3], b: [f64; 3]) -> f64 {
+    a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+}
+
 pub(crate) fn parse_binary64(token: &str) -> Result<f64, String> {
     let normalized = normalized_decimal(token)?;
     let value: f64 = normalized.parse().map_err(|e| format!("{token:?}: {e}"))?;

@@ -1,16 +1,32 @@
-//! Fixed-parameter timing for the declared isolated-pulsar, TCB `@` subset.
+//! Fixed-parameter timing for isolated-pulsar TCB `@` and PKS terrestrial profiles.
 //! See README.md for accepted input syntax and scientific conventions.
 
+mod clkcorr;
+mod eop;
+mod form_bats;
 mod form_residuals;
+mod get_obs_coord;
+mod ifteph;
 mod input;
 mod longdouble;
+mod read_ephemeris;
 mod read_parfile;
 mod read_timfile;
+#[cfg(test)]
+mod resource_tests;
+mod runtime;
+mod tabulated_function;
 mod tempo2_util;
+mod tropo;
+mod tt2tdb;
 
+pub use clkcorr::ClockStep;
+pub use form_bats::{Corrections, TerrestrialResult, form_bats_all as evaluate_terrestrial};
 pub use form_residuals::form_residuals as evaluate_barycentric;
 pub use input::load;
 pub use longdouble::{PRECISION_BITS, Scalar};
+pub use runtime::{Resource, RuntimeContext};
+pub use tropo::{Weather, WeatherValue};
 
 use serde::Serialize;
 use std::{collections::BTreeMap, fmt, path::PathBuf};
@@ -91,7 +107,7 @@ pub struct OriginalObservation {
 #[derive(Clone, Debug, Serialize)]
 pub struct Observation {
     pub original: OriginalObservation,
-    /// Already barycentric TCB, in MJD days; never an observatory clock epoch.
+    /// MJD days: barycentric TCB for @, observatory-clock time for PKS.
     pub sat_mjd: Scalar,
     pub frequency_mhz: f64,
     pub toa_error_us: f64,

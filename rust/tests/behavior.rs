@@ -271,7 +271,8 @@ fn rejects_malformed_and_unsupported_inputs_with_context() {
         "x 1400 50000 10 @\n",
         "FORMAT 1\nINCLUDE extra.tim\n",
         "FORMAT 1\nx 1400 50000x 10 @\n",
-        "FORMAT 1\nx 1400 50000 10 pks\n",
+        // M1b now supports PKS; keep the unknown-site rejection contract.
+        "FORMAT 1\nx 1400 50000 10 unknown_site\n",
         "FORMAT 1\nx 1400 50000 10 @ -pn 0\n",
         "FORMAT 1\nx 1e999 50000 10 @\n",
         "FORMAT 1\nx 1400 50000 -1 @\n",

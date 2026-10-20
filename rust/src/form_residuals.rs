@@ -27,6 +27,23 @@ fn pulse_integer(value: &Float) -> Option<i64> {
 /// All input observations are eligible; the first one's signed fractional phase
 /// sets the reference. No fit, tracking, sorting, cuts or mean subtraction occurs.
 pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
+    if psr.observations.iter().any(|o| o.original.site != "@") {
+        return Err(TimingError::new(
+            &psr.tim.path,
+            None,
+            "site",
+            "use evaluate_terrestrial with a RuntimeContext for PKS",
+        ));
+    }
+    let epochs: Vec<_> = psr.observations.iter().map(|o| o.sat_mjd.clone()).collect();
+    form_residuals_at(psr, &epochs)
+}
+
+/// Shared residual kernel; epochs are BAT=BBAT for both declared isolated paths.
+pub(crate) fn form_residuals_at(
+    psr: &TimingInput,
+    epochs: &[Scalar],
+) -> Result<TimingResult, TimingError> {
     let f0 = &psr.parameters["F0"].value.0;
     let pepoch = &psr.parameters["PEPOCH"].value.0;
     let nf0 = source_i32(f0).ok_or_else(|| {
@@ -47,7 +64,7 @@ pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
     })?;
     let ff0 = f0.clone() - nf0;
     let mut phase_terms = Vec::with_capacity(psr.observations.len());
-    for o in &psr.observations {
+    for (o, epoch) in psr.observations.iter().zip(epochs) {
         let error = |message| {
             TimingError::new(
                 &psr.tim.path,
@@ -56,7 +73,7 @@ pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
                 message,
             )
         };
-        let bbat = &o.sat_mjd.0;
+        let bbat = &epoch.0;
         let bbat_day =
             source_i32(bbat).ok_or_else(|| error("integer MJD exceeds the source i32 range"))?;
         let ntpd = bbat_day
@@ -93,7 +110,8 @@ pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
     // Rug % uses a truncating quotient, matching the adopted fortran_mod semantics.
     let phas1 = fortran_mod(phase_terms[0].1.clone(), 1.0f64);
     let mut observations = Vec::with_capacity(phase_terms.len());
-    for (o, (phaseint, mut phase5)) in psr.observations.iter().zip(phase_terms) {
+    for ((o, epoch), (phaseint, mut phase5)) in psr.observations.iter().zip(epochs).zip(phase_terms)
+    {
         let error = |message| {
             TimingError::new(
                 &psr.tim.path,
@@ -115,8 +133,8 @@ pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
         observations.push(ToaResult {
             index: o.original.index,
             sat_mjd: o.sat_mjd.clone(),
-            bat_mjd: o.sat_mjd.clone(),
-            bbat_mjd: o.sat_mjd.clone(),
+            bat_mjd: epoch.clone(),
+            bbat_mjd: epoch.clone(),
             phase_turn: Scalar(phaseint + phase5),
             nphase_turn,
             pulse_number: pulse_n,
