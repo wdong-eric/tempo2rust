@@ -1,0 +1,127 @@
+{
+  "cases": {
+    "all_whitespace": {
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/supplemental_inputs/supplemental_all_whitespace.bin 0"
+      ],
+      "returncode": -6,
+      "rust": [
+        {
+          "init_error": -9,
+          "op": "startup"
+        },
+        {
+          "boundary": "title_conversion",
+          "event": 0,
+          "init_error": 0,
+          "io_calls": [
+            1,
+            2,
+            0
+          ],
+          "last_fread_size_requested_returned": [
+            204,
+            1,
+            1
+          ],
+          "op": "open"
+        }
+      ],
+      "sha256": "e7c4123943651a0c42d7e98dafb3ce4aebbb4059d89cd7763144c6220bf205e7",
+      "source_diagnostic": [
+        "==64801==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016cee1a34 at pc 0x0001038d36e0 bp 0x00016cee19b0 sp 0x00016cee1168",
+        "SUMMARY: AddressSanitizer: stack-buffer-overflow (/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/title-sanitized:arm64+0x100002a84) in jpl_init_ephemeris+0x254"
+      ],
+      "source_stdout": "{\"op\":\"startup\",\"init_error\":-9,\"struct_size\":648,\"double_align\":8,\"pvsun_offset\":248,\"macro_offset\":248,\"au_offset\":28,\"iinfo_offset\":336,\"ifile_offset\":640}\n{\"event\":0,\"op\":\"open\""
+    },
+    "last_minus": {
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/supplemental_inputs/supplemental_last_minus.bin 0"
+      ],
+      "returncode": -6,
+      "rust": [
+        {
+          "init_error": -9,
+          "op": "startup"
+        },
+        {
+          "boundary": "title_conversion",
+          "event": 0,
+          "init_error": 0,
+          "io_calls": [
+            1,
+            2,
+            0
+          ],
+          "last_fread_size_requested_returned": [
+            204,
+            1,
+            1
+          ],
+          "op": "open"
+        }
+      ],
+      "sha256": "ba516bb2f39df77bdf79d772207dcaf6c61fccb22b8293966657a518825a165a",
+      "source_diagnostic": [
+        "==64807==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016b359a34 at pc 0x0001053376e0 bp 0x00016b3599b0 sp 0x00016b359168",
+        "SUMMARY: AddressSanitizer: stack-buffer-overflow (/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/title-sanitized:arm64+0x100002a84) in jpl_init_ephemeris+0x254"
+      ],
+      "source_stdout": "{\"op\":\"startup\",\"init_error\":-9,\"struct_size\":648,\"double_align\":8,\"pvsun_offset\":248,\"macro_offset\":248,\"au_offset\":28,\"iinfo_offset\":336,\"ifile_offset\":640}\n{\"event\":0,\"op\":\"open\""
+    },
+    "last_sign": {
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/supplemental_inputs/supplemental_last_sign.bin 0"
+      ],
+      "returncode": -6,
+      "rust": [
+        {
+          "init_error": -9,
+          "op": "startup"
+        },
+        {
+          "boundary": "title_conversion",
+          "event": 0,
+          "init_error": 0,
+          "io_calls": [
+            1,
+            2,
+            0
+          ],
+          "last_fread_size_requested_returned": [
+            204,
+            1,
+            1
+          ],
+          "op": "open"
+        }
+      ],
+      "sha256": "8d3c774da705c7bad39e3b6758324a676353b09b8a739ee8ecd62cb02b6245c0",
+      "source_diagnostic": [
+        "==64804==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x00016d2a9a34 at pc 0x0001033bf6e0 bp 0x00016d2a99b0 sp 0x00016d2a9168",
+        "SUMMARY: AddressSanitizer: stack-buffer-overflow (/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/title-sanitized:arm64+0x100002a84) in jpl_init_ephemeris+0x254"
+      ],
+      "source_stdout": "{\"op\":\"startup\",\"init_error\":-9,\"struct_size\":648,\"double_align\":8,\"pvsun_offset\":248,\"macro_offset\":248,\"au_offset\":28,\"iinfo_offset\":336,\"ifile_offset\":640}\n{\"event\":0,\"op\":\"open\""
+    }
+  },
+  "command": [
+    "/usr/bin/clang",
+    "-O1",
+    "-g",
+    "-std=c11",
+    "-fsanitize=address",
+    "-fno-sanitize-recover=all",
+    "-I",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/source",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/probe.c",
+    "-lm",
+    "-o",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port/build/debug/title-sanitized"
+  ],
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)",
+  "executable_sha256": "f75e039fdecc357aa14bcd8b39bc168f8e21a5728f0223009bd5ec4463ff29be",
+  "source_hashes": {
+    "jpl_int.h": "d595b3aa8727567539cf5f73ef0977ca487237f2f2356538e1f5586e24315f72",
+    "jpleph.c": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+    "jpleph.h": "c04f5f1b0fc961868ebd3ca0c4af6d9e5f2fca045689c963865484d581e1809d"
+  }
+}

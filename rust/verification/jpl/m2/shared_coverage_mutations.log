@@ -1,0 +1,67 @@
+[
+  {
+    "mutation": "shared_weighted_unscaled.json non-array object",
+    "detected": true,
+    "error": "shared_weighted_unscaled.json: expected an array of 1 cycles, got dict"
+  },
+  {
+    "mutation": "shared_weighted_unscaled.json non-array null",
+    "detected": true,
+    "error": "shared_weighted_unscaled.json: expected an array of 1 cycles, got NoneType"
+  },
+  {
+    "mutation": "shared_weighted_unscaled.json empty cycles",
+    "detected": true,
+    "error": "shared_weighted_unscaled.json: expected exactly 1 cycles, got 0"
+  },
+  {
+    "mutation": "shared_weighted_unscaled.json missing cycle",
+    "detected": true,
+    "error": "shared_weighted_unscaled.json: expected exactly 1 cycles, got 0"
+  },
+  {
+    "mutation": "shared_weighted_unscaled.json extra cycle",
+    "detected": true,
+    "error": "shared_weighted_unscaled.json: expected exactly 1 cycles, got 2"
+  },
+  {
+    "mutation": "shared_weighted_unscaled.json missing artifact",
+    "detected": true,
+    "error": "shared artifact set mismatch: missing=['shared_weighted_unscaled.json'], extra=[]"
+  },
+  {
+    "mutation": "shared_all.json non-array object",
+    "detected": true,
+    "error": "shared_all.json: expected an array of 2 cycles, got dict"
+  },
+  {
+    "mutation": "shared_all.json non-array null",
+    "detected": true,
+    "error": "shared_all.json: expected an array of 2 cycles, got NoneType"
+  },
+  {
+    "mutation": "shared_all.json empty cycles",
+    "detected": true,
+    "error": "shared_all.json: expected exactly 2 cycles, got 0"
+  },
+  {
+    "mutation": "shared_all.json missing cycle",
+    "detected": true,
+    "error": "shared_all.json: expected exactly 2 cycles, got 1"
+  },
+  {
+    "mutation": "shared_all.json extra cycle",
+    "detected": true,
+    "error": "shared_all.json: expected exactly 2 cycles, got 3"
+  },
+  {
+    "mutation": "shared_all.json missing artifact",
+    "detected": true,
+    "error": "shared artifact set mismatch: missing=['shared_all.json'], extra=[]"
+  },
+  {
+    "mutation": "extra shared case",
+    "detected": true,
+    "error": "shared artifact set mismatch: missing=[], extra=['shared_unexpected.json']"
+  }
+]

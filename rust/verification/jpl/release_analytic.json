@@ -1,0 +1,9 @@
+{
+  "components": 576,
+  "max_absolute_difference_position_velocity_acceleration": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "method": "H exact rational explicit polynomial and analytic derivatives"
+}

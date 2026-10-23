@@ -1,0 +1,14 @@
+[
+  {
+    "caller_unchanged": true,
+    "case": "zero_error",
+    "error": "/Users/Eric.Dong/Downloads/tempo2rust/rust/../validation/fitting/inputs/zero_error.tim: fit: cycle 1: TKsvd source boundary: invalid w[-1] access after nonfinite arithmetic",
+    "valid_recovery_equal": true
+  },
+  {
+    "caller_unchanged": true,
+    "case": "tiny_error",
+    "error": "/Users/Eric.Dong/Downloads/tempo2rust/rust/../validation/fitting/inputs/tiny_error.tim: fit: cycle 1: TKsvd source boundary: invalid w[-1] access after nonfinite arithmetic",
+    "valid_recovery_equal": true
+  }
+]

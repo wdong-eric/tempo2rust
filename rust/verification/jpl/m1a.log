@@ -1,0 +1,7 @@
+toolchain: PASS
+cargo: PASS
+dependencies: PASS
+format: PASS
+tests: PASS
+clippy: PASS
+Accepted fixture comparison and independent numerical diagnostics: PASS
