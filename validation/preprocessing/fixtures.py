@@ -173,6 +173,7 @@ def cases():
         add('noise_only_'+typ,[A('noise',0,typ,'-be','A',2 if typ in ['T2efac','T2equad','TNEF'] else -6),wrapper()])
     for typ in ['T2globalEfac','TNGlobalEF','TNGlobalEQ']:
         add('noise_only_'+typ,[setting(typ,-6 if typ=='TNGlobalEQ' else 2),wrapper()])
+    add('modify_double_endpoints',[setting('nobs',5)]+sum(([obs(i,'nFlags',0),A('flag',0,i,'-be','A')] for i in range(5)),[])+[obs(0,'sat',58000),obs(1,'sat',58002),obs(2,'sat','58000.0000000000000000001'),obs(3,'sat','58001.9999999999999999999'),obs(4,'sat',58001),wrapper('-modify','modify.txt')],{'modify.txt':'-be A 58000 58002 C\n'})
     assert len({c['id'] for c in cs})==len(cs)
     return cs
 

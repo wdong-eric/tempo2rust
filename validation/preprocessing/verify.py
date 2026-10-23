@@ -5,7 +5,7 @@ from pathlib import Path
 from profile import HERE,BUILD,sha,save,compile_probe
 from run import compare,execute,validate,check_identity,execution_identity,runtime,load_results
 
-def mutations():
+def source_mutations():
     from profile import blob
     pre=blob('preProcess.C').decode().replace('\r\n','\n')
     simple=blob('preProcessSimple.C').decode()
@@ -98,7 +98,7 @@ def main():
     assert proc.returncode==2
     controls['no_build_option_absent']=dict(returncode=proc.returncode,stderr=proc.stderr)
     mutations=[]
-    for name,cid,file,old,new in mutations():
+    for name,cid,file,old,new in source_mutations():
         mx,mp=compile_probe('mut_'+name,(file,old,new));mp['stable']['runtime_fixtures']=runtime()
         identity_rejection=rejected(lambda:check_identity(expected,mp,mx))
         r=execute(cs[cid],mx,mp)

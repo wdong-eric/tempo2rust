@@ -1,0 +1,483 @@
+{
+  "cases": 302,
+  "actions": 1429,
+  "events": 3451,
+  "raw_archives": [
+    {
+      "cases": 302,
+      "raw_sha256": "e6084c26f3c095398c26e1e54aaa13cc743b4ccc8a5cb4d60ed069847eeed157",
+      "lossless_reconstruction": true
+    },
+    {
+      "cases": 302,
+      "raw_sha256": "adb1e8b2fd4328e09943e8382c8b1d6b5f121ea1eb302588c00c7f045b71552e",
+      "lossless_reconstruction": true
+    }
+  ],
+  "all_delta_chains_valid": true,
+  "initial_identity": "27a3e95c890452acdc707b9c228fc60acb1fc7ae678d61a0d2690ba843e3f356",
+  "findings": {
+    "wrapper_link_chain": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0.8000000000000000000000000000000001348151",
+        "KIN": "53.13010235415598077424707199932862588551",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "wrapper_overwritten_label": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "3",
+        "IPERHARM": "3",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "epoch_cross_1": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58011",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "epoch_cross_2": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58010",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "wrapper_epoch_multi": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "-1",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58011",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "epoch_motion_15": {
+      "p0": {
+        "F0": "2.004693850894966399970923582648019608619",
+        "F1": "2.133551368000000000000000000000000059458E-10",
+        "F2": "5.164399999999999999999999999999999762557E-18",
+        "F2_prefit": "17",
+        "PEPOCH": "58366.25",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "units_2_1_@": {
+      "p0": {
+        "F0": "50002",
+        "F1": "50002.12500000000000000000000000000631089",
+        "F2": "50002.25",
+        "F2_prefit": "51002.5",
+        "PEPOCH": "50003",
+        "SINI": "50013",
+        "KIN": "50073",
+        "DAOP": "50088",
+        "IPERHARM": "50089",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "simul_only_carried": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "simul_order_chain": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "wrapper_multi_select_order": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          1
+        ]
+      }
+    },
+    "plugin_ok": {
+      "p0": {
+        "F0": "2",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          11
+        ]
+      },
+      "p1": {
+        "F0": "3",
+        "F1": "0",
+        "F2": "0",
+        "F2_prefit": "17",
+        "PEPOCH": "58000",
+        "SINI": "0",
+        "KIN": "0",
+        "DAOP": "0",
+        "IPERHARM": "0",
+        "deleted": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "nits": [
+          11
+        ]
+      }
+    }
+  }
+}
