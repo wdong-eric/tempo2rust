@@ -15,31 +15,29 @@ pub(crate) fn std_freq(x: f64, f0: f64, k: usize) -> f64 {
     }
 }
 
-pub(crate) fn update_std_freq(
-    psr: &mut TimingInput,
-    errors: &mut [FitNumber; 4],
-    k: usize,
-    val: f64,
-    error: f64,
-) {
-    let f0 = psr.parameters["F0"].value.0.clone();
-    let value = &mut psr.parameters.get_mut(SPIN[k]).unwrap().value.0;
+pub(crate) fn update_std_freq(psr: &mut TimingInput, k: usize, val: f64, error: f64) {
+    let f0 = psr.parameter_cell("F0").val.clone();
+    let value = &mut psr.parameter_cell_mut(SPIN[k]).val;
     if k == 0 {
         *value *= ld(1.0) - ld(val) / &f0;
         // Preserve the source predicate: NaN leaves the existing physical error unchanged.
         if error >= 0.0 {
-            errors[k] = FitNumber::from(error);
+            psr.parameter_cell_mut(SPIN[k]).err = ld(error);
         }
     } else {
         let scale = [1.0, 1.0, 1.0e9, 1.0e18][k];
         let divisor = (24.0f64 * 3600.0).powf((k + 1) as f64);
         *value -= f0.clone() * (val / divisor) / scale;
         if error >= 0.0 {
-            errors[k] = FitNumber(ld(error / divisor) / scale * &f0);
+            psr.parameter_cell_mut(SPIN[k]).err = ld(error / divisor) / scale * &f0;
         }
     }
 }
 
 pub(crate) fn spin_values(psr: &TimingInput) -> [Float; 4] {
-    SPIN.map(|key| psr.parameters[key].value.0.clone())
+    SPIN.map(|key| psr.parameter_cell(key).val.clone())
+}
+
+pub(crate) fn spin_errors(psr: &TimingInput) -> [FitNumber; 4] {
+    SPIN.map(|key| FitNumber(psr.parameter_cell(key).err.clone()))
 }

@@ -47,12 +47,15 @@ pub(crate) fn form_residuals_at(
     psr: &TimingInput,
     epochs: &[Scalar],
 ) -> Result<TimingResult, TimingError> {
-    let f0 = &psr.parameters["F0"].value.0;
-    let pepoch = &psr.parameters["PEPOCH"].value.0;
+    let f0 = &psr.parameter_cell("F0").val;
+    let pepoch = &psr.parameter_cell("PEPOCH").val;
     let nf0 = source_i32(f0).ok_or_else(|| {
         TimingError::new(
             &psr.par.path,
-            psr.parameters["F0"].original.as_ref().map(|p| p.line),
+            psr.parameter_metadata["F0"]
+                .original
+                .as_ref()
+                .map(|p| p.line),
             "F0",
             "integer part exceeds the source i32 range",
         )
@@ -60,7 +63,10 @@ pub(crate) fn form_residuals_at(
     let pepoch_day = source_i32(pepoch).ok_or_else(|| {
         TimingError::new(
             &psr.par.path,
-            psr.parameters["PEPOCH"].original.as_ref().map(|p| p.line),
+            psr.parameter_metadata["PEPOCH"]
+                .original
+                .as_ref()
+                .map(|p| p.line),
             "PEPOCH",
             "integer MJD exceeds the source i32 range",
         )
@@ -97,11 +103,11 @@ pub(crate) fn form_residuals_at(
             * 86400i32;
         let mut arg = Float::with_val(PRECISION_BITS, &delta_t * &delta_t);
         let mut phase3 =
-            (Float::with_val(PRECISION_BITS, 0.5) * &psr.parameters["F1"].value.0) * &arg;
+            (Float::with_val(PRECISION_BITS, 0.5) * &psr.parameter_cell("F1").val) * &arg;
         for (key, divisor) in [("F2", 6i32), ("F3", 24i32)] {
             arg *= &delta_t;
-            if psr.parameters[key].set {
-                phase3 += (psr.parameters[key].value.0.clone() / divisor) * &arg;
+            if psr.parameter_cell(key).param_set != 0 {
+                phase3 += (psr.parameter_cell(key).val.clone() / divisor) * &arg;
             }
         }
         let phase5 = phase2 + phase3;

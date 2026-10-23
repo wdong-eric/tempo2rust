@@ -6,7 +6,7 @@ use crate::{
     Corrections, EngineProvenance, FitControls, FitNumber, LeastSquares, Resource, RuntimeContext,
     Scalar, TerrestrialResult, TimingError, TimingInput, TimingResult, ToaResult,
     evaluate_barycentric, evaluate_terrestrial,
-    std_freq::{SPIN, spin_values, std_freq, update_std_freq},
+    std_freq::{SPIN, spin_errors, spin_values, std_freq, update_std_freq},
     tkfit::tk_least_squares,
     tksvd::ld,
 };
@@ -144,18 +144,22 @@ fn t2_fit(
     options: &FitOptions,
     mut evaluate: impl FnMut(&TimingInput) -> Result<FitTiming, TimingError>,
 ) -> Result<FitResult, TimingError> {
-    for (key, param) in &input.parameters {
+    for (key, meta) in &input.parameter_metadata {
+        let param = input.parameter_cell(key);
         if param.fit_flag == 2 || (param.fit_flag != 0 && !SPIN.contains(&key.as_str())) {
             return Err(TimingError::new(
                 &input.par.path,
-                param.original.as_ref().map(|p| p.line),
+                meta.original.as_ref().map(|p| p.line),
                 key,
                 "M2 fits local F0-F3 only; global or other active fit flags are unsupported",
             ));
         }
     }
     let selected: Vec<_> = (0..4)
-        .filter(|&k| input.parameters[SPIN[k]].set && input.parameters[SPIN[k]].fit_flag == 1)
+        .filter(|&k| {
+            input.parameter_cell(SPIN[k]).param_set != 0
+                && input.parameter_cell(SPIN[k]).fit_flag == 1
+        })
         .collect();
     let columns: Vec<_> = std::iter::once("ZERO".to_string())
         .chain(selected.iter().map(|&k| SPIN[k].to_string()))
@@ -171,8 +175,7 @@ fn t2_fit(
         }))
         .collect();
     let mut model = input.clone();
-    // readValue sets err=0; supplied uncertainties belong to prefitErr metadata.
-    let mut physical_errors = std::array::from_fn(|_| FitNumber::from(0.0));
+    // The frontend leaves source err initialized; callbacks update those same cells.
     let mut offset_error = None;
     let controls = &input.fit_controls;
     let rescale = controls.mode == 0 || options.rescale_err_chisq;
@@ -180,12 +183,12 @@ fn t2_fit(
     let mut nonfinite = false;
     for iteration in 1..=controls.nits {
         let before_values = spin_values(&model).map(Scalar);
-        let before_errors = physical_errors.clone();
+        let before_errors = spin_errors(&model);
         let prefit = evaluate(&model)?;
         let x: Vec<_> = prefit
             .observations
             .iter()
-            .map(|o| (o.bbat_mjd.0.clone() - &model.parameters["PEPOCH"].value.0).to_f64())
+            .map(|o| (o.bbat_mjd.0.clone() - &model.parameter_cell("PEPOCH").val).to_f64())
             .collect();
         let data: Vec<_> = prefit.centered_s.iter().map(|v| v.0.to_f64()).collect();
         let sigma: Vec<_> = input
@@ -193,7 +196,7 @@ fn t2_fit(
             .iter()
             .map(|o| o.toa_error_us * 1e-6)
             .collect();
-        let f0 = model.parameters["F0"].value.0.to_f64();
+        let f0 = model.parameter_cell("F0").val.to_f64();
         let matrix: Vec<Vec<f64>> = x
             .iter()
             .map(|&x| {
@@ -243,7 +246,6 @@ fn t2_fit(
         for (j, &k) in selected.iter().enumerate() {
             update_std_freq(
                 &mut model,
-                &mut physical_errors,
                 k,
                 solver.increments[j + 1].0.to_f64(),
                 solver.errors[j + 1].0.to_f64(),
@@ -280,7 +282,7 @@ fn t2_fit(
             before_values,
             before_errors,
             after_values: spin_values(&model).map(Scalar),
-            after_errors: physical_errors.clone(),
+            after_errors: spin_errors(&model),
             row_indices: input
                 .observations
                 .iter()

@@ -1,5 +1,5 @@
 //! Selected tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/
-//! fortran_nlong. parse_binary64 is strict Rust adapter parsing; remainder and
+//! fortran_nlong/copyParam. parse_binary64 is strict Rust adapter parsing; remainder and
 //! integer selection use the approved Rug representation, not source ABI objects.
 use crate::longdouble::normalized_decimal;
 use rug::Float;
@@ -47,4 +47,77 @@ pub(crate) fn fortran_mod(a: Float, p: f64) -> Float {
 pub(crate) fn fortran_nlong(x: &Float) -> Float {
     // fortran_nlong: signed half addition then truncation, not ties-to-even.
     (x.clone() + if x > &0 { 0.5f64 } else { -0.5f64 }).trunc()
+}
+
+/// tempo2Util.C::copyParam: ordered field writes, with links and backing retained.
+/// A failed destination is terminal for scientific use; its prefix is diagnostic.
+/// Owned disjoint source/destination borrows exclude overlapping strcpy buffers.
+pub fn copy_param(
+    source: &crate::tempo2::SourceParameter,
+    destination: &mut crate::tempo2::SourceParameter,
+) -> Result<(), crate::tempo2::ParameterBoundary> {
+    use crate::tempo2::ParameterBoundary;
+    if let Some(error) = &destination.boundary {
+        return Err(error.clone());
+    }
+    let result = (|| {
+        if let Some(error) = &source.boundary {
+            return Err(error.clone());
+        }
+        for index in 0..source.a_size {
+            let i = index as usize;
+            let error = |field, kind| ParameterBoundary {
+                cell: i,
+                field,
+                kind,
+            };
+            let src = source
+                .cells
+                .get(i)
+                .ok_or_else(|| error("label", "missing_source_cell"))?;
+            let dst = destination
+                .cells
+                .get_mut(i)
+                .ok_or_else(|| error("label", "missing_destination_cell"))?;
+            for (field, src, dst) in [
+                ("label", &src.label, &mut dst.label),
+                ("shortlabel", &src.shortlabel, &mut dst.shortlabel),
+            ] {
+                let mut j = 0;
+                loop {
+                    let byte = *src
+                        .get(j)
+                        .ok_or_else(|| error(field, "missing_string_terminator"))?;
+                    *dst.get_mut(j)
+                        .ok_or_else(|| error(field, "insufficient_label_storage"))? = byte;
+                    if byte == 0 {
+                        break;
+                    }
+                    j += 1;
+                }
+            }
+            dst.val = src.val.clone();
+            dst.err = src.err.clone();
+            dst.fit_flag = src.fit_flag;
+            dst.param_set = src.param_set;
+            dst.prefit = Some(
+                src.prefit
+                    .as_ref()
+                    .ok_or_else(|| error("prefit", "unwritten_value"))?
+                    .clone(),
+            );
+            dst.prefit_err = Some(
+                src.prefit_err
+                    .as_ref()
+                    .ok_or_else(|| error("prefitErr", "unwritten_value"))?
+                    .clone(),
+            );
+        }
+        destination.a_size = source.a_size;
+        Ok(())
+    })();
+    if let Err(error) = &result {
+        destination.boundary = Some(error.clone());
+    }
+    result
 }

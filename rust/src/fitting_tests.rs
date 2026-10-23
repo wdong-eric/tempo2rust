@@ -1,7 +1,7 @@
 //! Rust-only fixture harness for TEMPO2 fitting counterparts; no production code.
 use crate::{
     FitNumber, load,
-    std_freq::{spin_values, std_freq, update_std_freq},
+    std_freq::{spin_errors, spin_values, std_freq, update_std_freq},
     tkfit::tk_least_squares,
 };
 use serde_json::{Value, json};
@@ -77,44 +77,46 @@ fn independent_source_solver_inputs_and_callbacks() {
             .unwrap();
     let mut input = load(&root.join("inputs/all.par"), &root.join("inputs/bary.tim")).unwrap();
     for (k, key) in ["F0", "F1", "F2", "F3"].iter().enumerate() {
-        input.parameters.get_mut(*key).unwrap().value =
-            callback["before"][k].as_str().unwrap().parse().unwrap();
+        input.parameter_cell_mut(key).val = callback["before"][k]
+            .as_str()
+            .unwrap()
+            .parse::<crate::Scalar>()
+            .unwrap()
+            .0;
     }
     let x = callback["x_days"].as_str().unwrap().parse().unwrap();
     let columns: Vec<FitNumber> = std::iter::once(1.0)
-        .chain((0..4).map(|k| std_freq(x, input.parameters["F0"].value.0.to_f64(), k)))
+        .chain((0..4).map(|k| std_freq(x, input.parameter_cell("F0").val.to_f64(), k)))
         .map(FitNumber::from)
         .collect();
-    let mut errors = std::array::from_fn(|_| FitNumber::from(0.0));
     for k in 0..4 {
         update_std_freq(
             &mut input,
-            &mut errors,
             k,
             numbers(&callback["increments"])[k],
             numbers(&callback["errors"])[k],
         );
     }
-    let result = json!({"columns":columns,"after":spin_values(&input).map(FitNumber),"physical_errors":errors});
+    let result = json!({"columns":columns,"after":spin_values(&input).map(FitNumber),"physical_errors":spin_errors(&input)});
     for k in 0..4 {
-        update_std_freq(&mut input, &mut errors, k, 0.0, f64::NAN);
+        update_std_freq(&mut input, k, 0.0, f64::NAN);
     }
     assert_eq!(
         result["physical_errors"],
-        serde_json::to_value(&errors).unwrap()
+        serde_json::to_value(spin_errors(&input)).unwrap()
     );
     for k in 0..4 {
-        update_std_freq(&mut input, &mut errors, k, 0.0, f64::INFINITY);
+        update_std_freq(&mut input, k, 0.0, f64::INFINITY);
     }
     assert_eq!(
-        serde_json::to_value(&errors).unwrap(),
+        serde_json::to_value(spin_errors(&input)).unwrap(),
         callback["after_positive_infinity_errors"]
     );
     for k in 0..4 {
-        update_std_freq(&mut input, &mut errors, k, 0.0, f64::NEG_INFINITY);
+        update_std_freq(&mut input, k, 0.0, f64::NEG_INFINITY);
     }
     assert_eq!(
-        serde_json::to_value(&errors).unwrap(),
+        serde_json::to_value(spin_errors(&input)).unwrap(),
         callback["after_negative_infinity_errors"]
     );
     fs::write(
@@ -233,7 +235,7 @@ fn fit_controls_and_restrictions_leave_fixed_evaluation_intact() {
     let default = crate::FitOptions::default();
     for (key, flag) in [("F0", 2), ("PEPOCH", 1)] {
         let mut bad = valid.clone();
-        bad.parameters.get_mut(key).unwrap().fit_flag = flag;
+        bad.parameter_cell_mut(key).fit_flag = flag;
         assert!(crate::evaluate_barycentric(&bad).is_ok());
         let before = serde_json::to_vec(&bad).unwrap();
         assert!(crate::fit_barycentric(&bad, &default).is_err());
@@ -245,7 +247,7 @@ fn fit_controls_and_restrictions_leave_fixed_evaluation_intact() {
     assert_eq!(result.cycles[0].after_errors[0].as_float(), &0);
     assert!(result.cycles[0].offset_error_s.is_none());
     assert_eq!(
-        valid.parameters["F0"]
+        valid.parameters()["F0"]
             .uncertainty
             .as_ref()
             .unwrap()

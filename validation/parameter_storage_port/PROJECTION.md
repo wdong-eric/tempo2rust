@@ -86,5 +86,5 @@ receipts. Central alone accepts this stage; M2/full transfer remain open.
 0033 says param_iperharm remains blank. Pinned initialise.C:422–423 and K registry
 entry 89 both assign IPERHARM. Lines 314–317 separately overwrite param_daop (88)
 with IPERHARM. Recommendation: preserve BOTH source labels and correct the sentence
-in 0033. No accepted reference is changed. Clarification requested in O's chat;
-the independent storage/copy work proceeds while this label decision is pending.
+in 0033. No accepted reference is changed. The user explicitly approved preserving both source labels in O's chat. This
+resolves the implementation choice; the shared decision text remains central-owned.

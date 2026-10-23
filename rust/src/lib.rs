@@ -19,10 +19,13 @@ mod form_bats;
 mod form_residuals;
 mod get_obs_coord;
 mod ifteph;
+mod initialise;
 mod input;
 mod jpleph;
 mod longdouble;
 mod observatory;
+#[cfg(test)]
+mod parameter_storage_tests;
 mod read_ephemeris;
 mod read_parfile;
 mod read_timfile;
@@ -33,6 +36,7 @@ mod std_freq;
 mod stdio;
 mod t2fit;
 mod tabulated_function;
+pub mod tempo2;
 mod tempo2_util;
 mod tkfit;
 mod tksvd;
@@ -49,6 +53,7 @@ pub use longdouble::{PRECISION_BITS, Scalar};
 pub use read_parfile::FitControls;
 pub use runtime::{Resource, RuntimeContext};
 pub use t2fit::{FitCycle, FitOptions, FitResult, FitTiming, fit_barycentric, fit_terrestrial};
+pub use tempo2_util::copy_param;
 pub use tkfit::{FitNumber, LeastSquares};
 pub use tropo::{Weather, WeatherValue};
 
@@ -98,6 +103,7 @@ pub struct SourceFile {
     pub text: String,
 }
 
+/// Historical scalar output snapshot, not the source array-valued parameter.
 #[derive(Clone, Debug, Serialize)]
 pub struct Parameter {
     pub value: Scalar,
@@ -148,17 +154,24 @@ pub struct Conventions {
     pub corrections: &'static str,
 }
 
+/// Strict frontend provenance; no authoritative physical values or fit flags.
+#[derive(Clone, Debug, Default)]
+pub(crate) struct ParameterMetadata {
+    uncertainty: Option<Scalar>,
+    original: Option<ParameterLine>,
+}
+
 /// Owns validated input. Read-only access keeps parser-established invariants intact.
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug)]
 pub struct TimingInput {
     pub(crate) par: SourceFile,
     pub(crate) tim: SourceFile,
-    pub(crate) parameters: BTreeMap<String, Parameter>,
+    pub(crate) parameter_store: tempo2::ParameterStore,
+    pub(crate) parameter_metadata: BTreeMap<String, ParameterMetadata>,
     pub(crate) text_parameters: BTreeMap<String, ParameterLine>,
     pub(crate) observations: Vec<Observation>,
     pub(crate) conventions: Conventions,
     // Kept out of the existing fixed-evaluation JSON contract. Fits expose controls explicitly.
-    #[serde(skip)]
     pub(crate) fit_controls: FitControls,
 }
 
@@ -172,8 +185,38 @@ impl TimingInput {
     pub fn tim_source(&self) -> &SourceFile {
         &self.tim
     }
-    pub fn parameters(&self) -> &BTreeMap<String, Parameter> {
-        &self.parameters
+    /// Fresh owned compatibility view. Mutating it cannot modify this input.
+    pub fn parameters(&self) -> BTreeMap<String, Parameter> {
+        self.parameter_metadata
+            .iter()
+            .map(|(key, meta)| {
+                let cell = self.parameter_cell(key);
+                (
+                    key.clone(),
+                    Parameter {
+                        value: Scalar(cell.val.clone()),
+                        set: cell.param_set != 0,
+                        fit_flag: cell.fit_flag.try_into().expect("strict frontend fit flag"),
+                        uncertainty: meta.uncertainty.clone(),
+                        original: meta.original.clone(),
+                    },
+                )
+            })
+            .collect()
+    }
+    /// Source storage from the bounded frontend bridge: prefit fields remain
+    /// unwritten; supplied uncertainty is frontend metadata, not source err.
+    pub fn parameter_store(&self) -> &tempo2::ParameterStore {
+        &self.parameter_store
+    }
+    pub(crate) fn parameter_cell(&self, key: &str) -> &tempo2::ParameterCell {
+        let (label, i) = read_parfile::numeric_location(key);
+        // Only the validated frontend and fit callbacks can mutate this owner.
+        &self.parameter_store.slots[label as usize].cells[i]
+    }
+    pub(crate) fn parameter_cell_mut(&mut self, key: &str) -> &mut tempo2::ParameterCell {
+        let (label, i) = read_parfile::numeric_location(key);
+        &mut self.parameter_store.slots[label as usize].cells[i]
     }
     pub fn text_parameters(&self) -> &BTreeMap<String, ParameterLine> {
         &self.text_parameters
@@ -224,4 +267,19 @@ pub struct TimingResult {
     /// Signed fractional reduced phase of the first input TOA, before subtraction.
     pub reference_phase_turn: Scalar,
     pub observations: Vec<ToaResult>,
+}
+
+// Preserve the existing JSON contract while deriving its scalar view on demand.
+impl Serialize for TimingInput {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::SerializeStruct;
+        let mut out = serializer.serialize_struct("TimingInput", 6)?;
+        out.serialize_field("par", &self.par)?;
+        out.serialize_field("tim", &self.tim)?;
+        out.serialize_field("parameters", &self.parameters())?;
+        out.serialize_field("text_parameters", &self.text_parameters)?;
+        out.serialize_field("observations", &self.observations)?;
+        out.serialize_field("conventions", &self.conventions)?;
+        out.end()
+    }
 }

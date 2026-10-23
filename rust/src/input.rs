@@ -38,7 +38,8 @@ pub fn load(par_path: &Path, tim_path: &Path) -> Result<TimingInput, TimingError
     Ok(TimingInput {
         par,
         tim,
-        parameters: psr.param,
+        parameter_store: psr.param,
+        parameter_metadata: psr.metadata,
         fit_controls: psr.fit_controls,
         text_parameters: psr.text_parameters,
         observations: obsn,

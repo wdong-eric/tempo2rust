@@ -62,7 +62,7 @@ pub fn form_bats_all(
         ));
     }
     for key in ["RAJ", "DECJ", "DM", "POSEPOCH", "DMEPOCH"] {
-        if !input.parameters.contains_key(key) {
+        if !input.parameter_metadata.contains_key(key) {
             return Err(TimingError::new(
                 &input.par.path,
                 None,
@@ -85,8 +85,8 @@ pub fn form_bats_all(
             ));
         }
     }
-    let alpha = input.parameters["RAJ"].value.0.to_f64();
-    let delta = input.parameters["DECJ"].value.0.to_f64();
+    let alpha = input.parameter_cell("RAJ").val.to_f64();
+    let delta = input.parameter_cell("DECJ").val.to_f64();
     let pos_pulsar = [
         alpha.cos() * delta.cos(),
         alpha.sin() * delta.cos(),
@@ -94,7 +94,7 @@ pub fn form_bats_all(
     ];
     let norm = dot_product(pos_pulsar, pos_pulsar).sqrt();
     let pulsar_direction = pos_pulsar.map(|x| x / norm);
-    let dm = input.parameters["DM"].value.0.to_f64();
+    let dm = input.parameter_cell("DM").val.to_f64();
     let mut corrections = Vec::new();
     let mut bats = Vec::new();
     let mut warnings = Vec::new();

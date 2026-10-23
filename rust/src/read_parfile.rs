@@ -38,7 +38,8 @@ impl Default for FitControls {
 
 /// Validated PAR contents used to assemble the owned TimingInput.
 pub(crate) struct ParFile {
-    pub param: BTreeMap<String, Parameter>,
+    pub param: crate::tempo2::ParameterStore,
+    pub metadata: BTreeMap<String, crate::ParameterMetadata>,
     pub text_parameters: BTreeMap<String, ParameterLine>,
     pub conventions: Conventions,
     pub fit_controls: FitControls,
@@ -137,21 +138,12 @@ fn read_value(
 }
 
 pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
-    let mut param: BTreeMap<String, Parameter> = ["F0", "F1", "F2", "F3", "PEPOCH"]
-        .into_iter()
-        .map(|name| {
-            (
-                name.into(),
-                Parameter {
-                    value: Scalar(Float::with_val(PRECISION_BITS, 0)),
-                    set: false,
-                    fit_flag: 0,
-                    uncertainty: None,
-                    original: None,
-                },
-            )
-        })
-        .collect();
+    let mut param = crate::initialise::initialise_parameters();
+    let mut metadata: BTreeMap<String, crate::ParameterMetadata> =
+        ["F0", "F1", "F2", "F3", "PEPOCH"]
+            .into_iter()
+            .map(|name| (name.into(), crate::ParameterMetadata::default()))
+            .collect();
     let mut text_parameters: BTreeMap<String, ParameterLine> = BTreeMap::new();
     let mut fit_controls = FitControls::default();
     for (index, raw) in par.text.lines().enumerate() {
@@ -201,11 +193,23 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
             // readParfile.C assigns sequentially: the last MODE/WEIGHT wins.
             fit_controls.declarations.push(original);
         } else if NUMERIC.contains(&key.as_str()) {
-            if param.get(&key).is_some_and(|parameter| parameter.set) {
+            let (label, index) = numeric_location(&key);
+            let cell = &mut param.slots[label as usize].cells[index];
+            if cell.param_set != 0 {
                 return Err(error("duplicate parameter".into()));
             }
             let parameter = read_value(par, &key, &tokens, original)?;
-            param.insert(key.clone(), parameter);
+            // Temporary strict-frontend bridge, not source readValue uncertainty semantics.
+            cell.val = parameter.value.0;
+            cell.fit_flag = i32::from(parameter.fit_flag);
+            cell.param_set = 1;
+            metadata.insert(
+                key.clone(),
+                crate::ParameterMetadata {
+                    uncertainty: parameter.uncertainty,
+                    original: parameter.original,
+                },
+            );
         } else if matches!(key.as_str(), "PSRJ" | "CLK" | "EPHEM" | "TZRSITE" | "UNITS") {
             if tokens.len() != 2 {
                 return Err(error("expected exactly one text value".into()));
@@ -224,7 +228,8 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
         }
     }
     for key in ["F0", "PEPOCH"] {
-        if !param[key].set {
+        let (label, index) = numeric_location(key);
+        if param.slots[label as usize].cells[index].param_set == 0 {
             return Err(TimingError::new(
                 &par.path,
                 None,
@@ -243,7 +248,7 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
     }
     let units_resolution = if text_parameters.contains_key("UNITS") {
         "explicit UNITS TCB"
-    } else if param.contains_key("EPHVER") {
+    } else if metadata.contains_key("EPHVER") {
         "UNITS omitted; initialiseOne SI_UNITS/TCB default retained with EPHVER 5"
     } else {
         return Err(TimingError::new(
@@ -257,6 +262,7 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
     Ok(ParFile {
         fit_controls,
         param,
+        metadata,
         text_parameters,
         conventions: Conventions {
             time_scale: "TCB",
@@ -268,4 +274,25 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
             corrections: "@ bypasses clock and propagation; isolated subset has BAT = BBAT = SAT",
         },
     })
+}
+
+/// Bounded frontend spelling bridge, independent of labels (including source defects).
+pub(crate) fn numeric_location(key: &str) -> (crate::tempo2::Label, usize) {
+    use crate::tempo2::Label::*;
+    match key {
+        "F0" => (param_f, 0),
+        "F1" => (param_f, 1),
+        "F2" => (param_f, 2),
+        "F3" => (param_f, 3),
+        "PEPOCH" => (param_pepoch, 0),
+        "RAJ" => (param_raj, 0),
+        "DECJ" => (param_decj, 0),
+        "POSEPOCH" => (param_posepoch, 0),
+        "DM" => (param_dm, 0),
+        "DMEPOCH" => (param_dmepoch, 0),
+        "EPHVER" => (param_ephver, 0),
+        "TZRMJD" => (param_tzrmjd, 0),
+        "TZRFRQ" => (param_tzrfrq, 0),
+        _ => unreachable!("validated strict frontend keyword"),
+    }
 }
