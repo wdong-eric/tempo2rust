@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for H reference acceptance and the I/J stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for H reference acceptance and the I/J/K stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -47,6 +47,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Delivered and corrected at `1df4d37`; reference accepted by decision 0016 | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 | [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | `rust/` and optional new `validation/jpl_port/`; historical verification immutable | Released by decision 0017 after E ownership closure and H acceptance | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only | Released by decision 0018; independent of I's implementation | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
+| [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Released by decision 0020; independent of I/J | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
 
 A through H have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I follows E as the Rust owner under its bounded contract and stores new checks separately. Decision 0008's later preservation policy requires removing the earlier JPL cache correction while retaining the source's deterministic behavior; historical M1b acceptance remains scoped to its recorded revision. Accepted reference and precision directories remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
@@ -97,6 +98,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | JPL reference evidence | Accepted by decision 0016 at corrected H delivery `1df4d37` | Exact host regeneration, source/helper/cache/lifetime evidence and stable isolated failure classifications; no port acceptance |
 | JPL Rust contract | I released by decision 0017; title boundary clarified by 0019 | Same-open-file C stdio, safe Rust source logic, explicit undefined-source dispositions, exact host observations and unchanged timing gates; all-whitespace title classified without editing H |
 | Clock/table reference | J released by decision 0018 | Defined table/clock outcomes, source-global lifetime, active toa2utc mutation and inactive-source dispositions; later port contract remains central |
+| Parameter/PAR reference | K released by decision 0020 | Initialized versus unwritten state, shared scalar grammar, links/defaults and distinct reader lifecycles; explicit later parser coverage |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
