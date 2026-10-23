@@ -1,0 +1,102 @@
+{
+  "artifact_sha256": {
+    "rust/JPL_REPORT.md": "afedbcb64ad30a80872a7fabfacfcd269fc1bc2b33aff7588a963f68ec4e999f",
+    "rust/src/jpleph.rs": "7749740162fbf09b7ceba7c68c2f9ccb3b55c2d6b99a2b9c78980cf69f78d51c",
+    "rust/src/stdio.rs": "ab6b3c17c4b02698bca2b81f9b4f5759a2b3b4ba1ba16e6a7d1f04f5f16da789",
+    "rust/verification/jpl/commands.json": "55c78276e0ee9c0ceb6c0c7494f01ad04c5379b379dee90d4dfb4e0f2ae474ee",
+    "rust/verification/jpl/debug_analytic.json": "ab3d1b41e798c681d19cfedaa12ea2a843a9bd1af7e48521348de4f3b172dcfe",
+    "rust/verification/jpl/debug_comparison.json": "daff75aa0067d818d1e022e61a1d49c29d6e3ca6ad999bb7bc0d69ed0e3096c0",
+    "rust/verification/jpl/debug_coverage.json": "e6bfacf336be0b6cdb73aa6b345324713b066523851cf9d637249a0b1f16c86a",
+    "rust/verification/jpl/debug_demand_comparison.json": "37a439a85d017748f82a8bfcac3cec013cf339b760d874d85d5d3787b2d2fc86",
+    "rust/verification/jpl/debug_demand_raw.json": "741e09db494f68eb99ffddf29df63eda49ee20b797296e8e4576a4eeddb6c5d0",
+    "rust/verification/jpl/debug_demand_reference.json": "50f579df63207930b8fd2a1bb6aeef7fd120c4859db6dac6a22be166667d2828",
+    "rust/verification/jpl/debug_isolated_comparison.json": "53399f25813c0ae928ec3b3d0b05e0ee63fde7b54180c3ab240b146f03b20b6b",
+    "rust/verification/jpl/debug_isolated_raw.json": "061fcf2b587377007aafd83860b5c92fc4fca83fe16e4d2ac26fb6aaf55a8d0e",
+    "rust/verification/jpl/debug_legacy_header_controls.json": "4186c33974b682bb48446f5db439ad341e9e0c3ea0c484a30d22ffe3cf6cb37b",
+    "rust/verification/jpl/debug_ownership.json": "3e9d49bdce92a4a6c26104e66089c8466d5f1cab5a317906facde7816d546f92",
+    "rust/verification/jpl/debug_raw.json": "ae9e7bec4ac8c7445613d94d6a4377ddb72806677fba7a64a8e1010141655d30",
+    "rust/verification/jpl/debug_source_hashes.json": "a308d0fd6555e6424a76d2746485b7b7e6e2ba963958f4a382e0656ec363010d",
+    "rust/verification/jpl/debug_supplemental_comparison.json": "63d51702b612c5f5f4f487dbdc281d2e00625b76d5fb28c1e7f4ec333d5e479c",
+    "rust/verification/jpl/debug_supplemental_raw.json": "3df054ced651e4d174ca17e64acc2fc26243501282a820418c02157ac72d4a99",
+    "rust/verification/jpl/debug_supplemental_reference.json": "4a96a0d8b3a370a595763281525d04ced04e2e4c28d145cbcc639b6012f060c9",
+    "rust/verification/jpl/debug_title_boundaries.json": "f85a3fd61191f5d6f1b399dfc7c8c8d56659bf3e3731ab779980f2daee11ea07",
+    "rust/verification/jpl/delivery_checks.json": "6bf32c3182f8c69bd2cce3b670d66656b743e87d7ba0e40d2306885c6b5824d9",
+    "rust/verification/jpl/immutable_hashes.json": "831712e0414cc95b9605e4e80e1254b82dc1ece7ecf6eab91ca0925aa01fc6f5",
+    "rust/verification/jpl/native_inventory.json": "9ae7bb5b7cd1728c24f155e5f6524d33fc033d6d94540a838a95c19690654690",
+    "rust/verification/jpl/release_analytic.json": "ab3d1b41e798c681d19cfedaa12ea2a843a9bd1af7e48521348de4f3b172dcfe",
+    "rust/verification/jpl/release_comparison.json": "350060cd040301da7aa49137063d0097de5331b8fdd585086d99c43a2938464c",
+    "rust/verification/jpl/release_coverage.json": "e6bfacf336be0b6cdb73aa6b345324713b066523851cf9d637249a0b1f16c86a",
+    "rust/verification/jpl/release_demand_comparison.json": "3cd40dc2f7fcb3dddee86800cea1bce0456e4a777f94a1e96a5fcc4127ea55aa",
+    "rust/verification/jpl/release_demand_raw.json": "741e09db494f68eb99ffddf29df63eda49ee20b797296e8e4576a4eeddb6c5d0",
+    "rust/verification/jpl/release_demand_reference.json": "50f579df63207930b8fd2a1bb6aeef7fd120c4859db6dac6a22be166667d2828",
+    "rust/verification/jpl/release_isolated_comparison.json": "53399f25813c0ae928ec3b3d0b05e0ee63fde7b54180c3ab240b146f03b20b6b",
+    "rust/verification/jpl/release_isolated_raw.json": "061fcf2b587377007aafd83860b5c92fc4fca83fe16e4d2ac26fb6aaf55a8d0e",
+    "rust/verification/jpl/release_legacy_header_controls.json": "9befa24f367ed77ae5e4b14d5aeaee24099fce33e24943b474d8d4aa02af3013",
+    "rust/verification/jpl/release_ownership.json": "590c935dd47462b1b1d954da58dd7330d9fe101392316d30ef12b6061e6b6aef",
+    "rust/verification/jpl/release_raw.json": "ae9e7bec4ac8c7445613d94d6a4377ddb72806677fba7a64a8e1010141655d30",
+    "rust/verification/jpl/release_source_hashes.json": "a308d0fd6555e6424a76d2746485b7b7e6e2ba963958f4a382e0656ec363010d",
+    "rust/verification/jpl/release_supplemental_comparison.json": "77a214741ed7c69786b4084ca32ba68e9cbf4395efa8ed4b71eec109b79f95cc",
+    "rust/verification/jpl/release_supplemental_raw.json": "3df054ced651e4d174ca17e64acc2fc26243501282a820418c02157ac72d4a99",
+    "rust/verification/jpl/release_supplemental_reference.json": "4a96a0d8b3a370a595763281525d04ced04e2e4c28d145cbcc639b6012f060c9",
+    "rust/verification/jpl/release_title_boundaries.json": "5806a5aa11519b77ad51436c7dd18e6161ca228e6e7bc3f4f785ea36dc51a90e",
+    "rust/verification/jpl/source_hashes.json": "a308d0fd6555e6424a76d2746485b7b7e6e2ba963958f4a382e0656ec363010d",
+    "rust/verification/jpl/title_scan_source_evidence.json": "4b65ff721fbdfa75764acba1c93090d45ccaa57c6fbc2d9f25f6233c519db4b3",
+    "validation/jpl_port/run.py": "6919b7eb7f95a14d2207675bcd1b3bef6b7afd2d572d0564d96a470c58968fe4",
+    "validation/jpl_port/verify.py": "ea26a83cc96612f1ef3905a6e93ec3664793f1027fc56d825354177fd5d527d1"
+  },
+  "checks": {
+    "legacy_controls_per_profile": 12,
+    "legacy_observations_equal": true,
+    "m2_exact_historical_failure_set": true,
+    "m2_failure_count": 4,
+    "raw_and_isolated_profile_observations_equal": true
+  },
+  "current_input_hashes": {
+    "count": 127,
+    "mismatches": []
+  },
+  "decision": "0022",
+  "delivery_commit": "902fbba6172953036b1453c89f950a66ed9f031c",
+  "executed_git_head": "27c83840295fd0f1309cf54b3477d033cf0d4896",
+  "legacy_header_after": {
+    "cases": {
+      "normal": {
+        "rust": "handle version=405 ncoeff=751 extended=[[0, 0, 0], [0, 0, 0]]",
+        "sha256": "fc0b68c8cf258557124b3797e0642f3275cfbb1c7d33340be5b2b435737b9e53"
+      },
+      "unwritten_extended_comparison": {
+        "rust": "boundary unwritten_extended_header",
+        "sha256": "156d0e0ebbfbf5d29bae06a8080e4bd29a851ea28f5e78a1fa373221ee8ae073"
+      }
+    },
+    "rust_sha256": {
+      "jpleph.rs": "7749740162fbf09b7ceba7c68c2f9ccb3b55c2d6b99a2b9c78980cf69f78d51c",
+      "stdio.rs": "ab6b3c17c4b02698bca2b81f9b4f5759a2b3b4ba1ba16e6a7d1f04f5f16da789"
+    },
+    "scope": "Rust-only safe-header probe; source undefined branch classified by source inspection, not executed natively",
+    "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f"
+  },
+  "legacy_header_before": {
+    "cases": {
+      "normal": {
+        "rust": "handle version=405 ncoeff=751 extended=[[0, 0, 0], [0, 0, 0]]",
+        "sha256": "fc0b68c8cf258557124b3797e0642f3275cfbb1c7d33340be5b2b435737b9e53"
+      },
+      "unwritten_extended_comparison": {
+        "rust": "handle version=405 ncoeff=733 extended=[[0, 0, 0], [0, 0, 0]]",
+        "sha256": "156d0e0ebbfbf5d29bae06a8080e4bd29a851ea28f5e78a1fa373221ee8ae073"
+      }
+    },
+    "rust_sha256": {
+      "jpleph.rs": "e868094789197507627c55eb152328adaafd5c19e3594ee67bae2c4e64b8b3e6",
+      "stdio.rs": "ab6b3c17c4b02698bca2b81f9b4f5759a2b3b4ba1ba16e6a7d1f04f5f16da789"
+    },
+    "scope": "Rust-only safe-header probe; source undefined branch classified by source inspection, not executed natively",
+    "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f"
+  },
+  "protected_hashes": {
+    "count": 233,
+    "mismatches": []
+  },
+  "scope": "Source and delivery-evidence review plus an independently executed Rust-only header probe. Recorded I full verification is distinguished from central focused execution; undefined native header comparison was not run."
+}

@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for H reference acceptance and the I/J/K stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for I's Rust JPL acceptance, J's clock reference acceptance and K's reference stage. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -8,7 +8,7 @@ The active objective is to transfer the TEMPO2 core in staged implementation cha
 
 Workspace: `/Users/Eric.Dong/Downloads/tempo2rust`.
 
-The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted within their declared historical scope. E is delivered; M2 remains unaccepted at the exact SVD order gate. F/G/H evidence is accepted for planning/reference use. I is released for the JPL Rust transfer.** Later decisions govern current ownership and preservation requirements.
+The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted within their declared historical scope. E is delivered; M2 remains unaccepted at the exact SVD order gate. F/G/H/J evidence is accepted within its declared planning/reference scope. I's bounded JPL Rust transfer is accepted by decision 0022.** Later decisions govern current ownership and preservation requirements.
 
 `tempo2/` and `validation/reference/` are independent Git repositories. The primary project repository tracks the central documents, Rust crate and precision study, and ignores those two nested repositories. E's new fitting-validation directory will also be tracked by the primary repository. The accepted D delivery is now committed as `3f08a8c` (implementation), `31d55bf` (validation) and `87f3933` (design/acceptance documentation), preserving the report/source-manifest hashes in decision 0006. Both independent repositories remain clean. Preserve existing histories and do not flatten or implicitly stage either nested repository. Inspect live Git status before starting new work.
 
@@ -32,6 +32,8 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
+[Decision 0021](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0021-clock-reference-acceptance.md) accepts J's executed clock/table evidence at `360cc03`; nine unrun cases remain open. [Decision 0022](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0022-jpl-rust-acceptance.md) accepts I's bounded Rust JPL delivery at `902fbba`, executed implementation `27c8384`, and closes its ownership window. These supersede the earlier dispatch status above. A later Rust owner requires a separate central release.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -45,15 +47,15 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Delivered at `15eee12`; inventory accepted by decision 0013 | Coverage inventory, behavior-difference ledger and `REPORT.md` |
 | [G Binary reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/07-binary-reference.md) | `validation/binary/` only | Delivered; bounded reference evidence accepted by decision 0014 | All 14 binary dispatches, derivative/update/mutation evidence and `REPORT.md` |
 | [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Delivered and corrected at `1df4d37`; reference accepted by decision 0016 | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
-| [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | `rust/` and optional new `validation/jpl_port/`; historical verification immutable | Released by decision 0017 after E ownership closure and H acceptance | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
+| [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0022 at `902fbba`, executed implementation `27c8384` | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only; delivered evidence now read-only | Executed evidence accepted by decision 0021 at `360cc03`; nine unrun cases remain open | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
 | [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Released by decision 0020; independent of I/J | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
 
-A through H and J have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I follows E as the Rust owner, with its initial delivery under final boundary correction review; K prepares parameter/PAR evidence. I stores new checks separately. Decision 0008's later preservation policy requires removing the earlier JPL cache correction while retaining the source's deterministic behavior; historical M1b acceptance remains scoped to its recorded revision. Accepted reference and precision directories remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through J have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K prepares parameter/PAR evidence. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
-**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. I started from `d499e94` after E/H ownership closure; J started from `67aa77c`; K started from `9f974ef`. I, J and K have separate write ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
+**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. I started from `d499e94` after E/H ownership closure; J started from `67aa77c`; K started from `9f974ef`. I and J ownership windows are now closed; K retains its separate reference ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
 
 | Chat | Thread ID | Responsibility |
 | --- | --- | --- |
@@ -61,7 +63,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment F: TEMPO2 core and fidelity inventory | `01a16734-9835-7f53-8a56-79602dc5e2af` | Audit baseline `ddc07b2`; write only `validation/coverage/` |
 | Assignment G: TEMPO2 binary reference | `01a1673f-3754-7641-83bd-1d0b03ad06c3` | Prepare all-model source evidence; write only `validation/binary/` |
 | Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Delivered and accepted JPL kernel/layout/state/file-lifetime reference; ownership window closed |
-| Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Transfer JPL logic under decision 0017; current bounded owner of `rust/` and optional `validation/jpl_port/` |
+| Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Bounded transfer accepted by decision 0022; ownership window closed |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Delivered reference accepted within its executed scope by decision 0021; ownership window closed, nine cases remain unrun |
 | Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Prepare parameter state and shared PAR reference under decision 0020; write only `validation/parameters/` |
 
@@ -98,6 +100,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | SVD diagnostic comparison | Decision 0010 diagnostic only; decision 0012 governs acceptance | Keep exact raw mode-order gate; paired singular modes do not replace it. Numerical budgets and source cutoff controls remain unchanged. |
 | JPL reference evidence | Accepted by decision 0016 at corrected H delivery `1df4d37` | Exact host regeneration, source/helper/cache/lifetime evidence and stable isolated failure classifications; no port acceptance |
 | JPL Rust contract | I released by decision 0017; title boundary clarified by 0019 | Same-open-file C stdio, safe Rust source logic, explicit undefined-source dispositions, exact host observations and unchanged timing gates; all-whitespace title classified without editing H |
+| JPL Rust acceptance | Accepted by decision 0022 at `902fbba`; I ownership closed | Corrected legacy-header boundary, exact H host observations, owned stdio and unchanged M1/M2 regression outcomes |
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
 | Parameter/PAR reference | K released by decision 0020 | Initialized versus unwritten state, shared scalar grammar, links/defaults and distinct reader lifecycles; explicit later parser coverage |
 
