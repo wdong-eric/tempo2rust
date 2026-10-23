@@ -81,10 +81,11 @@ complete with its nonzero exit and exactly four historical raw-order diagnostics
 Source/executable/compiler/runner/input identities and protected-byte checks accompany
 receipts. Central alone accepts this stage; M2/full transfer remain open.
 
-## Contract discrepancy for central review
+## Resolved contract discrepancy
 
-0033 says param_iperharm remains blank. Pinned initialise.C:422–423 and K registry
+The original 0033 said param_iperharm remains blank. Pinned initialise.C:409–410 and K registry
 entry 89 both assign IPERHARM. Lines 314–317 separately overwrite param_daop (88)
 with IPERHARM. Recommendation: preserve BOTH source labels and correct the sentence
 in 0033. No accepted reference is changed. The user explicitly approved preserving both source labels in O's chat. This
-resolves the implementation choice; the shared decision text remains central-owned.
+resolves the implementation choice. Central independently verified the source and
+corrected 0033 at 82f6e10, including retained suffix bytes.

@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I/L, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L/O, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -14,7 +14,9 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/read_parfile.rs` | `readParfile.C::readParfile/readValue`; MODE/WEIGHT sequential assignment and NITS; source text preserved |
 | `src/read_timfile.rs` | `readTimfile.C::readTimfile/readTim` FORMAT 1 subset; directives and per-TOA flags omitted |
 | `src/longdouble.rs` | Generated `TKlongdouble.h`, selected from `TKlongdouble.float128.h`; `TKlongdouble.C::parse_longdouble/print_longdouble` numeric roles. Finite MPFR128/strict decimal transport is the approved adapter, not source binary128, native long double or an ABI object |
-| `src/tempo2_util.rs` | `tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/fortran_nlong`; strict `parse_binary64` is Rust glue |
+| `src/tempo2.rs` | `tempo2.h::label`, `param_label`, parameter capacities and all `parameter` fields; owned array storage, signed integers, independent logical/backing extents and unwritten state; no C ABI equivalence |
+| `src/initialise.rs` | Parameter allocation/zero initialization in `initialise.C::allocateMemory`, source-order labels in `initialiseOne`, ownership replacement/destruction for `destroyMemory`; remaining pulsar/observation/covariance responsibilities deferred |
+| `src/tempo2_util.rs` | `tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/fortran_nlong/copyParam`; strict `parse_binary64` is Rust glue |
 | `src/form_residuals.rs` | `formResiduals.C::formResiduals`, `tempo2Util.C::fortran_mod/fortran_nlong`; split spin phase, first-input reference and checked counts. The `@` entry supplies zero-delay `formBats.C::formBats` and `secularMotion.C::secularMotion` branches |
 | `src/form_bats.rs` | Selected `global.C::formBatsAll`, `calculate_bclt.C::calculate_bclt`, `formBats.C::formBats`; fused `shapiro_delay.C::shapiro_delay`, `dm_delays.C::dm_delays` constant-DM/spherical-wind path, `vectorPulsar.C::vectorPulsar` fixed direction, and zero `secularMotion.C::secularMotion`. Also calls the Rust `formResiduals.C::formResiduals` counterpart |
 | `src/runtime.rs` | Rust-owned resource/context glue; `observatory.C::getObservatory/ITRF_to_GRS80`, `tropo.C::initialize_meteorology_tables`; orchestrates `clkcorr.C::getClockCorrections`, `eop.C::load_EOP`, `ifteph.C::IFTE_init`, `jpleph.c::jpl_init_ephemeris` counterparts |
@@ -39,6 +41,12 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/t2fit.rs` | `t2fit.C::t2Fit/t2Fit_getFitData/t2Fit_fillFitInfo/t2Fit_buildDesignMatrix/t2Fit_updateParameters` local ZERO/F0–F3 subset and `tempo2.C::main` NITS lifecycle; owned fit results are Rust-only glue |
 | `src/main.rs` | Rust-only command/JSON publication glue for `tempo2.C::main`, `getInputs.C::getInputs` and `textOutput.C::textOutput` responsibilities; not the full upstream CLI/output contract |
 | `build.rs` | Rust-only Cargo build glue replacing selected `Makefile.am` and `sofa/Makefile.am` rules for retained SOFA; no standalone timing routine |
+
+The historical scalar `Parameter` in `lib.rs` is an owned compatibility snapshot,
+not the array-valued source `parameter` (`tempo2::SourceParameter`). The strict
+frontend stores only provenance/uncertainty metadata outside the canonical source
+store. No numerical parameter map remains; fit values and errors update source
+cells. The frontend bridge is not a complete `readValue` transfer.
 
 ZERO construction and storage remain in `t2fit.rs`; the frequency callback lives
 in `std_freq.rs`, with `SPIN` fixing the source F0–F3 order. The SVD retains source
@@ -65,7 +73,7 @@ No numerical dependency or alternate JPL implementation was added.
 
 There are twelve production unsafe sites: five in `stdio.rs`, two existing
 SOFA sites, and five in `clock_text.rs` (declarations plus four typed calls).
-JPL and clock/table algorithms, storage, graph traversal and synchronization
+Parameter storage/initialization/copy, JPL and clock/table algorithms, graph traversal and synchronization
 remain safe Rust. Each site
 has adjacent necessity and concrete invariants. No unsafe function or Send/Sync
 implementation is present.
@@ -111,3 +119,17 @@ J's pinned GCC `fmadd`; all preceding operations and every numerical budget stay
 unchanged. `verification/clocks/interpolation_contract.json` records the evidence.
 Process serialization, terminal-source errors, operation-local storage bounds,
 byte diagnostics and JSON presentation are explicit adapters in `CLOCK_REPORT.md`.
+
+
+## Parameter storage projection
+
+`../validation/parameter_storage_port/PROJECTION.md` maps all fields and selected
+K/M cases; its registry map includes all unnamed slots. The mechanical source
+transcription in `translate.py` preserves label assignment order and is not a
+build or runtime dependency. Native supplemental calls compile unchanged pinned
+routines and inspect only initialized bytes. `parameter_storage_tests.rs` is test
+instrumentation, not a production native bridge. `copy_param` uses safe owned
+buffers; failed destinations retain a diagnostic prefix and reject further
+scientific reads/copies. No unsafe site, dependency or numerical operation was
+added. The source's overwritten D_AOP label is retained; both source IPERHARM
+labels follow the user's explicit clarification of 0033.

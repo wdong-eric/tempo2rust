@@ -88,3 +88,28 @@ Only their source-description comment changed in this review follow-up.
 All nine withheld native clock experiments stay unrun. Eight have separate safe
 Rust checks; the cycle has no execution result. Historical reports/reference
 files and F's inventory remain unchanged. Central owns bounded acceptance.
+
+
+## O parameter ownership and bounded frontend
+
+Decision 0033 transfers source-indexed parameter allocation and labels with signed
+flags/counts, independent logical/backing extents, and explicit unwritten prefit
+and inactive-link entries. Caller 17/19 sentinels from K are never defaults.
+`copyParam` maps to ordered `copy_param`, retaining links, backing cells and bytes
+after the copied NUL. Undefined accesses yield operation-local named boundaries;
+defined prefixes remain diagnostic and affected destinations become unavailable.
+Overlapping buffers are excluded by safe ownership. Dropping/replacing an owner
+frees its entire backing allocation instead of emulating source leaks or dangling
+pointers. Full `Clone` is not source `copyParam`.
+
+The strict frontend remains bounded: source values/fit/set flags live in one store;
+original lines and supplied uncertainties remain separate metadata. Source `err`
+starts at zero and fit callbacks assign it; prefit fields remain unwritten. This
+is explicitly pending full PAR transfer. `parameters()` changes from a borrowed
+map to a fresh owned snapshot, with unchanged JSON schema/membership/values.
+
+Pinned `initialise.C:314–317` overwrites D_AOP with IPERHARM; lines 409–410 also
+label param_iperharm IPERHARM. Both are preserved following the user's explicit
+clarification in O's chat. This corrects the contract's prose assumption, not the
+source defect or accepted K registry. General initialization, parser expansion,
+linked-value arithmetic and full copyPSR remain deferred; M2 remains unaccepted.

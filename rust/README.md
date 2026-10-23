@@ -287,3 +287,44 @@ Rust modules and existing FFI sites are mapped in
 [SOURCE_CORRESPONDENCE.md](SOURCE_CORRESPONDENCE.md). Retained native sources
 remain byte-identical to the accepted M1b delivery; their original names and
 paths are listed in `native/upstream_manifest.json`.
+
+## Parameter storage foundation (Assignment O)
+
+`TimingInput` owns the source-indexed `tempo2::ParameterStore`: 166 enum entries,
+2,000 allocated slots and 9,616 backing cells. `param_LAST` is a marker. Source
+integer flags/counts and logical sizes remain signed; backing sizes are independent.
+The selected initializer preserves all labels, including both `param_daop` and
+`param_iperharm` labeled `IPERHARM`, blank cells, and bytes after terminating NULs.
+Unwritten prefit/link entries are `None`, not zero or experimental caller seeds.
+
+Loading, fixed evaluation and fit callbacks share that one store. The current
+strict PAR frontend writes `val`, `fitFlag` and `paramSet`; supplied uncertainty
+and original lines remain separate frontend metadata. It does not implement full
+source `readValue`, prefit initialization, linked getters, or general PAR/TIM input.
+Source `err` is initialized to zero and subsequently assigned by fit callbacks.
+
+`parameters()` now returns an **owned** `BTreeMap<String, Parameter>` derived on
+each call, instead of a borrowed map. Indexing/iteration still works; callers that
+need a reference should bind the snapshot first. Mutating the snapshot has no
+effect on `TimingInput`. The five historical default keys, optional-key membership,
+and CLI/JSON fields and values are unchanged. `Parameter` remains the scalar
+compatibility view; `tempo2::SourceParameter` is the array-valued source structure.
+`parameter_store()` offers read-only inspection of this bounded bridge state.
+
+`copy_param` preserves source field order, complete destination tails and links,
+negative/zero copy counts, and logical-size assignment last. It returns a named
+boundary on a missing cell/string byte or unwritten value. Earlier writes remain
+available through explicitly diagnostic access, while `cell()` and later copy
+calls reject the affected destination. Rust ownership excludes overlapping buffers.
+Whole-object `Clone` copies ownership and is distinct from `copy_param`.
+
+Run the complete O evidence with:
+
+```sh
+python3 validation/parameter_storage_port/verify.py
+```
+
+This writes only `rust/verification/parameter_storage/` and build caches. Existing
+clock/JPL/M1/M2 runners retain their projections and tolerances. M2 must still exit
+nonzero with its four historical raw-mode-order diagnostics. See
+`PARAMETER_STORAGE_REPORT.md` for executed identities and scope.
