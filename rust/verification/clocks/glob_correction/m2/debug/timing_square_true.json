@@ -1,0 +1,363 @@
+{
+  "schema_version": "tempo2-fit-v1",
+  "status": "completed_with_source_nonfinite",
+  "engine": {
+    "name": "tempo2-rust",
+    "version": "0.1.0",
+    "numeric_backend": "Rug 1.30.0 / MPFR; native reference long double and TKsign_d/TKretMax_d are binary64",
+    "significand_bits": 128,
+    "arithmetic_rounding": "nearest ties to even; nonfused source operations; T2_SVD_TOL binary64 1e-27",
+    "support_profile": "M2 isolated TCB @ / PKS, ZERO and local F0-F3",
+    "source_correspondence": "TEMPO2 fda6ad4a9753ad7dc5d291406f2f310a9161423f; A2 7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572; t2fit.C / TKfit.C / TKsvd.C / t2fit_stdFitFuncs.C / tempo2.C"
+  },
+  "input": {
+    "par": {
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/../validation/fitting/inputs/square.par",
+      "sha256": "aeac04946df3713562b63d046a205a680f01cf240ce18143b8b7bea8774d8179",
+      "text": "PSRJ J0000-0000\nF0 1 1 0.25\nPEPOCH 54000\nUNITS TCB\nMODE 1\n"
+    },
+    "tim": {
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/../validation/fitting/inputs/square.tim",
+      "sha256": "df01a6b18b9614fa490626aaf41b3fae90f28a459f6ec314cecc71f6adaef0e9",
+      "text": "FORMAT 1\na 1400 54000 1 @\nb 1400 54001 2 @\n"
+    },
+    "parameters": {
+      "F0": {
+        "value": "1.000000000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 1,
+        "uncertainty": "2.500000000000000000000000000000000000000e-1",
+        "original": {
+          "line": 2,
+          "keyword": "F0",
+          "tokens": [
+            "1",
+            "1",
+            "0.25"
+          ],
+          "raw_line": "F0 1 1 0.25"
+        }
+      },
+      "F1": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "F2": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "F3": {
+        "value": "0",
+        "set": false,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": null
+      },
+      "PEPOCH": {
+        "value": "54000.00000000000000000000000000000000000",
+        "set": true,
+        "fit_flag": 0,
+        "uncertainty": null,
+        "original": {
+          "line": 3,
+          "keyword": "PEPOCH",
+          "tokens": [
+            "54000"
+          ],
+          "raw_line": "PEPOCH 54000"
+        }
+      }
+    },
+    "text_parameters": {
+      "PSRJ": {
+        "line": 1,
+        "keyword": "PSRJ",
+        "tokens": [
+          "J0000-0000"
+        ],
+        "raw_line": "PSRJ J0000-0000"
+      },
+      "UNITS": {
+        "line": 4,
+        "keyword": "UNITS",
+        "tokens": [
+          "TCB"
+        ],
+        "raw_line": "UNITS TCB"
+      }
+    },
+    "observations": [
+      {
+        "original": {
+          "index": 0,
+          "line": 2,
+          "name": "a",
+          "raw_line": "a 1400 54000 1 @",
+          "frequency_mhz_text": "1400",
+          "sat_mjd_text": "54000",
+          "toa_error_us_text": "1",
+          "site": "@"
+        },
+        "sat_mjd": "54000.00000000000000000000000000000000000",
+        "frequency_mhz": 1400.0,
+        "toa_error_us": 1.0
+      },
+      {
+        "original": {
+          "index": 1,
+          "line": 3,
+          "name": "b",
+          "raw_line": "b 1400 54001 2 @",
+          "frequency_mhz_text": "1400",
+          "sat_mjd_text": "54001",
+          "toa_error_us_text": "2",
+          "site": "@"
+        },
+        "sat_mjd": "54001.00000000000000000000000000000000000",
+        "frequency_mhz": 1400.0,
+        "toa_error_us": 2.0
+      }
+    ],
+    "conventions": {
+      "time_scale": "TCB",
+      "units_resolution": "explicit UNITS TCB",
+      "phase_reference": "signed fractional reduced phase of first input TOA",
+      "remove_mean": false,
+      "fit_performed": false,
+      "input_order": "original; no cuts or sorting",
+      "corrections": "@ bypasses clock and propagation; isolated subset has BAT = BBAT = SAT"
+    }
+  },
+  "controls": {
+    "mode": 1,
+    "nits": 1,
+    "mode_defaulted": false,
+    "nits_defaulted": true,
+    "declarations": [
+      {
+        "line": 5,
+        "keyword": "MODE",
+        "tokens": [
+          "1"
+        ],
+        "raw_line": "MODE 1"
+      }
+    ]
+  },
+  "mode": 1,
+  "nits": 1,
+  "rescale_requested": true,
+  "rescale_effective": true,
+  "remove_mean": true,
+  "fit_performed": true,
+  "columns": [
+    "ZERO",
+    "F0"
+  ],
+  "column_scales": [
+    "seconds",
+    "x_days * 24 * 3600 / F0"
+  ],
+  "physical_parameter_order": [
+    "F0",
+    "F1",
+    "F2",
+    "F3"
+  ],
+  "covariance_coordinates": "raw unscaled source fit coordinates (not physical spin covariance)",
+  "chi_square_units": "dimensionless (weighted)",
+  "cycles": [
+    {
+      "iteration": 1,
+      "before_values": [
+        "1.000000000000000000000000000000000000000",
+        "0",
+        "0",
+        "0"
+      ],
+      "before_errors": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "after_values": [
+        "1.000000000000000000000000000000000000000",
+        "0",
+        "0",
+        "0"
+      ],
+      "after_errors": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "prefit": {
+        "raw_residual_semantics": "fixed-model raw diagnostic before unweighted mean removal",
+        "reference_phase_turn": "0",
+        "mean_s": "0",
+        "observations": [
+          {
+            "index": 0,
+            "sat_mjd": "54000.00000000000000000000000000000000000",
+            "bat_mjd": "54000.00000000000000000000000000000000000",
+            "bbat_mjd": "54000.00000000000000000000000000000000000",
+            "phase_turn": "0",
+            "nphase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0"
+          },
+          {
+            "index": 1,
+            "sat_mjd": "54001.00000000000000000000000000000000000",
+            "bat_mjd": "54001.00000000000000000000000000000000000",
+            "bbat_mjd": "54001.00000000000000000000000000000000000",
+            "phase_turn": "86400.00000000000000000000000000000000000",
+            "nphase_turn": "0",
+            "pulse_number": "86400",
+            "residual_s": "0"
+          }
+        ],
+        "centered_s": [
+          "0",
+          "0"
+        ],
+        "corrections": [],
+        "runtime_root": null,
+        "resources": [],
+        "warnings": [],
+        "retained_numerics": []
+      },
+      "postfit": {
+        "raw_residual_semantics": "fixed-model raw diagnostic before unweighted mean removal",
+        "reference_phase_turn": "0",
+        "mean_s": "0",
+        "observations": [
+          {
+            "index": 0,
+            "sat_mjd": "54000.00000000000000000000000000000000000",
+            "bat_mjd": "54000.00000000000000000000000000000000000",
+            "bbat_mjd": "54000.00000000000000000000000000000000000",
+            "phase_turn": "0",
+            "nphase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0"
+          },
+          {
+            "index": 1,
+            "sat_mjd": "54001.00000000000000000000000000000000000",
+            "bat_mjd": "54001.00000000000000000000000000000000000",
+            "bbat_mjd": "54001.00000000000000000000000000000000000",
+            "phase_turn": "86400.00000000000000000000000000000000000",
+            "nphase_turn": "0",
+            "pulse_number": "86400",
+            "residual_s": "0"
+          }
+        ],
+        "centered_s": [
+          "0",
+          "0"
+        ],
+        "corrections": [],
+        "runtime_root": null,
+        "resources": [],
+        "warnings": [],
+        "retained_numerics": []
+      },
+      "row_indices": [
+        0,
+        1
+      ],
+      "x_days": [
+        "0",
+        "1.000000000000000000000000000000000000000"
+      ],
+      "sigma_s": [
+        "9.999999999999999547481118258862586856139e-7",
+        "1.999999999999999909496223651772517371228e-6"
+      ],
+      "data_s": [
+        "0",
+        "0"
+      ],
+      "white_data": [
+        "0",
+        "0"
+      ],
+      "matrix": [
+        [
+          "1.000000000000000000000000000000000000000",
+          "0"
+        ],
+        [
+          "1.000000000000000000000000000000000000000",
+          "86400.00000000000000000000000000000000000"
+        ]
+      ],
+      "white_matrix": [
+        [
+          "1000000.000000000000000000000000000000000",
+          "0"
+        ],
+        [
+          "500000.0000000000000000000000000000000000",
+          "43200000000.00000000000000000000000000000"
+        ]
+      ],
+      "solver": {
+        "singular_values": [
+          "999999.9999330204035703948156270014456799",
+          "43200000002.89351851740965317937324314912"
+        ],
+        "retained": [
+          true,
+          true
+        ],
+        "rank": 2,
+        "dof": 0,
+        "increments": [
+          "0",
+          "0"
+        ],
+        "covariance": [
+          [
+            "9.999999999999999798866476292556153672528e-13",
+            "-1.157407407407407394627949119557003622092e-17"
+          ],
+          [
+            "-1.157407407407407394627949119557003622092e-17",
+            "6.697959533607681800294877191385327319514e-22"
+          ]
+        ],
+        "errors_unscaled": [
+          "9.999999999999999547481118258862586856139e-7",
+          "2.588041640624756596266878237361567204056e-11"
+        ],
+        "errors": [
+          "NaN",
+          "NaN"
+        ],
+        "chi_square": "0",
+        "error_multiplier": "NaN",
+        "linearized_s": [
+          "0",
+          "0"
+        ]
+      },
+      "offset_s": "0",
+      "offset_error_s": null,
+      "offset_error_state": "undefined source storage; no value",
+      "warnings": [
+        "source nonfinite fit errors preserved; error >= 0 callbacks may retain previous physical errors",
+        "source offset_e remains uninitialized; no numerical offset error is exported"
+      ]
+    }
+  ]
+}

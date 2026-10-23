@@ -1,0 +1,151 @@
+{
+  "barycentric": {
+    "result": "PASS",
+    "scalar_stage_comparisons": 45,
+    "identity_flags_full_and_reduced_counts": "exact",
+    "max_absolute_errors": {
+      "sat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "frequency_mhz": {
+        "value": "0",
+        "unit": "MHz",
+        "gate": "1e-9"
+      },
+      "toa_error_us": {
+        "value": "0",
+        "unit": "microsecond",
+        "gate": "1e-12"
+      },
+      "bat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "bbat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "phase_turn": {
+        "value": "1.89247117877E-25",
+        "unit": "turn",
+        "gate": "1e-10"
+      },
+      "residual_s": {
+        "value": "1.892471148645055E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      }
+    },
+    "max_parameter_relative_error": "1.54851393430690502870807087548335721178317975714102408067231448347581444385787051483942721E-36",
+    "parameter_relative_gate": "1e-30",
+    "expected_zero_parameters": "exact"
+  },
+  "barycentric_4ns": {
+    "result": "PASS",
+    "scalar_stage_comparisons": 72,
+    "identity_flags_full_and_reduced_counts": "exact",
+    "max_absolute_errors": {
+      "sat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "frequency_mhz": {
+        "value": "0",
+        "unit": "MHz",
+        "gate": "1e-9"
+      },
+      "toa_error_us": {
+        "value": "0",
+        "unit": "microsecond",
+        "gate": "1e-12"
+      },
+      "bat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "bbat_mjd": {
+        "value": "1.9008691200E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "phase_turn": {
+        "value": "1.89247117877E-25",
+        "unit": "turn",
+        "gate": "1e-10"
+      },
+      "residual_s": {
+        "value": "1.892471148645055E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      }
+    },
+    "max_parameter_relative_error": "1.54851393430690502870807087548335721178317975714102408067231448347581444385787051483942721E-36",
+    "parameter_relative_gate": "1e-30",
+    "expected_zero_parameters": "exact"
+  },
+  "long_span": {
+    "result": "PASS",
+    "scalar_stage_comparisons": 60,
+    "identity_flags_full_and_reduced_counts": "exact",
+    "max_absolute_errors": {
+      "sat_mjd": {
+        "value": "2.7647740800E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "frequency_mhz": {
+        "value": "0",
+        "unit": "MHz",
+        "gate": "1e-9"
+      },
+      "toa_error_us": {
+        "value": "0",
+        "unit": "microsecond",
+        "gate": "1e-12"
+      },
+      "bat_mjd": {
+        "value": "2.7647740800E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "bbat_mjd": {
+        "value": "2.7647740800E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      },
+      "phase_turn": {
+        "value": "4.977176E-23",
+        "unit": "turn",
+        "gate": "1e-10"
+      },
+      "residual_s": {
+        "value": "3.76200923958827030E-25",
+        "unit": "s",
+        "gate": "1e-12"
+      }
+    },
+    "max_parameter_relative_error": "3.47148743282315133778790981331238065449917206720909285736677206192731098127319509014899652E-35",
+    "parameter_relative_gate": "1e-30",
+    "expected_zero_parameters": "exact"
+  },
+  "independent_f3": {
+    "result": "PASS",
+    "oracle": "512-bit unsplit polynomial from original decimal tokens",
+    "max_phase_error_turn": "2.03183068180669246925197279684876736083332104954024543985724449157714843749999999999999999999999999999999999999999996930674162932636129677121259394251506311E-32",
+    "max_residual_error_s": "1.64578282619890441069338216807034393140416903193822981078545397475607046315457252512310576899714261714156919929383252535735259984690290038035783152397071993E-34",
+    "phase_gate_turn": "1e-27",
+    "residual_gate_s": "1e-29",
+    "pulse_counts": "exact"
+  },
+  "analytic_4ns": {
+    "max_aligned_residual_s": "2.662405555120914843264583907829403525147E-30",
+    "max_4ns_error_s": "2.490095854040290687E-30",
+    "diagnostic_gate_s": "1e-20"
+  }
+}
