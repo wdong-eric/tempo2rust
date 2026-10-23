@@ -2,7 +2,7 @@
 
 Central decision, 20 October 2026. **Release Assignment E for the bounded fitting implementation below. M2 is not accepted.** M0, M1a and M1b remain accepted. This decision authorizes implementation in a separate chat; it does not create that chat.
 
-The user directs us to follow TEMPO2 unless evidence demonstrates a problem. The contract therefore adopts the pinned source's fitting coordinates, arithmetic boundaries, SVD, update order, iteration lifecycle and uncertainty conventions. It does not substitute a different least-squares method or redefine the timing model.
+**Amended 23 October 2026 by [decision 0008](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0008-preservation-policy-and-stage-plan.md): preserve TEMPO2 bugs during the transfer and defer corrections.** Its result/failure policy supersedes the original guard requirements; the finite fitting equations and numerical gates remain unchanged. The contract therefore adopts the pinned source's fitting coordinates, arithmetic boundaries, SVD, update order, iteration lifecycle and uncertainty conventions. It does not substitute a different least-squares method or redefine the timing model.
 
 ## Starting identity and ownership
 
@@ -50,7 +50,7 @@ Support one isolated pulsar with the existing homogeneous `@` or PKS input profi
 
 Fit the mandatory ZERO offset and any supplied subset of F0–F3 having local `fit_flag = 1`. Preserve unset/fixed terms. Always include ZERO, including a request with no selected spin parameters. Column order is ZERO, F0, F1, F2, F3, omitting unselected terms. A selected but zero-valued derivative is still a fitted parameter.
 
-Accept PAR `MODE 0`/`MODE 1` and its `WEIGHT` alias, plus positive integer `NITS`. Preserve raw spelling/tokens and the resolved defaults. Treat duplicate MODE/WEIGHT declarations as the existing parser treats duplicate parameters: an explicit error rather than ambiguous precedence. Do not add TIM MODE or weighting directives in this assignment. Reject unsupported mode values and invalid iteration counts with input context.
+Accept PAR `MODE 0`/`MODE 1` and its `WEIGHT` alias, plus positive integer `NITS`. Preserve raw spelling/tokens and the resolved defaults. For repeated MODE/WEIGHT declarations, preserve the source's sequential assignment: the last declaration wins, and the original source text remains available. Do not add TIM MODE or weighting directives in this assignment. Reject unsupported mode values and invalid iteration counts with input context.
 
 The new fit operation rejects global fit flags (`2`) and active fit flags on parameters outside F0–F3. A fixed-parameter evaluation continues to preserve fit flags without performing a fit, as it does now. New fit restrictions must not retroactively reject previously supported fixed-evaluation inputs.
 
@@ -125,22 +125,11 @@ The solver computes chi-square using the extended solution before narrowing it t
 
 Preserve source convergence tests and the effective nonconvergence branch at iteration 30 (`max_its = 40` does not bypass that branch). Return a contextual error instead of terminating the process.
 
-## Invalid fits and authorized error behavior
+## Source outcomes and adapter boundaries
 
-The existing ownership, recoverable-error and bounded-access rules apply. Add focused guards where the new fit boundary introduces a demonstrated failure:
+[Decision 0008](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0008-preservation-policy-and-stage-plan.md) replaces the original invalid-fit correction table. Preserve defined nonfinite outcomes, including square-fit rescaling, and the source update callback's `error >= 0` predicate. Fit diagnostics encode NaN and signed infinity explicitly. Do not turn these source calculations into different finite values or preemptive numerical corrections.
 
-| Condition | Required behavior and evidence |
-| --- | --- |
-| No data, or `n < p` | Return an error. Upstream asserts on empty selection and returns a success-like zero chi-square without filling outputs when `p > n`. |
-| MODE 1 uncertainty is zero, or conversion/whitening becomes nonfinite | Return an observation-specific error before solving. Source divides directly by the uncertainty; do not replace zero with a floor. Existing MODE 0 may ignore a zero supplied uncertainty. |
-| Error rescaling requested/effective with `nu = 0` | Return an error. The central square-fit probe demonstrates nonfinite source errors. |
-| MODE 1, no rescaling, `n = p` | Permit a finite solution/covariance/error result. Record `nu = 0`; reduced chi-square is unavailable with a reason, not NaN or a fabricated value. |
-| Nonfinite matrix, solver output, updated parameter or postfit timing value; impossible indexing/allocation dimensions; SVD nonconvergence | Return contextual errors, preserving the source's valid calculation rather than clipping, retrying with another solver or publishing partial output. |
-| Finite rank deficiency under the source cutoff | Return the source pseudoinverse with rank/drop diagnostics, not a blanket invalid-fit error. |
-
-Carry fitting on an owned working model. Publish one complete result only after every requested cycle and serialization succeed. Do not mutate the caller's model or return a successful earlier iteration when a later iteration fails. Prove failure followed by valid processing in one library process and the corresponding CLI nonzero/empty-stdout behavior. Preserve supported resource fallback and recovery.
-
-Each intentional departure needs a comment beside the changed code identifying the original behavior, demonstrated problem and intended difference, plus a regression and report entry. No scientific expression change is authorized by these error guards. A newly discovered scientific problem returns to central review with a reproducer; keep independent work moving.
+For upstream assertion/exit, uninitialized outputs or unsafe access, record the actual failure class and the Rust adapter's contextual error without claiming exact successful output. Preserve finite rank-deficient pseudoinverses. Keep caller input owned/unchanged and never publish a partially serialized result. Existing state/error differences remain visible in the compatibility ledger; defer bug fixes until after transfer.
 
 ## Minimal library and CLI
 
@@ -169,14 +158,14 @@ Export through the actual `t2Fit` call and the specified pre/post `formBatsAll`/
 
 Required families, with every row's complete decimal input committed:
 
-1. **Solver controls:** deterministic full-rank matrices with heterogeneous errors; rescaling on/off; exact dependent columns; one zero column; singular values on both sides of the `1e-27` cutoff and the central probe's exactly represented diagonal equality case; the square-fit error/unscaled-success pair. Include the central probe cases as independently generated checks. No random data or tolerance-driven fixture selection.
+1. **Solver controls:** deterministic full-rank matrices with heterogeneous errors; rescaling on/off; exact dependent columns; one zero column; singular values on both sides of the `1e-27` cutoff and the central probe's exactly represented diagonal equality case; the square-fit nonfinite-rescaling/unscaled-finite pair. Include the central probe cases as independently generated checks. No random data or tolerance-driven fixture selection.
 2. **Barycentric fitting:** ZERO only; each of F0, F1, F2 and F3 separately; a nonconsecutive subset; all four together. Include nonzero initial derivatives, heterogeneous uncertainties, MODE 0 and MODE 1, both rescale settings, an unsorted input, and NITS 2. Cases may cover several requirements together.
 3. **PKS fitting:** a copy of the accepted seven-TOA case with selected spin fit flags and heterogeneous positive errors, under both weighting modes; plus a controlled, phase-connected small-perturbation case with at least 12 distinct epochs spanning both sides of PEPOCH and all F0–F3 selected. Use the accepted resource/time/meteorology profile. Do not change the original files.
 4. **Failure and regression:** unsupported/global fit requests, invalid controls/weights/counts, nonconvergence/error path, caller immutability, same-process recovery, CLI failure publication and all accepted M1a/M1b checks.
 
 For controlled timing fixtures, choose exact declared epochs and deterministic perturbations, record a truth model separately from the starting fit model, and keep every relevant phase away from half-turn rounding boundaries. Record any reference alignment/root-finding used to construct TOAs, with its final error bound. Freeze and hash inputs before Rust fitting comparisons. Compare fixed-parameter predictions first: fitting must not hide a pre-existing timing discrepancy. Do not claim recovery of a truth model merely from agreement with TEMPO2.
 
-The following are prospective engineering gates, not measured M2 performance. They are fixed before implementation; failures require localization and central review, not automatic relaxation. Use decimal/extended comparisons, check finiteness and shape before arithmetic, and report maximum signed/absolute differences with fixture/cycle/row/column identity.
+The following are prospective engineering gates, not measured M2 performance. They are fixed before implementation; failures require localization and central review, not automatic relaxation. Use decimal/extended comparisons, check shape and numeric classification before arithmetic; compare source nonfinite classes exactly under decision 0008 and apply finite budgets only to finite pairs, and report maximum signed/absolute differences with fixture/cycle/row/column identity.
 
 Let `a_j = max_i |A_ref[i,j]|` for unwhitened columns. For a zero reference column require an exactly zero candidate column, zero fitted increment/error and zero covariance row/column; its physical parameter remains unchanged from the input. Covariance normalization uses `sqrt(C_ref[j,j] * C_ref[k,k])` computed without binary64 underflow in the comparator. In the physical-update gate, `delta Fk` is the difference between engines' updated values and `Delta Fk_ref` is the reference's change from its prefit value in that cycle.
 

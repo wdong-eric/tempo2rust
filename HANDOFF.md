@@ -1,8 +1,8 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 20 October 2026 for the M2 fitting contract and Assignment E release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for the preservation policy and E/F stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
-The immediate objective is one supported calculation path with demonstrated numerical agreement and useful failure behavior. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
+The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
 ## Workspace and current evidence
 
@@ -16,7 +16,7 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 [M1b central review and bounded correction](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0005-m1b-review-and-resource-correction.md) records the original findings and required correction. [M1b acceptance](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0006-m1b-acceptance.md) closes both findings after debug/release checks and accepts the declared macOS arm64 PKS path. Scientific policy and tolerances are unchanged.
 
-[M2 fitting contract and E release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) defines ZERO/F0–F3 fitting, the source SVD and mixed-precision boundaries, weighting, uncertainty rescaling, iteration behavior, fitting fixtures, comparison gates and invalid-fit errors. The linked source probe supports these decisions. No separate implementation chat has been created by that document.
+[M2 fitting contract and E release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) defines ZERO/F0–F3 fitting, the source SVD and mixed-precision boundaries, weighting, uncertainty rescaling, iteration behavior, fitting fixtures, comparison gates and invalid-fit errors. The linked source probe supports these decisions. [Decision 0008](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0008-preservation-policy-and-stage-plan.md) supersedes its bug-correction policy, requires module counterparts and justified unsafe boundaries, and releases the core/fidelity inventory.
 
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
@@ -29,7 +29,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [A2 Reference correction](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/01a-reference-correction.md) | `/Users/Eric.Dong/Downloads/tempo2rust/validation/reference/` | Delivered and accepted for M0 at `7795d53` | Updated `REPORT.md` and new revision |
 | [C Barycentric timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/03-barycentric-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Delivered at `49e122c`; M1a accepted in decision 0003 | `M1A_REPORT.md` inside the owned directory |
 | [D Observatory timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/04-observatory-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Complete; corrected delivery accepted for M1b in decision 0006 | `M1B_REPORT.md` and correction evidence |
-| [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Released by decision 0007; handoff ready for a separate chat | `rust/M2_REPORT.md` and fitting reference/verification evidence |
+| [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Released by decisions 0007 and 0008; fitting implementation | `rust/M2_REPORT.md` and fitting reference/verification evidence |
+| [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Released by decision 0008; baseline audit independent of E | Coverage inventory, behavior-difference ledger and `REPORT.md` |
 
 A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete and accepted, with TEMPO2's meteorology fallback, valid numerical behavior and comparison gates preserved. E follows C and D as the next owner of the Rust crate and creates fitting evidence in its separate directory. The accepted reference and precision directories remain read-only inputs to implementation work; report needed changes rather than silently changing comparison evidence.
 
@@ -39,7 +40,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 
 Use one Rust crate with a library and a small CLI initially. Owned model and observation values hold the input; fallible operations return results with contextual errors. The initial barycentric operation needs no observatory resources. D introduces an explicit runtime context when the terrestrial path needs resources. Preserve recognizable correspondence with TEMPO2 routines and the original calculation order, including the accepted source-corresponding module and helper names. Retain established numerical libraries behind small interfaces when justified by the selected path.
 
-Follow existing TEMPO2 decisions unless evidence demonstrates they are wrong or prone to errors. Preserve defaults and supported fallbacks; do not replace them solely because a different policy seems stricter or cleaner. For every intentional behavioral departure, put explanatory comments beside the changed code identifying the original behavior, the concrete problem and the intended difference. Record the evidence and regression in the report; material scientific changes still belong to central review.
+Preserve existing TEMPO2 behavior, including known bugs, throughout the transfer. Record defects and reproducers for correction after the overall transfer; do not fix them during a port. Decision 0008 supersedes earlier permission to change behavior after demonstrating a bug. It also requires every production module to name its TEMPO2 counterpart and every necessary unsafe boundary to explain why it is needed and which invariants make it valid. F inventories earlier deviations; their previous acceptance does not establish exact source fidelity under the new goal.
 
 The reference executable is a separate process used for comparison. Invoking the old engine from Rust is useful reference plumbing, but does not complete a Rust timing milestone. The relevant timing logic must execute in the new core; retained external numerical dependencies must be identified.
 
@@ -62,18 +63,19 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | M1b fixture scope and release | Adopted PKS path; D released by decision 0004 | A2 identity/configuration; source-compatible meteorology; SOFA/JPL boundary; stage budgets |
 | M1b acceptance | Accepted 20 October 2026 for the declared macOS arm64 PKS path | Decision 0006 pins the corrected delivery; both resource findings closed, numerical outputs unchanged, debug/release recovery verified |
 | M2 contract and release | Adopted; E released by decision 0007 | Pinned source inspection and executable probe; ZERO/F0–F3, source SVD, MODE/NITS, raw covariance/rescaled errors, separate fit fixtures and gates |
+| Preservation and full-core coverage | Decision 0008 adopted; F released | Deterministic bugs retained, baseline differences reconciled, every core module and unsafe boundary accounted for |
 | M2 acceptance | Pending implementation and central review | E's source, identical-input solver checks, end-to-end fitting comparisons, invalid-fit recovery and unchanged M1a/M1b behavior |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
 ## Numerical and behavioral contracts
 
-- Preserve the pinned source's scientific conventions, defaults and supported fallbacks. Justify intentional departures with a demonstrated error or concrete failure risk, explanatory comments at the changed code, a focused regression and the new expectation.
+- Preserve the pinned source's scientific conventions, defaults, supported fallbacks and deterministic bugs. Record known defects for later correction; do not add a behavior change as part of the transfer. Identify undefined-source cases and observable adapter differences explicitly under decision 0008.
 - Parse precision-sensitive decimal inputs directly into the selected representation. Preserve precision through arithmetic, serialization, comparison, and display. Converting an already-rounded `f64` into an extended type does not restore input digits.
 - State each fixture's time scale, units, ephemeris, clock realization, reference-phase rule, mean-removal setting, selections, and input ordering. A fit must never be used to conceal a fixed-parameter discrepancy.
 - Compare numerical errors using the magnitude of the difference between actual and expected values, with explicit units and any relative scaling defined. Compare identifiers and discrete flags exactly. Document tolerance rationale before accepting results; discrepancies trigger investigation rather than automatic relaxation.
 - Preserve TOA identity and original input fields. Reject unsupported scientifically active parameters and directives explicitly. Defaults must be identified and recorded; missing metadata must not be guessed.
-- Return defined errors for malformed input, unavailable indispensable resources, unsupported configurations and invalid fits. Preserve adopted TEMPO2 fallbacks, including missing-weather behavior, with warnings and provenance. A failed calculation must not expose stale or apparently complete results. Test failure followed by valid processing when the corresponding library path exists.
+- Preserve source result and failure classifications, including defined nonfinite fit outputs. Record explicit fallible-library boundary differences where upstream terminates or produces undefined state; do not invent values to simulate it. Preserve source fallbacks, including missing-weather behavior, with warnings and provenance. Historical recoverable-error guards and state changes remain compatibility inventory items until reviewed under decision 0008.
 - Separate implementation checks, numerical agreement, and scientific corrections in reports. An untested platform remains untested even if it cross-compiles.
 
 ## Milestones
@@ -87,7 +89,7 @@ The central chat updates this table when a decision is made. Implementation chat
 | M3 | Additional models and directives are supported in fixture-driven batches with an explicit compatibility table |
 | M4 | Supported workflows install reproducibly and have documented library and CLI behavior, provenance, robustness tests, and declared platform coverage |
 
-M2's detailed brief is now available as Assignment E. M3 and M4 receive detailed briefs after the preceding interfaces and coverage are known. Earlier time and token estimates are planning hypotheses; use delivered assignments' measured effort to update them.
+M2's amended brief is available as Assignment E. Assignment F inventories the entire core, baseline departures, module correspondence and unsafe sites to support the remaining transfer. M3 and M4 receive detailed briefs after the preceding interfaces and coverage are known. Earlier time and token estimates are planning hypotheses; use delivered assignments' measured effort to update them.
 
 ## Required return report
 
@@ -130,4 +132,4 @@ For D, historical initial dispatch under decision 0004; its bounded correction i
 Implement Assignment D in /Users/Eric.Dong/Downloads/tempo2rust. D is released by /Users/Eric.Dong/Downloads/tempo2rust/decisions/0004-m1b-contract-and-d-release.md. Read that contract, /Users/Eric.Dong/Downloads/tempo2rust/HANDOFF.md, /Users/Eric.Dong/Downloads/tempo2rust/handoffs/04-observatory-core.md, and rust/M1A_REPORT.md. Own the Rust PKS observatory path. Follow existing TEMPO2 decisions unless demonstrated wrong or prone to errors, and explain each intentional departure in comments beside the changed code. Retain the normal meteorology fallback with warnings and provenance; do not introduce the rejected strict-weather policy or an opt-in switch. Preserve the accepted barycentric path, staged planning changes and independent reference repositories. Deliver stage comparisons, resource/fallback/recovery checks and rust/M1B_REPORT.md. Shared design changes and M1b acceptance remain in the central planning chat.
 ```
 
-For E, ready for a separate implementation chat: use the [complete dispatch prompt](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) in its handoff. Decision 0007 is the adopted contract; E delivers evidence for central M2 acceptance.
+For E, ready for a separate implementation chat: use the [complete dispatch prompt](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) in its handoff. Decisions 0007 and 0008 govern E; it delivers evidence for central M2 acceptance. F follows [its inventory handoff](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md).
