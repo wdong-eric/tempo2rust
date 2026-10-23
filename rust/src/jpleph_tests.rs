@@ -546,6 +546,32 @@ fn title_scan_boundaries_close_stream_and_allow_reinitialization() {
 }
 
 #[test]
+fn legacy_extended_header_rejects_unwritten_comparison() {
+    let path = std::env::temp_dir().join(format!("jpl-legacy-header-{}", std::process::id()));
+    for (version, ncon) in [(b"405", 2_u32), (b"430", 400_u32)] {
+        let mut valid = fixture();
+        valid[26..29].copy_from_slice(version);
+        valid[2676..2680].copy_from_slice(&ncon.to_ne_bytes());
+        let mut invalid = valid.clone();
+        for (j, word) in [u32::MAX, 0, 0].iter().enumerate() {
+            invalid[2844 + j * 4..2848 + j * 4].copy_from_slice(&word.to_ne_bytes());
+        }
+        fs::write(&path, invalid).unwrap();
+        assert!(matches!(
+            Ephemeris::init(File::open(&path), None, None),
+            Err(Boundary("unwritten_extended_header"))
+        ));
+        fs::write(&path, valid).unwrap();
+        let e = Ephemeris::init(File::open(&path), None, None)
+            .unwrap()
+            .unwrap();
+        assert_eq!(e.ncoeff, 382);
+        assert_eq!(e.ipt[13..], [[0; 3]; 2]);
+    }
+    fs::remove_file(path).unwrap();
+}
+
+#[test]
 fn optional_demands_follow_interp_flags_and_actual_storage() {
     let path = std::env::temp_dir().join(format!("jpl-demand-{}", std::process::id()));
     fs::write(&path, fixture()).unwrap();

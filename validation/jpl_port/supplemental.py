@@ -1,4 +1,4 @@
-"""I-owned canonical probes beyond H: C-locale atoi whitespace and bounds."""
+"""I-owned canonical probes and safe Rust boundary controls beyond H."""
 import json
 import shutil
 import subprocess
@@ -84,3 +84,27 @@ def run(h,exe,profile):
     port.save(port.OUT/f'{profile}_demand_reference.json',canonical)
     port.save(port.OUT/f'{profile}_demand_raw.json',rust)
     port.save(port.OUT/f'{profile}_demand_comparison.json',dict(status='PASS',counts=counts,command=command,harness_sha256=port.sha(harness_path),harness_changes=replacements,source_hashes=manifest['files'],input_sha256=port.sha(h.INPUTS/'extended_le.bin'),scenarios={name:case['commands'] for name,case in cases.items()},scope='controlled same-host full-state observations, not portable C values'))
+
+    # Rust only: never execute C's comparison of unread legacy extension words.
+    evidence={}
+    for order,suffix in [('<','le'),('>','be')]:
+        for route,version,count in [('legacy',405,6),('count400',430,400),('extended_small',430,6),('extended_large',430,402)]:
+            base,spec=h.synthetic(order,version=version,count=count)
+            for malformed in ([False,True] if route in ['legacy','count400'] else [False]):
+                name=f'{route}_{suffix}_'+('unwritten' if malformed else 'valid')
+                data=bytearray(base)
+                if malformed:port.struct.pack_into(order+'3I',data,2844,0xffffffff,0,0)
+                path=supplemental_inputs/(name+'.bin');path.write_bytes(data)
+                lines=[f'open {path} 0','close']
+                observed=port.execute(exe,dict(commands=lines),h.INPUTS,name)
+                if malformed:
+                    assert observed==[dict(op='startup',init_error=-9),dict(event=0,op='open',boundary='unwritten_extended_header',init_error=0,io_calls=[1,2,0],last_fread_size_requested_returned=[204,1,1])],(name,observed)
+                else:
+                    assert [e['op'] for e in observed]==['startup','open','close'],(name,observed)
+                    opened=observed[1]
+                    assert opened['nonnull'] and opened['init_error']==0,(name,observed)
+                    for key,value in dict(version=version,ncon=count,ncoeff=spec['ncoeff'],recsize=spec['recsize'],ipt=spec['ipt']).items():assert opened[key]==value,(name,key,opened[key],value)
+                evidence[name]=dict(sha256=port.sha(path),commands=lines,byte_order=order,version=version,ncon=count,disposition='unwritten_extended_header' if malformed else 'valid_header',rust=observed)
+    assert len(evidence)==12
+    assert evidence['legacy_le_unwritten']['sha256']=='156d0e0ebbfbf5d29bae06a8080e4bd29a851ea28f5e78a1fa373221ee8ae073'
+    port.save(port.OUT/f'{profile}_legacy_header_controls.json',dict(status='PASS',cases=evidence,source_hashes=manifest['files'],scope='Rust-only controls; canonical unread second-comparison operands classified by source inspection, never executed'))

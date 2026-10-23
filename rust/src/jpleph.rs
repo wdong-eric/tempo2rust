@@ -173,15 +173,20 @@ impl Ephemeris {
                 }
             }
         } else {
-            // The source marks row 13 invalid and later clears both rows. Avoid
-            // its intervening reads/swaps of unwritten temporary words.
+            // Only this marker is written. The first comparison normally clears
+            // both rows; a second comparison would consume unread source words.
             ipt[13][0] = u32::MAX;
         }
         let next = |r: [u32; 3]| r[0].wrapping_add(r[1].wrapping_mul(r[2]).wrapping_mul(3));
-        if ipt[13][0] != next(ipt[12]) || ipt[14][0] != next(ipt[13]) {
-            ipt[13..].fill([0; 3]);
+        let invalid_extended = if ipt[13][0] != next(ipt[12]) {
+            true
         } else if version < 430 || ncon == 400 {
             return Err(Boundary("unwritten_extended_header"));
+        } else {
+            ipt[14][0] != next(ipt[13])
+        };
+        if invalid_extended {
+            ipt[13..].fill([0; 3]);
         }
         let emrat = double(&header, 36, swap_bytes);
         // Source comparisons deliberately allow NaN; do not replace with contains.

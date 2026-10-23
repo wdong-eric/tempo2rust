@@ -54,7 +54,7 @@ comparison is untested and no cache behavior was changed.
 | Defined nonfinite source arithmetic | Exact NaN/+Infinity/-Infinity classes preserved at low level; high-level nonfinite timing-vector rejection remains a documented adapter. |
 | Global initialization code and live -7/-8 handles | Atomic global sequential status, startup -9, reset on init, unchanged by Drop. Live partial-init handles retain caller mutations and close normally. No C global-race equivalence claimed. |
 | C pointer ABI and null/double close | Owned non-cloneable stream, bounded optional Sun view and field selectors. No packed Rust ABI, arbitrary byte-offset getters or raw handle API. |
-| Pre430 unwritten temporary extension words | Source invalid marker clears optional rows; Rust avoids reading/swapping unwritten temporary words. Malformed accidental-valid marker case returns an explicit boundary. |
+| Pre430 or ncon400 unwritten temporary extension words | Preserve first-comparison mismatch clearing. If the computed row-12 end equals UINT32_MAX, reject with `unwritten_extended_header` before the second comparison consumes unread row-13/14 operands. Rust-only controls cover both routes and byte orders; valid small/large extended headers remain accepted. |
 | Unterminated title, including all-whitespace H title_zero | Decision 0019 requires `title_conversion` when whitespace/sign/digit scanning reaches byte 84. Startup compares; open is a boundary; control/state/close remain explicitly accounted as unreachable. In-bounds no-digit zero and complete C-locale whitespace are preserved. |
 
 All 12 implemented responsibilities and each H event are covered by the projection.

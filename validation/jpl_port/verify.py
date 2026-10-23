@@ -43,6 +43,8 @@ def main():
     assert len(expected)==4 and failures==expected,('changed M2 failure set',failures)
     assert port.load(port.OUT/'debug_raw.json')==port.load(port.OUT/'release_raw.json'),'JPL debug/release difference'
     assert port.load(port.OUT/'debug_isolated_raw.json')==port.load(port.OUT/'release_isolated_raw.json'),'isolated debug/release difference'
+    legacy=[port.load(port.OUT/f'{profile}_legacy_header_controls.json')['cases'] for profile in ['debug','release']]
+    assert {k:v['rust'] for k,v in legacy[0].items()}=={k:v['rust'] for k,v in legacy[1].items()},'legacy header debug/release difference'
     archives={}
     for p in (port.RUST/'target').glob('*/build/tempo2-rust-*/out/libtiming_native.a'):
         # Only archives for the current build are required to lack JPL. Old

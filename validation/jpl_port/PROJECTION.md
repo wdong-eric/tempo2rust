@@ -87,3 +87,12 @@ INT_MIN, -1, 0, 1, 2, 3, 4 and INT_MAX. Only the observation harness's optional
 buffer is enlarged to 12 initialized slots; canonical algorithms remain exact
 Git bytes. All fields/events compare with the same startup-ABI projection. These
 remain controlled host observations subject to source pointer-formation UB.
+
+Twelve additional Rust-only header controls cover both byte orders: normal and
+unwritten-comparison cases for pre-430 and ncon400 headers, plus valid extended
+headers with small and large constant counts. In either no-extension route,
+first-comparison mismatch still clears both optional rows. If the computed end
+of row 12 equals UINT32_MAX, reject before the second comparison consumes unread
+row-13/14 words. Four boundary events require global status zero, one seek/two
+reads, no allocation, and last fread (204,1,1). The unread native comparison is
+never executed and supplies no numerical oracle. H's projection is unchanged.
