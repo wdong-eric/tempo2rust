@@ -49,14 +49,15 @@ A through H have delivered their assigned evidence or implementation. E's M2 gat
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
-**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. The chats have separate write ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
+**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. I started from `d499e94` after E/H ownership closure and is active. The chats have separate write ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
 
 | Chat | Thread ID | Responsibility |
 | --- | --- | --- |
-| Assignment E: Rust TEMPO2 fitting | `01a16734-4da3-7810-979a-4dad2f647ecd` | Implement the amended M2 contract in `rust/` and `validation/fitting/` |
+| Assignment E: Rust TEMPO2 fitting | `01a16734-4da3-7810-979a-4dad2f647ecd` | Delivered amended M2 implementation and corrections; ownership window closed, acceptance gate pending |
 | Assignment F: TEMPO2 core and fidelity inventory | `01a16734-9835-7f53-8a56-79602dc5e2af` | Audit baseline `ddc07b2`; write only `validation/coverage/` |
 | Assignment G: TEMPO2 binary reference | `01a1673f-3754-7641-83bd-1d0b03ad06c3` | Prepare all-model source evidence; write only `validation/binary/` |
-| Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Prepare JPL kernel/layout/state/file-lifetime evidence; write only `validation/jpl/` |
+| Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Delivered and accepted JPL kernel/layout/state/file-lifetime reference; ownership window closed |
+| Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Transfer JPL logic under decision 0017; current bounded owner of `rust/` and optional `validation/jpl_port/` |
 
 ## Shared working design
 

@@ -73,3 +73,7 @@ Reuse the existing M1a/M1b and M2 verifiers with output redirected to I's eviden
 After integration, remove the obsolete retained `rust/native/jpleph.c`, `jpleph.h`, `jpl_int.h`, active `departures.patch`, JPL compile/link logic, old FFI and superseded preflight/cache tests. Retain attribution and pin/hash provenance for the translated source; preserve SOFA files and notices. Update the live source map, native manifest, behavior ledger, build documentation and unsafe inventory. Historical verification reports remain historical evidence and are not rewritten as current results.
 
 Return `rust/JPL_REPORT.md` with coherent Conventional Commit IDs, commands, source/executed revision hashes, complete function/case mapping, raw and projected comparison counts, numerical maxima, exact failure classifications, U1/U2/B03 dispositions, remaining unsafe sites and platform/coverage limits. Central accepts the bounded port only after reviewing that evidence. Binary models, full fitting, SOFA transfer, parser/fallback reconciliation, Linux, packaging and overall transfer acceptance remain separate work.
+
+## Dispatch
+
+Created **Assignment I: Rust JPL transfer**, chat `01a1678a-ed2a-78c0-819d-a2b914a221bb`, in the local `rustify-tempo2` project from contract commit `d499e94`. Its active turn acknowledged the ownership boundaries and began with source inspection and the comparison projection. The user has explicitly authorized central coordination of implementation chats; acceptance remains here.
