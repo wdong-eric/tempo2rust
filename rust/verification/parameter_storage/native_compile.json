@@ -1,0 +1,26 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/gcc/16.2.0/bin/g++-16",
+    "-O2",
+    "-std=gnu++11",
+    "-DHAVE_CONFIG_H",
+    "-I/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/probe.cc",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/initialise.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/readParfile.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/TKlongdouble.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/tempo2Util.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/TKmatrix.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/TKlog.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/clkcorr.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/tabulatedfunction.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/observatory.C",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/source/global_data.C",
+    "-lquadmath",
+    "-o",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/build/native/probe"
+  ],
+  "returncode": 0,
+  "stderr": "",
+  "stdout": ""
+}

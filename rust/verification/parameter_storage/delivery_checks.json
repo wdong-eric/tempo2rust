@@ -1,0 +1,35 @@
+{
+  "M2_failures": [
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10"
+  ],
+  "command_receipts_sha256": "2b1281119f65116d76c56e88e59a4cd0f7b21309ac9d0060f109f621cfe72c9b",
+  "controls_per_profile": 28,
+  "counts_per_profile": {
+    "fields": 664159,
+    "numbers": 96906,
+    "scalars": 591516
+  },
+  "direct_cases_per_profile": 10,
+  "direct_profiles_identical": true,
+  "events_per_profile": 32,
+  "executables": {
+    "debug": {
+      "native_sha256": "4584fe90efb9b57b5224717b99fb65779fe1f6d2805da0ea140b62398bdf96a1",
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/deps/tempo2_rust-ea61be09d25d8f48",
+      "sha256": "27757b2f11b06bbf9343b38d2ff2cbcdcd137d5ab2dad9c51e9aba6247e518d0"
+    },
+    "release": {
+      "native_sha256": "4584fe90efb9b57b5224717b99fb65779fe1f6d2805da0ea140b62398bdf96a1",
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/release/deps/tempo2_rust-de1e77b2b99ef1f6",
+      "sha256": "b623d5206fcfa4c5d46bc67d7122f42945b4ef2b4c682af686f436697d8fd425"
+    }
+  },
+  "executed_head": "71cd6d899bd429c590d75fcd684e6170b4f4208a",
+  "protected_files": 1618,
+  "regressions_sha256": "5e11ad26ee58d1895b60bdfa470692f791dff1c42a369c677c20a4a3c225c620",
+  "runner_sha256": "060493db549b327fea60131c692a0a42b3a4d39043aa26f6545cf8e60e035fed",
+  "status": "O checks pass; central acceptance pending; M2 unresolved"
+}

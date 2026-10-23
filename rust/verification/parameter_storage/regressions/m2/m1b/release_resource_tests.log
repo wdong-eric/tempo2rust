@@ -1,0 +1,12 @@
+    Finished `release` profile [optimized] target(s) in 0.05s
+     Running unittests src/lib.rs (target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
+
+running 5 tests
+test resource_tests::eop_upper_boundary_recovers_and_leap_is_not_interpolated ... ok
+test resource_tests::ifte_endianness_derivative_boundaries_and_recovery ... ok
+test resource_tests::ifte_record_grid_rejects_impossible_steps_and_recovers ... ok
+test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
+test resource_tests::table_steps_endpoints_and_source_rows ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.00s
+

@@ -1,0 +1,13 @@
+test_behavior_mutations (test_comparator.ComparisonControls.test_behavior_mutations) ... ok
+test_boundary_classification_and_defined_prefix (test_comparator.ComparisonControls.test_boundary_classification_and_defined_prefix) ... ok
+test_finite_bits_signed_zero_and_nonfinite_classes (test_comparator.ComparisonControls.test_finite_bits_signed_zero_and_nonfinite_classes) ... ok
+test_missing_extra_fields (test_comparator.ComparisonControls.test_missing_extra_fields) ... ok
+test_missing_extra_reordered_actions_events_components (test_comparator.ComparisonControls.test_missing_extra_reordered_actions_events_components) ... ok
+test_missing_extra_reordered_cases (test_comparator.ComparisonControls.test_missing_extra_reordered_cases) ... ok
+test_positive_reference_and_complete_delivery (test_comparator.ComparisonControls.test_positive_reference_and_complete_delivery) ... ok
+test_wrong_execution_source_input_comparator_and_stale_identity (test_comparator.ComparisonControls.test_wrong_execution_source_input_comparator_and_stale_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.438s
+
+OK

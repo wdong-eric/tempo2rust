@@ -1,0 +1,13 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "--lib",
+    "--locked",
+    "--offline",
+    "--no-run",
+    "--message-format=json"
+  ],
+  "returncode": 0,
+  "stderr": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s\n"
+}

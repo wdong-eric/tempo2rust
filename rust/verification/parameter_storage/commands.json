@@ -1,0 +1,99 @@
+[
+  {
+    "command": [
+      "cargo",
+      "fmt",
+      "--manifest-path",
+      "rust/Cargo.toml",
+      "--check"
+    ],
+    "log": "fmt.log",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "name": "fmt",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "cargo",
+      "clippy",
+      "--manifest-path",
+      "rust/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "log": "clippy.log",
+    "log_sha256": "99f71393b9903dca098310bb446022a4bdee195ea9996f351a787195555210a6",
+    "name": "clippy",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "rust/Cargo.toml",
+      "--offline",
+      "--locked"
+    ],
+    "log": "debug_tests.log",
+    "log_sha256": "1caaf86cb88a1e60c7ebbff0e24ce910c80f39412b4a72682afcad649ab8b126",
+    "name": "debug_tests",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py",
+      "--profile",
+      "debug"
+    ],
+    "log": "debug_direct.log",
+    "log_sha256": "dbe33b701845a8b51c490d562e8566bb897f8a60b404d3c29163e674e7b2d7a0",
+    "name": "debug_direct",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "cargo",
+      "test",
+      "--manifest-path",
+      "rust/Cargo.toml",
+      "--offline",
+      "--locked",
+      "--release"
+    ],
+    "log": "release_tests.log",
+    "log_sha256": "ec82449ca8dde13eef9842cbb71bdc067667134ff4b7c90cfcefe4840b804674",
+    "name": "release_tests",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py",
+      "--profile",
+      "release"
+    ],
+    "log": "release_direct.log",
+    "log_sha256": "f547bd4762a85041d60bbc10ee815e0e19c959566ee25b727a05e1e9ad2ac97e",
+    "name": "release_direct",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/verify.py"
+    ],
+    "environment": {
+      "TEMPO2_CLOCK_VERIFICATION_ROOT": "/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/parameter_storage/regressions"
+    },
+    "log": "regressions/dispatch.log",
+    "log_sha256": "2aae285e64469fb298af9669b3b490ec8fec251bf949bfaa2592f1661a613e81",
+    "name": "redirected_clock_JPL_M1_M2",
+    "returncode": 0
+  }
+]

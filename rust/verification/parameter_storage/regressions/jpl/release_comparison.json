@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "boundary_events": 1,
+    "discrete": 17098,
+    "exact_events": 1439,
+    "executed_events": 1440,
+    "finite": 43310,
+    "nonfinite": 96,
+    "reference_events": 1443,
+    "unreachable_events": 3
+  },
+  "executable_sha256": "b623d5206fcfa4c5d46bc67d7122f42945b4ef2b4c682af686f436697d8fd425",
+  "finite_maximum_difference": 0,
+  "machine": "arm64",
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "status": "PASS"
+}

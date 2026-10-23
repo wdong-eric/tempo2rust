@@ -1,0 +1,1 @@
+debug {'finite': 43310, 'nonfinite': 96, 'discrete': 17098, 'reference_events': 1443, 'exact_events': 1439, 'boundary_events': 1, 'unreachable_events': 3, 'executed_events': 1440}

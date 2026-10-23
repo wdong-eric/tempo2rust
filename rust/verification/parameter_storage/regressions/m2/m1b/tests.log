@@ -1,0 +1,68 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running unittests src/lib.rs (target/debug/deps/tempo2_rust-ea61be09d25d8f48)
+
+running 29 tests
+test clock_tests::probe ... ignored, fresh-process clock comparison probe; driven by validation/clocks_port/run.py
+test clock_tests::process_provenance ... ignored, process-lifetime provenance control; fresh process via L verifier
+test clock_glob::tests::c_locale_glob_components ... ok
+test clock_tests::byte_parsing_and_operation_local_table_boundaries ... ok
+test jpleph::tests::probe ... ignored, executed in fresh processes by validation/jpl_port/run.py
+test jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization ... ignored, run alone by the JPL verifier so another test cannot reuse the inspected fd
+test form_residuals::tests::signed_half_pulses_and_checked_counts ... ok
+test clock_tests::diagnostic_keys_counters_storage_and_suppression ... ok
+test jpleph::tests::optional_demands_follow_interp_flags_and_actual_storage ... ok
+test parameter_storage_tests::probe ... ignored, O runner supplies explicit actions and fresh launch identity
+test jpleph::tests::c_locale_title_whitespace_and_signed_versions ... ok
+test jpleph::tests::legacy_extended_header_rejects_unwritten_comparison ... ok
+test resource_tests::eop_upper_boundary_recovers_and_leap_is_not_interpolated ... ok
+test jpleph::tests::owned_boundaries_lifetimes_and_direct_acceleration ... ok
+test resource_tests::ifte_endianness_derivative_boundaries_and_recovery ... ok
+test resource_tests::ifte_record_grid_rejects_impossible_steps_and_recovers ... ok
+test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
+test stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup ... ignored, run alone by the JPL verifier so another test cannot reuse the inspected fd
+test resource_tests::table_steps_endpoints_and_source_rows ... ok
+test tropo::tests::niell_mapping_matches_pinned_source ... ok
+test parameter_storage_tests::signed_counts_flags_nonfinite_and_zero_copy ... ok
+test parameter_storage_tests::canonical_store_drives_evaluation_and_snapshots_are_detached ... ok
+test parameter_storage_tests::operation_local_boundaries_and_terminal_destination ... ok
+test parameter_storage_tests::initialization_ownership_and_unwritten_fields ... ok
+test fitting_tests::independent_source_solver_inputs_and_callbacks ... ok
+test t2fit::tests::later_cycle_error_publishes_no_partial_fit ... ok
+test fitting_tests::fit_controls_and_restrictions_leave_fixed_evaluation_intact ... ok
+test fitting_tests::source_failure_boundaries_and_nonfinite_transport ... ok
+test fitting_tests::terrestrial_fit_failure_recovers_with_the_same_runtime ... ok
+
+test result: ok. 23 passed; 0 failed; 6 ignored; 0 measured; 0 filtered out; finished in 2.77s
+
+     Running unittests src/main.rs (target/debug/deps/tempo2_rust-ec5e4fe46f13b422)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/behavior.rs (target/debug/deps/behavior-5842da9929013f2c)
+
+running 7 tests
+test strict_decimals_and_nanosecond_round_trips ... ok
+test preserves_metadata_identity_and_original_order ... ok
+test nonzero_f3_agrees_with_independent_unsplit_polynomial ... ok
+test end_to_end_signed_half_pulses ... ok
+test failed_library_processing_then_valid_processing_is_stateless ... ok
+test rejects_malformed_and_unsupported_inputs_with_context ... ok
+test cli_publishes_complete_json_or_no_result ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/reference_contract.rs (target/debug/deps/reference_contract-ff866a8ab00f3758)
+
+running 1 test
+test accepted_reference_projection_and_provenance ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+
+   Doc-tests tempo2_rust
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
