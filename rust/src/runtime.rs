@@ -1,5 +1,8 @@
-//! Rust-owned context for TEMPO2 observatory.C, clkcorr.C, eop.C and ephemeris resources.
-//! get_observatory follows observatory.C::getObservatory; the context has no standalone counterpart.
+//! Rust-owned resource/provenance context; no standalone source counterpart.
+//! PKS geometry follows observatory.C::getObservatory/ITRF_to_GRS80; weather loading
+//! follows tropo.C::initialize_meteorology_tables. Orchestrates Rust counterparts
+//! of clkcorr.C::getClockCorrections, eop.C::load_EOP, ifteph.C::IFTE_init and
+//! jpleph.c::jpl_init_ephemeris; resource hashing/ownership are Rust-only glue.
 use crate::{
     TimingError, clkcorr::ClockCorrections, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris,
     tabulated_function::TabulatedFunction,

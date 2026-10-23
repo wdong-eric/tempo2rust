@@ -1,4 +1,6 @@
-// Ported from TEMPO2 clkcorr.C; GPL-3.0-or-later.
+// Selected TEMPO2 clkcorr.C::getClockCorrections/getCorrection and
+// getClockCorrectionSequenceInternal route/cache behavior; explicit chains omitted.
+// ClockCorrections owns source process state. GPL-3.0-or-later.
 use crate::{
     TimingError,
     runtime::{Resource, paths_with_extension, read_resource},

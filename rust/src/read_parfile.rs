@@ -1,4 +1,5 @@
-//! Supported readParfile.C / readValue path.
+//! Selected TEMPO2 readParfile.C::readParfile/readValue path and validated defaults.
+//! ParFile is owned Rust parser glue; unsupported source keywords remain excluded.
 use crate::input::ignored_line;
 use crate::longdouble::parse_longdouble;
 use crate::tempo2_util::{dms_turn, hms_turn, parse_binary64, turn_deg};

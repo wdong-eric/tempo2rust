@@ -1,4 +1,6 @@
-// Ported from TEMPO2 tropo.C; GPL-3.0-or-later.
+// Selected tropo.C::getMeteorologicalValue/getZenithWetDelay/
+// getSurfaceAtmosphericPressure/NMF_hydrostatic/NMF_wet/compute_tropospheric_delays.
+// Rust combines lookup/fallback provenance and evaluates one TOA. GPL-3.0-or-later.
 use crate::{
     PRECISION_BITS, Scalar, TimingError,
     runtime::{MeteorologyFunction, Observatory},

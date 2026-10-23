@@ -55,3 +55,9 @@ at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` is layout-only evidence
 retained native risk is now explicit next to the Rust AU getter and is independent
 of U1's file-identity assumption. E preserves native behavior; the separate JPL
 stage owns any later disposition.
+
+F B06 documentation correction: `ifteph.C::IFTE_init` does not check its header
+read counts. `IFTE_get_Vals` checks data seek/read outcomes and exits on a short
+coefficient read; upper dates must not be described as unchecked data reads.
+The Rust range/record guards and owned storage remain existing adapter departures.
+Only their source-description comment changed in this review follow-up.

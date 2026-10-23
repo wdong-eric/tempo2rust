@@ -1,4 +1,5 @@
-// Ported from TEMPO2 ifteph.C; GPL-3.0-or-later.
+// Selected TEMPO2 ifteph.C::IFTE_init/IFTE_get_Vals/IFTEinterp in owned storage;
+// split_ifte_epoch also follows tt2tdb.C::tt2tb's split epoch. GPL-3.0-or-later.
 use crate::{PRECISION_BITS, TimingError};
 use rug::Float;
 use std::path::{Path, PathBuf};
@@ -130,7 +131,8 @@ impl IfteEphemeris {
         let jd1_fraction = jd0_fraction - jd1_integer;
         jd0_integer += jd1_integer;
         let error = |message| TimingError::new(&self.path, None, "IF99", message);
-        // Source only checks the lower bound then seeks/reads unchecked upper dates.
+        // IFTE_get_Vals checks the lower date bound; data seeks/short reads exit.
+        // IFTE_init's header reads are unchecked; they are a separate boundary.
         // Reject uncovered dates before indexing; interpolation inside coverage is unchanged.
         if jd0_integer < self.start_jd
             || jd0_integer + jd1_fraction > self.end_jd

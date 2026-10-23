@@ -1,4 +1,9 @@
-// Rust port of global.C / calculate_bclt.C / formBats.C for the adopted subset.
+// Adopted PKS subset of global.C::formBatsAll, calculate_bclt.C::calculate_bclt
+// and formBats.C::formBats. Fused terms follow shapiro_delay.C::shapiro_delay,
+// dm_delays.C::dm_delays (constant DM/spherical wind), vectorPulsar.C::vectorPulsar
+// (fixed direction) and secularMotion.C::secularMotion (zero correction only).
+// This owned entry also calls formResiduals.C::formResiduals through the Rust kernel;
+// its scope is broader than the source formBatsAll call, not whole-file coverage.
 use crate::{
     PRECISION_BITS, RuntimeContext, Scalar, TimingError, TimingInput, TimingResult,
     clkcorr::ClockStep, runtime::Resource, tempo2_util::dot_product, tropo::Weather,

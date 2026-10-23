@@ -1,4 +1,7 @@
-// Ported from TEMPO2 formResiduals.C and tempo2Util.C; GPL-3.0-or-later.
+// Selected spin/phase path of TEMPO2 formResiduals.C::formResiduals, using
+// tempo2Util.C::fortran_mod/fortran_nlong. The @ entry also supplies the zero-delay
+// formBats.C::formBats and secularMotion.C::secularMotion branches (SAT=BAT=BBAT).
+// Checked integer conversions are Rust adapters. GPL-3.0-or-later.
 // Copyright (C) 2006-2009 George Hobbs, Russell Edwards and TEMPO2 contributors.
 use crate::tempo2_util::{fortran_mod, fortran_nlong};
 use crate::{

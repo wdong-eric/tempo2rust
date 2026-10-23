@@ -1,4 +1,6 @@
-//! Rust-only CLI/JSON glue for TEMPO2 tempo2.C timing and fitting entry points.
+//! Rust-only bounded CLI/JSON orchestration for tempo2.C::main; argument and output
+//! roles correspond to getInputs.C::getInputs and textOutput.C::textOutput.
+//! No standalone counterpart or complete upstream CLI/output contract is claimed.
 use std::{
     env,
     ffi::OsString,

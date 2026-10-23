@@ -1,4 +1,5 @@
-//! Supported FORMAT 1 readTimfile.C path.
+//! TEMPO2 readTimfile.C::readTimfile/readTim FORMAT 1 subset; source directives,
+//! per-TOA flags and other formats are outside this owned reader's profile.
 use crate::input::ignored_line;
 use crate::longdouble::parse_longdouble;
 use crate::tempo2_util::parse_binary64;

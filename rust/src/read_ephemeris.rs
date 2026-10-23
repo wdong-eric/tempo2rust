@@ -1,5 +1,6 @@
-//! TEMPO2 readEphemeris.C using retained jpleph.c numerical operations.
-// Narrow interface to the pinned low-level JPL library; timing remains in Rust.
+//! Selected readEphemeris.C::readEphemeris body/epoch/scaling responsibility.
+//! Retains jpleph.c::jpl_init_ephemeris/jpl_pleph/jpl_get_double/
+//! jpl_init_error_code/jpl_close_ephemeris; ownership/preflight are Rust adapters.
 use crate::{PRECISION_BITS, TimingError, ifteph::IFTE_KM1};
 use rug::Float;
 use std::{

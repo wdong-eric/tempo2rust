@@ -1,5 +1,6 @@
-//! Rust-only file ownership glue for readParfile.C/readTimfile.C; no standalone counterpart.
-//! File ownership and the public load operation.
+//! Rust-only load/provenance glue for readParfile.C::readParfile/readValue,
+//! readTimfile.C::readTimfile/readTim and selected initialise.C::initialiseOne defaults.
+//! SourceFile and immutable TimingInput have no standalone TEMPO2 counterpart.
 use crate::{SourceFile, TimingError, TimingInput};
 use crate::{read_parfile::read_parfile, read_timfile::read_timfile};
 use sha2::{Digest, Sha256};

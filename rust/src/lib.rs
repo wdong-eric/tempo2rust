@@ -1,5 +1,8 @@
-//! Rust-only public ownership/API/serialization glue for tempo2.h, readParfile.C,
-//! readTimfile.C, formBats.C, formResiduals.C and t2fit.C. No standalone source counterpart.
+//! Rust-only owned projections of tempo2.h pulsar/observation/parameter and
+//! initialise.C::initialiseOne state, with error/JSON glue; no standalone counterpart
+//! or C ABI equivalence. Reexports selected readParfile.C::readParfile,
+//! readTimfile.C::readTimfile, global.C::formBatsAll, formResiduals.C::formResiduals
+//! and t2fit.C::t2Fit responsibilities through the Rust modules.
 //! Timing and selected spin fitting for isolated-pulsar TCB `@` and PKS profiles.
 //! See README.md for accepted input syntax and scientific conventions.
 

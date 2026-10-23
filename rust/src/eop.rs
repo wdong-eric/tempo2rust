@@ -1,4 +1,5 @@
-// Ported from TEMPO2 eop.C; GPL-3.0-or-later.
+// TEMPO2 eop.C::load_EOP/get_EOP subset; Eop owns the source's static samples.
+// The checked upper-date boundary is a documented adapter departure. GPL-3.0-or-later.
 use crate::TimingError;
 use std::path::{Path, PathBuf};
 pub(crate) struct Eop {

@@ -14,12 +14,20 @@
     "rust/verification/m1b",
     "rust/Cargo.lock"
   ],
-  "executed_source_hashes_current": true,
+  "executed_source_hashes_current": false,
   "documentation_local_links_exist": true,
   "review_followup": {
     "shared_coverage_mutations": 13,
     "exact_order_gate_still_fails": true,
     "native_behavior_unchanged": true,
     "U1_and_U2_documented_separately": true
+  },
+  "executed_source_hashes_preserved": true,
+  "post_review_source_hashes_current": true,
+  "comment_only_followup": {
+    "changed_rust_files": 21,
+    "non_comment_lines_identical": true,
+    "format_status": "PASS",
+    "checks": "post_review_checks.json"
   }
 }

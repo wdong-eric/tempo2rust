@@ -1,4 +1,6 @@
-//! TEMPO2 t2fit.C single-pulsar fitting and tempo2.C NITS lifecycle.
+//! Selected t2fit.C::t2Fit/t2Fit_getFitData/t2Fit_fillFitInfo/
+//! t2Fit_buildDesignMatrix/t2Fit_updateParameters for local ZERO/F0-F3 fitting;
+//! tempo2.C::main supplies the NITS lifecycle. Other fit paths are outside this port.
 //! Rust-only owned results/JSON expose source fit coordinates separately from model values.
 use crate::{
     Corrections, EngineProvenance, FitControls, FitNumber, LeastSquares, Resource, RuntimeContext,

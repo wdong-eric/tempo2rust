@@ -1,4 +1,7 @@
-//! Corresponds to TEMPO2 longdouble.h; uses the approved fixed MPFR precision.
+//! Source numeric role: generated TEMPO2 TKlongdouble.h (selected from
+//! TKlongdouble.float128.h) and TKlongdouble.C::parse_longdouble/print_longdouble.
+//! Scalar is the approved finite MPFR128 adapter with strict decimal transport;
+//! it is neither source binary128 (113 bits), native long double nor ABI compatible.
 use rug::Float;
 use serde::{Serialize, Serializer};
 use std::{fmt, str::FromStr};

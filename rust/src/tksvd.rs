@@ -1,5 +1,5 @@
 //! TEMPO2 TKsvd.C: TKbidiagonal, TKsingularValueDecomposition_lsq,
-//! TKbacksubstitution_svd and TKpythag; T2toolkit.C binary64 helpers.
+//! TKbacksubstitution_svd and TKpythag; T2toolkit.C::TKsign_d/TKretMax_d boundaries.
 // Copyright (C) 2006-2009 George Hobbs, Russell Edwards and TEMPO2 contributors.
 // Port under GPL-3.0-or-later. Keep source index/operation order, including f64 helpers.
 #![allow(clippy::needless_range_loop, clippy::assign_op_pattern)]

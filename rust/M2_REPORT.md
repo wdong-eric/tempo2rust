@@ -90,12 +90,29 @@ rescaling even with `--norescale`, exactly NITS cycles, and ZERO assignment
 without adding an offset delay to recomputed timing. Defined source bugs are
 preserved; no alternative solver, column normalization or precision mode exists.
 
-The complete 23-file naming map and eight existing unsafe Rust sites are in
+The 23-file responsibility map and eight existing unsafe Rust sites are in
 [`SOURCE_CORRESPONDENCE.md`](SOURCE_CORRESPONDENCE.md). New fitting code is safe
 Rust. Retained native files, fixed goldens and prior M1b evidence are unchanged
 relative to `ddc07b2`. The source-bug/adapter/coverage departure table, source
 locations, adjacent explanations and regression evidence are in
 [`BEHAVIOR_DIFFERENCES.md`](BEHAVIOR_DIFFERENCES.md).
+
+A subsequent comment-only review completes the concise source-file/routine
+declarations using F's validated module map. It corrects `longdouble.h` to the
+generated `TKlongdouble.h`/`TKlongdouble.float128.h` and `TKlongdouble.C` roles;
+names the fused Shapiro/DM/fixed-direction/zero-secular responsibilities in
+`form_bats`; and distinguishes unchecked IFTE header reads from checked data
+reads and source exit (B06). These declarations describe selected subsets and
+Rust adapters, not whole-file coverage.
+
+The numerical run's [`source_hashes.json`](verification/m2/source_hashes.json)
+is preserved as executed. The later comment/documentation state is separately
+hashed in [`post_review_source_hashes.json`](verification/m2/post_review_source_hashes.json).
+[`post_review_checks.json`](verification/m2/post_review_checks.json) records
+that all changed Rust files have identical nonblank, non-full-line-comment lines
+to `75b9e93`, and records the successful formatting check. No numerical rerun
+was performed for these comment-only changes; the prior numerical evidence and
+four unresolved exact-order diagnostics remain unchanged.
 
 ## Independent evidence and measured coverage
 

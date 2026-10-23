@@ -1,4 +1,6 @@
-//! Numeric utilities corresponding to the supported tempo2Util.C routines.
+//! Selected tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/
+//! fortran_nlong. parse_binary64 is strict Rust adapter parsing; remainder and
+//! integer selection use the approved Rug representation, not source ABI objects.
 use crate::longdouble::normalized_decimal;
 use rug::Float;
 

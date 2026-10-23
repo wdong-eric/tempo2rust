@@ -1,4 +1,6 @@
-// Ported from TEMPO2 tabulatedfunction.C; GPL-3.0-or-later.
+// TEMPO2 tabulatedfunction.C::TabulatedFunction_load/TabulatedFunction_getValue/
+// TabulatedFunction_getStartX/TabulatedFunction_getEndX in an owned table.
+// Selected interpolation/boundary behavior; GPL-3.0-or-later.
 use crate::TimingError;
 use std::path::{Path, PathBuf};
 

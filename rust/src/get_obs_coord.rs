@@ -1,5 +1,6 @@
-//! TEMPO2 get_obsCoord.C::get_obsCoord_IAU2000B; retained SOFA rotations.
-// get_obsCoord_IAU2000B orchestration in Rust; bundled SOFA does rotations.
+//! TEMPO2 get_obsCoord.C::get_obsCoord_IAU2000B, selected PKS geometry.
+//! Retained SOFA: sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for routines
+//! iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP and their pinned dependency closure.
 use crate::{TimingError, eop::Eop, runtime::Observatory};
 use rug::Float;
 // Necessity: retain the accepted SOFA Fortran implementation through its C ABI.

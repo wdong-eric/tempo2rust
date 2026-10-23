@@ -1,4 +1,5 @@
-// Ported from TEMPO2 tt2tdb.C; GPL-3.0-or-later.
+// TEMPO2 tt2tdb.C::tt2tb, restricted to the accepted IF99 SI/TCB branch.
+// correction_tt_teph/correction_tt_tb/einstein_rate retain source roles. GPL-3.0-or-later.
 use crate::{
     PRECISION_BITS, TimingError,
     ifteph::{IFTE_KM1, IFTE_LC, IFTE_MJD0, IFTE_TEPH0, IfteEphemeris, split_ifte_epoch},
