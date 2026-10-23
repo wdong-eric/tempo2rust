@@ -1,0 +1,17 @@
+{
+  "classification": "unaltered_prior_probe_host_observation_not_portable_values",
+  "command": [
+    "/opt/homebrew/bin/gcc-16",
+    "-O2",
+    "-I",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/source",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/prior_probe.c",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/source/jpleph.c",
+    "-o",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/prior_probe"
+  ],
+  "probe_sha256": "1e5be8cbf57daf8bbfa5ab45b4324355a534c34d019feb0068cd848e8b87e830",
+  "probe_source": "#include <stdio.h>\n#include \"jpleph.h\"\nint main(int argc,char **argv) {\n    double a[6],b[6];\n    void *e=jpl_init_ephemeris(argv[1],NULL,NULL);\n    if(!e) return 2;\n    double end=jpl_get_double(e,JPL_EPHEM_END_JD);\n    int good=jpl_pleph(e,2450000.5,3,12,a,1);\n    int failed=jpl_pleph(e,end-8,3,12,b,1);\n    int repeated=jpl_pleph(e,end-8,3,12,b,1);\n    int recovered=jpl_pleph(e,2450000.5,3,12,b,1);\n    printf(\"%d %d %d %d %.17g\\n\",good,failed,repeated,recovered,b[0]-a[0]);\n    jpl_close_ephemeris(e);return 0;\n}\n",
+  "stderr": "",
+  "stdout": "0 -2 0 0 0\n"
+}

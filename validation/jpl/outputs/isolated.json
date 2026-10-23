@@ -1,0 +1,175 @@
+{
+  "build_commands": {
+    "asan": [
+      "/usr/bin/clang",
+      "-O1",
+      "-g",
+      "-std=c11",
+      "-fsanitize=address",
+      "-fno-sanitize-recover=all",
+      "-I",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/source",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/probe.c",
+      "-lm",
+      "-o",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/asan"
+    ],
+    "ubsan": [
+      "/usr/bin/clang",
+      "-O1",
+      "-g",
+      "-std=c11",
+      "-fsanitize=undefined,address,float-cast-overflow",
+      "-fno-sanitize-recover=all",
+      "-I",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/source",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/probe.c",
+      "-lm",
+      "-o",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/ubsan"
+    ]
+  },
+  "cases": {
+    "coefficient_offset": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/large_coefficient_offset.bin 0",
+        "control",
+        "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
+      ],
+      "diagnostic": "AddressSanitizer",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "SUMMARY: AddressSanitizer: BUS (validation/jpl/build/asan:arm64+<address>) in interp+<address>"
+      ]
+    },
+    "max_cheby_assertion": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "interp 0.5 32 18 3 1 2"
+      ],
+      "diagnostic": "Assertion",
+      "last_completed_op": "startup",
+      "returncode": -6,
+      "summary": [
+        "Assertion failed: (ncf < MAX_CHEBY), function interp, file jpleph.c, line 326."
+      ]
+    },
+    "nan_epoch": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "control",
+        "state nan 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
+      ],
+      "diagnostic": "outside the range",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:582:10: runtime error: nan is outside the range of representable values of type 'unsigned int'",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:582:10 "
+      ]
+    },
+    "nut_four_slot_overwrite": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "control",
+        "state_nut4"
+      ],
+      "diagnostic": "stack-buffer-overflow",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "SUMMARY: AddressSanitizer: stack-buffer-overflow (validation/jpl/build/asan:arm64+<address>) in interp+<address>"
+      ]
+    },
+    "pleph_ipt_one_past": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "control",
+        "pleph 2450003.5 3 12 1"
+      ],
+      "diagnostic": "index 15 out of bounds",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:625:31: runtime error: index 15 out of bounds for type 'uint32_t[15][3]' (aka 'unsigned int[15][3]')",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:625:31 "
+      ]
+    },
+    "state_ipt_one_past": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "control",
+        "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
+      ],
+      "diagnostic": "index 15 out of bounds",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:625:31: runtime error: index 15 out of bounds for type 'uint32_t[15][3]' (aka 'unsigned int[15][3]')",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:625:31 "
+      ]
+    },
+    "tiny_step_record_cast": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/tiny_step.bin 0",
+        "control",
+        "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
+      ],
+      "diagnostic": "outside the range",
+      "last_completed_op": "control",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:582:10: runtime error: 3e+300 is outside the range of representable values of type 'unsigned int'",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:582:10 "
+      ]
+    },
+    "u2_packed_au": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "getter d 28"
+      ],
+      "diagnostic": "misaligned address",
+      "last_completed_op": "open",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:77:13: runtime error: load of misaligned address <address> for type 'double', which requires 8 byte alignment",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:77:13 "
+      ]
+    },
+    "u2_packed_emrat": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/extended_le.bin 0",
+        "getter d 36"
+      ],
+      "diagnostic": "misaligned address",
+      "last_completed_op": "open",
+      "returncode": -6,
+      "summary": [
+        "validation/jpl/build/source/jpleph.c:77:13: runtime error: load of misaligned address <address> for type 'double', which requires 8 byte alignment",
+        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:77:13 "
+      ]
+    },
+    "unterminated_title": {
+      "classification": "undefined_or_terminating_no_numerical_oracle",
+      "commands": [
+        "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/unterminated_title.bin 0"
+      ],
+      "diagnostic": "stack-buffer-overflow",
+      "last_completed_op": "startup",
+      "returncode": -6,
+      "summary": [
+        "SUMMARY: AddressSanitizer: stack-buffer-overflow (validation/jpl/build/asan:arm64+<address>) in jpl_init_ephemeris+<address>"
+      ]
+    }
+  },
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)"
+}

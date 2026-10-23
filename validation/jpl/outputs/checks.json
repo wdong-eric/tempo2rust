@@ -1,0 +1,101 @@
+{
+  "cases": 55,
+  "compile_command": [
+    "/opt/homebrew/bin/gcc-16",
+    "-O2",
+    "-std=c11",
+    "-I",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/source",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/probe.c",
+    "-lm",
+    "-o",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/probe"
+  ],
+  "compile_stderr": "",
+  "compiler": "gcc-16 (Homebrew GCC 16.2.0) 16.2.0",
+  "coverage": {
+    "implemented_functions": [
+      "dimension",
+      "interp",
+      "jpl_close_ephemeris",
+      "jpl_get_constant",
+      "jpl_get_double",
+      "jpl_get_long",
+      "jpl_init_ephemeris",
+      "jpl_init_error_code",
+      "jpl_pleph",
+      "jpl_state",
+      "swap_32_bit_val",
+      "swap_64_bit_val"
+    ],
+    "missing_function_mutation": "detected"
+  },
+  "events": 1443,
+  "harness_sha256": {
+    "SOURCE_MAP.md": "db48d3a5e895c2b2a3bcb2194ed21978ef9cf66e893d053fbb6cba2467ec5f98",
+    "analyze.py": "649202e15069f7dd731bcca3ae85ba4f23bbca84d8b85304727fad244a05f9a7",
+    "coverage.json": "488e968cf826638bcf71a7b19d498e35ac1b83e942506482b070b0aeb7fc4613",
+    "probe.c": "a67a1e3c2a294f44a1c0c6156974445fd9d061786947a9462fa005c7dfdd9e6a",
+    "run.py": "3552606cdb1dd125aacdcdf1c395beb4ad6664758d71c8d7454878153a46c441"
+  },
+  "machine": "arm64",
+  "mutations": {
+    "changed_cache_bytes": "detected",
+    "changed_cache_transition": "detected",
+    "dropped_sequence_step": "detected",
+    "reordered_sequence": "detected",
+    "wrong_component_count": "detected",
+    "wrong_error_status": "detected",
+    "wrong_result_class": "detected",
+    "wrong_target_index": "detected",
+    "wrong_units": "detected"
+  },
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "prior_evidence": {
+    "canonical_stdout": "0 -2 0 0 0",
+    "path": "validation/coverage/native_replay.json",
+    "retained_stdout": "0 -2 -2 0 0",
+    "sha256": "462542bf1a640545d9c9c8f8f5db6fd460d275e786e24d93d31049c7eab9fa3d"
+  },
+  "reference_sha256": "2efb8fe4cc91489af856bde4baaf15abc2b2ee03265238db24ff1e41eb5a60f5",
+  "repeatability": "two fresh processes per case; exact structured equality",
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_mutations": {
+    "cache_after_success": {
+      "case": "partial_cache_be",
+      "first_changed_event_index": 5,
+      "mutant_sha256": "b8a7abb5e8d9d99f64a4f0fb5203a6ecd2d7f21ecbb47095b44d7be2e1923b4b",
+      "status": "detected"
+    },
+    "wrong_au_units": {
+      "case": "state_sequences_le",
+      "first_changed_event_index": 3,
+      "mutant_sha256": "8272c35161c23b85d41fc4b4a7a274623d3810ab6b24207f24859e597f569a98",
+      "status": "detected"
+    },
+    "wrong_finite_class": {
+      "case": "helper_interpolation",
+      "first_changed_event_index": 2,
+      "mutant_sha256": "98788a46b7a52a3bbe310cbb9df4657d8d9d5187efd64a3318d6e1ffc2ef4cbf",
+      "status": "detected"
+    },
+    "wrong_optional_dimension": {
+      "case": "state_sequences_le",
+      "first_changed_event_index": 1,
+      "mutant_sha256": "99b05cc013233268532bbb5c3f0ca0a17d6492c00f3013d81531bd4ec23283f1",
+      "status": "detected"
+    },
+    "wrong_target_mapping": {
+      "case": "pleph_pairs_le",
+      "first_changed_event_index": 3,
+      "mutant_sha256": "8febdac1a049fe9364933acc41671a3636cf612aca4927c400bf5b9279cadda0",
+      "status": "detected"
+    }
+  },
+  "source_sha256": {
+    "jpl_int.h": "d595b3aa8727567539cf5f73ef0977ca487237f2f2356538e1f5586e24315f72",
+    "jpleph.c": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+    "jpleph.h": "c04f5f1b0fc961868ebd3ca0c4af6d9e5f2fca045689c963865484d581e1809d"
+  },
+  "status": "PASS"
+}

@@ -1,0 +1,379 @@
+{
+  "cache_sequences": {
+    "de405_truncated_pleph": {
+      "cache_locations": [
+        522,
+        1141,
+        1141,
+        522
+      ],
+      "same_io_counts_failure_and_repeat": true,
+      "statuses": [
+        0,
+        -2,
+        0,
+        0
+      ],
+      "x_observations": [
+        {
+          "bits": "3fee9506b3b5e51b",
+          "class": "finite",
+          "decimal": "0.95569167232239083"
+        },
+        null,
+        {
+          "bits": "da81b5d5ca26f0d5",
+          "class": "finite",
+          "decimal": "-9.5907800474915761e+127"
+        },
+        {
+          "bits": "3fee9506b3b5e51b",
+          "class": "finite",
+          "decimal": "0.95569167232239083"
+        }
+      ]
+    },
+    "de405_truncated_state": {
+      "cache_locations": [
+        522,
+        1141,
+        1141,
+        522
+      ],
+      "same_io_counts_failure_and_repeat": true,
+      "statuses": [
+        0,
+        -2,
+        0,
+        0
+      ],
+      "x_observations": [
+        {
+          "bits": "3fcf9ee6632b124f",
+          "class": "finite",
+          "decimal": "0.24703674165916076"
+        },
+        {
+          "bits": "c0c1940000000000",
+          "class": "finite",
+          "decimal": "-9000"
+        },
+        {
+          "bits": "dad231c9f46c06c2",
+          "class": "finite",
+          "decimal": "-3.1529565638093364e+129"
+        },
+        {
+          "bits": "3fcf9ee6632b124f",
+          "class": "finite",
+          "decimal": "0.24703674165916076"
+        }
+      ]
+    },
+    "partial_cache_be": {
+      "cache_locations": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "complete_bytes_read": 680,
+      "same_io_counts_failure_and_repeat": true,
+      "statuses": [
+        0,
+        -2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "x_observations": [
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        },
+        {
+          "bits": "c0c1940000000000",
+          "class": "finite",
+          "decimal": "-9000"
+        },
+        {
+          "bits": "0000000000000000",
+          "class": "finite",
+          "decimal": "0"
+        },
+        {
+          "bits": "0000000000000000",
+          "class": "finite",
+          "decimal": "0"
+        },
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        },
+        {
+          "bits": "3eec2d688b2ca2a9",
+          "class": "finite",
+          "decimal": "1.3436020116567903e-05"
+        }
+      ]
+    },
+    "partial_cache_le": {
+      "cache_locations": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "complete_bytes_read": 680,
+      "same_io_counts_failure_and_repeat": true,
+      "statuses": [
+        0,
+        -2,
+        0,
+        0,
+        0,
+        0
+      ],
+      "x_observations": [
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        },
+        {
+          "bits": "c0c1940000000000",
+          "class": "finite",
+          "decimal": "-9000"
+        },
+        {
+          "bits": "3eec2d688b2ca2a9",
+          "class": "finite",
+          "decimal": "1.3436020116567903e-05"
+        },
+        {
+          "bits": "3eec2d688b2ca2a9",
+          "class": "finite",
+          "decimal": "1.3436020116567903e-05"
+        },
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        },
+        {
+          "bits": "3eec2d688b2ca2a9",
+          "class": "finite",
+          "decimal": "1.3436020116567903e-05"
+        }
+      ]
+    },
+    "seek_failure_recovery": {
+      "cache_locations": [
+        0,
+        1,
+        1,
+        0
+      ],
+      "same_io_counts_failure_and_repeat": true,
+      "statuses": [
+        0,
+        -6,
+        0,
+        0
+      ],
+      "x_observations": [
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        },
+        {
+          "bits": "c0c1940000000000",
+          "class": "finite",
+          "decimal": "-9000"
+        },
+        {
+          "bits": "3edc514bc52e218f",
+          "class": "finite",
+          "decimal": "6.7514329938973043e-06"
+        },
+        {
+          "bits": "3edde8e9fcdb7298",
+          "class": "finite",
+          "decimal": "7.1310568736353348e-06"
+        }
+      ]
+    }
+  },
+  "chebyshev_diagnostic": {
+    "components": 576,
+    "max_absolute_difference_position_velocity_acceleration": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max_absolute_scale_position_velocity_acceleration": [
+      311.3125,
+      14811.125,
+      431353.75
+    ],
+    "method": "exact rational explicit polynomial sum differentiated analytically; rounded once for comparison",
+    "units": [
+      "synthetic coefficient units",
+      "coefficient units/day",
+      "coefficient units/day^2"
+    ]
+  },
+  "de405_api_combination_finite_components": 17,
+  "de405_api_combination_max_abs_difference": 0.0,
+  "de405_api_combination_nonfinite_classes": [
+    "+Infinity"
+  ],
+  "file_lifetime": {
+    "lifetime_overwrite_be": {
+      "cached_value_unchanged": true,
+      "path_matches_open_inode": true,
+      "reload_observes_replacement": true,
+      "reopen_observes_replacement": true
+    },
+    "lifetime_overwrite_le": {
+      "cached_value_unchanged": true,
+      "path_matches_open_inode": true,
+      "reload_observes_replacement": true,
+      "reopen_observes_replacement": true
+    },
+    "lifetime_replace_be": {
+      "cached_value_unchanged": true,
+      "path_matches_open_inode": false,
+      "reload_observes_replacement": false,
+      "reopen_observes_replacement": true
+    },
+    "lifetime_replace_le": {
+      "cached_value_unchanged": true,
+      "path_matches_open_inode": false,
+      "reload_observes_replacement": false,
+      "reopen_observes_replacement": true
+    }
+  },
+  "init_statuses": {
+    "init_failures": [
+      {
+        "nonnull": false,
+        "status": -1
+      },
+      {
+        "nonnull": false,
+        "status": -3
+      },
+      {
+        "nonnull": false,
+        "status": -4
+      },
+      {
+        "nonnull": false,
+        "status": -10
+      },
+      {
+        "nonnull": false,
+        "status": -5
+      },
+      {
+        "nonnull": true,
+        "status": -7
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_alloc_1": [
+      {
+        "nonnull": false,
+        "status": -6
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_read_1": [
+      {
+        "nonnull": false,
+        "status": -3
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_read_2": [
+      {
+        "nonnull": false,
+        "status": -4
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_read_3": [
+      {
+        "nonnull": false,
+        "status": -10
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_read_4": [
+      {
+        "nonnull": true,
+        "status": -7
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_read_5": [
+      {
+        "nonnull": true,
+        "status": -8
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_injected_seek_1": [
+      {
+        "nonnull": false,
+        "status": -2
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ],
+    "init_optional_outputs": [
+      {
+        "nonnull": true,
+        "status": 0
+      },
+      {
+        "nonnull": true,
+        "status": 0
+      }
+    ]
+  },
+  "ordinary_endian_numerical_agreement": "exact finite bits/nonfinite classes in state_sequences and pleph_pairs",
+  "scope": "host observations except isolated exact rational helper diagnostic; no Rust budgets"
+}
