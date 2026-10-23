@@ -4,6 +4,10 @@ Prepared 19 October 2026; updated 24 October 2026 for I/J/K/L/M/N/O acceptance, 
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
+## Generated evidence policy
+
+[Decision 0039](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0039-generated-validation-output-policy.md) implements the user's instruction: **do not commit reproducible validation JSON, compressed JSON or other large generated evidence.** Keep outputs local and preserve their paths/hashes for review. Commit sources, generators, authored fixtures/contracts and concise reports. This supersedes earlier instructions in any handoff to commit generated results; never force-add ignored outputs. Existing local accepted evidence remains immutable during unrelated work. [Validation artifact guidance](/Users/Eric.Dong/Downloads/tempo2rust/validation/README.md) explains recording and review.
+
 ## Workspace and current evidence
 
 Workspace: `/Users/Eric.Dong/Downloads/tempo2rust`.

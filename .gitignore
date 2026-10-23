@@ -8,3 +8,33 @@
 **/build/
 **/__pycache__/
 .DS_Store
+
+# Generated validation evidence is local. Keep generators and authored contracts.
+# Applies to raw dumps, baselines, profiles, coverage and execution receipts.
+/validation/**/*.json
+/validation/**/*.json.gz
+/validation/**/*.jsonl
+/validation/**/*.jsonl.gz
+/rust/verification/**/*.json
+/rust/verification/**/*.json.gz
+/rust/verification/**/*.jsonl
+/rust/verification/**/*.jsonl.gz
+/decisions/evidence/**/*.json
+/decisions/evidence/**/*.json.gz
+/decisions/evidence/**/*.jsonl
+/decisions/evidence/**/*.jsonl.gz
+
+# Small schemas, comparison policies and release contracts are source inputs.
+!/decisions/evidence/observation-storage/released-fields.json
+!/decisions/evidence/par-specialized/released-branches.json
+!/decisions/evidence/pulsar-lifecycle/released-fields.json
+!/validation/binary/schema.json
+!/validation/clocks_port/projection.json
+!/validation/coverage/batches.json
+!/validation/fitting/schema.json
+!/validation/jpl/coverage.json
+!/validation/jpl/diagnostic_fixtures.json
+!/validation/jpl_port/isolated_projection.json
+!/validation/jpl_port/projection.json
+!/validation/parameter_storage_port/case_projection.json
+!/validation/parameter_storage_port/registry_projection.json
