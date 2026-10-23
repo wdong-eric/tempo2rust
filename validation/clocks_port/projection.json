@@ -1,0 +1,7077 @@
+{
+  "release": "82fc09a18d59cde9594a5941e4820950f1b6f20f",
+  "source": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "reference_sha256": "9f189fd0765acaa9ee3eda0299993eb7d3fb1d13bf1f103aa688fa1ea165ccaa",
+  "cases": [
+    {
+      "id": "table_F_skipped_row",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1.5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_F_all_duplicate",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_F_duplicate_end",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "2"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_F_singleton_proxy",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "2"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_F_decreasing_proxy",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1.5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_ordinary",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "49999"
+        ],
+        [
+          "value",
+          "50000"
+        ],
+        [
+          "value",
+          "50000.00000000001"
+        ],
+        [
+          "value",
+          "50000.5"
+        ],
+        [
+          "value",
+          "50000.99999999999"
+        ],
+        [
+          "value",
+          "50001"
+        ],
+        [
+          "value",
+          "50001.00000000001"
+        ],
+        [
+          "value",
+          "50002"
+        ],
+        [
+          "value",
+          "50003"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_internal_duplicate",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.9999999999999998"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "2.0000000000000004"
+        ],
+        [
+          "value",
+          "3"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_decreasing_middle",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "2.5"
+        ],
+        [
+          "value",
+          "3"
+        ],
+        [
+          "value",
+          "4"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_decreasing_both_proxies",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "3"
+        ],
+        [
+          "value",
+          "4"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_permissive",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "3"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_signed_zero",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-1"
+        ],
+        [
+          "value",
+          "-0"
+        ],
+        [
+          "value",
+          "0.5"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "2"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_nan_y",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-inf"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_inf_y",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-inf"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_mixed_infinity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-inf"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_nan_x",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-inf"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_infinite_x",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "-inf"
+        ],
+        [
+          "value",
+          "0"
+        ],
+        [
+          "value",
+          "1"
+        ],
+        [
+          "value",
+          "1.5"
+        ],
+        [
+          "value",
+          "2"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_query_nonfinite",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "nan"
+        ],
+        [
+          "value",
+          "inf"
+        ],
+        [
+          "value",
+          "-inf"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_header_255",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1.5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_body_chunk_boundary",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1.5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_reload",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/first.clk"
+        ],
+        [
+          "value",
+          "5"
+        ],
+        [
+          "load",
+          "{case}/second.clk"
+        ],
+        [
+          "value",
+          "5"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_empty",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_bad_header",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_no_samples",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_missing",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/missing.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_singleton_exact",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "1"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "Rust boundary only: table_bracket_storage"
+    },
+    {
+      "id": "table_singleton_nan",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ],
+        [
+          "value",
+          "nan"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "Rust boundary only: table_bracket_storage"
+    },
+    {
+      "id": "table_empty_value",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "empty_value"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "Rust boundary only: table_sample_storage"
+    },
+    {
+      "id": "table_empty_start",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "empty_start"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "Rust boundary only: table_sample_storage"
+    },
+    {
+      "id": "table_empty_end",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "empty_end"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "Rust boundary only: table_sample_storage"
+    },
+    {
+      "id": "table_header_256",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "Rust boundary only: table_header_storage"
+    },
+    {
+      "id": "table_header_800",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/sample.clk"
+        ]
+      ],
+      "last_action": 1,
+      "disposition": "Rust boundary only: table_header_storage"
+    },
+    {
+      "id": "table_basename_255",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.clk"
+        ],
+        [
+          "value",
+          "5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "table_long_full_path",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "load",
+          "{case}/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/t.clk"
+        ],
+        [
+          "value",
+          "5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_simple",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "normalization",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          " \ta\r\n",
+          " B ",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          " \ta\r\n",
+          " B ",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "identity_no_initialization",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          " a ",
+          "A",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          " a ",
+          "A",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "identity_null_target",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          " ",
+          "@null",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          " ",
+          "@null",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "source_null",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "@null",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "@null",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "source_empty",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "source_spaces",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "   ",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "   ",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "target_null",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "@null",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "@null",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "target_empty",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "alias",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "alias",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_reverse",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "B",
+          "A",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "B",
+          "A",
+          "0"
+        ],
+        [
+          "path",
+          "B",
+          "A",
+          "5"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_missing_nodes",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "path",
+          "X",
+          "B",
+          "5"
+        ],
+        [
+          "path",
+          "A",
+          "X",
+          "5"
+        ],
+        [
+          "path",
+          "X",
+          "Y",
+          "5"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "X",
+          "Y",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "X",
+          "Y",
+          "0"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_disconnected",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "path",
+          "A",
+          "D",
+          "5"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_parallel",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_node_tie",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "D",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_binary32_rounding",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "D",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_binary32_accumulation",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "D",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_block_retry",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "3",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "4",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "10",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "11",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 21,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "route_invalid_two_edges",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "range_disjoint",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "a.clk b.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "range_negative",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "-5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "-5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "range_above_million",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "1000005",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "1000005",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "range_nan_query",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "nan",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_m1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_nan",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_inf",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_minf",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_3_4028234663852886e38",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_1e39",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_garbage",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_absent",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_overflow_sum",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_negative_acyclic",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "weights_cycle",
+      "classification": "bounded",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "D",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "D",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "unrun cycle; no repair or execution"
+    },
+    {
+      "id": "path_identity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "path",
+          "A",
+          "A",
+          "5"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_missing_direct",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index_file",
+          "{case}/missing.clk",
+          "0"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_extra_without_default",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/extra"
+        ],
+        [
+          "index",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_extra_offset",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/extra"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_empty_extra",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/missing_extra"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_sorted",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_empty",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_invalid",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_short",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_leading_space",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_absent",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_env_unset",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "@unset",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_env_empty",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_bad_lazy_table",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "index_missing_file",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "remove",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "index",
+          "0"
+        ]
+      ],
+      "last_action": 3,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "headers_long_names",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "headers_badness_prefix",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_empty",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "",
+          "0"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_null",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "@null",
+          "0"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_missing",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "missing.clk",
+          "0"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_broken",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "b.clk a.clk",
+          "0"
+        ]
+      ],
+      "last_action": 2,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_precedes_auto",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          " a.clk\t b.clk ",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 6,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_after_auto",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "define",
+          "a.clk b.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_first_matching",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "a.clk b.clk",
+          "0"
+        ],
+        [
+          "define",
+          "z.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_duplicate_exact",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/extra"
+        ],
+        [
+          "define",
+          "same.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_duplicate_fullpath",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/extra"
+        ],
+        [
+          "define",
+          "{case}/root/clock/same.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "explicit_duplicate_arbitrary_path",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "env",
+          "{case}/root",
+          "{case}/extra"
+        ],
+        [
+          "define",
+          "/nonexistent/same.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "helper_broken",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "a.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "helper_fill",
+          "0",
+          "0",
+          "X",
+          "B",
+          "0"
+        ],
+        [
+          "helper_accumulate",
+          "0",
+          "0",
+          "X",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "helper_early_target",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "define",
+          "a.clk b.clk",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "0"
+        ],
+        [
+          "helper_fill",
+          "0",
+          "0",
+          "A",
+          "C",
+          "0"
+        ],
+        [
+          "helper_accumulate",
+          "0",
+          "0",
+          "A",
+          "C",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_w0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_w1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_w2",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_w-1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_utc_target_w0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_utc_target_w1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_utc_target_w2",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_utc_target_w-1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_tt_w0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_tt_w1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_tt_w2",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_original_tt_w-1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_both_w0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_both_w1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_both_w2",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_both_w-1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_empty_w0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_empty_w1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_empty_w2",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "2"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_empty_w-1",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "-1"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_utc_identity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "fallback_tt_identity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "TT(TAI)",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "TT(TAI)",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_epochs",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5.000000000000000000000000000000001",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_proxy",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_nan",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_positive_infinity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_negative_infinity",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "sequential_inf",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "capacity_29",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "C0",
+          "C29",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "C0",
+          "C29",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "capacity_30",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "C0",
+          "C30",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "C0",
+          "C30",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "capacity_31",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "C0",
+          "C31",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "C0",
+          "C31",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "independent_sum",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "4"
+        ],
+        [
+          "slot",
+          "0",
+          "0",
+          "1e16",
+          "A"
+        ],
+        [
+          "slot",
+          "0",
+          "1",
+          "1",
+          "B"
+        ],
+        [
+          "slot",
+          "0",
+          "2",
+          "-1e16",
+          "C"
+        ],
+        [
+          "slot",
+          "0",
+          "3",
+          "-0",
+          "D"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ]
+      ],
+      "last_action": 9,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_root_extra",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "env",
+          "{case}/root2",
+          "{case}/extra"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_before_load_copy",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "copy",
+          "{case}/replacement.clk",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_before_load_replace",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "replace",
+          "{case}/replacement.clk",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_before_load_remove",
+      "classification": "exit",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "remove",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_after_load_copy",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "copy",
+          "{case}/replacement.clk",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_after_load_replace",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "replace",
+          "{case}/replacement.clk",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_after_load_remove",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "remove",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 10,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_add",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "copy",
+          "{case}/new.clk",
+          "{case}/root/clock/new.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "Z",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_fresh_replacement",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "X",
+          "Y",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "X",
+          "Y",
+          "0"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_changed_samples_before_load",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "index",
+          "0"
+        ],
+        [
+          "copy",
+          "{case}/same_header.clk",
+          "{case}/root/clock/a.clk"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "lifetime_warning_state",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "Y",
+          "UTC",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "Y",
+          "UTC",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "X",
+          "UTC",
+          "0"
+        ]
+      ],
+      "last_action": 13,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_multiple_pulsars",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "3",
+          "3",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "pulsar",
+          "1",
+          "2",
+          "2",
+          "A",
+          "B",
+          "2"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "obs",
+          "1",
+          "5",
+          "T",
+          "0",
+          "2"
+        ],
+        [
+          "obs",
+          "2",
+          "5",
+          "T",
+          "2",
+          "2"
+        ],
+        [
+          "obs",
+          "3",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "obs",
+          "4",
+          "5",
+          "T",
+          "0",
+          "2"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0.0",
+          "1",
+          "J0"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "0.25",
+          "0",
+          "J1"
+        ],
+        [
+          "jump",
+          "0",
+          "2",
+          "0.5",
+          "1",
+          "J2"
+        ],
+        [
+          "jump",
+          "0",
+          "3",
+          "0.75",
+          "1",
+          "J3"
+        ],
+        [
+          "jump",
+          "1",
+          "0",
+          "0.0",
+          "1",
+          "J0"
+        ],
+        [
+          "jump",
+          "1",
+          "1",
+          "0.25",
+          "0",
+          "J1"
+        ],
+        [
+          "jump",
+          "1",
+          "2",
+          "0.5",
+          "1",
+          "J2"
+        ],
+        [
+          "jump",
+          "1",
+          "3",
+          "0.75",
+          "1",
+          "J3"
+        ],
+        [
+          "members",
+          "0",
+          "3",
+          "1",
+          "2"
+        ],
+        [
+          "members",
+          "1",
+          "2",
+          "1"
+        ],
+        [
+          "members",
+          "2",
+          "1"
+        ],
+        [
+          "members",
+          "3",
+          "2",
+          "1"
+        ],
+        [
+          "members",
+          "4",
+          "1",
+          "1"
+        ],
+        [
+          "toa",
+          "2"
+        ],
+        [
+          "toa",
+          "2"
+        ]
+      ],
+      "last_action": 23,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_bypass_no_initialization",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "2",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "0",
+          "2"
+        ],
+        [
+          "obs",
+          "1",
+          "5",
+          "T",
+          "2",
+          "2"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_nonstandard_flags",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "2",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "3",
+          "2"
+        ],
+        [
+          "obs",
+          "1",
+          "5",
+          "T",
+          "-1",
+          "2"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 5,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_duplicate_memberships",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "1",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "0",
+          "0"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0",
+          "1",
+          "unused"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "0.25",
+          "1",
+          "repeat"
+        ],
+        [
+          "members",
+          "0",
+          "1",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_site_source",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "0",
+          "",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 4,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_capacity_0",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "1",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "0",
+          "0"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0",
+          "1",
+          "unused"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "0.25",
+          "0",
+          "j"
+        ],
+        [
+          "members",
+          "0",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_capacity_28",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "1",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "0",
+          "28"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0",
+          "1",
+          "unused"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "0.25",
+          "0",
+          "j"
+        ],
+        [
+          "members",
+          "0",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "toa_capacity_29",
+      "classification": "undefined",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "1",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "0",
+          "29"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0",
+          "1",
+          "unused"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "0.25",
+          "0",
+          "j"
+        ],
+        [
+          "members",
+          "0",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "Rust boundary only: clock_correction_storage"
+    },
+    {
+      "id": "toa_long_jump_label",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "1",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "2",
+          "2"
+        ],
+        [
+          "jump",
+          "0",
+          "0",
+          "0",
+          "1",
+          "unused"
+        ],
+        [
+          "jump",
+          "0",
+          "1",
+          "-0",
+          "0",
+          "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
+        ],
+        [
+          "members",
+          "0",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 7,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "pks_real",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{real}",
+          ""
+        ],
+        [
+          "obs",
+          "0",
+          "58000.12345678901234567890123456789",
+          "PKS",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "",
+          "TT(TAI)",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "UTC(PKS)",
+          "UTC",
+          "0"
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "0",
+          "",
+          "TT(TAI)",
+          "0"
+        ],
+        [
+          "toa",
+          "1"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    },
+    {
+      "id": "cvs_and_debug",
+      "classification": "ordinary",
+      "actions": [
+        [
+          "profile"
+        ],
+        [
+          "env",
+          "{case}/root",
+          ""
+        ],
+        [
+          "debug",
+          "1",
+          "1"
+        ],
+        [
+          "obs",
+          "0",
+          "5",
+          "T",
+          "1",
+          "2"
+        ],
+        [
+          "clock",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "tt",
+          "0"
+        ],
+        [
+          "correction",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "pulsar",
+          "0",
+          "1",
+          "0",
+          "A",
+          "B",
+          "0"
+        ],
+        [
+          "toa",
+          "1"
+        ]
+      ],
+      "last_action": 8,
+      "disposition": "complete ordered defined-prefix comparison"
+    }
+  ],
+  "fields": {
+    "$.cases[].actions[][]": "exact after declared byte/path/location projection",
+    "$.cases[].classification": "exact after declared byte/path/location projection",
+    "$.cases[].command": "executable identity; fresh manifest gate",
+    "$.cases[].events[].clock_state.errors": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].badness.binary32": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].badness.value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].badness.value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].badness.value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].clock_state.functions[].end.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].end.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].end.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].clock_state.functions[].from": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].header": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].loaded": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].name": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].path": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].samples": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].start.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].start.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.functions[].start.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].clock_state.functions[].to": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.initialized": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].end.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].end.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].end.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].clock_state.sequences[].from": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].from_key": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].indices[]": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].start.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].start.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].start.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].clock_state.sequences[].to": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.sequences[].to_key": "exact after declared byte/path/location projection",
+    "$.cases[].events[].clock_state.warnings": "exact after declared byte/path/location projection",
+    "$.cases[].events[].event": "exact after declared byte/path/location projection",
+    "$.cases[].events[].operation": "exact after declared byte/path/location projection",
+    "$.cases[].events[].phase": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.clockCorr": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.count": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.sat": "input echo metadata; binary64 SAT remains exact",
+    "$.cases[].events[].result.after.sat_binary64.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.sat_binary64.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.sat_binary64.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.after.slots[].changed_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.slots[].destination_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.slots[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.slots[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.after.slots[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.after.telID": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.clockCorr": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.count": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.sat": "input echo metadata; binary64 SAT remains exact",
+    "$.cases[].events[].result.before.sat_binary64.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.sat_binary64.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.sat_binary64.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.before.slots[].destination_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.slots[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.slots[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.before.slots[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.before.telID": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.clock_capacity": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.double_digits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.float_digits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.longdouble_digits": "native ABI metadata; record separately",
+    "$.cases[].events[].result.longdouble_size": "native ABI metadata; record separately",
+    "$.cases[].events[].result.observation.clockCorr": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.count": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.sat": "input echo metadata; binary64 SAT remains exact",
+    "$.cases[].events[].result.observation.sat_binary64.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.sat_binary64.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.sat_binary64.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observation.slots[].destination_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.slots[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.slots[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation.slots[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observation.telID": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observation_size": "native ABI metadata; record separately",
+    "$.cases[].events[].result.observations[].after.clockCorr": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.count": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.sat": "input echo metadata; binary64 SAT remains exact",
+    "$.cases[].events[].result.observations[].after.sat_binary64.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.sat_binary64.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.sat_binary64.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observations[].after.slots[].changed_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.slots[].destination_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.slots[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.slots[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].after.slots[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observations[].after.telID": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.clockCorr": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.count": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.sat": "input echo metadata; binary64 SAT remains exact",
+    "$.cases[].events[].result.observations[].before.sat_binary64.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.sat_binary64.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.sat_binary64.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observations[].before.slots[].destination_bytes": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.slots[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.slots[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].before.slots[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.observations[].before.telID": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.observations[].index": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.ok": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.query.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.query.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.query.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.reverse_hint": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.source_present": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.end.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.end.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.end.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.table.header": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.name": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.samples[][].bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.samples[][].class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.samples[][].decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.table.start.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.start.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.table.start.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].result.table_size": "native ABI metadata; record separately",
+    "$.cases[].events[].result.target_present": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].result.value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].table_queries[].epoch.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].table_queries[].epoch.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].table_queries[].epoch.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].events[].table_queries[].name": "exact after declared byte/path/location projection",
+    "$.cases[].events[].table_queries[].value.bits": "exact after declared byte/path/location projection",
+    "$.cases[].events[].table_queries[].value.class": "exact after declared byte/path/location projection",
+    "$.cases[].events[].table_queries[].value.decimal": "format metadata; finite bits compared exactly",
+    "$.cases[].id": "exact after declared byte/path/location projection",
+    "$.cases[].returncode": "exact after declared byte/path/location projection",
+    "$.cases[].stderr": "exact after declared byte/path/location projection",
+    "$.cases[].stdout": "exact after declared byte/path/location projection",
+    "$.cases[].timeout": "exact after declared byte/path/location projection"
+  }
+}
