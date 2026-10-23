@@ -109,6 +109,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment O: Rust parameter storage foundation | `01a168ce-9a6e-7a20-b8ff-f5df761fa336` | Delivery `8d2be6f` accepted by decision 0036; ownership window closed |
 | Assignment P: TEMPO2 preprocessing reference | `01a168d8-48fa-7722-82db-2d2b6ec8916f` | Owns `validation/preprocessing/` under decision 0034; dispatched from `e68806e` |
 | Assignment Q: TEMPO2 specialized PAR reference | `01a168e7-6a90-7d63-b906-362363a4c15f` | Owns `validation/par_specialized/` under decision 0035; dispatched from `ad6fbf6` |
+| Assignment R: Rust observation storage foundation | `01a16903-61ef-7651-a9c9-41e6c8943e41` | Sole Rust owner under decision 0037; dispatched from `0fd7885` |
 
 ## Shared working design
 
