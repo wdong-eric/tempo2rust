@@ -1,0 +1,7792 @@
+[
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1.5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\nbad row\n2 0\n"
+    },
+    "id": "table_F_skipped_row",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\n1 1\n"
+    },
+    "id": "table_F_all_duplicate",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\n2 1\n2 2\n"
+    },
+    "id": "table_F_duplicate_end",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\n"
+    },
+    "id": "table_F_singleton_proxy",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1.5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n2 0\n1 0\n"
+    },
+    "id": "table_F_decreasing_proxy",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "49999"
+      ],
+      [
+        "value",
+        "50000"
+      ],
+      [
+        "value",
+        "50000.00000000001"
+      ],
+      [
+        "value",
+        "50000.5"
+      ],
+      [
+        "value",
+        "50000.99999999999"
+      ],
+      [
+        "value",
+        "50001"
+      ],
+      [
+        "value",
+        "50001.00000000001"
+      ],
+      [
+        "value",
+        "50002"
+      ],
+      [
+        "value",
+        "50003"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B 1\n50000 -0\n50001 2\n50002 3\n"
+    },
+    "id": "table_ordinary",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.9999999999999998"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "2.0000000000000004"
+      ],
+      [
+        "value",
+        "3"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 10\n2 20\n2 30\n3 40\n"
+    },
+    "id": "table_internal_duplicate",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "2.5"
+      ],
+      [
+        "value",
+        "3"
+      ],
+      [
+        "value",
+        "4"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 10\n3 30\n2 20\n4 40\n"
+    },
+    "id": "table_decreasing_middle",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "3"
+      ],
+      [
+        "value",
+        "4"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n3 30\n1 10\n"
+    },
+    "id": "table_decreasing_both_proxies",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "3"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n\n# comment\n # leading comment\none\n1junk 4\n1 10junk\n2 0x1p2 trailing\n3 6 # trailing\n"
+    },
+    "id": "table_permissive",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-1"
+      ],
+      [
+        "value",
+        "-0"
+      ],
+      [
+        "value",
+        "0.5"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n-0 -0\n1 -0\n"
+    },
+    "id": "table_signed_zero",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-inf"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 nan\n2 1\n"
+    },
+    "id": "table_nan_y",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-inf"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 inf\n2 inf\n"
+    },
+    "id": "table_inf_y",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-inf"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 -inf\n2 inf\n"
+    },
+    "id": "table_mixed_infinity",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-inf"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\nnan 3\n2 4\n"
+    },
+    "id": "table_nan_x",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "-inf"
+      ],
+      [
+        "value",
+        "0"
+      ],
+      [
+        "value",
+        "1"
+      ],
+      [
+        "value",
+        "1.5"
+      ],
+      [
+        "value",
+        "2"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n-inf 3\ninf 4\n"
+    },
+    "id": "table_infinite_x",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "nan"
+      ],
+      [
+        "value",
+        "inf"
+      ],
+      [
+        "value",
+        "-inf"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 3\n2 5\n"
+    },
+    "id": "table_query_nonfinite",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1.5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\n1 2\n2 4\n"
+    },
+    "id": "table_header_255",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1.5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               1 7\n2 9\n"
+    },
+    "id": "table_body_chunk_boundary",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/first.clk"
+      ],
+      [
+        "value",
+        "5"
+      ],
+      [
+        "load",
+        "{case}/second.clk"
+      ],
+      [
+        "value",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "first.clk": "# A B 1\n0 3\n10 3\n",
+      "second.clk": "# C D 1\n0 7\n10 7\n"
+    },
+    "id": "table_reload",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "sample.clk": ""
+    },
+    "id": "table_empty",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "sample.clk": "A B\n1 2\n2 3\n"
+    },
+    "id": "table_bad_header",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\nbad\n"
+    },
+    "id": "table_no_samples",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/missing.clk"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {},
+    "id": "table_missing",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "1"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\n"
+    },
+    "id": "table_singleton_exact",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ],
+      [
+        "value",
+        "nan"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {
+      "sample.clk": "# A B\n1 0\n"
+    },
+    "id": "table_singleton_nan",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "empty_value"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {},
+    "id": "table_empty_value",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "empty_start"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {},
+    "id": "table_empty_start",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "empty_end"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {},
+    "id": "table_empty_end",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {
+      "sample.clk": "#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\n1 2\n2 4\n"
+    },
+    "id": "table_header_256",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/sample.clk"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {
+      "sample.clk": "#hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh\n1 2\n2 4\n"
+    },
+    "id": "table_header_800",
+    "last_action": 1
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.clk"
+      ],
+      [
+        "value",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.clk": "# A B 1\n0 1\n10 1\n"
+    },
+    "id": "table_basename_255",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "load",
+        "{case}/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/t.clk"
+      ],
+      [
+        "value",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd/t.clk": "# A B 1\n0 1\n10 1\n"
+    },
+    "id": "table_long_full_path",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_simple",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        " \ta\r\n",
+        " B ",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        " \ta\r\n",
+        " B ",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# a b 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "normalization",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        " a ",
+        "A",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        " a ",
+        "A",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "identity_no_initialization",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        " ",
+        "@null",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        " ",
+        "@null",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "identity_null_target",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "@null",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "@null",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "source_null",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "source_empty",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "   ",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "   ",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "source_spaces",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "@null",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "@null",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "target_null",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "target_empty",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "alias",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "alias",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "B",
+        "A",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "B",
+        "A",
+        "0"
+      ],
+      [
+        "path",
+        "B",
+        "A",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_reverse",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "path",
+        "X",
+        "B",
+        "5"
+      ],
+      [
+        "path",
+        "A",
+        "X",
+        "5"
+      ],
+      [
+        "path",
+        "X",
+        "Y",
+        "5"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "X",
+        "Y",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "X",
+        "Y",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_missing_nodes",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "path",
+        "A",
+        "D",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/clock/c.clk": "# C D 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_disconnected",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 1\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_parallel",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "D",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# A B 1\n0 2\n10 2\n",
+      "root/clock/c.clk": "# B D 1\n0 4\n10 4\n",
+      "root/clock/d.clk": "# C D 1\n0 8\n10 8\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_node_tie",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "D",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 16777216\n0 1\n10 1\n",
+      "root/clock/b.clk": "# B D 1\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A D 16777217\n0 8\n10 8\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_binary32_rounding",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "D",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 16777216\n0 1\n10 1\n",
+      "root/clock/b.clk": "# B C 1\n0 2\n10 2\n",
+      "root/clock/c.clk": "# C D 1\n0 4\n10 4\n",
+      "root/clock/z.clk": "# A D 16777218\n0 8\n10 8\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_binary32_accumulation",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "3",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "4",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "10",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "11",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n4 1\n",
+      "root/clock/b.clk": "# A B 2\n4 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_block_retry",
+    "last_action": 21
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n4 1\n",
+      "root/clock/b.clk": "# C B 1\n6 1\n10 1\n",
+      "root/clock/z.clk": "# A B 5\n0 9\n10 9\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "route_invalid_two_edges",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "a.clk b.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n4 1\n",
+      "root/clock/b.clk": "# C B 1\n6 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "range_disjoint",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "-5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "-5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n-10 1\n-1 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "range_negative",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "1000005",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "1000005",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n1000001 1\n1000010 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "range_above_million",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "nan",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "range_nan_query",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B -1\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_m1",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 0\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_0",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B nan\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_nan",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B inf\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_inf",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B -inf\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_minf",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 3.4028234663852886e38\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_3_4028234663852886e38",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1e39\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_1e39",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B garbage\n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_garbage",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B \n0 11\n10 11\n",
+      "root/clock/z.clk": "# A B 2\n0 22\n10 22\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_absent",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 3e38\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 3e38\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_overflow_sum",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 2\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B -3\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A B 4\n0 8\n10 8\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_negative_acyclic",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "D",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "D",
+        "0"
+      ]
+    ],
+    "classification": "bounded",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# B C -2\n0 2\n10 2\n",
+      "root/clock/c.clk": "# C B -2\n0 4\n10 4\n",
+      "root/clock/d.clk": "# C D 5\n0 8\n10 8\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "weights_cycle",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "path",
+        "A",
+        "A",
+        "5"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "path_identity",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index_file",
+        "{case}/missing.clk",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_missing_direct",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/extra"
+      ],
+      [
+        "index",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "extra/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_extra_without_default",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/extra"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/same.clk": "# A B 1\n0 10\n10 10\n",
+      "root/clock/same.clk": "# A B 1\n0 20\n10 20\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_extra_offset",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/missing_extra"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_empty_extra",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 10\n10 10\n",
+      "root/clock/z.clk": "# A B 1\n0 20\n10 20\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_sorted",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_empty",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "A B\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_invalid",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_short",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": " # A B\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_leading_space",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_absent",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "@unset",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_env_unset",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_env_empty",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_bad_lazy_table",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "remove",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "index",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "index_missing_file",
+    "last_action": 3
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "headers_long_names",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 2junk\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "headers_badness_prefix",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_empty",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "@null",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_null",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "missing.clk",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_missing",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "b.clk a.clk",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_broken",
+    "last_action": 2
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        " a.clk\t b.clk ",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A B 0.5\n0 9\n10 9\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_precedes_auto",
+    "last_action": 6
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "define",
+        "a.clk b.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A B 0.5\n0 9\n10 9\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_after_auto",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "a.clk b.clk",
+        "0"
+      ],
+      [
+        "define",
+        "z.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A B 0.5\n0 9\n10 9\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_first_matching",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/extra"
+      ],
+      [
+        "define",
+        "same.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/same.clk": "# A B 1\n0 10\n10 10\n",
+      "root/clock/same.clk": "# A B 1\n0 20\n10 20\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_duplicate_exact",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/extra"
+      ],
+      [
+        "define",
+        "{case}/root/clock/same.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/same.clk": "# A B 1\n0 10\n10 10\n",
+      "root/clock/same.clk": "# A B 1\n0 20\n10 20\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_duplicate_fullpath",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "env",
+        "{case}/root",
+        "{case}/extra"
+      ],
+      [
+        "define",
+        "/nonexistent/same.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/same.clk": "# A B 1\n0 10\n10 10\n",
+      "root/clock/same.clk": "# A B 1\n0 20\n10 20\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "explicit_duplicate_arbitrary_path",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "a.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "helper_fill",
+        "0",
+        "0",
+        "X",
+        "B",
+        "0"
+      ],
+      [
+        "helper_accumulate",
+        "0",
+        "0",
+        "X",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "helper_broken",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "define",
+        "a.clk b.clk",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "0"
+      ],
+      [
+        "helper_fill",
+        "0",
+        "0",
+        "A",
+        "C",
+        "0"
+      ],
+      [
+        "helper_accumulate",
+        "0",
+        "0",
+        "A",
+        "C",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 1\n10 1\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/clock/z.clk": "# A B 0.5\n0 9\n10 9\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "helper_early_target",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A Z 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_w0",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A Z 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_w1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A Z 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_w2",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A Z 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_w-1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC Z 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_utc_target_w0",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC Z 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_utc_target_w1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC Z 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_utc_target_w2",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC Z 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_utc_target_w-1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A TT(TAI) 1\n0 3\n10 3\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_tt_w0",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A TT(TAI) 1\n0 3\n10 3\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_tt_w1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A TT(TAI) 1\n0 3\n10 3\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_tt_w2",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A TT(TAI) 1\n0 3\n10 3\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_original_tt_w-1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC TT(TAI) 1\n0 4\n10 4\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_both_w0",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC TT(TAI) 1\n0 4\n10 4\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_both_w1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC TT(TAI) 1\n0 4\n10 4\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_both_w2",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# UTC TT(TAI) 1\n0 4\n10 4\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_both_w-1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# P Q 1\n0 5\n10 5\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_empty_w0",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# P Q 1\n0 5\n10 5\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_empty_w1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# P Q 1\n0 5\n10 5\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_empty_w2",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "-1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# P Q 1\n0 5\n10 5\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_empty_w-1",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_utc_identity",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "TT(TAI)",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "TT(TAI)",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "fallback_tt_identity",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5.000000000000000000000000000000001",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 86400\n10 86400\n",
+      "root/clock/b.clk": "# C B\n0 0\n10 100\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_epochs",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 86400\n10 86400\n",
+      "root/clock/b.clk": "# C B\n0 0\n5 100\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_proxy",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 nan\n10 nan\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_nan",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C\n0 0\n10 inf\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_positive_infinity",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C\n0 0\n10 -inf\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_negative_infinity",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A C 1\n0 inf\n10 inf\n",
+      "root/clock/b.clk": "# C B 1\n0 2\n10 2\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "sequential_inf",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "C0",
+        "C29",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "C0",
+        "C29",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/00.clk": "# C0 C1 1\n0 1\n100 1\n",
+      "root/clock/01.clk": "# C1 C2 1\n0 2\n100 2\n",
+      "root/clock/02.clk": "# C2 C3 1\n0 3\n100 3\n",
+      "root/clock/03.clk": "# C3 C4 1\n0 4\n100 4\n",
+      "root/clock/04.clk": "# C4 C5 1\n0 5\n100 5\n",
+      "root/clock/05.clk": "# C5 C6 1\n0 6\n100 6\n",
+      "root/clock/06.clk": "# C6 C7 1\n0 7\n100 7\n",
+      "root/clock/07.clk": "# C7 C8 1\n0 8\n100 8\n",
+      "root/clock/08.clk": "# C8 C9 1\n0 9\n100 9\n",
+      "root/clock/09.clk": "# C9 C10 1\n0 10\n100 10\n",
+      "root/clock/10.clk": "# C10 C11 1\n0 11\n100 11\n",
+      "root/clock/11.clk": "# C11 C12 1\n0 12\n100 12\n",
+      "root/clock/12.clk": "# C12 C13 1\n0 13\n100 13\n",
+      "root/clock/13.clk": "# C13 C14 1\n0 14\n100 14\n",
+      "root/clock/14.clk": "# C14 C15 1\n0 15\n100 15\n",
+      "root/clock/15.clk": "# C15 C16 1\n0 16\n100 16\n",
+      "root/clock/16.clk": "# C16 C17 1\n0 17\n100 17\n",
+      "root/clock/17.clk": "# C17 C18 1\n0 18\n100 18\n",
+      "root/clock/18.clk": "# C18 C19 1\n0 19\n100 19\n",
+      "root/clock/19.clk": "# C19 C20 1\n0 20\n100 20\n",
+      "root/clock/20.clk": "# C20 C21 1\n0 21\n100 21\n",
+      "root/clock/21.clk": "# C21 C22 1\n0 22\n100 22\n",
+      "root/clock/22.clk": "# C22 C23 1\n0 23\n100 23\n",
+      "root/clock/23.clk": "# C23 C24 1\n0 24\n100 24\n",
+      "root/clock/24.clk": "# C24 C25 1\n0 25\n100 25\n",
+      "root/clock/25.clk": "# C25 C26 1\n0 26\n100 26\n",
+      "root/clock/26.clk": "# C26 C27 1\n0 27\n100 27\n",
+      "root/clock/27.clk": "# C27 C28 1\n0 28\n100 28\n",
+      "root/clock/28.clk": "# C28 C29 1\n0 29\n100 29\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "capacity_29",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "C0",
+        "C30",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "C0",
+        "C30",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/00.clk": "# C0 C1 1\n0 1\n100 1\n",
+      "root/clock/01.clk": "# C1 C2 1\n0 2\n100 2\n",
+      "root/clock/02.clk": "# C2 C3 1\n0 3\n100 3\n",
+      "root/clock/03.clk": "# C3 C4 1\n0 4\n100 4\n",
+      "root/clock/04.clk": "# C4 C5 1\n0 5\n100 5\n",
+      "root/clock/05.clk": "# C5 C6 1\n0 6\n100 6\n",
+      "root/clock/06.clk": "# C6 C7 1\n0 7\n100 7\n",
+      "root/clock/07.clk": "# C7 C8 1\n0 8\n100 8\n",
+      "root/clock/08.clk": "# C8 C9 1\n0 9\n100 9\n",
+      "root/clock/09.clk": "# C9 C10 1\n0 10\n100 10\n",
+      "root/clock/10.clk": "# C10 C11 1\n0 11\n100 11\n",
+      "root/clock/11.clk": "# C11 C12 1\n0 12\n100 12\n",
+      "root/clock/12.clk": "# C12 C13 1\n0 13\n100 13\n",
+      "root/clock/13.clk": "# C13 C14 1\n0 14\n100 14\n",
+      "root/clock/14.clk": "# C14 C15 1\n0 15\n100 15\n",
+      "root/clock/15.clk": "# C15 C16 1\n0 16\n100 16\n",
+      "root/clock/16.clk": "# C16 C17 1\n0 17\n100 17\n",
+      "root/clock/17.clk": "# C17 C18 1\n0 18\n100 18\n",
+      "root/clock/18.clk": "# C18 C19 1\n0 19\n100 19\n",
+      "root/clock/19.clk": "# C19 C20 1\n0 20\n100 20\n",
+      "root/clock/20.clk": "# C20 C21 1\n0 21\n100 21\n",
+      "root/clock/21.clk": "# C21 C22 1\n0 22\n100 22\n",
+      "root/clock/22.clk": "# C22 C23 1\n0 23\n100 23\n",
+      "root/clock/23.clk": "# C23 C24 1\n0 24\n100 24\n",
+      "root/clock/24.clk": "# C24 C25 1\n0 25\n100 25\n",
+      "root/clock/25.clk": "# C25 C26 1\n0 26\n100 26\n",
+      "root/clock/26.clk": "# C26 C27 1\n0 27\n100 27\n",
+      "root/clock/27.clk": "# C27 C28 1\n0 28\n100 28\n",
+      "root/clock/28.clk": "# C28 C29 1\n0 29\n100 29\n",
+      "root/clock/29.clk": "# C29 C30 1\n0 30\n100 30\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "capacity_30",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "C0",
+        "C31",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "C0",
+        "C31",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/00.clk": "# C0 C1 1\n0 1\n100 1\n",
+      "root/clock/01.clk": "# C1 C2 1\n0 2\n100 2\n",
+      "root/clock/02.clk": "# C2 C3 1\n0 3\n100 3\n",
+      "root/clock/03.clk": "# C3 C4 1\n0 4\n100 4\n",
+      "root/clock/04.clk": "# C4 C5 1\n0 5\n100 5\n",
+      "root/clock/05.clk": "# C5 C6 1\n0 6\n100 6\n",
+      "root/clock/06.clk": "# C6 C7 1\n0 7\n100 7\n",
+      "root/clock/07.clk": "# C7 C8 1\n0 8\n100 8\n",
+      "root/clock/08.clk": "# C8 C9 1\n0 9\n100 9\n",
+      "root/clock/09.clk": "# C9 C10 1\n0 10\n100 10\n",
+      "root/clock/10.clk": "# C10 C11 1\n0 11\n100 11\n",
+      "root/clock/11.clk": "# C11 C12 1\n0 12\n100 12\n",
+      "root/clock/12.clk": "# C12 C13 1\n0 13\n100 13\n",
+      "root/clock/13.clk": "# C13 C14 1\n0 14\n100 14\n",
+      "root/clock/14.clk": "# C14 C15 1\n0 15\n100 15\n",
+      "root/clock/15.clk": "# C15 C16 1\n0 16\n100 16\n",
+      "root/clock/16.clk": "# C16 C17 1\n0 17\n100 17\n",
+      "root/clock/17.clk": "# C17 C18 1\n0 18\n100 18\n",
+      "root/clock/18.clk": "# C18 C19 1\n0 19\n100 19\n",
+      "root/clock/19.clk": "# C19 C20 1\n0 20\n100 20\n",
+      "root/clock/20.clk": "# C20 C21 1\n0 21\n100 21\n",
+      "root/clock/21.clk": "# C21 C22 1\n0 22\n100 22\n",
+      "root/clock/22.clk": "# C22 C23 1\n0 23\n100 23\n",
+      "root/clock/23.clk": "# C23 C24 1\n0 24\n100 24\n",
+      "root/clock/24.clk": "# C24 C25 1\n0 25\n100 25\n",
+      "root/clock/25.clk": "# C25 C26 1\n0 26\n100 26\n",
+      "root/clock/26.clk": "# C26 C27 1\n0 27\n100 27\n",
+      "root/clock/27.clk": "# C27 C28 1\n0 28\n100 28\n",
+      "root/clock/28.clk": "# C28 C29 1\n0 29\n100 29\n",
+      "root/clock/29.clk": "# C29 C30 1\n0 30\n100 30\n",
+      "root/clock/30.clk": "# C30 C31 1\n0 31\n100 31\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "capacity_31",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "4"
+      ],
+      [
+        "slot",
+        "0",
+        "0",
+        "1e16",
+        "A"
+      ],
+      [
+        "slot",
+        "0",
+        "1",
+        "1",
+        "B"
+      ],
+      [
+        "slot",
+        "0",
+        "2",
+        "-1e16",
+        "C"
+      ],
+      [
+        "slot",
+        "0",
+        "3",
+        "-0",
+        "D"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "independent_sum",
+    "last_action": 9
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "env",
+        "{case}/root2",
+        "{case}/extra"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_root_extra",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "copy",
+        "{case}/replacement.clk",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_before_load_copy",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "replace",
+        "{case}/replacement.clk",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_before_load_replace",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "remove",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "exit",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_before_load_remove",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "copy",
+        "{case}/replacement.clk",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_after_load_copy",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "replace",
+        "{case}/replacement.clk",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_after_load_replace",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "remove",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_after_load_remove",
+    "last_action": 10
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "copy",
+        "{case}/new.clk",
+        "{case}/root/clock/new.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "Z",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_add",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "X",
+        "Y",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "X",
+        "Y",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "lifetime_fresh_replacement",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "index",
+        "0"
+      ],
+      [
+        "copy",
+        "{case}/same_header.clk",
+        "{case}/root/clock/a.clk"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "extra/b.clk": "# A B 1\n0 55\n10 55\n",
+      "new.clk": "# A Z 1\n0 66\n10 66\n",
+      "replacement.clk": "# X Y 1\n0 77\n10 77\n",
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n",
+      "root2/clock/a.clk": "# A B 1\n0 99\n10 99\n",
+      "same_header.clk": "# A B 1\n0 88\n10 88\n"
+    },
+    "id": "lifetime_changed_samples_before_load",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "Y",
+        "UTC",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "Y",
+        "UTC",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "X",
+        "UTC",
+        "0"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "lifetime_warning_state",
+    "last_action": 13
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "3",
+        "3",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "pulsar",
+        "1",
+        "2",
+        "2",
+        "A",
+        "B",
+        "2"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "obs",
+        "1",
+        "5",
+        "T",
+        "0",
+        "2"
+      ],
+      [
+        "obs",
+        "2",
+        "5",
+        "T",
+        "2",
+        "2"
+      ],
+      [
+        "obs",
+        "3",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "obs",
+        "4",
+        "5",
+        "T",
+        "0",
+        "2"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0.0",
+        "1",
+        "J0"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "0.25",
+        "0",
+        "J1"
+      ],
+      [
+        "jump",
+        "0",
+        "2",
+        "0.5",
+        "1",
+        "J2"
+      ],
+      [
+        "jump",
+        "0",
+        "3",
+        "0.75",
+        "1",
+        "J3"
+      ],
+      [
+        "jump",
+        "1",
+        "0",
+        "0.0",
+        "1",
+        "J0"
+      ],
+      [
+        "jump",
+        "1",
+        "1",
+        "0.25",
+        "0",
+        "J1"
+      ],
+      [
+        "jump",
+        "1",
+        "2",
+        "0.5",
+        "1",
+        "J2"
+      ],
+      [
+        "jump",
+        "1",
+        "3",
+        "0.75",
+        "1",
+        "J3"
+      ],
+      [
+        "members",
+        "0",
+        "3",
+        "1",
+        "2"
+      ],
+      [
+        "members",
+        "1",
+        "2",
+        "1"
+      ],
+      [
+        "members",
+        "2",
+        "1"
+      ],
+      [
+        "members",
+        "3",
+        "2",
+        "1"
+      ],
+      [
+        "members",
+        "4",
+        "1",
+        "1"
+      ],
+      [
+        "toa",
+        "2"
+      ],
+      [
+        "toa",
+        "2"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_multiple_pulsars",
+    "last_action": 23
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "2",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "0",
+        "2"
+      ],
+      [
+        "obs",
+        "1",
+        "5",
+        "T",
+        "2",
+        "2"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_bypass_no_initialization",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "2",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "3",
+        "2"
+      ],
+      [
+        "obs",
+        "1",
+        "5",
+        "T",
+        "-1",
+        "2"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_nonstandard_flags",
+    "last_action": 5
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "1",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "0",
+        "0"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0",
+        "1",
+        "unused"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "0.25",
+        "1",
+        "repeat"
+      ],
+      [
+        "members",
+        "0",
+        "1",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_duplicate_memberships",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "0",
+        "",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_site_source",
+    "last_action": 4
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "1",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "0",
+        "0"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0",
+        "1",
+        "unused"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "0.25",
+        "0",
+        "j"
+      ],
+      [
+        "members",
+        "0",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_capacity_0",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "1",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "0",
+        "28"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0",
+        "1",
+        "unused"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "0.25",
+        "0",
+        "j"
+      ],
+      [
+        "members",
+        "0",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_capacity_28",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "1",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "0",
+        "29"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0",
+        "1",
+        "unused"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "0.25",
+        "0",
+        "j"
+      ],
+      [
+        "members",
+        "0",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "undefined",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_capacity_29",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "1",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "2",
+        "2"
+      ],
+      [
+        "jump",
+        "0",
+        "0",
+        "0",
+        "1",
+        "unused"
+      ],
+      [
+        "jump",
+        "0",
+        "1",
+        "-0",
+        "0",
+        "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"
+      ],
+      [
+        "members",
+        "0",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "toa_long_jump_label",
+    "last_action": 7
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{real}",
+        ""
+      ],
+      [
+        "obs",
+        "0",
+        "58000.12345678901234567890123456789",
+        "PKS",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "",
+        "TT(TAI)",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "UTC(PKS)",
+        "UTC",
+        "0"
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "0",
+        "",
+        "TT(TAI)",
+        "0"
+      ],
+      [
+        "toa",
+        "1"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {},
+    "id": "pks_real",
+    "last_action": 8
+  },
+  {
+    "actions": [
+      [
+        "profile"
+      ],
+      [
+        "env",
+        "{case}/root",
+        ""
+      ],
+      [
+        "debug",
+        "1",
+        "1"
+      ],
+      [
+        "obs",
+        "0",
+        "5",
+        "T",
+        "1",
+        "2"
+      ],
+      [
+        "clock",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "tt",
+        "0"
+      ],
+      [
+        "correction",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "pulsar",
+        "0",
+        "1",
+        "0",
+        "A",
+        "B",
+        "0"
+      ],
+      [
+        "toa",
+        "1"
+      ]
+    ],
+    "classification": "ordinary",
+    "evidence": "",
+    "files": {
+      "root/clock/a.clk": "# A B 1\n0 1\n10 1\n",
+      "root/observatory/aliases": "T alias\n",
+      "root/observatory/observatories.dat": "-4554232.1 2816759.1 -3454036.3 Test T A\n"
+    },
+    "id": "cvs_and_debug",
+    "last_action": 8
+  }
+]

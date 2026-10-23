@@ -195,5 +195,5 @@
     }
   },
   "support_archive_sha256": "313507c5063cb6a8156a0e5fd0f752e2baa59a77c78b5b32822d8efeddd2dbf5",
-  "support_policy": "Raw primary, observatory, TKlog, TKlongdouble and tempo2Util compiled first; archive supplies canonical global variables and uncalled dependencies. initialiseOne is never called; no A2 resource tracing on exercised paths."
+  "support_policy": "Raw primary, observatory, TKlog, TKlongdouble and tempo2Util; verbatim global.C data prefix and CVSdisplayVersion. No archive is linked. A2 config and archive symbol evidence are verified; initialiseOne and A2 resource tracing never execute."
 }

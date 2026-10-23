@@ -76,7 +76,7 @@ def prepare():
                platform=platform.platform(), machine=platform.machine(), locale='C', flags=flags,
                support_archive_sha256=LIBRARY_SHA, archive_selected_defined_symbols=selected,
                preprocessed=preprocessed,
-               support_policy='Raw primary, observatory, TKlog, TKlongdouble and tempo2Util compiled first; archive supplies canonical global variables and uncalled dependencies. initialiseOne is never called; no A2 resource tracing on exercised paths.')
+               support_policy='Raw primary, observatory, TKlog, TKlongdouble and tempo2Util; verbatim global.C data prefix and CVSdisplayVersion. No archive is linked. A2 config and archive symbol evidence are verified; initialiseOne and A2 resource tracing never execute.')
     save(BUILD/'profile.json',out)
     return src, cc, flags, out
 
