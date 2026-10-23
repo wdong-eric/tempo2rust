@@ -217,10 +217,28 @@ impl RuntimeContext {
         resources.last_mut().unwrap().coverage_mjd =
             Some([ifte.start_jd - 2400000.5, ifte.end_jd - 2400000.5]);
         let path = root.join("ephemeris/DE405.1950.2050");
-        let jpl = JplEphemeris::open(
-            &path,
-            &read_resource(&root, &path, "DE405 planetary ephemeris", &mut resources)?,
-        )?;
+        // Provenance and parsing consume one opened object. The digest records
+        // bytes observed by this pass, not a snapshot guarantee against writers.
+        use std::io::{Read, Seek, SeekFrom};
+        let mut file = fs::File::open(&path)
+            .map_err(|e| TimingError::new(&path, None, "JPL", e.to_string()))?;
+        let mut data = Vec::new();
+        file.read_to_end(&mut data)
+            .map_err(|e| TimingError::new(&path, None, "JPL", e.to_string()))?;
+        file.seek(SeekFrom::Start(0))
+            .map_err(|e| TimingError::new(&path, None, "JPL", e.to_string()))?;
+        resources.push(Resource {
+            path: path
+                .strip_prefix(&root)
+                .unwrap()
+                .to_string_lossy()
+                .into_owned(),
+            sha256: format!("{:x}", Sha256::digest(&data)),
+            size_bytes: data.len(),
+            role: "DE405 planetary ephemeris".into(),
+            coverage_mjd: None,
+        });
+        let jpl = JplEphemeris::open(&path, file)?;
         resources.last_mut().unwrap().coverage_mjd =
             Some([jpl.start_jd - 2400000.5, jpl.end_jd - 2400000.5]);
         let path = root.join("earth/eopc04_IAU2000.62-now");

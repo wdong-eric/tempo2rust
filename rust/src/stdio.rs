@@ -1,7 +1,12 @@
 //! Owned libc stream for jpleph.c's fread/fseek semantics; no JPL algorithm.
 //! Rust File ownership replaces fopen; buffering and partial items remain libc's.
-use std::{ffi::{c_char, c_int, c_long, c_void}, fs::File, io,
-    os::fd::{AsRawFd, IntoRawFd}, ptr::NonNull};
+use std::{
+    ffi::{c_char, c_int, c_long, c_void},
+    fs::File,
+    io,
+    os::fd::{AsRawFd, IntoRawFd},
+    ptr::NonNull,
+};
 
 // Necessity: source-visible stdio read-ahead cannot be replaced by Rust File.
 // The opaque pointer is never dereferenced by Rust or exposed outside this module.
@@ -22,7 +27,11 @@ pub(crate) struct Stream {
 impl Stream {
     pub fn from_file(file: File) -> io::Result<Self> {
         #[cfg(test)]
-        let mode = if OBSERVER.with(|o| o.borrow().fail_fdopen) { c"invalid" } else { c"rb" };
+        let mode = if OBSERVER.with(|o| o.borrow().fail_fdopen) {
+            c"invalid"
+        } else {
+            c"rb"
+        };
         #[cfg(not(test))]
         let mode = c"rb";
         // Necessity: adopt the already opened descriptor without reopening its path.
@@ -33,12 +42,18 @@ impl Stream {
         let raw = unsafe { fdopen(file.as_raw_fd(), mode.as_ptr()) };
         let raw = NonNull::new(raw).ok_or_else(io::Error::last_os_error)?;
         let _fd = file.into_raw_fd();
-        Ok(Self { raw, #[cfg(test)] metadata_file })
+        Ok(Self {
+            raw,
+            #[cfg(test)]
+            metadata_file,
+        })
     }
 
     pub fn seek(&mut self, offset: c_long, whence: c_int) -> c_int {
         #[cfg(test)]
-        if observe(0, 0, 0) { return -1; }
+        if observe(0, 0, 0) {
+            return -1;
+        }
         // Necessity: preserve source fseek ordering and libc buffer transitions.
         // &mut self exclusively borrows the live owned stream, with no escaped
         // pointers/aliases. The caller supplies a source-width offset and origin.
@@ -46,15 +61,26 @@ impl Stream {
     }
 
     pub fn read(&mut self, bytes: &mut [u8], size: usize, count: usize) -> io::Result<usize> {
-        let total = size.checked_mul(count).filter(|n| *n <= bytes.len())
+        let total = size
+            .checked_mul(count)
+            .filter(|n| *n <= bytes.len())
             .ok_or_else(|| io::Error::new(io::ErrorKind::InvalidInput, "fread buffer bound"))?;
         #[cfg(test)]
-        if observe(1, size, count) { return Ok(0); }
+        if observe(1, size, count) {
+            return Ok(0);
+        }
         // Necessity: retain fread's complete-item return and partial-item writes.
         // Checked product fits this initialized, exclusively borrowed byte slice;
         // libc needs no alignment, retains neither buffer nor borrow, and may write
         // only total bytes. The stream is live and exclusively borrowed, even at EOF.
-        let result = unsafe { fread(bytes[..total].as_mut_ptr().cast(), size, count, self.raw.as_ptr()) };
+        let result = unsafe {
+            fread(
+                bytes[..total].as_mut_ptr().cast(),
+                size,
+                count,
+                self.raw.as_ptr(),
+            )
+        };
         #[cfg(test)]
         OBSERVER.with(|o| o.borrow_mut().last_read[2] = result);
         Ok(result)
@@ -67,7 +93,9 @@ impl Drop for Stream {
         // This non-cloneable owner relinquished File only after fdopen success;
         // Drop runs once, after all exclusive calls end. No pointer escapes and
         // no Send/Sync impl permits concurrent stream/cache access.
-        unsafe { fclose(self.raw.as_ptr()); }
+        unsafe {
+            fclose(self.raw.as_ptr());
+        }
     }
 }
 
@@ -90,8 +118,15 @@ pub(crate) fn observe(kind: usize, size: usize, count: usize) -> bool {
     OBSERVER.with(|o| {
         let mut o = o.borrow_mut();
         o.calls[kind] += 1;
-        if kind == 1 { o.last_read = [size, count, 0]; }
-        if o.fail[kind] == 0 { false } else { o.fail[kind] -= 1; o.fail[kind] == 0 }
+        if kind == 1 {
+            o.last_read = [size, count, 0];
+        }
+        if o.fail[kind] == 0 {
+            false
+        } else {
+            o.fail[kind] -= 1;
+            o.fail[kind] == 0
+        }
     })
 }
 

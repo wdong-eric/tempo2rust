@@ -47,7 +47,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         serde_json::from_slice::<serde_json::Value>(&baseline_cli.stdout)?
     );
     // Decision 0005 reproducers use disposable copies of the exact pinned files.
-    // No panic/signal catching: the public constructor itself must return Err.
+    // JPL rejects the undefined conversion at use; IF99 retains its constructor guard.
     let mut grid_checks = Vec::new();
     for (name, offset, field) in [
         ("ephemeris/DE405.1950.2050", 2668, "JPL"),
@@ -59,12 +59,17 @@ fn main() -> Result<(), Box<dyn Error>> {
         let mut malformed = saved.clone();
         malformed[offset..offset + 8].copy_from_slice(&1e-300f64.to_be_bytes());
         fs::write(&path, &malformed)?;
-        let error = RuntimeContext::new(&runtime_dir)
-            .err()
-            .expect("impossible record grid accepted");
+        let error = match RuntimeContext::new(&runtime_dir) {
+            Err(e) => e,
+            Ok(mut ctx) => evaluate_terrestrial(&input, &mut ctx).unwrap_err(),
+        };
         assert_eq!(error.path, path);
         assert_eq!(error.field, field);
-        assert!(error.message.contains("record grid"));
+        assert!(error.message.contains(if field == "JPL" {
+            "record_conversion"
+        } else {
+            "record grid"
+        }));
         let failed_cli = run_cli()?;
         assert_eq!(failed_cli.status.code(), Some(1));
         assert!(failed_cli.stdout.is_empty());

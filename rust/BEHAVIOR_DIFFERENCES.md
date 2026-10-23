@@ -1,4 +1,4 @@
-# Fitting preservation and boundary ledger
+# Preservation and boundary ledger
 
 Assignment E preserves defined TEMPO2 results, including deterministic bugs.
 The pinned source is `fda6ad4a9753ad7dc5d291406f2f310a9161423f`. Numerical
@@ -22,14 +22,10 @@ until the overall transfer is complete; central review owns dispositions.
 | Duplicate MODE/WEIGHT sequential assignment | `subset.par` includes three declarations | `read_parfile.rs` last declaration wins, all original declarations remain | Preserved |
 | Unsupported controls/fit selections | MODE outside 0/1, nonpositive NITS, global or non-spin active flags | Explicit profile errors; fixed evaluation still accepts its pre-existing fit-flag metadata | Coverage boundary, not a claim that upstream rejects all these inputs |
 
-The original M1 guards, owned state, clock/resource cache behavior, repeat-call
-policy, input handling, A2 solar-wind initializer correction and D's native
-initialization/read-cache corrections are **not silently grandfathered as exact
-legacy behavior**. E leaves them unchanged per the ownership handoff. Their
-previous acceptance remains bounded by decisions 0002–0006; reconciliation
-belongs to the separate stage after Assignment F's fixed-baseline inventory.
-`M1A_REPORT.md`, `M1B_REPORT.md`, `native/departures.patch` and
-`validation/coverage/` retain the detailed baseline evidence.
+Original M1 adapters outside JPL remain covered by their historical evidence and
+F's fixed-baseline inventory. Assignment I changes only the released JPL scope;
+M1 historical acceptance does not establish exact whole-source fidelity.
+`M1A_REPORT.md`, `M1B_REPORT.md` and `validation/coverage/` remain unchanged.
 
 Independent fitting fixtures use fresh runtime contexts, matching isolated
 reference processes. A preliminary verifier that reused a runtime from the
@@ -39,22 +35,31 @@ restored raw forward agreement. This observation is not proof of a newly found
 Rust/source difference under the same call history; cross-profile history
 comparison is untested and no cache behavior was changed.
 
-JPL safety limitation identified by F/central: preflight validates supplied
-bytes, but native initialization reopens the path. File identity/content must
-remain unchanged between preflight and native use and during later native
-reads; this is currently unenforced. Adjacent FFI comments explicitly state the
-assumption. Preflight alone does not guarantee native memory bounds for a changed
-file. A separate source-faithful JPL stage owns this issue; E does not fix it.
+## Assignment I JPL dispositions (decision 0017)
 
-Separate JPL limitation **U2/B29**: canonical `jpl_int.h` packs AU at byte offset
-28, but `jpl_get_double` dereferences a cast `double*` requiring eight-byte
-alignment on this host. Allocator alignment and successful fixtures do not prove
-that field access is portably aligned. F's `validation/coverage/native_replay.json`
-at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` is layout-only evidence
-(offset 28, alignment 8, struct size 648), not sanitizer or crash evidence. This
-retained native risk is now explicit next to the Rust AU getter and is independent
-of U1's file-identity assumption. E preserves native behavior; the separate JPL
-stage owns any later disposition.
+| Source behavior | Current Rust disposition / evidence |
+| --- | --- |
+| U1 validate bytes then reopen path | Removed: runtime hashes/rewinds/transfers one File. Owned test replaces the path after hashing and proves original AU is consumed; reopen sees new AU. Digest observes a pass, not concurrent-write snapshot consistency. |
+| U2/B29 packed AU/EMRAT getters | Decoded fields selected safely; isolated H getter commands return those values without unaligned access. |
+| B03 cache before seek/read | Restored. Exact H raw cache bytes, statuses, I/O counts and retry observations pass; prior corrected-cache test and native patch removed. Fix deferred until overall transfer. |
+| Unwritten Sun/recurrence state | Explicit absent Sun and initialized recurrence storage. First demand computes Sun. H control supplies its sentinels separately. Natural-init status is compared without invented C fields. |
+| Transient ipt[15]/pv[14] pointer formation | Actual row/destination selected before indexing. Full calls match H host observations; C UB is not emulated. |
+| Failed ordinary pleph reads unwritten local pv | Return source status and earlier mutations without a numerical vector. Timing adapter returns contextual error. |
+| Position-only EMB copies unwritten velocity | Read only requested components; public source-cleared suffix remains zero. |
+| Missing/unvisited private pleph body row | Explicit `pleph_unwritten_row` boundary; no fabricated zero scientific vector. Direct state retains caller storage for unvisited requests. |
+| nut[4] and direct acceleration demands | Initialized destination slices sized to actual dimension/demand. Four-slot libration rejects; nine-slot direct body/libration acceleration tested. |
+| Partial fread elements | Raw initialized bytes retained, including old suffix; exact same-host byte comparison, not portable C numerical meaning. |
+| NaN/tiny-step record conversion, bad coefficients/counts, title overflow, invalid selectors | Distinct operation-local Boundary errors. No broad low-level finite/AU/grid restrictions. Unsigned record-offset and kernel arithmetic retain source wrapping. |
+| Defined nonfinite source arithmetic | Exact NaN/+Infinity/-Infinity classes preserved at low level; high-level nonfinite timing-vector rejection remains a documented adapter. |
+| Global initialization code and live -7/-8 handles | Atomic global sequential status, startup -9, reset on init, unchanged by Drop. Live partial-init handles retain caller mutations and close normally. No C global-race equivalence claimed. |
+| C pointer ABI and null/double close | Owned non-cloneable stream, bounded optional Sun view and field selectors. No packed Rust ABI, arbitrary byte-offset getters or raw handle API. |
+| Pre430 unwritten temporary extension words | Source invalid marker clears optional rows; Rust avoids reading/swapping unwritten temporary words. Malformed accidental-valid marker case returns an explicit boundary. |
+| Unterminated no-digit title | Declared H title_zero maps to version zero; overflowing or unterminated numeric token rejects rather than scanning beyond the consumed title. |
+
+All 12 implemented responsibilities and each H event are covered by the projection.
+The ten isolated source cases are classified separately in I's evidence. No
+sanitizer output is used as a post-failure numerical oracle. Platform limits and
+untested malformed branches remain in `JPL_REPORT.md`; central owns acceptance.
 
 F B06 documentation correction: `ifteph.C::IFTE_init` does not check its header
 read counts. `IFTE_get_Vals` checks data seek/read outcomes and exits on a short

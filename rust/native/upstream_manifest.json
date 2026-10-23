@@ -1,9 +1,6 @@
 {
   "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
   "files": {
-    "jpl_int.h": "d595b3aa8727567539cf5f73ef0977ca487237f2f2356538e1f5586e24315f72",
-    "jpleph.c": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
-    "jpleph.h": "c04f5f1b0fc961868ebd3ca0c4af6d9e5f2fca045689c963865484d581e1809d",
     "sofa/anp.for": "59a45a0683c110404cfc1c4bd53deead6879e704440d1a8d7f36319caab4cf83",
     "sofa/anpm.for": "effa3d85ba9ab8bb9fddd50aed800f3490c9d1d752fb43ff2b8f3effa7be0ad0",
     "sofa/bi00.for": "a4f93e9978cf3510c2e7998377dea72f630084aa65f933a2a9711037bc04ff97",

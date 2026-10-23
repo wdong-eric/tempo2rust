@@ -1,0 +1,18 @@
+{
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "files": {
+    "jpleph.c": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+    "jpleph.h": "c04f5f1b0fc961868ebd3ca0c4af6d9e5f2fca045689c963865484d581e1809d",
+    "jpl_int.h": "d595b3aa8727567539cf5f73ef0977ca487237f2f2356538e1f5586e24315f72"
+  },
+  "license": "GPL-2.0-or-later",
+  "copyright": "Copyright (C) 2011, Project Pluto",
+  "authors": [
+    "Piotr A. Dybczynski",
+    "Bill J. Gray"
+  ],
+  "translated_into": [
+    "src/jpleph.rs"
+  ],
+  "io_boundary": "src/stdio.rs"
+}

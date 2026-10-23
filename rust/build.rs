@@ -1,4 +1,4 @@
-//! Rust-only Cargo build glue for retained jpleph.c/SOFA, replacing selected
+//! Rust-only Cargo build glue for retained SOFA, replacing selected
 //! Makefile.am and sofa/Makefile.am rules; no standalone timing routine counterpart.
 use std::{env, fs, path::Path, process::Command};
 
@@ -6,17 +6,15 @@ fn run(program: &str, args: &[&str]) {
     let status = Command::new(program)
         .args(args)
         .status()
-        .unwrap_or_else(|e| panic!("cannot run {program}: {e}; install GCC/GFortran or set CC/FC"));
+        .unwrap_or_else(|e| panic!("cannot run {program}: {e}; install GFortran or set FC"));
     assert!(status.success(), "{program} {args:?} failed");
 }
 
 fn main() {
     println!("cargo:rerun-if-changed=native");
-    println!("cargo:rerun-if-env-changed=CC");
     println!("cargo:rerun-if-env-changed=FC");
     let out = env::var("OUT_DIR").unwrap();
     let fc = env::var("FC").unwrap_or_else(|_| "gfortran-16".into());
-    let cc = env::var("CC").unwrap_or_else(|_| "gcc-16".into());
     let mut sources: Vec<_> = fs::read_dir("native/sofa")
         .unwrap()
         .map(|p| p.unwrap().path())
@@ -45,20 +43,11 @@ fn main() {
         );
         objects.push(object);
     }
-    let object = Path::new(&out).join("jpleph.o");
-    run(
-        &cc,
-        &[
-            "-O2",
-            "-fPIC",
-            "-c",
-            "native/jpleph.c",
-            "-o",
-            object.to_str().unwrap(),
-        ],
-    );
-    objects.push(object);
     let archive = Path::new(&out).join("libtiming_native.a");
+    // Recreate the archive so an earlier build cannot retain a removed JPL object.
+    if archive.exists() {
+        fs::remove_file(&archive).unwrap();
+    }
     let mut args = vec!["crs", archive.to_str().unwrap()];
     args.extend(objects.iter().map(|p| p.to_str().unwrap()));
     run("ar", &args);

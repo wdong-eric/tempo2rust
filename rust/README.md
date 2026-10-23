@@ -9,8 +9,9 @@ acceptance belongs to the central planning chat.
 
 The crate uses Rust edition 2024, Rug 1.30.0 and bundled GMP/MPFR through
 gmp-mpfr-sys 1.7.1. Rust/Cargo 1.97.1 on macOS arm64 is the executed toolchain.
-GCC/GFortran 16 compile the vendored JPL/SOFA sources (`CC`/`FC` override the
-compiler commands); a C toolchain also builds GMP/MPFR. Python 3 runs the fixture
+GFortran 16 compiles the vendored SOFA sources (`FC` overrides the compiler);
+a C toolchain also builds GMP/MPFR. JPL parsing/interpolation executes in Rust
+with a minimal owned libc stdio boundary. Python 3 runs the fixture
 comparators. The normal build uses only sources inside this crate. No TEMPO2
 executable is needed. Barycentric evaluation requires no runtime data.
 
@@ -212,13 +213,20 @@ owned directory; the supplied runtime remains read-only. Large runtime files are
 explicit external test inputs, not bundled in the crate.
 
 The verifier also runs the resource unit tests and public resource/CLI checks
-in release mode. Both central-review `step_days=1e-300` reproducers must return
-contextual constructor errors, leave CLI stdout empty, and permit valid
-processing afterward in the same library host. DE405 grids are bounded by
-native record/seek limits; IF99 grids must match the owned records and use
-checked index/offset arithmetic. Release terrestrial exports must be
-byte-identical to debug exports. The JPL repeated-short-read/cache-recovery
-regression remains active in both builds.
+in release mode. Under Assignment I, JPL's `step_days=1e-300` conversion is
+rejected at use; IF99 retains its constructor guard. Both leave CLI stdout empty
+and permit valid processing afterward. JPL's canonical cache-before-read and
+partial-read behavior are now tested against H, including stale retry success;
+IF99 grids retain checked index/offset arithmetic. Release terrestrial exports
+must be byte-identical to debug exports.
+
+Assignment I evidence is separate in `verification/jpl/`; see `JPL_REPORT.md`.
+Run `python3 ../validation/jpl_port/run.py --profile debug` and `--profile release`
+for the 55-scenario exact H gate. `../validation/jpl_port/verify.py` runs the
+complete I verification and redirects existing M1/M2 verifiers into that directory.
+M2's four raw SVD-order diagnostics remain unresolved; the verifier explicitly
+checks that exact failure set. Historical verification directories are immutable.
+
 
 
 ## ZERO and spin fitting (M2 delivery; central acceptance pending)

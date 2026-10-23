@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignment E, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -22,7 +22,9 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/tabulated_function.rs` | `tabulatedfunction.C::TabulatedFunction_load/TabulatedFunction_getValue/TabulatedFunction_getStartX/TabulatedFunction_getEndX` in an owned table |
 | `src/eop.rs` | `eop.C::load_EOP/get_EOP` |
 | `src/ifteph.rs` | `ifteph.C::IFTE_init/IFTE_get_Vals/IFTEinterp` in owned storage; split-epoch responsibility from `tt2tdb.C::tt2tb` |
-| `src/read_ephemeris.rs` | Selected `readEphemeris.C::readEphemeris`; retained `jpleph.c::jpl_init_ephemeris/jpl_pleph/jpl_get_double/jpl_init_error_code/jpl_close_ephemeris`, with Rust ownership/preflight |
+| `src/read_ephemeris.rs` | Selected `readEphemeris.C::readEphemeris` call order and Rug128 scaling; safe JPL calls, timing error/nonfinite adapter |
+| `src/jpleph.rs` | All 12 implemented functions in `jpleph.c`, declared field meanings in `jpleph.h`, decoded `jpl_int.h` layout; full map in `../validation/jpl_port/PROJECTION.md` |
+| `src/stdio.rs` | Rust ownership glue for JPL's libc I/O; no standalone scientific counterpart, no JPL algorithm |
 | `src/get_obs_coord.rs` | Selected `get_obsCoord.C::get_obsCoord_IAU2000B`; retained `sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for` routines `iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP` and their pinned closure |
 | `src/tt2tdb.rs` | `tt2tdb.C::tt2tb`, accepted IF99 SI/TCB branch |
 | `src/tropo.rs` | `tropo.C::getMeteorologicalValue/getZenithWetDelay/getSurfaceAtmosphericPressure/NMF_hydrostatic/NMF_wet/compute_tropospheric_delays`; combined lookup/provenance and single-TOA Rust operation |
@@ -31,7 +33,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/tkfit.rs` | `TKfit.C` nonaccelerated `TKleastSquares` route: covariance, back substitution, mixed-precision chi-square, error rescaling; `FitNumber` is Rust-only diagnostic transport |
 | `src/t2fit.rs` | `t2fit.C::t2Fit/t2Fit_getFitData/t2Fit_fillFitInfo/t2Fit_buildDesignMatrix/t2Fit_updateParameters` local ZERO/F0–F3 subset and `tempo2.C::main` NITS lifecycle; owned fit results are Rust-only glue |
 | `src/main.rs` | Rust-only command/JSON publication glue for `tempo2.C::main`, `getInputs.C::getInputs` and `textOutput.C::textOutput` responsibilities; not the full upstream CLI/output contract |
-| `build.rs` | Rust-only Cargo build glue replacing selected `Makefile.am` and `sofa/Makefile.am` rules for retained JPL/SOFA; no standalone timing routine |
+| `build.rs` | Rust-only Cargo build glue replacing selected `Makefile.am` and `sofa/Makefile.am` rules for retained SOFA; no standalone timing routine |
 
 ZERO construction and storage remain in `t2fit.rs`; the frequency callback lives
 in `std_freq.rs`, with `SPIN` fixing the source F0–F3 order. The SVD retains source
@@ -48,52 +50,46 @@ of the existing Rust parser/range/error adapters.
 
 ## Retained dependencies
 
-`native/upstream_manifest.json` names every retained native file at the same
-TEMPO2-relative path, including all 36 SOFA routines and the JPL C/header files.
-Those files remain byte-identical to accepted M1b, including the previously
-accepted JPL patch. `native/README.md` and `native/departures.patch` identify the
-native responsibilities and the existing changes. They are established retained
-numerical dependencies, not hidden TEMPO2 fitting calls. Their original source
-headers, routine names and licenses are preserved. SOFA packaging restrictions
-remain a separate distribution limitation.
+`native/upstream_manifest.json` identifies the 36 unchanged SOFA routines and
+notices at their TEMPO2-relative paths. `native/README.md` describes the retained
+closure. JPL C files/build/FFI and the historical cache-correction patch are
+removed; `jpl_source_manifest.json` preserves source hashes and GPL attribution.
+No numerical dependency or alternate JPL implementation was added.
 
 ## Unsafe audit
 
-There is no unsafe code in the new controls, derivatives, SVD, fit orchestration,
-serializer or CLI. The only unsafe Rust sites remain the eight pre-existing
-FFI declaration/call blocks below. Each now has an adjacent necessity explanation
-and concrete invariants; no new FFI is added.
+There are seven production unsafe sites: five in `stdio.rs` and the two existing
+SOFA sites. All new JPL arithmetic, parsing and indexing are safe Rust. Each site
+has adjacent necessity and concrete invariants. No unsafe function or Send/Sync
+implementation is present.
 
-| Site | Why native entry is necessary | Invariants at the boundary |
-|---|---|---|
-| `get_obs_coord.rs` extern block | Retained SOFA ABI | By-reference f64 scalars and contiguous column-major 3/6/9-element arrays; no retained pointers |
-| `get_obs_coord.rs` call block | SOFA rotations | Live aligned initialized arrays, exclusive outputs, disjoint position/velocity slices for cross product, no escaping pointers, `-frecursive` locals |
-| `read_ephemeris.rs` extern block | Retained JPL ABI | Valid native handles, NUL-terminated path and six-element f64 output contract |
-| `read_ephemeris.rs` initializer | C-owned reader allocation | Live CString, ABI-permitted null optional arrays, global init/status lock; native file matching preflight is an unenforced assumption |
-| `read_ephemeris.rs` init-status query | C error slot | Same lock held; no pointers |
-| `read_ephemeris.rs` AU query | C ephemeris metadata | Live non-null exclusive handle and source constant field offset 28; U2/B29 remains unresolved because the packed AU offset does not satisfy the getter's cast-double alignment requirement |
-| `read_ephemeris.rs` interpolation | C numerical interpolation | Exclusive mutable handle/cache access, finite epoch, aligned initialized six-slot output, source body identifiers, no retained pointers; native bounds assume unchanged file contents |
-| `read_ephemeris.rs` Drop | Matching C deallocator | Unique non-cloneable successful handle, exactly one cleanup, no outstanding call or escaped pointer |
+| Site | Necessity | Invariants |
+| --- | --- | --- |
+| `stdio.rs` foreign declarations | C stdio buffering is observable in H | Opaque FILE, bounded calls, no retained caller buffers |
+| `stdio.rs` fdopen | Consume the already opened file without path reopen | File owns live fd until success; static NUL mode; failure drops File; success relinquishes fd exactly once |
+| `stdio.rs` fread | Complete-item counts and partial-element writes | Checked size product fits initialized exclusive byte slice; no pointer escapes; live exclusive stream |
+| `stdio.rs` fseek | Source seek/buffer transitions | Exclusive stream borrow, source-width offset/origin, no concurrent cache/position access |
+| `stdio.rs` fclose | Matching destruction of libc buffer and fd | Non-cloneable stream, one Drop, all calls ended, no escaped pointer |
+| `get_obs_coord.rs` extern block | Retained SOFA ABI | By-reference binary64 scalars and contiguous column-major arrays |
+| `get_obs_coord.rs` call block | SOFA rotations | Aligned initialized arrays, exclusive outputs, disjoint cross-product slices, no retained pointers, automatic Fortran locals |
 
-The handle is not made `Send` or `Sync` by an unsafe implementation. This audit
-explains the existing boundaries; it is not concurrency stress testing, an
-exhaustive native-memory proof or approval of historical behavior differences.
-Those differences remain visible in `BEHAVIOR_DIFFERENCES.md` and Assignment F's
-independent baseline inventory.
+The test-only stdio observer duplicates a File descriptor only for metadata,
+without reads/seeks. It adds no unsafe site and is absent from production builds.
+The production stream is neither Clone nor Send/Sync. These are bounded ownership
+checks on the declared host, not concurrency stress or other-platform validation.
 
-The JPL preflight reads and validates file bytes, then native initialization
-reopens the path. There is no enforced identity/content pin between those
-operations or throughout native reads. Preflight therefore does **not** prove
-the native reader consumes the validated bytes. This is an existing safety
-limitation assigned to a separate central JPL stage; E changes no native reader
-or cache behavior.
+## JPL boundary dispositions
 
-Separately, F's **U2/B29** records that canonical `jpl_int.h` packs AU at byte
-offset 28, while `jpl_get_double` casts `base + field` to `double*` and dereferences
-it. The host requires eight-byte double alignment; aligned allocation does not
-establish alignment of `base + 28`. Successful timing fixtures do not prove a
-portable alignment contract. F's [native layout evidence](../validation/coverage/native_replay.json)
-at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` measures offset 28,
-alignment 8 and struct size 648 without executing the unaligned getter or running
-a sanitizer. This retained-source risk is distinct from U1's file-identity gap.
-The adjacent AU-call comment now states it; E changes no native behavior.
+U1: runtime provenance reads/hashes and rewinds one File, then consumes it into
+stdio. Path replacement cannot substitute another object. In-place writes remain
+visible according to stdio/cache behavior; the digest is not an immutable snapshot.
+
+U2/B29: selectors read decoded AU/EMRAT fields; no packed typed dereference remains.
+B03: canonical cache-before-read is restored, including stale retry success,
+partial bytes and skipped byte swapping after failed reads. It is preserved as a
+known source defect, not corrected downstream.
+
+Decision 0017 supplies the remaining owned/undefined-state dispositions in
+`../validation/jpl_port/PROJECTION.md` and `BEHAVIOR_DIFFERENCES.md`. H's full-call
+values remain host observations subject to source undefined pointer formation.
+Exact agreement does not make them portable C results or accept the full transfer.
