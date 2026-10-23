@@ -80,3 +80,7 @@ Require fresh output and proof that the intended executable/case ran; reject mis
 Run debug/release Rust checks, formatting and Clippy; compare profiles. Rerun I's full JPL host/isolated/supplemental/ownership gates with new output stored under L, preserving its projections. Run the existing M1a/M1b numerical comparisons with all budgets and fixture/resource identities unchanged. Update only active behavioral tests/orchestration whose assumptions this decision explicitly supersedes, and document each replacement. Run M2 to completion and require exactly its four historical dependent-column raw-order diagnostics and no additional failures. A nonzero M2 exit remains visible.
 
 Deliver `rust/CLOCK_REPORT.md`, coherent Conventional Commit IDs, executed hashes, complete source/field/case correspondence, direct/integrated comparison counts and maxima, precise safe/presentation/lifetime adapters, changed-test explanations, unsafe inventory and remaining gaps. Central retains acceptance. Passing this bounded stage would not accept M2, full observatory/resources/input coverage, Linux/concurrency, or the overall transfer.
+
+## Dispatch
+
+Created **Assignment L: Rust clock and table transfer**, chat `01a167e7-780c-7163-9ed3-e1af7cb9ec33`, in the local `rustify-tempo2` project from release commit `82fc09a`. Its active turn acknowledged the source/projection-first sequence. L is the sole current Rust owner; central reviews K's delivered reference independently.

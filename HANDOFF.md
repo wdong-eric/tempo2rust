@@ -69,6 +69,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Bounded transfer accepted by decision 0022; ownership window closed |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Delivered reference accepted within its executed scope by decision 0021; ownership window closed, nine cases remain unrun |
 | Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Delivered bounded reference; central review pending |
+| Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Current bounded Rust owner under decision 0023; dispatched from `82fc09a` |
 
 ## Shared working design
 
