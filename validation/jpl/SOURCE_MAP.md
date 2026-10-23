@@ -10,9 +10,11 @@ are in `outputs/checks.json`. No source patch initializes or repairs anything.
 | `probe.c` | All 12 implemented functions in `jpleph.c`; layouts in `jpl_int.h`; API in `jpleph.h` | Includes unchanged source to access static helpers. Macros interpose libc seek/read/calloc for counting and explicitly requested fault injection. Ordinary libc calls remain ordinary calls. |
 | `run.py` | Binary encoding documented in `jpl_int.h`; initializer and query sequences in `jpleph.c` | Fixture generation, process isolation, serialization checks and mutation comparisons; no production counterpart. |
 | `analyze.py` | `interp`, `jpl_state` cache flow, Earth/Moon combination in `jpl_pleph` | Independent rational polynomial diagnostic and observed-sequence assertions; no replacement reference engine. |
+| `test_isolated.py`, `diagnostic_fixtures.json` | No standalone TEMPO2 counterpart; validates H's sanitizer evidence comparator | Original unsymbolized and central symbolized failure summaries must give the same contract; failure kind/stage and available source locations remain gated. |
 | `inputs.json`, `cases.json` | Declared encoded fields and ordered caller actions | Reproducible manifests; generated binary inputs live under ignored `build/inputs/`. |
 | `outputs/reference.json` | Values, classifications, statuses, raw cache bytes and caller mutations | Host observations explicitly distinguished from defined initialized helper calculations. |
 | `coverage.json` | Every implemented function, declaration-only function and macro | Machine-checked named cases and explicit gaps; not a branch-coverage percentage. |
+| `outputs/isolated.json`, `outputs/isolated_diagnostics.json` | Invalid/terminating canonical paths | First file contains the exact failure contract; second retains variable trace presentation as diagnostic evidence only. No post-failure numerical values. |
 
 The table in `coverage.json` gives exact source spans for every implementation.
 `make_sub_ephem` has a declaration but no implementation in the pinned checkout.

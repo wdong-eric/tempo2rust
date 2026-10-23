@@ -38,11 +38,10 @@
         "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
       ],
       "diagnostic": "AddressSanitizer",
+      "failure_kind": "AddressSanitizer:BUS",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "SUMMARY: AddressSanitizer: BUS (validation/jpl/build/asan:arm64+<address>) in interp+<address>"
-      ]
+      "source_location_if_reported": "jpleph.c:373"
     },
     "max_cheby_assertion": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -50,11 +49,10 @@
         "interp 0.5 32 18 3 1 2"
       ],
       "diagnostic": "Assertion",
+      "failure_kind": "assertion:ncf < MAX_CHEBY",
       "last_completed_op": "startup",
       "returncode": -6,
-      "summary": [
-        "Assertion failed: (ncf < MAX_CHEBY), function interp, file jpleph.c, line 326."
-      ]
+      "source_location_if_reported": "jpleph.c:326"
     },
     "nan_epoch": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -64,12 +62,10 @@
         "state nan 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
       ],
       "diagnostic": "outside the range",
+      "failure_kind": "UndefinedBehaviorSanitizer:float-to-integer-overflow",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:582:10: runtime error: nan is outside the range of representable values of type 'unsigned int'",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:582:10 "
-      ]
+      "source_location_if_reported": "jpleph.c:582"
     },
     "nut_four_slot_overwrite": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -79,11 +75,10 @@
         "state_nut4"
       ],
       "diagnostic": "stack-buffer-overflow",
+      "failure_kind": "AddressSanitizer:stack-buffer-overflow",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "SUMMARY: AddressSanitizer: stack-buffer-overflow (validation/jpl/build/asan:arm64+<address>) in interp+<address>"
-      ]
+      "source_location_if_reported": "jpleph.c:403"
     },
     "pleph_ipt_one_past": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -93,12 +88,10 @@
         "pleph 2450003.5 3 12 1"
       ],
       "diagnostic": "index 15 out of bounds",
+      "failure_kind": "UndefinedBehaviorSanitizer:array-index-out-of-bounds",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:625:31: runtime error: index 15 out of bounds for type 'uint32_t[15][3]' (aka 'unsigned int[15][3]')",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:625:31 "
-      ]
+      "source_location_if_reported": "jpleph.c:625"
     },
     "state_ipt_one_past": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -108,12 +101,10 @@
         "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
       ],
       "diagnostic": "index 15 out of bounds",
+      "failure_kind": "UndefinedBehaviorSanitizer:array-index-out-of-bounds",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:625:31: runtime error: index 15 out of bounds for type 'uint32_t[15][3]' (aka 'unsigned int[15][3]')",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:625:31 "
-      ]
+      "source_location_if_reported": "jpleph.c:625"
     },
     "tiny_step_record_cast": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -123,12 +114,10 @@
         "state 2450003.5 1 2 0 2 0 0 0 0 0 0 2 0 0 0 0"
       ],
       "diagnostic": "outside the range",
+      "failure_kind": "UndefinedBehaviorSanitizer:float-to-integer-overflow",
       "last_completed_op": "control",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:582:10: runtime error: 3e+300 is outside the range of representable values of type 'unsigned int'",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:582:10 "
-      ]
+      "source_location_if_reported": "jpleph.c:582"
     },
     "u2_packed_au": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -137,12 +126,10 @@
         "getter d 28"
       ],
       "diagnostic": "misaligned address",
+      "failure_kind": "UndefinedBehaviorSanitizer:misaligned-access",
       "last_completed_op": "open",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:77:13: runtime error: load of misaligned address <address> for type 'double', which requires 8 byte alignment",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:77:13 "
-      ]
+      "source_location_if_reported": "jpleph.c:77"
     },
     "u2_packed_emrat": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -151,12 +138,10 @@
         "getter d 36"
       ],
       "diagnostic": "misaligned address",
+      "failure_kind": "UndefinedBehaviorSanitizer:misaligned-access",
       "last_completed_op": "open",
       "returncode": -6,
-      "summary": [
-        "validation/jpl/build/source/jpleph.c:77:13: runtime error: load of misaligned address <address> for type 'double', which requires 8 byte alignment",
-        "SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior validation/jpl/build/source/jpleph.c:77:13 "
-      ]
+      "source_location_if_reported": "jpleph.c:77"
     },
     "unterminated_title": {
       "classification": "undefined_or_terminating_no_numerical_oracle",
@@ -164,11 +149,10 @@
         "open /Users/Eric.Dong/Downloads/tempo2rust/validation/jpl/build/inputs/unterminated_title.bin 0"
       ],
       "diagnostic": "stack-buffer-overflow",
+      "failure_kind": "AddressSanitizer:stack-buffer-overflow",
       "last_completed_op": "startup",
       "returncode": -6,
-      "summary": [
-        "SUMMARY: AddressSanitizer: stack-buffer-overflow (validation/jpl/build/asan:arm64+<address>) in jpl_init_ephemeris+<address>"
-      ]
+      "source_location_if_reported": "jpleph.c:726"
     }
   },
   "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)"

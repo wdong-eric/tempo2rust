@@ -32,11 +32,13 @@
   },
   "events": 1443,
   "harness_sha256": {
-    "SOURCE_MAP.md": "db48d3a5e895c2b2a3bcb2194ed21978ef9cf66e893d053fbb6cba2467ec5f98",
+    "SOURCE_MAP.md": "ea53902a1426ece0fc43462a8c27ef51aad45af1167817469cade88d3b3f52d5",
     "analyze.py": "649202e15069f7dd731bcca3ae85ba4f23bbca84d8b85304727fad244a05f9a7",
-    "coverage.json": "b0dedb177f7c2295de4aeebcdb8c4cb836de64be5270c8c8ef00893e73529022",
+    "coverage.json": "575b27bdd58dd5154dbb838b24d3449e8647d87883a91b5277322da8f72db068",
+    "diagnostic_fixtures.json": "01523c2c58b68d3d19786781527171e1b01d736dcdd598019e2a33fca1b2239c",
     "probe.c": "a67a1e3c2a294f44a1c0c6156974445fd9d061786947a9462fa005c7dfdd9e6a",
-    "run.py": "3552606cdb1dd125aacdcdf1c395beb4ad6664758d71c8d7454878153a46c441"
+    "run.py": "890d9f8909e4533546506c72a1d6d8e945584e10c526d8305a85d2778a75896b",
+    "test_isolated.py": "46be264c722fcabd22da86cd64de8efad48720ff5b786dc8811246fedab20972"
   },
   "machine": "arm64",
   "mutations": {

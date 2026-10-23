@@ -41,7 +41,9 @@ No numerical result is fabricated after a sanitizer failure or from ordinary
 | `outputs/reference.json` | Full observations, finite decimal/bit pairs, explicit nonfinite classes, statuses, sentinels, cache hex, I/O counts and actual fread return counts. |
 | `outputs/checks.json` | Toolchain, flags, source/harness hashes, case counts, repeatability, artifact/source/coverage mutations. |
 | `outputs/analysis.json` | Numerical scales, semantic assertions, failure/lifetime summaries and finite/nonfinite API comparisons. |
-| `outputs/isolated.json` | Sanitizer/assertion classifications and last completed stage; unstable addresses normalized, no post-failure values. |
+| `outputs/isolated.json` | Exact isolated failure contract: return status, failure kind, last completed stage, commands, compiler/flags and pinned source-location expectations. No trace text or post-failure values. |
+| `outputs/isolated_diagnostics.json` | Latest sanitizer/assertion summary text, kept as diagnostic evidence outside exact reproducibility comparison. |
+| `test_isolated.py`, `diagnostic_fixtures.json` | Regression tests using original unsymbolized summaries and central's symbolized replay; wrong failure kind/stage and source-location mutations. |
 | `outputs/prior_replay.json` | Exact earlier probe source, hash, command and fresh canonical stdout; F's files remain read-only. |
 
 From `/Users/Eric.Dong/Downloads/tempo2rust`:
@@ -49,12 +51,14 @@ From `/Users/Eric.Dong/Downloads/tempo2rust`:
 ```sh
 python3 validation/jpl/run.py
 python3 validation/jpl/analyze.py
+python3 -m unittest discover -s validation/jpl -p test_isolated.py -v
 ```
 
 The first command builds and executes, compares against the checked-in reference
 and manifests, repeats every ordinary scenario in a fresh process, and runs the
 mutation/isolated probes. The second checks semantic assertions and writes the
-derived analysis. To deliberately regenerate the reference from canonical C:
+derived analysis. The third runs the focused isolated-diagnostic regression
+tests. To deliberately regenerate the reference from canonical C:
 
 ```sh
 python3 validation/jpl/run.py --record
@@ -194,6 +198,36 @@ resets the global error. Closing a handle does not reset it.
 
 ## Actual verification
 
+### Central-review reproducibility correction
+
+Central reproduced every ordinary numerical event but found that ASan summary
+formatting differed with symbolization: for example, the same coefficient-offset
+BUS failure appeared either as an executable offset or as `jpleph.c:373 in
+interp`. Exact comparison of that presentation was an H checker defect, not a
+TEMPO2 result discrepancy.
+
+The corrected gate derives the failure kind from the observed diagnostic and
+compares status, kind, completed stage, commands and build profile exactly.
+Reported source locations must match the pinned source: AU/EMRAT 77, IPT pointer
+625, record conversion 582, Chebyshev assertion 326, coefficient read 373,
+six-component write 403 and title parse 726. UBSan/assertion locations are
+required; ASan source locations are checked when present because unsymbolized
+summaries legitimately omit them. Unknown diagnostics fail classification.
+Symbolized/unsymbolized summary text is saved separately in
+`outputs/isolated_diagnostics.json` and is not an exact oracle.
+
+The stable contract was migrated from **54162de's original observations**, not
+re-recorded from central's latest trace. `diagnostic_fixtures.json` preserves both
+presentations with input provenance/hashes. Nine focused tests cover their
+equivalence plus wrong failure kind, wrong completed stage, wrong source file or
+line, missing required locations, unknown diagnostics, changed return status,
+dropped cases and changed assertion conditions. The ordinary numerical reference,
+its classifications, inputs, canonical sources and all existing numerical gates
+remain unchanged. The default full runner and analysis were rerun without
+`--record`; the original numerical reference remains byte-identical.
+
+### Verification results
+
 - Unmodified source hashes and resource hashes checked; both independent source
   repositories clean at final inspection. No unrelated failures were encountered
   or repaired. Other owners' work was not tested by H.
@@ -218,6 +252,8 @@ resets the global error. Closing a handle does not reset it.
 - Ten isolated instrumented processes reach their declared invalid/terminating
   classifications. Their expected failures are verification evidence, not
   sanitizer-clean claims. GCC and Clang profiles are recorded separately.
+- Nine focused diagnostic-comparator tests pass, including acceptance of both
+  recorded trace presentations and rejection of wrong failure kind/stage.
 
 No Rust tolerance is adopted. Exact equality here checks repeatability and
 artifact integrity on the declared host. It is not a proposed cross-platform
@@ -260,5 +296,8 @@ observations, actual checks and initial report. The subsequent documentation
 commit records central's independent confirmation and C-stdio direction; its
 identity is returned in this chat. That update changes no executable probe or
 numerical observation: the function/case coverage check was rerun and its
-documentation hash refreshed. Only explicit `validation/jpl/` paths are staged.
-No changes to another owner's history are included.
+documentation hash refreshed. A subsequent bounded correction fixes isolated
+diagnostic comparison and adds the focused regression evidence described above;
+its commit identity is returned with the updated report in this chat. Only
+explicit `validation/jpl/` paths are staged. No changes to another owner's history
+are included.

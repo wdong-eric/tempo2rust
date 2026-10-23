@@ -327,8 +327,8 @@ def isolated_checks(source):
         # Assertion text on macOS can be lower-case, unlike GNU libc.
         assert run.returncode and diagnostic.lower() in run.stderr.lower(),(name,run.returncode,run.stderr)
         completed=[json.loads(line) for line in run.stdout.splitlines() if line.endswith("}")]
-        # Addresses/PIDs/ASLR frames are intentionally excluded; preserve the
-        # diagnostic type and source line, not an unstable process dump.
+        # Retain trace presentation as evidence; isolated_contract supplies the
+        # stable classification and validates source locations when reported.
         summary=[line for line in run.stderr.splitlines() if "runtime error:" in line or "SUMMARY:" in line or "Assertion" in line or "Assertion failed" in line]
         summary=[re.sub(r"0x[0-9a-fA-F]+","<address>",line.replace(str(ROOT)+"/","")) for line in summary]
         results[name]=dict(returncode=run.returncode,diagnostic=diagnostic,summary=summary,
@@ -336,6 +336,49 @@ def isolated_checks(source):
                            commands=lines,classification="undefined_or_terminating_no_numerical_oracle")
     return dict(compiler=subprocess.check_output([clang,"--version"],text=True).splitlines()[0],
                 build_commands=commands,cases=results)
+
+
+def isolated_contract(observed):
+    """Gate failure kind/stage independently of ASan symbolizer availability."""
+    source_lines={
+        "u2_packed_au":77, "u2_packed_emrat":77,
+        "state_ipt_one_past":625, "pleph_ipt_one_past":625,
+        "nan_epoch":582, "tiny_step_record_cast":582,
+        "max_cheby_assertion":326, "coefficient_offset":373,
+        "nut_four_slot_overwrite":403, "unterminated_title":726,
+    }
+    contract=copy.deepcopy(observed)
+    for name,case in contract["cases"].items():
+        summary="\n".join(case.pop("summary"))
+        asan=re.findall(r"SUMMARY: AddressSanitizer: ([\w-]+)",summary)
+        assertion=re.findall(r"Assertion failed: \(([^\n]+)\), function",summary)
+        if asan:
+            assert len(asan)==1,(name,summary)
+            kind="AddressSanitizer:"+asan[0]
+        elif assertion:
+            assert len(assertion)==1,(name,summary)
+            kind="assertion:"+assertion[0]
+        else:
+            reasons={
+                "misaligned address":"misaligned-access",
+                "index 15 out of bounds":"array-index-out-of-bounds",
+                "outside the range of representable values":"float-to-integer-overflow",
+            }
+            matched=[label for text,label in reasons.items()
+                     if any(text in line for line in summary.splitlines() if "runtime error:" in line)]
+            assert len(matched)==1,(name,"unclassified sanitizer failure",summary)
+            kind="UndefinedBehaviorSanitizer:"+matched[0]
+        # Inspect diagnostic summaries, not arbitrary caller stack frames.
+        filename=r"([A-Za-z_][\w.-]*\.(?:c|cc|cpp|h))"
+        locations=set(re.findall(r"\b"+filename+r":(\d+)",summary))
+        locations.update(re.findall(r"file "+filename+r", line (\d+)",summary))
+        expected={("jpleph.c",str(source_lines[name]))}
+        if locations or not asan:
+            assert locations==expected,(name,"unexpected/missing source location",locations,expected)
+        assert case["returncode"]!=0,(name,"isolated failure returned success")
+        case["failure_kind"]=kind
+        case["source_location_if_reported"]=f"jpleph.c:{source_lines[name]}"
+    return contract
 
 
 def source_mutations(source,cc,cases,actual):
@@ -420,7 +463,8 @@ def main():
     compare(repeated,actual); validate_roundtrip(actual)
     mutation=mutation_checks(actual)
     live_mutations=source_mutations(source,cc,cases,actual)
-    isolated=isolated_checks(source)
+    isolated_diagnostics=isolated_checks(source)
+    isolated=isolated_contract(isolated_diagnostics)
     prior_replay=replay_prior(source,cc)
     coverage=check_coverage(source,cases,isolated)
     RESULTS.mkdir(exist_ok=True)
@@ -433,6 +477,8 @@ def main():
                       (RESULTS/"prior_replay.json",prior_replay)):
         if args.record: save(path,data)
         else: compare(data,json.loads(path.read_text()))
+    # Trace formatting is evidence, never the exact reproducibility oracle.
+    save(RESULTS/"isolated_diagnostics.json",isolated_diagnostics)
     prior=json.loads((ROOT/"validation/coverage/native_replay.json").read_text())
     assert prior["results"]["original"]["jpleph_sha256"]==source_hashes["jpleph.c"]
     assert prior["original_resource_sha256"]==manifest["real_de405"]["sha256"]
@@ -441,7 +487,7 @@ def main():
                 compiler=subprocess.check_output([cc,"--version"],text=True).splitlines()[0],
                 compile_command=command,compile_stderr=compiled.stderr,
                 source_commit=SOURCE,source_sha256=source_hashes,
-                harness_sha256={name:sha((HERE/name).read_bytes()) for name in ("probe.c","run.py","analyze.py","coverage.json","SOURCE_MAP.md")},
+                harness_sha256={name:sha((HERE/name).read_bytes()) for name in ("probe.c","run.py","analyze.py","test_isolated.py","diagnostic_fixtures.json","coverage.json","SOURCE_MAP.md")},
                 prior_evidence={"path":"validation/coverage/native_replay.json","sha256":sha((ROOT/"validation/coverage/native_replay.json").read_bytes()),
                                 "canonical_stdout":prior["results"]["original"]["stdout"],
                                 "retained_stdout":prior["results"]["retained"]["stdout"]},
