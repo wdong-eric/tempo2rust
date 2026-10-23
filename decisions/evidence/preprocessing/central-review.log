@@ -1,0 +1,20 @@
+PASS committed artifacts, protected inputs and nested repositories
+PASS all delivered executed identities 20
+PASS complete delivered delta chains 302
+PASS 16 delivered post-initial mutation differences
+PASS fresh native build; exact complete stable profile 8233e450dcf42bf055a4b2527277b6a737b8b4745cc8971aabbcbb9674e700b9
+PASS fresh cases 1 / 302 simple_repeat
+PASS fresh cases 26 / 302 jump_ordinary_2
+PASS fresh cases 51 / 302 filter_50
+PASS fresh cases 76 / 302 select_REJECT_MJD_True
+PASS fresh cases 101 / 302 logic_100
+PASS fresh cases 126 / 302 simul_125
+PASS fresh cases 151 / 302 simul_150
+PASS fresh cases 176 / 302 wrapper_dm_warning
+PASS fresh cases 201 / 302 scale_1_1.0000000155051979176
+PASS fresh cases 226 / 302 units_100_2_@
+PASS fresh cases 251 / 302 epoch_motion_7
+PASS fresh cases 276 / 302 wave_reverse
+PASS fresh cases 301 / 302 noise_only_TNGlobalEQ
+PASS complete fresh replay 302
+PASS central P review; 22 controls; 302 cases; 1429 actions; 3451 events; /tmp/tempo2-preprocessing-central-review.json
