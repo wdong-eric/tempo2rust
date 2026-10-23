@@ -1,5 +1,7 @@
 # Compare SVD modes without assigning them parameter identities
 
+**Acceptance rule superseded by [decision 0012](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0012-retain-exact-svd-order-gate.md).** The user's later direct answer retains the exact raw mode-order gate. The paired comparison below remains diagnostic evidence and cannot waive that gate.
+
 Central decision, 23 October 2026. This clarifies decision 0007's singular-value/drop-diagnostic comparison after E's exactly dependent-column probe. It changes the comparison projection, not the solver, its raw outputs or the numerical budgets. Rug128 remains the production representation. M2 acceptance remains pending implementation and verification.
 
 ## Source and evidence

@@ -18,7 +18,7 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 [M2 fitting contract and E release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) defines ZERO/F0–F3 fitting, the source SVD and mixed-precision boundaries, weighting, uncertainty rescaling, iteration behavior, fitting fixtures, comparison gates and source result/failure classifications. The linked source probe supports these decisions. [Decision 0008](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0008-preservation-policy-and-stage-plan.md) supersedes its bug-correction policy, requires module counterparts and justified unsafe boundaries, and releases the core/fidelity inventory. [Decision 0009](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0009-binary-reference-stage.md) releases independent binary-model reference evidence while E owns the Rust crate.
 
-[Decision 0010](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0010-svd-mode-comparison.md) permits paired singular-mode permutation in comparisons while preserving production ordering and all physical gates. [Decision 0011](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0011-jpl-reference-stage.md) releases JPL reference evidence before a later safe Rust replacement of the retained reader.
+[Decision 0010](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0010-svd-mode-comparison.md) establishes paired singular-mode diagnostics. The user's later answer, recorded in [decision 0012](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0012-retain-exact-svd-order-gate.md), retains the exact raw mode-order acceptance gate; M2 remains pending. [Decision 0011](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0011-jpl-reference-stage.md) releases JPL reference evidence before a later safe Rust replacement of the retained reader.
 
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
@@ -40,13 +40,14 @@ A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete 
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
-**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`. The three chats have separate write ownership; central acceptance remains pending.
+**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. The chats have separate write ownership; central acceptance remains pending.
 
 | Chat | Thread ID | Responsibility |
 | --- | --- | --- |
 | Assignment E: Rust TEMPO2 fitting | `01a16734-4da3-7810-979a-4dad2f647ecd` | Implement the amended M2 contract in `rust/` and `validation/fitting/` |
 | Assignment F: TEMPO2 core and fidelity inventory | `01a16734-9835-7f53-8a56-79602dc5e2af` | Audit baseline `ddc07b2`; write only `validation/coverage/` |
 | Assignment G: TEMPO2 binary reference | `01a1673f-3754-7641-83bd-1d0b03ad06c3` | Prepare all-model source evidence; write only `validation/binary/` |
+| Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Prepare JPL kernel/layout/state/file-lifetime evidence; write only `validation/jpl/` |
 
 ## Shared working design
 

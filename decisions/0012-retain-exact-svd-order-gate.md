@@ -1,0 +1,11 @@
+# Retain the exact singular-mode order gate
+
+Central decision, 23 October 2026. The user's later direct answer in Assignment E is authoritative: **“Keep exact order gate and report it unresolved.”** It supersedes decision 0010's permission for a pure singular-mode permutation to pass acceptance. This is a recorded instruction, not a new numerical finding or a request to change the production solver.
+
+The answer was retrieved from `Assignment E: Rust TEMPO2 fitting`, thread `01a16734-4da3-7810-979a-4dad2f647ecd`, user message `01a16754-1760-7182-8ba2-fefee46e1b84`. The question explicitly concerned matching an unordered spectrum while preserving each engine's exported raw mode order. Central's earlier follow-up requiring decision 0010 to be applied is superseded by this later user choice.
+
+Retain the exact raw retention-flag ordering and the retained singular-value comparison at its original index. Decision 0010's paired-mode comparison, each engine's own cutoff checks and recorded permutations remain useful diagnostic evidence; they cannot waive the exact gate. Keep Rug128, the source algorithm, production array order, physical parameter/observation ordering and all other numerical budgets unchanged. Do not sort production output or introduce a different precision to make the fixture pass.
+
+E's current delivery reports two exact-order diagnostics per build for the dependent-column fixture. The corresponding paired spectrum, rank and physical results agree within the existing gates, as recorded in decision 0010's diagnostic evidence. This distinguishes the open ordering requirement from a demonstrated discrepancy in the fitted physical coordinates. The full verifier must still return failure while the gate is unresolved. **M2 remains pending.** A later change to this acceptance requirement needs an explicit central decision consistent with the user's instruction; this decision makes no such change.
+
+Central also requested two bounded delivery corrections from E: reject missing/extra shared-output cycles before `zip` comparison, with mutations protecting exact coverage; and record F's packed JPL getter alignment gap alongside its file-identity gap. These do not change the production fitting equations or the open order gate. JPL reference work proceeds independently under decision 0011.
