@@ -6,7 +6,7 @@ HERE=Path(__file__).resolve().parent
 ROOT=HERE.parent.parent
 RUST=ROOT/'rust'
 J=ROOT/'validation/clocks'
-OUT=RUST/'verification/clocks/glob_correction'
+OUT=Path(os.environ.get('TEMPO2_CLOCK_VERIFICATION_ROOT', RUST/'verification/clocks/glob_correction'))
 ENV=dict(os.environ,CARGO_HOME=str(RUST/'.cargo-home'),GMP_MPFR_SYS_CACHE=str(RUST/'target/gmp-cache'),LC_ALL='C')
 ENV.pop('TEMPO2_ALIAS',None)
 BOUNDS={'table_singleton_exact':'table_bracket_storage','table_singleton_nan':'table_bracket_storage','table_empty_value':'table_sample_storage','table_empty_start':'table_sample_storage','table_empty_end':'table_sample_storage','table_header_256':'table_header_storage','table_header_800':'table_header_storage','toa_capacity_29':'clock_correction_storage'}

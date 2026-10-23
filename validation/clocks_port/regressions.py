@@ -3,13 +3,13 @@
 import importlib.util,json,os,shutil,subprocess,sys
 from pathlib import Path
 sys.dont_write_bytecode=True
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parent.parent;RUST=ROOT/'rust';OUT=RUST/'verification/clocks/glob_correction'
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parent.parent;RUST=ROOT/'rust';OUT=Path(os.environ.get('TEMPO2_CLOCK_VERIFICATION_ROOT', RUST/'verification/clocks/glob_correction'))
 def module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 
 def main():
     stage=sys.argv[1]
-    port=module('run',ROOT/'validation/jpl_port/run.py');port.OUT=OUT/'jpl';port.BUILD=HERE/'build/jpl'
+    port=module('run',ROOT/'validation/jpl_port/run.py');port.OUT=OUT/'jpl';port.BUILD=OUT/'build/jpl' if 'TEMPO2_CLOCK_VERIFICATION_ROOT' in os.environ else HERE/'build/jpl'
     port.OUT.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(RUST/'verification/jpl/title_scan_source_evidence.json',port.OUT/'title_scan_source_evidence.json')
     os.environ.update(port.ENV)
