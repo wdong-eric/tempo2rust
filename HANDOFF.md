@@ -53,7 +53,7 @@ A through H have delivered their assigned evidence or implementation. E's M2 gat
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
-**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. I started from `d499e94` after E/H ownership closure; J started from `67aa77c`. I and J are active with separate write ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
+**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`; H started from `173f0fb`. I started from `d499e94` after E/H ownership closure; J started from `67aa77c`; K started from `9f974ef`. I, J and K have separate write ownership. Acceptance is recorded per assignment in the decisions above; M2 remains pending.
 
 | Chat | Thread ID | Responsibility |
 | --- | --- | --- |
@@ -63,6 +63,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Delivered and accepted JPL kernel/layout/state/file-lifetime reference; ownership window closed |
 | Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Transfer JPL logic under decision 0017; current bounded owner of `rust/` and optional `validation/jpl_port/` |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Prepare table/clock/toa2utc source evidence under decision 0018; write only `validation/clocks/` |
+| Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Prepare parameter state and shared PAR reference under decision 0020; write only `validation/parameters/` |
 
 ## Shared working design
 

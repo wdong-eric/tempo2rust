@@ -48,3 +48,7 @@ For source undefined behavior, record the operation and known preconditions with
 Own only `validation/parameters/`, including harnesses, fixtures, manifests, registry/coverage tables, comparison checks, source findings and `REPORT.md`. Keep builds ignored. Read canonical `tempo2/`, independent `validation/reference/`, F/G/H/J evidence, current Rust and central documents without modifying them. Existing F inventory remains a fixed historical baseline. Commit coherent owned `test:`, `docs:` and necessary `fix:` stages using explicit paths; preserve other chats' concurrent work.
 
 Return commands and executed hashes, full registry and function/branch dispositions, exact tested scope, regenerated results and mutation evidence, all unrun/undefined paths, and a proposed division of later parser work. Exact regeneration establishes reference integrity on this host; it does not set a Rust tolerance or accept a port. Central will use the findings to define the shared parameter and parser implementation contract without changing the approved Rug representation or the open M2 gate.
+
+## Dispatch
+
+Created **Assignment K: TEMPO2 parameter and PAR reference**, chat `01a167ad-4f08-7061-ae55-4f25abc12a7f`, in local project `rustify-tempo2` from release commit `9f974ef`. Its active turn acknowledged the ownership boundaries and began source inspection. I and J continue in their respective directories; central retains acceptance.
