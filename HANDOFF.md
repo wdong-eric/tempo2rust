@@ -24,6 +24,8 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 [Decision 0015](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0015-m2-review-and-correction-closure.md) closes E's requested verifier/correspondence corrections at `75b9e93` and `90b52bb`. E's implementation window is complete; M2 remains unaccepted because the exact raw mode-order gate still fails. Any next Rust-writing assignment requires a separate central release.
 
+[Decision 0016](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0016-jpl-reference-acceptance.md) accepts H's bounded JPL reference evidence and diagnostic-comparison correction at `1df4d37`. Full state/pleph values remain host observations subject to the documented source undefined behavior. The observed stdio buffering must be preserved by the next reader implementation.
+
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
 ## Assignments and execution order
@@ -38,7 +40,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Delivered and corrections reviewed in decision 0015; M2 exact-order gate remains open | `rust/M2_REPORT.md` and fitting reference/verification evidence |
 | [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Delivered at `15eee12`; inventory accepted by decision 0013 | Coverage inventory, behavior-difference ledger and `REPORT.md` |
 | [G Binary reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/07-binary-reference.md) | `validation/binary/` only | Delivered; bounded reference evidence accepted by decision 0014 | All 14 binary dispatches, derivative/update/mutation evidence and `REPORT.md` |
-| [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Released by decision 0011; prepares source-faithful safe Rust replacement after E | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
+| [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Delivered and corrected at `1df4d37`; reference accepted by decision 0016 | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 
 A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete and accepted, with TEMPO2's meteorology fallback, valid numerical behavior and comparison gates preserved. E follows C and D as the next owner of the Rust crate and creates fitting evidence in its separate directory. The accepted reference and precision directories remain read-only inputs to implementation work; report needed changes rather than silently changing comparison evidence.
 
@@ -82,8 +84,9 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | M2 contract and release | Adopted; E released by decision 0007 | Pinned source inspection and executable probe; ZERO/F0–F3, source SVD, MODE/NITS, raw covariance/rescaled errors, separate fit fixtures and gates |
 | Preservation and full-core coverage | Decision 0008 adopted; F released | Deterministic bugs retained, baseline differences reconciled, every core module and unsafe boundary accounted for |
 | Binary reference preparation | Decision 0009 adopted; G released | Native and wrapper precision, model-specific updates, source mutations and integrated residual evidence; implementation gates await central review |
-| M2 acceptance | Pending implementation and central review | E's source, identical-input solver checks, end-to-end fitting comparisons, invalid-fit recovery and unchanged M1a/M1b behavior |
-| SVD diagnostic comparison | Decision 0010 adopted | Preserve raw mode order; compare paired singular values and retention flags independently of physical parameter order. All numerical budgets and source cutoff controls remain unchanged. |
+| M2 acceptance | Pending exact mode-order gate; E corrections closed in decision 0015 | All other reviewed comparisons pass; keep the four raw-order diagnostics unresolved under decision 0012 |
+| SVD diagnostic comparison | Decision 0010 diagnostic only; decision 0012 governs acceptance | Keep exact raw mode-order gate; paired singular modes do not replace it. Numerical budgets and source cutoff controls remain unchanged. |
+| JPL reference evidence | Accepted by decision 0016 at corrected H delivery `1df4d37` | Exact host regeneration, source/helper/cache/lifetime evidence and stable isolated failure classifications; no port acceptance |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
