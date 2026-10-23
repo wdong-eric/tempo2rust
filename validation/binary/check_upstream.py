@@ -7,13 +7,14 @@ import os
 import re
 import shutil
 import subprocess
-from decimal import Decimal
+from decimal import Decimal, getcontext
 from pathlib import Path
 from prepare_fixtures import sha, save
 from run_reference import ROOT, PROJECT, A2, BUILD, RUNTIME, COMPILER, normalize, resources, verify_build
 
 
 def main():
+    getcontext().prec=90
     identity=verify_build();work=BUILD/'upstream';work.mkdir(exist_ok=True)
     source=PROJECT/'tempo2/tests/testEndToEnd.C'
     assert source.read_bytes()==(A2/'build/source/tests/testEndToEnd.C').read_bytes()

@@ -1,0 +1,3 @@
+Delay correction turned off for psr 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:396] Warning: [BIN1] SIN I > 1.0, setting to 1: should probably use DDS model 
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.

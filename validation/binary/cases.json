@@ -616,11 +616,24 @@
     "labels": "t2_companions.labels",
     "model": "T2",
     "name": "t2_companions",
-    "notes": "Two-companion route reaches getParameter k == aSize for scalar optional arrays: source guard is > rather than >=. Delay/derivative values withheld. In-bounds updates are recorded. Third/fourth companions remain unexercised.",
+    "notes": "Two-companion route reaches getParameter k == aSize for scalar optional arrays: source guard is > rather than >=. Delay/derivative values withheld. Updates are isolated in t2_companion_updates. Third/fourth companions remain unexercised.",
     "par": "t2_companions.par",
     "reference": "first eligible TOA in original order; no preprocessing/sort/cuts/fit; REFPHS_TZR inactive",
     "requests": "t2_companions.requests",
     "source_semantics": "undefined_source",
+    "tim": "barycentric.tim"
+  },
+  {
+    "geometry": "source formBatsAll: vectorPulsar, readEphemeris DE405, calculate_bclt; no supplied vectors",
+    "integrated": false,
+    "labels": "t2_companion_updates.labels",
+    "model": "T2",
+    "name": "t2_companion_updates",
+    "notes": "Only in-bounds updates, in an independent process without entering getParameter or model delay/derivative arithmetic.",
+    "par": "t2_companion_updates.par",
+    "reference": "first eligible TOA in original order; no preprocessing/sort/cuts/fit; REFPHS_TZR inactive",
+    "requests": "t2_companion_updates.requests",
+    "source_semantics": "defined",
     "tim": "barycentric.tim"
   },
   {

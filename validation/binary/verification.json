@@ -1,0 +1,46 @@
+{
+  "cases_validated": 75,
+  "diagnostic_relation_bounds": {
+    "centering_seconds": "1e-30",
+    "pet_seconds": "1e-23",
+    "reduced_phase_turn": "1e-23"
+  },
+  "models": [
+    "BT",
+    "BTJ",
+    "BTX",
+    "ELL1",
+    "DD",
+    "DDK",
+    "DDS",
+    "MSS",
+    "DDGR",
+    "T2",
+    "T2-PTA",
+    "DDH",
+    "ELL1H",
+    "ELL1k"
+  ],
+  "mutation_rejections": [
+    "missing model",
+    "missing derivative label",
+    "altered PB storage units",
+    "omitted SINI mutation",
+    "NaN changed to infinity class",
+    "omitted wrapper or residual result",
+    "manufactured undefined-source numeric result",
+    "omitted update mutation",
+    "one pulse changed",
+    "wrapper narrowing changed",
+    "fabricated zero geometry"
+  ],
+  "outputs_manifest_sha256": "5e8cfcd0f45485607f0b9902d778420529735378e10fb3553ef6e84aa3a7c2f3",
+  "regeneration": {
+    "all_bytes_identical": true,
+    "files_compared": 151,
+    "max_numeric_difference": "0",
+    "scope": "same exporter build, source/library/runtime; includes diagnostics and geometry"
+  },
+  "schema_sha256": "b1f63c7402565225d81f1762b086d7f476614105699240f61101a4343df53c41",
+  "scope": "Implementation/evidence integrity checks, not physical validation or Rust acceptance"
+}

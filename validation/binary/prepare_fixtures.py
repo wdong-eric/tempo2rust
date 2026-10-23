@@ -164,7 +164,10 @@ def main():
         add(model.lower()+'_jumps',model,{**values[model],**jumps},labs,labs,notes='Strict bbat > BPJEP; equality and both sides included. T2 arr=1 with one companion returns zero: jump-array and companion indices share arr.')
     second={'PB_2':'12.34567890123456789','A1_2':'2.34567890123456789','ECC_2':'0.234567890123456789','OM_2':'123.4567890123456789','T0_2':'53997.1234567890123456789','PBDOT_2':'1.23456789e-14','XDOT_2':'2.3456789e-15','X2DOT_2':'3.456789e-26'}
     labs=[(l,k) for l in ['param_pb','param_a1','param_ecc','param_om','param_t0','param_pbdot','param_a1dot','param_a2dot'] for k in [0,1]]
-    add('t2_companions','T2',{**values['T2'],**second},labs,labs,residual=False,undefined=True,notes='Two-companion route reaches getParameter k == aSize for scalar optional arrays: source guard is > rather than >=. Delay/derivative values withheld. In-bounds updates are recorded. Third/fourth companions remain unexercised.')
+    add('t2_companions','T2',{**values['T2'],**second},labs,residual=False,undefined=True,notes='Two-companion route reaches getParameter k == aSize for scalar optional arrays: source guard is > rather than >=. Delay/derivative values withheld. Updates are isolated in t2_companion_updates. Third/fourth companions remain unexercised.')
+    add('t2_companion_updates','T2',{**values['T2'],**second},updates=labs,residual=False,notes='Only in-bounds updates, in an independent process without entering getParameter or model delay/derivative arithmetic.')
+    path=inputs/'t2_companion_updates.requests'
+    path.write_text('\n'.join(line for line in path.read_text().splitlines() if line.startswith('update_'))+'\n')
     low={**lowecc,**shapiro,'EPS1DOT':'1.23456789e-17','EPS2DOT':'-2.3456789e-17'}
     lowlabs=[(l,0) for l in ['param_pb','param_a1','param_eps1','param_eps2','param_eps1dot','param_eps2dot','param_tasc','param_pbdot','param_a1dot','param_sini','param_m2']]
     add('t2_ell1','T2',low,lowlabs,lowlabs)

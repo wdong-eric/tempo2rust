@@ -1,0 +1,2 @@
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:396] Warning: [BINFB1] Both PBDOT and FB1 are set for ELL1; explicit FB1 takes precedence and PBDOT is disabled. 
+Delay correction turned off for psr 0
