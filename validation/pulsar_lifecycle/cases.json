@@ -1,0 +1,319 @@
+[
+  {
+    "args": [
+      "natural",
+      "-7",
+      "2"
+    ],
+    "classification": "defined",
+    "id": "natural_-7",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "natural",
+      "0",
+      "2"
+    ],
+    "classification": "defined",
+    "id": "natural_0",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "natural",
+      "1",
+      "2"
+    ],
+    "classification": "defined",
+    "id": "natural_1",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "natural",
+      "9",
+      "2"
+    ],
+    "classification": "defined",
+    "id": "natural_9",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "wrapper",
+      "0",
+      "-3"
+    ],
+    "classification": "defined",
+    "id": "wrapper_0",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "wrapper",
+      "1",
+      "-3"
+    ],
+    "classification": "defined",
+    "id": "wrapper_1",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "wrapper",
+      "2",
+      "-3"
+    ],
+    "classification": "defined",
+    "id": "wrapper_2",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "wrapper",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "classification": "host_abi",
+    "id": "wrapper_debug_cvs",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "repeat",
+      "-4",
+      "7"
+    ],
+    "classification": "defined",
+    "id": "seeded_reinitialise",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "allocate",
+      "-3"
+    ],
+    "classification": "defined",
+    "id": "allocate_-3",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "allocate",
+      "0"
+    ],
+    "classification": "defined",
+    "id": "allocate_0",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "allocate",
+      "1"
+    ],
+    "classification": "defined",
+    "id": "allocate_1",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "allocate",
+      "5"
+    ],
+    "classification": "defined",
+    "id": "allocate_5",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "destroy"
+    ],
+    "classification": "defined",
+    "id": "destroy_constraints",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "destroy_null"
+    ],
+    "classification": "defined",
+    "id": "destroy_null_observation",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "matrix",
+      "1",
+      "1"
+    ],
+    "classification": "defined",
+    "id": "matrix_1_1",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "matrix",
+      "2",
+      "3"
+    ],
+    "classification": "defined",
+    "id": "matrix_2_3",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "matrix",
+      "3",
+      "2"
+    ],
+    "classification": "defined",
+    "id": "matrix_3_2",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "matrix",
+      "4",
+      "4"
+    ],
+    "classification": "defined",
+    "id": "matrix_4_4",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "uinv",
+      "3"
+    ],
+    "classification": "defined",
+    "id": "matrix_uinv",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "matrix",
+      "0",
+      "3"
+    ],
+    "classification": "assert_termination",
+    "id": "matrix_zero_rows",
+    "returncode": -6
+  },
+  {
+    "args": [
+      "matrix",
+      "3",
+      "0"
+    ],
+    "classification": "assert_termination",
+    "id": "matrix_zero_cols",
+    "returncode": -6
+  },
+  {
+    "args": [
+      "copy",
+      "-1",
+      "-1",
+      "-1",
+      "2",
+      "disjoint"
+    ],
+    "classification": "defined",
+    "id": "copy_negative",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "0",
+      "0",
+      "0",
+      "2",
+      "disjoint"
+    ],
+    "classification": "defined",
+    "id": "copy_zero",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "2",
+      "2",
+      "3",
+      "1",
+      "disjoint"
+    ],
+    "classification": "defined",
+    "id": "copy_partial",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "3",
+      "1999",
+      "1999",
+      "0",
+      "disjoint"
+    ],
+    "classification": "defined",
+    "id": "copy_last",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "3",
+      "1",
+      "2",
+      "0",
+      "shared"
+    ],
+    "classification": "defined",
+    "id": "copy_shared",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "3",
+      "1",
+      "2",
+      "0",
+      "forward_overlap"
+    ],
+    "classification": "defined",
+    "id": "copy_forward_overlap",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy",
+      "3",
+      "1",
+      "2",
+      "0",
+      "backward_overlap"
+    ],
+    "classification": "defined",
+    "id": "copy_backward_overlap",
+    "returncode": 0
+  },
+  {
+    "args": [
+      "copy_repeat",
+      "2",
+      "1",
+      "2",
+      "0",
+      "disjoint"
+    ],
+    "classification": "defined",
+    "id": "copy_repeat",
+    "returncode": 0
+  }
+]
