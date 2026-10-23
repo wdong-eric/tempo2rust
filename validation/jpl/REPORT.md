@@ -131,19 +131,24 @@ numbers while proving the setup.
 
 Source stdio buffering also matters. After loading a 6,600-byte synthetic record,
 the adjacent-record truncation case retains **680 readable bytes** in stdio even
-though only **137 bytes remain on disk** in that record. The delivered cache
-prefix equals those observed 680 bytes, followed by the old buffer suffix.
+though only **137 bytes remain on disk** in that record. The actual call is
+`fread(size=8, count=825)` and returns **85 complete items**, with statuses
+`0, -2, 0` and identical cache bytes on retry. The delivered cache prefix equals
+those observed 680 bytes, followed by the old buffer suffix.
 Distant-record cases avoid that read-ahead: both 136-byte and 137-byte cuts return
 17 complete doubles; the latter additionally concerns a partially read element
 whose C value is indeterminate. Raw bytes are observational evidence, not a
 portable value for that element. libc/OS buffer behavior is explicitly scoped
 to this host.
 
-An immutable file snapshot would remove observed mutation/error paths. The
-recommended next design is an owned open handle with validation of the state
-actually consumed and an explicit source cache transition model. Central must
-decide how to represent stdio read-ahead behavior before treating a different
-reader backend as source-equivalent.
+An immutable file snapshot would remove observed mutation/error paths. Central
+independently reproduced the adjacent-record result from the canonical source
+and H's probe, then directed the later port to **retain a minimal bounded C-stdio
+I/O wrapper while moving JPL headers, state and interpolation into Rust**. A
+Rust `File`/`BufReader` substitution must not silently change the host stdio
+behavior. Validation must still cover the actual consumed state and the original
+cache transitions. The wrapper interface and its justified unsafe invariants
+belong to the later central release; H implements no production wrapper.
 
 ### U2 and other undefined boundaries
 
@@ -233,8 +238,10 @@ Central review is needed for:
    requirements. Recommend safe ownership/indexing and explicit initialization
    with each observable adapter difference recorded; no invented portable value
    for undefined accesses.
-2. File/reader ownership, validation of consumed state and the intended fidelity
-   profile for stdio read-ahead. Do not silently adopt an immutable snapshot.
+2. The bounded C-stdio wrapper contract, file/reader ownership, validation of
+   consumed state and unsafe invariants. Central has selected retention of the
+   host stdio boundary; an immutable snapshot or Rust File/BufReader replacement
+   is not the released direction.
 3. The Rust interface set and its failure/result representation, including
    partial-init handles, exact status ordering, stale cache results and defined
    nonfinite classes. Deterministic cache-before-read behavior remains required.
@@ -247,9 +254,11 @@ port, M2, binary-model milestone or overall transfer acceptance is asserted.
 ## Commits
 
 `9917229` (`test(jpl): add canonical reader probes and declared fixtures`)
-contains the probes/manifests/correspondence. The evidence commit containing this
-report is titled `test(jpl): record source observations and reference report`;
-its final identity is returned in this chat (and available with
-`git log -1 -- validation/jpl/REPORT.md`). It contains observations and actual
-checks as well as this report. Only explicit `validation/jpl/` paths are staged.
+contains the probes/manifests/correspondence. `c642f3a`
+(`test(jpl): record source observations and reference report`) contains the
+observations, actual checks and initial report. The subsequent documentation
+commit records central's independent confirmation and C-stdio direction; its
+identity is returned in this chat. That update changes no executable probe or
+numerical observation: the function/case coverage check was rerun and its
+documentation hash refreshed. Only explicit `validation/jpl/` paths are staged.
 No changes to another owner's history are included.

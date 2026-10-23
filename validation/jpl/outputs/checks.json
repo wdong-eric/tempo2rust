@@ -34,7 +34,7 @@
   "harness_sha256": {
     "SOURCE_MAP.md": "db48d3a5e895c2b2a3bcb2194ed21978ef9cf66e893d053fbb6cba2467ec5f98",
     "analyze.py": "649202e15069f7dd731bcca3ae85ba4f23bbca84d8b85304727fad244a05f9a7",
-    "coverage.json": "488e968cf826638bcf71a7b19d498e35ac1b83e942506482b070b0aeb7fc4613",
+    "coverage.json": "b0dedb177f7c2295de4aeebcdb8c4cb836de64be5270c8c8ef00893e73529022",
     "probe.c": "a67a1e3c2a294f44a1c0c6156974445fd9d061786947a9462fa005c7dfdd9e6a",
     "run.py": "3552606cdb1dd125aacdcdf1c395beb4ad6664758d71c8d7454878153a46c441"
   },
