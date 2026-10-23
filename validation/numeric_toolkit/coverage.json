@@ -3066,7 +3066,7 @@
         "link_unknown_target",
         "link_repeat_exit"
       ],
-      "count": 18,
+      "count": 35,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3081,7 +3081,7 @@
         "link_unlinked_3",
         "link_unlinked_4"
       ],
-      "count": 5,
+      "count": 10,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3119,7 +3119,7 @@
         "link_nan_stig",
         "link_unknown_target"
       ],
-      "count": 17,
+      "count": 34,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3131,7 +3131,7 @@
         "link_formula_0",
         "link_unknown_0"
       ],
-      "count": 2,
+      "count": 4,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3156,7 +3156,7 @@
         "link_nan_stig",
         "link_unknown_target"
       ],
-      "count": 15,
+      "count": 30,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3167,7 +3167,7 @@
       "cases": [
         "link_formula_0"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3178,7 +3178,7 @@
       "cases": [
         "link_unknown_0"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3194,7 +3194,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 6,
+      "count": 12,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3214,7 +3214,7 @@
         "link_neg_px",
         "link_unknown_target"
       ],
-      "count": 10,
+      "count": 20,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3229,7 +3229,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 5,
+      "count": 10,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3240,7 +3240,7 @@
       "cases": [
         "link_unknown_1"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3252,7 +3252,7 @@
         "link_formula_2",
         "link_unknown_2"
       ],
-      "count": 2,
+      "count": 4,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3271,7 +3271,7 @@
         "link_neg_px",
         "link_unknown_target"
       ],
-      "count": 9,
+      "count": 18,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3282,7 +3282,7 @@
       "cases": [
         "link_formula_2"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3293,7 +3293,7 @@
       "cases": [
         "link_unknown_2"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3307,7 +3307,7 @@
         "link_zero_px",
         "link_neg_px"
       ],
-      "count": 4,
+      "count": 8,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3323,7 +3323,7 @@
         "link_unknown_4",
         "link_unknown_target"
       ],
-      "count": 6,
+      "count": 12,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3336,7 +3336,7 @@
         "link_zero_px",
         "link_neg_px"
       ],
-      "count": 3,
+      "count": 6,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3347,7 +3347,7 @@
       "cases": [
         "link_unknown_3"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3359,7 +3359,7 @@
         "link_formula_4",
         "link_unknown_4"
       ],
-      "count": 2,
+      "count": 4,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3374,7 +3374,7 @@
         "link_unknown_3",
         "link_unknown_target"
       ],
-      "count": 5,
+      "count": 10,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -3385,7 +3385,7 @@
       "cases": [
         "link_formula_4"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": true,
       "file": "tempo2Util.C",
       "index": 0,
@@ -3396,7 +3396,7 @@
       "cases": [
         "link_unknown_4"
       ],
-      "count": 1,
+      "count": 2,
       "fallthrough": false,
       "file": "tempo2Util.C",
       "index": 1,
@@ -4202,15 +4202,15 @@
   ],
   "execution": {
     "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/build/coverage",
-    "executable_sha256": "51632e300358c8fd3bbae4c49791b6d3c03f0cd8be1ba2519ec025cfceed51ed",
+    "executable_sha256": "0ffb65d7eb87802095efe5ab4cda876d33b56b785f2cf5847f2e770c7bd473ce",
     "runner_sources": {
       "coverage.py": "910fa037361e33703f85210bb8ccd59f9c385995fe039fa696231d4e5cc70b0a",
-      "fixtures.py": "46e0b578b328a3454ea3fcdce19375b3d0542b7a533e6762a0325ae35ae76204",
+      "fixtures.py": "0b3e88eabfe6fe60d26b477c3f92046adeffbfcb1cf4e44303c0212d50aa42fe",
       "inventory.py": "8bb31fde8d29952047884d3801e3e79097ce6ffcee35ae90e9e2a2158bbc5256",
-      "probe.cc": "28bd9171615e62550b60204f9d304cc1e41e86847d00149b65ff3bba321b7a0a",
+      "probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
       "profile.py": "472d6ad1124ff4a2236587888141ddacae3d46055267822f5ea5680576e70073",
       "run.py": "9cb919ab551e134dfe87c1b753a0721cc2ea2bf8531c3ffc9a58b070e4e279a7",
-      "verify.py": "b51030099b0f5d43887000551c32af2c902f53152a72f2ed9973bf277280988d"
+      "verify.py": "eab013af18cec6b8d0c9465c82ad7deaa59b1c5a0668b1aa563fb9aa7ed7538b"
     }
   },
   "functions": [
@@ -4238,7 +4238,7 @@
         "inline_4": 1,
         "inline_5": 1,
         "inline_6": 1,
-        "link_formula_2": 1
+        "link_formula_2": 2
       },
       "end_line": 43,
       "file": "TKlongdouble.h",
@@ -4284,11 +4284,11 @@
         "inline_4": 1,
         "inline_5": 1,
         "inline_6": 1,
-        "link_formula_1": 1,
-        "link_nan_stig": 1,
-        "link_negative_stig": 1,
-        "link_right_stig": 1,
-        "link_zero_stig": 1
+        "link_formula_1": 2,
+        "link_nan_stig": 2,
+        "link_negative_stig": 2,
+        "link_right_stig": 2,
+        "link_zero_stig": 2
       },
       "end_line": 53,
       "file": "TKlongdouble.h",
@@ -4319,7 +4319,7 @@
         "inline_4": 1,
         "inline_5": 1,
         "inline_6": 1,
-        "link_formula_0": 2
+        "link_formula_0": 4
       },
       "end_line": 61,
       "file": "TKlongdouble.h",
@@ -5040,29 +5040,29 @@
     },
     {
       "cases": {
-        "link_formula_0": 1,
-        "link_formula_1": 1,
-        "link_formula_2": 1,
-        "link_formula_3": 1,
-        "link_formula_4": 1,
-        "link_nan_stig": 1,
-        "link_neg_px": 1,
-        "link_negative_stig": 1,
+        "link_formula_0": 2,
+        "link_formula_1": 2,
+        "link_formula_2": 2,
+        "link_formula_3": 2,
+        "link_formula_4": 2,
+        "link_nan_stig": 2,
+        "link_neg_px": 2,
+        "link_negative_stig": 2,
         "link_repeat_exit": 1,
-        "link_right_stig": 1,
-        "link_unknown_0": 1,
-        "link_unknown_1": 1,
-        "link_unknown_2": 1,
-        "link_unknown_3": 1,
-        "link_unknown_4": 1,
-        "link_unknown_target": 1,
-        "link_unlinked_0": 1,
-        "link_unlinked_1": 1,
-        "link_unlinked_2": 1,
-        "link_unlinked_3": 1,
-        "link_unlinked_4": 1,
-        "link_zero_px": 1,
-        "link_zero_stig": 1
+        "link_right_stig": 2,
+        "link_unknown_0": 2,
+        "link_unknown_1": 2,
+        "link_unknown_2": 2,
+        "link_unknown_3": 2,
+        "link_unknown_4": 2,
+        "link_unknown_target": 2,
+        "link_unlinked_0": 2,
+        "link_unlinked_1": 2,
+        "link_unlinked_2": 2,
+        "link_unlinked_3": 2,
+        "link_unlinked_4": 2,
+        "link_zero_px": 2,
+        "link_zero_stig": 2
       },
       "end_line": 469,
       "file": "tempo2Util.C",
@@ -5206,7 +5206,7 @@
         "inline_6",
         "link_formula_2"
       ],
-      "count": 8,
+      "count": 9,
       "file": "TKlongdouble.h",
       "line": 41
     },
@@ -5221,7 +5221,7 @@
         "inline_6",
         "link_formula_2"
       ],
-      "count": 8,
+      "count": 9,
       "file": "TKlongdouble.h",
       "line": 42
     },
@@ -5296,7 +5296,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 12,
+      "count": 17,
       "file": "TKlongdouble.h",
       "line": 51
     },
@@ -5315,7 +5315,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 12,
+      "count": 17,
       "file": "TKlongdouble.h",
       "line": 52
     },
@@ -5358,7 +5358,7 @@
         "inline_6",
         "link_formula_0"
       ],
-      "count": 9,
+      "count": 11,
       "file": "TKlongdouble.h",
       "line": 59
     },
@@ -5373,7 +5373,7 @@
         "inline_6",
         "link_formula_0"
       ],
-      "count": 9,
+      "count": 11,
       "file": "TKlongdouble.h",
       "line": 60
     },
@@ -11420,7 +11420,7 @@
         "link_unknown_target",
         "link_repeat_exit"
       ],
-      "count": 23,
+      "count": 45,
       "file": "tempo2Util.C",
       "line": 426
     },
@@ -11450,7 +11450,7 @@
         "link_unknown_target",
         "link_repeat_exit"
       ],
-      "count": 23,
+      "count": 45,
       "file": "tempo2Util.C",
       "line": 428
     },
@@ -11475,7 +11475,7 @@
         "link_unknown_target",
         "link_repeat_exit"
       ],
-      "count": 18,
+      "count": 35,
       "file": "tempo2Util.C",
       "line": 431
     },
@@ -11515,7 +11515,7 @@
         "link_nan_stig",
         "link_unknown_target"
       ],
-      "count": 17,
+      "count": 34,
       "file": "tempo2Util.C",
       "line": 436
     },
@@ -11524,7 +11524,7 @@
         "link_formula_0",
         "link_unknown_0"
       ],
-      "count": 2,
+      "count": 4,
       "file": "tempo2Util.C",
       "line": 437
     },
@@ -11532,7 +11532,7 @@
       "cases": [
         "link_formula_0"
       ],
-      "count": 1,
+      "count": 2,
       "file": "tempo2Util.C",
       "line": 438
     },
@@ -11540,7 +11540,7 @@
       "cases": [
         "link_formula_0"
       ],
-      "count": 2,
+      "count": 4,
       "file": "tempo2Util.C",
       "line": 439
     },
@@ -11548,7 +11548,7 @@
       "cases": [
         "link_formula_0"
       ],
-      "count": 1,
+      "count": 2,
       "file": "tempo2Util.C",
       "line": 440
     },
@@ -11556,7 +11556,7 @@
       "cases": [
         "link_formula_0"
       ],
-      "count": 1,
+      "count": 2,
       "file": "tempo2Util.C",
       "line": 441
     },
@@ -11579,7 +11579,7 @@
         "link_nan_stig",
         "link_unknown_target"
       ],
-      "count": 16,
+      "count": 32,
       "file": "tempo2Util.C",
       "line": 443
     },
@@ -11592,7 +11592,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 6,
+      "count": 12,
       "file": "tempo2Util.C",
       "line": 445
     },
@@ -11604,7 +11604,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 5,
+      "count": 10,
       "file": "tempo2Util.C",
       "line": 447
     },
@@ -11616,7 +11616,7 @@
         "link_right_stig",
         "link_nan_stig"
       ],
-      "count": 5,
+      "count": 10,
       "file": "tempo2Util.C",
       "line": 449
     },
@@ -11634,7 +11634,7 @@
         "link_neg_px",
         "link_unknown_target"
       ],
-      "count": 11,
+      "count": 22,
       "file": "tempo2Util.C",
       "line": 452
     },
@@ -11643,7 +11643,7 @@
         "link_formula_2",
         "link_unknown_2"
       ],
-      "count": 2,
+      "count": 4,
       "file": "tempo2Util.C",
       "line": 454
     },
@@ -11651,7 +11651,7 @@
       "cases": [
         "link_formula_2"
       ],
-      "count": 1,
+      "count": 2,
       "file": "tempo2Util.C",
       "line": 455
     },
@@ -11668,7 +11668,7 @@
         "link_neg_px",
         "link_unknown_target"
       ],
-      "count": 10,
+      "count": 20,
       "file": "tempo2Util.C",
       "line": 457
     },
@@ -11679,7 +11679,7 @@
         "link_zero_px",
         "link_neg_px"
       ],
-      "count": 4,
+      "count": 8,
       "file": "tempo2Util.C",
       "line": 459
     },
@@ -11689,7 +11689,7 @@
         "link_zero_px",
         "link_neg_px"
       ],
-      "count": 3,
+      "count": 6,
       "file": "tempo2Util.C",
       "line": 460
     },
@@ -11703,7 +11703,7 @@
         "link_unknown_4",
         "link_unknown_target"
       ],
-      "count": 7,
+      "count": 14,
       "file": "tempo2Util.C",
       "line": 462
     },
@@ -11712,7 +11712,7 @@
         "link_formula_4",
         "link_unknown_4"
       ],
-      "count": 2,
+      "count": 4,
       "file": "tempo2Util.C",
       "line": 463
     },
@@ -11720,7 +11720,7 @@
       "cases": [
         "link_formula_4"
       ],
-      "count": 1,
+      "count": 2,
       "file": "tempo2Util.C",
       "line": 464
     },
@@ -11738,7 +11738,7 @@
         "link_unknown_4",
         "link_unknown_target"
       ],
-      "count": 11,
+      "count": 22,
       "file": "tempo2Util.C",
       "line": 468
     },
@@ -12851,8 +12851,8 @@
     ],
     "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/build/coverage",
-    "executable_sha256": "51632e300358c8fd3bbae4c49791b6d3c03f0cd8be1ba2519ec025cfceed51ed",
-    "link_map_sha256": "02b78a874cc8828c742795787fa484e0c87fa35a04c4f144c7477977bab43c2f",
+    "executable_sha256": "0ffb65d7eb87802095efe5ab4cda876d33b56b785f2cf5847f2e770c7bd473ce",
+    "link_map_sha256": "6d9a0d732501df2c5219951dbb9efa6c73c7ef16469a04d33fccc5c2f8c1a780",
     "mutation": null,
     "preprocessed_sha256": {
       "TKlongdouble.C": "7e6d6d08264d97bb2eef3e3b7910daa35725628a69842c326c18f5cd53567b1a",
@@ -13043,7 +13043,7 @@
         "/Library/Developer/CommandLineTools/SDKs/MacOSX26.sdk/usr/include/unistd.h": "8d535079658f063bcef358ef4c1c1b52b8e88dacfc22cbf4db0f6bf8abe40637",
         "/Library/Developer/CommandLineTools/SDKs/MacOSX26.sdk/usr/include/wchar.h": "78eb7bdc7ef407c67f50a6079a740ac24a87f19b010516853e3054fff41f25ed",
         "/Library/Developer/CommandLineTools/SDKs/MacOSX26.sdk/usr/include/wctype.h": "a3831f2699c4d342cde3ba8caf61e5b324d914f2a5caa39f1064aaf29b30eaae",
-        "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/probe.cc": "28bd9171615e62550b60204f9d304cc1e41e86847d00149b65ff3bba321b7a0a",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
         "/opt/homebrew/Cellar/gcc/16.2.0/include/c++/16/aarch64-apple-darwin25/bits/atomic_word.h": "5448723d7b1d6c026106092cb3f4fd57c8dca20c09ca4ec7f09e2e6d7f81a5f5",
         "/opt/homebrew/Cellar/gcc/16.2.0/include/c++/16/aarch64-apple-darwin25/bits/basic_file.h": "97c458960f2efc06fe3bf36555d1f7abad27d3c3429a1011ae29d30801f1726a",
         "/opt/homebrew/Cellar/gcc/16.2.0/include/c++/16/aarch64-apple-darwin25/bits/c++allocator.h": "6d145d8b333308d2b6d6cbfd23a8186305abb350a68fbc227b9628543244f03d",
@@ -13194,12 +13194,12 @@
       },
       "runner_sources": {
         "coverage.py": "910fa037361e33703f85210bb8ccd59f9c385995fe039fa696231d4e5cc70b0a",
-        "fixtures.py": "46e0b578b328a3454ea3fcdce19375b3d0542b7a533e6762a0325ae35ae76204",
+        "fixtures.py": "0b3e88eabfe6fe60d26b477c3f92046adeffbfcb1cf4e44303c0212d50aa42fe",
         "inventory.py": "8bb31fde8d29952047884d3801e3e79097ce6ffcee35ae90e9e2a2158bbc5256",
-        "probe.cc": "28bd9171615e62550b60204f9d304cc1e41e86847d00149b65ff3bba321b7a0a",
+        "probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
         "profile.py": "472d6ad1124ff4a2236587888141ddacae3d46055267822f5ea5680576e70073",
         "run.py": "9cb919ab551e134dfe87c1b753a0721cc2ea2bf8531c3ffc9a58b070e4e279a7",
-        "verify.py": "b51030099b0f5d43887000551c32af2c902f53152a72f2ed9973bf277280988d"
+        "verify.py": "eab013af18cec6b8d0c9465c82ad7deaa59b1c5a0668b1aa563fb9aa7ed7538b"
       },
       "runtime": {
         "libgcc_s.1.1.dylib": {

@@ -177,9 +177,9 @@ int main(int argc,char**argv){
         else if(a[0]=="nlong"){longdouble x=strtoflt128(a[1].c_str(),nullptr),rounded=x>0?x+0.5:x-0.5;
             assert(!isnanq(rounded)&&!isinfq(rounded)&&truncq(rounded)>=static_cast<longdouble>(LONG_MIN)&&truncq(rounded)<=static_cast<longdouble>(LONG_MAX));out=std::to_string(fortran_nlong(x));}
         else if(a[0]=="vector"){
-            double v[8];for(int i=0;i<8;i++)v[i]=strtod(a[1+i].c_str(),nullptr);auto before=array(v,8);
-            double dot=dotproduct(v,v+3);vectorsum(v+stoi(a[9]),v,v+3);auto sum=array(v,8);vectorscale(v+stoi(a[10]),strtod(a[11].c_str(),nullptr));
-            out="{\"before\":"+before+",\"dot\":"+num(dot)+",\"after_sum\":"+sum+",\"after_scale\":"+array(v,8)+"}";
+            double v[11]={0,0,0,0,0,0,0,0,9,10,11};for(int i=0;i<8;i++)v[i]=strtod(a[1+i].c_str(),nullptr);auto before=array(v,11);
+            double dot=dotproduct(v,v+3);vectorsum(v+stoi(a[9]),v,v+3);auto sum=array(v,11);vectorscale(v+stoi(a[10]),strtod(a[11].c_str(),nullptr));
+            out="{\"before\":"+before+",\"dot\":"+num(dot)+",\"after_sum\":"+sum+",\"after_scale\":"+array(v,11)+"}";
         }else if(a[0]=="rotation"){
             double v[3];for(int i=0;i<3;i++)v[i]=strtod(a[1+i].c_str(),nullptr);ECLIPTIC_OBLIQUITY=strtod(a[4].c_str(),nullptr);auto before=array(v,3);
             if(a[5]=="forward")equ2ecl(v);else ecl2equ(v);auto rotated=array(v,3);if(a[5]=="forward")ecl2equ(v);else equ2ecl(v);
@@ -196,8 +196,10 @@ int main(int argc,char**argv){
             int target=ids[stoi(a[1])],from=ids[stoi(a[2])];p->param[target].nLinkTo=stoi(a[3]);p->param[target].linkTo[0]=from;p->param[target].linkTo[1]=from;
             if(a.size()>5)v[from][0]=strtoflt128(a[5].c_str(),nullptr);
             // A linked dependency remains a stored value: getParameterValue is nonrecursive.
-            p->param[from].nLinkTo=1;p->param[from].linkTo[0]=param_px;
-            out=num(getParameterValue(p,target,stoi(a[4])));delete p;
+            p->param[from].nLinkTo=1;p->param[from].linkTo[0]=from==param_kin?param_stig:param_px;
+            parameter prior[MAX_PARAMS];memcpy(prior,p->param,sizeof prior);longdouble prior_values[MAX_PARAMS][2];memcpy(prior_values,v,sizeof v);
+            longdouble first=getParameterValue(p,target,stoi(a[4])),second=getParameterValue(p,target,stoi(a[4]));
+            out="{\"value\":"+num(first)+",\"repeat_value\":"+num(second)+",\"parameters_unchanged\":"+(memcmp(prior,p->param,sizeof prior)==0?"true":"false")+",\"values_unchanged\":"+(memcmp(prior_values,v,sizeof v)==0?"true":"false")+"}";delete p;
         }else if(a[0]=="controls"){quietFlag=stoi(a[1]);debugFlag=stoi(a[2]);out=logs();}
         else if(a[0]=="message"){displayMsg(stoi(a[1]),a[2].c_str(),a[3].c_str(),a[4].c_str(),stoi(a[5]));out=logs();}
         else if(a[0]=="checklogs"){int r=logerr_check();out="{\"return\":"+std::to_string(r)+",\"state\":"+logs()+"}";}

@@ -101,6 +101,7 @@ MUTATIONS=[
  ('copypsr_fd_extent','tempo2Util.C','for (i=0; i<=p[p2].nfdJumps; i++)','for (i=0; i<=p[p1].nfdJumps; i++)','copypsr_0'),
  ('copypsr_observation','tempo2Util.C','for (i=0;i<p[p1].nobs;i++)','for (i=0;i<p[p1].nobs-1;i++)','copypsr_0'),
  ('link_semantics','tempo2Util.C','return 1.0/psr->param[param_px].val[0];','return 2.0/psr->param[param_px].val[0];','link_formula_3'),
+ ('link_nonrecursive','tempo2Util.C','return sin(psr->param[param_kin].val[0]/180*M_PI);','return sin(getParameterValue(psr,param_kin,0)/180*M_PI);','link_formula_2'),
  ('diagnostic_suppression','tempo2Util.C','else if (!warnedAboutMultiple)','else if (true)','diagnostic_capacity'),
  ('diagnostic_storage','TKlog.h','TK_MAX_ERRORS 30','TK_MAX_ERRORS 29','diagnostic_error_storage'),
 ]
