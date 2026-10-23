@@ -95,7 +95,7 @@ Decimal consistency replays are diagnostics, not Rust acceptance gates or indepe
 
 The original `testEndToEnd.checkIdeal` remains **failed**, exit 1, with **`abs(residual) < 1e-9 s` unchanged**. Only its driver was rebuilt from the unchanged source to relocate DATDIR; the A2 timing library is reused. The live run again fails at the first residual around **1.13759 ns**. The separately hashed A2 localization records index **35**, **120/284** residuals outside threshold and maximum **4.59895516385995339247551543745087149 ns**. Those aggregate localization values are identified as reused historical A2 evidence, not newly recomputed by the assertion driver. The test stops at the first failure before fitting. Its failure is distinct from port-compatibility evidence and is not explained or corrected here.
 
-Whitespace checks exclude only the two byte-preserved original `test3` inputs: they contain upstream trailing spaces. Harness, synthetic fixtures and reports are checked normally. No source file is trimmed to make that check pass.
+The unfiltered whitespace check reports upstream trailing spaces in the two byte-preserved original `test3` inputs and in raw source diagnostic logs. Those bytes are intentionally retained. The scoped check excluding those input copies and `outputs/*.log` passes for the authored harness, synthetic fixtures, JSON and reports. No source input or diagnostic is trimmed to make the check pass.
 
 ## Files, commits and remaining work
 
@@ -111,6 +111,6 @@ Whitespace checks exclude only the two byte-preserved original `test3` inputs: t
 | `source_inventory.json`, `coverage.json`, `BRANCHES.md`, `schema.json` | Source conditions, callback/subindex/presence coverage and semantics |
 | `observations.json`, `verification.json` | Observed numerical scales and actual validation results |
 
-Source/fixture stage commit: **`95d25c1`** (`test(binary): add pinned source probes and declared fixtures`). The evidence/report stage commit is returned in the implementation chat; use `git log --oneline -- validation/binary` for both exact commit identities without a self-referential commit hash in this file.
+Source/fixture stage commit: **`95d25c1`** (`test(binary): add pinned source probes and declared fixtures`). Evidence/report stage commit: **`6027e11`** (`test(binary): record model behavior and reproducible reference evidence`). A subsequent report-only clarification records the intentionally retained whitespace in raw diagnostics. Use `git log --oneline -- validation/binary` for the complete delivery history.
 
 Remaining work is explicit in BRANCHES.md: runtime branch instrumentation/exhaustive combinations, FB3–19, jump indices 2–4, third/fourth companions and unsafe companion boundaries, unsupported link combinations, legacy parser scaling/aliases beyond the declared inputs, ecliptic and non-TCB cases, singular/extreme parameters, other platforms, binary-fitting integration and the eventual Rust port. Central review must choose the implementation sequence and finite acceptance budgets after inspecting this evidence. No design decision or milestone is accepted by this report.
