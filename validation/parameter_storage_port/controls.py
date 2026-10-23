@@ -51,7 +51,7 @@ print('1 passed; 0 failed')
         reject('stale launch challenge',lambda:port.execute(fake,port.identity(fake),[]))
         out=Path(td)/'failed-run';out.mkdir();receipt=out/'debug_direct.json';receipt.write_text('{"status":"PASS"}')
         failed=subprocess.CompletedProcess([],1,'','injected build failure')
-        with patch.object(port,'OUT',out),patch.object(sys,'argv',['run','--profile','debug']),patch.object(port.subprocess,'run',return_value=failed):
+        with patch.object(port,'OUT',out),patch.object(sys,'argv',['run','--profile','debug']),patch.object(port,'identity',return_value={k:v for k,v in identity.items() if k!='executable_sha256'}),patch.object(port.subprocess,'run',return_value=failed):
             reject('failed run deletes previous success receipt',port.main)
         assert not receipt.exists()
     return results
