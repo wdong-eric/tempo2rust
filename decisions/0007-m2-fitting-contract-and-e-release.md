@@ -171,10 +171,10 @@ Let `a_j = max_i |A_ref[i,j]|` for unwhitened columns. For a zero reference colu
 
 | Quantity | Gate |
 | --- | --- |
-| Inputs, row mapping/order, flags, column order, controls, iteration count, degrees of freedom, effective rank/drop decisions, pulse counts | Exact for the prescribed fixtures. Do not compare nonunique SVD vector signs as scientific outputs. |
+| Inputs, row mapping/order, flags, column order, controls, iteration count, degrees of freedom, effective rank/drop decisions, pulse counts | Exact for the prescribed fixtures. Match singular modes together with their drop flags as specified in decision 0010; their raw index is not a physical column identity. Do not compare nonunique SVD vector signs as scientific outputs. |
 | `x` after its binary64 boundary | At most 4 binary64 ULPs of the reference; structural zero is exact. |
 | Matrix entries | `|delta A_ij| <= 5e-14 * a_j`; apply the same rule with the corresponding whitened column maximum to the whitened matrix. Structural zeros remain exact. |
-| Singular values | Retained values agree relatively within `1e-10`; discarded values satisfy the specified cutoff and exact drop classification. Preserve the exactly represented equality control. |
+| Singular values | Match the finite spectrum and associated flags under decision 0010, preserving raw order in output. Retained values agree relatively within `1e-10`; discarded values satisfy the specified cutoff and exact drop classification. Preserve the exactly represented equality control. |
 | Identical-input solver increments | `a_j * |delta p_j| <= 1e-13 s + 1e-11 * a_j * |p_ref,j|`; additionally `max_i |sum_j A_ref,ij * delta p_j| <= 1e-14 s`. |
 | Raw covariance, identical-input solve or end-to-end fit | `|delta C_jk| <= 1e-10 * sqrt(C_ref,jj * C_ref,kk)`; a structural zero-variance row/column remains exactly zero. |
 | Fit-coordinate/physical errors, identical-input solve | Relative difference at most `1e-10`; an analytically exact zero remains zero. |

@@ -1,0 +1,398 @@
+{
+  "checks": {
+    "rug113": {
+      "existing_comparator_after_pairing": {
+        "errors": [],
+        "maxima": {
+          "chi_square": {
+            "absolute_error": "0E-46",
+            "gate": "8.28433333333333445583163178083010558E-21",
+            "path": "shared.solver.chi_square",
+            "signed_error": "0E-46"
+          },
+          "covariance": {
+            "absolute_error": "0E-37",
+            "gate": "4.16666666666666643537020320309238741E-12",
+            "path": "shared.solver.covariance[0,0]",
+            "signed_error": "0E-37"
+          },
+          "error_multiplier": {
+            "absolute_error": "0E-41",
+            "gate": "4.55064098049201613236129301820476201E-16",
+            "path": "shared.solver.error_multiplier",
+            "signed_error": "0E-41"
+          },
+          "errors": {
+            "absolute_error": "0E-42",
+            "gate": "9.28895700400331466719074970106451161E-17",
+            "path": "shared.solver.errors[0]",
+            "signed_error": "0E-42"
+          },
+          "errors_unscaled": {
+            "absolute_error": "0E-36",
+            "gate": "2.04124145231931508615019765784381889E-11",
+            "path": "shared.solver.errors_unscaled[0]",
+            "signed_error": "0E-36"
+          },
+          "increment_effect_s": {
+            "absolute_error": "0E-42",
+            "gate": "1.0000583333333333333289289878830635727169E-13",
+            "path": "shared.solver.increments[0]",
+            "signed_error": "0E-42"
+          },
+          "linearized_s": {
+            "absolute_error": "0E-41",
+            "gate": "1E-12",
+            "path": "shared.solver.linearized_s[0]",
+            "signed_error": "0E-41"
+          },
+          "matrix": {
+            "absolute_error": "0",
+            "gate": "5E-14",
+            "path": "shared.matrix[0,0]",
+            "signed_error": "0"
+          },
+          "modeled_difference_s": {
+            "absolute_error": "0E-42",
+            "gate": "1E-14",
+            "path": "shared.modeled_difference[0]",
+            "signed_error": "0E-42"
+          },
+          "singular_values": {
+            "absolute_error": "0E-35",
+            "gate": "3.46410161513775459438469527097382281E-10",
+            "path": "shared.solver.singular_values[0]",
+            "signed_error": "0E-35"
+          },
+          "white_matrix": {
+            "absolute_error": "0",
+            "gate": "5E-14",
+            "path": "shared.white_matrix[0,0]",
+            "signed_error": "0"
+          }
+        },
+        "measurements": 49
+      },
+      "own_cutoff_and_flags": "pass",
+      "reference_to_actual_mode_pairs": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    "rug128": {
+      "existing_comparator_after_pairing": {
+        "errors": [],
+        "maxima": {
+          "chi_square": {
+            "absolute_error": "4.436E-47",
+            "gate": "8.28433333333333445583163178083010558E-21",
+            "path": "shared.solver.chi_square",
+            "signed_error": "-4.436E-47"
+          },
+          "covariance": {
+            "absolute_error": "1.743E-38",
+            "gate": "4.16666666666666643537020320309238741E-12",
+            "path": "shared.solver.covariance[0,0]",
+            "signed_error": "1.743E-38"
+          },
+          "error_multiplier": {
+            "absolute_error": "3.538E-42",
+            "gate": "4.55064098049201613236129301820476201E-16",
+            "path": "shared.solver.error_multiplier",
+            "signed_error": "-3.538E-42"
+          },
+          "errors": {
+            "absolute_error": "2.003E-43",
+            "gate": "9.28895700400331466719074970106451161E-17",
+            "path": "shared.solver.errors[0]",
+            "signed_error": "2.003E-43"
+          },
+          "errors_unscaled": {
+            "absolute_error": "1.932E-37",
+            "gate": "2.04124145231931508615019765784381889E-11",
+            "path": "shared.solver.errors_unscaled[0]",
+            "signed_error": "-1.932E-37"
+          },
+          "increment_effect_s": {
+            "absolute_error": "3.514E-43",
+            "gate": "1.0000583333333333333289289878830635727169E-13",
+            "path": "shared.solver.increments[0]",
+            "signed_error": "3.514E-43"
+          },
+          "linearized_s": {
+            "absolute_error": "4.905E-42",
+            "gate": "1E-12",
+            "path": "shared.solver.linearized_s[4]",
+            "signed_error": "4.905E-42"
+          },
+          "matrix": {
+            "absolute_error": "0",
+            "gate": "5E-14",
+            "path": "shared.matrix[0,0]",
+            "signed_error": "0"
+          },
+          "modeled_difference_s": {
+            "absolute_error": "7.028E-43",
+            "gate": "1E-14",
+            "path": "shared.modeled_difference[0]",
+            "signed_error": "7.028E-43"
+          },
+          "singular_values": {
+            "absolute_error": "5.20618E-34",
+            "gate": "3.46410161513775459438469527097382281E-10",
+            "path": "shared.solver.singular_values[0]",
+            "signed_error": "5.20618E-34"
+          },
+          "white_matrix": {
+            "absolute_error": "0",
+            "gate": "5E-14",
+            "path": "shared.white_matrix[0,0]",
+            "signed_error": "0"
+          }
+        },
+        "measurements": 49
+      },
+      "own_cutoff_and_flags": "pass",
+      "reference_to_actual_mode_pairs": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    }
+  },
+  "input_and_reference": {
+    "data_s": [
+      "3.00000000000000007600257229123386082e-06",
+      "-1.99999999999999990949622365177251737e-06",
+      "3.99999999999999981899244730354503474e-06",
+      "9.99999999999999954748111825886258686e-07",
+      "-5.00000000000000040901526957015654773e-06",
+      "6.00000000000000015200514458246772165e-06"
+    ],
+    "matrix": [
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ]
+    ],
+    "mode": 0,
+    "rescale_effective": true,
+    "sigma_s": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "1",
+      "1"
+    ],
+    "solver": {
+      "chi_square": "8.28333333333333445583163178083010558e-11",
+      "covariance": [
+        [
+          "0.0416666666666666643537020320309238741",
+          "0.0416666666666666643537020320309238741"
+        ],
+        [
+          "0.0416666666666666643537020320309238741",
+          "0.0416666666666666643537020320309238741"
+        ]
+      ],
+      "dof": 4,
+      "error_multiplier": "4.55064098049201613236129301820476201e-06",
+      "errors": [
+        "9.28895700400331466719074970106451161e-07",
+        "9.28895700400331466719074970106451161e-07"
+      ],
+      "errors_unscaled": [
+        "0.204124145231931508615019765784381889",
+        "0.204124145231931508615019765784381889"
+      ],
+      "increments": [
+        "5.83333333333333289289878830635727169e-07",
+        "5.83333333333333289289878830635727169e-07"
+      ],
+      "linearized_s": [
+        "1.83333333333333349742281462996240649e-06",
+        "-3.16666666666666627631774449946888694e-06",
+        "2.83333333333333302865445282869849564e-06",
+        "-1.66666666666666623831645835385195653e-07",
+        "-6.16666666666666719935326404500308684e-06",
+        "4.83333333333333336166715010762118254e-06"
+      ],
+      "rank": 1,
+      "retained": [
+        true,
+        false
+      ],
+      "singular_values": [
+        "3.46410161513775459438469527097382281",
+        "3.04516261909254248355290079047063064e-34"
+      ]
+    },
+    "white_data": [
+      "3.00000000000000007600257229123386082e-06",
+      "-1.99999999999999990949622365177251737e-06",
+      "3.99999999999999981899244730354503474e-06",
+      "9.99999999999999954748111825886258686e-07",
+      "-5.00000000000000040901526957015654773e-06",
+      "6.00000000000000015200514458246772165e-06"
+    ],
+    "white_matrix": [
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ],
+      [
+        "1",
+        "1"
+      ]
+    ]
+  },
+  "inspected_files": {
+    "rust/src/tksvd.rs": "a35432863cf60916a6438b4241f1958fecd4b1ce8101ba02f275665ee8dfa09b",
+    "tempo2/TKsvd.C": "f6fc8e85148332adfded85d5489d1e226a8da0ab076319a7b33d640215b1fa3d",
+    "validation/fitting/build/dependent_rug113.json": "4f8e9bb682ea412c8152cd288d425429680fcf0b984e3465fee239719340f527",
+    "validation/fitting/build/dependent_rug128.json": "b79c569e814312b1d5d26556278d6f4d63ede17dd0eadadcd725aad2d67f97f2",
+    "validation/fitting/compare.py": "8a7db74f24acc6e55f76fe626de862ffc1ef31edf9ad31ab0256ec364e3881a1",
+    "validation/fitting/reference/dependent_columns.json": "f7e940828c247c69ecdbf59e4502220ee60ace29fc260efa018161b3ddf5a01a"
+  },
+  "rust_diagnostics": {
+    "rug113": {
+      "chi_square": "8.28333333333333445583163178083010558e-11",
+      "covariance": [
+        [
+          "4.16666666666666643537020320309238741e-2",
+          "4.16666666666666643537020320309238741e-2"
+        ],
+        [
+          "4.16666666666666643537020320309238741e-2",
+          "4.16666666666666643537020320309238741e-2"
+        ]
+      ],
+      "dof": 4,
+      "error_multiplier": "4.55064098049201613236129301820476201e-6",
+      "errors": [
+        "9.28895700400331466719074970106451161e-7",
+        "9.28895700400331466719074970106451161e-7"
+      ],
+      "errors_unscaled": [
+        "2.04124145231931508615019765784381889e-1",
+        "2.04124145231931508615019765784381889e-1"
+      ],
+      "increments": [
+        "5.83333333333333289289878830635727169e-7",
+        "5.83333333333333289289878830635727169e-7"
+      ],
+      "linearized_s": [
+        "1.83333333333333349742281462996240649e-6",
+        "-3.16666666666666627631774449946888694e-6",
+        "2.83333333333333302865445282869849564e-6",
+        "-1.66666666666666623831645835385195653e-7",
+        "-6.16666666666666719935326404500308684e-6",
+        "4.83333333333333336166715010762118254e-6"
+      ],
+      "rank": 1,
+      "retained": [
+        true,
+        false
+      ],
+      "singular_values": [
+        "3.46410161513775459438469527097382281",
+        "3.04516261909254248355290079047063064e-34"
+      ]
+    },
+    "rug128": {
+      "chi_square": "8.283333333333334455831631780830105575564e-11",
+      "covariance": [
+        [
+          "4.166666666666666435370203203092387411743e-2",
+          "4.166666666666666435370203203092387411743e-2"
+        ],
+        [
+          "4.166666666666666435370203203092387411743e-2",
+          "4.166666666666666435370203203092387411743e-2"
+        ]
+      ],
+      "dof": 4,
+      "error_multiplier": "4.550640980492016132361293018204762006462e-6",
+      "errors": [
+        "9.288957004003314667190749701064511612003e-7",
+        "9.288957004003314667190749701064511612003e-7"
+      ],
+      "errors_unscaled": [
+        "2.041241452319315086150197657843818888068e-1",
+        "2.041241452319315086150197657843818888068e-1"
+      ],
+      "increments": [
+        "5.833333333333332892898788306357271693514e-7",
+        "5.833333333333332892898788306357271693514e-7"
+      ],
+      "linearized_s": [
+        "1.833333333333333497422814629962406485220e-6",
+        "-3.166666666666666276317744499468886942850e-6",
+        "2.833333333333333028654452828698495636672e-6",
+        "-1.666666666666666238316458353851956530889e-7",
+        "-6.166666666666667199353264045003086835095e-6",
+        "4.833333333333333361667150107621182542061e-6"
+      ],
+      "rank": 1,
+      "retained": [
+        false,
+        true
+      ],
+      "singular_values": [
+        "9.293098813148628184670717744356170930077e-39",
+        "3.464101615137754594384695270973823330618"
+      ]
+    }
+  },
+  "source_pin": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "status": "central diagnostic snapshot; final production regeneration still required"
+}

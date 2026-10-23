@@ -1,0 +1,21 @@
+# Compare SVD modes without assigning them parameter identities
+
+Central decision, 23 October 2026. This clarifies decision 0007's singular-value/drop-diagnostic comparison after E's exactly dependent-column probe. It changes the comparison projection, not the solver, its raw outputs or the numerical budgets. Rug128 remains the production representation. M2 acceptance remains pending implementation and verification.
+
+## Source and evidence
+
+The pinned [TKsvd.C:55](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/TKsvd.C:55) diagonalizes modes in a descending index loop but does not sort the resulting spectrum. Its back substitution uses the corresponding columns of U and V with each singular value. The columns of the input design matrix and rows of V identify fitted coordinates; the singular-mode index does not. Applying a common permutation to the modes of U, W and V leaves the reconstructed design matrix, solution and covariance unchanged. Comparing an SVD mode index as though it named F0 or F1 would conflate these different coordinates.
+
+E's saved diagnostic uses a 6-by-2 matrix whose entries are all one. Its binary128 reference reports approximately `[3.4641016151377546, 3.04516e-34]`, with retention `[true, false]`. The temporary 113-bit Rust diagnostic reproduces that order; Rug128 reports approximately `[9.29310e-39, 3.4641016151377546]`, with retention `[false, true]`. Both give rank 1. The saved fit increments, covariance, errors, chi-square and linearized residuals agree within the existing budgets. The attached [evidence snapshot](/Users/Eric.Dong/Downloads/tempo2rust/decisions/evidence/m2/svd-mode-order.json) records the exact decimal values and file hashes inspected centrally. These are diagnostic snapshots of E's work in progress, not acceptance of its final implementation. Final verification must regenerate its production outputs at Rug128; files left by the temporary 113-bit diagnostic cannot stand in for that check.
+
+## Comparison rule
+
+Keep the solver's mode order, associated retention flags and any mode vectors unchanged in exported results. Do not sort production arrays, change precision, switch algorithms, or alter the cutoff to force the reference order.
+
+For the comparison only, match finite singular modes by their values, carrying each mode's original index and retention flag together. A stable descending sort of these paired records is sufficient; retain the comparison permutation in diagnostics. Require the same number of modes, the same retained/dropped classification after matching, and exactly the same effective rank. Equal-valued modes do not gain physical parameter identities from a sorting tie-break. Reject nonfinite singular values as a completed finite solve unless the source case has an explicitly classified nonfinite outcome.
+
+Validate each engine's retention flags against its own unrounded singular values and the unchanged source rule: apply the strict comparison `w < binary64(1e-27) * max(w)`, then regard a resulting zero as inactive in back substitution. This includes an originally zero mode and the all-zero matrix. The exactly represented diagonal equality control must still retain its nonzero equality mode. Sorting must not hide a wrong cutoff, an extra dropped mode, a negative singular value or a mismatched flag/value pair.
+
+Matched retained singular values keep the `1e-10` relative gate. Discarded values must satisfy their source cutoff/zero classification; their tiny roundoff magnitudes are not a new relative-agreement requirement. The physical-column order, fit increments, updates, covariance indices, errors, degrees of freedom, modeled effect, residuals and pulse counts retain every existing gate. No permutation is permitted for those parameter- or observation-coordinate outputs.
+
+Verification must reject a changed retained singular value, changed rank, changed retention flag, flag/value mismatch, threshold-equality violation and a permutation of physical parameter outputs. A pure permutation of correctly paired singular modes is permitted and reported. Full central acceptance still requires the independent reference, production Rug128 regeneration, the other solver controls and end-to-end fitting evidence.

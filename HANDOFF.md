@@ -75,6 +75,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | Preservation and full-core coverage | Decision 0008 adopted; F released | Deterministic bugs retained, baseline differences reconciled, every core module and unsafe boundary accounted for |
 | Binary reference preparation | Decision 0009 adopted; G released | Native and wrapper precision, model-specific updates, source mutations and integrated residual evidence; implementation gates await central review |
 | M2 acceptance | Pending implementation and central review | E's source, identical-input solver checks, end-to-end fitting comparisons, invalid-fit recovery and unchanged M1a/M1b behavior |
+| SVD diagnostic comparison | Decision 0010 adopted | Preserve raw mode order; compare paired singular values and retention flags independently of physical parameter order. All numerical budgets and source cutoff controls remain unchanged. |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
