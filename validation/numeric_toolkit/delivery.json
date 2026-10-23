@@ -1,0 +1,76 @@
+{
+  "acceptance": "Pending central review; reference only. Rug128 and all budgets unchanged. M2 four exact-order diagnostics and full transfer remain open.",
+  "artifacts": {
+    ".gitignore": "c7cd0fc55d4b88bc4ed87b1cdc33670d9046174ab762188a0f2ce10290bb56e0",
+    "REPORT.md": "307e529afab5e7ddcae637411cd0aea4eb38b16b9515b98f5ce1097929ac7174",
+    "SOURCE_MAP.md": "a66e2a6e2c20eb19ddbb079bba65bf2b678872f259d8bee241a231d02175fd10",
+    "cases.json": "024794fcac4e2e425ee07aa0d7cc5a2faaea910f32db156a452d28d3b6208e77",
+    "coverage.json": "a48b46b1fd0a14e2b73c9a60758e592f96ef01ca591f140dbe1b0b61565e88a8",
+    "coverage.py": "910fa037361e33703f85210bb8ccd59f9c385995fe039fa696231d4e5cc70b0a",
+    "fixtures.py": "0b3e88eabfe6fe60d26b477c3f92046adeffbfcb1cf4e44303c0212d50aa42fe",
+    "inventory.json": "471a5b510b3162601ad2c31a11b89fd4c1254fb33e97c06027c3cdb881845a52",
+    "inventory.py": "8bb31fde8d29952047884d3801e3e79097ce6ffcee35ae90e9e2a2158bbc5256",
+    "observations.json": "f99bb4cbdb7f868e7f26507eeadea8a2f984b7a2a3ec08d0de98fa1791822833",
+    "probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
+    "profile.json": "e87acf9c9a8fcee5934b91263eaa65fd42cc20c1cd94b87f3312af54c7de0874",
+    "profile.py": "472d6ad1124ff4a2236587888141ddacae3d46055267822f5ea5680576e70073",
+    "regeneration.json": "4c536a800bc51646dd74e18ce121196ad0dfd0e72a74b4ce840b676c9e4a2a9e",
+    "run.py": "9cb919ab551e134dfe87c1b753a0721cc2ea2bf8531c3ffc9a58b070e4e279a7",
+    "verification.json": "13271a49ef975cec2701e42f98b1e96e810fd946434f10f58909de11958b3a0a",
+    "verify.py": "eab013af18cec6b8d0c9465c82ad7deaa59b1c5a0668b1aa563fb9aa7ed7538b"
+  },
+  "commands": [
+    "python3 validation/numeric_toolkit/verify.py",
+    "python3 validation/numeric_toolkit/coverage.py"
+  ],
+  "current_link_map_sha256": "f55f619777d56f06bf0b5438032423f644c09bd298c59b7223cf6b20c12cd425",
+  "executed_O2": {
+    "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/build/probe",
+    "executable_sha256": "3c5732b6b3afd5047876703540b042af354481b6b53d72c59c9073a49eaad5fa",
+    "runner_sources": {
+      "coverage.py": "910fa037361e33703f85210bb8ccd59f9c385995fe039fa696231d4e5cc70b0a",
+      "fixtures.py": "0b3e88eabfe6fe60d26b477c3f92046adeffbfcb1cf4e44303c0212d50aa42fe",
+      "inventory.py": "8bb31fde8d29952047884d3801e3e79097ce6ffcee35ae90e9e2a2158bbc5256",
+      "probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
+      "profile.py": "472d6ad1124ff4a2236587888141ddacae3d46055267822f5ea5680576e70073",
+      "run.py": "9cb919ab551e134dfe87c1b753a0721cc2ea2bf8531c3ffc9a58b070e4e279a7",
+      "verify.py": "eab013af18cec6b8d0c9465c82ad7deaa59b1c5a0668b1aa563fb9aa7ed7538b"
+    }
+  },
+  "executed_coverage": {
+    "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/numeric_toolkit/build/coverage",
+    "executable_sha256": "0ffb65d7eb87802095efe5ab4cda876d33b56b785f2cf5847f2e770c7bd473ce",
+    "runner_sources": {
+      "coverage.py": "910fa037361e33703f85210bb8ccd59f9c385995fe039fa696231d4e5cc70b0a",
+      "fixtures.py": "0b3e88eabfe6fe60d26b477c3f92046adeffbfcb1cf4e44303c0212d50aa42fe",
+      "inventory.py": "8bb31fde8d29952047884d3801e3e79097ce6ffcee35ae90e9e2a2158bbc5256",
+      "probe.cc": "0e9c8744171273fb2fbcec7fb688791b820fdb051c9d07431908114fe745e7be",
+      "profile.py": "472d6ad1124ff4a2236587888141ddacae3d46055267822f5ea5680576e70073",
+      "run.py": "9cb919ab551e134dfe87c1b753a0721cc2ea2bf8531c3ffc9a58b070e4e279a7",
+      "verify.py": "eab013af18cec6b8d0c9465c82ad7deaa59b1c5a0668b1aa563fb9aa7ed7538b"
+    }
+  },
+  "final_evidence_commit": "e754581",
+  "harness_commit": "be4b4c9",
+  "independent_repositories": {
+    "tempo2": {
+      "head": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+      "status": ""
+    },
+    "validation/reference": {
+      "head": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+      "status": ""
+    }
+  },
+  "initial_evidence_commit": "5734dc9",
+  "release": "c03583442294c059768c9727034a6e7554a96108",
+  "result": {
+    "actions": 604,
+    "cases": 350,
+    "compiled_behavior_mutants": 22,
+    "events": 1207,
+    "inline_functions_entered": 11,
+    "integrity_comparator_controls": 35,
+    "primary_functions_entered": 24
+  }
+}
