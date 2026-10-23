@@ -1,0 +1,185 @@
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWanisobkgrd_plug.C:274:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrd_plug.C:239:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrdfromfile_plug.C:233:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdetect_plug.C:100:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdipolebkgrd_plug.C:307:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWevolve_plug.C:219:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralanisobkgrd_plug.C:424:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralbkgrd_plug.C:302:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsens_plug.C:62:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsingle_plug.C:173:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:180:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:228:      preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:252:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/addRed_plug.C:84:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/addRed_plug.C:134:  preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/analyticChol_plug.C:102:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/applet_plug.C:120:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/autoDM_plug.C:82:   preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/autoSpectralFit_plug.C:82:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:355:	preProcess(psr,1,argc,argv);      
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/basic_plug.C:95:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/calcDMe_plug.C:253:  preProcess(psr, *npsr, argc, argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/checkWhite_plug.C:88:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/cholSpectra_plug.C:150:   preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/clock_plug.C:132:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/clock_plug.C:214:      preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareBackends_plug.C:88:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:93:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/delays_plug.C:135:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/designmatrix_plug.C:104:    preProcess(pPsr, *pnPsr, argc, argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/detectGWB_plug.C:173:      preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/detectGWBnew_plug.C:168:   preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:102:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:148:      preProcess(psr,1,argc,argv);      
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:214:  preProcess(psr,1,argc,argv);      
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/efacEquad_plug.C:173:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fake_plug.C:416:      preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fake_plug.C:452:	  preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/findCW_plug.C:78:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/findCWs_plug.C:84:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fitStability_plug.C:87:   preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fixData_plug.C:147:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fixData_plug.C:805:      preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glast_plug.C:163:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glitch_plug.C:499:	  preProcess(psr,1,argc,argv);      
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glitch_plug.C:653:      preProcess(psr,1,argc,argv);        
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/grTemplate_plug.C:80:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/gwmStats_plug.C:124:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/gwm_plug.C:100:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/icLimit_plug.C:238:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/interpolate_plug.C:181:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/mjk_plug.C:121:   preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/planet_plug.C:267:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/planet_plug.C:760:	      preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:564:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:2739:               preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:3592:            preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plotMany_plug.C:202:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/ppta_splug.C:62:      useSelectFile(selectFname,psr,*npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:426:        preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:2537:                    preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:3387:            preProcess(psr,1,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:293:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/simRedNoise_plug.C:101:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/simulDM_plug.C:89:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/spectralModel_plug.C:209:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/spectrum_plug.C:116:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/splk_plug.C:121:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/stridefit2_plug.C:150:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/stridefit2_plug.C:190:        updateEpoch(psr,0,t);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/transform_plug.C:83:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/transform_plug.C:91:      transform_units(&psr[0],TDB_UNITS,SI_UNITS);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/transform_plug.C:106:      transform_units(&psr[0],SI_UNITS,TDB_UNITS);   
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:39:void readWhiteNoiseModelFile(pulsar *psr,int p);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:41:void preProcess(pulsar *psr,int npsr,int argc,char **argv)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:71:    if (displayCVSversion == 1) CVSdisplayVersion("preProcess.C","preProcess()",CVS_verNum);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:163:            readWhiteNoiseModelFile(psr,p);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:275:        preProcessSimple1 (psr + p, tempo1, last);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:278:            updateEpoch_str(psr,p,newEpoch);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:480:        preProcessSimple2 (psr + p, startdmmjd, ndm, dmvals, trimonly);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:541:                useSelectFile(selectFname,psr,npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:545:        preProcessSimple3 (psr + p);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:561:void useSelectFile(char *fname,pulsar *psr,int npsr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:719:                processSimultaneous(line,psr,npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:721:                processFlag(line,psr,npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:723:                logicFlag(line,psr,npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:730:void logicFlag(char *line,pulsar *psr,int npsr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:797:void processFlag(char *line,pulsar *psr,int npsr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:847:void processSimultaneous(char *line,pulsar *psr, int npsr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcess.C:969:void readWhiteNoiseModelFile(pulsar *psr,int p)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:33:void preProcessSimple (pulsar *psr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:37:    if (displayCVSversion == 1) CVSdisplayVersion("preProcessSimple.C","preProcessSimple()",CVS_verNum);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:39:    preProcessSimple1 (psr, 0, -1);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:40:    preProcessSimple2 (psr, 0, 0, 0, 0);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:41:    preProcessSimple3 (psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:44:void preProcessSimple1 (pulsar *psr, int tempo1, double thelast)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:135:        transform_units(psr, TDB_UNITS, SI_UNITS);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:138:void preProcessSimple2 (pulsar *psr,
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:preProcessSimple.C:420:void preProcessSimple3 (pulsar *psr)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.C:371:    preProcess(psr,npsr,argc,commandLine);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:987:    void preProcess(pulsar *psr,int npsr,int argc,char *argv[]);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:990:    void preProcessSimple (pulsar *psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:992:    /* three stages of preProcess that interleave with preProcess (complicated) */
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:994:    void preProcessSimple1 (pulsar *psr, int tempo1, double thelast);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:996:    void preProcessSimple2 (pulsar *psr,
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1002:    void preProcessSimple3 (pulsar *psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1006:    void useSelectFile(char *fname,pulsar *psr,int npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1007:    void processSimultaneous(char *line,pulsar *psr, int npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1008:    void processFlag(char *line,pulsar *psr,int npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1009:    void logicFlag(char *line,pulsar *psr,int npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1049:    void updateEpoch_str(pulsar* psr, int p, const char* newEpoch);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1050:    void updateEpoch(pulsar* psr, int p, longdouble nMJD);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1093:    void transform_units(struct pulsar *psr, int from, int to);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:20:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:52:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:86:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:118:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:153:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:184:    preProcessSimple(psr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:231:    preProcess(psr,npsr,2,cmd);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:40:void scale_param(struct parameter *p, int arr,longdouble f)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:48:void xform_mjd(struct parameter *p,int arr, longdouble f)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:57:transform_units(struct pulsar *psr, int from, int to)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:61:    if (displayCVSversion == 1) CVSdisplayVersion("units.C","transform_units()",CVS_verNum);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:72:    scale_param(&psr->param[param_f],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:73:    scale_param(&psr->param[param_f],1, one/(f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:74:    scale_param(&psr->param[param_f],2, one/(f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:75:    scale_param(&psr->param[param_f],3, one/(f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:76:    scale_param(&psr->param[param_f],4, one/(f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:77:    scale_param(&psr->param[param_f],5, one/(f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:78:    scale_param(&psr->param[param_f],6, one/(f*f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:79:    scale_param(&psr->param[param_f],7, one/(f*f*f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:80:    scale_param(&psr->param[param_f],8, one/(f*f*f*f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:81:    scale_param(&psr->param[param_f],9, one/(f*f*f*f*f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:82:    scale_param(&psr->param[param_fddc],0, pow(f, (double)(one+(longdouble)psr->param[param_fddi].val[0])));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:102:        scale_param(&psr->param[param_dm],k,  val);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:104:        /*      scale_param(&psr->param[param_dm],k, f*f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:105:                scale_param(&psr->param[param_dm],k, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:106:                scale_param(&psr->param[param_dm],k, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:107:                scale_param(&psr->param[param_dm],k, one/(f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:108:                scale_param(&psr->param[param_dm],k, one/(f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:109:                scale_param(&psr->param[param_dm],k, one/(f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:110:                scale_param(&psr->param[param_dm],k, one/(f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:111:                scale_param(&psr->param[param_dm],k, one/(f*f*f*f*f*f));
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:112:                scale_param(&psr->param[param_dm],k, one/(f*f*f*f*f*f*f)); */
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:122:        scale_param(&psr->param[param_cm],k,  val);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:128:    //scale_param(&psr->param[param_px], one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:137:    scale_param(&psr->param[param_pmrv],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:138:    scale_param(&psr->param[param_pmra],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:139:    scale_param(&psr->param[param_pmdec],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:142:    scale_param(&psr->param[param_pmra2],0, one/f/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:143:    scale_param(&psr->param[param_pmdec2],0, one/f/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:147:    xform_mjd(&psr->param[param_posepoch],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:148:    xform_mjd(&psr->param[param_pepoch],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:149:    xform_mjd(&psr->param[param_start],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:150:    xform_mjd(&psr->param[param_finish],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:156:    xform_mjd(&psr->param[param_t0],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:157:    scale_param(&psr->param[param_pb],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:158:    scale_param(&psr->param[param_fb],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:159:    scale_param(&psr->param[param_a1],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:160:    scale_param(&psr->param[param_edot],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:162:    scale_param(&psr->param[param_omdot],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:163:    xform_mjd(&psr->param[param_tasc],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:177:        xform_mjd(&psr->param[param_tzrmjd],0, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:178:        scale_param(&psr->param[param_tzrfrq],0, one/f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:184:        xform_mjd(&psr->param[param_bpjep],k, f);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:185:        scale_param(&psr->param[param_bpja1],k, f); 
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:units.C:186:        scale_param(&psr->param[param_bpjpb],k, f); 
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/glast/glast_plug.C:163:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/mjkbayes/mjkbayes_plug.C:111:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/splug/jbo_splug.C:69:      useSelectFile(selectFname,psr,*npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/splug/ppta_dr1_splug.C:69:      useSelectFile(selectFname,psr,*npsr);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/add2state_plug.C:133:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addArbitraryDM_plug.C:107:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addCGW_plug.C:126:	preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addChromVar_plug.C:148:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addDmVar_plug.C:159:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addGWB_plug.C:169:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addGaussian_plug.C:122:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addInstrumentalIssues_plug.C:104:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addRedNoise_plug.C:163:    preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/formIdeal_plug.C:110:  preProcess(psr,*npsr,argc,argv);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:updateEpoch.C:4:void updateEpoch_str(pulsar* psr, int p, const char* newEpoch)
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:updateEpoch.C:65:    updateEpoch(psr,p,nMJD);
+fda6ad4a9753ad7dc5d291406f2f310a9161423f:updateEpoch.C:68:void updateEpoch(pulsar* psr, int p, longdouble nMJD) {
