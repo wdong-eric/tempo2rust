@@ -30,6 +30,11 @@ def save(path, value):
     path.write_text(json.dumps(value, indent=2, sort_keys=True, allow_nan=False)+'\n')
 
 
+def runner_identity():
+    return {name:sha((HERE/name).read_bytes()) for name in
+            ['run.py','profile.py','fixtures.py','inventory.py','verify.py','coverage.py','probe.cc']}
+
+
 def blob(name):
     return subprocess.check_output(['git', '-C', str(ROOT/'tempo2'), 'show', PIN+':'+name])
 
@@ -65,6 +70,7 @@ def prepare():
 
 
 def compile_probe(src, name='probe', mutation=None, coverage=False):
+    runner_sources = runner_identity()
     if mutation:
         dest = BUILD/(name+'_source')
         shutil.copytree(src, dest, dirs_exist_ok=True)
@@ -100,5 +106,7 @@ def compile_probe(src, name='probe', mutation=None, coverage=False):
                    dependencies=subprocess.check_output(['otool','-L',str(exe)],text=True).splitlines()[1:],
                    runtime_hashes={n:sha(Path(subprocess.check_output([cc,'-print-file-name='+n],text=True).strip()).read_bytes()) for n in ['libquadmath.0.dylib','libstdc++.6.dylib','libgcc_s.1.1.dylib']},
                    support_policy='All primary and support translation units from raw pinned Git bytes. Only global.C data prefix and CVSdisplayVersion are sliced. No A2 archive or initializer correction. Header/config generated as declared. Real clock/table/observatory support is linked.',
-                   mutation=mutation, coverage_instrumentation=coverage)
+                   mutation=mutation, coverage_instrumentation=coverage,
+                   runner_sources=runner_sources)
+    assert runner_identity() == runner_sources, 'Runner/harness changed during compilation'
     return exe, profile

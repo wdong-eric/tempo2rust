@@ -54,13 +54,22 @@
       "global.C:1-64",
       "global.C:176-200"
     ],
-    "link_map_sha256": "b45cdcebe128d90e9de6622ab3fe7a66bc33494e19c44ea3a9628bd7a5c9a4a1",
+    "link_map_sha256": "9169f34b6a84afee589a951882cdd400f21caae57813470bbc1578103dd35925",
     "locale": "C",
     "machine": "arm64",
     "mutation": null,
     "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
     "platform": "macOS-26.7-arm64-arm-64bit",
     "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+    "runner_sources": {
+      "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+      "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+      "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+      "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+      "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+      "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+      "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+    },
     "runtime_hashes": {
       "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
       "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -90,6 +99,19 @@
       "tempo2Util.h": "7a9f7484c853413974e59671dde66cc5517347f1857cb5d41475200ce97d816f"
     },
     "support_policy": "All primary and support translation units from raw pinned Git bytes. Only global.C data prefix and CVSdisplayVersion are sliced. No A2 archive or initializer correction. Header/config generated as declared. Real clock/table/observatory support is linked."
+  },
+  "execution_identity": {
+    "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/probe",
+    "executable_sha256": "ddbe600183cca59ccbddbe99f08229572eb16b77c56b4fe160341a3974df6fa2",
+    "runner_sources": {
+      "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+      "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+      "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+      "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+      "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+      "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+      "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+    }
   },
   "observations_sha256": "00f9c3edf78c0be231ae7455416a9338f146d25faad413f7f080b0ac588f646b"
 }

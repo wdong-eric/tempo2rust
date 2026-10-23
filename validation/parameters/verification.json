@@ -47,6 +47,111 @@
       "rejected": true
     }
   ],
+  "coverage_reuse": {
+    "line_coverage_sha256": "944cfd39b85b0a7e715fd4176283e2052ca3dc86f770cba9810c1ce145601014",
+    "native_command_checked": [
+      "/opt/homebrew/bin/g++-16",
+      "-O2",
+      "-std=gnu++11",
+      "-DHAVE_CONFIG_H",
+      "-I/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/probe.cc",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/initialise.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/readParfile.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKlongdouble.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/tempo2Util.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKmatrix.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKlog.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/clkcorr.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/tabulatedfunction.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/observatory.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/global_data.C",
+      "-lquadmath"
+    ],
+    "native_identity_fields_checked": [
+      "source_revision",
+      "compiler",
+      "compiler_sha256",
+      "platform",
+      "machine",
+      "locale",
+      "sources",
+      "generated",
+      "numeric_header_sha256",
+      "globals_data_sha256",
+      "probe_sha256",
+      "runtime_hashes",
+      "support_policy",
+      "mutation"
+    ],
+    "reason": "Only Python identity gating/receipts changed; native sources, harness, configuration, compiler and flags unchanged."
+  },
+  "identity_checks": [
+    {
+      "accepted": true,
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/probe",
+        "executable_sha256": "ddbe600183cca59ccbddbe99f08229572eb16b77c56b4fe160341a3974df6fa2",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
+      "name": "fresh build accepted"
+    },
+    {
+      "diagnostic": "profile.compiler_sha256: 'b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363' != '0000000000000000000000000000000000000000000000000000000000000000'",
+      "name": "wrong compiler",
+      "rejected": true
+    },
+    {
+      "diagnostic": "profile.sources.readParfile.C: 'ecdbec472eff256ab1c7d875a4ea56536c146012599684408b03fe738ac7550e' != '0000000000000000000000000000000000000000000000000000000000000000'",
+      "name": "wrong source",
+      "rejected": true
+    },
+    {
+      "diagnostic": "execution.runner_sources.run.py: '0000000000000000000000000000000000000000000000000000000000000000' != 'd00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03'",
+      "name": "wrong runner",
+      "rejected": true
+    },
+    {
+      "diagnostic": "execution.runner_sources.probe.cc: '0000000000000000000000000000000000000000000000000000000000000000' != '721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a'",
+      "name": "wrong harness",
+      "rejected": true
+    },
+    {
+      "actual_wrapper_sha256": "15be4ef67d8a0bf6ae03bed0296a839399a125e1205553f05507e2a120973173",
+      "diagnostic": "execution.executable_sha256: 'ddbe600183cca59ccbddbe99f08229572eb16b77c56b4fe160341a3974df6fa2' != '15be4ef67d8a0bf6ae03bed0296a839399a125e1205553f05507e2a120973173'",
+      "name": "forwarding wrapper",
+      "native_sha256": "ddbe600183cca59ccbddbe99f08229572eb16b77c56b4fe160341a3974df6fa2",
+      "rejected": true
+    },
+    {
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/run.py",
+        "--no-build"
+      ],
+      "name": "removed --no-build cannot publish",
+      "receipt_after": [
+        "265b1ee35b884a4b1d7899d141827c1c429e33b82698fcaf27fd8c1fb92360e6",
+        1792745787876570928
+      ],
+      "receipt_before": [
+        "265b1ee35b884a4b1d7899d141827c1c429e33b82698fcaf27fd8c1fb92360e6",
+        1792745787876570928
+      ],
+      "rejected": true,
+      "returncode": 2,
+      "stderr": "usage: run.py [-h] [--record] [--select SELECT]\nrun.py: error: unrecognized arguments: --no-build\n",
+      "stdout": ""
+    }
+  ],
   "initialization_equivalence": [
     "allocateMemory realloc=0/1",
     "initialiseOne fullSetup=0/1 except explicit noWarnings input"
@@ -55,6 +160,19 @@
   "source_mutations": [
     {
       "case": "alias_DM",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_dispatch",
+        "executable_sha256": "784c73a6c88f61c3f33290c0046c0df9e641762c2ccd51d6457c7f24e3f3ef52",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "dispatch",
       "observed": {
         "actions": [
@@ -598,7 +716,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "3e4985aba27203c6f83cfb8abe38e2c8855279ef50d7e0765cce70262df666d1",
+        "link_map_sha256": "923a9988c094b9268d80265fbef0df470e90e4af623bf624a685794b2bf9018d",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -609,6 +727,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -647,6 +774,19 @@
     },
     {
       "case": "index_FB",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_index",
+        "executable_sha256": "df4ec398f80810faa0bf2bd0966f126972288c9fa097395a7242dc5a90016e01",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "index",
       "observed": {
         "actions": [
@@ -1109,7 +1249,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "e6c2ac6e828af28470b65005bf35c9da21b541bfb3d4cd783ecee6abc566a022",
+        "link_map_sha256": "c617dc3348a0537010127548585536245e096f837b95c90dec2a86939d325b14",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -1120,6 +1260,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -1158,6 +1307,19 @@
     },
     {
       "case": "value_forms",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_duplicate",
+        "executable_sha256": "a7e441b9a7b262aa0677b0f73009a9850f3cdabdb8b5df898b2771cad5ee9839",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "duplicate",
       "observed": {
         "actions": [
@@ -2476,7 +2638,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "d62fbccbce5da94c5dee2f1ee437601acaa0c201d1c11051aea591d074b3873c",
+        "link_map_sha256": "91763ceb000f0eb2dbe38c19c2f26a81c9739a0f52bfbaffcec45d5fa74fb809",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -2487,6 +2649,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -2525,6 +2696,19 @@
     },
     {
       "case": "coordinate_duplicate",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_uncertainty",
+        "executable_sha256": "42bcfc29d1e5f39eb7d34fd0ca83c424c53a597211b249ae7cf8bf089ca24afe",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "uncertainty",
       "observed": {
         "actions": [
@@ -3200,7 +3384,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "1377e324a609a29ef5bbb774b3019f2044af64ae73e667874fa44b76d7fab343",
+        "link_map_sha256": "408c60bdd8a614f249e8a71ed4e06537909bb48a77a3189fe45aaf1f9852dedf",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -3211,6 +3395,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -3249,6 +3442,19 @@
     },
     {
       "case": "link_DSHK_after",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_link_direction",
+        "executable_sha256": "041a47ea97b4dde598cf0ef9f77b8662146b46d1502be3d7878e9f993334b2bc",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "link_direction",
       "observed": {
         "actions": [
@@ -4088,7 +4294,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "c639f3d36bc90b4542915c486e57fdf1eb6c8c0025385e7652ad80ada495ee8b",
+        "link_map_sha256": "88dd6a7698676e3f6447a942bd49a5c03af613f38e5bbfd7314ff0528d4db6cf",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -4099,6 +4305,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -4137,6 +4352,19 @@
     },
     {
       "case": "final_defaults",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_finalization",
+        "executable_sha256": "e08a60b25f0b8f9d049a1c4b88d58809730e504088ce5e318769a9ff1760a6d2",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "finalization",
       "observed": {
         "actions": [
@@ -5066,7 +5294,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "c38b01b25a812775d78cb569322954fa2739a83741c38eac8ce8dc476ee16dea",
+        "link_map_sha256": "8983e29108c0c8fe756932d5f94bd8052132802478d2a66f46efad4828b37de9",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -5077,6 +5305,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -5115,6 +5352,19 @@
     },
     {
       "case": "repeat_full",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_wrapper_reset",
+        "executable_sha256": "6e84c26ae03f91737392b02208e3f9ac12fb3df0a2712d3f89bfcc4d440bae57",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "wrapper_reset",
       "observed": {
         "actions": [
@@ -5954,7 +6204,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "608b3d7891923f5d2cde932a1afc82fe671b0f6a35afdf9330956c03947d6b3d",
+        "link_map_sha256": "43eb21a649bb34c44a8edd2dc01646cbc6bad6a23953032509ef9f105bb6315c",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -5965,6 +6215,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
@@ -6003,6 +6262,19 @@
     },
     {
       "case": "final_no_pepoch",
+      "execution_identity": {
+        "executable_path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/mutation_failure_stage",
+        "executable_sha256": "3c19fe54a02214af1afbe2733e584686c7128db7c028fcbe4e5b749a8c4a5a9d",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        }
+      },
       "name": "failure_stage",
       "observed": {
         "actions": [
@@ -6357,7 +6629,7 @@
           "global.C:1-64",
           "global.C:176-200"
         ],
-        "link_map_sha256": "be7a1e1359a5eedf363f992b5a9822e893ef5151e7f1b832d97b82c09d2ce040",
+        "link_map_sha256": "b870db6a03e807680439d3b8a08f21fc20da914842bb2ddfedea964305c1d4eb",
         "locale": "C",
         "machine": "arm64",
         "mutation": [
@@ -6368,6 +6640,15 @@
         "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
         "platform": "macOS-26.7-arm64-arm-64bit",
         "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+        "runner_sources": {
+          "coverage.py": "36ce64da7d612d7465502b71fac7e9534f26569095b046bb3402140b32a09873",
+          "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+          "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+          "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+          "profile.py": "d31c2008a7da0f304adf81f60d9fb89825175535f1d7ad555a0f5c37a502229a",
+          "run.py": "d00e25225b73f804e2a5953636b8638378f01916b37f1702b0d5b984242d3d03",
+          "verify.py": "9dc7b0ba4948dd0d81a600169efc971a6d25c3755c57616d17ffb98354adcd8e"
+        },
         "runtime_hashes": {
           "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
           "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",

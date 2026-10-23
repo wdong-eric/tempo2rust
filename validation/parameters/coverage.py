@@ -5,7 +5,7 @@ import gzip
 import json
 import subprocess
 from profile import HERE,BUILD,prepare,compile_probe,save,sha
-from run import execute,validate,compare
+from run import execute,validate,compare,check_execution_identity
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     for p in BUILD.glob('coverage-*.gcda'):p.unlink()
     exe,profile=compile_probe(prepare(),'coverage',coverage=True)
     def one(c):
-        r=execute(c,exe);validate(c,r);return r
+        r=execute(c,exe,profile);validate(c,r);return r
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
         for i,r in enumerate(pool.map(one,cases)):
             compare(gold[i],r,'coverage.'+r['id'])
@@ -25,7 +25,7 @@ def main():
         path=BUILD/('coverage-'+source+'.gcov.json.gz')
         data=json.loads(gzip.decompress(path.read_bytes()))
         units[source]=dict(command=command,stdout=p.stdout,stderr=p.stderr,data=data)
-    save(HERE/'line_coverage.json',dict(profile=profile,units=units,ordinary_observation_comparison='exact for every case and field',cases=len(cases)))
+    save(HERE/'line_coverage.json',dict(profile=profile,execution_identity=check_execution_identity(exe,profile),units=units,ordinary_observation_comparison='exact for every case and field',cases=len(cases)))
     print('PASS: instrumented outputs agree; coverage exported')
 
 
