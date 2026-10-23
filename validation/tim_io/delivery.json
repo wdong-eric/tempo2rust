@@ -1,0 +1,144 @@
+{
+  "actions": 299,
+  "all_15_current_native_identities_checked": true,
+  "artifacts": {
+    ".gitignore": "c7cd0fc55d4b88bc4ed87b1cdc33670d9046174ab762188a0f2ce10290bb56e0",
+    "COVERAGE.md": "30729c44749870b3f8aeec73d8fb6dc543ba5c6c0fee239be7db1019e2f9252e",
+    "REPORT.md": "ab090fa627db3094ff84d07b7ab2783199e3285172b0fd2d35a681c91a02ae2e",
+    "SOURCE_MAP.md": "6580155ff434c1070be071ab6224750e10293655ab650f9f22f83c677649c3b4",
+    "cases.json": "400bc04add8053da8fb248de2691bdb9e0ded2ccfb4230d963d240708426ccea",
+    "coverage.json": "191e2e9a95b1afcb3a71be4bb6552a2ff6879522fbc6f1c465f3384cd208ae63",
+    "coverage.py": "c25baf99f49e6c2f64f8d896a31dcef66b11ba9f341b6d9ea0839ef3da37fb7b",
+    "fixtures.py": "55e14a3e90b3b8d5e7f7eefb80945eb6725f9fbec3bac1f38bb83df18c785de2",
+    "inventory.json": "2e10b5e5695ef377352edd95905457795579009e7bb12bc6304de2a14883cf09",
+    "inventory.py": "078d1e9f09c672738915f19599759375e1f9b7a04aded4da3c0989aae98ed2f7",
+    "observations.json": "bced05c085f59ceecdd3aa9cfd60d10d764988bdbf613aff1a5cf2c88227a14e",
+    "probe.cc": "b535198eb6a710f3616ebbe1144f1657e9107880336d485174c3097d49fe6040",
+    "profile.json": "d23a3907e09be4d391b92ffdfa2f05170af4e78beecaea95bcacb1aef88eca7c",
+    "profile.py": "49500d1b2e80e8651c87e4a04cb1eaa8bd6b69fca84fa4f81043ebc73dc779cb",
+    "reference.raw.json.gz": "0d03d28d24541b02ec62a7af9b104e394a0127202fbd4b8858ad371e1f53aaa5",
+    "regeneration.json": "0b289e911aa74a72f210e12485fc573590b617f8a095d0f427338396a2beaf1a",
+    "replay.raw.json.gz": "1456a02bd9a48e10d326db5a079c1d6b350ef05d5be1c414c08a437c82f2f7ce",
+    "run.py": "26994990e96359774e879bab06a1e72a66cb9b52c6515572b231db6c38ed4413",
+    "verification.json": "9a64a9d9fc36a3f33c6552929af83423271ec351a1d55a823e96fab17684bad0",
+    "verify.py": "b6a7d62a8e6580d9311307c18caa5dd8533bd22395e5a2e2190ba0c4c1ef8507"
+  },
+  "cases": 157,
+  "classes": {
+    "defined": 116,
+    "host": 35,
+    "normal_exit": 6
+  },
+  "commits": [
+    "266a1d3eb99856a636b0205b274c60bb17461f67",
+    "e11455d984e31e8adf0210058e4f55c9ed8a9fe1"
+  ],
+  "comparison_controls": 10,
+  "compiled_mutant_executables": {
+    "character_order": "2b34813cd0bbb1113841a058dbfb2e7a021fab6f1e8fb179e8e907535cbb8566",
+    "comparison": "bbcb8f585158ef994aeb50ac975c7eeba0f8171452bd2035e1ecbc59f71e89ec",
+    "date_year": "3073477b0aefb90ab7000e6c13cd768ecf4f8107c16ccf4278d061ed1917f7f2",
+    "direct_io": "a8df08e123fcd2165a83e64d5fe04d44647ef26c8413bffc499520a6f978320f",
+    "directive_order": "09fbea08aa9ab709c643a1a5c23f9efe93e641f7de1e7bb8f7565f73e04fbf8a",
+    "fdjump_bug": "b1379440138662aaa02f4bbfd474336d67bfcc6dd312f08f3508e9a7d87a2cee",
+    "jbo_endian": "ce679a226904b0caaf39838a98dc046d300606e48cdd0f0c92c263e34a1df46f",
+    "jump_history": "46c0d398ceb75ae73468cde3610ec098258d244ef94e840d4f04294da302b6ef",
+    "selector": "d7ee91d1814b36f58ecaf48ef2243853b8595483d09bfa50e999d59b5aabb8e5",
+    "sort_latch": "1351472be5869d4324d685631bc00c507d1c2573252c5ca84ae349815391edf6",
+    "state_retention": "e02d56ed52c8bf4a91fb17c5ccb351ce518113e39b03e4dfef99c5438b4c1c1d",
+    "writer_inversion": "3c14dadc4abc4ac5cdacc1ee19316cef5aac3761a47f6da4a473c35cf69344a6",
+    "writer_retained": "d46735f8c0ed859fc4867660e5c98f83d28598bdbe2ecbc0914d87df3576d6bb"
+  },
+  "compiled_mutations": 13,
+  "coverage_summary": {
+    "readJBO_bat.C": {
+      "branches_hit": 74,
+      "branches_total": 103,
+      "functions_hit": 6,
+      "functions_total": 6,
+      "lines_hit": 111,
+      "lines_total": 111,
+      "unexecuted_lines": []
+    },
+    "readTimfile.C": {
+      "branches_hit": 442,
+      "branches_total": 556,
+      "functions_hit": 4,
+      "functions_total": 4,
+      "lines_hit": 401,
+      "lines_total": 403,
+      "unexecuted_lines": [
+        799,
+        800
+      ]
+    },
+    "read_fortran2.h": {
+      "branches_hit": 41,
+      "branches_total": 52,
+      "functions_hit": 7,
+      "functions_total": 7,
+      "lines_hit": 49,
+      "lines_total": 50,
+      "unexecuted_lines": [
+        49
+      ]
+    },
+    "sortToAs.C": {
+      "branches_hit": 12,
+      "branches_total": 12,
+      "functions_hit": 2,
+      "functions_total": 2,
+      "lines_hit": 16,
+      "lines_total": 16,
+      "unexecuted_lines": []
+    }
+  },
+  "date": "2026-10-23",
+  "events": 906,
+  "final_fresh_replay": {
+    "path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/tim_io/build/probe",
+    "runners": {
+      "coverage.py": "c25baf99f49e6c2f64f8d896a31dcef66b11ba9f341b6d9ea0839ef3da37fb7b",
+      "fixtures.py": "55e14a3e90b3b8d5e7f7eefb80945eb6725f9fbec3bac1f38bb83df18c785de2",
+      "inventory.py": "078d1e9f09c672738915f19599759375e1f9b7a04aded4da3c0989aae98ed2f7",
+      "probe.cc": "b535198eb6a710f3616ebbe1144f1657e9107880336d485174c3097d49fe6040",
+      "profile.py": "49500d1b2e80e8651c87e4a04cb1eaa8bd6b69fca84fa4f81043ebc73dc779cb",
+      "run.py": "26994990e96359774e879bab06a1e72a66cb9b52c6515572b231db6c38ed4413",
+      "verify.py": "b6a7d62a8e6580d9311307c18caa5dd8533bd22395e5a2e2190ba0c4c1ef8507"
+    },
+    "sha256": "be9b5e1ce4854b6e958d67bc239a509bf3b9497d1e44b91eeaf1dc011658a743"
+  },
+  "gcov_version": "gcov (Homebrew GCC 16.2.0) 16.2.0",
+  "identity_controls": 14,
+  "instrumented_execution": {
+    "path": "/Users/Eric.Dong/Downloads/tempo2rust/validation/tim_io/build/coverage",
+    "runners": {
+      "coverage.py": "c25baf99f49e6c2f64f8d896a31dcef66b11ba9f341b6d9ea0839ef3da37fb7b",
+      "fixtures.py": "55e14a3e90b3b8d5e7f7eefb80945eb6725f9fbec3bac1f38bb83df18c785de2",
+      "inventory.py": "078d1e9f09c672738915f19599759375e1f9b7a04aded4da3c0989aae98ed2f7",
+      "probe.cc": "b535198eb6a710f3616ebbe1144f1657e9107880336d485174c3097d49fe6040",
+      "profile.py": "49500d1b2e80e8651c87e4a04cb1eaa8bd6b69fca84fa4f81043ebc73dc779cb",
+      "run.py": "26994990e96359774e879bab06a1e72a66cb9b52c6515572b231db6c38ed4413",
+      "verify.py": "b6a7d62a8e6580d9311307c18caa5dd8533bd22395e5a2e2190ba0c4c1ef8507"
+    },
+    "sha256": "65a19abcd5374b7088760435f492d8c4dc54adffe4b759a98423256f9c381d83"
+  },
+  "limitations": [
+    "bounded host compiler ABI results for writers, JBO, union I/O, colored diagnostics and qsort ties",
+    "source-invalid storage cases unrun",
+    "no Rust, preprocessing, specialized PAR or numerical-gate changes"
+  ],
+  "ownership": "validation/tim_io/ only; M accepted by 0030, K read-only accepted by 0026; L owns Rust; central acceptance pending",
+  "raw_archives_crosschecked": {
+    "case_count": 157,
+    "complete_ordered_events": true,
+    "launch_challenges": true,
+    "normalized_stream_equality": true,
+    "raw_stdout_stderr_digests": true
+  },
+  "reference_pin": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+  "reference_status": "",
+  "release": "8f4d31e",
+  "source_pin": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_status": ""
+}
