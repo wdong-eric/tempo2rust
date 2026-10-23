@@ -1,0 +1,105 @@
+[
+  {
+    "case": "global",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/global.par:2: F0: M2 fits local F0-F3 only; global or other active fit flags are unsupported\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "unsupported-active",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/unsupported-active.par:3: PEPOCH: M2 fits local F0-F3 only; global or other active fit flags are unsupported\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "bad-mode",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/bad-mode.par:6: WEIGHT: MODE/WEIGHT must be 0 or 1 for M2\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "bad-nits",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/bad-nits.par:6: NITS: NITS must be a positive source-range integer for M2\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "fractional-nits",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/fractional-nits.par:6: NITS: NITS must be a positive source-range integer for M2\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "negative-nits",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/negative-nits.par:6: NITS: NITS must be a positive source-range integer for M2\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "zero_error",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/zero_error.tim: fit: cycle 1: TKsvd source boundary: invalid w[-1] access after nonfinite arithmetic\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "tiny_error",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/tiny_error.tim: fit: cycle 1: TKsvd source boundary: invalid w[-1] access after nonfinite arithmetic\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "underdetermined",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/underdetermined.tim: fit: cycle 1: TKfit source boundary: n < p returns without initializing fit outputs\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "empty",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/empty.tim: observations: no FORMAT 1 observations supplied\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "negative-weight",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/negative-weight.tim:2: uncertainty_us: uncertainty must be nonnegative\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "nonfinite-weight",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/nonfinite-weight.tim:2: uncertainty_us: expected a complete finite decimal token, got \"NaN\"\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "missing-runtime",
+    "returncode": 1,
+    "stderr": "tempo2-rust: PKS observations require --runtime PATH\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "missing-runtime-file",
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/fit-cli-prcfmawq/absent: runtime root: No such file or directory (os error 2)\n",
+    "stdout_empty": true
+  },
+  {
+    "case": "valid-square-after-errors",
+    "norescale": false,
+    "status": "completed_with_source_nonfinite",
+    "stderr": "tempo2-rust: cycle 1: source nonfinite fit errors preserved; error >= 0 callbacks may retain previous physical errors\ntempo2-rust: cycle 1: source offset_e remains uninitialized; no numerical offset error is exported\n",
+    "stdout_complete": true
+  },
+  {
+    "case": "valid-square-after-errors",
+    "norescale": true,
+    "status": "completed",
+    "stderr": "",
+    "stdout_complete": true
+  },
+  {
+    "case": "PKS CLI/library equality",
+    "complete_JSON": true,
+    "warnings_stderr": true
+  }
+]

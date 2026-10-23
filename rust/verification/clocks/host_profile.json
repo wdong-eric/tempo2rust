@@ -1,0 +1,9 @@
+{
+  "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)\nbinary: rustc\ncommit-hash: 8bab26f4f68e0e26f0bb7960be334d5b520ea452\ncommit-date: 2026-07-14\nhost: aarch64-apple-darwin\nrelease: 1.97.1\nLLVM version: 22.1.6\n",
+  "cargo": "cargo 1.97.1 (c980f4866 2026-06-30)\n",
+  "os": "ProductName:\t\tmacOS\nProductVersion:\t\t26.7\nBuildVersion:\t\t25G229\n",
+  "locale": "C",
+  "machine": "arm64",
+  "linked_libraries": "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/deps/tempo2_rust-ea61be09d25d8f48:\n\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1359.0.0)\n\t/usr/lib/libiconv.2.dylib (compatibility version 7.0.0, current version 7.0.0)\n",
+  "note": "Mach-O dependency versions are linked load-command metadata. The system libc implementation is supplied by this recorded macOS build; no shared-cache libc image digest is claimed. sscanf/snprint formatting only; no C clock implementation."
+}

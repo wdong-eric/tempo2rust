@@ -1,0 +1,122 @@
+[
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/run.py",
+      "--profile",
+      "debug"
+    ],
+    "log": "debug_direct.log",
+    "name": "debug_direct",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/deps/tempo2_rust-ea61be09d25d8f48",
+      "--exact",
+      "clock_tests::process_provenance",
+      "--ignored",
+      "--nocapture"
+    ],
+    "log": "debug_provenance.log",
+    "name": "debug_provenance",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/run.py",
+      "--profile",
+      "release"
+    ],
+    "log": "release_direct.log",
+    "name": "release_direct",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/release/deps/tempo2_rust-de1e77b2b99ef1f6",
+      "--exact",
+      "clock_tests::process_provenance",
+      "--ignored",
+      "--nocapture"
+    ],
+    "log": "release_provenance.log",
+    "name": "release_provenance",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port",
+      "-p",
+      "test_comparator.py",
+      "-v"
+    ],
+    "log": "comparator_mutations.log",
+    "name": "comparator_mutations",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/regressions.py",
+      "jpl",
+      "debug"
+    ],
+    "log": "debug_jpl.log",
+    "name": "debug_jpl",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/regressions.py",
+      "jpl",
+      "release"
+    ],
+    "log": "release_jpl.log",
+    "name": "release_jpl",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/jpl_port",
+      "-p",
+      "test_comparator.py",
+      "-v"
+    ],
+    "log": "jpl_comparator_mutations.log",
+    "name": "jpl_comparator_mutations",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/regressions.py",
+      "m1a"
+    ],
+    "log": "m1a.log",
+    "name": "m1a",
+    "returncode": 0
+  },
+  {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks_port/regressions.py",
+      "m2"
+    ],
+    "log": "m2.log",
+    "name": "m2",
+    "returncode": 1
+  }
+]

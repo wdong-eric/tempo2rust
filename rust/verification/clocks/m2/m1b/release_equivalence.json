@@ -1,0 +1,18 @@
+{
+  "terrestrial.json": {
+    "byte_identical": true,
+    "sha256": "6e63f6dba7dd33fb56061f992a6cc4029fe34039e6f319c3de25fa93aa3326ee"
+  },
+  "terrestrial_4ns.json": {
+    "byte_identical": true,
+    "sha256": "10ac2cd3f9eb842a61092c9ffae5bae13c63178274c2170815cc95f40f1be367"
+  },
+  "cli-equivalent.json": {
+    "byte_identical": true,
+    "sha256": "33d49aea8ca428d91ca817fb991fb18da9b620dcece8c06d9fc8df24d7da78a5"
+  },
+  "recovery.json": {
+    "byte_identical": true,
+    "sha256": "ceaeb3d17c170f2d6b2b34072758e709805fd951200b52f1ee0e60fa522b1b7f"
+  }
+}

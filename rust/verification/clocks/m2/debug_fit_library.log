@@ -1,0 +1,17 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running `target/debug/examples/compare_fitting`
+"zero": completed, caller unchanged
+"f0": completed, caller unchanged
+"f1": completed, caller unchanged
+"f2": completed, caller unchanged
+"f3": completed, caller unchanged
+"subset": completed, caller unchanged
+"all": completed, caller unchanged
+"all_mode0": completed, caller unchanged
+"pks_all": completed, caller unchanged
+"pks_all_mode0": completed, caller unchanged
+"pks_seven_mode0": completed, caller unchanged
+"pks_seven_mode1": completed, caller unchanged
+"zero_derivative": completed, caller unchanged
+"timing_square_false": completed, caller unchanged
+"timing_square_true": completed, caller unchanged

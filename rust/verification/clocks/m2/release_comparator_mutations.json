@@ -1,0 +1,357 @@
+[
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.increments[1]: |difference| 0.000067869501685101301844866025530248085733280700958989933133125305175781250 > 1.000033934750842550650922433012765124042866640350479494966566562652587890625E-11",
+    "mutation": "increment sign"
+  },
+  {
+    "detected": true,
+    "first_error": "columns: exact mismatch ['ZERO', 'F0', 'F1', 'F2', 'F3'] != ['ZERO', 'F1', 'F0', 'F2', 'F3']",
+    "mutation": "column permutation"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].row_indices: exact mismatch [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] != [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]",
+    "mutation": "row permutation"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].sigma_s[0] binary64: exact mismatch 1e-06 != 2e-06",
+    "mutation": "changed measurement weights"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].data_s[0]: |difference| 0.000021726401650696072087197083244625162 > 1E-12",
+    "mutation": "raw instead of centered data"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.covariance[0,0]: |difference| 6.42702877642361744549700767219900006E-13 > 6.42702877642361744549700767219900006E-23",
+    "mutation": "covariance incorrectly rescaled"
+  },
+  {
+    "detected": true,
+    "first_error": "columns: exact mismatch ['ZERO', 'F0', 'F1', 'F2', 'F3'] != ['ZERO', 'F0', 'F1', 'F2']",
+    "mutation": "dropped column"
+  },
+  {
+    "detected": true,
+    "first_error": "columns: exact mismatch ['ZERO', 'F0', 'F1', 'F2', 'F3'] != ['ZERO', 'F0', 'F1', 'F2', 'F3', 'F4']",
+    "mutation": "extra column"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].matrix[0]: shape mismatch",
+    "mutation": "missing matrix column"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.rank: exact mismatch 5 != 4",
+    "mutation": "changed rank"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.dof: exact mismatch 11 != 12",
+    "mutation": "changed DOF"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.strict_raw_retention_order: exact mismatch [True, True, True, True, True] != [False, True, True, True, True]",
+    "mutation": "changed retained mode"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles: shape mismatch",
+    "mutation": "missing iteration"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.centered_s[0]: |difference| 9.12050040379720103239788801927050822E-7 > 1E-12",
+    "mutation": "raw as postfit centered residual"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.observations[1].pulse_number: exact mismatch '-63741333' != '123'",
+    "mutation": "wrong pulse count"
+  },
+  {
+    "detected": true,
+    "first_error": "input.par.sha256: exact mismatch 'a057699e58e5b7a1983d658489a3a440059df4b9adea7277e91c3194d38749c3' != '0000000000000000000000000000000000000000000000000000000000000000'",
+    "mutation": "changed source identity"
+  },
+  {
+    "detected": true,
+    "first_error": "input.tim.text: exact mismatch 'FORMAT 1\\ntoa0 1400 53910.125 1 @\\ntoa1 1400 53927.1249996090162846830161869366027 2 @\\ntoa2 1400 53945.1249996011427192544369845796897 3 @\\ntoa3 1400 53966.1249995955891224484564977675341 4 @\\ntoa4 1400 53983.1250003559543949355072423085889 5 @\\ntoa5 1400 53997.124999975161123073212741382601 1 @\\ntoa6 1400 54008.1249995956580447365342793040886 2 @\\ntoa7 1400 54019.1250003602488444200829493751145 3 @\\ntoa8 1400 54037.1250003666248271912469943447551 4 @\\ntoa9 1400 54052.12500037396739192496274168789 5 @\\ntoa10 1400 54071.124999623942718501489561974893 1 @\\ntoa11 1400 54090.1250000201177595786495227498226 2 @\\ntoa12 1400 54104.1249996522357614691116923397957 3 @\\ntoa13 1400 54119.1249996682008341956130586502374 4 @\\ntoa14 1400 54133.1250004469717954182279086924354 5 @\\ntoa15 1400 54150.1250000883645252898885787810525 1 @\\n' != 'FORMAT 1\\n'",
+    "mutation": "changed original source"
+  },
+  {
+    "detected": true,
+    "first_error": "controls: exact mismatch {'mode': 1, 'nits': 2, 'mode_defaulted': False, 'nits_defaulted': False, 'declarations': [{'line': 16, 'keyword': 'MODE', 'tokens': ['1'], 'raw_line': 'MODE 1'}, {'line': 17, 'keyword': 'NITS', 'tokens': ['2'], 'raw_line': 'NITS 2'}]} != {'mode': 0, 'nits': 2, 'mode_defaulted': False, 'nits_defaulted': False, 'declarations': [{'line': 16, 'keyword': 'MODE', 'tokens': ['1'], 'raw_line': 'MODE 1'}, {'line': 17, 'keyword': 'NITS', 'tokens': ['2'], 'raw_line': 'NITS 2'}]}",
+    "mutation": "changed resolved control"
+  },
+  {
+    "detected": true,
+    "first_error": "remove_mean: exact mismatch True != False",
+    "mutation": "missing mean-removal label"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].matrix[0,1]: |difference| 6.4703728581723089329898357391357421875E-8 > 6.40630976056664250791072845458984375E-8",
+    "mutation": "matrix just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].white_matrix[0,1]: |difference| 0.064703728581723094970703125 > 0.0640630976056664306640625",
+    "mutation": "white matrix just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].x_days[0]: |difference| 5.7411853049416095018386840820312500E-14 > 5.68434188608080148696899414062500E-14",
+    "mutation": "x just above four ULP"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.strict_raw_singular_values[0]: |difference| 177.72942837696470713841175972129821918 > 175.969731066301690236051247248810118",
+    "mutation": "retained singular value just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.increments[1]: |difference| 1.01003427409835097615743165734289277528329530675398428991623222827911376953125000000553425E-11 > 1.000033934750842550650922433012765124042866640350479494966566562652587890625E-11",
+    "mutation": "increment effect just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.covariance[0,1]: |difference| 3.03975267428321821275493674260641402825590414950063812517958371693789580713010743E-28 > 3.00965611315170120074746212139248913688703381138677042096988486825534238329713606640963237E-28",
+    "mutation": "covariance just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.errors[1]: |difference| 1.49581515297884857324132945168586899440602001050144368782639503479003906250000000000040920E-11 > 1.48100510195925601311022717988699900436239605000142939388751983642578125E-11",
+    "mutation": "fit error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.errors_unscaled[1]: |difference| 3.7916926525254211916553947040657564355E-22 > 3.75415114111427840757959871689678855E-22",
+    "mutation": "unscaled error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.chi_square: |difference| 0.00005470721202643243585499476466793566946 > 0.000054165556461814292925737390760332346",
+    "mutation": "chi square just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].prefit.mean_s: |difference| 1.0100000000000000000000000000E-12 > 1E-12",
+    "mutation": "prefit mean just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].prefit.centered_s[1]: |difference| 1.0100000000000000000000000000E-12 > 1E-12",
+    "mutation": "prefit centered just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].prefit.observations[1].residual_s: |difference| 1.01000000000000000000000000000E-12 > 1E-12",
+    "mutation": "prefit residual_s just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].prefit.observations[1].bbat_mjd: |difference| 1.0099999999999999999999999999999999999999999999999999999999999999999987200E-12 > 1E-12",
+    "mutation": "prefit bbat_mjd just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].prefit.observations[1].phase_turn: |difference| 1.010000000000000000E-10 > 1E-10",
+    "mutation": "prefit phase_turn just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.mean_s: |difference| 1.010000000000000000000000000000E-12 > 1E-12",
+    "mutation": "postfit mean just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.centered_s[1]: |difference| 1.01000000000000000000000000000E-12 > 1E-12",
+    "mutation": "postfit centered just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.observations[1].residual_s: |difference| 1.01000000000000000000000000000E-12 > 1E-12",
+    "mutation": "postfit residual_s just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.observations[1].bbat_mjd: |difference| 1.0099999999999999999999999999999999999999999999999999999999999999999987200E-12 > 1E-12",
+    "mutation": "postfit bbat_mjd just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].postfit.observations[1].phase_turn: |difference| 1.010000000000000000E-10 > 1E-10",
+    "mutation": "postfit phase_turn just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.linearized_s[1]: |difference| 1.01000000000000000000000000000E-12 > 1E-12",
+    "mutation": "linearized residual just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_values[0]: |difference| 1.01034274098350976161208380119354345874401166529393900760136949079294935710309620082471934E-11 > 1.00033934750842550654661762494410243440001154979597921544690048593361321950380556457192283E-11",
+    "mutation": "physical F0 just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_errors[0]: |difference| 1.49581515297884862677415076786118914256473610559500956685842962787026237321523642950730209E-11 > 1.48100510195925606611302056223880113125221396593565303649349468105966571605468953416600796E-11",
+    "mutation": "physical F0 error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_values[1]: |difference| 1.01009039551270037633366766657453750436483647965726710344678462624533987825806177192546117E-11 > 1.00008950050762413498382937284607673699488760362105653806612339232211869134461561678188332E-11",
+    "mutation": "physical F1 just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_errors[1]: |difference| 1.74997990729854728069036232582960367429937795771356844859165267162981500808466415713802336E-11 > 1.73265337356291809969342804537584522207859203734016678078381452636615347335115263082940936E-11",
+    "mutation": "physical F1 error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_values[2]: |difference| 1.01017126466082897340280910044332543746336164406207967407718965814931602280623069608538419E-11 > 1.00016956897111779544832584202309449253798182580403928126454421598942180475864425354946881E-11",
+    "mutation": "physical F2 just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_errors[2]: |difference| 2.48108093716479974470079736365122816178716591135701025474919475632251019669062084629093243E-11 > 2.45651577937108885613940333034775065523481773401684183638534134289357445216893153098070469E-11",
+    "mutation": "physical F2 error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_values[3]: |difference| 1.01007259866429323981539091639769251346886151619356058258291110909543051706665361445254755E-11 > 1.00007187986563687110434744197791337967214011504312928968605060306478269016500357866552252E-11",
+    "mutation": "physical F3 just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].after_errors[3]: |difference| 2.64613071425083856227721132021551610962326742521898208216617327789468526548779289559221086E-11 > 2.61993140024835501215565477249061000952798754972176443778829037415315372820573554018878817E-11",
+    "mutation": "physical F3 error just above gate"
+  },
+  {
+    "detected": true,
+    "first_error": "after[1]: |difference| 1.674489883401920419474337303952907040202526664770903684710188481092339662943703773503691E-11 > 8.25234187070430902963247950829264028E-39",
+    "mutation": "using pre-update F0 for F1"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.errors[0]: numbers must be decimal strings",
+    "mutation": "square_rescaled nonfinite class"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.errors[0] nonfinite class: exact mismatch '+Infinity' != '-Infinity'",
+    "mutation": "infinite_covariance nonfinite class"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.increments[0] nonfinite class: exact mismatch '+Infinity' != '1'",
+    "mutation": "infinite_increment nonfinite class"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.errors[0] nonfinite class: exact mismatch 'NaN' != '0'",
+    "mutation": "infinite_rescaled_error nonfinite class"
+  },
+  {
+    "mutation": "dependent_columns paired mode permutation",
+    "paired_diagnostic_valid": true,
+    "permutations": [
+      {
+        "path": "shared.solver",
+        "reference_to_candidate": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      }
+    ],
+    "strict_order_rejected": true
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10",
+    "mutation": "dependent_columns flag/value mismatch"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_singular_values[0]: |difference| 4.46410161513775459438469527097382281 > 3.46410161513775459438469527097382281E-10",
+    "mutation": "dependent_columns negative singular value"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_singular_values[0] nonfinite class: exact mismatch '3.46410161513775459438469527097382281' != 'NaN'",
+    "mutation": "dependent_columns nonfinite singular value"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.rank: exact mismatch 1 != 0",
+    "mutation": "dependent_columns changed rank"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, False]",
+    "mutation": "dependent_columns changed retention"
+  },
+  {
+    "mutation": "at_cutoff paired mode permutation",
+    "paired_diagnostic_valid": true,
+    "permutations": [
+      {
+        "path": "shared.solver",
+        "reference_to_candidate": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      }
+    ],
+    "strict_order_rejected": true
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_singular_values[0]: |difference| 2 > 1E-10",
+    "mutation": "at_cutoff negative singular value"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_singular_values[0] nonfinite class: exact mismatch '1' != 'NaN'",
+    "mutation": "at_cutoff nonfinite singular value"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.rank: exact mismatch 2 != 0",
+    "mutation": "at_cutoff changed rank"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_retention_order: exact mismatch [True, True] != [False, True]",
+    "mutation": "at_cutoff changed retention"
+  },
+  {
+    "detected": true,
+    "first_error": "shared.solver.strict_raw_retention_order: exact mismatch [True, True] != [True, False]",
+    "mutation": "threshold equality wrongly dropped"
+  },
+  {
+    "detected": true,
+    "first_error": "cycles[0].solver.increments[0]: |difference| 339630.28979220740010407136294360609700434535891 > 1.00000843194292303489062304945600434535891E-11",
+    "mutation": "physical parameter output permutation"
+  }
+]
