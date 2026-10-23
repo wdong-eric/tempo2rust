@@ -1,0 +1,23 @@
+# Clock and table Rust acceptance
+
+Central decision, 23 October 2026. **Accept Assignment L's bounded Rust transfer at corrected delivery `84b6b86`. Close correction 0029 and L's Rust ownership window.** The corrected implementation is `e149369`, verifier/supplemental evidence machinery `c5aed3f`, and final verification artifacts `aa0dd19`. This accepts the selected scope of 0023 with the single interpolation contraction authorized by 0027. It does not accept M2 or the full core transfer.
+
+## Independent review and execution
+
+Central reviewed the source correspondence, process/session ownership, table parsing and interpolation, route construction/cache/explicit chains, selected observatory lookup, diagnostics and active SAT-jump application. The corrected safe Rust glob preserves native membership, complete path-byte ordering and repeated separator spelling. The eight discrepancies in 0029 are closed; no additional unsafe boundary was introduced for globbing.
+
+A fresh central debug/release build and execution passes **142 exact J comparisons, eight explicit safe Rust boundary cases and 18 supplemental helper patterns plus three integrated glob cases per profile**. The integrated cases exercise route selection, observatory ordering and repeated root separators through the actual accepted native clock executable. All eight comparator tests pass. Both profiles agree after removing only launch identity fields; maximum finite comparison difference is zero across 34,818 finite, 196 nonfinite and 68,256 discrete comparisons per profile. The source cycle case remains unrun.
+
+The [central reproducer](/Users/Eric.Dong/Downloads/tempo2rust/decisions/evidence/clocks/rust-acceptance/central-review.py), its log and compressed complete JSON receipt preserve actual executed identities. [Acceptance checks](/Users/Eric.Dong/Downloads/tempo2rust/decisions/evidence/clocks/rust-acceptance/acceptance-checks.json) verify all **46 executed-source hashes, 824 protected-file hashes and 211 final delivery artifacts**, including the artifacts' committed bytes at `84b6b86`. Both nested repositories remain clean at their accepted pins. Debug/release test hashes are respectively `60a1eee8a12e429ea47fab6956730faeee4064c7615ab6369361bee93ac2f8f9` and `9e6a2ff0b604d1e7a906192ac4ded086ed8410e10beb0949a20abff845672a0b`; current CLI hashes also match the final receipts.
+
+L's final command receipts cover formatting, Clippy, Rust tests, provenance, supplemental mutation controls, unchanged JPL checks and M1a/M1b regressions. Central checked their artifact/implementation identities and results; it did not repeat those regression suites. Shared repository HEAD advanced through central documentation during execution: the final delivery receipt names `539299a`, while executed source hashes establish the unchanged implementation from `c5aed3f`. Neither shared HEAD nor report commit is substituted for executable identity.
+
+M2 still exits 1 with exactly the four historical debug/release dependent-column raw retention-order and singular-value-index-zero failures. Their full content is retained in the acceptance checks. Decision 0012 and all numerical tolerances remain unchanged.
+
+## Accepted scope and remaining boundaries
+
+The accepted path preserves the selected source parsing/chunk behavior, lazy process-lifetime table/lookup/cache state, single-precision route weights and tie order, source exits as terminal fallible-session outcomes, ordinary warning/fallback behavior, and deterministic SAT-jump indexing/storage quirks. Undefined source accesses use the explicit operation-local safe boundaries in 0023. The one final interpolation `mul_add` has the separately reviewed source instruction evidence in 0027; this grants no broader arithmetic-fusion exception.
+
+This is macOS arm64/C-locale evidence for the declared regular-file inputs and bounded storage. Full observatory geometry, general PAR/TIM lifecycle, disabled legacy clock paths, IFTE/EOP/weather state, source cycles, partial-read failures, other platforms/locales and concurrency stress remain outside verified coverage. Internal byte paths remain distinct from the CLI's declared text-presentation boundary. Existing JPL/stdio/SOFA and typed C text-conversion unsafe sites retain their documented ownership/invariants; acceptance does not claim a wholly native-free crate.
+
+`validation/clocks/`, original L evidence and `rust/verification/clocks/glob_correction/` remain immutable acceptance inputs. `validation/clocks_port/` becomes a regression verifier; later changes require an explicit release. A next Rust owner needs a separate contract. N's TIM I/O reference is delivered at `68de89a` and awaits central review.
