@@ -1,0 +1,9 @@
+   Compiling tempo2-rust v0.1.0 (/Users/Eric.Dong/Downloads/tempo2rust/rust)
+    Finished `release` profile [optimized] target(s) in 1.79s
+     Running unittests src/lib.rs (rust/target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
+
+running 1 test
+test fitting_tests::terrestrial_fit_failure_recovers_with_the_same_runtime ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.23s
+

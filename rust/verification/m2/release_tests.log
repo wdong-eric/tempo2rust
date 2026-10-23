@@ -1,0 +1,55 @@
+   Compiling tempo2-rust v0.1.0 (/Users/Eric.Dong/Downloads/tempo2rust/rust)
+    Finished `release` profile [optimized] target(s) in 0.93s
+     Running unittests src/lib.rs (target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
+
+running 15 tests
+test resource_tests::eop_upper_boundary_recovers_and_leap_is_not_interpolated ... ok
+test resource_tests::ifte_record_grid_rejects_impossible_steps_and_recovers ... ok
+test resource_tests::ifte_endianness_derivative_boundaries_and_recovery ... ok
+test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
+test resource_tests::table_steps_endpoints_and_invalid_data ... ok
+test tropo::tests::niell_mapping_matches_pinned_source ... ok
+test form_residuals::tests::signed_half_pulses_and_checked_counts ... ok
+test resource_tests::native_read_failure_recovers_without_stale_cached_record ... ok
+test fitting_tests::fit_controls_and_restrictions_leave_fixed_evaluation_intact ... ok
+test fitting_tests::source_failure_boundaries_and_nonfinite_transport ... ok
+test t2fit::tests::later_cycle_error_publishes_no_partial_fit ... ok
+test resource_tests::jpl_record_grid_bounds_and_endpoints_recover ... ok
+test resource_tests::clock_routes_coverage_ties_fallback_and_recovery ... ok
+test fitting_tests::independent_source_solver_inputs_and_callbacks ... ok
+test fitting_tests::terrestrial_fit_failure_recovers_with_the_same_runtime ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+
+     Running unittests src/main.rs (target/release/deps/tempo2_rust-29a00137720b1b55)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/behavior.rs (target/release/deps/behavior-4c26a7deb3bfc3de)
+
+running 7 tests
+test strict_decimals_and_nanosecond_round_trips ... ok
+test preserves_metadata_identity_and_original_order ... ok
+test nonzero_f3_agrees_with_independent_unsplit_polynomial ... ok
+test end_to_end_signed_half_pulses ... ok
+test failed_library_processing_then_valid_processing_is_stateless ... ok
+test rejects_malformed_and_unsupported_inputs_with_context ... ok
+test cli_publishes_complete_json_or_no_result ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/reference_contract.rs (target/release/deps/reference_contract-ae5dc0daed256264)
+
+running 1 test
+test accepted_reference_projection_and_provenance ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+   Doc-tests tempo2_rust
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

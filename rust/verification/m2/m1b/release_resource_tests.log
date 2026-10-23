@@ -1,0 +1,16 @@
+   Compiling tempo2-rust v0.1.0 (/Users/Eric.Dong/Downloads/tempo2rust/rust)
+    Finished `release` profile [optimized] target(s) in 2.62s
+     Running unittests src/lib.rs (target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
+
+running 8 tests
+test resource_tests::ifte_endianness_derivative_boundaries_and_recovery ... ok
+test resource_tests::ifte_record_grid_rejects_impossible_steps_and_recovers ... ok
+test resource_tests::eop_upper_boundary_recovers_and_leap_is_not_interpolated ... ok
+test resource_tests::table_steps_endpoints_and_invalid_data ... ok
+test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
+test resource_tests::native_read_failure_recovers_without_stale_cached_record ... ok
+test resource_tests::clock_routes_coverage_ties_fallback_and_recovery ... ok
+test resource_tests::jpl_record_grid_bounds_and_endpoints_recover ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+

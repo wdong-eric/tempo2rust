@@ -1,8 +1,8 @@
 # TEMPO2 Rust timing core
 
-One library and JSON CLI for fixed-parameter residuals of one isolated pulsar,
+One library and JSON CLI for fixed-parameter residuals and ZERO/F0–F3 fitting of one isolated pulsar,
 using TCB barycentric `@` TOAs or the declared PKS terrestrial path and F0
-through F3. M1a is accepted. M1b evidence is in `M1B_REPORT.md`; milestone
+through F3. M1a and M1b are accepted. M2 evidence is in `M2_REPORT.md`; milestone
 acceptance belongs to the central planning chat.
 
 ## Run
@@ -105,10 +105,11 @@ TIM input requires one literal `FORMAT 1` header, then exactly five fields:
 `name frequency_MHz MJD uncertainty_us @`. Blank lines and whole-line `#` or
 `C` comments are accepted. All original TOAs remain in input order. Other
 directives, flags, sites other than PKS (below), binary models, higher spin derivatives, tracking,
-glitches, noise terms, fitting and selection are unsupported and rejected.
+glitches, noise terms and selection are unsupported and rejected. The bounded
+fit operation below accepts local F0–F3 fit flags.
 
 The first TOA supplies the signed fractional phase reference. TZR metadata does
-not activate `REFPHS_TZR`. There is no mean subtraction. `@` bypasses clock and
+not activate `REFPHS_TZR`. Fixed evaluation performs no mean subtraction. `@` bypasses clock and
 propagation corrections; the supported isolated model has `SAT = BAT = BBAT`.
 See the report for the source integer-range guards and other limits.
 
@@ -136,7 +137,9 @@ python3 tests/reference/compare.py tests/reference/outputs/long_span.json \
 `tests/reference/` contains unchanged A2 artifacts and provenance pinned to
 `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572`. Tests do not read either independent
 reference repository. The report separates implementation checks, numerical
-agreement, and untested scientific scope. Linux execution, broader terrestrial coverage, binary timing, fitting,
+agreement, and untested scientific scope. The fitting tests additionally read
+root-tracked `validation/fitting/`, never an independent reference repository.
+Linux execution, broader terrestrial coverage, binary timing, broader fitting,
 distribution packaging and performance remain open.
 
 Ported routines derive from TEMPO2, copyright George Hobbs, Russell Edwards
@@ -216,3 +219,54 @@ native record/seek limits; IF99 grids must match the owned records and use
 checked index/offset arithmetic. Release terrestrial exports must be
 byte-identical to debug exports. The JPL repeated-short-read/cache-recovery
 regression remains active in both builds.
+
+
+## ZERO and spin fitting (M2 delivery; central acceptance pending)
+
+```sh
+cargo run --locked --offline -- fit \
+  --par ../validation/fitting/inputs/all.par \
+  --tim ../validation/fitting/inputs/bary.tim --norescale
+# PKS uses the same command with --runtime ../tempo2/T2runtime.
+python3 verify_m2.py
+```
+
+Use `fit_barycentric(&input, &FitOptions::default())`, or
+`fit_terrestrial(&input, &mut runtime, &options)`. `FitOptions` contains only
+`rescale_err_chisq` (default true). PAR `MODE`/`WEIGHT` 0 or 1 and positive
+source-range integer `NITS` control execution; defaults are 0 and 1. The last
+MODE/WEIGHT declaration wins, and every original declaration is retained in
+`input.fit_controls()`. There are no competing CLI mode/iteration overrides.
+Fixed-evaluation JSON for previously supported inputs remains unchanged.
+
+The fit always includes ZERO, then supplied F0–F3 with local flag 1 in source
+order. Global flags and active flags on other parameters fail at the fit
+boundary; fixed evaluation still preserves them. Each cycle evaluates raw
+residuals, subtracts their unweighted mean, constructs source-scaled columns,
+whitens in binary64, solves with the source SVD and strict `1e-27` cutoff,
+updates selected parameters sequentially, and recomputes centered residuals.
+F1–F3 use the newly updated F0. ZERO is stored for that cycle, not accumulated
+or subsequently subtracted from the timing model. Exactly NITS cycles run.
+
+The versioned [`tempo2-fit-v1` schema](../validation/fitting/schema.json)
+separates original input, fitted values, source physical errors, raw covariance,
+unscaled/rescaled coordinate errors, raw/centered/linearized/recomputed residuals,
+row/column mapping and full per-cycle timing/resource provenance. Covariance is
+never rescaled. MODE 0 rescales errors even with `--norescale`. The source DOF
+is `n - p`, including rank-deficient pseudoinverse results. Rank warnings do not
+assert physical identifiability.
+
+Source nonfinite fit diagnostics use `NaN`, `+Infinity` and `-Infinity` strings.
+A square rescaled fit may complete with `status=completed_with_source_nonfinite`;
+NaN callback errors retain preceding physical errors. Supplied PAR uncertainties
+remain original metadata; source current errors begin at zero. An uninitialized
+source `offset_e` has no numerical counterpart and is explicitly labeled with
+`offset_error_s=null`. Source unsafe-access/termination/uninitialized-output
+boundaries return contextual errors, with no partial fit result. Input `Scalar`
+remains finite. See [BEHAVIOR_DIFFERENCES.md](BEHAVIOR_DIFFERENCES.md).
+
+The new fitting path is safe Rust and adds no numerical dependency. All production
+Rust modules and existing FFI sites are mapped in
+[SOURCE_CORRESPONDENCE.md](SOURCE_CORRESPONDENCE.md). Retained native sources
+remain byte-identical to the accepted M1b delivery; their original names and
+paths are listed in `native/upstream_manifest.json`.

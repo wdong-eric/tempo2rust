@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "rust/verify_m2.py"
+  ],
+  "returncode": 1,
+  "open_gate_diagnostics": 4,
+  "failed_fixture": "dependent_columns",
+  "interpretation": "strict raw singular-mode order unresolved; other prescribed checks passed",
+  "log": "full_run.log"
+}

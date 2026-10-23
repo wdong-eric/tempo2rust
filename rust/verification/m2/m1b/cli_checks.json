@@ -1,0 +1,55 @@
+[
+  {
+    "case": "missing-runtime",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: PKS observations require --runtime PATH\n"
+  },
+  {
+    "case": "invalid-runtime",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/absent: runtime root: No such file or directory (os error 2)\n"
+  },
+  {
+    "case": "unknown-observatory",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/unknown-observatory.tim:2: site: only barycentric @ or PKS is supported, got \"unknown\"\n"
+  },
+  {
+    "case": "mixed-sites",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/mixed-sites.tim: site: mixed barycentric and terrestrial observations are outside the supported profiles\n"
+  },
+  {
+    "case": "outside-coverage",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime/ephemeris/TIMEEPH_short.te405: IF99: observation 1 (b) at SAT 80000.00000000000000000000000000000000000: epoch outside IF99 coverage\n"
+  },
+  {
+    "case": "unsupported-ephemeris",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/unsupported-ephemeris.par: EPHEM: PKS profile requires EPHEM DE405\n"
+  },
+  {
+    "case": "unsupported-clock",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/unsupported-clock.par: CLK: PKS profile requires CLK TT(TAI)\n"
+  },
+  {
+    "case": "unsupported-model",
+    "stdout_empty": true,
+    "returncode": 1,
+    "stderr": "tempo2-rust: /Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-cli-ez4nlr8a/unsupported-model.par:1: BINARY: unsupported PAR keyword (including inactive supplied higher derivatives or TRACK)\n"
+  },
+  {
+    "case": "valid-after-errors",
+    "complete_JSON": true,
+    "weather_warnings_stderr": true
+  }
+]

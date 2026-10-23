@@ -1,0 +1,19 @@
+{
+  "tempo2": {
+    "head": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "clean": true
+  },
+  "validation/reference": {
+    "head": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+    "clean": true
+  },
+  "unchanged_since_ddc07b2": [
+    "rust/native",
+    "rust/tests/reference",
+    "rust/tests/terrestrial",
+    "rust/verification/m1b",
+    "rust/Cargo.lock"
+  ],
+  "executed_source_hashes_current": true,
+  "documentation_local_links_exist": true
+}
