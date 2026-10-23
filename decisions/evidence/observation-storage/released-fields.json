@@ -1,0 +1,562 @@
+{
+  "schema_version": 1,
+  "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_header_sha256": "0313b6eaf9f9ae9d7e5cce340379ad4b7068394e5222a01f73949e3a2640de93",
+  "accepted_n_inventory_sha256": "2e10b5e5695ef377352edd95905457795579009e7bb12bc6304de2a14883cf09",
+  "field_count": 95,
+  "fields": [
+    {
+      "name": "sat",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "origsat",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "sat_day",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "sat_sec",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "bat",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "batCorr",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "bbat",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "pet",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "clockCorr",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "delayCorr",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "deleted",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "prefitResidual",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "residual",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "residualtn",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "addedNoise",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNRedSignal",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNRedErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNDMSignal",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNDMErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "SWGPSignal",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "SWGPErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNGroupSignal",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNGroupErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNChromSignal",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "TNChromErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "freq",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "freqSSB",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "toaErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "toaDMErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "origErr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "phaseOffset",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averagebat",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averageres",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averageerr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averagedmbat",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averagedmres",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "averagedmerr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "fname",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FILELEN+1"
+      ]
+    },
+    {
+      "name": "telID",
+      "source_type": "char",
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "correctionsTT",
+      "source_type": "clock_correction",
+      "dimensions": [
+        "MAX_CLK_CORR"
+      ]
+    },
+    {
+      "name": "nclock_correction",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "correctionTT_TB",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "einsteinRate",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "correctionTT_calcEph",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "correctionTT_Teph",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "correctionUT1",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "sun_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "sun_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "planet_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ]
+    },
+    {
+      "name": "planet_ssb_tmr",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ]
+    },
+    {
+      "name": "planet_ssb_derv",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ]
+    },
+    {
+      "name": "jupiter_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "saturn_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "venus_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "uranus_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "neptune_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "earthMoonBary_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "earthMoonBary_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "earth_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "observatory_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "psrPos",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "zenith",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "nutations",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ]
+    },
+    {
+      "name": "siteVel",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "shklovskii",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelaySun",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelayJupiter",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelaySaturn",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelayVenus",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelayUranus",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "shapiroDelayNeptune",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "troposphericDelay",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "tdis1",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "tdis2",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "roemer",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "torb",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "nphase",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "phase",
+      "source_type": "longdouble",
+      "dimensions": []
+    },
+    {
+      "name": "pulseN",
+      "source_type": "long long",
+      "dimensions": []
+    },
+    {
+      "name": "flagID",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FLAGS",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "flagVal",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FLAGS",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "nFlags",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "jump",
+      "source_type": "int",
+      "dimensions": [
+        "MAX_FLAGS"
+      ]
+    },
+    {
+      "name": "jumpScale",
+      "source_type": "double",
+      "dimensions": [
+        "MAX_FLAGS"
+      ]
+    },
+    {
+      "name": "obsNjump",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "fdjump",
+      "source_type": "int",
+      "dimensions": [
+        "MAX_FLAGS"
+      ]
+    },
+    {
+      "name": "obsNfdjump",
+      "source_type": "int",
+      "dimensions": []
+    },
+    {
+      "name": "efac",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "equad",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "snr",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "pnoise",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "tobs",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "chisq",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "bline",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "spherical_solar_wind",
+      "source_type": "double",
+      "dimensions": []
+    }
+  ],
+  "clock_correction_fields": [
+    {
+      "name": "correction",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "corrects_to",
+      "source_type": "char",
+      "dimensions": [
+        "32"
+      ]
+    }
+  ],
+  "source_constants": {
+    "MAX_FILELEN": 500,
+    "MAX_FLAGS": 40,
+    "MAX_FLAG_LEN": 32,
+    "MAX_CLK_CORR": 30
+  },
+  "interpretation": "Released source field/type/extent scope. No Rust layout equivalence or native unwritten value is asserted."
+}
