@@ -9,5 +9,5 @@
     "--message-format=json"
   ],
   "returncode": 0,
-  "stderr": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s\n"
+  "stderr": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s\n"
 }

@@ -1,7 +1,7 @@
 {
   "artifacts": {
-    "release_native.json.gz": "866ba2d633b14f61dc99deb619243fa9ca19071f9c78c55a21b00efae1ccf51e",
-    "release_raw.json.gz": "6c239fd1e389476d6972b737e6abb2220aaa4bfd140591cdfb324310c6c49c2e"
+    "release_native.json.gz": "5865841f36fd3f89cc823bc326cd8171e4b916c45fcc32bb20694359d41a6b3d",
+    "release_raw.json.gz": "29c2c69bca372e4f99225142832a5ecb5ab7d261e8dc271ab372bff87b55832d"
   },
   "boundaries": 8,
   "cases": 10,
@@ -81,6 +81,14 @@
     },
     {
       "name": "rolled back copy prefix",
+      "status": "rejected"
+    },
+    {
+      "name": "changed boundary caller values",
+      "status": "rejected"
+    },
+    {
+      "name": "changed boundary caller links",
       "status": "rejected"
     },
     {
@@ -179,12 +187,12 @@
       "rust/tests/behavior.rs": "b14b118ac15a18e0baab24896d807f83e5a605c3a510f1129ebc508b6b98efb4",
       "rust/tests/reference_contract.rs": "0bab2f25f795e6301f0a0085927469196eaf656725f9dbe32e377ea7f8efd5d1",
       "validation/parameter_storage_port/case_projection.json": "7cdb80105b645cf6f240f89c560ec540bfe1d2c7af92a8b87b0ffb05eaec25dc",
-      "validation/parameter_storage_port/controls.py": "f4af00269d2e9ceb3e543f560e6774bacc0d3c1153109416b509785a8130abf1",
+      "validation/parameter_storage_port/controls.py": "437645eb19afbe22b4fdb5249139c95831de722ffa0665c39c93f9eb60a877e5",
       "validation/parameter_storage_port/native.py": "285a8e09002541da2b252945d56c699bf02dbd8da544fb545ac6f59ebda8e737",
       "validation/parameter_storage_port/probe.cc": "71f79bcf081cf34a94a3a79a7d6f8810eb0792a361ca51d12b81a97aeef49b61",
       "validation/parameter_storage_port/protected_hashes.json": "60209249fe8b3427505ea5fa1d3e3053d998089c22ac9ecd1abc1fb51467f22d",
       "validation/parameter_storage_port/registry_projection.json": "c65beac7a6008c1ebc9b64ede1e63131977c74b2239de359dbdd880a7bd0822d",
-      "validation/parameter_storage_port/run.py": "2890f9b146c02c1836af1e4c3dc11d8971c470ea7a95617ee1ca7d6a4f420544",
+      "validation/parameter_storage_port/run.py": "e32527c28fa9f17966a0990f11801605b0702fbddfb2dacef4abcd72bbdc0f98",
       "validation/parameter_storage_port/translate.py": "8c0392069ee1ac3c2670d4b72b74ee714093200e88995f267a5156ec10d86699",
       "validation/parameter_storage_port/verify.py": "060493db549b327fea60131c692a0a42b3a4d39043aa26f6545cf8e60e035fed"
     },
@@ -199,11 +207,11 @@
       "--nocapture"
     ],
     "input_sha256": "e08a193504348674758c73db9d8552ebd3c5a8c4944a18863011f810d10bf34c",
-    "output_sha256": "d94ad90ddce10af94128b1c032eb63b52dbc9cffa3040bdfca8b91362a5cf92f",
+    "output_sha256": "d7456ea93c6311b831882d81a5690fef63c55ff62c37ea705dc1b38d52416401",
     "returncode": 0,
     "stderr": "",
-    "stdout": "\nrunning 1 test\ntest parameter_storage_tests::probe ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 28 filtered out; finished in 1.05s\n\n",
-    "token": "a8323510b51622b2938b84a6dbde5c3f"
+    "stdout": "\nrunning 1 test\ntest parameter_storage_tests::probe ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 28 filtered out; finished in 1.15s\n\n",
+    "token": "5b6d3f3f8240f663948eb4b60ef5aa99"
   },
   "native": {
     "backend": "/opt/homebrew/Cellar/gcc/16.2.0/libexec/gcc/aarch64-apple-darwin25/16/cc1plus",

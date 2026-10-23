@@ -26,7 +26,7 @@
       "warnings"
     ],
     "log": "clippy.log",
-    "log_sha256": "99f71393b9903dca098310bb446022a4bdee195ea9996f351a787195555210a6",
+    "log_sha256": "f0788aa36d1c86b6ccdfb7f4042a5574102d82061c046422a2d42e008a1e4710",
     "name": "clippy",
     "returncode": 0
   },
@@ -40,7 +40,7 @@
       "--locked"
     ],
     "log": "debug_tests.log",
-    "log_sha256": "1caaf86cb88a1e60c7ebbff0e24ce910c80f39412b4a72682afcad649ab8b126",
+    "log_sha256": "b422607a2e20f33d04a0da5d79f2996fc6b9b06f95f804df54a0acde23f2390a",
     "name": "debug_tests",
     "returncode": 0
   },
@@ -52,7 +52,7 @@
       "debug"
     ],
     "log": "debug_direct.log",
-    "log_sha256": "dbe33b701845a8b51c490d562e8566bb897f8a60b404d3c29163e674e7b2d7a0",
+    "log_sha256": "3924f0aca1cd75bbee8baae5a293bd37fc925ce1464e1c27575bf91845949922",
     "name": "debug_direct",
     "returncode": 0
   },
@@ -67,7 +67,7 @@
       "--release"
     ],
     "log": "release_tests.log",
-    "log_sha256": "ec82449ca8dde13eef9842cbb71bdc067667134ff4b7c90cfcefe4840b804674",
+    "log_sha256": "193a9a548c79402fe4c4401688225204c4d71676e9fc5f4ba4d3638e518aaec4",
     "name": "release_tests",
     "returncode": 0
   },
@@ -79,7 +79,7 @@
       "release"
     ],
     "log": "release_direct.log",
-    "log_sha256": "f547bd4762a85041d60bbc10ee815e0e19c959566ee25b727a05e1e9ad2ac97e",
+    "log_sha256": "e20196eab737e6f1073a8419eb19abedbb98f33871240d138cb2c27a337bb33d",
     "name": "release_direct",
     "returncode": 0
   },

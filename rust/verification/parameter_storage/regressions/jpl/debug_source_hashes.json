@@ -1,5 +1,5 @@
 {
-  "executed_git_head": "8bad0be9ebdc649d431ee60aaf9d6cd52e845c7e",
+  "executed_git_head": "ad6fbf692751b39c67713fd5a446c675a51db665",
   "sha256": {
     "decisions/0017-jpl-rust-contract-and-i-release.md": "5af95017d96bfbcfb27635cedd32ffc3c7ffe0c0a411e5e3f708560dd44b2bf5",
     "decisions/0019-jpl-title-boundary-projection.md": "d1adddc72e79a8dd4ea61c2167d51404bf97c627a1ddaf206c0f50f4e8752cf0",

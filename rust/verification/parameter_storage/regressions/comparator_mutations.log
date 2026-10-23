@@ -8,6 +8,6 @@ test_positive_reference_and_complete_delivery (test_comparator.ComparisonControl
 test_wrong_execution_source_input_comparator_and_stale_identity (test_comparator.ComparisonControls.test_wrong_execution_source_input_comparator_and_stale_identity) ... ok
 
 ----------------------------------------------------------------------
-Ran 8 tests in 1.438s
+Ran 8 tests in 1.493s
 
 OK

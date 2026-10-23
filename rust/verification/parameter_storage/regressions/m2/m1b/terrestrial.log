@@ -1,2 +1,2 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.02s
      Running `target/debug/examples/compare_terrestrial /Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime target/terrestrial-comparison`

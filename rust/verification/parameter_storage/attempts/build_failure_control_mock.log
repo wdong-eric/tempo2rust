@@ -1,0 +1,28 @@
+Traceback (most recent call last):
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py", line 145, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py", line 139, in main
+    rejected=controls.run(raw,native_raw,before,exe)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/controls.py", line 55, in run
+    reject('failed run deletes previous success receipt',port.main)
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/controls.py", line 10, in reject
+    try:fn()
+        ^^^^
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py", line 123, in main
+    frozen=protected();build_identity=identity();cmd=['cargo','test','--lib','--locked','--offline','--no-run','--message-format=json']+(['--release'] if args.profile=='release' else [])
+                                      ^^^^^^^^^^
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py", line 90, in identity
+    return dict(**({'executable_sha256':sha(exe)} if exe is not None else {}),compiler_sha256=sha(rustc),cargo_sha256=sha(cargo),toolchain=subprocess.check_output(['rustc','-vV'],text=True),sources={str(p.relative_to(ROOT)):sha(p) for p in sorted(paths)})
+                                                                                              ^^^^^^^^^^
+  File "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameter_storage_port/run.py", line 9, in sha
+    def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+                                     ^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1050, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '.'
