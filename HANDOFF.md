@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for I's Rust JPL acceptance, J's clock reference acceptance and K's reference stage. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for I/J acceptance, K delivery and L's clock/table Rust release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -34,6 +34,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0021](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0021-clock-reference-acceptance.md) accepts J's executed clock/table evidence at `360cc03`; nine unrun cases remain open. [Decision 0022](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0022-jpl-rust-acceptance.md) accepts I's bounded Rust JPL delivery at `902fbba`, executed implementation `27c8384`, and closes its ownership window. These supersede the earlier dispatch status above. A later Rust owner requires a separate central release.
 
+[Decision 0023](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0023-clock-table-rust-contract-and-l-release.md) releases L as the next bounded Rust owner. It requires process-lifetime clock/selected lookup/diagnostic state, source table and routing behavior, active SAT-jump semantics, explicit safe boundaries and unchanged numerical gates. K's parameter/PAR reference delivery (`474ce01`, `6d13581`) awaits central review; no Rust parser stage is released yet.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -49,9 +51,10 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Delivered and corrected at `1df4d37`; reference accepted by decision 0016 | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 | [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0022 at `902fbba`, executed implementation `27c8384` | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only; delivered evidence now read-only | Executed evidence accepted by decision 0021 at `360cc03`; nine unrun cases remain open | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
-| [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Released by decision 0020; independent of I/J | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
+| [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Delivered at `474ce01`/`6d13581`; central acceptance pending | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
+| [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | `rust/`, new `validation/clocks_port/`, narrow JPL output-routing plumbing only | Released by decision 0023 after I ownership closure | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
 
-A through J have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K prepares parameter/PAR evidence. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through K have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K's parameter/PAR reference awaits central review. L now owns the clock/table Rust transfer. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
@@ -65,7 +68,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Delivered and accepted JPL kernel/layout/state/file-lifetime reference; ownership window closed |
 | Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Bounded transfer accepted by decision 0022; ownership window closed |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Delivered reference accepted within its executed scope by decision 0021; ownership window closed, nine cases remain unrun |
-| Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Prepare parameter state and shared PAR reference under decision 0020; write only `validation/parameters/` |
+| Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Delivered bounded reference; central review pending |
 
 ## Shared working design
 
@@ -102,7 +105,8 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | JPL Rust contract | I released by decision 0017; title boundary clarified by 0019 | Same-open-file C stdio, safe Rust source logic, explicit undefined-source dispositions, exact host observations and unchanged timing gates; all-whitespace title classified without editing H |
 | JPL Rust acceptance | Accepted by decision 0022 at `902fbba`; I ownership closed | Corrected legacy-header boundary, exact H host observations, owned stdio and unchanged M1/M2 regression outcomes |
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
-| Parameter/PAR reference | K released by decision 0020 | Initialized versus unwritten state, shared scalar grammar, links/defaults and distinct reader lifecycles; explicit later parser coverage |
+| Parameter/PAR reference | K delivered at `474ce01`/`6d13581`; review pending | Initialized versus unwritten state, shared scalar grammar, links/defaults and distinct reader lifecycles; explicit later parser coverage |
+| Clock/table Rust contract | L released by decision 0023 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
