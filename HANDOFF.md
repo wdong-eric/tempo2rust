@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for I/J/K/L/M acceptance and N's delivered TIM I/O reference. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for I/J/K/L/M/N acceptance. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -52,6 +52,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0031](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0031-clock-rust-acceptance.md) accepts L's bounded clock/table Rust transfer at corrected delivery `84b6b86`. Central independently rebuilt the exact J and supplemental comparisons in both profiles, checked final source/artifact identities and closed 0029. L's ownership window is closed; M2 and broader core coverage remain open.
 
+[Decision 0032](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0032-tim-reference-acceptance.md) accepts N's bounded TIM I/O reference at `68de89a`. Central independently rebuilt all 157 cases / 906 events and 24 normal verifier controls, verified the actual binary/artifact identities and retained the JBO diagnostic/other host limits. N's ownership window is closed; a Rust input-lifecycle contract remains separate.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -70,9 +72,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0026 at `38d62af`, including correction `ccdf55c` | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
 | [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | Delivered evidence read-only; ownership window closed | Corrected delivery `84b6b86` accepted by decision 0031 | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
 | [M Numeric utility reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/13-numeric-utility-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0030 at `a01d428`, final evidence `e754581` | `REPORT.md`, complete selected-function/header inventory, bounded numeric/text/state evidence and actual execution-identity controls |
-| [N TIM I/O reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/14-tim-io-reference.md) | `validation/tim_io/` only | Delivered at `68de89a`; central review pending | `REPORT.md`, complete primary-file inventory, caller-state/history projection, raw TIM/JBO/order/I/O evidence and current execution controls |
+| [N TIM I/O reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/14-tim-io-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0032 at `68de89a` | `REPORT.md`, complete primary-file inventory, caller-state/history projection, raw TIM/JBO/order/I/O evidence and current execution controls |
 
-A through N have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I and L's bounded Rust transfers and K/M's bounded references are accepted with their ownership windows closed. N's TIM I/O and ordering reference awaits central review. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through N have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I and L's bounded Rust transfers and K/M/N's bounded references are accepted with their ownership windows closed. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
@@ -89,7 +91,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Corrected bounded reference accepted by decision 0026 at `38d62af`; ownership window closed |
 | Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Corrected bounded transfer accepted by decision 0031 at `84b6b86`; ownership window closed |
 | Assignment M: TEMPO2 numeric utility reference | `01a167fd-6e4d-7b31-ae87-f1fafd486df3` | Bounded reference accepted by decision 0030 at `a01d428`; ownership window closed |
-| Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | Delivered at `68de89a` under decision 0028; central review pending |
+| Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | Bounded reference accepted by decision 0032 at `68de89a`; ownership window closed |
 
 ## Shared working design
 
