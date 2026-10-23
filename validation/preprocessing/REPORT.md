@@ -15,10 +15,21 @@ primary routines have bounded executed witnesses. The 14 identity controls
 16 compiled mutations passed. The final replay, coverage and preservation
 receipts below establish the delivered state; central acceptance remains open.
 
+Under the 24 October 2026 tracking instruction, generated validation payloads
+remain local. Source, fixture declarations, scripts and concise reports belong
+in Git; generated JSON, compressed observations/raw dumps, profiles, coverage
+and receipts must not be staged again. Central manages their untracking without
+deleting local files or rewriting history. The measurements below describe the
+completed execution snapshot, not a new validation run after this policy change.
+
 ## Reproduction
 
 From `/Users/Eric.Dong/Downloads/tempo2rust`, with the pinned TEMPO2 checkout,
 existing three-line reference config, Python 3, Homebrew GCC 16 and gcov 16:
+
+For a fresh checkout without local baseline outputs, first generate them with
+`python3 validation/preprocessing/run.py --record`. Preserve existing local
+evidence when it is available, then run the verification sequence below.
 
 ```sh
 python3 validation/preprocessing/run.py
@@ -39,8 +50,11 @@ scientific observations, case catalog, inventory, initial state or raw archive.
 `verify.py` emits the full uncompressed local verification receipt; `seal.py`
 archives its exact bytes as `verification.json.gz` and verifies current executed
 binaries, post-initial mutation differences, receipt membership and protected
-inputs. Its final manifest hashes every delivered file except itself. The large
-uncompressed receipt and intermediate builds are ignored by Git.
+inputs. Its manifest hashes every delivered file except itself. Generated output
+is local evidence; running these commands does not authorize committing it.
+The existing delivery manifest records the original snapshot at commit 2038c41;
+subsequent report-only edits are outside that historical seal. An explicit future
+`seal.py` run creates an updated local manifest.
 
 `inspect.py --case CASE_ID` reconstructs that case's complete final state and
 ordered deltas for examination. Its decimal binary128 decoder is a readable
@@ -86,6 +100,19 @@ defined before their runs. Exact ordered actions and file bytes are in cases.jso
 No implicit reset, sort, ideal round-trip or source-defect repair is applied.
 
 ## Evidence and integrity
+
+All generated artifacts listed below are local under `validation/preprocessing/`.
+The original snapshot has these SHA-256 identities; fresh raw launches contain
+new nonces, so raw archives and receipts may change while exact scientific
+comparison still passes.
+
+| Local evidence | Original SHA-256 |
+|---|---|
+| observations.json.gz | `1e44d2446fa37ce22cbe0de36fbd1c2879b0005861c94819181b7e97a13999f2` |
+| reference.raw.json.gz | `e6084c26f3c095398c26e1e54aaa13cc743b4ccc8a5cb4d60ed069847eeed157` |
+| verification.json.gz | `c53b697217d1c24e04f768b5aebe51ef5aab7879b5d5af1d9e997a535f13a3da` |
+| coverage.json | `023828de10c1db04592c7187358c1a0044272f26a194ceadf1025e6bf39898e3` |
+| regeneration.json | `2c644869c92312c829d5ba9970a18516ded3e645b98d39c2c0e0be76c71f42da` |
 
 | Artifact | Purpose |
 |---|---|
