@@ -1,0 +1,43 @@
+{
+  "scope": "Source inventory and named executable cases, not a line/branch coverage percentage or port acceptance. Full state calls are host observations subject to source undefined behavior.",
+  "functions": {
+    "jpl_get_double": {"source": "jpleph.c:75-78", "cases": ["layout_*"], "isolated": ["u2_packed_au", "u2_packed_emrat"], "status": "Aligned start/end/step selected; packed AU/EMRAT sanitizer diagnostics; arbitrary offsets and type-punning misuse undefined, not goldens."},
+    "jpl_get_long": {"source": "jpleph.c:80-83", "cases": ["layout_*"], "isolated": [], "status": "All 45 IPT slots and declared integer scalar getters; signed int32 load promoted to host long. Arbitrary/unaligned offsets not executed."},
+    "jpl_pleph": {"source": "jpleph.c:135-237", "cases": ["pleph_pairs_*", "absent_quantities_*", "de405_truncated_pleph", "canonical_natural_status"], "isolated": ["pleph_ipt_one_past"], "status": "Targets 1-17, mixed centre rules, Earth/Moon special pair, SSB/EMB/Sun, zero/nonzero velocity, invalid/equal indices, optional absence and failure/recovery. Failed output suppressed. Private uninitialized arrays and out-of-range pointer formation preclude portable full-call numerical goldens."},
+    "interp": {"source": "jpleph.c:315-433", "cases": ["helper_interpolation", "state_sequences_*", "zero_coefficients"], "isolated": ["max_cheby_assertion"], "status": "Initialized helper: ncf 1/2/5/17, dimensions 1/2/3, intervals 1/2/8, flags 1/2/3, endpoints and interior; exact polynomial diagnostic. State snapshots cover interval 4 and derivative/time cache demands. ncf=0 with velocity and arbitrary malformed inputs remain unsafe/unexecuted."},
+    "swap_32_bit_val": {"source": "jpleph.c:443-449", "cases": ["helper_interpolation", "layout_*"], "isolated": [], "status": "Known byte pattern plus both header orders."},
+    "swap_64_bit_val": {"source": "jpleph.c:451-463", "cases": ["helper_interpolation", "layout_*", "partial_cache_*", "partial_far_*"], "isolated": [], "status": "Two-word pattern, headers/constants/full records, and skipped swap after short reads. Negative count misuse not executed."},
+    "dimension": {"source": "jpleph.c:470-481", "cases": ["helper_interpolation", "state_sequences_*"], "isolated": [], "status": "Indices 0-15; 11 maps to 2 and 14 to 1, otherwise 3. Kernel sizing uses IPT index; state interpolation uses i+1."},
+    "jpl_state": {"source": "jpleph.c:564-662", "cases": ["state_sequences_*", "de405_full", "de405_truncated_state", "partial_cache_*", "partial_far_*", "seek_failure_recovery", "read_failure_before_first_success", "non_power_interval", "zero_au"], "isolated": ["state_ipt_one_past", "nan_epoch", "tiny_step_record_cast", "coefficient_offset", "nut_four_slot_overwrite"], "status": "All 14 list entries, barycentric/heliocentric, Sun 9 values/cache, shared optional destination, exact/adjacent endpoints, all returned errors applicable to state. Controlled unwritten fields do not cure line 625 pointer UB; full-call numbers are host observations."},
+    "jpl_init_error_code": {"source": "jpleph.c:664-669", "cases": ["init_*", "constant_failures"], "isolated": [], "status": "Startup -9, all defined init status codes, non-null -7/-8, successful recovery/reset, unchanged after close. Concurrent access not tested."},
+    "jpl_init_ephemeris": {"source": "jpleph.c:698-875", "cases": ["layout_*", "init_*", "threshold_count", "title_zero", "nan_ratio"], "isolated": ["unterminated_title"], "status": "Real DE405; both synthetic byte orders; pre430, extended <=400 and >400, special 400 scan, malformed extended offsets, title/header discrepancy, ratio and missing/short inputs; nam/val four combinations. libc seek/read/allocation failure injection identified separately from filesystem failures. Unwritten temp_data fields retained."},
+    "jpl_close_ephemeris": {"source": "jpleph.c:884-890", "cases": ["init_*", "lifetime_*"], "isolated": [], "status": "Successful and non-null-error handles closed and reopened. Null/double close, leak instrumentation and concurrency not tested."},
+    "jpl_get_constant": {"source": "jpleph.c:895-917", "cases": ["layout_*", "constant_partial_*", "constant_failures"], "isolated": [], "status": "Negative/end indices, first/last, 399/400/401 names, byte order, short values and ignored seek/read failures; initialized 7-byte caller names. Name/value reads accept any positive byte count, not exact length."}
+  },
+  "declarations_and_macros": {
+    "make_sub_ephem": "Declared jpleph.h:60, no implementation in pinned checkout; no invented counterpart or executable case.",
+    "jpl_get_pvsun": "jpleph.h:110 raw base+248 double pointer. Host offsetof(pvsun)=248 and 9 mathematical Sun values observed separately; the macro itself conveys no length, validity or initialization. No substitute getter implementation."
+  },
+  "requirements": {
+    "R1_identity": "run.py exports unmodified Git blobs, verifies live equality/hashes, replays the unchanged F/D prior probe in H's build, records compiler/flags and harness hashes.",
+    "R2_layouts": "inputs.json declarations plus layout_*; SOURCE_MAP.md lists every field, unit, getter and counterpart.",
+    "R3_queries": "state_sequences_*, pleph_pairs_*, de405_full, helper_interpolation and zero_coefficients; full arrays include untouched sentinels.",
+    "R4_failure": "init_*, seek_failure_recovery, read_failure_before_first_success, de405_truncated_*, partial_cache_*, partial_far_* and isolated.json.",
+    "R5_lifetime_U1": "lifetime_replace_*, lifetime_overwrite_*, u1_preflight_reopen_*; fstat/stat inode equality, cached/uncached/reopen behavior and stdio read-ahead recorded. No production wrapper race claim.",
+    "R6_verification": "Exact ordered regeneration, decimal-to-bits checks, paired endian observations, independent rational helper diagnostic, nine artifact mutations and five compiled source mutations.",
+    "U2_alignment": "Layout evidence, packed-field access contract and isolated UBSan AU/EMRAT errors. No unaligned getter number exported as a portable oracle."
+  },
+  "unexecuted_or_nonportable": [
+    "Only macOS arm64 (LP64, little-endian hardware) executed. Big-endian file encoding is tested on this host; big-endian hardware, Linux, Windows, 32-bit ABI and other real ephemerides are untested.",
+    "Unwritten pvsun_t/pvsun/interpolation fields and swapped pre430 temporary bytes have no portable initializer values. No MemorySanitizer availability or natural-init numerical validity is claimed.",
+    "Source pointer formation at jpleph.c:625 is UBSan-diagnosed even in controlled state. Source :639 also transiently forms pv[14] in pleph's 13-row allocation; it is separately source-inspected, not separately sanitizer-isolated.",
+    "Position-only EMB copy at :216 copies unwritten velocity slots. Failed ordinary pleph at :203 continues using unwritten locals. Sanitizer does not prove their initialization; outputs on failure are suppressed.",
+    "Public nut[4] documentation is insufficient for six-value libration/mantle requests. H's normal harness deliberately supplies six slots; isolated four-slot probe reports ASan overflow.",
+    "Malformed NaN/tiny-step epoch conversion, oversized coefficient offsets, unterminated title and ncf=18 are isolated; there is no portable numerical result after the recorded failure stage.",
+    "ncf=0 derivative underflow, invalid/negative list flags, zero/negative/overflowed record layouts, invalid getter offsets, null/double-close, signed count overflow and arbitrary malformed offset combinations are not exhaustively executed.",
+    "Ordinary seek failures and allocation failure are injected at libc boundaries, not OS disk/resource exhaustion. Partial reads and live file replacements/overwrites are real filesystem operations.",
+    "Concurrent file writers, global init-error races, multiprocess ordering, permission-denied access, directory/FIFO streams, fclose errors and file-descriptor leak counts are untested.",
+    "Partial binary64 elements have indeterminate C values; raw observed bytes and full-call outputs remain host observations. stdio buffered bytes are platform/runtime-dependent.",
+    "No top-level TEMPO2 timing orchestration, SOFA, Rust implementation, fitting, port numerical budgets or milestone acceptance is included."
+  ]
+}

@@ -1,0 +1,1426 @@
+{
+  "absent_be.bin": {
+    "sha256": "73dc48e23ea879e5ab1975139cfee4f5bdbf69523ca895dc411a14b0c64ce845",
+    "size": 31344,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 653,
+      "ncon": 402,
+      "optional": false,
+      "records": 4,
+      "recsize": 5224,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "absent_le.bin": {
+    "sha256": "364e8e7cf7a4acfa83322a8579cfe21350c2b76569af0e371249748be3294ed8",
+    "size": 31344,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 653,
+      "ncon": 402,
+      "optional": false,
+      "records": 4,
+      "recsize": 5224,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "bad_extended_be.bin": {
+    "sha256": "1ac3497cb5a5831d46354c425c65ed4549586b1bfcfe04994a84ccdd489e8ac4",
+    "size": 39600,
+    "specification": {
+      "bad_extended": true,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "bad_extended_le.bin": {
+    "sha256": "b5c2b13e30ceaabed7455e9280853f9d3b58399d0b1a39066f164bfeba37267c",
+    "size": 39600,
+    "specification": {
+      "bad_extended": true,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "bad_ratio.bin": {
+    "sha256": "36f60152ac6105030b480b79c8db14a85af61abe0433107a57d129bad649c9d2",
+    "size": 39600
+  },
+  "empty.bin": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0
+  },
+  "extended_be.bin": {
+    "sha256": "77023e2d543383874ecb388f2498e7ab7d47fced170161797a51d58ff953fbca",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "extended_le.bin": {
+    "sha256": "c419f4dd0ab9f3ff5d2220b11ce3db5b08a7e53489e04c269f90c06658d9d324",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "large_coefficient_offset.bin": {
+    "sha256": "bb8c1e892d0e6e8503c29e531e8354f8e85d6ccbc3921d96f17510ee462a3e82",
+    "size": 39600
+  },
+  "nan_ratio.bin": {
+    "sha256": "8a32bbc88a7e14c9ee8728fc171e80a38fa56b5c0794fa5cfb850f0e2fea6c76",
+    "size": 39600
+  },
+  "non_power_interval.bin": {
+    "sha256": "da994685cf6c6b523405cf8fc6d156080f970f92ad38db1e040f41477c339745",
+    "size": 39600
+  },
+  "pre405_be.bin": {
+    "sha256": "5ae50a94607ce9211981bde3e65ef7e7ef32247ec2996f08a6cb334a47c64f8e",
+    "size": 36048,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 751,
+      "ncon": 6,
+      "optional": true,
+      "records": 4,
+      "recsize": 6008,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 405
+    }
+  },
+  "pre405_le.bin": {
+    "sha256": "fc0b68c8cf258557124b3797e0642f3275cfbb1c7d33340be5b2b435737b9e53",
+    "size": 36048,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 751,
+      "ncon": 6,
+      "optional": true,
+      "records": 4,
+      "recsize": 6008,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 405
+    }
+  },
+  "real_de405": {
+    "path": "tempo2/T2runtime/ephemeris/DE405.1950.2050",
+    "sha256": "86786f07aeddc1c5b6ddb24d8c65930803458938c6a2f920e8ea72a86da7479c",
+    "size": 9316736
+  },
+  "scan400_be.bin": {
+    "sha256": "1df0a2d582894fcb7af42ce6c8bf37de3eda671258bfc000d11e60d94e92109a",
+    "size": 36048,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 751,
+      "ncon": 400,
+      "optional": true,
+      "records": 4,
+      "recsize": 6008,
+      "scanned_extra_names": 2,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "scan400_le.bin": {
+    "sha256": "3243601d8902f886102f28354c5abacfa5468112d6182ac9a6ecf525870afcff",
+    "size": 36048,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "ncoeff": 751,
+      "ncon": 400,
+      "optional": true,
+      "records": 4,
+      "recsize": 6008,
+      "scanned_extra_names": 2,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "shifted_be.bin": {
+    "sha256": "f25d35ab641b656e756f0352efdce1b74a6262c7a1725f14ef4074ef97a92680",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 7000,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "shifted_le.bin": {
+    "sha256": "824fa1910964d28920c402a994615aba0e89d89e55b2f205b5c4d7f6011f1bce",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 402,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 7000,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "short_constants.bin": {
+    "sha256": "13b060f7610a590b8f335415a6658d43a5abe23b679461ee86464c3d790a7010",
+    "size": 6615
+  },
+  "short_extended.bin": {
+    "sha256": "a8e87392f3f5702c85edffed441506f316f455485b975172c5c277eea9f6f503",
+    "size": 2876
+  },
+  "short_header.bin": {
+    "sha256": "ce7bfdc8ec698f68bd7205b8c2f9af1d5dec2fcf52f18bd358f0c598a989d744",
+    "size": 100
+  },
+  "small430_be.bin": {
+    "sha256": "825127eee15238b89b2b12ff0c11ebf93714cf09cea1000f0a94746898220441",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": ">",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 6,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "small430_le.bin": {
+    "sha256": "89c7a106ef5c18855b13e1f38aa321c07a3c8e05d44f0acb5a0d0ae23c92cafe",
+    "size": 39600,
+    "specification": {
+      "bad_extended": false,
+      "byte_order": "<",
+      "coefficient_rule": "base=(record+1)*1000+(ipt_index+1)*10+component+subinterval/16+shift; c0=base; ck=(-1)^k*base/2^(k+3)",
+      "header_version_ignored": 999,
+      "ipt": [
+        [
+          3,
+          4,
+          1
+        ],
+        [
+          15,
+          5,
+          2
+        ],
+        [
+          45,
+          6,
+          4
+        ],
+        [
+          117,
+          7,
+          8
+        ],
+        [
+          285,
+          8,
+          1
+        ],
+        [
+          309,
+          4,
+          2
+        ],
+        [
+          333,
+          5,
+          4
+        ],
+        [
+          393,
+          6,
+          8
+        ],
+        [
+          537,
+          7,
+          1
+        ],
+        [
+          558,
+          8,
+          2
+        ],
+        [
+          606,
+          4,
+          4
+        ],
+        [
+          654,
+          5,
+          8
+        ],
+        [
+          734,
+          6,
+          1
+        ],
+        [
+          752,
+          7,
+          2
+        ],
+        [
+          794,
+          8,
+          4
+        ]
+      ],
+      "ncoeff": 825,
+      "ncon": 6,
+      "optional": true,
+      "records": 4,
+      "recsize": 6600,
+      "scanned_extra_names": 0,
+      "shift": 0,
+      "start": 2450000.5,
+      "step": 32.0,
+      "title_version": 430
+    }
+  },
+  "threshold_count.bin": {
+    "sha256": "2222aeb2a8ef758d03cf2731a731cc96ea6eebf35980b93abb0def132ed53d6d",
+    "size": 39600
+  },
+  "tiny_step.bin": {
+    "sha256": "3f551fabf2e4987820ab91f60afb1832526a7e25e5eaf55dd28aa8258289d591",
+    "size": 39600
+  },
+  "title_zero.bin": {
+    "sha256": "e7c4123943651a0c42d7e98dafb3ce4aebbb4059d89cd7763144c6220bf205e7",
+    "size": 39600
+  },
+  "truncated_de405.bin": {
+    "construction": "real_de405[:-4000]",
+    "sha256": "c91ca9f3b91c1ca2e890cef3eb8e784bc012966b0c4621ecb4c4d5fb14607042",
+    "size": 9312736
+  },
+  "unterminated_title.bin": {
+    "sha256": "8d313dca5604daba085e4ae5b113c83bf770886066456f53ca989d86aeb3ae2d",
+    "size": 39600
+  },
+  "zero_au.bin": {
+    "sha256": "f5948685b5e87f1f235b240a65ceeddf5343d6911a100fdcdad3b9108fe89f41",
+    "size": 39600
+  },
+  "zero_coefficients.bin": {
+    "sha256": "c58cb541eaeb186381aee243931f96df0c7e7e536fccf0e9151968191d1867c0",
+    "size": 39600
+  }
+}
