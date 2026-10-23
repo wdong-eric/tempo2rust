@@ -29,11 +29,11 @@ protected=json.loads((ROOT/'validation/parameter_storage_port/protected_hashes.j
 tracked=subprocess.check_output(['git','ls-files'],cwd=ROOT,text=True).splitlines()
 for s in tracked:
  p=ROOT/s
- if s.startswith(('validation/preprocessing/','validation/par_specialized/')):continue
- if s.startswith(('validation/','rust/verification/','rust/tests/reference/','decisions/','handoffs/')) or s in ['HANDOFF.md','rust/PARAMETER_STORAGE_REPORT.md','rust/CLOCK_REPORT.md','rust/JPL_REPORT.md','rust/M1A_REPORT.md','rust/M1B_REPORT.md','rust/M2_REPORT.md','rust/Cargo.toml','rust/Cargo.lock','rust/build.rs']:
+ if s.startswith(('validation/preprocessing/','validation/par_specialized/','validation/pulsar_lifecycle/')):continue
+ if s.startswith(('validation/','rust/verification/','rust/tests/reference/','decisions/','handoffs/')) or s in ['rust/PARAMETER_STORAGE_REPORT.md','rust/CLOCK_REPORT.md','rust/JPL_REPORT.md','rust/M1A_REPORT.md','rust/M1B_REPORT.md','rust/M2_REPORT.md','rust/Cargo.toml','rust/Cargo.lock','rust/build.rs']:
   if s in ['validation/parameter_storage_port/run.py','validation/parameter_storage_port/native.py','validation/parameter_storage_port/verify.py']:continue
   protected[s]=sha(p)
-assert all(not s.startswith(('validation/preprocessing/','validation/par_specialized/')) for s in protected)
+assert all(not s.startswith(('validation/preprocessing/','validation/par_specialized/','validation/pulsar_lifecycle/')) for s in protected)
 assert all(sha(ROOT/s)==h for s,h in protected.items())
 save('protected_hashes.json',protected)
 save('baseline.json',dict(head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),sources={str(p.relative_to(ROOT)):sha(p) for p in sorted((ROOT/'rust/src').glob('*.rs'))},nested={s:dict(head=subprocess.check_output(['git','-C',s,'rev-parse','HEAD'],cwd=ROOT,text=True).strip(),status=subprocess.check_output(['git','-C',s,'status','--porcelain'],cwd=ROOT,text=True)) for s in ['tempo2','validation/reference']}))

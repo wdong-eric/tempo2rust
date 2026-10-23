@@ -1,0 +1,11 @@
+{
+  "reason": "HANDOFF.md is a live central coordination ledger with concurrent edits; R does not modify it. Accepted evidence remains immutable.",
+  "baseline_head": "22b345c9305cb5aae5bdefdb93f4d5d15c8329ae",
+  "baseline_handoff_sha256": "8aefc676b874c40073977921f5810b3fdc885cee75ddf911ff066d406c774a2c",
+  "observed_shared_head": "3ec1e18245231e78503465a3ffb5773f52082f21",
+  "observed_handoff_sha256": "493f71fe6beb20da91827f45f0263e8fd8541ff95fc8d2024bae592f43ff2f6e",
+  "removed_from_immutable_membership": [
+    "HANDOFF.md"
+  ],
+  "accepted_evidence_removed": []
+}

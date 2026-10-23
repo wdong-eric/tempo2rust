@@ -6,7 +6,7 @@ PIN='fda6ad4a9753ad7dc5d291406f2f310a9161423f'
 
 def build():
     spec=importlib.util.spec_from_file_location('k_profile',ROOT/'validation/parameters/profile.py');k=importlib.util.module_from_spec(spec);spec.loader.exec_module(k)
-    k.BUILD=HERE/'build/native';src=k.prepare()
+    k.BUILD=OUT/'build/native' if 'TEMPO2_PARAMETER_VERIFICATION_ROOT' in os.environ else HERE/'build/native';src=k.prepare()
     exe=k.BUILD/'probe';exe.unlink(missing_ok=True);cc=Path(shutil.which('g++-16')).resolve()
     flags=['-O2','-std=gnu++11','-DHAVE_CONFIG_H','-I'+str(src)]
     units=[HERE/'probe.cc',*[src/n for n in k.SOURCES],src/'global_data.C']
