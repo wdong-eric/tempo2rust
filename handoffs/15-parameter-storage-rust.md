@@ -1,0 +1,19 @@
+# Assignment O: Rust parameter storage foundation
+
+Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0008/0012/0026/0030/0031/0032 and the governing [contract 0033](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0033-parameter-storage-contract-and-o-release.md). Inspect the pinned `tempo2.h`, parameter portions of `initialise.C`, `tempo2Util.C::copyParam`, K's registry/observations and M's copy cases before editing. L's Rust ownership window is closed. This chat implements O; central owns shared decisions and acceptance.
+
+You are not alone in the workspace. Own `rust/`, new `validation/parameter_storage_port/` and only the narrow optional verifier output-routing changes in 0033. Preserve other chats' work, both nested repositories, all accepted reference/projection data and historical verification. Never reset, clean or broadly stage the workspace. Commit explicit owned paths in coherent `feat:`, `fix:`, `test:` and `docs:` stages.
+
+Execute in dependency order:
+
+1. Define the exact parameter/source/case projection and record current protected-file hashes. Map all 166 enum entries, all 2,000 slots / 9,616 cells, initialized versus unwritten fields, and selected K/M cases. Keep non-parameter initializer responsibilities explicitly deferred.
+2. Implement safe owned source-indexed parameter storage and initialization/labels in source-corresponding modules. Preserve signed integers, source capacities, logical/backing extents, blank/overwritten labels and unwritten pre-fit/link state. Keep Rug128 unchanged.
+3. Implement source `copyParam` order, retained tails/links and operation-local boundary prefixes. Compare the four M cases and K's selected parameter evidence. Add bounded supplemental source evidence and Rust boundary tests without executing undefined native access.
+4. Make the existing loader, evaluator and fitter use this canonical store. Retain the strict frontend's supported scope and original metadata. Derive the historical scalar/JSON view from the store, with the approved owned-snapshot return type. Remove the obsolete mutable numeric map; do not add a second synchronized authority.
+5. Run exact direct comparisons and identity/mutation controls in both profiles, followed by redirected clock/JPL and unchanged M1/M2 regressions. Deliver `rust/PARAMETER_STORAGE_REPORT.md`, source/executable hashes, API adaptation notes, commits and remaining gaps for central review.
+
+Preserve deterministic source defects until the entire transfer finishes. Unknown C storage has no portable value: use the explicit unwritten/safe-boundary contract. Do not add linked-value arithmetic, broader parser support, full pulsar initialization or numerical tolerance/backend changes. M2 remains unaccepted with its four exact-order diagnostics. Report a newly consequential ambiguity with concrete evidence; continue independent work within the contract.
+
+## Dispatch prompt
+
+Implement Assignment O under `/Users/Eric.Dong/Downloads/tempo2rust/decisions/0033-parameter-storage-contract-and-o-release.md` and `handoffs/15-parameter-storage-rust.md`. Read the named decisions, accepted K/M evidence and pinned source first. Own only the released paths. Transfer the parameter registry, owned storage/initialization and copyParam semantics, then make the existing parser/evaluator/fitter use that one store. Preserve source indices, labels, signed flags, unwritten pre-fit state and retained-copy behavior. Keep Rug128, strict frontend scope, CLI/JSON schema, accepted fixtures and numerical gates unchanged; the convenience parameters() method may become a fresh owned snapshot as specified. No new unsafe should be needed. Run exact direct and full redirected regressions, retain all four M2 failures, commit coherent stages and return rust/PARAMETER_STORAGE_REPORT.md. Shared design changes and acceptance remain central.
