@@ -1,0 +1,9 @@
+# Reproducible validation outputs stay local. Never force-add them.
+*.json
+*.gz
+reference_raw/
+replay_raw/
+raw_initial/
+mutations/
+build/
+__pycache__/
