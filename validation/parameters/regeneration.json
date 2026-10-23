@@ -1,0 +1,95 @@
+{
+  "cases": 306,
+  "cases_sha256": "8b29a3b2efab1a32d73c8f28502163833482a36e42013412b86654fc3ccd6b2e",
+  "complete_ordered_comparison": true,
+  "events": 1545,
+  "executed_profile": {
+    "command": [
+      "/opt/homebrew/bin/g++-16",
+      "-O2",
+      "-std=gnu++11",
+      "-DHAVE_CONFIG_H",
+      "-I/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/probe.cc",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/initialise.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/readParfile.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKlongdouble.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/tempo2Util.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKmatrix.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/TKlog.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/clkcorr.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/tabulatedfunction.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/observatory.C",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/source/global_data.C",
+      "-lquadmath",
+      "-Wl,-map,/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/probe.map",
+      "-o",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/parameters/build/probe"
+    ],
+    "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+    "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+    "coverage_instrumentation": false,
+    "dependencies": [
+      "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+      "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+      "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+    ],
+    "executable_sha256": "ddbe600183cca59ccbddbe99f08229572eb16b77c56b4fe160341a3974df6fa2",
+    "generated": {
+      "config.h": {
+        "sha256": "470c61b68a61504558e76ef772639e46b565a1e4500115d6e3fb6a71286dd69e",
+        "text": "#define PACKAGE_STRING \"Tempo2 2026.09.1\"\n#define VERSION \"2026.09.1\"\n#define TEMPO2_ARCH \"darwin-arm64-reference\"\n"
+      },
+      "controls.h": {
+        "sha256": "2c6f0a89af44cd4cba8b2899da108e0d4997a9a456cf07522cdd463588e225ac",
+        "text": "FIELD(nobs);\nFIELD(simflag);\nFIELD(nits);\nFIELD(nCompanion);\nFIELD(bootStrap);\nFIELD(units);\nFIELD(setUnits);\nFIELD(ne_sw);\nFIELD(nWhite);\nFIELD(nQuad);\nFIELD(ifuncN);\nFIELD(orbifuncN);\nFIELD(clkOffsN);\nFIELD(nTelDX);\nFIELD(nTelDY);\nFIELD(nTelDZ);\nFIELD(quad_ifuncN_p);\nFIELD(quad_ifuncN_c);\nFIELD(quad_ifunc_geom_p);\nFIELD(quad_ifunc_geom_c);\nFIELD(cgw_mc);\nFIELD(timeEphemeris);\nFIELD(useCalceph);\nFIELD(dilateFreq);\nFIELD(planetShapiro);\nFIELD(correctTroposphere);\nFIELD(t2cMethod);\nFIELD(fixedFormat);\nFIELD(nStorePrecision);\nFIELD(fdjump_pint_format);\nFIELD(refphs);\nFIELD(dmoffsDMnum);\nFIELD(dmoffsCMnum);\nFIELD(calcShapiro);\nFIELD(dmOffset);\nFIELD(ipm);\nFIELD(swm);\nFIELD(nPhaseJump);\nFIELD(eclCoord);\nFIELD(noWarnings);\nFIELD(fitMode);\nFIELD(robust);\nFIELD(rescaleErrChisq);\nFIELD(nJumps);\nFIELD(nfdJumps);\nFIELD(nToffset);\nFIELD(ndmx);\nFIELD(nconstraints);\nFIELD(constraint_efactor);\nFIELD(auto_constraints);\nFIELD(jboFormat);\nFIELD(fdjump_log);\nFIELD(nT2efac);\nFIELD(nT2equad);\nFIELD(T2globalEfac);\nFIELD(nSx);\nFIELD(nTNEF);\nFIELD(nTNEQ);\nFIELD(nTNECORR);\nFIELD(nTNSECORR);\nFIELD(TNGlobalEF);\nFIELD(TNGlobalEQ);\nFIELD(nTNSQ);\nFIELD(TNRedAmp);\nFIELD(TNRedGam);\nFIELD(TNRedAmp2);\nFIELD(TNRedGam2);\nFIELD(TNRedC);\nFIELD(TNRedFLow);\nFIELD(TNRedCorner);\nFIELD(TNRed_log_freqs);\nFIELD(TNRed_log_factor);\nFIELD(TNDMAmp);\nFIELD(TNDMGam);\nFIELD(TNDMC);\nFIELD(SWGPAmp);\nFIELD(SWGPGam);\nFIELD(SWGPC);\nFIELD(TNDM_log_freqs);\nFIELD(TNDM_log_factor);\nFIELD(TNChromAmp);\nFIELD(TNChromGam);\nFIELD(TNChromC);\nFIELD(TNChromIdx);\nFIELD(TNChrom_log_freqs);\nFIELD(TNChrom_log_factor);\nFIELD(TNBandDMAmp);\nFIELD(TNBandDMGam);\nFIELD(TNBandDMC);\nFIELD(nTNBandNoise);\nFIELD(nTNGroupNoise);\nFIELD(TNsubtractDM);\nFIELD(TNsubtractRed);\nFIELD(TNsubtractChrom);\nFIELD(TNsubtractSWGP);\nFIELD(TNsubtractPoly);\nFIELD(TN_QpRatio);\nFIELD(TN_QpPeriod);\nFIELD(TN_QpSig);\nFIELD(TN_QpLam);\nFIELD(AverageResiduals);\nFIELD(useTNOrth);\nFIELD(nDMEvents);\nFIELD(nTNShapeletEvents);\nFIELD(sorted);\nFIELD(detL);\nFIELD(dm_series_type);\nFIELD(eopc04_file);\nFIELD(filterStr);\nFIELD(passStr);\nFIELD(fitFunc);\nFIELD(whiteNoiseModelFile);\nFIELD(fjumpID);\nFIELD(deleteFileName);\nFIELD(tzrsite);\nFIELD(name);\nFIELD(binaryModel);\n"
+      },
+      "names.h": {
+        "sha256": "47f4d57f724bb4fe53e2b02fac15504adcc3d76845ef68df370b92cfeb01be61",
+        "text": "static const char *names[] = {\"param_raj\", \"param_decj\", \"param_f\", \"param_pepoch\", \"param_posepoch\", \"param_dmepoch\", \"param_dm\", \"param_cm\", \"param_pmra\", \"param_pmdec\", \"param_pmra2\", \"param_pmdec2\", \"param_px\", \"param_sini\", \"param_pb\", \"param_fb\", \"param_t0\", \"param_a1\", \"param_om\", \"param_pmrv\", \"param_ecc\", \"param_edot\", \"param_e2dot\", \"param_xpbdot\", \"param_pbdot\", \"param_pb2dot\", \"param_a1dot\", \"param_a2dot\", \"param_omdot\", \"param_om2dot\", \"param_orbpx\", \"param_tasc\", \"param_eps1\", \"param_eps2\", \"param_m2\", \"param_gamma\", \"param_mtot\", \"param_glep\", \"param_glph\", \"param_glf0\", \"param_glf1\", \"param_glf2\", \"param_expep\", \"param_expph\", \"param_exptau\", \"param_expindex\", \"param_gausep\", \"param_gausamp\", \"param_gaussig\", \"param_gausindex\", \"param_glf0d\", \"param_gltd\", \"param_start\", \"param_finish\", \"param_track\", \"param_bp\", \"param_bpp\", \"param_tzrmjd\", \"param_tzrfrq\", \"param_fddc\", \"param_fddi\", \"param_fd\", \"param_dr\", \"param_dtheta\", \"param_tspan\", \"param_bpjep\", \"param_bpjph\", \"param_bpja1\", \"param_bpjec\", \"param_bpjom\", \"param_bpjpb\", \"param_wave_om\", \"param_kom\", \"param_kin\", \"param_shapmax\", \"param_dth\", \"param_a0\", \"param_b0\", \"param_xomdot\", \"param_afac\", \"param_eps1dot\", \"param_eps2dot\", \"param_tres\", \"param_trestn\", \"param_wave_dm\", \"param_waveepoch_dm\", \"param_dshk\", \"param_ephver\", \"param_daop\", \"param_iperharm\", \"param_dmassplanet\", \"param_dphaseplanet\", \"param_waveepoch\", \"param_ifunc\", \"param_clk_offs\", \"param_dmx\", \"param_dmxr1\", \"param_dmxr2\", \"param_dmmodel\", \"param_gwsingle\", \"param_cgw\", \"param_quad_om\", \"param_h3\", \"param_h4\", \"param_nharm\", \"param_stig\", \"param_telx\", \"param_tely\", \"param_telz\", \"param_telEpoch\", \"param_quad_ifunc_p\", \"param_quad_ifunc_c\", \"param_tel_dx\", \"param_tel_dy\", \"param_tel_dz\", \"param_tel_vx\", \"param_tel_vy\", \"param_tel_vz\", \"param_tel_x0\", \"param_tel_y0\", \"param_tel_z0\", \"param_gwm_amp\", \"param_gwcs_amp\", \"param_gwecc\", \"param_gwb_amp\", \"param_dm_sin1yr\", \"param_dm_cos1yr\", \"param_brake\", \"param_stateSwitchT\", \"param_df1\", \"param_red_sin\", \"param_red_cos\", \"param_jitter\", \"param_red_dm_sin\", \"param_red_dm_cos\", \"param_red_chrom_sin\", \"param_red_chrom_cos\", \"param_swgp_sin\", \"param_swgp_cos\", \"param_band_red_sin\", \"param_band_red_cos\", \"param_sx\", \"param_sxr1\", \"param_sxr2\", \"param_sxer\", \"param_group_red_sin\", \"param_group_red_cos\", \"param_ne_sw\", \"param_shapevent\", \"param_orbifunc\", \"param_gltd2\", \"param_gltd3\", \"param_glf0d2\", \"param_glf0d3\", \"param_ne_sw_sin\", \"param_ne_sw_ifunc\", \"param_chromx\", \"param_chromxr1\", \"param_chromxr2\", \"param_nudot_epoch\", \"param_nudot_amp\", \"param_nudot_transition_time\", \"param_LAST\", \"param_ZERO\", \"param_JUMP\", \"param_FDJUMP\"};\n"
+      }
+    },
+    "globals_data_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+    "globals_slices": [
+      "global.C:1-64",
+      "global.C:176-200"
+    ],
+    "link_map_sha256": "b45cdcebe128d90e9de6622ab3fe7a66bc33494e19c44ea3a9628bd7a5c9a4a1",
+    "locale": "C",
+    "machine": "arm64",
+    "mutation": null,
+    "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+    "platform": "macOS-26.7-arm64-arm-64bit",
+    "probe_sha256": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+    "runtime_hashes": {
+      "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146",
+      "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+      "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c"
+    },
+    "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "sources": {
+      "T2accel.h": "3604c0967d53c64e0f611943809524a7d79ff3b8face432912323f67f8c8cc00",
+      "TKfit.h": "531359603cbde940c6c5523187f4b9b8bb32d4cb7d9fefcf96283c2f94d0d5d8",
+      "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+      "TKlog.h": "977dc204af66a0e61fe3b6288c630e3a3343ebc9dc08d5e1f2e535b5ea518e3c",
+      "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+      "TKlongdouble.float128.h": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+      "TKlongdouble.ld.h": "b9acbfa5a68e3427f83ed3a8ec9551d9fb202d8b73502be219205ad1269a713d",
+      "TKmatrix.C": "3817bedcd680e88be6b715b1165eacec028f942d3213eec1b0f02c097a01fb11",
+      "TKmatrix.h": "b089efa5ddd1dda2c2615a41a119d015209b908858899713e4ec6bd47270ca84",
+      "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+      "global.C": "e61fc1a83a9adf0b6d905d2c5a58cd764a1fd0261c276fccb33daadb6788a2a7",
+      "initialise.C": "5da876556455e5fda635b30917ae9e745ef880b93ef513b47b6e4823458868c1",
+      "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+      "readParfile.C": "ecdbec472eff256ab1c7d875a4ea56536c146012599684408b03fe738ac7550e",
+      "t2fit_nestlike.h": "50db4fb3e38bb16eab83dbd2ce4331ee9fbbbbb314e60b17fbb003997996a9af",
+      "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+      "tabulatedfunction.h": "99420358a63a8a3edf66d38328b67103f8c2d8aba0494625db011f0ab4f7e2d0",
+      "tempo2.h": "0313b6eaf9f9ae9d7e5cce340379ad4b7068394e5222a01f73949e3a2640de93",
+      "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+      "tempo2Util.h": "7a9f7484c853413974e59671dde66cc5517347f1857cb5d41475200ce97d816f"
+    },
+    "support_policy": "All primary and support translation units from raw pinned Git bytes. Only global.C data prefix and CVSdisplayVersion are sliced. No A2 archive or initializer correction. Header/config generated as declared. Real clock/table/observatory support is linked."
+  },
+  "observations_sha256": "00f9c3edf78c0be231ae7455416a9338f146d25faad413f7f080b0ac588f646b"
+}

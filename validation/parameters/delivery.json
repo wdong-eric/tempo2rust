@@ -1,0 +1,41 @@
+{
+  "artifacts": {
+    ".gitignore": "c7cd0fc55d4b88bc4ed87b1cdc33670d9046174ab762188a0f2ce10290bb56e0",
+    "DISPATCH.md": "d47f31961229dd7869f5a28c2767380ed855fcc9a9f3985ba20e604513a990e5",
+    "FINDINGS.md": "7910ae80ac2f023014dee81b0c7ca46c1907b5c29d6ebee050edb4efe0fdcbe0",
+    "REGISTRY.md": "7880d29dae412596122879a3e415dc9b0b9e8b9c8d1df734e864f2deb957fb54",
+    "REPORT.md": "7eef386b009e15f382f90eb25363ba216fe46b1a1528c3c6179842e05e92611c",
+    "cases.json": "8b29a3b2efab1a32d73c8f28502163833482a36e42013412b86654fc3ccd6b2e",
+    "catalog.py": "511d34cf7c148ad83b2d726ea6716e7ec3e1a9a422f5c0f217767aa40cf7c857",
+    "coverage.json": "064ee65cf243a99ea1880c1da91772303f169edf19013de52d0aefeb174651b3",
+    "coverage.py": "85f74c10355f419c916b3210c3ece3c4859b26b84dacda50c328abf039a8580f",
+    "diagnostics/fb20.json": "b548957e200cb368b20f6ead5ddff00ee60b3bea8a0b02e7a0abc8ee6b9fbd2c",
+    "fixtures.py": "eb4ade10365ddc476c4301ee7e1e27b1ce0a932b3e4bde84cf5f643c949071d1",
+    "input_hashes.json": "c0601acfd692e76c6b85c72ffd435cdcae01a2cba2a88a553478d2db8823c0a3",
+    "inventory.json": "43c48270119fe35ef3bee7230f0beb35a993677df9ce0d7b15c5cffff2fc2958",
+    "inventory.py": "826fadfe9f5013e32868cfd4b0c745c56ebfc7566a6fc07f8f3277c7f7022ef3",
+    "line_coverage.json": "944cfd39b85b0a7e715fd4176283e2052ca3dc86f770cba9810c1ce145601014",
+    "observations.json": "00f9c3edf78c0be231ae7455416a9338f146d25faad413f7f080b0ac588f646b",
+    "probe.cc": "721bbe258cd80a13a8c7cf2f97af0e94c55907e0292a67901cbc6d64b8e2b60a",
+    "profile.json": "dbf1f88738406120477de963a2809985b2b6fae2d9a74d50730595cd5e04f6e2",
+    "profile.py": "b7d643bedacf251832031ecd5e4321677aa71ea90a97bc401fbf8a4af193c54c",
+    "regeneration.json": "7c14189af79f9284a9bdf151ee1fc3aaef25161fccbf95168a8cc19a2566d1fc",
+    "registry.json": "24198355268f7f59910862870391743752d65a9e42d34e59c38918d348fb8f44",
+    "run.py": "18e96f22e79645831fe192952b1fae869252ac63681b719662c4c6c138e293dc",
+    "verification.json": "c2007a3084df0091fbfc9ad1c2ff8c467f48077aeed9dc2d632f921bf9edd8b9",
+    "verify.py": "f4ad28e94b8c86cdb5c72561eba326b25fad24d73fd97484a949a1a27fae85d3"
+  },
+  "harness_commit": "474ce01cb9fdf2ee690fd98de5c56d4c1480412c",
+  "independent_repositories": {
+    "tempo2": {
+      "head": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+      "status": ""
+    },
+    "validation/reference": {
+      "head": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+      "status": ""
+    }
+  },
+  "scope": "validation/parameters only; reference evidence, no Rust conformance/acceptance",
+  "self_hash_excluded": true
+}

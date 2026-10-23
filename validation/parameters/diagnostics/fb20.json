@@ -1,0 +1,266 @@
+{
+  "actions": [
+    [
+      "init",
+      "1",
+      "0",
+      "0"
+    ],
+    [
+      "stream",
+      "FB0 1.125 1 0.25\nFB19 1.125 1 0.25\nFB20 1.125 1 0.25\n"
+    ]
+  ],
+  "classification": "invalid heap index; unplanned initial fixture rejected and excluded from ordinary goldens",
+  "events": [
+    {
+      "action": 0,
+      "op": "init",
+      "phase": "begin"
+    },
+    {
+      "action": 0,
+      "changes": {},
+      "op": "init",
+      "phase": "end",
+      "result": {
+        "MAX_FIT": 10000,
+        "MAX_OBSN": 2,
+        "MAX_PARAMS": 2000,
+        "MAX_PSR": 2,
+        "longdouble_bytes": 16,
+        "natural_controls": {
+          "AverageResiduals": 0,
+          "SWGPAmp": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "SWGPC": 0,
+          "SWGPGam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "T2globalEfac": {
+            "bits": "3ff0000000000000",
+            "type": "binary64"
+          },
+          "TNBandDMAmp": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNBandDMC": 0,
+          "TNBandDMGam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNChromAmp": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNChromC": 0,
+          "TNChromGam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNChromIdx": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNChrom_log_factor": {
+            "bits": "4000000000000000",
+            "type": "binary64"
+          },
+          "TNChrom_log_freqs": 0,
+          "TNDMAmp": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNDMC": 0,
+          "TNDMGam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNDM_log_factor": {
+            "bits": "4000000000000000",
+            "type": "binary64"
+          },
+          "TNDM_log_freqs": 0,
+          "TNGlobalEF": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNGlobalEQ": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedAmp": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedAmp2": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedC": 0,
+          "TNRedCorner": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedFLow": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedGam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRedGam2": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNRed_log_factor": {
+            "bits": "4000000000000000",
+            "type": "binary64"
+          },
+          "TNRed_log_freqs": 0,
+          "TN_QpLam": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TN_QpPeriod": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TN_QpRatio": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TN_QpSig": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "TNsubtractChrom": 0,
+          "TNsubtractDM": 0,
+          "TNsubtractPoly": 33686017,
+          "TNsubtractRed": 0,
+          "TNsubtractSWGP": 0,
+          "auto_constraints": 0,
+          "binaryModel": "NONE",
+          "bootStrap": 0,
+          "calcShapiro": 1,
+          "caller_nchromx_after": 119,
+          "caller_ne_sw_ifuncN_after": 117,
+          "cgw_mc": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "clkOffsN": 0,
+          "constraint_efactor": {
+            "bits": "430c6bf526340000",
+            "type": "binary64"
+          },
+          "correctTroposphere": 1,
+          "deleteFileName": "NONE",
+          "detL": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "dilateFreq": 1,
+          "dmOffset": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "dm_series_type": 0,
+          "dmoffsCMnum": 0,
+          "dmoffsDMnum": 0,
+          "eclCoord": 0,
+          "eopc04_file": "/earth/eopc04_IAU2000.62-now",
+          "fdjump_log": 1,
+          "fdjump_pint_format": 0,
+          "filterStr": "",
+          "fitFunc": "default",
+          "fitMode": 0,
+          "fixedFormat": 0,
+          "fjumpID": "",
+          "ifuncN": 0,
+          "ipm": 1,
+          "jboFormat": 0,
+          "nCompanion": 0,
+          "nDMEvents": 0,
+          "nJumps": 0,
+          "nPhaseJump": 0,
+          "nQuad": 0,
+          "nStorePrecision": 0,
+          "nSx": 0,
+          "nT2efac": 0,
+          "nT2equad": 0,
+          "nTNBandNoise": 0,
+          "nTNECORR": 0,
+          "nTNEF": 0,
+          "nTNEQ": 0,
+          "nTNGroupNoise": 0,
+          "nTNSECORR": 0,
+          "nTNSQ": 0,
+          "nTNShapeletEvents": 0,
+          "nTelDX": 0,
+          "nTelDY": 0,
+          "nTelDZ": 0,
+          "nToffset": 0,
+          "nWhite": 0,
+          "name": "NOT SET",
+          "nconstraints": 0,
+          "ndmx": 0,
+          "ne_sw": {
+            "bits": "4010000000000000",
+            "type": "binary64"
+          },
+          "nfdJumps": 0,
+          "nits": 1,
+          "noWarnings": 0,
+          "nobs": 0,
+          "orbifuncN": 0,
+          "passStr": "",
+          "planetShapiro": 1,
+          "quad_ifuncN_c": 0,
+          "quad_ifuncN_p": 0,
+          "quad_ifunc_geom_c": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "quad_ifunc_geom_p": {
+            "bits": "0000000000000000",
+            "type": "binary64"
+          },
+          "refphs": 0,
+          "rescaleErrChisq": 1,
+          "robust": 0,
+          "setUnits": 0,
+          "simflag": 0,
+          "sorted": 0,
+          "swm": 0,
+          "t2cMethod": 1,
+          "timeEphemeris": 1,
+          "tzrsite": "NULL",
+          "units": 1,
+          "useCalceph": 0,
+          "useTNOrth": 0,
+          "whiteNoiseModelFile": "NULL"
+        },
+        "sizeof_pulsar": 5673584
+      }
+    },
+    {
+      "action": 1,
+      "op": "stream",
+      "phase": "begin"
+    }
+  ],
+  "executable_sha256": "f4b3a76be58621b69e3408674c614bfd3d3bee79e33a984611dd89f44ed7c182",
+  "portable_numeric_result": null,
+  "reproduction_limit": "The early harness executable hash and raw partial events are retained; that pre-freeze harness source was not separately frozen. The unsafe index is source-inspected and deliberately excluded from rerun suites. No portable termination or numerical result is claimed.",
+  "returncode": -10,
+  "source": "readParfile.C:2129-2137 has no range check; FB20 writes index 20 of a 20-element array",
+  "source_sha256": "ecdbec472eff256ab1c7d875a4ea56536c146012599684408b03fe738ac7550e",
+  "stderr": "",
+  "stdout": ""
+}
