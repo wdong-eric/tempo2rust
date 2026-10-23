@@ -1,0 +1,24 @@
+shared_coverage_mutations 0
+rustc: PASS
+cargo: PASS
+cc: PASS
+fc: PASS
+dependencies: PASS
+format: PASS
+tests: PASS
+clippy: PASS
+release_resource_tests: PASS
+release_build: PASS
+terrestrial: PASS
+release_terrestrial: PASS
+resource_recovery: PASS
+resource_recovery_release: PASS
+terrestrial_contract_mutations: PASS
+terrestrial_4ns_contract_mutations: PASS
+M1b stage gates, 4 ns response, resource/CLI recovery and M1a regressions: PASS
+debug_fit_library 0
+release_tests 0
+release_fit_library 0
+final_format 0
+final_clippy 0
+M2: 4 open numerical gate failures; see verification/m2/open_gate_failures.json

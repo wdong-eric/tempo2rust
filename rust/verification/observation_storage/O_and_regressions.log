@@ -1,0 +1,8 @@
+fmt
+clippy
+debug_tests
+debug_direct
+release_tests
+release_direct
+redirected_clock_JPL_M1_M2
+O exact checks and unchanged regressions finished; four M2 failures retained.

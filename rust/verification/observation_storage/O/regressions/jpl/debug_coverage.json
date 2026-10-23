@@ -1,0 +1,242 @@
+{
+  "boundary_events": 1,
+  "exact_events": 1439,
+  "functions": {
+    "dimension": {
+      "isolated": [],
+      "ordinary": [
+        "helper_interpolation",
+        "state_sequences_be",
+        "state_sequences_le"
+      ],
+      "source": "jpleph.c:470-481"
+    },
+    "interp": {
+      "isolated": [
+        "max_cheby_assertion"
+      ],
+      "ordinary": [
+        "helper_interpolation",
+        "state_sequences_be",
+        "state_sequences_le",
+        "zero_coefficients"
+      ],
+      "source": "jpleph.c:315-433"
+    },
+    "jpl_close_ephemeris": {
+      "isolated": [],
+      "ordinary": [
+        "init_failures",
+        "init_injected_alloc_1",
+        "init_injected_read_1",
+        "init_injected_read_2",
+        "init_injected_read_3",
+        "init_injected_read_4",
+        "init_injected_read_5",
+        "init_injected_seek_1",
+        "init_optional_outputs",
+        "lifetime_overwrite_be",
+        "lifetime_overwrite_le",
+        "lifetime_replace_be",
+        "lifetime_replace_le"
+      ],
+      "source": "jpleph.c:884-890"
+    },
+    "jpl_get_constant": {
+      "isolated": [],
+      "ordinary": [
+        "constant_failures",
+        "constant_partial_be",
+        "constant_partial_le",
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le"
+      ],
+      "source": "jpleph.c:895-917"
+    },
+    "jpl_get_double": {
+      "isolated": [
+        "u2_packed_au",
+        "u2_packed_emrat"
+      ],
+      "ordinary": [
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le"
+      ],
+      "source": "jpleph.c:75-78"
+    },
+    "jpl_get_long": {
+      "isolated": [],
+      "ordinary": [
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le"
+      ],
+      "source": "jpleph.c:80-83"
+    },
+    "jpl_init_ephemeris": {
+      "isolated": [
+        "unterminated_title"
+      ],
+      "ordinary": [
+        "init_failures",
+        "init_injected_alloc_1",
+        "init_injected_read_1",
+        "init_injected_read_2",
+        "init_injected_read_3",
+        "init_injected_read_4",
+        "init_injected_read_5",
+        "init_injected_seek_1",
+        "init_optional_outputs",
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le",
+        "nan_ratio",
+        "threshold_count",
+        "title_zero"
+      ],
+      "source": "jpleph.c:698-875"
+    },
+    "jpl_init_error_code": {
+      "isolated": [],
+      "ordinary": [
+        "constant_failures",
+        "init_failures",
+        "init_injected_alloc_1",
+        "init_injected_read_1",
+        "init_injected_read_2",
+        "init_injected_read_3",
+        "init_injected_read_4",
+        "init_injected_read_5",
+        "init_injected_seek_1",
+        "init_optional_outputs"
+      ],
+      "source": "jpleph.c:664-669"
+    },
+    "jpl_pleph": {
+      "isolated": [
+        "pleph_ipt_one_past"
+      ],
+      "ordinary": [
+        "absent_quantities_be",
+        "absent_quantities_le",
+        "canonical_natural_status",
+        "de405_truncated_pleph",
+        "pleph_pairs_be",
+        "pleph_pairs_le"
+      ],
+      "source": "jpleph.c:135-237"
+    },
+    "jpl_state": {
+      "isolated": [
+        "state_ipt_one_past",
+        "nan_epoch",
+        "tiny_step_record_cast",
+        "coefficient_offset",
+        "nut_four_slot_overwrite"
+      ],
+      "ordinary": [
+        "de405_full",
+        "de405_truncated_state",
+        "non_power_interval",
+        "partial_cache_be",
+        "partial_cache_le",
+        "partial_far_136_be",
+        "partial_far_136_le",
+        "partial_far_137_be",
+        "partial_far_137_le",
+        "read_failure_before_first_success",
+        "seek_failure_recovery",
+        "state_sequences_be",
+        "state_sequences_le",
+        "zero_au"
+      ],
+      "source": "jpleph.c:564-662"
+    },
+    "swap_32_bit_val": {
+      "isolated": [],
+      "ordinary": [
+        "helper_interpolation",
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le"
+      ],
+      "source": "jpleph.c:443-449"
+    },
+    "swap_64_bit_val": {
+      "isolated": [],
+      "ordinary": [
+        "helper_interpolation",
+        "layout_absent_be",
+        "layout_absent_le",
+        "layout_bad_extended_be",
+        "layout_bad_extended_le",
+        "layout_extended_be",
+        "layout_extended_le",
+        "layout_pre405_be",
+        "layout_pre405_le",
+        "layout_scan400_be",
+        "layout_scan400_le",
+        "layout_small430_be",
+        "layout_small430_le",
+        "partial_cache_be",
+        "partial_cache_le",
+        "partial_far_136_be",
+        "partial_far_136_le",
+        "partial_far_137_be",
+        "partial_far_137_le"
+      ],
+      "source": "jpleph.c:451-463"
+    }
+  },
+  "isolated": 10,
+  "reference_events": 1443,
+  "scenarios": 55,
+  "unreachable_events": 3
+}

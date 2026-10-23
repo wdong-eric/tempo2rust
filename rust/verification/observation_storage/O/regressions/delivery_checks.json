@@ -1,0 +1,52 @@
+{
+  "cases_per_profile": {
+    "exact": 142,
+    "safe_Rust_boundary": 8,
+    "unrun_cycle": 1
+  },
+  "counts_per_profile": {
+    "discrete": 68256,
+    "finite": 34818,
+    "nonfinite": 196
+  },
+  "executed_commit": "a70db2683c418fa655ff1fa0084e8468c2c26f70",
+  "glob_supplemental": {
+    "helper_patterns": 18,
+    "integrated_cases": 3,
+    "mutations": 9,
+    "original_delivery_mismatches_rejected": 8
+  },
+  "independent_repositories": {
+    "tempo2": {
+      "head": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+      "status": ""
+    },
+    "validation/reference": {
+      "head": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+      "status": ""
+    }
+  },
+  "jpl": "PASS: unchanged I gates",
+  "m1a": "PASS",
+  "m1b": "PASS (via M2)",
+  "m2_exit": 1,
+  "m2_failures": [
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10"
+  ],
+  "max_finite_difference": 0,
+  "native_symbols": {
+    "debug": {
+      "binary_sha256": "11923da288cbb6532bfd09a55f54246a9ee05d816446a02affc3ff24a71d56fa",
+      "retained_C_clock_or_JPL_symbols": false
+    },
+    "release": {
+      "binary_sha256": "a35e70701fb929829c4c42e3da6d172bd9021b327bc58f079a67900f8c2971a6",
+      "retained_C_clock_or_JPL_symbols": false
+    }
+  },
+  "profiles_identical": true,
+  "status": "L corrected gates PASS; central acceptance pending"
+}

@@ -1,0 +1,26 @@
+{
+  "jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization": {
+    "command": [
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/deps/tempo2_rust-ea61be09d25d8f48",
+      "--exact",
+      "jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization",
+      "--ignored",
+      "--test-threads=1"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "\nrunning 1 test\ntest jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s\n\n"
+  },
+  "stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup": {
+    "command": [
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/deps/tempo2_rust-ea61be09d25d8f48",
+      "--exact",
+      "stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup",
+      "--ignored",
+      "--test-threads=1"
+    ],
+    "returncode": 0,
+    "stderr": "",
+    "stdout": "\nrunning 1 test\ntest stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 34 filtered out; finished in 0.00s\n\n"
+  }
+}

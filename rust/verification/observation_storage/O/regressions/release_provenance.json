@@ -1,0 +1,20 @@
+{
+  "after_removal_changed_root": [
+    {
+      "coverage_mjd": [
+        0.0,
+        10.0
+      ],
+      "path": "/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/clock-provenance-4091n8cf/root-a/clock/edge.clk",
+      "role": "inspected clock",
+      "sha256": "744442cf61e04b6b63f928c72160d273e83ede2959e512dac11a655490460742",
+      "size_bytes": 15
+    }
+  ],
+  "identity_before_index": true,
+  "index_count": 1,
+  "indexed_sha256": "8fbe5740a487f0f889c51f1d03d9d6e393f9053630661cc5581615d4133770c0",
+  "sample_sha256": "744442cf61e04b6b63f928c72160d273e83ede2959e512dac11a655490460742",
+  "status": "PASS",
+  "value_s": 7
+}

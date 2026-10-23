@@ -1,0 +1,13 @@
+debug_direct
+debug_glob_supplemental
+debug_provenance
+release_direct
+release_glob_supplemental
+release_provenance
+comparator_mutations
+debug_jpl
+release_jpl
+jpl_comparator_mutations
+m1a
+m2
+L direct/JPL/M1 gates pass; M2 remains unaccepted with exactly four historical diagnostics.

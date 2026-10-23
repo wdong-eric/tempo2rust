@@ -1,0 +1,12 @@
+test_claimed_probe_without_output_is_rejected (test_comparator.ExecutionTests.test_claimed_probe_without_output_is_rejected) ... ok
+test_success_with_stale_output_and_no_probe_is_rejected (test_comparator.ExecutionTests.test_success_with_stale_output_and_no_probe_is_rejected) ... ok
+test_zero_selected_tests_with_output_is_rejected (test_comparator.ExecutionTests.test_zero_selected_tests_with_output_is_rejected) ... ok
+test_changed_boundary_disposition_rejected (test_comparator.IsolatedTests.test_changed_boundary_disposition_rejected) ... ok
+test_complete_control (test_comparator.ProjectionTests.test_complete_control) ... ok
+test_mutations (test_comparator.ProjectionTests.test_mutations) ... ok
+test_projection_classification_controls (test_comparator.ProjectionTests.test_projection_classification_controls) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 3.224s
+
+OK

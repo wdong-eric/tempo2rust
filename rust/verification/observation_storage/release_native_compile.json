@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/opt/homebrew/Cellar/gcc/16.2.0/bin/g++-16",
+    "-O2",
+    "-std=gnu++11",
+    "-DHAVE_CONFIG_H",
+    "-I/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/observation_storage/build/release/source",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/observation_storage_port/probe.cc",
+    "-lquadmath",
+    "-o",
+    "/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/observation_storage/build/release/probe"
+  ],
+  "returncode": 0,
+  "stderr": "",
+  "stdout": ""
+}
