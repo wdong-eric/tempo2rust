@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for I/J acceptance, K delivery and L's clock/table Rust release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for I/J acceptance, K's review correction, L's Rust transfer and M's numeric reference release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -38,6 +38,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0024](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0024-parameter-reference-review-correction.md) records central's exact replay of K's 306 cases and returns a verifier identity defect for correction. The `--no-build` shortcut can attribute a changed executable to the frozen reference hash. K acceptance remains pending; reference values are unchanged.
 
+[Decision 0025](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0025-numeric-utility-reference-stage.md) releases M's independent TKlongdouble/tempo2Util reference stage. It covers shared numeric, text, conversion, copy/link and diagnostic responsibilities while L owns Rust. It changes no numerical representation or acceptance gate.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -55,8 +57,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only; delivered evidence now read-only | Executed evidence accepted by decision 0021 at `360cc03`; nine unrun cases remain open | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
 | [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Delivered; central replay passes, verifier identity correction requested by 0024 | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
 | [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | `rust/`, new `validation/clocks_port/`, narrow JPL output-routing plumbing only | Released by decision 0023 after I ownership closure | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
+| [M Numeric utility reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/13-numeric-utility-reference.md) | `validation/numeric_toolkit/` only | Released by decision 0025; independent reference work while L owns Rust | `REPORT.md`, complete selected-function/header inventory, bounded numeric/text/state evidence and actual execution-identity controls |
 
-A through K have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K's parameter/PAR reference awaits central review. L now owns the clock/table Rust transfer. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through K have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K is correcting its verifier identity under 0024. L owns the clock/table Rust transfer, and M prepares the independent numeric utility reference. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
@@ -110,6 +113,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
 | Parameter/PAR reference | K's 306 cases replay exactly; 0024 identity correction pending | Initialized versus unwritten state, scalar grammar, links/defaults and reader lifecycles; fresh execution provenance required before acceptance |
 | Clock/table Rust contract | L released by decision 0023 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
+| Numeric utility reference | M released by decision 0025 | Shared numeric/header, text, rounding/conversion, vector/rotation, copy/link and diagnostic evidence; no Rust gate or representation change |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
 
