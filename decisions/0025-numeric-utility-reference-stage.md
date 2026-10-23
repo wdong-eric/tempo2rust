@@ -52,3 +52,7 @@ Use exact same-profile source regeneration for numerical bits/classes, integer r
 Known undefined operations can be classified from source without executing them. Do not retry J's withheld experiments or work around any tool restriction. If an ordinary fixture unexpectedly reaches a boundary, isolate its partial evidence, remove it from successful numerical claims and explain the corrected classification; do not silently discard it.
 
 Return `validation/numeric_toolkit/REPORT.md`, reproducible commands, coherent commits, current executed identities, complete inventories/projections, raw and comparison evidence, numerical/format/state results, mutation controls and all unrun/ABI/platform limits. Identify later Rust representation/API decisions without deciding them here. Rug128, M2's exact mode-order gate and all accepted numerical budgets remain unchanged. Central will review this reference before releasing its implementation.
+
+## Dispatch
+
+Created **Assignment M: TEMPO2 numeric utility reference**, chat `01a167fd-6e4d-7b31-ae87-f1fafd486df3`, in the local `rustify-tempo2` project from release commit `c035834`. Its active turn acknowledged the owned reference directory and began the source/handoff review. L remains the sole Rust owner; central continues K's review.
