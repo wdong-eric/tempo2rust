@@ -3,7 +3,7 @@ import copy
 import json
 import re
 from profile import HERE, BUILD, save, sha
-from run import compile_probe, execute, compare
+from run import compile_probe, execute, compare, compare_manifest
 
 
 def ends(case, op):
@@ -19,6 +19,27 @@ def differs(expected,actual):
 def semantic(result):
     # Executable filenames and diagnostic source paths must not kill a mutation.
     return {k:result[k] for k in ('returncode','timeout','events')}
+
+
+def identity_controls(manifest):
+    """Test the same manifest gate used by normal verification, not a parallel gate."""
+    controls=[]
+    for name,path in [('compiler',('compiler_sha256',)),
+                      ('runtime',('runtime_hashes','libquadmath.0.dylib')),
+                      ('dependency',('dependencies','observatory.C'))]:
+        changed=copy.deepcopy(manifest);node=changed['native']
+        for key in path[:-1]:node=node[key]
+        node[path[-1]]='0'*64
+        try:compare_manifest(manifest,changed)
+        except AssertionError as error:controls.append(dict(name=name,rejected=str(error)))
+        else:raise AssertionError('Stable identity mutation escaped: '+name)
+    changed=copy.deepcopy(manifest)
+    for key in ('executable_sha256','link_map_sha256'):
+        changed['native'][key]='0'*64
+    compare_manifest(manifest,changed)
+    return dict(status='PASS',rejected=controls,changed_rebuild_bytes_allowed=True,
+                gate='run.compare_manifest',verifier_sha256=sha((HERE/'verify.py').read_bytes()),
+                runner_sha256=sha((HERE/'run.py').read_bytes()))
 
 
 def contracts(rows):

@@ -3,6 +3,7 @@
   "executed_cases": 142,
   "full_ordered_fresh_replay": true,
   "harness_sha256": "74f47062c2ad2acd93a95e7a6b0910336ee4b5ff09416a139a41987ccf0f62a3",
+  "identity_controls_passed": 3,
   "mode": "check",
   "native": {
     "command": [
@@ -43,7 +44,7 @@
       "global.C:1-64",
       "global.C:176-200"
     ],
-    "link_map_sha256": "b0c4b09751b1eb8e9fde0ac3e9accd3ef9854b2dddf7ff84090888e034111697",
+    "link_map_sha256": "52cf6591de2dad7002b52c8b8e533c7239ff00a4ab96b41d1f6a98e9b6def1b0",
     "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
     "primary": {
       "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
@@ -58,6 +59,7 @@
     },
     "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value."
   },
+  "runner_sha256": "0f4d1ccba95dd42372332d61dacfa9a2440ab4859aa5a3676549ea8bd5567e2f",
   "source": {
     "archive_selected_defined_symbols": {
       "convertTOA": [],
@@ -257,5 +259,7 @@
     "support_archive_sha256": "313507c5063cb6a8156a0e5fd0f752e2baa59a77c78b5b32822d8efeddd2dbf5",
     "support_policy": "Raw primary, observatory, TKlog, TKlongdouble and tempo2Util; verbatim global.C data prefix and CVSdisplayVersion. No archive is linked. A2 config and archive symbol evidence are verified; initialiseOne and A2 resource tracing never execute."
   },
+  "stable_identity_verified": true,
+  "verifier_sha256": "3ee721fa854c419bdf4dc575aef5e55b20f1004a1d32ebf786c93aff28d7eefa",
   "withheld_cases": 9
 }

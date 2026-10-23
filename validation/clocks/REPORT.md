@@ -2,7 +2,7 @@
 
 Delivered for central review on 23 October 2026 under release `67aa77c` and decision 0018. This is bounded source-reference evidence. It changes no Rust implementation, defines no Rust tolerance, accepts no milestone and does not close the broader core inventory.
 
-The supported suite passes: **151 catalogued cases, 142 executed cases (122 ordinary and 20 terminating), 972 completed ordered actions**, exact fresh-process replay, **27 behavioral assertions, 19 rejected artifact mutations and 12 detected compiled source mutations**. The GCC coverage build executes all **32 primary function/constructor/lambda entries**, with per-case counts. Nine invalid-access/cycle probes remain **unrun**, as explained below; no successful vector or sanitizer classification is claimed for them.
+The supported suite passes: **151 catalogued cases, 142 executed cases (122 ordinary and 20 terminating), 972 completed ordered actions**, exact fresh-process replay, **27 behavioral assertions, 19 rejected artifact mutations, three rejected native-identity mutations and 12 detected compiled source mutations**. The GCC coverage build executes all **32 primary function/constructor/lambda entries**, with per-case counts. Nine invalid-access/cycle probes remain **unrun**, as explained below; no successful vector or sanitizer classification is claimed for them.
 
 ## Ownership and commits
 
@@ -10,7 +10,8 @@ Only `validation/clocks/` was edited or staged. Existing Rust/JPL work and the n
 
 - `488743a` — `docs(clocks): pin Assignment J source profile and state contracts`.
 - `d70b075` — `test(clocks): export pinned table routes cache and SAT jump behavior`.
-- The final owned report/coverage commit follows these stages and is identified in the delivery message. It includes the measured function matrix, this report and removal of one trailing space in the runner; no numerical implementation changes follow the verified exporter.
+- `4a7c1a3` — `docs(clocks): deliver measured coverage results and explicit probe limits`.
+- The final owned verifier/report correction follows these stages and is identified in the delivery message. It consolidates the stable native-identity gate and tests it with changed compiler/runtime/dependency hashes; the numerical exporter, fixtures and goldens are unchanged.
 
 ## Reproduction and exact build
 
@@ -27,7 +28,7 @@ git -C tempo2 status --short
 git -C validation/reference status --short
 ```
 
-Those commands were executed. `--record` deliberately creates/replaces only J's checked artifacts; normal `python3 validation/clocks/run.py` checks them and runs all mutation checks. The final `--skip-mutations` invocation reran the complete source/fixture/resource identity gates and two fresh executions of each supported case after the final recording. Mutation checks had already passed against that same exporter and fixture set. Coverage is an additional instrumented run, not the numeric oracle. No Rust test or other assignment's suite was run.
+Those commands were executed. `--record` deliberately creates/replaces only J's checked artifacts; normal `python3 validation/clocks/run.py` checks them and runs all mutation checks. The final `--skip-mutations` invocation reran the complete source/fixture/resource/native identity gates, three focused identity mutation controls, and two fresh executions of each supported case after the verifier correction. Mutation checks had already passed against that same exporter and fixture set. Coverage is an additional instrumented run, not the numeric oracle. No Rust test or other assignment's suite was run.
 
 For a single supported case, use e.g. `python3 validation/clocks/run.py --case pks_real`. This executes twice and checks the action schema and replay; only the full command compares with the committed whole-suite oracle. Case files are restored before each fresh run; within each run, ordered resource mutations and global state are retained. Withheld case IDs remain unrun even when selected individually.
 
@@ -129,7 +130,7 @@ tai2tt_tai.clk    46161bbb915b3b4fa4e910f327833795df3950410b18e01cd6118648dff869
 
 Unexecuted clock locations include glob allocation/read errors (219–226), an invalid-predecessor safeguard (497–498), public handling of a broken cached accumulator chain (866–867), and a literal UTC-versus-TT(TAI) identity return (777). The broken helper itself is executed with controlled arguments. Compiler-associated closing/return locations 133 and 238 have no execution counters. These gaps remain visible in the matrix. Observatory geometry and general logging/BAT input coverage are not claimed merely because some dependencies execute.
 
-The comparator checks recursive types, exact object-field sets, full array lengths/order, case/action IDs, actual query lists, slot counts/destinations/byte masks, finite bits and decimal text, nonfinite classes, return codes and complete diagnostic streams. It rejects missing/extra cases, events and fields before indexed comparison. Absolute workspace/build paths alone are normalized; diagnostic text, line numbers and spacing remain exact for the recorded host. Native compiler/source/config/runtime hashes and full resource identity are checked separately. Default verification never rewrites the ordinary/isolated goldens.
+The comparator checks recursive types, exact object-field sets, full array lengths/order, case/action IDs, actual query lists, slot counts/destinations/byte masks, finite bits and decimal text, nonfinite classes, return codes and complete diagnostic streams. It rejects missing/extra cases, events and fields before indexed comparison. Absolute workspace/build paths alone are normalized; diagnostic text, line numbers and spacing remain exact for the recorded host. The shared `run.compare_manifest` gate checks native compiler/source/config/runtime hashes, dependency/primary/generated-header/global-slice identities, flags and full resource identity. It compares all native fields except the recorded executable/link-map/compile-log hashes; these build-output bytes need not match across rebuilds. `outputs/identity_checks.json` demonstrates rejection of independently changed compiler, libquadmath and observatory-dependency hashes through this same gate, and confirms changed executable/link-map bytes are allowed. These controls run during the normal whole-suite check, including `--skip-mutations`. Default verification never rewrites the ordinary/isolated goldens. The final `last_execution.json` has mode `check`, `stable_identity_verified=true`, three passed identity controls, 142 executed cases and nine withheld cases, and hashes the actual runner/verifier used. Central independently reported exact replay of the committed d70b075 numerical evidence (1,964 events), all 19 artifact mutations and all 12 compiled source mutations; that confirmation does not itself constitute milestone acceptance.
 
 The 19 artifact mutations cover missing/extra/reordered cases and events, fields, component count/destination order, binary64 bits, nonfinite class, binary32 weights, shifted epoch, loaded state, write mask, exit status/last stage and an unrun→passed misclassification.
 
@@ -161,7 +162,7 @@ Central still owns the later Rust contract: query-specific dispositions for unde
 
 - `cases.json`, `fixtures.py`: complete declarative inputs/actions, expected termination locations and explicit unrun membership.
 - `probe.cc`, `run.py`: canonical-source exporter, resource setup, exact regeneration and comparison.
-- `verify.py`, `outputs/checks.json`: behavior assertions and artifact/compiled-source mutations.
+- `verify.py`, `outputs/checks.json`, `outputs/identity_checks.json`: behavior assertions and artifact/compiled-source/native-identity mutations.
 - `coverage.py`, `outputs/coverage.json`: measured function/case/dependency matrix and unexecuted locations.
 - `profile.py`, `profile.json`, `outputs/manifest.json`, `outputs/last_execution.json`: raw source/configuration, active-profile, compiler/runtime/resource and actual execution identities.
 - `outputs/reference.json`: complete ordered ordinary/terminating records; `outputs/isolated.json`: explicit unrun records.
@@ -174,4 +175,6 @@ isolated.json   742718f00e94aa576d3837283c80647e0bbd4aa8e33e70de0708e3d959d789a9
 manifest.json   551df45df59ba8837c307d1bebc15a0d69e786dbdefed0bc655ae66f8ec31eb8
 checks.json     d46eda1ba21830276b9b4bd7157fea8eca9659174cfe110921363b85642147ed
 coverage.json   4521f0e7921019eb1f16f600779fe559ce1c1cc3dd808f69053a243b434a8672
+identity_checks.json 2112cfd8e7edefc2975c60ec43fb5b68114ba3c33ca5d88f018629ad1c818f73
+last_execution.json  183d03cc93cc6e057cefdcb8c06eb813037817eee5543875528ab5f64a750dcf
 ```

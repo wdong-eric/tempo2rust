@@ -102,6 +102,15 @@ def compare(expected,actual,path='$'):
     elif expected!=actual:raise AssertionError(f'{path}: {str(expected)[:180]!r} != {str(actual)[:180]!r}')
 
 
+def compare_manifest(recorded, actual):
+    """Enforce stable execution identity; rebuilt binary/map/log bytes are recorded."""
+    for key in ('resource_manifest','harness_sha256','fixtures_sha256','cases_sha256','source'):
+        compare(recorded[key],actual[key],'manifest.'+key)
+    rebuilt={'executable_sha256','link_map_sha256','compile_log_sha256'}
+    compare({k:v for k,v in recorded['native'].items() if k not in rebuilt},
+            {k:v for k,v in actual['native'].items() if k not in rebuilt},'manifest.native')
+
+
 def validate_case(case,result):
     assert result['id']==case['id']
     assert result['returncode']==(0 if case['classification']=='ordinary' else 1),(case['id'],result['returncode'],result['stderr'])
@@ -146,13 +155,10 @@ def main():
             compare(json.loads((OUTPUTS/'reference.json').read_text()),payload)
             compare(json.loads((OUTPUTS/'isolated.json').read_text()),failures)
             compare(json.loads((HERE/'cases.json').read_text()),cases)
-            compare(json.loads((OUTPUTS/'manifest.json').read_text())['resource_manifest'],manifest)
-            recorded=json.loads((OUTPUTS/'manifest.json').read_text())
-            for key in ('harness_sha256','fixtures_sha256','cases_sha256'):compare(recorded[key],profiles[key],key)
-            compare(recorded['source'],profiles['source'],'source_profile')
-            for key in ('command','compiler','compiler_sha256','numeric_header_sha256','globals_prefix_sha256','globals_source_slices','dependencies','primary','profile','table_value_instrumentation','dynamic_libraries','runtime_hashes'):
-                compare(recorded['native'][key],profiles['native'][key],'native_profile.'+key)
-        save(OUTPUTS/'last_execution.json',dict(mode='record' if args.record else 'check',native=native_profile,source=source_profile,harness_sha256=sha((HERE/'probe.cc').read_bytes()),cases=len(cases),executed_cases=len(ordinary),withheld_cases=len(isolated),full_ordered_fresh_replay=True))
+            compare_manifest(json.loads((OUTPUTS/'manifest.json').read_text()),profiles)
+        from verify import identity_controls
+        save(OUTPUTS/'identity_checks.json',identity_controls(profiles))
+        save(OUTPUTS/'last_execution.json',dict(mode='record' if args.record else 'check',native=native_profile,source=source_profile,harness_sha256=sha((HERE/'probe.cc').read_bytes()),cases=len(cases),executed_cases=len(ordinary),withheld_cases=len(isolated),full_ordered_fresh_replay=True,stable_identity_verified=not args.record,identity_controls_passed=3,runner_sha256=sha((HERE/'run.py').read_bytes()),verifier_sha256=sha((HERE/'verify.py').read_bytes())))
         print('PASS: complete ordered artifacts, fresh-process replay, inputs and source profile')
     if not args.case and not args.skip_mutations:
         from verify import verify
