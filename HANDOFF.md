@@ -103,6 +103,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | Bounded reference accepted by decision 0032 at `68de89a`; ownership window closed |
 | Assignment O: Rust parameter storage foundation | `01a168ce-9a6e-7a20-b8ff-f5df761fa336` | Sole Rust owner under decision 0033; dispatched from `73fc537` |
 | Assignment P: TEMPO2 preprocessing reference | `01a168d8-48fa-7722-82db-2d2b6ec8916f` | Owns `validation/preprocessing/` under decision 0034; dispatched from `e68806e` |
+| Assignment Q: TEMPO2 specialized PAR reference | `01a168e7-6a90-7d63-b906-362363a4c15f` | Owns `validation/par_specialized/` under decision 0035; dispatched from `ad6fbf6` |
 
 ## Shared working design
 
