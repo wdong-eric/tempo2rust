@@ -10,7 +10,7 @@ use std::{
 
 // Necessity: source-visible stdio read-ahead cannot be replaced by Rust File.
 // The opaque pointer is never dereferenced by Rust or exposed outside this module.
-// Every call below has one live owner and exclusive access; libc retains no buffer.
+// Every call has one live owner and exclusive access; libc retains no caller buffer.
 unsafe extern "C" {
     fn fdopen(fd: c_int, mode: *const c_char) -> *mut c_void;
     fn fread(ptr: *mut c_void, size: usize, count: usize, stream: *mut c_void) -> usize;

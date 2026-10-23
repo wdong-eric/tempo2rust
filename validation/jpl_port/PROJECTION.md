@@ -37,7 +37,7 @@ NaN and tiny-step record conversions fail at `record_conversion`; ncf=18 at
 four-slot nut at `output_storage`; overflowing/unterminated title at
 `title_conversion`. No sanitizer trace or process exit is a numerical oracle.
 Each isolated sequence is replayed; last safe Rust event and disposition are
-gated separately. New boundary tests cover direct third derivatives, invalid
+gated separately. New boundary tests cover direct acceleration demands, invalid
 selectors/counts, same-open-file provenance, fdopen ownership failure, independent
 handles, drop/reopen, and recovery. No race scheduling is needed.
 
