@@ -103,7 +103,7 @@ Preserve the source sign, units, association, casts and update order. Do not use
 
 ## Solver and uncertainty contract
 
-Use the nonaccelerated TEMPO2 SVD path from `TKsvd.C`/`TKfit.C`, ported to Rust using the existing fixed Rug128 representation for source `longdouble` operations. Keep intentional binary64 boundaries, including all calls equivalent to `TKsign_d(double,double)`; its sign test is `b >= 0`, not an unrestricted sign-bit copy. Preserve nonfused operation order and source math semantics.
+Use the nonaccelerated TEMPO2 SVD path from `TKsvd.C`/`TKfit.C`, ported to Rust using the existing fixed Rug128 representation for source `longdouble` operations. Keep intentional binary64 boundaries, including all calls equivalent to `TKsign_d(double,double)`; its sign test is `b >= 0`, not an unrestricted sign-bit copy. The running norm also passes through `TKretMax_d(double,double)` at `TKsvd.C:247`, narrowing both arguments and the return before assignment back to the extended norm. Preserve nonfused operation order and source math semantics.
 
 A2 disables BLAS/LAPACK/ACCEL_LSQ. A new binary64 QR, normal-equations solver, column normalization, a different rank threshold or a selectable solver backend is not authorized. Reuse Rug and existing error/numeric facilities; do not add a new numerical dependency for this bounded port. Preserve source attribution and licensing.
 

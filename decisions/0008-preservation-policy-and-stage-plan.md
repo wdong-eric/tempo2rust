@@ -39,6 +39,7 @@ The full objective is the transfer of the TEMPO2 core, not just the presently su
 | --- | --- | --- |
 | E: fitting | Separate implementation chat; owns `rust/` and `validation/fitting/`, returns `rust/M2_REPORT.md` | Release under decisions 0007 and 0008. M2 remains pending central review. |
 | F: core and fidelity inventory | Separate evidence chat; owns only `validation/coverage/`; maps pinned core sources, baseline Rust modules, unsafe sites and earlier departures | Release now. Read-only with respect to implementation and central decisions. |
+| G: binary reference | Separate evidence chat; owns only `validation/binary/`; probes all 14 source model dispatches and their derivatives, updates and mutations | Released by decision 0009. Independent of E/F; does not implement Rust or accept binary coverage. |
 | Existing-departure reconciliation | A subsequent implementation handoff after F's evidence and E's ownership window | Central review assigns concrete changes and source-observed regression targets; no silent grandfathering of deterministic fixes. |
 | Remaining timing/model/input/fitting/prediction stages | Separate bounded implementation chats, selected from F's complete inventory | Central contracts specify dependencies, reference fixtures and acceptance. A completed stage does not remove uncovered rows. |
 | Integration and transfer acceptance | Implementation checks plus central acceptance | Every core row has a reviewed disposition and evidence; correspondence, unsafe justifications, regression behavior and remaining limitations are audited. |

@@ -1,0 +1,33 @@
+# Binary model reference stage
+
+Central decision, 23 October 2026. Release Assignment G to prepare binary-model reference evidence independently of E's fitting implementation. G owns only `validation/binary/`. This is preparation for the remaining core transfer; it neither changes Rust nor accepts a binary-model milestone. Decisions 0008's bug-preservation, source-correspondence and unsafe rules govern the work.
+
+## Source contract
+
+The pinned [formResiduals.C:493](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/formResiduals.C:493) dispatches the following 14 model names when PB or FB is set: `BT`, `BTJ`, `BTX`, `ELL1`, `DD`, `DDK`, `DDS`, `MSS`, `DDGR`, `T2`, `T2-PTA`, `DDH`, `ELL1H` and `ELL1k`. The current isolated Rust profile covers none of these model calculations. A complete binary inventory must account for all 14, including partially covered paths rather than dropping difficult models.
+
+The binary routines supply `torb`; the caller stores it in the observation, adds it to the BBAT-relative spin time and to the fractional-day term, and sets `pet = bbat - torb / SECDAY`. These signs and the source operation order are part of the contract. Declaring BINARY alone is not the residual dispatch condition. Preserve the distinction between native return precision and the fit callback: for example BT/ELL1 return `double`, DD returns `longdouble`, and [t2FitFunc_binaryModels](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/t2fit_stdFitFuncs.C:125) returns `double` even for DD.
+
+Parameter updates are model-specific. For example, [updateBT](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/BTmodel.C:144) adds the PB fit increment directly, whereas [updateELL1](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/ELL1model.C:276) divides that increment by SECDAY. Their derivative coordinates must be observed together with their updates. Do not infer one generic physical-unit mapping from a shared parameter name.
+
+Source mutations and surprising calculations are required observations. [DDmodel.C:64](/Users/Eric.Dong/Downloads/tempo2rust/tempo2/DDmodel.C:64) warns and changes SINI above 1 to 1; the later Rust port must retain that behavior. BT fixes its local `edot` to zero while exposing an EDOT derivative/update route. Probe the actual behavior rather than correcting it or assuming agreement with an analytic derivative. Epochs before the orbit reference also exercise the source's integer-orbit and sign conventions.
+
+## Evidence requirements
+
+Use the canonical pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`. The verified A2 build at independent revision `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572` may be reused read-only, with its initializer correction and instrumentation explicitly recorded. Verify that the selected model and dispatcher sources correspond to the canonical pin apart from already recorded observational instrumentation. No additional scientific patch is authorized.
+
+Produce deterministic reference cases for every model: an ordinary finite delay case, multiple epochs before/after the orbit reference and across orbital phase, direct derivative and update callback probes, parameter-presence/default behavior, and relevant source state mutations. Start from supplied upstream test inputs where useful, retaining their identities, and use declared synthetic parameters to cover missing models/branches. Record every input value, its parsing/storage unit and its source coordinate conversion. Build an explicit matrix of optional branches, companion/subindex support and available derivative/update labels; ordinary baseline cases do not prove every branch has been exercised.
+
+For direct model probes, export the model's native return type before any wrapper narrowing and the wrapper output separately. For each update, export the before/after values/errors and supplied increment/error, preserving parameter flags and any mutated fields. Run delay/derivative/update probes from independently initialized or explicitly copied states, and add sequential-call cases where mutations affect subsequent results. Do not allow one probe's mutation to silently contaminate an unrelated golden.
+
+Export integrated `formResiduals` results with a declared original-order phase reference and both mean-removal settings for the fixed barycentric fixture path, retaining raw and centered residuals, `torb`, `pet`, full/reduced phase and pulse counts. Include an ordinary PKS example using the already accepted time/resource profile to establish the propagation-to-binary boundary. A resource-dependent or frame-dependent model must record the actual needed geometry/state rather than use fabricated zero vectors as observational data.
+
+Each case records finite/nonfinite/failure classification, diagnostics, source mutations and resource/input/build hashes. Encode nonfinite values explicitly as in decision 0008. Isolate upstream termination/undefined-state probes in disposable processes; capture exit status/signal and initialized output only. Do not fix or manufacture results for a failing source path. The existing DDH ideal-fixture failure and its unchanged 1 ns threshold remain separate recorded upstream behavior; numerical agreement with a future port does not assert that this upstream test passes.
+
+Deliver a reproducible exporter/runner, committed full-decimal inputs and reference outputs, a schema/coverage manifest and a report. Verify exact regeneration within this reference build and meaningful export/schema mutations such as missing model/label, altered parameter units, omitted state mutations or changed nonfinite class. Use independent analytic limits only as diagnostics with their assumptions stated; do not replace source expectations with the analytic answer when they differ.
+
+Finite Rust acceptance budgets will be specified by the central implementation contract after inspecting these exports, conditioning and source precision. G must report actual repeatability and numerical scales without inventing a passing Rust comparison or silently changing the existing M1/M2 gates. No Rust implementation or binary-fitting integration is authorized in G's directory-only assignment.
+
+## Sequencing
+
+E continues to own `rust/` and `validation/fitting/`; F owns `validation/coverage/`; G owns `validation/binary/`. G's reference work can proceed concurrently. The next Rust-writing assignment waits for an explicit ownership handoff after E and central review of F/G evidence. Central review will select dependency-ordered binary/model and existing-departure reconciliation batches while retaining all other uncovered core rows from F's inventory.
