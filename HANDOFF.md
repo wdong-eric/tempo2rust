@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for the preservation policy and E/F/G stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for the preservation policy and E/F/G/H stage releases. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -18,6 +18,8 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 [M2 fitting contract and E release](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0007-m2-fitting-contract-and-e-release.md) defines ZERO/F0–F3 fitting, the source SVD and mixed-precision boundaries, weighting, uncertainty rescaling, iteration behavior, fitting fixtures, comparison gates and source result/failure classifications. The linked source probe supports these decisions. [Decision 0008](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0008-preservation-policy-and-stage-plan.md) supersedes its bug-correction policy, requires module counterparts and justified unsafe boundaries, and releases the core/fidelity inventory. [Decision 0009](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0009-binary-reference-stage.md) releases independent binary-model reference evidence while E owns the Rust crate.
 
+[Decision 0010](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0010-svd-mode-comparison.md) permits paired singular-mode permutation in comparisons while preserving production ordering and all physical gates. [Decision 0011](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0011-jpl-reference-stage.md) releases JPL reference evidence before a later safe Rust replacement of the retained reader.
+
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
 ## Assignments and execution order
@@ -32,6 +34,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Released by decisions 0007 and 0008; fitting implementation | `rust/M2_REPORT.md` and fitting reference/verification evidence |
 | [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Released by decision 0008; baseline audit independent of E | Coverage inventory, behavior-difference ledger and `REPORT.md` |
 | [G Binary reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/07-binary-reference.md) | `validation/binary/` only | Released by decision 0009; reference evidence independent of E/F | All 14 binary dispatches, derivative/update/mutation evidence and `REPORT.md` |
+| [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Released by decision 0011; prepares source-faithful safe Rust replacement after E | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 
 A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete and accepted, with TEMPO2's meteorology fallback, valid numerical behavior and comparison gates preserved. E follows C and D as the next owner of the Rust crate and creates fitting evidence in its separate directory. The accepted reference and precision directories remain read-only inputs to implementation work; report needed changes rather than silently changing comparison evidence.
 
@@ -113,7 +116,7 @@ Each owner saves the report named in the assignment table and returns its absolu
 5. Any shared decision needed, with a recommended option and the evidence behind it.
 6. Which milestone criteria are satisfied and which remain open.
 
-The user can bring that report back to the central chat for review. Do not assume permission to send messages to other chats. Do not mark central decisions or milestone acceptance complete from an implementation chat.
+The user can bring that report back to the central chat for review. On 23 October 2026 the user explicitly authorized the central chat to coordinate implementation chats, including relaying central decisions and correction briefs. Central may therefore read delivery reports and send those follow-ups directly. This does not authorize implementation chats to message arbitrary chats or accept milestones. Do not mark central decisions or milestone acceptance complete from an implementation chat.
 
 ## Prompts for dispatch
 
