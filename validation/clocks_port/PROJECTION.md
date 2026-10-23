@@ -43,7 +43,9 @@ and DUP1. Source locations map explicitly to the named C counterpart and line.
 Case/build/runtime paths are substituted only at the presentation boundary.
 For any truncated diagnostic, compare with the original source path lengths
 (same-length temporary case roots and source-location mapping), then substitute
-paths. Never drop a diagnostic because it contains a path. Public library/CLI
+paths. Never drop a diagnostic because it contains a path. J captured stdout/stderr
+with Python universal-newline translation; apply the same CRLF/CR-to-LF
+presentation projection to those channels only (JSON byte/string fields stay exact). Public library/CLI
 presentation may capture these events as warnings/stderr while JSON stays whole.
 
 Freshness gates remove prior per-case output, record command/input/executable
@@ -60,3 +62,9 @@ with output redirected; preserve their comparator and expected data. Rerun M1a
 and M1b unchanged numerical/identity budgets. Run M2 fully and retain its nonzero
 exit and exactly four existing dependent-column raw-order diagnostics. Only
 active tests contradicted by 0023 may change, with rationale in CLOCK_REPORT.
+
+The user explicitly authorized the pinned-host final interpolation contraction
+on 23 October 2026 after review of `interpolation_contract.json`. J's GCC -O2
+binary uses `fmadd`; Rust now uses `mul_add` only at the final multiply/add of
+that expression. This supersedes 0023's no-fusion clause at this single site;
+all finite-bit gates and preceding expression grouping remain unchanged.

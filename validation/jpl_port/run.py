@@ -20,6 +20,7 @@ ROOT = HERE.parent.parent
 RUST = ROOT/'rust'
 H = ROOT/'validation/jpl'
 OUT = RUST/'verification/jpl'
+BUILD = HERE/'build'  # Importing regressions may redirect only output/build storage.
 ENV = dict(os.environ,CARGO_HOME=str(RUST/'.cargo-home'),GMP_MPFR_SYS_CACHE=str(RUST/'target/gmp-cache'))
 
 def load(path): return json.loads(path.read_text())
@@ -174,7 +175,7 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--profile',choices=['debug','release'],default='debug');args=parser.parse_args()
     OUT.mkdir(parents=True,exist_ok=True)
     executed=manifests()
-    h=module('h_fixture_generator',H/'run.py'); h.BUILD=HERE/'build'/args.profile;h.INPUTS=h.BUILD/'inputs'
+    h=module('h_fixture_generator',H/'run.py'); h.BUILD=BUILD/args.profile;h.INPUTS=h.BUILD/'inputs'
     h.INPUTS.mkdir(parents=True,exist_ok=True)
     manifest=h.inputs();assert manifest==load(H/'inputs.json'),'H input identity'
     cases=h.scenarios(manifest)
