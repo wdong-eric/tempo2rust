@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 23 October 2026 for I/J/K/L/M/N acceptance and O's parameter-storage Rust release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 23 October 2026 for I/J/K/L/M/N acceptance, O's parameter-storage Rust release and P's preprocessing reference release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -56,6 +56,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0033](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0033-parameter-storage-contract-and-o-release.md) releases O as the next Rust owner. It transfers source-indexed parameter storage, allocation/labels and copy semantics, then integrates one canonical store into existing loading/evaluation/fitting. The strict frontend, Rug128, CLI/JSON schema and numerical gates remain unchanged; `parameters()` may return an owned compatibility snapshot. Full PAR/TIM and linked-value arithmetic remain later work.
 
+[Decision 0034](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0034-preprocessing-reference-stage.md) releases P's independent preprocessing, selection/noise, unit and epoch reference across 15 primary routines. It requires explicit caller histories, source defect preservation and separate undefined/host classifications, including the main wrapper's uninitialized no-setdm argument. P owns only its new reference directory; O retains sole Rust ownership.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -76,8 +78,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [M Numeric utility reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/13-numeric-utility-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0030 at `a01d428`, final evidence `e754581` | `REPORT.md`, complete selected-function/header inventory, bounded numeric/text/state evidence and actual execution-identity controls |
 | [N TIM I/O reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/14-tim-io-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0032 at `68de89a` | `REPORT.md`, complete primary-file inventory, caller-state/history projection, raw TIM/JBO/order/I/O evidence and current execution controls |
 | [O Parameter storage Rust foundation](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/15-parameter-storage-rust.md) | `rust/`, new `validation/parameter_storage_port/`, optional narrow clock verifier output routing | Released by decision 0033 after L's ownership closure | `rust/PARAMETER_STORAGE_REPORT.md`, complete storage/copy projection, integrated canonical state and unchanged regressions |
+| [P Preprocessing reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/16-preprocessing-reference.md) | `validation/preprocessing/` only | Released by decision 0034 independently of O | `REPORT.md`, complete primary routine/branch/caller maps and exact native preprocessing/unit/epoch history evidence |
 
-A through N have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I and L's bounded Rust transfers and K/M/N's bounded references are accepted with their ownership windows closed. O owns the next Rust parameter-storage stage. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through N have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I and L's bounded Rust transfers and K/M/N's bounded references are accepted with their ownership windows closed. O owns the Rust parameter-storage stage while P prepares independent preprocessing reference evidence. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
