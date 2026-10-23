@@ -36,6 +36,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0023](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0023-clock-table-rust-contract-and-l-release.md) releases L as the next bounded Rust owner. It requires process-lifetime clock/selected lookup/diagnostic state, source table and routing behavior, active SAT-jump semantics, explicit safe boundaries and unchanged numerical gates. K's parameter/PAR reference delivery (`474ce01`, `6d13581`) awaits central review; no Rust parser stage is released yet.
 
+[Decision 0024](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0024-parameter-reference-review-correction.md) records central's exact replay of K's 306 cases and returns a verifier identity defect for correction. The `--no-build` shortcut can attribute a changed executable to the frozen reference hash. K acceptance remains pending; reference values are unchanged.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -51,7 +53,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Delivered and corrected at `1df4d37`; reference accepted by decision 0016 | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 | [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0022 at `902fbba`, executed implementation `27c8384` | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only; delivered evidence now read-only | Executed evidence accepted by decision 0021 at `360cc03`; nine unrun cases remain open | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
-| [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Delivered at `474ce01`/`6d13581`; central acceptance pending | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
+| [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | `validation/parameters/` only | Delivered; central replay passes, verifier identity correction requested by 0024 | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
 | [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | `rust/`, new `validation/clocks_port/`, narrow JPL output-routing plumbing only | Released by decision 0023 after I ownership closure | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
 
 A through K have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I's Rust JPL transfer is accepted and its ownership window is closed; K's parameter/PAR reference awaits central review. L now owns the clock/table Rust transfer. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
@@ -68,7 +70,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment H: TEMPO2 JPL reference | `01a1675e-84aa-7080-b480-1d4cc9919e08` | Delivered and accepted JPL kernel/layout/state/file-lifetime reference; ownership window closed |
 | Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Bounded transfer accepted by decision 0022; ownership window closed |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Delivered reference accepted within its executed scope by decision 0021; ownership window closed, nine cases remain unrun |
-| Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Delivered bounded reference; central review pending |
+| Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Bounded reference replay passes; correcting verifier identity under decision 0024 |
 | Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Current bounded Rust owner under decision 0023; dispatched from `82fc09a` |
 
 ## Shared working design
@@ -106,7 +108,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | JPL Rust contract | I released by decision 0017; title boundary clarified by 0019 | Same-open-file C stdio, safe Rust source logic, explicit undefined-source dispositions, exact host observations and unchanged timing gates; all-whitespace title classified without editing H |
 | JPL Rust acceptance | Accepted by decision 0022 at `902fbba`; I ownership closed | Corrected legacy-header boundary, exact H host observations, owned stdio and unchanged M1/M2 regression outcomes |
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
-| Parameter/PAR reference | K delivered at `474ce01`/`6d13581`; review pending | Initialized versus unwritten state, shared scalar grammar, links/defaults and distinct reader lifecycles; explicit later parser coverage |
+| Parameter/PAR reference | K's 306 cases replay exactly; 0024 identity correction pending | Initialized versus unwritten state, scalar grammar, links/defaults and reader lifecycles; fresh execution provenance required before acceptance |
 | Clock/table Rust contract | L released by decision 0023 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
