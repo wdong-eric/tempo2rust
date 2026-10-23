@@ -1,0 +1,40 @@
+Using the following chain of clock corrections for UTC(pks) -> TT(TAI)
+pks2tid.clk : UTC(PKS) -> UTC(TID)
+tid2nist.clk : UTC(TID) -> UTC(NIST)
+nist2utc.clk : UTC(NIST) -> UTC
+utc2tai.clk : UTC -> TAI
+tai2tt_tai.clk : TAI -> TT(TAI)
+Using the following chain of clock corrections for UTC(pks) -> TT(TAI)
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gpst.clk : UTC(GPS) -> UTC(GPST)
+gpst2utc.clk : UTC(GPST) -> UTC
+utc2tai.clk : UTC -> TAI
+tai2tt_tai.clk : TAI -> TT(TAI)
+Using the following chain of clock corrections for UTC(pks) -> TT(TAI)
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gps_usno.clk : UTC(GPS) -> UTC(GPS_USNO)
+gps_usno2utc.clk : UTC(GPS_USNO) -> UTC
+utc2tai.clk : UTC -> TAI
+tai2tt_tai.clk : TAI -> TT(TAI)
+Using the following chain of clock corrections for UTC(pks) -> UTC
+pks2tid.clk : UTC(PKS) -> UTC(TID)
+tid2nist.clk : UTC(TID) -> UTC(NIST)
+nist2utc.clk : UTC(NIST) -> UTC
+Using the following chain of clock corrections for UTC(pks) -> UTC
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gpst.clk : UTC(GPS) -> UTC(GPST)
+gpst2utc.clk : UTC(GPST) -> UTC
+Using the following chain of clock corrections for UTC(pks) -> UTC
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gps_usno.clk : UTC(GPS) -> UTC(GPS_USNO)
+gps_usno2utc.clk : UTC(GPS_USNO) -> UTC
+Loaded zenith wet delays for site PKS from pks.zwd
+Loaded surface atmospheric pressures for site PKS from pks.sap
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 50000.0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 50000.0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=50000 FINISH = 56000.7891239850942
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=50000 FINISH = 56000.7891239850942
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/TKfit.C:346] SVD nparams=2 nconst=0 ndata=7

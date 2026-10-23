@@ -1,0 +1,7 @@
+Delay correction turned off for psr 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=53910.125 FINISH = 54150.1250000883665
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=53910.125 FINISH = 54150.1250000883665
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/TKfit.C:346] SVD nparams=1 nconst=0 ndata=16
+Delay correction turned off for psr 0

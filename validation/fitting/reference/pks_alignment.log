@@ -1,0 +1,16 @@
+alignment_max_residual_s="2.64906911143225024448815540606761652e-25"
+Using the following chain of clock corrections for UTC(pks) -> TT(TAI)
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gpst.clk : UTC(GPS) -> UTC(GPST)
+gpst2utc.clk : UTC(GPST) -> UTC
+utc2tai.clk : UTC -> TAI
+tai2tt_tai.clk : TAI -> TT(TAI)
+Using the following chain of clock corrections for UTC(pks) -> UTC
+pks2gps.clk : UTC(PKS) -> UTC(GPS)
+gps2gpst.clk : UTC(GPS) -> UTC(GPST)
+gpst2utc.clk : UTC(GPST) -> UTC
+Loaded zenith wet delays for site PKS from pks.zwd
+Loaded surface atmospheric pressures for site PKS from pks.sap
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP2] Assume standard atmospheric pressure (no data) for site pks at MJD 53910.1
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:397] [TROP1] Assume zero zenith wet delay (no data) for site pks  at MJD 53910.1
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:401] Warning: [DUP1] duplicated warnings have been suppressed.

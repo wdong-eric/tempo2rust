@@ -1,0 +1,7 @@
+fitting	/Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/square.par	r	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/readParfile.C
+fitting	/Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/zero_error.tim	r	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/readTimfile.C
+fitting	/Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/zero_error.tim	r	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/readTimfile.C
+tt2tb	/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime/ephemeris/TIMEEPH_short.te405	r	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/ifteph.C
+readEphemeris	/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime/ephemeris/DE405.1950.2050	rb	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/jpleph.c
+tt2tb	/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime/ephemeris/TIMEEPH_short.te405	r	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/ifteph.C
+readEphemeris	/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime/ephemeris/DE405.1950.2050	rb	1	0	/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/jpleph.c

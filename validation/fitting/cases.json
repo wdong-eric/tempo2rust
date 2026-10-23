@@ -1,0 +1,191 @@
+{
+  "solver": [
+    {
+      "expected": "completed",
+      "input": "weighted_unscaled.txt",
+      "name": "weighted_unscaled"
+    },
+    {
+      "expected": "completed",
+      "input": "weighted_rescaled.txt",
+      "name": "weighted_rescaled"
+    },
+    {
+      "expected": "completed",
+      "input": "unweighted.txt",
+      "name": "unweighted"
+    },
+    {
+      "expected": "completed",
+      "input": "dependent_columns.txt",
+      "name": "dependent_columns"
+    },
+    {
+      "expected": "completed",
+      "input": "below_cutoff.txt",
+      "name": "below_cutoff"
+    },
+    {
+      "expected": "completed",
+      "input": "above_cutoff.txt",
+      "name": "above_cutoff"
+    },
+    {
+      "expected": "completed",
+      "input": "at_cutoff.txt",
+      "name": "at_cutoff"
+    },
+    {
+      "expected": "completed",
+      "input": "square_rescaled.txt",
+      "name": "square_rescaled"
+    },
+    {
+      "expected": "completed",
+      "input": "square_unscaled.txt",
+      "name": "square_unscaled"
+    },
+    {
+      "expected": "completed",
+      "input": "zero_column.txt",
+      "name": "zero_column"
+    },
+    {
+      "expected": "completed",
+      "input": "zero_matrix.txt",
+      "name": "zero_matrix"
+    },
+    {
+      "expected": "boundary",
+      "input": "zero_weight.txt",
+      "name": "zero_weight"
+    },
+    {
+      "expected": "boundary",
+      "input": "underflow_weight.txt",
+      "name": "underflow_weight"
+    },
+    {
+      "expected": "boundary",
+      "input": "underdetermined.txt",
+      "name": "underdetermined"
+    },
+    {
+      "expected": "completed",
+      "input": "infinite_covariance.txt",
+      "name": "infinite_covariance"
+    },
+    {
+      "expected": "completed",
+      "input": "infinite_increment.txt",
+      "name": "infinite_increment"
+    },
+    {
+      "expected": "completed",
+      "input": "infinite_rescaled_error.txt",
+      "name": "infinite_rescaled_error"
+    }
+  ],
+  "timing": [
+    {
+      "name": "zero",
+      "par": "zero.par",
+      "rescale": true,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "f0",
+      "par": "f0.par",
+      "rescale": false,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "f1",
+      "par": "f1.par",
+      "rescale": false,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "f2",
+      "par": "f2.par",
+      "rescale": true,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "f3",
+      "par": "f3.par",
+      "rescale": false,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "subset",
+      "par": "subset.par",
+      "rescale": true,
+      "tim": "bary_unsorted.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "all",
+      "par": "all.par",
+      "rescale": false,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "all_mode0",
+      "par": "all_mode0.par",
+      "rescale": false,
+      "tim": "bary.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "pks_all",
+      "par": "pks_all.par",
+      "rescale": true,
+      "tim": "pks.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "pks_all_mode0",
+      "par": "pks_all_mode0.par",
+      "rescale": false,
+      "tim": "pks.tim",
+      "truth": "truth.par"
+    },
+    {
+      "name": "pks_seven_mode0",
+      "par": "pks_seven_mode0.par",
+      "rescale": false,
+      "tim": "pks_seven.tim"
+    },
+    {
+      "name": "pks_seven_mode1",
+      "par": "pks_seven_mode1.par",
+      "rescale": true,
+      "tim": "pks_seven.tim"
+    },
+    {
+      "name": "zero_derivative",
+      "par": "zero_derivative.par",
+      "rescale": false,
+      "tim": "epoch.tim"
+    },
+    {
+      "name": "timing_square_false",
+      "par": "square.par",
+      "rescale": false,
+      "tim": "square.tim"
+    },
+    {
+      "name": "timing_square_true",
+      "par": "square.par",
+      "rescale": true,
+      "tim": "square.tim"
+    }
+  ]
+}

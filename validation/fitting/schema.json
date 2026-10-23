@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "tempo2-fit-v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "engine",
+    "input",
+    "controls",
+    "mode",
+    "nits",
+    "rescale_requested",
+    "rescale_effective",
+    "remove_mean",
+    "fit_performed",
+    "columns",
+    "column_scales",
+    "physical_parameter_order",
+    "covariance_coordinates",
+    "chi_square_units",
+    "cycles"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "tempo2-fit-v1"
+    },
+    "status": {
+      "enum": [
+        "completed",
+        "completed_with_source_nonfinite"
+      ]
+    },
+    "mode": {
+      "enum": [
+        0,
+        1
+      ]
+    },
+    "nits": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "remove_mean": {
+      "const": true
+    },
+    "fit_performed": {
+      "const": true
+    },
+    "rescale_requested": {
+      "type": "boolean"
+    },
+    "rescale_effective": {
+      "type": "boolean"
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "ZERO",
+          "F0",
+          "F1",
+          "F2",
+          "F3"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "cycles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/cycle"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "number": {
+      "type": "string",
+      "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+    },
+    "vector": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/number"
+      }
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/vector"
+      }
+    },
+    "solver": {
+      "type": "object",
+      "required": [
+        "singular_values",
+        "retained",
+        "rank",
+        "dof",
+        "increments",
+        "covariance",
+        "errors_unscaled",
+        "errors",
+        "chi_square",
+        "error_multiplier",
+        "linearized_s"
+      ],
+      "properties": {
+        "singular_values": {
+          "$ref": "#/$defs/vector"
+        },
+        "increments": {
+          "$ref": "#/$defs/vector"
+        },
+        "errors_unscaled": {
+          "$ref": "#/$defs/vector"
+        },
+        "errors": {
+          "$ref": "#/$defs/vector"
+        },
+        "linearized_s": {
+          "$ref": "#/$defs/vector"
+        },
+        "covariance": {
+          "$ref": "#/$defs/matrix"
+        },
+        "retained": {
+          "type": "array",
+          "items": {
+            "type": "boolean"
+          }
+        },
+        "rank": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dof": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "chi_square": {
+          "type": "string",
+          "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+        },
+        "error_multiplier": {
+          "type": "string",
+          "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+        }
+      },
+      "additionalProperties": false
+    },
+    "timing": {
+      "type": "object",
+      "required": [
+        "raw_residual_semantics",
+        "reference_phase_turn",
+        "mean_s",
+        "observations",
+        "centered_s",
+        "corrections",
+        "runtime_root",
+        "resources",
+        "warnings",
+        "retained_numerics"
+      ],
+      "properties": {
+        "raw_residual_semantics": {
+          "const": "fixed-model raw diagnostic before unweighted mean removal"
+        },
+        "mean_s": {
+          "type": "string",
+          "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+        },
+        "reference_phase_turn": {
+          "type": "string",
+          "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+        },
+        "centered_s": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "index",
+              "sat_mjd",
+              "bat_mjd",
+              "bbat_mjd",
+              "phase_turn",
+              "nphase_turn",
+              "pulse_number",
+              "residual_s"
+            ],
+            "properties": {
+              "sat_mjd": {
+                "type": "string",
+                "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+              },
+              "bat_mjd": {
+                "type": "string",
+                "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+              },
+              "bbat_mjd": {
+                "type": "string",
+                "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+              },
+              "phase_turn": {
+                "type": "string",
+                "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+              },
+              "residual_s": {
+                "type": "string",
+                "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+              },
+              "index": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "nphase_turn": {
+                "type": "string",
+                "pattern": "^-?[0-9]+$"
+              },
+              "pulse_number": {
+                "type": "string",
+                "pattern": "^-?[0-9]+$"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "cycle": {
+      "type": "object",
+      "required": [
+        "iteration",
+        "before_values",
+        "before_errors",
+        "after_values",
+        "after_errors",
+        "prefit",
+        "postfit",
+        "row_indices",
+        "x_days",
+        "sigma_s",
+        "data_s",
+        "white_data",
+        "matrix",
+        "white_matrix",
+        "solver",
+        "offset_s",
+        "offset_error_s",
+        "offset_error_state",
+        "warnings"
+      ],
+      "properties": {
+        "before_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "before_errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "after_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "after_errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "x_days": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "sigma_s": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "data_s": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "white_data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/number"
+          }
+        },
+        "prefit": {
+          "$ref": "#/$defs/timing"
+        },
+        "postfit": {
+          "$ref": "#/$defs/timing"
+        },
+        "solver": {
+          "$ref": "#/$defs/solver"
+        },
+        "matrix": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vector"
+          }
+        },
+        "white_matrix": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vector"
+          }
+        },
+        "iteration": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "row_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "offset_s": {
+          "type": "string",
+          "description": "Round-trip decimal; nonfinite fit diagnostics are exactly NaN, +Infinity, -Infinity."
+        },
+        "offset_error_s": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Null only for uninitialized source offset_e, never a nonfinite encoding."
+        },
+        "offset_error_state": {
+          "enum": [
+            "initialized by source callback",
+            "undefined source storage; no value"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

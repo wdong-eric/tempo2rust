@@ -1,0 +1,9 @@
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:396] Warning: [PAR1] Have not set a position epoch. The period epoch will be used instead. /Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/square.par
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/tempo2Util.C:396] Warning: [PAR2] Have not set a DM epoch. The period epoch will be used instead. /Users/Eric.Dong/Downloads/tempo2rust/validation/fitting/inputs/square.par
+Delay correction turned off for psr 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=54000 FINISH = 54001
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:851] ss/fs 0 0
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/t2fit.C:880] START=54000 FINISH = 54001
+[/Users/Eric.Dong/Downloads/tempo2-rust/validation/reference/build/source/TKfit.C:346] SVD nparams=2 nconst=0 ndata=2
+Delay correction turned off for psr 0

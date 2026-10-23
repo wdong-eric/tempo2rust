@@ -1,0 +1,215 @@
+{
+  "columns": [
+    "ZERO",
+    "F3"
+  ],
+  "cycles": [
+    {
+      "after_errors": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "after_values": [
+        "10.123456789",
+        "-9.99999999999999999999999999999999987e-16",
+        "2e-26",
+        "0"
+      ],
+      "before_errors": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "before_values": [
+        "10.123456789",
+        "-9.99999999999999999999999999999999987e-16",
+        "2e-26",
+        "0"
+      ],
+      "data_s": [
+        "0",
+        "0",
+        "0"
+      ],
+      "iteration": 1,
+      "matrix": [
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "offset_error_s": "8.57142857142857134320986824127519554e-07",
+      "offset_s": "0",
+      "postfit": {
+        "centered_s": [
+          "0",
+          "0",
+          "0"
+        ],
+        "mean_s": "0",
+        "observations": [
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 0,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          },
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 1,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          },
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 2,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          }
+        ]
+      },
+      "prefit": {
+        "centered_s": [
+          "0",
+          "0",
+          "0"
+        ],
+        "mean_s": "0",
+        "observations": [
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 0,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          },
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 1,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          },
+          {
+            "bat_mjd": "54000",
+            "bbat_mjd": "54000",
+            "index": 2,
+            "nphase_turn": "0",
+            "phase_turn": "0",
+            "pulse_number": "0",
+            "residual_s": "0",
+            "sat_mjd": "54000"
+          }
+        ]
+      },
+      "sigma_s": [
+        "9.99999999999999954748111825886258686e-07",
+        "1.99999999999999990949622365177251737e-06",
+        "3.00000000000000007600257229123386082e-06"
+      ],
+      "solver": {
+        "chi_square": "0",
+        "covariance": [
+          [
+            "7.34693877551020453146346833338734182e-13",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "dof": 1,
+        "error_multiplier": "1",
+        "errors": [
+          "8.57142857142857134320986824127519554e-07",
+          "0"
+        ],
+        "errors_unscaled": [
+          "8.57142857142857134320986824127519554e-07",
+          "0"
+        ],
+        "increments": [
+          "0",
+          "0"
+        ],
+        "linearized_s": [
+          "0",
+          "0",
+          "0"
+        ],
+        "rank": 1,
+        "retained": [
+          true,
+          false
+        ],
+        "singular_values": [
+          "1166666.66666666663581587000187551693",
+          "0"
+        ]
+      },
+      "white_data": [
+        "0",
+        "0",
+        "0"
+      ],
+      "white_matrix": [
+        [
+          "1000000",
+          "0"
+        ],
+        [
+          "500000",
+          "0"
+        ],
+        [
+          "333333.333333333313930779695510864258",
+          "0"
+        ]
+      ],
+      "x_days": [
+        "0",
+        "0",
+        "0"
+      ]
+    }
+  ],
+  "input_identity": {
+    "par_sha256": "687f14885dda8ec8f646b683bdf267110d8ce80c0029ff2c2dfba01d2dcc6e25",
+    "par_text": "PSRJ J0000-0000\nRAJ 01:00:00.00000\nDECJ -00:00:00.00000\nF0 10.123456789\nF1 -1e-15\nF2 2e-26\nF3 0 1\nPEPOCH 54000\nPOSEPOCH 54000\nDMEPOCH 54000\nDM 100\nEPHVER 5\nCLK TT(TAI)\nEPHEM DE405\nUNITS TCB\nMODE 1\n",
+    "tim_sha256": "06bccac5a3b2072f905cef4f514abd1da1c7ae268de912186f1cce6bc44d3934",
+    "tim_text": "FORMAT 1\na 1400 54000 1 @\nb 1400 54000 2 @\nc 1400 54000 3 @\n"
+  },
+  "mode": 1,
+  "nits": 1,
+  "rescale_requested": false
+}
