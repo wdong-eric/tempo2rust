@@ -1,0 +1,10 @@
+# Reproducible evidence stays local per the user's 24 October instruction.
+*.json
+*.json.gz
+/generated.h
+/expected/
+/raw/
+/deltas/
+/mutations/
+/build/
+/__pycache__/
