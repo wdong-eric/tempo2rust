@@ -1,0 +1,45 @@
+{
+  "adapter_harness_sha256": "ca5faa8f5021bff2a95216ec0fe051917d123a58bf2a7fbceae612988434da27",
+  "adjacent_short_read": {
+    "bytes_left_on_disk_in_record": 137,
+    "cache_identical_on_retry": true,
+    "first_three_statuses": [
+      0,
+      -2,
+      0
+    ],
+    "input_sha256": "c419f4dd0ab9f3ff5d2220b11ce3db5b08a7e53489e04c269f90c06658d9d324",
+    "record_bytes": 6600,
+    "size_requested_returned": [
+      8,
+      825,
+      85
+    ]
+  },
+  "canonical_vs_h_reference": "exact structured equality",
+  "cases": 55,
+  "compiler": "gcc-16 (Homebrew GCC 16.2.0) 16.2.0",
+  "events": 1443,
+  "experiment_sha256": "6c5c8bbede6aa49eb0d44d935af411bcce64eb3fbf9f6160ab2dc7dff249630a",
+  "flags": [
+    "-O2",
+    "-std=c11",
+    "-lm"
+  ],
+  "h_cases_sha256": "d49acd8317b018ddaf3a38e39c79680f70e151182cab8273c19ca492b103470d",
+  "h_inputs_sha256": "a939b7d4513791b68c25dc05cd36ade4bd563bd1484307d902df0a11b95dca91",
+  "h_reference_sha256": "2efb8fe4cc91489af856bde4baaf15abc2b2ee03265238db24ff1e41eb5a60f5",
+  "h_runner_sha256": "890d9f8909e4533546506c72a1d6d8e945584e10c526d8305a85d2778a75896b",
+  "harness_sha256": "a67a1e3c2a294f44a1c0c6156974445fd9d061786947a9462fa005c7dfdd9e6a",
+  "limits": "No Rust wrapper, concurrent mutation, alternate host/libc or allocation-equivalence claim; the preparatory read models a same-descriptor provenance pass but does not hash inside the C adapter.",
+  "owned_fdopen_vs_canonical": "exact structured equality",
+  "owned_fdopen_vs_h_reference": "exact structured equality",
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "purpose": "Central host-scoped I/O architecture experiment; full state values remain H host observations subject to the recorded C undefined behavior.",
+  "source_commit": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_sha256": {
+    "jpl_int.h": "d595b3aa8727567539cf5f73ef0977ca487237f2f2356538e1f5586e24315f72",
+    "jpleph.c": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+    "jpleph.h": "c04f5f1b0fc961868ebd3ca0c4af6d9e5f2fca045689c963865484d581e1809d"
+  }
+}

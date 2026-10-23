@@ -1,0 +1,19 @@
+# Assignment I: transfer the JPL implementation to Rust
+
+Read HANDOFF.md and decisions 0008, 0012, 0015, 0016 and 0017. Decision 0017 is the complete contract; begin production work only when its status says released. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Own `rust/` and, if needed, new `validation/jpl_port/`. Central owns decisions and milestone acceptance. E's implementation window has ended; M2 remains unaccepted.
+
+You are not alone. Preserve concurrent edits, the independent repositories, H/F/G evidence and the historical M1/M2 verification directories. Do not reset, clean or broadly stage the workspace. Use explicit owned paths and coherent `feat:`, `fix:`, `test:` and `docs:` commits.
+
+Work in dependency order:
+
+1. Map all 12 implemented JPL functions and the Sun pointer macro to the smallest Rust representation, using H's source map and pinned source. Specify the comparison projection, source-defined state, owned-state adapters and test-only control/fault interface before implementing it. Keep every H scenario and ordered event accounted for.
+2. Implement the bounded owned C-stdio boundary, then Rust header/constant decoding and initializer/error semantics. Use one opened file for provenance and the stream; validate consumed bytes. Explain every necessary unsafe site beside it. Prove success/failure ownership and file-lifetime behavior.
+3. Port interpolation and state/cache handling in source order, then pleph selection and Earth/Moon arithmetic. Preserve cache-before-read, short reads, byte swapping, caller mutations, optional quantities and defined nonfinite results. Compare directly to H before integrating timing.
+4. Integrate through the existing `read_ephemeris` and runtime path, remove the obsolete JPL C/build/FFI machinery and superseded tests, and update current correspondence/provenance/behavior documentation. SOFA remains retained. No production alternate reader mode is needed.
+5. Run the specified debug/release, comparison/mutation, resource/ownership and M1/M2 regression checks. Store new evidence separately. The four existing M2 strict-order diagnostics remain unresolved; every additional failure requires investigation. Deliver `rust/JPL_REPORT.md` and commit IDs for central acceptance.
+
+The user requires TEMPO2's decisions and deterministic bugs to remain until the complete transfer is finished. Do not fix a defect, replace an algorithm or loosen a gate for convenience. Source undefined behavior is handled only through the explicit dispositions in decision 0017; do not fabricate native values or use unsafe Rust to emulate it. If a new ambiguity affects observable behavior or the accepted contract, present a concrete reproducer and recommendation while continuing independent work.
+
+## Dispatch prompt
+
+Implement Assignment I in `/Users/Eric.Dong/Downloads/tempo2rust` under released decision 0017 and `handoffs/09-jpl-rust.md`. Read HANDOFF.md, decisions 0008/0012/0015/0016/0017, H's report/source map/coverage and the pinned JPL source. Own `rust/` and optional new `validation/jpl_port/`; other chats' evidence and historical M1/M2 verification remain read-only. Transfer all implemented JPL logic to safe Rust with the approved minimal C-stdio boundary and same-open-file provenance. Preserve source behavior including cache-before-read and defined nonfinite results, and apply only the explicit undefined-source dispositions. Keep exact H host comparisons and all M1/M2 gates; M2's four strict-order diagnostics remain unresolved. Explain counterparts and necessary unsafe invariants, remove obsolete JPL C machinery, commit coherent owned stages and return `rust/JPL_REPORT.md` with executed source hashes and verification evidence. Central owns design changes and acceptance; do not declare the overall transfer or M2 complete.
