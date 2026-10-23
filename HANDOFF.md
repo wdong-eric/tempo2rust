@@ -37,12 +37,13 @@ A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete 
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
-**Dispatched 23 October 2026:** Both new chats started from policy commit `1322f8b` in the local `rustify-tempo2` project. E's implementation and F's baseline inventory have separate write ownership; central acceptance remains pending.
+**Dispatched 23 October 2026:** E and F started from policy commit `1322f8b` in the local `rustify-tempo2` project. G started from reference-stage contract commit `2f75c30`. The three chats have separate write ownership; central acceptance remains pending.
 
 | Chat | Thread ID | Responsibility |
 | --- | --- | --- |
 | Assignment E: Rust TEMPO2 fitting | `01a16734-4da3-7810-979a-4dad2f647ecd` | Implement the amended M2 contract in `rust/` and `validation/fitting/` |
 | Assignment F: TEMPO2 core and fidelity inventory | `01a16734-9835-7f53-8a56-79602dc5e2af` | Audit baseline `ddc07b2`; write only `validation/coverage/` |
+| Assignment G: TEMPO2 binary reference | `01a1673f-3754-7641-83bd-1d0b03ad06c3` | Prepare all-model source evidence; write only `validation/binary/` |
 
 ## Shared working design
 
