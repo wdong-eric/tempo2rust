@@ -8033,7 +8033,7 @@
         ],
         "line": 899,
         "name": "constraint_special",
-        "natural_state": "source writes string prefix through NUL; suffix unwritten",
+        "natural_state": "source writes complete scalar/array",
         "pointers": 1,
         "type": "char"
       },

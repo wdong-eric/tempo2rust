@@ -57,7 +57,7 @@ def build():
         r['initializer_anchors']=anchors
         if n=='param':state='source allocation: all aSize/nLink counts, val/err/fitFlag/paramSet and full calloc label buffers; link arrays/prefit/prefitErr unwritten'
         elif n in ['obsn','covar']:state='source allocates; observation backing unwritten' if n=='obsn' else 'source malloc_blas MAX_FIT squared; all calloc element bytes zero'
-        elif anchors:state='source writes string prefix through NUL; suffix unwritten' if r['type']=='char' and r['extents'] and n not in ['jumpSAT','jumpScaled'] else 'source writes complete scalar/array'
+        elif anchors:state='source writes string prefix through NUL; suffix unwritten' if r['type']=='char' and not r['pointers'] and r['extents'] and n not in ['jumpSAT','jumpScaled'] else 'source writes complete scalar/array'
         else:state='unwritten by initializer'
         r['natural_state']=state
         r['copy_anchors']=[dict(line=copy['start']+i,text=l.strip()) for i,l in enumerate(sc.splitlines()) if re.search(r'\.'+n+r'\b',l)]
