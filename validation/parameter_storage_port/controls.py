@@ -30,6 +30,8 @@ def run(raw,native,identity,exe):
         'lost strcpy suffix':lambda p:p['supplemental'][1]['destination_after']['cells'][0].update(label_bytes='7800'+'00'*62),
         'changed boundary class':lambda p:p['boundaries'][0]['error'].update(kind='unwritten_value'),
         'rolled back copy prefix':lambda p:p['boundaries'][6].update(after=copy.deepcopy(p['boundaries'][6]['before'])),
+        'changed boundary caller values':lambda p:[p['boundaries'][6][state]['cells'][2]['val'].update(value='123') for state in ['before','after']],
+        'changed boundary caller links':lambda p:[p['boundaries'][6][state]['linkTo'].__setitem__(4,123) for state in ['before','after']],
         'aSize written before boundary':lambda p:p['boundaries'][6]['after'].update(aSize=3),
     }
     for name,mutate in mutations.items():

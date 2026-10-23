@@ -55,14 +55,19 @@ def expected_cases():
         out.append(dict(id=c['id'],actions=c['actions'],events=events))
     return norm(out)
 
-def expected_boundaries(actual):
-    # Independently construct each defined prefix from the declared before/source states.
+def expected_boundaries():
+    # Start from M's immutable initialized callers, never from the Rust observation.
+    reference=next(c for c in load(ROOT/'validation/numeric_toolkit/observations.json') if c['id']=='copyparam_3')['events'][1]['result']
     expected=[]
     kinds={'source_cell':('label','missing_source_cell'),'destination_cell':('label','missing_destination_cell'),'label_nul':('label','missing_string_terminator'),'shortlabel_nul':('shortlabel','missing_string_terminator'),'label_capacity':('label','insufficient_label_storage'),'shortlabel_capacity':('shortlabel','insufficient_label_storage'),'prefit':('prefit','unwritten_value'),'prefitErr':('prefitErr','unwritten_value')}
-    assert [c['case'] for c in actual]==list(kinds),'boundary case membership/order'
-    for c in actual:
-        kind=c['case'];dst=copy.deepcopy(c['before']);src=c['source'];dst['cells'][0]=copy.deepcopy(src['cells'][0])
-        field,reason=kinds[kind]
+    for kind,(field,reason) in kinds.items():
+        src=copy.deepcopy(reference['source_before']);before=copy.deepcopy(reference['destination_before'])
+        if kind=='source_cell':src['cells']=src['cells'][:1];src['capacity']=1
+        elif kind=='destination_cell':before['cells']=before['cells'][:1];before['capacity']=1
+        elif kind.endswith('_nul'):src['cells'][1][field+'_bytes']='7a'*3
+        elif kind.endswith('_capacity'):before['cells'][1][field+'_bytes']='71'*2
+        else:src['cells'][1][field]=None
+        dst=copy.deepcopy(before);dst['cells'][0]=copy.deepcopy(src['cells'][0])
         if kind not in ['source_cell','destination_cell']:
             for f in ['label','shortlabel']:
                 a=bytes.fromhex(src['cells'][1][f+'_bytes']);b=bytearray.fromhex(dst['cells'][1][f+'_bytes'])
@@ -73,16 +78,16 @@ def expected_boundaries(actual):
                 for f in ['val','err','fitFlag','paramSet','prefit','prefitErr']:
                     if f==field:break
                     dst['cells'][1][f]=copy.deepcopy(src['cells'][1][f])
-        expected.append(dict(case=kind,error=dict(cell=1,field=field,kind=reason),before=c['before'],source=src,after=dst,reentry='same boundary'))
+        expected.append(dict(case=kind,error=dict(cell=1,field=field,kind=reason),before=before,source=src,after=dst,reentry='same boundary'))
     return expected
 
 def protected():
     frozen=load(HERE/'protected_hashes.json');assert {p:sha(ROOT/p) for p in frozen}==frozen,'protected evidence changed';return frozen
 
-def identity(exe):
+def identity(exe=None):
     paths=[*RUST.joinpath('src').glob('*.rs'),*RUST.joinpath('examples').glob('*.rs'),*RUST.joinpath('tests').glob('*.rs'),*HERE.glob('*.py'),*HERE.glob('*.json'),HERE/'probe.cc',RUST/'Cargo.toml',RUST/'Cargo.lock',RUST/'build.rs']
     rustc=Path(subprocess.check_output(['rustup','which','rustc'],text=True).strip());cargo=Path(subprocess.check_output(['rustup','which','cargo'],text=True).strip())
-    return dict(executable_sha256=sha(exe),compiler_sha256=sha(rustc),cargo_sha256=sha(cargo),toolchain=subprocess.check_output(['rustc','-vV'],text=True),sources={str(p.relative_to(ROOT)):sha(p) for p in sorted(paths)})
+    return dict(**({'executable_sha256':sha(exe)} if exe is not None else {}),compiler_sha256=sha(rustc),cargo_sha256=sha(cargo),toolchain=subprocess.check_output(['rustc','-vV'],text=True),sources={str(p.relative_to(ROOT)):sha(p) for p in sorted(paths)})
 def validate_identity(expected,actual):assert expected==actual,'execution identity mismatch'
 
 def execute(exe,expected_identity,case_input):
@@ -100,7 +105,7 @@ def validate(raw,native):
     assert set(raw)=={'token','input_sha256','cases','registry','boundaries','supplemental','initialized_bytes'}
     counts=compare(norm(raw['cases']),expected_cases())
     compare(raw['registry'],load(HERE/'registry_projection.json'),counts=counts)
-    compare(norm(raw['boundaries']),norm(expected_boundaries(raw['boundaries'])),counts=counts)
+    compare(norm(raw['boundaries']),norm(expected_boundaries()),counts=counts)
     compare(norm(raw['supplemental']),norm(native['supplemental']),counts=counts)
     compare(norm(raw['initialized_bytes']),norm(native['initialized_bytes']),counts=counts)
     # Separate full K registry (all names, indices, cells, labels and unwritten classes).
@@ -115,10 +120,11 @@ def validate(raw,native):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--profile',choices=['debug','release'],required=True);args=parser.parse_args();OUT.mkdir(parents=True,exist_ok=True)
     receipt=OUT/(args.profile+'_direct.json');receipt.unlink(missing_ok=True)
-    frozen=protected();cmd=['cargo','test','--lib','--locked','--offline','--no-run','--message-format=json']+(['--release'] if args.profile=='release' else [])
+    frozen=protected();build_identity=identity();cmd=['cargo','test','--lib','--locked','--offline','--no-run','--message-format=json']+(['--release'] if args.profile=='release' else [])
     proc=subprocess.run(cmd,cwd=RUST,env=ENV,capture_output=True,text=True);save(OUT/(args.profile+'_build.json'),dict(command=cmd,returncode=proc.returncode,stderr=proc.stderr));assert proc.returncode==0,proc.stderr
     artifacts=[json.loads(line) for line in proc.stdout.splitlines() if line.startswith('{')];exe=Path(next(x['executable'] for x in artifacts if x.get('executable') and x.get('target',{}).get('kind')==['lib']))
     before=identity(exe)
+    validate_identity(build_identity,{k:v for k,v in before.items() if k!='executable_sha256'})
     # Native module imports this module by name, with the same O paths.
     import native
     native_exe,native_id=native.build();token=secrets.token_hex(16)
