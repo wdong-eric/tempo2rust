@@ -42,6 +42,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0026](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0026-parameter-reference-acceptance.md) accepts K's bounded parameter/PAR reference at corrected delivery `38d62af`. Central's independent replay and focused identity controls close 0024 without changing scientific evidence. K's ownership window is closed; full parser/TIM implementation and M2 remain separate.
 
+[Decision 0027](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0027-clock-interpolation-contraction.md) records the user's approval in L's chat for one final interpolation `mul_add`, matching the pinned GCC `fmadd`. It supersedes 0023's no-fusion clause only at that expression; exact gates and final regression requirements remain unchanged.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -115,7 +117,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | JPL Rust acceptance | Accepted by decision 0022 at `902fbba`; I ownership closed | Corrected legacy-header boundary, exact H host observations, owned stdio and unchanged M1/M2 regression outcomes |
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
 | Parameter/PAR reference | K accepted by decision 0026 at `38d62af`; ownership closed | 306 exact case replays, actual executable/runner identity, controlled-state conventions, measured coverage and mutation controls; specialized records/TIM remain later work |
-| Clock/table Rust contract | L released by decision 0023 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
+| Clock/table Rust contract | L released by 0023; one interpolation contraction approved by 0027 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
 | Numeric utility reference | M released by decision 0025 | Shared numeric/header, text, rounding/conversion, vector/rotation, copy/link and diagnostic evidence; no Rust gate or representation change |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.

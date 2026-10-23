@@ -1,0 +1,56 @@
+{
+  "L_separate_operations_observation": {
+    "bits": "4034000000000000",
+    "decimal": "20",
+    "provenance": "L report; central verifies native bytes/disassembly and frozen J result, not an additional Rust experiment"
+  },
+  "accepted_J_executable_sha256": "ad01bde230053e437536c204ead2a7235e52c7e08b612910d2ab939024ee900f",
+  "approved_expression": "((x-x0)/(x1-x0)).mul_add(y1-y0,y0)",
+  "authorization": {
+    "answer": "Authorize this source-matched contraction",
+    "question": "Decision 0023 prohibits fused arithmetic, but J\u2019s accepted GCC binary demonstrably contracts the final table interpolation multiply/add to `fmadd`. May I use `f64::mul_add` only at that source expression to preserve J\u2019s exact host result? The separate-operation Rust result differs by one ULP in `table_internal_duplicate`; all other numerical/state comparisons reached so far match.",
+    "question_item_id": "[\"request_user_input_async\",\"call_5a168b884b61487ea10fbcddc71c29a6\",0]",
+    "thread_id": "01a167e7-780c-7163-9ed3-e1af7cb9ec33",
+    "title": "Assignment L: Rust clock and table transfer",
+    "user_message_id": "01a16803-2b10-7611-b9d5-91da489c5f56"
+  },
+  "case": "table_internal_duplicate",
+  "decision": "0027",
+  "event": 3,
+  "event_array_index": 7,
+  "frozen_reference_sha256": "9f189fd0765acaa9ee3eda0299993eb7d3fb1d13bf1f103aa688fa1ea165ccaa",
+  "function_disassembly_sha256": "d2e9dd3a980ecb7be53f236a06578b78f66fca2557bfb7d9f753878a1817432b",
+  "instruction_sequence": [
+    "00000001000019dc\tfsub\td15, d15, d31",
+    "00000001000019e0\tfsub\td29, d29, d31",
+    "00000001000019e4\tfdiv\td29, d15, d29",
+    "00000001000019ec\tfsub\td15, d15, d30",
+    "00000001000019f0\tfmadd\td14, d29, d15, d30"
+  ],
+  "read_only_disassembly_command": [
+    "/usr/bin/otool",
+    "-tvV",
+    "/Users/Eric.Dong/Downloads/tempo2rust/validation/clocks/build/probe"
+  ],
+  "reference_result": {
+    "query": {
+      "bits": "3fffffffffffffff",
+      "class": "finite",
+      "decimal": "1.9999999999999998"
+    },
+    "value": {
+      "bits": "4033ffffffffffff",
+      "class": "finite",
+      "decimal": "19.999999999999996"
+    }
+  },
+  "scope": "Final multiply/add only. Earlier subtraction/division, all gates and all other source sites unchanged. No native experiment executed by central.",
+  "source_blob": "tabulatedfunction.C",
+  "source_blob_sha256": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+  "source_lines": [
+    163,
+    164
+  ],
+  "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "status": "verified contract evidence; L delivery not accepted here"
+}
