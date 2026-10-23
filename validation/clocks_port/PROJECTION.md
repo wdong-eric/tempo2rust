@@ -68,3 +68,28 @@ on 23 October 2026 after review of `interpolation_contract.json`. J's GCC -O2
 binary uses `fmadd`; Rust now uses `mul_add` only at the final multiply/add of
 that expression. This supersedes 0023's no-fusion clause at this single site;
 all finite-bit gates and preceding expression grouping remain unchanged.
+
+## Decision 0029 glob correction
+
+The frozen 151-case J projection above is unchanged. Supplemental evidence in
+`rust/verification/clocks/glob_correction/` adds the exact eighteen review helper
+patterns and three integrated cases: wildcard-directory clock tie order,
+observatory duplicate-code selection, and repeated root separators. The helper
+reference compiles the verbatim pinned `globClockFiles` body; integrated cases
+execute the accepted J binary on new safe temporary inputs. All harness/source,
+input, compiler and executable identities are recorded. No withheld case runs.
+
+Helper outputs compare full path byte strings encoded as hex, in exact order.
+Integrated outputs use the existing complete event/state/number/diagnostic
+comparator. No path canonicalization is allowed: only the temporary base prefix
+is substituted after comparison, preserving separators, dot components and
+spaces. Both profiles must agree. Deliberate membership/order/path mutations
+and all eight mismatches recorded for the original delivery must reject.
+
+Production matching follows the pinned Darwin flags-zero grammar: only `!`
+negates a bracket set, and nested POSIX class/collation/equivalence spellings are
+ordinary bracket bytes. Traversal supplies `.` and `..`, retains raw separators,
+and sorts full byte strings rather than PathBuf components. Observatory fixed
+paths and its skip-default-file comparison likewise retain source bytes.
+No new unsafe boundary or native production dependency is added. New runs keep
+the original L evidence protected alongside J and earlier historical results.

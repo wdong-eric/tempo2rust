@@ -3,7 +3,7 @@
 import importlib.util,json,os,shutil,subprocess,sys
 from pathlib import Path
 sys.dont_write_bytecode=True
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parent.parent;RUST=ROOT/'rust';OUT=RUST/'verification/clocks'
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parent.parent;RUST=ROOT/'rust';OUT=RUST/'verification/clocks/glob_correction'
 def module(name,path):
     spec=importlib.util.spec_from_file_location(name,path);m=importlib.util.module_from_spec(spec);sys.modules[name]=m;spec.loader.exec_module(m);return m
 

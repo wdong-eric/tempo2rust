@@ -29,6 +29,7 @@ def main():
         assert result.returncode==expected,(name,result.returncode,result.stdout[-2000:],result.stderr[-2000:])
     for profile in ['debug','release']:
         run(profile+'_direct',[sys.executable,port.HERE/'run.py','--profile',profile])
+        run(profile+'_glob_supplemental',[sys.executable,port.HERE/'supplemental.py','--profile',profile])
         p=port.load(port.OUT/(profile+'_direct.json'));port.validate_delivery(p)
         port.validate_identity(sources,p['source_hashes'])
         port.validate_identity(port.sha(Path(p['executable'])),p['executable_sha256'])
@@ -37,6 +38,13 @@ def main():
             run(profile+'_provenance',[p['executable'],'--exact','clock_tests::process_provenance','--ignored','--nocapture'],env=dict(port.ENV,CLOCK_WORK=work,CLOCK_PROVENANCE_OUTPUT=str(output)))
             assert port.load(output)['status']=='PASS'
     debug=port.load(port.OUT/'debug_direct.json');release=port.load(port.OUT/'release_direct.json')
+    supplements=[port.load(port.OUT/(p+'_glob_supplemental.json')) for p in ['debug','release']]
+    for p,supplement in zip([debug,release],supplements):
+        port.validate_identity(sources,supplement['source_hashes'])
+        assert supplement['executable_sha256']==p['executable_sha256']
+    assert supplements[0]['helpers']==supplements[1]['helpers']
+    assert [r['rust'] for r in supplements[0]['integrated']]==[r['rust'] for r in supplements[1]['integrated']]
+    assert supplements[0]['mutations']==supplements[1]['mutations']
     for a,b in zip(debug['results'],release['results']):
         # Fresh invocation/path hashes differ; compare every actual state byte,
         # including Rust-only boundaries/log storage and native ABI adapters.
@@ -71,7 +79,7 @@ def main():
     port.validate_identity(frozen,immutable());port.validate_identity(sources,port.executed_sources())
     port.save(port.OUT/'immutable_hashes.json',frozen)
     port.save(port.OUT/'source_hashes.json',sources)
-    port.save(port.OUT/'delivery_checks.json',dict(status='L gates PASS; central acceptance pending',executed_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=port.ROOT,text=True).strip(),counts_per_profile=debug['counts'],cases_per_profile=dict(exact=142,safe_Rust_boundary=8,unrun_cycle=1),max_finite_difference=0,profiles_identical=True,jpl='PASS: unchanged I gates',m1a='PASS',m1b='PASS (via M2)',m2_exit=1,m2_failures=failures,native_symbols=symbols,independent_repositories=repos))
+    port.save(port.OUT/'delivery_checks.json',dict(status='L corrected gates PASS; central acceptance pending',executed_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=port.ROOT,text=True).strip(),counts_per_profile=debug['counts'],cases_per_profile=dict(exact=142,safe_Rust_boundary=8,unrun_cycle=1),glob_supplemental=dict(helper_patterns=18,integrated_cases=3,mutations=9,original_delivery_mismatches_rejected=8),max_finite_difference=0,profiles_identical=True,jpl='PASS: unchanged I gates',m1a='PASS',m1b='PASS (via M2)',m2_exit=1,m2_failures=failures,native_symbols=symbols,independent_repositories=repos))
     print('L direct/JPL/M1 gates pass; M2 remains unaccepted with exactly four historical diagnostics.',flush=True)
 
 

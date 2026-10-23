@@ -28,3 +28,9 @@ No reset switch, alternate strict parser, new cycle detection, finite-weight
 guard or compensated sum is introduced. Literal-disabled legacy clock bodies
 stay inactive. BAT input, general PAR/TIM, full geometry/weather/EOP/IFTE state,
 other models and full toolkit/logging remain outside this release.
+
+Decision 0029 corrects `clock_glob.rs` to the measured Darwin flags-zero grammar,
+raw path concatenation and full-string byte ordering. Clock and observatory
+callers supply complete source patterns; observatory's default-file exclusion
+compares raw bytes. The correction is verified by eighteen native helper cases
+and three full J-probe cases in `supplemental.py`, without rewriting J fixtures.

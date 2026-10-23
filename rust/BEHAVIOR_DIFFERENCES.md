@@ -78,6 +78,7 @@ Only their source-description comment changed in this review follow-up.
 | Directed binary32 weights/distances, unusual weights, strict ties, retry and reverse hints | Preserved; negative/finite guards removed; predecessor-cycle experiment remains unrun and algorithm unrepaired |
 | Four-stage stored-chain fallback versus UTC-only accumulator | Preserved; exhausted lookup normally returns zero, earlier slot writes survive failed fills |
 | Index/table/sequence, observatory and warning history lifetime | Process-wide synchronized session; new context/root does not reset. Header and sample identities retained separately |
+| Darwin glob membership, path bytes and ordering | Decision 0029 corrects the original Rust mismatch: preserve full-string ordering, literal `^`, host bracket syntax, dot entries and repeated separators. Selected observatory paths/comparison use raw bytes too |
 | Alias-list accumulation and SAT jump l/k mismatch/extra slot | Preserved deterministic source defects; no corrected variant |
 | Normal source exit | Contextual `source_exit` with cause and defined diagnostic prefix; session/standalone table becomes terminal |
 | Empty/singleton/header/basename/correction storage, invalid indices/unwritten fields/integer conversions | Operation-local named boundary before undefined operation, defined prefix retained; no guessed value or unsafe emulation |

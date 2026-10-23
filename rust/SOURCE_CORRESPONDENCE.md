@@ -23,7 +23,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/observatory.rs` | Selected `observatory.C` file/alias parsing, independent process initialization, alias lookup/accumulation and geometry |
 | `src/clock_diagnostics.rs` | `tempo2Util.C::displayMsg`, selected `TKlog.C/h`, `global.C::CVSdisplayVersion`; byte-event sink |
 | `src/clock_text.rs` | Private typed libc conversion/formatting for source fixed formats, C-string and whitespace rules |
-| `src/clock_glob.rs` | Source glob flags-zero calls, byte/C-locale matching, leading-dot rule and sorted paths |
+| `src/clock_glob.rs` | Pinned Darwin glob flags-zero byte grammar, dot entries/leading-dot rule, raw path spelling and full-string ordering; 0029 supplemental helper/index/observatory evidence |
 | `src/tabulated_function.rs` | `tabulatedfunction.C::TabulatedFunction_load/TabulatedFunction_getValue/TabulatedFunction_getStartX/TabulatedFunction_getEndX` in an owned table |
 | `src/eop.rs` | `eop.C::load_EOP/get_EOP` |
 | `src/ifteph.rs` | `ifteph.C::IFTE_init/IFTE_get_Vals/IFTEinterp` in owned storage; split-epoch responsibility from `tt2tdb.C::tt2tb` |
