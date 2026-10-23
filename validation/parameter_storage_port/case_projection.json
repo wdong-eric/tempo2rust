@@ -1,0 +1,319 @@
+[
+  {
+    "reference": "parameters",
+    "id": "registry",
+    "actions": [
+      [
+        "init",
+        "1",
+        "0",
+        "0"
+      ],
+      [
+        "registry"
+      ],
+      [
+        "destroy"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "end"
+      },
+      {
+        "action": 1,
+        "op": "registry",
+        "phase": "begin"
+      },
+      {
+        "action": 1,
+        "op": "registry",
+        "phase": "end"
+      },
+      {
+        "action": 2,
+        "op": "destroy",
+        "phase": "begin"
+      },
+      {
+        "action": 2,
+        "op": "destroy",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "parameters",
+    "id": "init_full",
+    "actions": [
+      [
+        "init",
+        "1",
+        "1",
+        "2"
+      ],
+      [
+        "destroy"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "end"
+      },
+      {
+        "action": 1,
+        "op": "destroy",
+        "phase": "begin"
+      },
+      {
+        "action": 1,
+        "op": "destroy",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "parameters",
+    "id": "init_all",
+    "actions": [
+      [
+        "init",
+        "2",
+        "1",
+        "1",
+        "all"
+      ],
+      [
+        "destroy"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "end"
+      },
+      {
+        "action": 1,
+        "op": "destroy",
+        "phase": "begin"
+      },
+      {
+        "action": 1,
+        "op": "destroy",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "parameters",
+    "id": "allocate_0",
+    "actions": [
+      [
+        "allocate",
+        "0"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "allocate",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "allocate",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "parameters",
+    "id": "allocate_1",
+    "actions": [
+      [
+        "allocate",
+        "1"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "allocate",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "allocate",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "parameters",
+    "id": "copy_parameter",
+    "actions": [
+      [
+        "init",
+        "1",
+        "0",
+        "0"
+      ],
+      [
+        "prior",
+        "param_pepoch",
+        "0",
+        "54000",
+        "54001",
+        "0.5",
+        "0.75",
+        "2",
+        "1"
+      ],
+      [
+        "copy",
+        "param_pepoch",
+        "param_posepoch"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "init",
+        "phase": "end"
+      },
+      {
+        "action": 1,
+        "op": "prior",
+        "phase": "begin"
+      },
+      {
+        "action": 1,
+        "op": "prior",
+        "phase": "end"
+      },
+      {
+        "action": 2,
+        "op": "copy",
+        "phase": "begin"
+      },
+      {
+        "action": 2,
+        "op": "copy",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "numeric_toolkit",
+    "id": "copyparam_0",
+    "actions": [
+      [
+        "copyparam",
+        "0"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "numeric_toolkit",
+    "id": "copyparam_1",
+    "actions": [
+      [
+        "copyparam",
+        "1"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "numeric_toolkit",
+    "id": "copyparam_3",
+    "actions": [
+      [
+        "copyparam",
+        "3"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "end"
+      }
+    ]
+  },
+  {
+    "reference": "numeric_toolkit",
+    "id": "copyparam_4",
+    "actions": [
+      [
+        "copyparam",
+        "4"
+      ]
+    ],
+    "events": [
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "begin"
+      },
+      {
+        "action": 0,
+        "op": "copyparam",
+        "phase": "end"
+      }
+    ]
+  }
+]
