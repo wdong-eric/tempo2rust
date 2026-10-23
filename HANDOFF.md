@@ -20,6 +20,8 @@ The authoritative initial design is in [decision 0001](/Users/Eric.Dong/Download
 
 [Decision 0010](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0010-svd-mode-comparison.md) establishes paired singular-mode diagnostics. The user's later answer, recorded in [decision 0012](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0012-retain-exact-svd-order-gate.md), retains the exact raw mode-order acceptance gate; M2 remains pending. [Decision 0011](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0011-jpl-reference-stage.md) releases JPL reference evidence before a later safe Rust replacement of the retained reader.
 
+[Decision 0013](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0013-core-inventory-acceptance.md) accepts F's inventory at `15eee12` as planning evidence against baseline `ddc07b2`. It does not accept later implementation, close the behavior ledger or declare any source fully transferred. G has delivered binary reference evidence at `95d25c1`, `6027e11` and `f550a6e`; central review is pending.
+
 The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conversation://6ad5ede9-5268-83ec-a623-52058d4a2959). All execution requirements needed for the initial tasks are included here and in the linked briefs.
 
 ## Assignments and execution order
@@ -32,7 +34,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [C Barycentric timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/03-barycentric-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Delivered at `49e122c`; M1a accepted in decision 0003 | `M1A_REPORT.md` inside the owned directory |
 | [D Observatory timing](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/04-observatory-core.md) | `/Users/Eric.Dong/Downloads/tempo2rust/rust/` | Complete; corrected delivery accepted for M1b in decision 0006 | `M1B_REPORT.md` and correction evidence |
 | [E Fitting](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/05-fitting-core.md) | `rust/` and new `validation/fitting/` under this workspace | Released by decisions 0007 and 0008; fitting implementation | `rust/M2_REPORT.md` and fitting reference/verification evidence |
-| [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Released by decision 0008; baseline audit independent of E | Coverage inventory, behavior-difference ledger and `REPORT.md` |
+| [F Core and fidelity inventory](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/06-core-fidelity-inventory.md) | `validation/coverage/` only | Delivered at `15eee12`; inventory accepted by decision 0013 | Coverage inventory, behavior-difference ledger and `REPORT.md` |
 | [G Binary reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/07-binary-reference.md) | `validation/binary/` only | Released by decision 0009; reference evidence independent of E/F | All 14 binary dispatches, derivative/update/mutation evidence and `REPORT.md` |
 | [H JPL reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/08-jpl-reference.md) | `validation/jpl/` only | Released by decision 0011; prepares source-faithful safe Rust replacement after E | Kernel/layout/state/file-lifetime evidence and `REPORT.md` |
 
