@@ -1,6 +1,14 @@
 [
   {
     "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/test_verify_m2.py"
+    ],
+    "log": "shared_coverage_mutations.log",
+    "returncode": 0
+  },
+  {
+    "command": [
       "cargo",
       "run",
       "--offline",

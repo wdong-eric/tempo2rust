@@ -31,6 +31,13 @@ only deliberately with `--create-inputs`; the script contains every seed,
 permutation, perturbation and solver row. The second command verifies reference
 identity, runs both Rust build modes and all M1 checks, and writes new evidence
 under `rust/verification/m2/`. It does not overwrite accepted M1 artifacts.
+Before shared-input comparisons, the verifier requires the exact shared artifact
+set and an array with exactly one solver cycle or the declared timing NITS cycles
+for each case. Missing, empty, truncated, extra and non-array artifacts fail
+verification. Prior shared outputs are cleared before generation and copying so
+stale files cannot fill a missing case. `rust/test_verify_m2.py` exercises these
+checks with one- and two-cycle cases; per-build coverage records list all 29
+completed shared cases and 34 cycles.
 
 ## What the exporter actually observes
 

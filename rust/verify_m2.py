@@ -34,6 +34,34 @@ def run(name,cmd):
     assert r.returncode==0,r.stdout
     return r
 
+def load_shared_cases(cases, actual_dir):
+    """Require every declared shared case and cycle before any solve is compared."""
+    references={}
+    for family in ['solver','timing']:
+        for case in cases[family]:
+            if case.get('expected')=='boundary':continue
+            name=case['name'];ref=json.loads((FIT/'reference'/f'{name}.json').read_text())
+            refs=[ref] if family=='solver' else ref['cycles']
+            count=1 if family=='solver' else ref['nits']
+            if not isinstance(refs,list) or len(refs)!=count:
+                raise ValueError(f'{name}: reference must contain exactly {count} cycles')
+            references[name]=(ref,refs)
+    expected={f'shared_{name}.json' for name in references}
+    actual={p.name for p in actual_dir.glob('shared_*.json')}
+    if actual!=expected:
+        raise ValueError(f'shared artifact set mismatch: missing={sorted(expected-actual)}, extra={sorted(actual-expected)}')
+    loaded={}
+    for name,(ref,refs) in references.items():
+        path=actual_dir/f'shared_{name}.json'
+        try:cycles=json.loads(path.read_text())
+        except (OSError,ValueError) as exc:raise ValueError(f'{path.name}: cannot read shared artifact: {exc}') from exc
+        if not isinstance(cycles,list):
+            raise ValueError(f'{path.name}: expected an array of {len(refs)} cycles, got {type(cycles).__name__}')
+        if len(cycles)!=len(refs):
+            raise ValueError(f'{path.name}: expected exactly {len(refs)} cycles, got {len(cycles)}')
+        loaded[name]=(ref,refs,cycles)
+    return loaded
+
 def cli_checks(profile):
     binary=ROOT/'target'/profile/'tempo2-rust';records=[]
     with tempfile.TemporaryDirectory(prefix='fit-cli-',dir=ROOT/'target') as td:
@@ -77,6 +105,9 @@ def main():
     for name,value in provenance['output_hashes'].items():assert sha(FIT/'reference'/name)==value,name
     for name,value in provenance['source_hashes'].items():assert sha(ROOT.parent/'tempo2'/name)==value,name
     assert sha(ROOT.parent/'validation/reference/build/libtempo2-reference.a')==provenance['library_sha256']
+    run('shared_coverage_mutations',[sys.executable,ROOT/'test_verify_m2.py'])
+    # Old generated files must not stand in for missing outputs from this run.
+    for p in (ROOT/'target/m2').glob('shared_*.json'):p.unlink()
     # Reuse the exact accepted M1 verifier, redirecting only its evidence destination.
     os.environ.update(CARGO_HOME=ENV['CARGO_HOME'],GMP_MPFR_SYS_CACHE=ENV['GMP_MPFR_SYS_CACHE'])
     m1=module('m1_regression',ROOT/'verify_m1b.py');m1.OUTPUT=OUTPUT/'m1b'
@@ -87,18 +118,29 @@ def main():
     cases=json.loads((FIT/'cases.json').read_text());summary={};all_failures=[]
     for profile in ['debug','release']:
         flag=[] if profile=='debug' else ['--release']
-        if flag:run('release_tests',['cargo','test',*flag,'--offline','--locked'])
+        if flag:
+            for p in (ROOT/'target/m2').glob('shared_*.json'):p.unlink()
+            run('release_tests',['cargo','test',*flag,'--offline','--locked'])
         run(profile+'_fit_library',['cargo','run',*flag,'--offline','--locked','--example','compare_fitting'])
         dest=OUTPUT/profile;dest.mkdir(exist_ok=True)
+        for p in dest.glob('shared_*.json'):p.unlink()
         for p in (ROOT/'target/m2').glob('*.json'):
             if p.stem in {c['name'] for c in cases['timing']} or p.stem.startswith('shared_') or p.stem in ['callbacks','recovery']:shutil.copyfile(p,dest/p.name)
+        try:shared=load_shared_cases(cases,dest)
+        except ValueError as exc:
+            failure=f'{profile}/shared_coverage: {exc}'
+            save(OUTPUT/(profile+'_shared_coverage.json'),{'status':'FAIL','error':str(exc)})
+            save(OUTPUT/'open_gate_failures.json',[failure])
+            print(failure,flush=True)
+            raise SystemExit(1) from exc
+        save(OUTPUT/(profile+'_shared_coverage.json'),{'status':'PASS','case_count':len(shared),'cycle_count':sum(len(a) for _,_,a in shared.values()),'cycles_by_case':{name:len(a) for name,(_,_,a) in shared.items()}})
         checks={}
         for family in ['solver','timing']:
             for case in cases[family]:
                 if case.get('expected')=='boundary':continue
-                name=case['name'];r=json.loads((FIT/'reference'/f'{name}.json').read_text());a=json.loads((dest/f'shared_{name}.json').read_text())
-                refs=[r] if family=='solver' else r['cycles']
-                for i,(rc,ac) in enumerate(zip(refs,a)):
+                name=case['name'];r,refs,a=shared[name]
+                for i in range(len(refs)):
+                    rc,ac=refs[i],a[i]
                     result=cmp.compare_shared(rc,ac,r['mode']);key=f'shared/{name}/{i+1}'
                     checks[key]={'status':'FAIL' if result.errors else 'PASS','measurements':result.measurements,'errors':result.errors,'maxima':result.maxima,'mode_permutations':result.mode_permutations}
                     all_failures += [profile+'/'+key+': '+s for s in result.errors]
@@ -123,7 +165,7 @@ def main():
     save(OUTPUT/'debug_release_equivalence.json',equivalence)
     run('final_format',['cargo','fmt','--check'])
     run('final_clippy',['cargo','clippy','--all-targets','--locked','--offline','--','-D','warnings'])
-    sources=[ROOT/'Cargo.toml',ROOT/'Cargo.lock',ROOT/'build.rs',ROOT/'verify_m2.py']
+    sources=[ROOT/'Cargo.toml',ROOT/'Cargo.lock',ROOT/'build.rs',ROOT/'verify_m2.py',ROOT/'test_verify_m2.py']
     for folder in [ROOT/'src',ROOT/'examples',ROOT/'tests',FIT]:
         sources.extend(p for p in folder.rglob('*') if p.is_file() and not any(x in p.parts for x in ['build','__pycache__','reference']))
     save(OUTPUT/'source_hashes.json',{str(p.relative_to(ROOT.parent)):sha(p) for p in sorted(set(sources))})

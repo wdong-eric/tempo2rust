@@ -62,7 +62,7 @@ and concrete invariants; no new FFI is added.
 | `read_ephemeris.rs` extern block | Retained JPL ABI | Valid native handles, NUL-terminated path and six-element f64 output contract |
 | `read_ephemeris.rs` initializer | C-owned reader allocation | Live CString, ABI-permitted null optional arrays, global init/status lock; native file matching preflight is an unenforced assumption |
 | `read_ephemeris.rs` init-status query | C error slot | Same lock held; no pointers |
-| `read_ephemeris.rs` AU query | C ephemeris metadata | Live non-null exclusive handle and source constant field offset 28 |
+| `read_ephemeris.rs` AU query | C ephemeris metadata | Live non-null exclusive handle and source constant field offset 28; U2/B29 remains unresolved because the packed AU offset does not satisfy the getter's cast-double alignment requirement |
 | `read_ephemeris.rs` interpolation | C numerical interpolation | Exclusive mutable handle/cache access, finite epoch, aligned initialized six-slot output, source body identifiers, no retained pointers; native bounds assume unchanged file contents |
 | `read_ephemeris.rs` Drop | Matching C deallocator | Unique non-cloneable successful handle, exactly one cleanup, no outstanding call or escaped pointer |
 
@@ -78,3 +78,13 @@ operations or throughout native reads. Preflight therefore does **not** prove
 the native reader consumes the validated bytes. This is an existing safety
 limitation assigned to a separate central JPL stage; E changes no native reader
 or cache behavior.
+
+Separately, F's **U2/B29** records that canonical `jpl_int.h` packs AU at byte
+offset 28, while `jpl_get_double` casts `base + field` to `double*` and dereferences
+it. The host requires eight-byte double alignment; aligned allocation does not
+establish alignment of `base + 28`. Successful timing fixtures do not prove a
+portable alignment contract. F's [native layout evidence](../validation/coverage/native_replay.json)
+at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` measures offset 28,
+alignment 8 and struct size 648 without executing the unaligned getter or running
+a sanitizer. This retained-source risk is distinct from U1's file-identity gap.
+The adjacent AU-call comment now states it; E changes no native behavior.

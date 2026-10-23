@@ -18,6 +18,9 @@ explain the order difference but do not waive it.
 - Production implementation/test commit: `e7efeac326f9f198f987194b7a533c3156ec8135`.
 - This report and the final verification records are delivered in the following
   evidence commit; its identifier is supplied with the delivery message.
+- The initial evidence commit was `979b73c`. A bounded central-review follow-up
+  adds strict shared-artifact coverage checks and records JPL U2/B29 separately
+  from U1; the updated commit identifier is supplied with the follow-up delivery.
 - Canonical TEMPO2: `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 - Independent corrected A2 reference: `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572`.
   Both independent repositories remain clean. E changed neither repository.
@@ -121,6 +124,19 @@ physical output permutations. Each build also passes all 23 Rust unit/integratio
 tests and 17 fitting CLI checks. Source formatting and all-target Clippy with
 denied warnings pass.
 
+The review follow-up closes a verifier coverage hole: the previous `zip(refs,a)`
+could silently compare fewer cycles or ignore extra cycles. Before any shared
+solve comparison, the verifier now requires the exact 29-case artifact set,
+array types, and each case's exact one-cycle or NITS cardinality (34 cycles per
+build). It clears prior shared outputs before generation/copying, then compares
+by the validated reference indices. Coverage failure saves a FAIL record and
+returns 1 rather than reporting a shortened comparison set. Thirteen dedicated
+mutations cover non-array objects/nulls, empty/missing/extra cycles for both
+one- and two-cycle cases, missing case files and an extra shared case. See
+[`shared_coverage_mutations.log`](verification/m2/shared_coverage_mutations.log),
+[`debug_shared_coverage.json`](verification/m2/debug_shared_coverage.json) and
+[`release_shared_coverage.json`](verification/m2/release_shared_coverage.json).
+
 The full precision signed/absolute maxima, limits, fixture/cycle/row/column paths,
 errors and diagnostic mode permutations are in
 [`numerical_errors.json`](verification/m2/numerical_errors.json). The table below
@@ -207,7 +223,8 @@ Paired spectra and each engine's strict cutoff flags also agree. A diagnostic
 
 Central decision 0010 permits pairing modes, but the subsequent direct user
 answer was **“Keep exact order gate and report it unresolved.”** This delivery
-enforces that latest instruction. It preserves both engines' raw output, checks
+enforces that latest instruction, now recorded centrally in
+[decision 0012](../decisions/0012-retain-exact-svd-order-gate.md). It preserves both engines' raw output, checks
 raw retention order and retained singular-value positions, and records paired
 analysis only as diagnostic evidence. No tolerance is relaxed. The four exact
 failure messages are in
@@ -260,6 +277,17 @@ the validated bytes or establish memory bounds for a changed file. This existing
 limitation is stated next to the FFI calls and in both ledgers. E does not expand
 into JPL initialization, caching or reader changes; the separate central stage
 owns that work.
+
+Separately, F's **U2/B29** identifies a native alignment gap: canonical
+`jpl_int.h` packs AU at byte offset 28, while `jpl_get_double` dereferences a cast
+`double*` requiring eight-byte alignment on this host. Aligned allocation and
+successful fixtures do not prove that `base + 28` satisfies the C alignment
+contract. F's [native replay evidence](../validation/coverage/native_replay.json)
+at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` is a layout-only probe
+(offset 28, alignment 8, struct size 648), without unaligned getter execution or
+sanitizer validation. E records this risk beside the existing getter and in both
+ledgers, separately from U1, without changing native behavior or expanding into
+the JPL port. H owns the separate `validation/jpl/` reference work.
 
 Independent PKS fixtures use fresh contexts matching isolated reference
 processes. Within a fit the runtime is reused. Cross-profile clock-cache history

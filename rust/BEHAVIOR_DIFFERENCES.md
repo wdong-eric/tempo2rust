@@ -45,3 +45,13 @@ remain unchanged between preflight and native use and during later native
 reads; this is currently unenforced. Adjacent FFI comments explicitly state the
 assumption. Preflight alone does not guarantee native memory bounds for a changed
 file. A separate source-faithful JPL stage owns this issue; E does not fix it.
+
+Separate JPL limitation **U2/B29**: canonical `jpl_int.h` packs AU at byte offset
+28, but `jpl_get_double` dereferences a cast `double*` requiring eight-byte
+alignment on this host. Allocator alignment and successful fixtures do not prove
+that field access is portably aligned. F's `validation/coverage/native_replay.json`
+at commit `15eee128aca18e4fd1f813a2084ba784b73570d0` is layout-only evidence
+(offset 28, alignment 8, struct size 648), not sanitizer or crash evidence. This
+retained native risk is now explicit next to the Rust AU getter and is independent
+of U1's file-identity assumption. E preserves native behavior; the separate JPL
+stage owns any later disposition.

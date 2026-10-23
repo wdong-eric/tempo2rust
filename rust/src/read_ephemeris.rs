@@ -170,6 +170,11 @@ impl JplEphemeris {
         })?;
         // Necessity: read the native AU constant. SAFETY: successful non-null
         // handle is still live and exclusively owned; 28 is JPL_EPHEM_AU_IN_KM.
+        // Unresolved U2/B29: jpl_int.h packs AU at byte offset 28, but this getter
+        // casts base+28 to double* (8-byte alignment on this host). Allocation
+        // alignment and passing fixtures do not prove this native dereference
+        // satisfies C alignment requirements. This retained-source risk is
+        // separate from U1's file-identity assumption; native behavior is unchanged.
         let one_au_m = unsafe { jpl_get_double(raw, 28) } * 1000.0;
         // readEphemeris.C: one_au *= IFTE_K promotes the product to longdouble.
         let k = Float::with_val(PRECISION_BITS, 1.0) + IFTE_KM1;

@@ -1,3 +1,4 @@
+shared_coverage_mutations 0
 rustc: PASS
 cargo: PASS
 cc: PASS

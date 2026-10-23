@@ -7,5 +7,11 @@
   "open_gate_diagnostics": 4,
   "failed_fixture": "dependent_columns",
   "interpretation": "strict raw singular-mode order unresolved; other prescribed checks passed",
-  "log": "full_run.log"
+  "log": "full_run.log",
+  "shared_coverage": {
+    "case_count_per_build": 29,
+    "cycle_count_per_build": 34,
+    "mutation_checks": 13,
+    "status": "PASS"
+  }
 }
