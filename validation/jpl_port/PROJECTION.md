@@ -81,3 +81,9 @@ Counts distinguish reference accounting, executed events, exact events, boundary
 and unreachable events. Supplementary I canonical probes preserve all six
 C-locale whitespace bytes, signed versions and in-bounds no-digit zero. ASan
 classifies all-whitespace/final-sign scans; it supplies no numerical oracle.
+
+Supplemental optional-demand scenarios cover all four optional indices with
+INT_MIN, -1, 0, 1, 2, 3, 4 and INT_MAX. Only the observation harness's optional
+buffer is enlarged to 12 initialized slots; canonical algorithms remain exact
+Git bytes. All fields/events compare with the same startup-ABI projection. These
+remain controlled host observations subject to source pointer-formation UB.

@@ -52,3 +52,35 @@ def run(h,exe,profile):
         # The scenario projection records these as operation-local boundaries.
         assert observed[-1].get('boundary')=='title_conversion',(name,observed)
     port.save(port.OUT/f'{profile}_title_boundaries.json',dict(command=command,compiler=subprocess.check_output([clang,'--version'],text=True).splitlines()[0],executable_sha256=port.sha(sanitized),source_hashes=manifest['files'],cases=evidence))
+
+    # Extend only H's observation harness: the included pinned JPL source remains
+    # byte-identical. A 12-slot nut destination accommodates direct acceleration.
+    harness=(port.H/'probe.c').read_text()
+    replacements={
+        'else if (!strcmp(op,"state")) {':'else if (!strcmp(op,"state_wide")) {',
+        'double et, pv[16][6], nut[6]; int bary,list[14];':'double et, pv[16][6], nut[12]; int bary,list[14];',
+        'fill(&pv[0][0],96); fill(nut,6);':'fill(&pv[0][0],96); fill(nut,12);',
+        'numbers(nut,6); snapshot(e,controlled);':'numbers(nut,12); snapshot(e,controlled);',
+    }
+    for old,new in replacements.items():
+        assert harness.count(old)==1,old
+        harness=harness.replace(old,new)
+    harness_path=h.BUILD/'demand_probe.c';harness_path.write_text(harness)
+    native=h.BUILD/'demand-canonical'
+    command=[cc,'-O2','-std=c11','-I',str(source),str(harness_path),'-lm','-o',str(native)]
+    p=subprocess.run(command,capture_output=True,text=True);assert p.returncode==0,p.stderr
+    cases={};canonical={};rust={}
+    for index in [10,11,12,13]:
+        for demand in [-2147483648,-1,0,1,2,3,4,2147483647]:
+            name=f'list_{index}_demand_{demand}';entries=[0]*14;entries[index]=demand
+            commands=[f'open {h.INPUTS/"extended_le.bin"} 0','control','state_wide 2450003.5 1 '+' '.join(map(str,entries)),'close']
+            cases[name]=dict(commands=commands,setup=[])
+            canonical[name]=h.execute(native,cases[name]);rust[name]=port.execute(exe,cases[name],h.INPUTS,name)
+    rules=dict(scenarios={name:[dict(op=e['op'],reference_fields=sorted(e),exact_fields=sorted(set(e)-abi),classifications={k:'reference_C_ABI_only' for k in sorted(set(e)&abi)}) for e in events] for name,events in canonical.items()})
+    counts=port.compare(rust,canonical,rules)
+    for index in [10,11,12,13]:
+        for demand in [4,2147483647]:assert rust[f'list_{index}_demand_{demand}'][3]['nut']==rust[f'list_{index}_demand_2'][3]['nut']
+        for demand in [-1,-2147483648]:assert rust[f'list_{index}_demand_{demand}'][3]['nut']==rust[f'list_{index}_demand_1'][3]['nut']
+    port.save(port.OUT/f'{profile}_demand_reference.json',canonical)
+    port.save(port.OUT/f'{profile}_demand_raw.json',rust)
+    port.save(port.OUT/f'{profile}_demand_comparison.json',dict(status='PASS',counts=counts,command=command,harness_sha256=port.sha(harness_path),harness_changes=replacements,source_hashes=manifest['files'],input_sha256=port.sha(h.INPUTS/'extended_le.bin'),scenarios={name:case['commands'] for name,case in cases.items()},scope='controlled same-host full-state observations, not portable C values'))

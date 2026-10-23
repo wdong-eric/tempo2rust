@@ -527,12 +527,13 @@ impl Ephemeris {
                 let (iptr, quantities) = if i == 14 {
                     (self.ipt[10], if recompute_pvsun { 3 } else { 0 })
                 } else {
-                    (self.ipt[if i < 10 { i } else { i + 1 }], list[i])
+                    (self.ipt[if i < 10 { i } else { i + 1 }], list[i] as u32)
                 };
+                // C assigns list to unsigned, passes its bits back to int for
+                // interp, and wraps quantities*3 for AU scaling. Optional rows
+                // skip that scaling; flags >3 request velocity, negative flags
+                // request position only. Bound actual storage, not flag values.
                 if n_intervals == iptr[2] && quantities != 0 {
-                    if !(1..=3).contains(&quantities) {
-                        return Err(Boundary("quantity_count"));
-                    }
                     let offset = iptr[0]
                         .checked_sub(1)
                         .and_then(|x| (x as usize).checked_mul(8))
@@ -554,12 +555,12 @@ impl Ephemeris {
                         iptr[1] as usize,
                         dimension(i + 1),
                         n_intervals,
-                        quantities,
+                        quantities as i32,
                         dest,
                     )?;
                     if i < 10 || i == 14 {
                         let dest = dest
-                            .get_mut(..quantities as usize * 3)
+                            .get_mut(..quantities.wrapping_mul(3) as usize)
                             .ok_or(Boundary("output_storage"))?;
                         for x in dest {
                             *x *= aufac;
@@ -570,18 +571,20 @@ impl Ephemeris {
         }
         if bary == 0 {
             for i in 0..9 {
-                if list[i] < 0 || list[i] > 3 {
-                    return Err(Boundary("quantity_count"));
-                }
-                if list[i] == 0 {
+                let n = (list[i] as u32).wrapping_mul(3) as usize;
+                if n == 0 {
                     continue;
                 }
-                let n = list[i] as usize * 3;
                 let row = pv
                     .get_mut(i)
                     .and_then(|p| p.get_mut(..n))
                     .ok_or(Boundary("output_storage"))?;
-                let sun = self.pvsun.as_ref().ok_or(Boundary("sun_uninitialized"))?;
+                let sun = self
+                    .pvsun
+                    .as_ref()
+                    .ok_or(Boundary("sun_uninitialized"))?
+                    .get(..n)
+                    .ok_or(Boundary("output_storage"))?;
                 for j in 0..n {
                     row[j] -= sun[j];
                 }

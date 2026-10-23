@@ -47,6 +47,7 @@ comparison is untested and no cache behavior was changed.
 | Failed ordinary pleph reads unwritten local pv | Return source status and earlier mutations without a numerical vector. Timing adapter returns contextual error. |
 | Position-only EMB copies unwritten velocity | Read only requested components; public source-cleared suffix remains zero. |
 | Missing/unvisited private pleph body row | Explicit `pleph_unwritten_row` boundary; no fabricated zero scientific vector. Direct state retains caller storage for unvisited requests. |
+| Optional direct demand flags | Preserve unsigned list assignment and signed interp flag: >1 requests velocity, exactly 3 also requests acceleration, negative flags request position. Optional rows skip AU scaling; 32 canonical host controls cover indices 10–13 and extreme signed flags. Planetary/Sun bounds use the source-width quantities*3 and actual storage. |
 | nut[4] and direct acceleration demands | Initialized destination slices sized to actual dimension/demand. Four-slot libration rejects; nine-slot direct body/libration acceleration tested. |
 | Partial fread elements | Raw initialized bytes retained, including old suffix; exact same-host byte comparison, not portable C numerical meaning. |
 | NaN/tiny-step record conversion, bad coefficients/counts, title overflow, invalid selectors | Distinct operation-local Boundary errors. No broad low-level finite/AU/grid restrictions. Unsigned record-offset and kernel arithmetic retain source wrapping. |

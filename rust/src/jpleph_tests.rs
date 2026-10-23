@@ -134,14 +134,14 @@ fn probe() {
                     controlled = true;
                     snapshot(e, controlled, &mut v);
                 }
-                "state" | "state_nut4" => {
+                "state" | "state_nut4" | "state_wide" => {
                     let e = eph.as_mut().unwrap();
                     let mut pv = [0.0; 96];
                     fill(&mut pv);
-                    let mut nut = [0.0; 6];
+                    let mut nut = [0.0; 12];
                     fill(&mut nut);
                     let mut list = [0; 14];
-                    let (et, bary) = if op == "state" {
+                    let (et, bary) = if op != "state_nut4" {
                         for i in 0..14 {
                             list[i] = args[3 + i].parse().unwrap();
                         }
@@ -150,7 +150,13 @@ fn probe() {
                         list[11] = 2;
                         (e.ephem_start + 1.0, 1)
                     };
-                    let n = if op == "state_nut4" { 4 } else { 6 };
+                    let n = if op == "state_nut4" {
+                        4
+                    } else if op == "state_wide" {
+                        12
+                    } else {
+                        6
+                    };
                     let status = e.state(
                         et,
                         &list,
@@ -159,9 +165,9 @@ fn probe() {
                         bary,
                     )?;
                     v["status"] = json!(status);
-                    if op == "state" {
+                    if op != "state_nut4" {
                         v["pv"] = numbers(&pv);
-                        v["nut"] = numbers(&nut);
+                        v["nut"] = numbers(&nut[..n]);
                         snapshot(e, controlled, &mut v);
                     }
                 }
@@ -410,7 +416,7 @@ fn owned_boundaries_lifetimes_and_direct_acceleration() {
             &mut nut,
             1
         ),
-        Err(Boundary("quantity_count"))
+        Err(Boundary("output_storage"))
     );
     assert_eq!(e.get_double(1), Err(Boundary("double_selector")));
     assert_eq!(e.get_long(45), Err(Boundary("integer_selector")));
@@ -536,5 +542,65 @@ fn title_scan_boundaries_close_stream_and_allow_reinitialization() {
         assert_eq!(good.pleph(2450008.5, 3, 12, &mut out, 1).unwrap(), 0);
         assert!(out.iter().all(|x| x.is_finite()));
     }
+    fs::remove_file(path).unwrap();
+}
+
+#[test]
+fn optional_demands_follow_interp_flags_and_actual_storage() {
+    let path = std::env::temp_dir().join(format!("jpl-demand-{}", std::process::id()));
+    fs::write(&path, fixture()).unwrap();
+    let mut e = Ephemeris::init(File::open(&path), None, None)
+        .unwrap()
+        .unwrap();
+    let mut pv = [[0.0; 6]; 10];
+    let mut list = [0; 14];
+    let mut results = Vec::new();
+    for demand in [1, 2, 3, 4, -1, i32::MIN, i32::MAX] {
+        list[11] = demand;
+        let mut nut = [0.0; 9];
+        fill(&mut nut);
+        assert_eq!(
+            e.state(
+                2450008.5,
+                &list,
+                &mut pv.each_mut().map(|p| p.as_mut_slice()),
+                &mut nut,
+                1
+            )
+            .unwrap(),
+            0
+        );
+        results.push(nut);
+    }
+    assert_eq!(results[0], results[4]);
+    assert_eq!(results[0], results[5]);
+    assert_eq!(results[1], results[3]);
+    assert_eq!(results[1], results[6]);
+    assert_ne!(results[1][6..], results[2][6..]);
+    list[11] = 4;
+    let mut nut = [0.0; 4];
+    assert_eq!(
+        e.state(
+            2450008.5,
+            &list,
+            &mut pv.each_mut().map(|p| p.as_mut_slice()),
+            &mut nut,
+            1
+        ),
+        Err(Boundary("output_storage"))
+    );
+    list[11] = 0;
+    list[0] = 4;
+    let mut nut = [0.0; 9];
+    assert_eq!(
+        e.state(
+            2450008.5,
+            &list,
+            &mut pv.each_mut().map(|p| p.as_mut_slice()),
+            &mut nut,
+            1
+        ),
+        Err(Boundary("output_storage"))
+    );
     fs::remove_file(path).unwrap();
 }
