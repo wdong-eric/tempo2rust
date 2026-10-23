@@ -7,6 +7,6 @@ test_mutations (test_comparator.ProjectionTests.test_mutations) ... ok
 test_projection_classification_controls (test_comparator.ProjectionTests.test_projection_classification_controls) ... ok
 
 ----------------------------------------------------------------------
-Ran 7 tests in 2.701s
+Ran 7 tests in 2.830s
 
 OK

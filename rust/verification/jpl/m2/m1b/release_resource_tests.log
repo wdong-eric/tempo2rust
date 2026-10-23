@@ -1,4 +1,4 @@
-    Finished `release` profile [optimized] target(s) in 0.04s
+    Finished `release` profile [optimized] target(s) in 0.05s
      Running unittests src/lib.rs (target/release/deps/tempo2_rust-de1e77b2b99ef1f6)
 
 running 6 tests
@@ -9,5 +9,5 @@ test resource_tests::table_steps_endpoints_and_invalid_data ... ok
 test resource_tests::meteorology_valid_zero_missing_and_outside_coverage ... ok
 test resource_tests::clock_routes_coverage_ties_fallback_and_recovery ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.00s
 

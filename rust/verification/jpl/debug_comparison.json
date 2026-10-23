@@ -9,7 +9,7 @@
     "reference_events": 1443,
     "unreachable_events": 3
   },
-  "executable_sha256": "f223c7550432b7f2e82a50aa8c650df12d5ff01bf82eb132a7d1779f4902d310",
+  "executable_sha256": "d69c0f712edf6c04ee6ad9af00a72a81699713d29566266ee67f35b37478f6b6",
   "finite_maximum_difference": 0,
   "machine": "arm64",
   "platform": "macOS-26.7-arm64-arm-64bit",

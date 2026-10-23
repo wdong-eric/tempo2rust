@@ -123,7 +123,7 @@
     "command": [
       "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/examples/check_terrestrial_resources",
       "/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime",
-      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-debug-sb1_wqzy/checks",
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-debug-_aik0e1x/checks",
       "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/tempo2-rust"
     ],
     "returncode": 0
@@ -132,7 +132,7 @@
     "command": [
       "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/release/examples/check_terrestrial_resources",
       "/Users/Eric.Dong/Downloads/tempo2rust/tempo2/T2runtime",
-      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-release-crtgr57j/checks",
+      "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/m1b-release-jmxn3xca/checks",
       "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/release/tempo2-rust"
     ],
     "returncode": 0

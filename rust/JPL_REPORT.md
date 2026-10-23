@@ -1,10 +1,10 @@
 # Assignment I: Rust JPL transfer
 
-23 October 2026. **The required JPL and M1 checks pass; M2 has exactly its four pre-existing diagnostics.** The implementation transfers all 12 implemented JPL functions and the Sun-view macro to safe Rust, with the approved owned libc stdio boundary. Central acceptance of this bounded assignment is still required. M2 and the overall TEMPO2 transfer remain unaccepted.
+23 October 2026. **The corrected legacy-header snapshot passes the required JPL and M1 checks; M2 retains exactly its four pre-existing diagnostics.** The implementation transfers all 12 implemented JPL functions and the Sun-view macro to safe Rust, with the approved owned libc stdio boundary. Central acceptance of this bounded assignment is still required. M2 and the overall TEMPO2 transfer remain unaccepted.
 
 ## Scope, revisions and evidence identity
 
-The governing contracts are decisions 0017 and 0019. The canonical TEMPO2 pin is `fda6ad4a9753ad7dc5d291406f2f310a9161423f`; H's accepted reference revision is `1df4d37`; the previous Rust ownership baseline is E's `90b52bb`. The executed implementation snapshot is `3e3d48f32d1e7cdaf814886422ec70ecd55e23ec`. The final delivery adds this report and generated evidence; it does not change executable inputs.
+The governing contracts are decisions 0017 and 0019. The canonical TEMPO2 pin is `fda6ad4a9753ad7dc5d291406f2f310a9161423f`; H's accepted reference revision is `1df4d37`; the previous Rust ownership baseline is E's `90b52bb`. The executed implementation snapshot is `27c83840295fd0f1309cf54b3477d033cf0d4896`. The final delivery updates this report and generated evidence; it does not change executable inputs.
 
 | Owned commit | Change |
 | --- | --- |
@@ -14,6 +14,8 @@ The governing contracts are decisions 0017 and 0019. The canonical TEMPO2 pin is
 | `6f48f05` | Bounded title conversion, decision 0019 projection and fresh-output enforcement |
 | `d91dfe8` | Preserve optional derivative flags using actual storage bounds |
 | `3e3d48f` | Clarify acceleration-demand and caller-buffer terminology |
+| `72c9dce` | Initial report/evidence delivery, superseded by the corrected snapshot below |
+| `27c8384` | Reject unread legacy extension comparisons at their operation boundary; add regression controls |
 
 Only `rust/` and `validation/jpl_port/` were changed by I. Concurrent assignments, independent repositories, copied fixtures, H's evidence and historical M1/M2 evidence remain outside I's edits. The final verifier checks the immutable files before and after execution.
 
@@ -77,7 +79,7 @@ H's `title_zero` is malformed: its 84-byte title contains only whitespace from b
 
 The projection retains all five original events and their reference identities, complete field lists and event hashes. Startup compares normally. Open must produce the boundary after one seek and two reads, before allocation, with global initialization status zero and last fread `(204, 1, 1)`. The later control, state and close commands remain accounted for as unreachable. Rust drops the stream during the failed initialization; this cleanup is distinct from executing the reference's later close command.
 
-The all-whitespace input hash is `e7c4123943651a0c42d7e98dafb3ce4aebbb4059d89cd7763144c6220bf205e7`. Fresh all-whitespace/final-plus/final-minus canonical probes reproduce ASan stack-buffer-overflow and Rust rejection in both profiles. The original reviewed [source evidence](/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/jpl/title_scan_source_evidence.json) is unchanged; per-profile title-boundary artifacts retain compiler, source, executable and input identities and full diagnostic text. Sanitizer output supplies a boundary diagnosis, not post-failure numerical values.
+The all-whitespace input hash is `e7c4123943651a0c42d7e98dafb3ce4aebbb4059d89cd7763144c6220bf205e7`. Fresh all-whitespace/final-plus/final-minus canonical probes reproduce ASan stack-buffer-overflow and Rust rejection in both profiles. The original reviewed [source evidence](/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/jpl/title_scan_source_evidence.json) is unchanged; per-profile title-boundary artifacts retain compiler, source, executable and input identities and diagnostic summaries. Sanitizer output supplies a boundary diagnosis, not post-failure numerical values.
 
 Two supplemental families compare unchanged pinned C algorithms with Rust:
 
@@ -105,6 +107,10 @@ All ten H isolated cases have separately gated dispositions in [isolated_project
 | Unterminated/overflowing title | `title_conversion` |
 
 These are operation-local boundaries, not invented canonical error codes or successful scientific vectors. Natural Sun absence and initialized recurrence storage are explicit owned-state adapters. The test-only control command supplies H's experimental state separately. Failed ordinary pleph preserves status and prior mutations without exposing undefined private output; position-only EMB reads only requested components. Unvisited private body rows produce `pleph_unwritten_row`. Low-level defined nonfinite arithmetic remains visible; the existing high-level timing-vector rejection remains an adapter.
+
+The legacy/no-extension header route writes only the row-13 invalid marker. A mismatch in the first pointer comparison still clears both optional rows. If row 12's computed end equals UINT32_MAX, the next comparison would consume unread row-13/14 operands; Rust now returns `unwritten_extended_header` before evaluating it. The earlier zero-initialized representation incorrectly allowed this malformed case to reach a successful handle. A new direct regression failed on that implementation and passes with the correction, including valid initialization after rejection for both pre-430 and ncon400 routes.
+
+Twelve additional Rust-only header controls run in each profile: both byte orders for normal/malformed pre-430 and ncon400 inputs, plus valid small/large extended-header inputs. The four malformed cases require exactly startup and boundary events, global status zero, one seek/two reads, no allocation, and last fread `(204, 1, 1)`. The eight valid controls retain their expected version, constant count, IPT rows, record size and coefficient count. The original central reproducer's malformed input SHA-256 is `156d0e0ebbfbf5d29bae06a8080e4bd29a851ea28f5e78a1fa373221ee8ae073`; its valid control retains version 405 and 751 coefficients. [Debug header controls](/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/jpl/debug_legacy_header_controls.json) and [release header controls](/Users/Eric.Dong/Downloads/tempo2rust/rust/verification/jpl/release_legacy_header_controls.json) retain input hashes, commands and complete Rust events, with identical observations between profiles. The unread native comparison is classified by source inspection and is never executed. These controls do not change H's 55 scenarios or its projection.
 
 U1 is removed: runtime hashes and rewinds one opened `File`, then transfers that descriptor to stdio. The ownership test hashes a file, replaces its pathname, proves initialization consumed the old object's AU, and proves reopen sees the new AU. H scenarios additionally cover in-place writes, cached reads, reopen, short reads and recovery. The digest describes the bytes observed during a pass; it does not promise a coherent snapshot during concurrent writes.
 
@@ -140,7 +146,7 @@ The driver sets the existing local `rust/.cargo-home` and `rust/target/gmp-cache
 
 The seven Python test methods include 24 output mutations, five classification mutations, one changed isolated disposition, three real subprocess execution controls and a complete positive control. They reject missing/extra coverage and components, wrong fields/order/indices/status/units/classes, altered cache timing/bytes, invented failure output, title omission or fabricated success, missing/reordered unreachable events and unapproved classifications. Execution controls reject stale output with `/usr/bin/true`, zero selected tests even when an output is written, and a claimed test pass without a fresh output. The runner removes the previous output before invocation and requires the named probe and exactly one passing test.
 
-Debug and release Rust suites each pass 16 library tests, seven behavior tests and one reference-contract test. Three intentionally ignored library entry points are executed explicitly by the JPL harness: the per-scenario probe and the two isolated ownership tests. Formatting, Clippy with warnings denied, resource recovery, CLI/library agreement, and the existing fitting/terrestrial comparator mutations pass.
+Debug and release Rust suites each pass 17 library tests, seven behavior tests and one reference-contract test. Three intentionally ignored library entry points are executed explicitly by the JPL harness: the per-scenario probe and the two isolated ownership tests. Formatting, Clippy with warnings denied, resource recovery, CLI/library agreement, and the existing fitting/terrestrial comparator mutations pass.
 
 | Regression | Result and unchanged numerical contract |
 | --- | --- |

@@ -9,7 +9,7 @@
     ],
     "returncode": 0,
     "stderr": "",
-    "stdout": "\nrunning 1 test\ntest jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s\n\n"
+    "stdout": "\nrunning 1 test\ntest jpleph::tests::title_scan_boundaries_close_stream_and_allow_reinitialization ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.00s\n\n"
   },
   "stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup": {
     "command": [
@@ -21,6 +21,6 @@
     ],
     "returncode": 0,
     "stderr": "",
-    "stdout": "\nrunning 1 test\ntest stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.00s\n\n"
+    "stdout": "\nrunning 1 test\ntest stdio::tests::descriptor_transfer_partial_items_and_failure_cleanup ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.00s\n\n"
   }
 }
