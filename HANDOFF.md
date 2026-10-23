@@ -113,6 +113,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment P: TEMPO2 preprocessing reference | `01a168d8-48fa-7722-82db-2d2b6ec8916f` | Owns `validation/preprocessing/` under decision 0034; dispatched from `e68806e` |
 | Assignment Q: TEMPO2 specialized PAR reference | `01a168e7-6a90-7d63-b906-362363a4c15f` | Owns `validation/par_specialized/` under decision 0035; dispatched from `ad6fbf6` |
 | Assignment R: Rust observation storage foundation | `01a16903-61ef-7651-a9c9-41e6c8943e41` | Sole Rust owner under decision 0037; dispatched from `0fd7885` |
+| Assignment S: TEMPO2 pulsar lifecycle reference | `01a16912-7fd8-7392-9c1e-79436775676e` | Owns `validation/pulsar_lifecycle/` under decision 0038; dispatched from `3ec1e18` |
 
 ## Shared working design
 
