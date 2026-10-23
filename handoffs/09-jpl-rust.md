@@ -1,6 +1,6 @@
 # Assignment I: transfer the JPL implementation to Rust
 
-Read HANDOFF.md and decisions 0008, 0012, 0015, 0016 and 0017. Decision 0017 is the complete contract; begin production work only when its status says released. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Own `rust/` and, if needed, new `validation/jpl_port/`. Central owns decisions and milestone acceptance. E's implementation window has ended; M2 remains unaccepted.
+Read HANDOFF.md and decisions 0008, 0012, 0015, 0016, 0017 and 0019. Decision 0017 is the release contract; decision 0019 resolves the all-whitespace title's boundary projection without changing H's reference or numerical gates. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Own `rust/` and, if needed, new `validation/jpl_port/`. Central owns decisions and milestone acceptance. E's implementation window has ended; M2 remains unaccepted.
 
 You are not alone. Preserve concurrent edits, the independent repositories, H/F/G evidence and the historical M1/M2 verification directories. Do not reset, clean or broadly stage the workspace. Use explicit owned paths and coherent `feat:`, `fix:`, `test:` and `docs:` commits.
 
