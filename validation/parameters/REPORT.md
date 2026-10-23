@@ -1,6 +1,6 @@
 # Assignment K: parameter state and shared PAR reference
 
-Delivered for central review, 23 October 2026. This is bounded native reference evidence under decisions 0008/0020; it does not implement Rust, set tolerances, close F's input lifecycle batch, or accept a milestone. All writes are under `validation/parameters/`. I/J work and both independent repositories were preserved.
+Delivered for central review, 23 October 2026. This is bounded native reference evidence under decisions 0008/0020; it does not implement Rust, set tolerances, close F's input lifecycle batch, or accept a milestone. All writes are under `validation/parameters/`. The initial delivery preserved I/J work; the decision 0024 correction preserves L's concurrent Rust work and both independent repositories. Acceptance remains with central.
 
 ## Delivered result
 
@@ -20,9 +20,21 @@ All ordinary cases regenerated exactly in fresh processes. A separate GCC covera
 | [FINDINGS.md](FINDINGS.md) | Scientific/data semantics, source bugs, wrapper differences, invalid-state boundaries and deferred work |
 | [diagnostics/fb20.json](diagnostics/fb20.json) | One unintended out-of-bounds FB20 trial, isolated from ordinary numerical evidence |
 
+## Decision 0024: verifier identity correction
+
+Central independently replayed the original 306 cases / 1,545 events, then reproduced a provenance defect: `--no-build` reused `profile.json` as the executed identity and could attribute a forwarding wrapper's launch to the frozen native executable. This correction removes that option completely. `run.py` has one fresh-build path; `profile.json` remains the unchanged native reference baseline, and is never substituted for the new build result.
+
+`compile_probe` captures the current Python runner/build/fixture/inventory/check scripts and native `probe.cc` hashes and checks that they remain unchanged during compilation. The shared `check_identity` gate compares the frozen stable native profile with the fresh profile, then checks the actual executable path/bytes and current runner/harness files against that fresh build. Every subprocess launch checks those executable and runner/harness identities before and after execution. The complete ordinary run checks again before writing its receipt. A full run removes its preceding success receipt before starting, so a failed new run cannot leave that old receipt looking like its result.
+
+`regeneration.json` now contains both `executed_profile` and independently checked `execution_identity`; each compiled source mutation records the same execution metadata in `verification.json`. This correction changes four Python files (`profile.py`, `run.py`, `verify.py`, `coverage.py`), receipt metadata, this report and delivery hashes. It changes **no native source/harness bytes, source pins, generated configuration, cases, observations, scientific values, statuses, numerical budgets, registry, dispatch inventory or diagnostics**. In particular, no undefined diagnostic was executed.
+
+The seven focused identity controls use the same normal gate: a fresh build is accepted (and its numeric case matches); deliberately wrong compiler, canonical source, runner and harness hashes are rejected; a same-path forwarding wrapper is rejected by its actual executable digest; and invoking the removed `--no-build` option exits 2 without changing the existing receipt's bytes or modification time. The normal complete regeneration, all nine existing comparator/freshness controls, and all eight compiled source mutations pass again. Exact commands are `python3 validation/parameters/run.py` followed by `python3 validation/parameters/verify.py`.
+
+The measured coverage is **reused unchanged**, not relabeled as a new coverage run. `verification.json::coverage_reuse` checks its native source/header/generated-config/harness/compiler/runtime identities and the compile/link command, allowing only coverage instrumentation and output/map filenames to differ. `coverage.py` was updated to pass fresh identity data to the shared launch gate for any future rerun; its historical `line_coverage.json` is byte-for-byte unchanged. The normal execution metadata identifies the current Python files; historical coverage metadata retains its original meaning.
+
 ## Version-control stages
 
-Harness and frozen observations: `474ce01cb9fdf2ee690fd98de5c56d4c1480412c` (`test: add canonical parameter and PAR reference harness`). The subsequent `docs: record parameter reference coverage and limitations` commit contains this report, coverage, regeneration/mutation evidence and delivery manifest; its commit ID is returned in the delivery chat. Both stages use explicit owned paths.
+Harness and frozen observations: `474ce01cb9fdf2ee690fd98de5c56d4c1480412c` (`test: add canonical parameter and PAR reference harness`). The original report/evidence commit is `6d135816a4f57aa8019b011882a7e0d58b51bad6` (`docs: record parameter reference coverage and limitations`). Decision 0024 implementation and executed receipts: `ccdf55c8143d0986c5af478d74db329286f57354` (`fix: verify freshly built parameter reference identities`). The subsequent report/delivery metadata commit ID is returned in the delivery chat. Every stage uses explicit owned paths.
 
 ## Reproduce
 
@@ -35,7 +47,7 @@ python3 validation/parameters/coverage.py
 python3 validation/parameters/catalog.py
 ```
 
-Run these sequentially: they deliberately recreate the same per-case working directories. Each suite internally uses four independent processes; this does not exercise shared-state concurrency. No network, new package, Rust build or timing-resource installation is needed. A2's generated minimal `config.h` is read and hashed; **no A2 object or archive is linked**.
+For the decision 0024 correction only the first two commands were rerun; the coverage and catalog artifacts were retained unchanged after the native-identity reuse checks. Run these sequentially: they deliberately recreate the same per-case working directories. Each suite internally uses four independent processes; this does not exercise shared-state concurrency. No network, new package, Rust build or timing-resource installation is needed. A2's generated minimal `config.h` is read and hashed; **no A2 object or archive is linked**.
 
 Initial generation used `python3 validation/parameters/run.py --record`. That explicit option replaces **only K** fixtures/goldens/profile. Ordinary `run.py` rebuilds the native probe, regenerates cases/inventory, compares all ordered records and stable build identities, and writes the regeneration receipt. `--select CASE_ID` is a diagnostic subset and never writes a full-suite success receipt. Builds, compiler logs, action files and temporary outputs are ignored under `build/`.
 
@@ -81,7 +93,7 @@ Selected helpers `parse_longdouble`, `turn_deg`, `hms_turn`, `dms_turn`, `copyPa
 
 ## Comparison and mutation integrity
 
-The comparison projection is explicit: all recorded JSON types/key sets/list lengths/order/values, raw stdout/stderr text and warning order, and status/action stages are exact. Scientific numbers are never normalized. Only workspace/build path prefixes are replaced with named markers. Fresh UUID launch challenges are validated then omitted from the comparison; addresses, padding and unwritten values are not serialized. Linker temporary object names make link-map digests execution identities, not a stable equality gate. Stable source/config/compiler/runtime/harness identities are compared on regeneration; each actual executable digest remains recorded.
+The comparison projection is explicit: all recorded JSON types/key sets/list lengths/order/values, raw stdout/stderr text and warning order, and status/action stages are exact. Scientific numbers are never normalized. Only workspace/build path prefixes are replaced with named markers. Fresh UUID launch challenges are validated then omitted from the comparison; addresses, padding and unwritten values are not serialized. Linker temporary object names make link-map digests execution identities, not a stable equality gate. Stable source/config/compiler/runtime/harness identities are compared on regeneration. The actual launch executable digest and current runner/harness hashes must match the fresh build before/after each process; they are recorded separately from the unchanged reference profile.
 
 Every invocation removes its case directory before creating action and output files. A random launch challenge must appear in the first probe event. The no-op-executable test rejects stale or absent outputs. Case directory names include an identity hash because this filesystem aliases names differing only in case; an early attempted run correctly failed the launch check on that collision. The corrected complete suite passed. Natural initializer fields and controlled prior parser fields remain separate; the change mask records observed value changes, with same-value write sets explained from source in FINDINGS.md.
 
