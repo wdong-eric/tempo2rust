@@ -46,6 +46,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0028](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0028-tim-io-reference-stage.md) releases N's independent TIM reading/writing, JBO/Fortran I/O and observation-ordering reference. It preserves include/repeat-call history and distinguishes host observations from defined results. General preprocessing and a Rust input-lifecycle contract remain later work.
 
+[Decision 0029](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0029-clock-glob-review-correction.md) returns L's delivered `189fed3` for a glob fidelity correction. Central reproduced eight membership/order/path differences against the raw native helper. L retains the Rust window; its acceptance remains pending.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -62,7 +64,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [I JPL Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0022 at `902fbba`, executed implementation `27c8384` | `rust/JPL_REPORT.md`, complete source mapping, host comparisons, ownership/unsafe evidence and M1/M2 regressions |
 | [J Clock/table reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) | `validation/clocks/` only; delivered evidence now read-only | Executed evidence accepted by decision 0021 at `360cc03`; nine unrun cases remain open | `REPORT.md`, table/route/fallback/cache/toa2utc source evidence and active-profile inventory |
 | [K Parameter/PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/11-parameter-par-reference.md) | Delivered evidence read-only; ownership window closed | Accepted by decision 0026 at `38d62af`, including correction `ccdf55c` | Complete parameter/dispatch inventory and bounded initialization/shared PAR reference; specialized records and TIM/preprocessing remain later work |
-| [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | `rust/`, new `validation/clocks_port/`, narrow JPL output-routing plumbing only | Released by decision 0023 after I ownership closure | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
+| [L Clock/table Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/12-clock-table-rust.md) | `rust/`, new `validation/clocks_port/`, narrow JPL output-routing plumbing only | Delivered at `189fed3`; central glob correction required by 0029 | `rust/CLOCK_REPORT.md`, complete projection, process-state and safe-boundary evidence, unchanged JPL/M1/M2 gates |
 | [M Numeric utility reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/13-numeric-utility-reference.md) | `validation/numeric_toolkit/` only | Released by decision 0025; independent reference work while L owns Rust | `REPORT.md`, complete selected-function/header inventory, bounded numeric/text/state evidence and actual execution-identity controls |
 | [N TIM I/O reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/14-tim-io-reference.md) | `validation/tim_io/` only | Released by decision 0028; independent reference while L owns Rust | `REPORT.md`, complete primary-file inventory, caller-state/history projection, raw TIM/JBO/order/I/O evidence and current execution controls |
 
@@ -81,7 +83,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment I: Rust JPL transfer | `01a1678a-ed2a-78c0-819d-a2b914a221bb` | Bounded transfer accepted by decision 0022; ownership window closed |
 | Assignment J: TEMPO2 clock and table reference | `01a16796-3234-7a41-aebf-0943867d9d04` | Delivered reference accepted within its executed scope by decision 0021; ownership window closed, nine cases remain unrun |
 | Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Corrected bounded reference accepted by decision 0026 at `38d62af`; ownership window closed |
-| Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Current bounded Rust owner under decision 0023; dispatched from `82fc09a` |
+| Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Delivered at `189fed3`; retained Rust ownership for the 0029 glob correction |
 | Assignment M: TEMPO2 numeric utility reference | `01a167fd-6e4d-7b31-ae87-f1fafd486df3` | Selected numeric/text/conversion/copy/link/diagnostic reference under decision 0025; dispatched from `c035834` |
 | Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | TIM/JBO/Fortran I/O and ordering reference under decision 0028; dispatched from `8f4d31e` |
 
@@ -121,7 +123,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | JPL Rust acceptance | Accepted by decision 0022 at `902fbba`; I ownership closed | Corrected legacy-header boundary, exact H host observations, owned stdio and unchanged M1/M2 regression outcomes |
 | Clock/table reference | J's executed evidence accepted by decision 0021 at `360cc03` | 142 exact case replays, measured function membership and mutation controls; nine unrun cases and later port dispositions remain open |
 | Parameter/PAR reference | K accepted by decision 0026 at `38d62af`; ownership closed | 306 exact case replays, actual executable/runner identity, controlled-state conventions, measured coverage and mutation controls; specialized records/TIM remain later work |
-| Clock/table Rust contract | L released by 0023; one interpolation contraction approved by 0027 | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
+| Clock/table Rust contract | L delivered; 0029 glob correction pending; 0027 contraction retained | Process lifetime, complete selected source behavior, byte parsing, explicit safe/terminal adapters, exact J comparisons and unchanged JPL/M1/M2 gates |
 | Numeric utility reference | M released by decision 0025 | Shared numeric/header, text, rounding/conversion, vector/rotation, copy/link and diagnostic evidence; no Rust gate or representation change |
 | TIM I/O reference | N released by decision 0028 | Complete source inventory, formats/directives/includes, writing and ordering, JBO/primitive I/O, declared host/undefined boundaries and fresh execution evidence |
 

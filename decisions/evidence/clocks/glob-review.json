@@ -1,0 +1,230 @@
+{
+  "canonical_function_sha256": "0fbb59b932cf2ce934917d89e4307e1aedc353ecc108c75a439a1b85110b1543",
+  "checks": [
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/a/a.clk"
+      ],
+      "pattern": "a",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a b/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/ab/a.clk",
+        "{tmp}/tree/b/a.clk",
+        "{tmp}/tree/back\\slash/a.clk",
+        "{tmp}/tree/colon:/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ],
+      "pattern": "*",
+      "rust": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/a b/a.clk",
+        "{tmp}/tree/ab/a.clk",
+        "{tmp}/tree/b/a.clk",
+        "{tmp}/tree/back\\slash/a.clk",
+        "{tmp}/tree/colon:/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ],
+      "pattern": "?",
+      "rust": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk"
+      ],
+      "pattern": "[ab]",
+      "rust": [
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk"
+      ],
+      "pattern": "[!x]",
+      "rust": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ],
+      "pattern": "[^x]",
+      "rust": [
+        "{tmp}/tree/!/a.clk",
+        "{tmp}/tree/-/a.clk",
+        "{tmp}/tree/^/a.clk",
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [],
+      "pattern": "[[:alpha:]]",
+      "rust": [
+        "{tmp}/tree/a/a.clk",
+        "{tmp}/tree/b/a.clk",
+        "{tmp}/tree/x/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/a/a.clk"
+      ],
+      "pattern": "[=a=]",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [],
+      "pattern": "[[=a=]]",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [],
+      "pattern": "[[.a.]]",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/.a/a.clk"
+      ],
+      "pattern": "\\.a",
+      "rust": [
+        "{tmp}/tree/.a/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [
+        "{tmp}/tree/./a.clk",
+        "{tmp}/tree/.a/a.clk"
+      ],
+      "pattern": ".*",
+      "rust": [
+        "{tmp}/tree/.a/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [],
+      "pattern": "[.]a",
+      "rust": []
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/back\\slash/a.clk"
+      ],
+      "pattern": "back\\\\slash",
+      "rust": [
+        "{tmp}/tree/back\\slash/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [
+        "{tmp}/tree/a//a.clk"
+      ],
+      "pattern": "a/",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": false,
+      "native": [
+        "{tmp}/tree/a///a.clk"
+      ],
+      "pattern": "a//",
+      "rust": [
+        "{tmp}/tree/a/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/./a/a.clk"
+      ],
+      "pattern": "./a",
+      "rust": [
+        "{tmp}/tree/./a/a.clk"
+      ]
+    },
+    {
+      "equal": true,
+      "native": [
+        "{tmp}/tree/a/../b/a.clk"
+      ],
+      "pattern": "a/../b",
+      "rust": [
+        "{tmp}/tree/a/../b/a.clk"
+      ]
+    }
+  ],
+  "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+  "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+  "reviewed_commit": "189fed3526ce7a3b1a8c6725d72d041251306ccc",
+  "rust_source_sha256": {
+    "clock_glob.rs": "2a108426d02ec80d722055d4a2d8c12ad6d801699e5da8d8608efb15954bb6a4",
+    "clock_text.rs": "a73da69d849dfd1d7b5312783c67a056df25f8c3d979abe466de89ec211b7fbc"
+  },
+  "scope": "Read-only raw canonical globClockFiles slice versus unchanged Rust modules, bounded regular temporary paths; no other native clock call or withheld experiment.",
+  "source_pin": "fda6ad4a9753ad7dc5d291406f2f310a9161423f"
+}
