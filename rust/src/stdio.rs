@@ -136,6 +136,7 @@ mod tests {
     use std::{fs, io::Write, os::unix::fs::MetadataExt};
 
     #[test]
+    #[ignore = "run alone by the JPL verifier so another test cannot reuse the inspected fd"]
     fn descriptor_transfer_partial_items_and_failure_cleanup() {
         let path = std::env::temp_dir().join(format!("jpl-stdio-{}", std::process::id()));
         let mut file = File::create(&path).unwrap();

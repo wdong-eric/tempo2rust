@@ -39,7 +39,7 @@ pub struct TerrestrialResult {
     pub runtime_root: std::path::PathBuf,
     pub resources: Vec<Resource>,
     pub warnings: Vec<String>,
-    pub retained_numerics: [&'static str; 2],
+    pub retained_numerics: [&'static str; 1],
 }
 
 /// Evaluate the declared isolated PKS model using explicit owned runtime resources.
@@ -330,7 +330,6 @@ pub fn form_bats_all(
         warnings,
         retained_numerics: [
             "Bundled SOFA Fortran closure from TEMPO2 fda6ad4; unchanged; native/upstream_manifest.json",
-            "JPL low-level reader from TEMPO2 fda6ad4; initialized header state and recoverable read cache; native/departures.patch",
         ],
     })
 }

@@ -34399,7 +34399,9 @@
           "macro_offset": "reference_C_ABI_only",
           "pvsun_offset": "reference_C_ABI_only",
           "struct_size": "reference_C_ABI_only"
-        }
+        },
+        "reference_event": null,
+        "reference_event_sha256": "3bfc944410917522887188adfb44ced0ffb6a7ded31b832c0b57c23391adaf35"
       },
       {
         "op": "open",
@@ -34422,26 +34424,12 @@
           "swap",
           "version"
         ],
-        "exact_fields": [
-          "event",
-          "header_doubles",
-          "init_error",
-          "io_calls",
-          "ipt",
-          "kernel_size",
-          "last_fread_size_requested_returned",
-          "ncoeff",
-          "ncon",
-          "nonnull",
-          "op",
-          "open_file_size",
-          "path_file_size",
-          "path_matches_open_inode",
-          "recsize",
-          "swap",
-          "version"
-        ],
-        "classifications": {}
+        "exact_fields": [],
+        "classifications": {},
+        "reference_event": 0,
+        "reference_event_sha256": "cf6b937e4a7f4b4776b3a498da30ce712383e71641d1a08b465e1395a2fe8638",
+        "mode": "boundary",
+        "reason": "Decision 0019: atoi whitespace scan leaves the 84-byte title"
       },
       {
         "op": "control",
@@ -34460,22 +34448,12 @@
           "twot",
           "vel_coeff"
         ],
-        "exact_fields": [
-          "cache_bytes",
-          "cache_loc",
-          "event",
-          "io_calls",
-          "last_fread_size_requested_returned",
-          "n_posn",
-          "n_vel",
-          "op",
-          "posn_coeff",
-          "sun",
-          "sun_epoch",
-          "twot",
-          "vel_coeff"
-        ],
-        "classifications": {}
+        "exact_fields": [],
+        "classifications": {},
+        "reference_event": 1,
+        "reference_event_sha256": "80a7f1618b277292a53f240bdeddbd030681844445dd4ce3ea03f95bbf139ca3",
+        "mode": "unreachable",
+        "reason": "Decision 0019: no handle after the title_conversion boundary"
       },
       {
         "op": "state",
@@ -34497,25 +34475,12 @@
           "twot",
           "vel_coeff"
         ],
-        "exact_fields": [
-          "cache_bytes",
-          "cache_loc",
-          "event",
-          "io_calls",
-          "last_fread_size_requested_returned",
-          "n_posn",
-          "n_vel",
-          "nut",
-          "op",
-          "posn_coeff",
-          "pv",
-          "status",
-          "sun",
-          "sun_epoch",
-          "twot",
-          "vel_coeff"
-        ],
-        "classifications": {}
+        "exact_fields": [],
+        "classifications": {},
+        "reference_event": 2,
+        "reference_event_sha256": "662ac4bddf8f5033d18b68baa898b023c91f62290824db8a5255082278091a70",
+        "mode": "unreachable",
+        "reason": "Decision 0019: no handle after the title_conversion boundary"
       },
       {
         "op": "close",
@@ -34526,14 +34491,12 @@
           "last_fread_size_requested_returned",
           "op"
         ],
-        "exact_fields": [
-          "event",
-          "init_error",
-          "io_calls",
-          "last_fread_size_requested_returned",
-          "op"
-        ],
-        "classifications": {}
+        "exact_fields": [],
+        "classifications": {},
+        "reference_event": 3,
+        "reference_event_sha256": "60460a28253b5bbbbc9e54d88924ab5a0d8fc657b0721af1595b9ab373f3b963",
+        "mode": "unreachable",
+        "reason": "Decision 0019: no handle after the title_conversion boundary"
       }
     ],
     "u1_preflight_reopen_be": [
@@ -35222,5 +35185,6 @@
     ]
   },
   "scenario_count": 55,
-  "event_count": 1443
+  "event_count": 1443,
+  "title_boundary_decision": "decisions/0019-jpl-title-boundary-projection.md"
 }

@@ -65,3 +65,19 @@ hashed and rewound by runtime provenance, then consumed. No alternate production
 reader, descriptor clone, escaped FILE pointer, or Send/Sync implementation.
 Private cfg(test) fault/counter state models H seek/read/allocation checkpoints.
 read_ephemeris retains timing call order and extended precision scaling.
+
+
+## Decision 0019 amendment: title_zero
+
+Central decision 0019 requires a title_conversion boundary when whitespace, sign
+or numeric scanning reaches byte 84. H is unchanged. The title_zero projection
+retains all five original events, their event numbers, complete reference field
+lists and canonical JSON hashes: startup compares defined fields; open requires
+boundary, global status zero, one preceding seek/two reads, no allocation, and
+last fread (204,1,1); control/state/close are explicitly unreachable. Cleanup
+occurs through Rust ownership, not execution of the later source close command.
+Only this named scenario has that classification; unexpected exclusions fail.
+Counts distinguish reference accounting, executed events, exact events, boundary
+and unreachable events. Supplementary I canonical probes preserve all six
+C-locale whitespace bytes, signed versions and in-bounds no-digit zero. ASan
+classifies all-whitespace/final-sign scans; it supplies no numerical oracle.

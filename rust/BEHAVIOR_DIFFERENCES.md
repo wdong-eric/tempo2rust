@@ -54,7 +54,7 @@ comparison is untested and no cache behavior was changed.
 | Global initialization code and live -7/-8 handles | Atomic global sequential status, startup -9, reset on init, unchanged by Drop. Live partial-init handles retain caller mutations and close normally. No C global-race equivalence claimed. |
 | C pointer ABI and null/double close | Owned non-cloneable stream, bounded optional Sun view and field selectors. No packed Rust ABI, arbitrary byte-offset getters or raw handle API. |
 | Pre430 unwritten temporary extension words | Source invalid marker clears optional rows; Rust avoids reading/swapping unwritten temporary words. Malformed accidental-valid marker case returns an explicit boundary. |
-| Unterminated no-digit title | Declared H title_zero maps to version zero; overflowing or unterminated numeric token rejects rather than scanning beyond the consumed title. |
+| Unterminated title, including all-whitespace H title_zero | Decision 0019 requires `title_conversion` when whitespace/sign/digit scanning reaches byte 84. Startup compares; open is a boundary; control/state/close remain explicitly accounted as unreachable. In-bounds no-digit zero and complete C-locale whitespace are preserved. |
 
 All 12 implemented responsibilities and each H event are covered by the projection.
 The ten isolated source cases are classified separately in I's evidence. No

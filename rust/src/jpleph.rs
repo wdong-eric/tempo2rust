@@ -123,16 +123,18 @@ impl Ephemeris {
             return Ok(None);
         }
         // atoi(title+26): preserve whitespace/sign/no-digit zero, but never scan
-        // past the title or overflow C int. A title containing no digits yields 0.
+        // past the title or overflow C int. Only an in-bounds non-digit yields zero.
         let mut at = 26;
-        while at < 84 && title[at].is_ascii_whitespace() {
+        while at < 84 && matches!(title[at], b' ' | b'\t' | b'\n' | b'\r' | 0x0b | 0x0c) {
             at += 1;
         }
         let negative = at < 84 && title[at] == b'-';
         if at < 84 && (title[at] == b'-' || title[at] == b'+') {
             at += 1;
         }
-        let first = at;
+        if at == title.len() {
+            return Err(Boundary("title_conversion"));
+        }
         let mut version = 0_i64;
         while at < 84 && title[at].is_ascii_digit() {
             version = version
@@ -144,7 +146,7 @@ impl Ephemeris {
         if negative {
             version = -version;
         }
-        if (at == 84 && at > first) || i32::try_from(version).is_err() {
+        if (at == title.len()) || i32::try_from(version).is_err() {
             return Err(Boundary("title_conversion"));
         }
         let swap_bytes = word(&header, 24, false) > 65536;

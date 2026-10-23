@@ -272,6 +272,9 @@ fn probe() {
         })();
         if let Err(e) = result {
             v["boundary"] = json!(e.0);
+            if op == "open" {
+                v["init_error"] = json!(jpl_init_error_code());
+            }
         }
         OBSERVER.with(|o| {
             let o = o.borrow();
@@ -477,4 +480,61 @@ fn owned_boundaries_lifetimes_and_direct_acceleration() {
         Err(Boundary("derivative_count"))
     );
     fs::remove_dir_all(dir).unwrap();
+}
+
+#[test]
+fn c_locale_title_whitespace_and_signed_versions() {
+    let path = std::env::temp_dir().join(format!("jpl-title-{}", std::process::id()));
+    for (prefix, version) in [
+        (&b"430/"[..], 430),
+        (&b"\x0b430/"[..], 430),
+        (&b" \t\n\r\x0b\x0c430/"[..], 430),
+        (&b"+430/"[..], 430),
+        (&b"-430/"[..], (-430_i32) as u32),
+        (&b"x"[..], 0),
+        (&b"+ "[..], 0),
+    ] {
+        let mut image = fixture();
+        image[26..84].fill(b' ');
+        image[26..26 + prefix.len()].copy_from_slice(prefix);
+        fs::write(&path, image).unwrap();
+        let e = Ephemeris::init(File::open(&path), None, None)
+            .unwrap()
+            .unwrap();
+        assert_eq!(e.ephemeris_version, version);
+    }
+    fs::remove_file(path).unwrap();
+}
+
+#[test]
+#[ignore = "run alone by the JPL verifier so another test cannot reuse the inspected fd"]
+fn title_scan_boundaries_close_stream_and_allow_reinitialization() {
+    use std::os::fd::AsRawFd;
+    let path = std::env::temp_dir().join(format!("jpl-title-boundary-{}", std::process::id()));
+    for token in [
+        vec![b' '; 58],
+        [vec![b' '; 57], vec![b'+']].concat(),
+        [vec![b' '; 57], vec![b'-']].concat(),
+        [vec![b' '; 57], vec![b'4']].concat(),
+        vec![b'9'; 58],
+    ] {
+        let mut image = fixture();
+        image[26..84].copy_from_slice(&token);
+        fs::write(&path, &image).unwrap();
+        let file = File::open(&path).unwrap();
+        let fd = file.as_raw_fd();
+        assert!(matches!(
+            Ephemeris::init(Ok(file), None, None),
+            Err(Boundary("title_conversion"))
+        ));
+        assert!(fs::metadata(format!("/dev/fd/{fd}")).is_err());
+        fs::write(&path, fixture()).unwrap();
+        let mut good = Ephemeris::init(File::open(&path), None, None)
+            .unwrap()
+            .unwrap();
+        let mut out = [0.0; 6];
+        assert_eq!(good.pleph(2450008.5, 3, 12, &mut out, 1).unwrap(), 0);
+        assert!(out.iter().all(|x| x.is_finite()));
+    }
+    fs::remove_file(path).unwrap();
 }
