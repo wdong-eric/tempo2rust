@@ -267,10 +267,7 @@ impl ClockSession {
                 ]
                 .concat(),
             );
-            let files = source_files(
-                Path::new(std::ffi::OsStr::from_bytes(c_bytes(&self.extra))),
-                b"clk",
-            );
+            let files = source_files(&[c_bytes(&self.extra), b"/*.clk"].concat());
             if files.is_empty() {
                 self.diagnostics.log(
                     b'e',
@@ -301,7 +298,7 @@ impl ClockSession {
             )?;
             return Err(terminal(Path::new(""), "clock_environment"));
         };
-        let files = source_files(&root.join("clock"), b"clk");
+        let files = source_files(&[c_bytes(root.as_os_str().as_bytes()), b"/clock/*.clk"].concat());
         if files.is_empty() {
             self.diagnostics
                 .stderr(b"No clock correction files in $TEMPO2/clock\n");

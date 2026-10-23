@@ -91,6 +91,7 @@ fn probe() {
         let result:Result<Value,TimingError>=session.run(|s|{
             let mut result=json!({});
             match op{
+                "glob"=>{use std::os::unix::ffi::OsStrExt;result=json!({"paths_hex":crate::clock_glob::files(a[1].as_bytes()).iter().map(|p|hex(p.as_os_str().as_bytes())).collect::<Vec<_>>()});},
                 "profile"=>result=json!({"float_digits":24,"double_digits":53,"longdouble_digits":PRECISION_BITS,"longdouble_size":0,"clock_capacity":30,"table_size":0,"observation_size":0}),
                 "env"=>{s.root=if a[1]=="@unset"{None}else{Some(a[1].clone().into())};s.extra=a[2].as_bytes().to_vec();},
                 "index"=>s.ensure_initialized(integer(1))?,

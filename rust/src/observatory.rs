@@ -231,7 +231,10 @@ impl ObservatoryDatabase {
         }
         diagnostics.log(b'd', "observatory.C", 205, b"In initObservatories");
         let root = root.ok_or_else(|| boundary("observatory_environment_storage"))?;
-        let path = root.join("observatory/observatories.dat");
+        let directory = [c_bytes(root.as_os_str().as_bytes()), b"/observatory/"].concat();
+        let path = PathBuf::from(std::ffi::OsStr::from_bytes(
+            &[directory.as_slice(), b"observatories.dat"].concat(),
+        ));
         if path.as_os_str().as_bytes().len() >= 1024 {
             return Err(boundary("observatory_path_storage"));
         }
@@ -248,7 +251,9 @@ impl ObservatoryDatabase {
         );
         self.read_file(&path, diagnostics)?;
         diagnostics.log(b'd', "observatory.C", 213, b"Reading other .dat files");
-        let pattern = root.join("observatory/*.dat");
+        let pattern = PathBuf::from(std::ffi::OsStr::from_bytes(
+            &[directory.as_slice(), b"*.dat"].concat(),
+        ));
         if pattern.as_os_str().as_bytes().len() >= 1024 {
             return Err(boundary("observatory_path_storage"));
         }
@@ -265,8 +270,8 @@ impl ObservatoryDatabase {
         );
         diagnostics.log(b'd', "observatory.C", 219, b"Return from glob = 0");
         diagnostics.log(b'd', "observatory.C", 220, b"Glob success");
-        for other in source_files(&root.join("observatory"), b"dat") {
-            if other != path {
+        for other in source_files(pattern.as_os_str().as_bytes()) {
+            if other.as_os_str().as_bytes() != path.as_os_str().as_bytes() {
                 diagnostics.log(
                     b'd',
                     "observatory.C",
@@ -284,10 +289,13 @@ impl ObservatoryDatabase {
                 233,
                 &[b"Note: using alias file ".as_slice(), alias, b".aliases"].concat(),
             );
-            root.join("observatory")
-                .join(std::ffi::OsStr::from_bytes(&[alias, b".aliases"].concat()))
+            PathBuf::from(std::ffi::OsStr::from_bytes(
+                &[directory.as_slice(), c_bytes(alias), b".aliases"].concat(),
+            ))
         } else {
-            root.join("observatory/aliases")
+            PathBuf::from(std::ffi::OsStr::from_bytes(
+                &[directory.as_slice(), b"aliases"].concat(),
+            ))
         };
         if path.as_os_str().as_bytes().len() >= 1024 {
             return Err(boundary("observatory_path_storage"));
