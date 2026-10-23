@@ -36,6 +36,13 @@ A, A2, B, C and D have delivered. D's bounded DE405/IF99 correction is complete 
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
+**Dispatched 23 October 2026:** Both new chats started from policy commit `1322f8b` in the local `rustify-tempo2` project. E's implementation and F's baseline inventory have separate write ownership; central acceptance remains pending.
+
+| Chat | Thread ID | Responsibility |
+| --- | --- | --- |
+| Assignment E: Rust TEMPO2 fitting | `01a16734-4da3-7810-979a-4dad2f647ecd` | Implement the amended M2 contract in `rust/` and `validation/fitting/` |
+| Assignment F: TEMPO2 core and fidelity inventory | `01a16734-9835-7f53-8a56-79602dc5e2af` | Audit baseline `ddc07b2`; write only `validation/coverage/` |
+
 ## Shared working design
 
 Use one Rust crate with a library and a small CLI initially. Owned model and observation values hold the input; fallible operations return results with contextual errors. The initial barycentric operation needs no observatory resources. D introduces an explicit runtime context when the terrestrial path needs resources. Preserve recognizable correspondence with TEMPO2 routines and the original calculation order, including the accepted source-corresponding module and helper names. Retain established numerical libraries behind small interfaces when justified by the selected path.
