@@ -4,7 +4,7 @@
 //! of clkcorr.C::getClockCorrections, eop.C::load_EOP, ifteph.C::IFTE_init and
 //! jpleph.c::jpl_init_ephemeris; resource hashing/ownership are Rust-only glue.
 use crate::{
-    TimingError, clkcorr::ClockCorrections, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris,
+    TimingError, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris,
     tabulated_function::TabulatedFunction,
 };
 use serde::Serialize;
@@ -83,109 +83,10 @@ pub(crate) fn paths_with_extension(
     Ok(paths)
 }
 
-pub(crate) struct Observatory {
-    pub xyz: [f64; 3],
-    pub latitude: f64,
-    pub longitude: f64,
-    pub height: f64,
-    pub code: String,
-    pub clock: String,
-}
-
-fn get_observatory(root: &Path, resources: &mut Vec<Resource>) -> Result<Observatory, TimingError> {
-    // The declared profile accepts literal PKS, so the source's additional alias
-    // lookup is outside this subset; no alias file is reported as read or applied.
-    let main = root.join("observatory/observatories.dat");
-    let mut paths = vec![main.clone()];
-    paths.extend(
-        paths_with_extension(&root.join("observatory"), "dat", false)?
-            .into_iter()
-            .filter(|p| p != &main),
-    );
-    let mut selected = None;
-    for path in paths {
-        let data = read_resource(root, &path, "observatory definitions", resources)?;
-        let text = std::str::from_utf8(&data)
-            .map_err(|e| TimingError::new(&path, None, "observatory", e.to_string()))?;
-        for (line, s) in text.lines().enumerate() {
-            if s.starts_with('#') || s.trim().is_empty() {
-                continue;
-            }
-            let t: Vec<_> = s.split_whitespace().collect();
-            let err = |m| TimingError::new(&path, Some(line + 1), "observatory", m);
-            if t.len() < 5 {
-                return Err(err("expected X Y Z NAME CODE [CLOCK]"));
-            }
-            let mut xyz = [0.0; 3];
-            for i in 0..3 {
-                xyz[i] = crate::tempo2_util::parse_binary64(t[i])
-                    .map_err(|_| err("invalid coordinate"))?;
-            }
-            if xyz[2].abs() > 1.0 && xyz[2].abs() < 10000.0 {
-                return Err(err(
-                    "geodetic input is unsupported; require ITRF cartesian coordinates",
-                ));
-            }
-            if selected.is_none()
-                && (t[3].eq_ignore_ascii_case("pks") || t[4].eq_ignore_ascii_case("pks"))
-            {
-                selected = Some((
-                    xyz,
-                    t[4].to_string(),
-                    t.get(5)
-                        .map(|s| s.to_string())
-                        .unwrap_or_else(|| format!("UTC({})", t[4])),
-                ));
-            }
-        }
-    }
-    let (xyz, code, clock) = selected
-        .ok_or_else(|| TimingError::new(main, None, "PKS", "observatory definition missing"))?;
-    // ITRF_to_GRS80, including its operation order and GRS80 constants.
-    let [x, y, z] = xyz;
-    let a = 6378137.0;
-    let flattening = 1.0 / 298.257222101;
-    let p = (x * x + y * y) / (a * a);
-    let esq = flattening * (2.0 - flattening);
-    let q = (1.0 - esq) / (a * a) * z * z;
-    let r = (p + q - esq * esq) / 6.0;
-    let s = esq * esq * p * q / (4.0 * r * r * r);
-    let t = (1.0 + s + (s * (2.0 + s)).sqrt()).powf(1.0 / 3.0);
-    let u = r * (1.0 + t + 1.0 / t);
-    let v = (u * u + esq * esq * q).sqrt();
-    let w = esq * (u + v - q) / (2.0 * v);
-    let k = (u + v + w * w).sqrt() - w;
-    let d = k * (x * x + y * y).sqrt() / (k + esq);
-    let height = (k + esq - 1.0) / k * (d * d + z * z).sqrt();
-    let latitude = 2.0 * z.atan2(d + (d * d + z * z).sqrt());
-    let longitude = if y >= 0.0 {
-        0.5 * std::f64::consts::PI - 2.0 * x.atan2((x * x + y * y).sqrt() + y)
-    } else {
-        -0.5 * std::f64::consts::PI + 2.0 * x.atan2((x * x + y * y).sqrt() - y)
-    };
-    // ITRF_to_GRS80 can propagate invalid coordinates as NaN; zero height also
-    // gives tropo.C a zero zenith norm. Return a resource error before either
-    // reaches a timing result (public resource-recovery example).
-    if !height.is_finite() || !latitude.is_finite() || !longitude.is_finite() || height == 0.0 {
-        return Err(TimingError::new(
-            root,
-            None,
-            "PKS",
-            "invalid GRS80 geometry",
-        ));
-    }
-    Ok(Observatory {
-        xyz,
-        latitude,
-        longitude,
-        height,
-        code,
-        clock,
-    })
-}
+pub(crate) use crate::observatory::Observatory;
 
 pub(crate) struct MeteorologyFunction {
-    pub site: String,
+    pub site: Vec<u8>,
     pub table: TabulatedFunction,
 }
 
@@ -195,7 +96,6 @@ pub struct RuntimeContext {
     pub(crate) root: PathBuf,
     pub(crate) resources: Vec<Resource>,
     pub(crate) observatory: Observatory,
-    pub(crate) clocks: ClockCorrections,
     pub(crate) ifte: IfteEphemeris,
     pub(crate) jpl: JplEphemeris,
     pub(crate) eop: crate::eop::Eop,
@@ -207,8 +107,29 @@ impl RuntimeContext {
         let root = fs::canonicalize(root)
             .map_err(|e| TimingError::new(root, None, "runtime root", e.to_string()))?;
         let mut resources = Vec::new();
-        let observatory = get_observatory(&root, &mut resources)?;
-        let clocks = ClockCorrections::load(&root, &mut resources)?;
+        let observatory = crate::clkcorr::with_session(&root, |session| {
+            let observatory = session.observatories.get(
+                b"PKS",
+                session.root.as_deref(),
+                session.alias.as_deref(),
+                &mut session.diagnostics,
+            )?;
+            session.export_observatory_resources(&root, &mut resources);
+            Ok(observatory)
+        })?;
+        // Existing timing geometry guard is outside L's selected lookup transfer.
+        if !observatory.height.is_finite()
+            || !observatory.latitude.is_finite()
+            || !observatory.longitude.is_finite()
+            || observatory.height == 0.0
+        {
+            return Err(TimingError::new(
+                &root,
+                None,
+                "PKS",
+                "invalid GRS80 geometry",
+            ));
+        }
         let path = root.join("ephemeris/TIMEEPH_short.te405");
         let ifte = IfteEphemeris::init(
             &path,
@@ -255,17 +176,16 @@ impl RuntimeContext {
         ] {
             for path in paths_with_extension(&root.join("atmosphere"), extension, true)? {
                 let data = read_resource(&root, &path, "meteorology table", &mut resources)?;
-                let text = std::str::from_utf8(&data)
-                    .map_err(|e| TimingError::new(&path, None, "meteorology", e.to_string()))?;
-                let table = TabulatedFunction::parse(&path, text)?;
-                resources.last_mut().unwrap().coverage_mjd = Some([table.start(), table.end()]);
-                let site = table.header[1..]
-                    .split_whitespace()
+                let table = crate::clkcorr::with_session(&root, |session| {
+                    TabulatedFunction::from_bytes(&path, &data, &mut session.diagnostics)
+                })?;
+                resources.last_mut().unwrap().coverage_mjd = Some([table.start()?, table.end()?]);
+                let site = crate::clock_text::tokens(&table.header[1..])
                     .next()
                     .ok_or_else(|| {
                         TimingError::new(&path, Some(1), "meteorology", "missing site name")
                     })?
-                    .to_string();
+                    .to_vec();
                 tables.push(MeteorologyFunction { site, table });
             }
         }
@@ -273,7 +193,6 @@ impl RuntimeContext {
             root,
             resources,
             observatory,
-            clocks,
             ifte,
             jpl,
             eop,

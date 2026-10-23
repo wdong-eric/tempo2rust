@@ -27,13 +27,14 @@ F's fixed-baseline inventory. Assignment I changes only the released JPL scope;
 M1 historical acceptance does not establish exact whole-source fidelity.
 `M1A_REPORT.md`, `M1B_REPORT.md` and `validation/coverage/` remain unchanged.
 
-Independent fitting fixtures use fresh runtime contexts, matching isolated
-reference processes. A preliminary verifier that reused a runtime from the
+Historical E verification used fresh runtime contexts. Under L, independent
+fitting fixtures now use fresh processes, matching isolated reference processes. A preliminary verifier that reused a runtime from the
 54000-centered fixture for the original seven-TOA fixture selected a different
 cached clock chain at early epochs. Correcting the verifier's experiment setup
 restored raw forward agreement. This observation is not proof of a newly found
 Rust/source difference under the same call history; cross-profile history
-comparison is untested and no cache behavior was changed.
+comparison was untested at that delivery. L now restores process-lifetime
+clock caches; the owned fitting driver isolates cases without a reset mode.
 
 ## Assignment I JPL dispositions (decision 0017)
 
@@ -67,3 +68,22 @@ read counts. `IFTE_get_Vals` checks data seek/read outcomes and exits on a short
 coefficient read; upper dates must not be described as unchecked data reads.
 The Rust range/record guards and owned storage remain existing adapter departures.
 Only their source-description comment changed in this review follow-up.
+
+## Assignment L clock/table dispositions (decision 0023 and user contraction approval)
+
+| Source behavior | Current Rust disposition |
+| --- | --- |
+| Permissive numeric prefixes/hex/nonfinite input, failed rows, duplicates/decreasing rows | Preserved by typed libc scans and source chunk/order rules; stricter parser removed |
+| Defined zero-width IEEE arithmetic and endpoint proxies | Preserved; no zero-width rejection. Final interpolation multiply/add alone uses user-authorized source-matched contraction |
+| Directed binary32 weights/distances, unusual weights, strict ties, retry and reverse hints | Preserved; negative/finite guards removed; predecessor-cycle experiment remains unrun and algorithm unrepaired |
+| Four-stage stored-chain fallback versus UTC-only accumulator | Preserved; exhausted lookup normally returns zero, earlier slot writes survive failed fills |
+| Index/table/sequence, observatory and warning history lifetime | Process-wide synchronized session; new context/root does not reset. Header and sample identities retained separately |
+| Alias-list accumulation and SAT jump l/k mismatch/extra slot | Preserved deterministic source defects; no corrected variant |
+| Normal source exit | Contextual `source_exit` with cause and defined diagnostic prefix; session/standalone table becomes terminal |
+| Empty/singleton/header/basename/correction storage, invalid indices/unwritten fields/integer conversions | Operation-local named boundary before undefined operation, defined prefix retained; no guessed value or unsafe emulation |
+| Source output and public JSON | Raw source-channel byte sink; CLI stderr routing on error; whole timing JSON only after success. Warning history is not reset |
+| Weather/IF99/EOP/geometry/timing guards beyond selected table/lookup dependencies | Existing bounded adapters remain; no claim of complete resource-process fidelity |
+
+All nine withheld native clock experiments stay unrun. Eight have separate safe
+Rust checks; the cycle has no execution result. Historical reports/reference
+files and F's inventory remain unchanged. Central owns bounded acceptance.

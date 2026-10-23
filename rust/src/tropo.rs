@@ -23,16 +23,20 @@ pub struct Weather {
 
 pub(crate) fn get_meteorological_value(
     tables: &[MeteorologyFunction],
-    site: &str,
+    site: &[u8],
     mjd: f64,
     pressure: bool,
     warnings: &mut Vec<String>,
 ) -> Result<WeatherValue, TimingError> {
-    let selected = tables
-        .iter()
-        .find(|t| t.site.eq_ignore_ascii_case(site) && t.table.covers(mjd));
+    let mut selected = None;
+    for table in tables {
+        if table.site.eq_ignore_ascii_case(site) && table.table.covers(mjd)? {
+            selected = Some(table);
+            break;
+        }
+    }
     let value = if let Some(t) = selected {
-        t.table.get_value(mjd, warnings)?
+        crate::clkcorr::with_diagnostics(|diagnostics| t.table.get_value(mjd, diagnostics))?
     } else {
         0.0
     };
@@ -49,8 +53,9 @@ pub(crate) fn get_meteorological_value(
     // including a measured zero. Decision 0004 explicitly adopts this fallback.
     let effective = if value == 0.0 {
         warnings.push(format!(
-            "{}: {site} @ {mjd}: {reason}; using {}",
+            "{}: {} @ {mjd}: {reason}; using {}",
             if pressure { "TROP2" } else { "TROP1" },
+            String::from_utf8_lossy(site),
             if pressure {
                 "101.325 kPa"
             } else {

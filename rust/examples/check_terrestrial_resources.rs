@@ -22,6 +22,18 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::create_dir_all(path.parent().unwrap())?;
         fs::copy(source.join(&r.path), &path)?;
     }
+    // Clock indexing is lazy and process-wide. Copy the declared clock inputs
+    // explicitly; constructing a context must not index them for this fixture.
+    fs::create_dir_all(runtime_dir.join("clock"))?;
+    for entry in fs::read_dir(source.join("clock"))? {
+        let entry = entry?;
+        if entry.path().extension().is_some_and(|x| x == "clk") {
+            fs::copy(
+                entry.path(),
+                runtime_dir.join("clock").join(entry.file_name()),
+            )?;
+        }
+    }
     let fixtures = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/terrestrial/fixtures");
     let par = fixtures.join("test1.par");
     let tim = fixtures.join("test2.tim");
@@ -42,10 +54,18 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
     let baseline_cli = run_cli()?;
     assert!(baseline_cli.status.success());
-    assert_eq!(
-        expected_result,
-        serde_json::from_slice::<serde_json::Value>(&baseline_cli.stdout)?
-    );
+    let cli_result: serde_json::Value = serde_json::from_slice(&baseline_cli.stdout)?;
+    assert_eq!(expected, cli_result["observations"]);
+    assert_eq!(expected_result["corrections"], cli_result["corrections"]);
+    // Cached source-root observatory provenance correctly differs from the
+    // fresh CLI process's scratch-root resources. The numerical projection above
+    // and the direct clock provenance controls test these distinct contracts.
+    assert!(baseline.resources.iter().any(|r| {
+        r.path
+            == source
+                .join("observatory/observatories.dat")
+                .to_string_lossy()
+    }));
     // Decision 0005 reproducers use disposable copies of the exact pinned files.
     // JPL rejects the undefined conversion at use; IF99 retains its constructor guard.
     let mut grid_checks = Vec::new();
@@ -91,11 +111,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     let mut checks = Vec::new();
     for name in [
-        "observatory/observatories.dat",
         "ephemeris/DE405.1950.2050",
         "ephemeris/TIMEEPH_short.te405",
         "earth/eopc04_IAU2000.62-now",
-        "clock/utc2tai.clk",
     ] {
         let path = runtime_dir.join(name);
         let saved = fs::read(&path)?;
@@ -126,14 +144,33 @@ fn main() -> Result<(), Box<dyn Error>> {
         );
         checks.push(json!({"resource":name,"missing_error":missing,"malformed_error":malformed,"recovery":"PASS"}));
     }
+    // Loaded process resources survive file removal/replacement and new contexts.
+    for name in ["observatory/observatories.dat", "clock/utc2tai.clk"] {
+        let path = runtime_dir.join(name);
+        let saved = fs::read(&path)?;
+        fs::remove_file(&path)?;
+        let mut next = RuntimeContext::new(&runtime_dir)?;
+        assert_eq!(
+            expected,
+            serde_json::to_value(&evaluate_terrestrial(&input, &mut next)?.timing.observations)?
+        );
+        fs::write(&path, b"malformed resource\n")?;
+        let mut next = RuntimeContext::new(&runtime_dir)?;
+        assert_eq!(
+            expected,
+            serde_json::to_value(&evaluate_terrestrial(&input, &mut next)?.timing.observations)?
+        );
+        fs::write(&path, &saved)?;
+        checks.push(json!({"resource":name,"loaded_process_cache_survives_remove_replace_and_new_context":"PASS"}));
+    }
     let obs_path = runtime_dir.join("observatory/observatories.dat");
     let saved_obs = fs::read(&obs_path)?;
     fs::write(&obs_path, "0 0 0 Parkes PKS\n")?;
-    let geometry_error = match RuntimeContext::new(&runtime_dir) {
-        Err(error) => error.to_string(),
-        Ok(_) => panic!("invalid geometry was accepted"),
-    };
-    assert!(geometry_error.contains("invalid GRS80 geometry"));
+    // A fresh process still exercises the unchanged high-level geometry guard.
+    let geometry_error = run_cli()?;
+    assert_eq!(geometry_error.status.code(), Some(1));
+    assert!(geometry_error.stdout.is_empty());
+    assert!(String::from_utf8(geometry_error.stderr)?.contains("invalid GRS80 geometry"));
     fs::write(&obs_path, &saved_obs)?;
     let huge_dm = scratch.join("overflow-dm.par");
     fs::write(

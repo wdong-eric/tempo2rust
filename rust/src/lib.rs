@@ -7,6 +7,11 @@
 //! See README.md for accepted input syntax and scientific conventions.
 
 mod clkcorr;
+mod clock_diagnostics;
+mod clock_glob;
+#[cfg(test)]
+mod clock_tests;
+mod clock_text;
 mod eop;
 #[cfg(test)]
 mod fitting_tests;
@@ -17,6 +22,7 @@ mod ifteph;
 mod input;
 mod jpleph;
 mod longdouble;
+mod observatory;
 mod read_ephemeris;
 mod read_parfile;
 mod read_timfile;
@@ -30,10 +36,12 @@ mod tabulated_function;
 mod tempo2_util;
 mod tkfit;
 mod tksvd;
+mod toa2utc;
 mod tropo;
 mod tt2tdb;
 
-pub use clkcorr::ClockStep;
+pub use clkcorr::{ClockStep, take_clock_diagnostics};
+pub use clock_diagnostics::ClockDiagnostic;
 pub use form_bats::{Corrections, TerrestrialResult, form_bats_all as evaluate_terrestrial};
 pub use form_residuals::form_residuals as evaluate_barycentric;
 pub use input::load;
@@ -48,7 +56,7 @@ use serde::Serialize;
 use std::{collections::BTreeMap, fmt, path::PathBuf};
 
 /// Context is attached at the input or observation boundary; no partial result is returned.
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct TimingError {
     pub path: PathBuf,
     pub line: Option<usize>,

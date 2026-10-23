@@ -79,7 +79,7 @@ routine map and exact before/after naming-pass verification.
 
 The terrestrial implementation follows the same convention:
 `form_bats::form_bats_all` (re-exported as `evaluate_terrestrial`),
-`get_clock_corrections`, `get_clock_correction_sequence`, `load_eop`,
+`get_clock_corrections`, `get_correction`, `get_sequence`, `toa2utc`, `load_eop`,
 `get_eop`, `read_ephemeris`, `get_obs_coord` and `compute_tropospheric_delay`.
 `tt2tdb.rs` matches the original filename and retains its routine name `tt2tb`.
 The shared `dot_product` lives in `tempo2_util`, matching `tempo2Util.C`.
@@ -189,15 +189,24 @@ resource hashes/ranges, retained numerical dependencies and warnings.
 The fixed profile uses IF99, IAU2000B, frequency dilation, Sun/planet Shapiro,
 interstellar DM, IPM=1, NE_SW=4, SWM=0 and troposphere. Source table selection,
 clock-route caching/ties, sequential step epochs, lower EOP proxy and clock UTC
-fallback are retained. Missing indispensable resources and malformed data are
-errors. EOP at/after its last sample is an error because the source's derivative
+fallback are retained. Tables skip unconverted rows, keep decreasing/duplicate/nonfinite
+samples, and preserve endpoint proxies and defined IEEE results. Exhausted clock
+fallbacks return zero; source exits become terminal-source errors. The approved
+storage boundaries are listed in `CLOCK_REPORT.md`. Other indispensable resource
+errors and existing timing guards remain in force. EOP at/after its last sample is an error because the source's derivative
 access is out of bounds there. No scientific coefficient correction is included.
 
-`RuntimeContext` owns resource state. Evaluations require exclusive mutable access;
-independent contexts do not share clock/IF99 caches. Keep runtime files unchanged
-while a context is alive, and construct a new context to adopt a new resource set.
-A failed evaluation returns no partial result; a later valid evaluation is supported.
-Native dependency sources and intentional changes are described in `native/README.md`.
+`RuntimeContext` owns the timing resources, while clock tables/index/sequences,
+selected observatory lookup and diagnostic history have synchronized process
+lifetime. A new context or changed root does not clear those caches. Indexing and
+sample loading are independently lazy; provenance retains the actual cached
+resource identity. IF99/JPL/EOP/weather state retains its existing context scope.
+A failed evaluation publishes no partial result. A clock source-exit or storage
+boundary latches the shared session; later clock operations return that terminal
+state until a fresh process. Unrelated JPL/IF99/EOP recovery remains supported.
+`take_clock_diagnostics()` drains source-channel byte events without resetting
+history or terminal state; the CLI routes pending error-prefix bytes to stderr.
+Native dependencies are described in `native/README.md` and `CLOCK_REPORT.md`.
 
 ```sh
 python3 verify_m1b.py --runtime /absolute/path/to/T2runtime

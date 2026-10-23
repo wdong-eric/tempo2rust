@@ -101,17 +101,37 @@ pub fn form_bats_all(
     for obs in &input.observations {
         let calculated = (|| {
             let sat = &obs.sat_mjd.0;
-            let clock_steps = runtime.clocks.get_clock_corrections(
-                &runtime.root,
-                &mut runtime.resources,
-                &runtime.observatory.clock,
-                "TT(TAI)",
-                sat.to_f64(),
-                &mut warnings,
-            )?;
-            let clock_tt = clock_steps
-                .iter()
-                .fold(0.0, |s, correction| s + correction.correction_s.0.to_f64());
+            let mut clock_observation = crate::clkcorr::ClockObservation {
+                sat: sat.clone(),
+                tel_id: obs.original.site.as_bytes().to_vec(),
+                clock_corr: 1,
+                ..Default::default()
+            };
+            let (clock_steps, clock_tt) = crate::clkcorr::with_session(&runtime.root, |session| {
+                session.queries.clear();
+                // The selected timing input has no SAT jumps; direct source-field
+                // tests exercise toa2utc's jump branch without extending PAR input.
+                let pulsar = crate::toa2utc::ClockPulsar {
+                    nobs: 1,
+                    to: b"TT(TAI)".to_vec(),
+                    no_warnings: 1,
+                    ..Default::default()
+                };
+                let mut observations = [vec![clock_observation.clone()]];
+                crate::toa2utc::toa2utc(session, &[pulsar], &mut observations, 1)?;
+                clock_observation = observations[0].remove(0);
+                let total = crate::clkcorr::get_correction_tt(&clock_observation)?;
+                let steps = session.steps(&runtime.root, clock_observation.count as usize)?;
+                session.export_resources(&runtime.root, &mut runtime.resources);
+                warnings.extend(
+                    session
+                        .diagnostics
+                        .events
+                        .drain(..)
+                        .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
+                );
+                Ok((steps, total))
+            })?;
             let tt = sat.clone() + clock_tt / 86400.0f64;
             // global.C: rough TT->TB, first ephemeris, site, refined TT->TB,
             // refined ephemeris. Legacy repeat calls can inherit previous vectors;
@@ -125,17 +145,22 @@ pub fn form_bats_all(
                 .to_f64();
             let earth_initial =
                 crate::read_ephemeris::read_ephemeris(&mut runtime.jpl, jd)?.earth_ssb;
-            let clock_utc_steps = runtime.clocks.get_clock_corrections(
-                &runtime.root,
-                &mut runtime.resources,
-                &runtime.observatory.clock,
-                "UTC",
-                sat.to_f64(),
-                &mut warnings,
-            )?;
-            let clock_utc = clock_utc_steps
-                .iter()
-                .fold(0.0, |s, correction| s + correction.correction_s.0.to_f64());
+            let (clock_utc_steps, clock_utc) =
+                crate::clkcorr::with_session(&runtime.root, |session| {
+                    session.queries.clear();
+                    let total =
+                        session.get_correction(&clock_observation, None, Some(b"UTC"), 1)?;
+                    let steps = session.steps(&runtime.root, session.queries.len())?;
+                    session.export_resources(&runtime.root, &mut runtime.resources);
+                    warnings.extend(
+                        session
+                            .diagnostics
+                            .events
+                            .drain(..)
+                            .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
+                    );
+                    Ok((steps, total))
+                })?;
             let utc = sat.clone() + clock_utc / 86400.0f64;
             let site = crate::get_obs_coord::get_obs_coord(
                 &runtime.observatory,

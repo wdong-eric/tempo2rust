@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -18,7 +18,12 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/form_residuals.rs` | `formResiduals.C::formResiduals`, `tempo2Util.C::fortran_mod/fortran_nlong`; split spin phase, first-input reference and checked counts. The `@` entry supplies zero-delay `formBats.C::formBats` and `secularMotion.C::secularMotion` branches |
 | `src/form_bats.rs` | Selected `global.C::formBatsAll`, `calculate_bclt.C::calculate_bclt`, `formBats.C::formBats`; fused `shapiro_delay.C::shapiro_delay`, `dm_delays.C::dm_delays` constant-DM/spherical-wind path, `vectorPulsar.C::vectorPulsar` fixed direction, and zero `secularMotion.C::secularMotion`. Also calls the Rust `formResiduals.C::formResiduals` counterpart |
 | `src/runtime.rs` | Rust-owned resource/context glue; `observatory.C::getObservatory/ITRF_to_GRS80`, `tropo.C::initialize_meteorology_tables`; orchestrates `clkcorr.C::getClockCorrections`, `eop.C::load_EOP`, `ifteph.C::IFTE_init`, `jpleph.c::jpl_init_ephemeris` counterparts |
-| `src/clkcorr.rs` | `clkcorr.C::getClockCorrections/getCorrection/getClockCorrectionSequenceInternal`; selected route/cache behavior and owned tables, without explicit source chains |
+| `src/clkcorr.rs` | `clkcorr.C::getClockCorrections/getCorrection/getClockCorrectionSequenceInternal`; all four public operations, explicit chains and all selected helpers/constructors; process session, directed routes, lazy tables and source fallbacks |
+| `src/toa2utc.rs` | Active `toa2utc.C::toa2utc`, bypass and exact SAT jump mutation |
+| `src/observatory.rs` | Selected `observatory.C` file/alias parsing, independent process initialization, alias lookup/accumulation and geometry |
+| `src/clock_diagnostics.rs` | `tempo2Util.C::displayMsg`, selected `TKlog.C/h`, `global.C::CVSdisplayVersion`; byte-event sink |
+| `src/clock_text.rs` | Private typed libc conversion/formatting for source fixed formats, C-string and whitespace rules |
+| `src/clock_glob.rs` | Source glob flags-zero calls, byte/C-locale matching, leading-dot rule and sorted paths |
 | `src/tabulated_function.rs` | `tabulatedfunction.C::TabulatedFunction_load/TabulatedFunction_getValue/TabulatedFunction_getStartX/TabulatedFunction_getEndX` in an owned table |
 | `src/eop.rs` | `eop.C::load_EOP/get_EOP` |
 | `src/ifteph.rs` | `ifteph.C::IFTE_init/IFTE_get_Vals/IFTEinterp` in owned storage; split-epoch responsibility from `tt2tdb.C::tt2tb` |
@@ -58,13 +63,17 @@ No numerical dependency or alternate JPL implementation was added.
 
 ## Unsafe audit
 
-There are seven production unsafe sites: five in `stdio.rs` and the two existing
-SOFA sites. All new JPL arithmetic, parsing and indexing are safe Rust. Each site
+There are twelve production unsafe sites: five in `stdio.rs`, two existing
+SOFA sites, and five in `clock_text.rs` (declarations plus four typed calls).
+JPL and clock/table algorithms, storage, graph traversal and synchronization
+remain safe Rust. Each site
 has adjacent necessity and concrete invariants. No unsafe function or Send/Sync
 implementation is present.
 
 | Site | Necessity | Invariants |
 | --- | --- | --- |
+| `clock_text.rs` foreign declarations and pair/header/number-prefix calls | Complete host sscanf grammar, prefix and binary32 conversion | Owned NUL input, private literal formats, initialized correctly typed outputs, bounded 63-byte strings, completed-conversion reads only; no pointers escape |
+| `clock_text.rs` formatting call | Fixed source printf spelling/truncation | One f64 argument, static enum-selected formats, initialized 512-byte bounded buffer; no pointers escape |
 | `stdio.rs` foreign declarations | C stdio buffering is observable in H | Opaque FILE, bounded calls, no retained caller buffers |
 | `stdio.rs` fdopen | Consume the already opened file without path reopen | File owns live fd until success; static NUL mode; failure drops File; success relinquishes fd exactly once |
 | `stdio.rs` fread | Complete-item counts and partial-element writes | Checked size product fits initialized exclusive byte slice; no pointer escapes; live exclusive stream |
@@ -93,3 +102,12 @@ Decision 0017 supplies the remaining owned/undefined-state dispositions in
 `../validation/jpl_port/PROJECTION.md` and `BEHAVIOR_DIFFERENCES.md`. H's full-call
 values remain host observations subject to source undefined pointer formation.
 Exact agreement does not make them portable C results or accept the full transfer.
+
+## Clock/table scope and authorized contraction
+
+`../validation/clocks_port/SOURCE_MAP.md` maps all 32 J entries and dependencies.
+The user authorized only the final table interpolation `mul_add` to reproduce
+J's pinned GCC `fmadd`; all preceding operations and every numerical budget stay
+unchanged. `verification/clocks/interpolation_contract.json` records the evidence.
+Process serialization, terminal-source errors, operation-local storage bounds,
+byte diagnostics and JSON presentation are explicit adapters in `CLOCK_REPORT.md`.

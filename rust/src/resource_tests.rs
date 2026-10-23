@@ -1,71 +1,58 @@
 //! Synthetic trust-boundary/recovery checks; numerical fixture checks are separate.
 use crate::{
-    clkcorr::ClockCorrections, eop::Eop, ifteph::IfteEphemeris, runtime::MeteorologyFunction,
+    eop::Eop, ifteph::IfteEphemeris, runtime::MeteorologyFunction,
     tabulated_function::TabulatedFunction, tropo::get_meteorological_value,
 };
-use std::{
-    fs,
-    path::{Path, PathBuf},
-    sync::atomic::{AtomicUsize, Ordering},
-};
+use std::path::Path;
 
-static NEXT: AtomicUsize = AtomicUsize::new(0);
-struct Directory(PathBuf);
-impl Directory {
-    fn new() -> Self {
-        let p = std::env::temp_dir().join(format!(
-            "tempo2-resources-{}-{}",
-            std::process::id(),
-            NEXT.fetch_add(1, Ordering::Relaxed)
-        ));
-        fs::create_dir(&p).unwrap();
-        Self(p)
-    }
-}
-impl Drop for Directory {
-    fn drop(&mut self) {
-        let _ = fs::remove_dir_all(&self.0);
-    }
+fn table(path: &Path, text: &str) -> TabulatedFunction {
+    TabulatedFunction::from_bytes(
+        path,
+        text.as_bytes(),
+        &mut crate::clock_diagnostics::Diagnostics::default(),
+    )
+    .unwrap()
 }
 
 #[test]
-fn table_steps_endpoints_and_invalid_data() {
+fn table_steps_endpoints_and_source_rows() {
     let p = Path::new("synthetic.clk");
-    let table = TabulatedFunction::parse(p, "# A B\n1 0\n2 0\n2 1\n3 1\n").unwrap();
-    let mut warnings = Vec::new();
-    assert_eq!(table.get_value(1.5, &mut warnings).unwrap(), 0.0);
-    assert_eq!(table.get_value(2.0, &mut warnings).unwrap(), 1.0);
-    assert_eq!(table.get_value(2.5, &mut warnings).unwrap(), 1.0);
-    assert_eq!(table.get_value(0.0, &mut warnings).unwrap(), 0.0);
-    assert_eq!(table.get_value(4.0, &mut warnings).unwrap(), 1.0);
-    assert_eq!(warnings.len(), 2);
-    for bad in [
-        "",
-        "A B\n1 1\n2 2\n",
-        "# A B\n1 0\n",
-        "# A B\n2 0\n1 0\n",
-        "# A B\n1 NaN\n2 0\n",
-        "# A B\n1 0\nbad row\n2 0\n",
-        "# A B\n1 0\n1 1\n",
-    ] {
-        assert!(TabulatedFunction::parse(p, bad).is_err(), "{bad}");
+    let t = table(p, "# A B\n1 0\n2 0\n2 1\n3 1\n");
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    for (x, y) in [(1.5, 0.0), (2.0, 1.0), (2.5, 1.0), (0.0, 0.0), (4.0, 1.0)] {
+        assert_eq!(t.get_value(x, &mut diagnostics).unwrap(), y);
     }
-    let duplicate_end = TabulatedFunction::parse(p, "# A B\n1 0\n2 1\n2 2\n").unwrap();
-    assert!(duplicate_end.get_value(2.0, &mut warnings).is_err());
-    assert_eq!(table.get_value(2.5, &mut warnings).unwrap(), 1.0);
+    assert_eq!(diagnostics.warnings, 2);
+    assert_eq!(table(p, "# A B\n1 0\nbad row\n2 0\n").samples.len(), 2);
+    assert_eq!(table(p, "# A B\n2 0\n1 0\n").samples.len(), 2);
+    assert!(
+        table(p, "# A B\n1 0\n2 1\n2 2\n")
+            .get_value(2.0, &mut diagnostics)
+            .unwrap()
+            .is_nan()
+    );
+    let singleton = table(p, "# A B\n1 0\n");
+    assert_eq!(singleton.get_value(0.0, &mut diagnostics).unwrap(), 0.0);
+    assert_eq!(
+        singleton
+            .get_value(1.0, &mut diagnostics)
+            .unwrap_err()
+            .field,
+        "table_bracket_storage"
+    );
 }
 
 #[test]
 fn meteorology_valid_zero_missing_and_outside_coverage() {
     let table = |text| MeteorologyFunction {
-        site: "PKS".into(),
-        table: TabulatedFunction::parse(Path::new("pks.synthetic"), text).unwrap(),
+        site: b"PKS".to_vec(),
+        table: table(Path::new("pks.synthetic"), text),
     };
     let pressure = vec![table("# PKS\n53000 100\n53001 102\n")];
     let wet = vec![table("# PKS\n53000 1e-9\n53001 3e-9\n")];
     let mut warnings = Vec::new();
-    let p = get_meteorological_value(&pressure, "pks", 53000.5, true, &mut warnings).unwrap();
-    let w = get_meteorological_value(&wet, "pks", 53000.5, false, &mut warnings).unwrap();
+    let p = get_meteorological_value(&pressure, b"pks", 53000.5, true, &mut warnings).unwrap();
+    let w = get_meteorological_value(&wet, b"pks", 53000.5, false, &mut warnings).unwrap();
     assert_eq!(p.effective_value.0, 101.0);
     assert!((w.effective_value.0.to_f64() - 2e-9).abs() < 1e-24);
     assert_eq!(p.reason, "table interpolation");
@@ -76,8 +63,8 @@ fn meteorology_valid_zero_missing_and_outside_coverage() {
         (&[][..], 53000.5, "no weather table for site"),
         (&pressure[..], 50000.0, "epoch outside weather coverage"),
     ] {
-        let p = get_meteorological_value(tables, "pks", mjd, true, &mut warnings).unwrap();
-        let w = get_meteorological_value(tables, "pks", mjd, false, &mut warnings).unwrap();
+        let p = get_meteorological_value(tables, b"pks", mjd, true, &mut warnings).unwrap();
+        let w = get_meteorological_value(tables, b"pks", mjd, false, &mut warnings).unwrap();
         assert_eq!(p.effective_value.0, 101.325);
         assert_eq!(w.effective_value.0, 0);
         assert_eq!(p.reason, reason);
@@ -116,107 +103,6 @@ fn eop_upper_boundary_recovers_and_leap_is_not_interpolated() {
     assert_eq!(warnings.len(), 1);
     assert!(Eop::load_eop(p, "bad").is_err());
     assert!(Eop::load_eop(p, &format!("{header}2000 1 1 50000 NaN 0 0")).is_err());
-}
-
-#[test]
-fn clock_routes_coverage_ties_fallback_and_recovery() {
-    let dir = Directory::new();
-    let root = &dir.0;
-    fs::create_dir(root.join("clock")).unwrap();
-    for (name, table) in [
-        ("a.clk", "# UTC(PKS) A 1\n0 1e-6\n10 1e-6\n"),
-        ("b.clk", "# A TT(TAI) 1\n0 32\n100 32\n"),
-        ("c.clk", "# UTC(PKS) B 1\n10 2e-6\n100 2e-6\n"),
-        ("d.clk", "# B TT(TAI) 1\n0 32\n100 32\n"),
-        ("e.clk", "# UTC TT(TAI) 1\n0 32\n1000 32\n"),
-    ] {
-        fs::write(root.join("clock").join(name), table).unwrap();
-    }
-    let mut resources = Vec::new();
-    let mut warnings = Vec::new();
-    let mut clocks = ClockCorrections::load(root, &mut resources).unwrap();
-    let a = clocks
-        .get_clock_corrections(
-            root,
-            &mut resources,
-            "UTC(PKS)",
-            "TT(TAI)",
-            5.0,
-            &mut warnings,
-        )
-        .unwrap();
-    assert_eq!(a[0].corrects_to, "A");
-    let b = clocks
-        .get_clock_corrections(
-            root,
-            &mut resources,
-            "UTC(PKS)",
-            "TT(TAI)",
-            15.0,
-            &mut warnings,
-        )
-        .unwrap();
-    assert_eq!(b[0].corrects_to, "B");
-    // Cached source sequence wins at its inclusive boundary, matching clkcorr.C.
-    assert_eq!(
-        clocks
-            .get_clock_corrections(
-                root,
-                &mut resources,
-                "UTC(PKS)",
-                "TT(TAI)",
-                10.0,
-                &mut warnings
-            )
-            .unwrap()[0]
-            .corrects_to,
-        "A"
-    );
-    let fallback = clocks
-        .get_clock_corrections(
-            root,
-            &mut resources,
-            "UTC(PKS)",
-            "TT(TAI)",
-            150.0,
-            &mut warnings,
-        )
-        .unwrap();
-    assert_eq!(fallback.len(), 1);
-    assert!(warnings.iter().any(|w| w.contains("assuming")));
-    assert!(
-        clocks
-            .get_clock_corrections(
-                root,
-                &mut resources,
-                "UTC(PKS)",
-                "TT(TAI)",
-                2000.0,
-                &mut warnings
-            )
-            .is_err()
-    );
-    assert_eq!(
-        clocks
-            .get_clock_corrections(
-                root,
-                &mut resources,
-                "UTC(PKS)",
-                "TT(TAI)",
-                5.0,
-                &mut warnings
-            )
-            .unwrap()[0]
-            .corrects_to,
-        "A"
-    );
-    assert!(
-        clocks
-            .get_clock_corrections(root, &mut resources, "TT(TAI)", "A", 5.0, &mut warnings)
-            .is_err()
-    );
-    fs::write(root.join("clock/bad.clk"), "# A C -1\n0 0\n10 0\n").unwrap();
-    assert!(ClockCorrections::load(root, &mut Vec::new()).is_err());
 }
 
 fn put_f(bytes: &mut [u8], at: usize, x: f64, big: bool) {

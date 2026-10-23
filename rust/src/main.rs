@@ -85,6 +85,11 @@ fn main() -> ExitCode {
     match run() {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
+            // Source stdout/stderr diagnostics both go to CLI stderr; a failed
+            // timing operation never publishes a partial JSON document.
+            for event in tempo2_rust::take_clock_diagnostics() {
+                let _ = io::stderr().lock().write_all(&event.bytes);
+            }
             eprintln!("tempo2-rust: {error}");
             ExitCode::FAILURE
         }

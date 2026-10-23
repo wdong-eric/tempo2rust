@@ -1,282 +1,1051 @@
-// Selected TEMPO2 clkcorr.C::getClockCorrections/getCorrection and
-// getClockCorrectionSequenceInternal route/cache behavior; explicit chains omitted.
-// ClockCorrections owns source process state. GPL-3.0-or-later.
+//! clkcorr.C constructors, helpers and four public clock operations, at fda6ad4.
+//! Source bytes, directed binary32 routing, lazy tables and append-only sequences.
+//! The outer synchronized session is a race-safety/lifetime adapter (0023), not
+//! a per-context mode. Deterministic defects and fallback zeros are retained.
 use crate::{
-    TimingError,
-    runtime::{Resource, paths_with_extension, read_resource},
-    tabulated_function::TabulatedFunction,
+    PRECISION_BITS, Scalar, TimingError,
+    clock_diagnostics::{Diagnostics, boundary, terminal},
+    clock_text::{self, NumberFormat, c_bytes, format_number},
+    observatory::{ObservatoryDatabase, resource, source_files},
+    runtime::Resource,
+    tabulated_function::{TabulatedFunction, chunks, os_error},
 };
+use rug::Float;
 use serde::Serialize;
-use std::path::{Path, PathBuf};
+use std::{
+    fs,
+    os::unix::ffi::OsStrExt,
+    path::{Path, PathBuf},
+    sync::{LazyLock, Mutex},
+};
 
-struct ClockCorrectionFunction {
-    path: PathBuf,
-    clock_from: String,
-    clock_to: String,
-    badness: f32,
-    table: Option<TabulatedFunction>,
+pub(crate) const MAX_CLK_CORR: usize = 30;
+#[derive(Clone)]
+pub(crate) struct ClockCorrection {
+    pub correction: f64,
+    pub corrects_to: [u8; 32],
 }
-struct ClockSequence {
-    clock_from: String,
-    clock_to: String,
-    start_mjd: f64,
-    end_mjd: f64,
-    function_indices: Vec<usize>,
+impl Default for ClockCorrection {
+    fn default() -> Self {
+        Self {
+            correction: 0.0,
+            corrects_to: [0; 32],
+        }
+    }
 }
-
-pub(crate) struct ClockCorrections {
-    functions: Vec<ClockCorrectionFunction>,
-    sequences: Vec<ClockSequence>,
+#[derive(Clone)]
+pub(crate) struct ClockObservation {
+    pub sat: Float,
+    pub tel_id: Vec<u8>,
+    pub clock_corr: i32,
+    pub count: i32,
+    pub corrections: [ClockCorrection; MAX_CLK_CORR],
+    pub jumps: Vec<i32>,
 }
-
-#[derive(Clone, Debug, Serialize)]
+impl Default for ClockObservation {
+    fn default() -> Self {
+        Self {
+            sat: Float::with_val(PRECISION_BITS, 0),
+            tel_id: Vec::new(),
+            clock_corr: 0,
+            count: 0,
+            corrections: std::array::from_fn(|_| ClockCorrection::default()),
+            jumps: Vec::new(),
+        }
+    }
+}
+#[derive(Debug, Serialize, Clone)]
 pub struct ClockStep {
     pub corrects_to: String,
-    pub correction_s: crate::Scalar,
+    pub correction_s: Scalar,
     pub resource: String,
 }
-
-impl ClockCorrections {
-    pub fn load(root: &Path, resources: &mut Vec<Resource>) -> Result<Self, TimingError> {
-        let paths = paths_with_extension(&root.join("clock"), "clk", false)?;
-        if paths.is_empty() {
-            return Err(TimingError::new(
-                root.join("clock"),
-                None,
-                "clock",
-                "no clock correction files",
-            ));
-        }
-        let mut functions = Vec::new();
-        for path in paths {
-            let data = read_resource(root, &path, "indexed clock", resources)?;
-            let text = std::str::from_utf8(&data)
-                .map_err(|e| TimingError::new(&path, None, "clock", e.to_string()))?;
-            let header = text.lines().next().unwrap_or("");
-            let tokens: Vec<_> = header
-                .strip_prefix('#')
-                .unwrap_or("")
-                .split_whitespace()
-                .collect();
-            if tokens.len() < 2 {
-                return Err(TimingError::new(
-                    &path,
-                    Some(1),
-                    "clock",
-                    "expected # FROM TO [BADNESS]",
-                ));
-            }
-            let badness = tokens
-                .get(2)
-                .and_then(|s| s.parse::<f32>().ok())
-                .unwrap_or(1.0);
-            // Dijkstra assumes finite nonnegative weights; the source accepts invalid
-            // weights and can build cyclic predecessor chains. Reject such headers.
-            if !badness.is_finite() || badness < 0.0 {
-                return Err(TimingError::new(
-                    &path,
-                    Some(1),
-                    "clock",
-                    "badness must be finite and nonnegative",
-                ));
-            }
-            functions.push(ClockCorrectionFunction {
-                path,
-                clock_from: tokens[0].to_uppercase(),
-                clock_to: tokens[1].to_uppercase(),
-                badness,
-                table: None,
-            });
-        }
-        // clkcorr.C uses process-global initialized flags/caches. Per-context state
-        // prevents a failed load or another runtime root from reusing that database.
-        Ok(Self {
-            functions,
-            sequences: Vec::new(),
-        })
+pub(crate) struct ClockCorrectionFunction {
+    pub table: TabulatedFunction,
+    pub path: PathBuf,
+    pub name: Vec<u8>,
+    pub from: Vec<u8>,
+    pub to: Vec<u8>,
+    pub badness: f32,
+    pub loaded: bool,
+    pub start: f64,
+    pub end: f64,
+    pub indexed: Resource,
+}
+#[derive(Default, Clone)]
+pub(crate) struct ClockSequence {
+    pub indices: Vec<usize>,
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "source spelling retained alongside normalized cache keys"
+        )
+    )]
+    pub from: Vec<u8>,
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "source spelling retained alongside normalized cache keys"
+        )
+    )]
+    pub to: Vec<u8>,
+    pub from_key: Vec<u8>,
+    pub to_key: Vec<u8>,
+    pub start: f64,
+    pub end: f64,
+}
+#[derive(Default)]
+pub(crate) struct PathBuildResult {
+    pub indices: Vec<usize>,
+    pub source_present: bool,
+    pub target_present: bool,
+    pub reverse_hint: bool,
+}
+pub(crate) struct TableQuery {
+    #[cfg(test)]
+    pub name: Vec<u8>,
+    #[cfg(test)]
+    pub epoch: f64,
+    pub value: f64,
+    pub function: usize,
+}
+#[derive(Default)]
+pub(crate) struct ClockSession {
+    pub initialized: bool,
+    pub functions: Vec<ClockCorrectionFunction>,
+    pub sequences: Vec<ClockSequence>,
+    pub root: Option<PathBuf>,
+    pub extra: Vec<u8>,
+    pub alias: Option<Vec<u8>>,
+    pub diagnostics: Diagnostics,
+    pub observatories: ObservatoryDatabase,
+    pub queries: Vec<TableQuery>,
+    pub fault: Option<TimingError>,
+}
+static SESSION: LazyLock<Mutex<ClockSession>> =
+    LazyLock::new(|| Mutex::new(ClockSession::default()));
+/// Hold one lock at the outer operation; inner lookup/diagnostics never relock.
+pub(crate) fn with_session<T>(
+    root: &Path,
+    operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
+) -> Result<T, TimingError> {
+    let mut session = SESSION
+        .lock()
+        .map_err(|_| boundary("clock_session_poisoned"))?;
+    session.root = Some(root.into());
+    session.alias = std::env::var_os("TEMPO2_ALIAS").map(|v| v.as_bytes().to_vec());
+    session.run(operation)
+}
+pub(crate) fn with_diagnostics<T>(
+    operation: impl FnOnce(&mut Diagnostics) -> Result<T, TimingError>,
+) -> Result<T, TimingError> {
+    let mut session = SESSION
+        .lock()
+        .map_err(|_| boundary("clock_session_poisoned"))?;
+    session.run(|s| operation(&mut s.diagnostics))
+}
+pub(crate) fn trim(name: &[u8]) -> &[u8] {
+    let mut start = 0;
+    let mut end = name.len();
+    while start < end && matches!(name[start], b' ' | b'\t' | b'\r' | b'\n') {
+        start += 1;
     }
-    fn get_clock_correction_sequence(
+    while end > start && matches!(name[end - 1], b' ' | b'\t' | b'\r' | b'\n') {
+        end -= 1;
+    }
+    &name[start..end]
+}
+pub(crate) fn normalize_clock_name(name: &[u8]) -> Vec<u8> {
+    trim(name).iter().map(u8::to_ascii_uppercase).collect()
+}
+pub(crate) fn clock_name_equals(a: &[u8], b: &[u8]) -> bool {
+    normalize_clock_name(a) == normalize_clock_name(b)
+}
+pub(crate) fn basename_from_path(path: &[u8]) -> &[u8] {
+    path.rsplit(|&b| b == b'/').next().unwrap_or_default()
+}
+impl ClockSession {
+    pub fn run<T>(
         &mut self,
-        root: &Path,
-        resources: &mut Vec<Resource>,
-        clock_from: &str,
-        clock_to: &str,
-        mjd: f64,
-    ) -> Result<Option<Vec<usize>>, TimingError> {
-        if let Some(sequence) = self.sequences.iter().find(|s| {
-            s.clock_from == clock_from
-                && s.clock_to == clock_to
-                && s.start_mjd <= mjd
-                && mjd <= s.end_mjd
-        }) {
-            return Ok(Some(sequence.function_indices.clone()));
+        f: impl FnOnce(&mut Self) -> Result<T, TimingError>,
+    ) -> Result<T, TimingError> {
+        if let Some(error) = &self.fault {
+            return Err(error.clone());
         }
-        let mut nodes: Vec<String> = Vec::new();
+        let result = f(self);
+        if let Err(error) = &result {
+            self.fault = Some(error.clone());
+        }
+        result
+    }
+    pub fn add_indexed_clock_file(&mut self, path: &Path, offset: i32) -> Result<(), TimingError> {
+        let data = fs::read(path).map_err(|e| {
+            self.diagnostics.stderr(
+                &[
+                    b"Fatal Error: Unable to open file ".as_slice(),
+                    path.as_os_str().as_bytes(),
+                    b" for reading: ",
+                    os_error(&e).as_bytes(),
+                    b"\n",
+                ]
+                .concat(),
+            );
+            terminal(path, "clock_index_open")
+        })?;
+        let Some(header) = chunks(&data).next() else {
+            self.diagnostics.stderr(
+                &[
+                    b"Error parsing clock file ".as_slice(),
+                    path.as_os_str().as_bytes(),
+                    b": file appears empty or corrupted.\n",
+                ]
+                .concat(),
+            );
+            return Err(terminal(path, "clock_index_empty"));
+        };
+        let Some((from, to, badness)) = clock_text::header(header) else {
+            self.diagnostics.stderr(
+                &[
+                    b"Error parsing clock file ".as_slice(),
+                    path.as_os_str().as_bytes(),
+                    b": first line must be of form # clock_from clock_to [badness]\n",
+                ]
+                .concat(),
+            );
+            return Err(terminal(path, "clock_index_header"));
+        };
+        let name = basename_from_path(path.as_os_str().as_bytes()).to_vec();
+        let badness = badness + offset as f32;
+        self.diagnostics.log(
+            b'd',
+            "clkcorr.C",
+            207,
+            &[
+                b"Indexed clock correction ".as_slice(),
+                &name,
+                b" : ",
+                &from,
+                b" -> ",
+                &to,
+                b" badness ",
+                &format_number(badness as f64, NumberFormat::GeneralThree),
+            ]
+            .concat(),
+        );
+        self.functions.push(ClockCorrectionFunction {
+            table: TabulatedFunction::default(),
+            path: path.into(),
+            name,
+            from,
+            to,
+            badness,
+            loaded: false,
+            start: 0.0,
+            end: 0.0,
+            indexed: resource(path, &data, "indexed clock", None),
+        });
+        Ok(())
+    }
+    pub fn ensure_initialized(&mut self, warnings: i32) -> Result<(), TimingError> {
+        if self.initialized {
+            return Ok(());
+        }
+        self.diagnostics
+            .log(b'd', "clkcorr.C", 244, b"Initialise clock file index");
+        let mut offset = 0;
+        if !c_bytes(&self.extra).is_empty() {
+            self.diagnostics.log(
+                b'm',
+                "clkcorr.C",
+                249,
+                &[
+                    b"Note, using '".as_slice(),
+                    &self.extra,
+                    b"' to look for extra clock files",
+                ]
+                .concat(),
+            );
+            let files = source_files(
+                Path::new(std::ffi::OsStr::from_bytes(c_bytes(&self.extra))),
+                b"clk",
+            );
+            if files.is_empty() {
+                self.diagnostics.log(
+                    b'e',
+                    "clkcorr.C",
+                    254,
+                    &[
+                        b"No clock correction files in '".as_slice(),
+                        &self.extra,
+                        b"'",
+                    ]
+                    .concat(),
+                );
+            } else {
+                for path in files {
+                    self.add_indexed_clock_file(&path, 0)?;
+                    self.log_loaded(b'm', 261, b"Loaded extra clock correction ");
+                }
+                offset = 1;
+            }
+        }
+        let Some(root) = self.root.as_ref().filter(|r| !r.as_os_str().is_empty()) else {
+            self.diagnostics.display(
+                2,
+                b"CLK11",
+                b"TEMPO2 environment path is not set",
+                b"",
+                warnings,
+            )?;
+            return Err(terminal(Path::new(""), "clock_environment"));
+        };
+        let files = source_files(&root.join("clock"), b"clk");
+        if files.is_empty() {
+            self.diagnostics
+                .stderr(b"No clock correction files in $TEMPO2/clock\n");
+            return Err(terminal(root, "clock_index_absent"));
+        }
+        for path in files {
+            self.add_indexed_clock_file(&path, offset)?;
+            self.log_loaded(b'd', 287, b"Loaded clock correction ");
+        }
+        self.initialized = true;
+        self.diagnostics
+            .log(b'd', "clkcorr.C", 292, b"Done with clock file index");
+        Ok(())
+    }
+    fn log_loaded(&mut self, kind: u8, line: usize, prefix: &[u8]) {
+        let f = self.functions.last().unwrap();
+        self.diagnostics.log(
+            kind,
+            "clkcorr.C",
+            line,
+            &[
+                prefix,
+                &f.name,
+                b" : ",
+                &f.from,
+                b" -> ",
+                &f.to,
+                b" badness ",
+                &format_number(f.badness as f64, NumberFormat::GeneralThree),
+            ]
+            .concat(),
+        );
+    }
+    pub fn ensure_function_loaded(&mut self, index: usize) -> Result<(), TimingError> {
+        let f = self
+            .functions
+            .get_mut(index)
+            .ok_or_else(|| boundary("clock_function_storage"))?;
+        if f.loaded {
+            return Ok(());
+        }
+        self.diagnostics.log(
+            b'd',
+            "clkcorr.C",
+            300,
+            &[
+                b"Loading clock correction function from ".as_slice(),
+                &f.name,
+                b" (",
+                f.path.as_os_str().as_bytes(),
+                b")",
+            ]
+            .concat(),
+        );
+        f.table.load(&f.path, &mut self.diagnostics)?;
+        f.start = f.table.start()?;
+        f.end = f.table.end()?;
+        f.loaded = true;
+        Ok(())
+    }
+    fn function_valid_at_mjd(&mut self, index: usize, mjd: f64) -> Result<bool, TimingError> {
+        self.ensure_function_loaded(index)?;
+        let f = &self.functions[index];
+        Ok(f.start <= mjd && f.end >= mjd)
+    }
+    fn sequence_mjd_range(&mut self, indices: &[usize]) -> Result<(f64, f64), TimingError> {
+        let (mut start, mut end) = (0.0, 1e6);
+        for &i in indices {
+            self.ensure_function_loaded(i)?;
+            let f = &self.functions[i];
+            if f.start > start {
+                start = f.start;
+            }
+            if f.end < end {
+                end = f.end;
+            }
+        }
+        Ok((start, end))
+    }
+    pub fn build_directed_path(
+        &mut self,
+        from: &[u8],
+        to: &[u8],
+        mjd: f64,
+    ) -> Result<PathBuildResult, TimingError> {
+        let mut result = PathBuildResult::default();
+        let mut nodes: Vec<Vec<u8>> = Vec::new();
         let mut edges = Vec::new();
-        for function in &self.functions {
+        for f in &self.functions {
             let mut pair = [0; 2];
-            for (i, name) in [&function.clock_from, &function.clock_to]
-                .iter()
-                .enumerate()
-            {
-                pair[i] = if let Some(j) = nodes.iter().position(|n| n == *name) {
-                    j
+            for (i, name) in [&f.from, &f.to].iter().enumerate() {
+                let key = normalize_clock_name(name);
+                pair[i] = if let Some(n) = nodes.iter().position(|k| k == &key) {
+                    n
                 } else {
-                    nodes.push((*name).clone());
+                    if nodes.len() > i32::MAX as usize {
+                        return Err(boundary("clock_node_integer"));
+                    }
+                    nodes.push(key);
                     nodes.len() - 1
                 };
             }
             edges.push(pair);
         }
-        let (Some(source), Some(target)) = (
-            nodes.iter().position(|n| n == clock_from),
-            nodes.iter().position(|n| n == clock_to),
-        ) else {
-            return Ok(None);
+        let source = nodes.iter().position(|n| n == &normalize_clock_name(from));
+        let target = nodes.iter().position(|n| n == &normalize_clock_name(to));
+        result.source_present = source.is_some();
+        result.target_present = target.is_some();
+        let (Some(source), Some(target)) = (source, target) else {
+            return Ok(result);
         };
-        let mut edge_blocked = vec![false; edges.len()];
+        let mut adjacency = vec![Vec::new(); nodes.len()];
+        let mut reverse = vec![Vec::new(); nodes.len()];
+        for (i, &[a, b]) in edges.iter().enumerate() {
+            adjacency[a].push(i);
+            reverse[b].push(a);
+        }
+        let mut blocked = vec![false; edges.len()];
         loop {
-            let mut distance = vec![f32::MAX; nodes.len()];
+            let mut dist = vec![f32::MAX; nodes.len()];
             let mut visited = vec![false; nodes.len()];
-            let mut previous_edge = vec![None; nodes.len()];
-            distance[source] = 0.0;
+            let mut previous = vec![None; nodes.len()];
+            dist[source] = 0.0;
             loop {
-                let mut best_distance = f32::MAX;
+                let mut best = f32::MAX;
                 let mut node = None;
-                for i in 0..nodes.len() {
-                    if !visited[i] && distance[i] < best_distance {
-                        best_distance = distance[i];
+                for i in 0..dist.len() {
+                    if !visited[i] && dist[i] < best {
+                        best = dist[i];
                         node = Some(i);
                     }
                 }
-                let Some(node) = node else { break };
+                let Some(node) = node else {
+                    break;
+                };
                 visited[node] = true;
                 if node == target {
                     break;
                 }
-                for (i, &[a, b]) in edges.iter().enumerate() {
-                    if a == node && !edge_blocked[i] {
-                        let new_distance = distance[node] + self.functions[i].badness;
-                        if new_distance < distance[b] {
-                            distance[b] = new_distance;
-                            previous_edge[b] = Some(i);
-                        }
+                for &edge in &adjacency[node] {
+                    if blocked[edge] {
+                        continue;
+                    }
+                    let dest = edges[edge][1];
+                    let new = dist[node] + self.functions[edge].badness;
+                    if new < dist[dest] {
+                        dist[dest] = new;
+                        previous[dest] = Some(edge);
                     }
                 }
             }
             if !visited[target] {
-                return Ok(None);
-            }
-            let mut function_indices = Vec::new();
-            let mut node = target;
-            while node != source {
-                let i = previous_edge[node].unwrap();
-                function_indices.push(i);
-                node = edges[i][0];
-            }
-            function_indices.reverse();
-            let mut valid = true;
-            let (mut start_mjd, mut end_mjd) = (0.0f64, 1e6f64);
-            for &i in &function_indices {
-                let function = &mut self.functions[i];
-                if function.table.is_none() {
-                    let data = read_resource(root, &function.path, "inspected clock", resources)?;
-                    let text = std::str::from_utf8(&data).map_err(|e| {
-                        TimingError::new(&function.path, None, "clock", e.to_string())
-                    })?;
-                    function.table = Some(TabulatedFunction::parse(&function.path, text)?);
-                    let table = function.table.as_ref().unwrap();
-                    let relative = function.path.strip_prefix(root).unwrap().to_string_lossy();
-                    resources
-                        .iter_mut()
-                        .find(|r| r.path == relative)
-                        .unwrap()
-                        .coverage_mjd = Some([table.start(), table.end()]);
+                let mut stack = vec![source];
+                let mut seen = vec![false; nodes.len()];
+                seen[source] = true;
+                while let Some(node) = stack.pop() {
+                    if node == target {
+                        result.reverse_hint = true;
+                        break;
+                    }
+                    for &next in &reverse[node] {
+                        if !seen[next] {
+                            seen[next] = true;
+                            stack.push(next);
+                        }
+                    }
                 }
-                let table = function.table.as_ref().unwrap();
-                if !table.covers(mjd) {
-                    edge_blocked[i] = true;
+                return Ok(result);
+            }
+            let mut candidate = Vec::new();
+            let mut node = target;
+            // The source has no predecessor-cycle guard. Do not execute the
+            // withheld cycle fixture or silently substitute a repaired algorithm.
+            while node != source {
+                let Some(edge) = previous[node] else {
+                    candidate.clear();
+                    break;
+                };
+                candidate.push(edge);
+                node = edges[edge][0];
+            }
+            candidate.reverse();
+            if candidate.is_empty() {
+                return Ok(result);
+            }
+            let mut valid = true;
+            for &edge in &candidate {
+                if !self.function_valid_at_mjd(edge, mjd)? {
+                    blocked[edge] = true;
                     valid = false;
                 }
-                start_mjd = start_mjd.max(table.start());
-                end_mjd = end_mjd.min(table.end());
             }
             if valid {
-                self.sequences.push(ClockSequence {
-                    clock_from: clock_from.into(),
-                    clock_to: clock_to.into(),
-                    start_mjd,
-                    end_mjd,
-                    function_indices: function_indices.clone(),
-                });
-                return Ok(Some(function_indices));
+                result.indices = candidate;
+                return Ok(result);
             }
         }
+    }
+    pub fn cache_sequence(
+        &mut self,
+        indices: Vec<usize>,
+        from: &[u8],
+        to: &[u8],
+    ) -> Result<usize, TimingError> {
+        let (start, end) = self.sequence_mjd_range(&indices)?;
+        self.sequences.push(ClockSequence {
+            indices,
+            from: from.to_vec(),
+            to: to.to_vec(),
+            from_key: normalize_clock_name(from),
+            to_key: normalize_clock_name(to),
+            start,
+            end,
+        });
+        Ok(self.sequences.len() - 1)
+    }
+    pub fn get_sequence(
+        &mut self,
+        from: &[u8],
+        to: &[u8],
+        mjd: f64,
+        warnings: i32,
+    ) -> Result<Option<usize>, TimingError> {
+        self.ensure_initialized(warnings)?;
+        if let Some(i) = self.sequences.iter().position(|s| {
+            s.from_key == normalize_clock_name(from)
+                && s.to_key == normalize_clock_name(to)
+                && s.start <= mjd
+                && s.end >= mjd
+        }) {
+            return Ok(Some(i));
+        }
+        self.diagnostics.log(
+            b'd',
+            "clkcorr.C",
+            559,
+            &[b"Making clock sequence from ".as_slice(), from, b" to ", to].concat(),
+        );
+        let result = self.build_directed_path(from, to, mjd)?;
+        if !result.source_present || !result.target_present {
+            let name = if !result.source_present { from } else { to };
+            let body = [
+                b"no clock corrections available for clock ".as_slice(),
+                name,
+                b" for MJD",
+            ]
+            .concat();
+            if body.len() >= 1000 {
+                return Err(boundary("clock_message_storage"));
+            }
+            self.diagnostics.display(
+                2,
+                b"CLK3",
+                &body,
+                &format_number(mjd, NumberFormat::One),
+                warnings,
+            )?;
+            return Ok(None);
+        }
+        if result.indices.is_empty() {
+            let body = [
+                b"no directed clock corrections available from ".as_slice(),
+                from,
+                b" to ",
+                to,
+                b" for MJD",
+            ]
+            .concat();
+            if body.len() >= 1000 {
+                return Err(boundary("clock_message_storage"));
+            }
+            let mut more = format_number(mjd, NumberFormat::One);
+            if result.reverse_hint {
+                more.extend(b" (reverse path exists but reverse traversal is disabled)");
+            }
+            self.diagnostics
+                .display(2, b"CLK7", &body, &more, warnings)?;
+            return Ok(None);
+        }
+        if warnings == 0 {
+            self.diagnostics.stdout(
+                &[
+                    b"Using the following chain of clock corrections for ".as_slice(),
+                    from,
+                    b" -> ",
+                    to,
+                    b"\n",
+                ]
+                .concat(),
+            );
+            for &i in &result.indices {
+                let f = &self.functions[i];
+                self.diagnostics
+                    .stdout(&[f.name.as_slice(), b" : ", &f.from, b" -> ", &f.to, b"\n"].concat());
+            }
+        }
+        self.cache_sequence(result.indices, from, to).map(Some)
+    }
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "selected source explicit-chain API; PAR chain syntax remains deferred"
+        )
+    )]
+    fn find_function_index_from_token(&self, token: &[u8]) -> Option<usize> {
+        self.functions
+            .iter()
+            .position(|f| f.name == token)
+            .or_else(|| {
+                self.functions
+                    .iter()
+                    .position(|f| f.name == basename_from_path(token))
+            })
+    }
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "selected source explicit-chain API; PAR chain syntax remains deferred"
+        )
+    )]
+    pub fn define_sequence(
+        &mut self,
+        files: Option<&[u8]>,
+        warnings: i32,
+    ) -> Result<(), TimingError> {
+        self.ensure_initialized(warnings)?;
+        let mut indices = Vec::new();
+        for token in clock_text::tokens(files.unwrap_or_default()) {
+            if let Some(i) = self.find_function_index_from_token(token) {
+                indices.push(i);
+            } else {
+                self.diagnostics.stdout(
+                    &[
+                        b"Requested clock correction file ".as_slice(),
+                        token,
+                        b" not found!\n",
+                    ]
+                    .concat(),
+                );
+                return Err(terminal(Path::new(""), "clock_chain_missing"));
+            }
+        }
+        if indices.is_empty() {
+            self.diagnostics.display(
+                2,
+                b"CLK13",
+                b"Empty CLK_CORR_CHAIN definition",
+                b"",
+                warnings,
+            )?;
+            return Err(terminal(Path::new(""), "clock_chain_empty"));
+        }
+        for pair in indices.windows(2) {
+            let prev = &self.functions[pair[0]];
+            let next = &self.functions[pair[1]];
+            if !clock_name_equals(&prev.to, &next.from) {
+                self.diagnostics.stderr(
+                    &[
+                        b"Invalid directed clock correction chain: ".as_slice(),
+                        &prev.name,
+                        b" (",
+                        &prev.from,
+                        b" -> ",
+                        &prev.to,
+                        b") cannot precede ",
+                        &next.name,
+                        b" (",
+                        &next.from,
+                        b" -> ",
+                        &next.to,
+                        b")\n",
+                    ]
+                    .concat(),
+                );
+                return Err(terminal(Path::new(""), "clock_chain_direction"));
+            }
+        }
+        let from = self.functions[indices[0]].from.clone();
+        let to = self.functions[*indices.last().unwrap()].to.clone();
+        self.cache_sequence(indices, &from, &to)?;
+        Ok(())
+    }
+    fn evaluate_function(
+        &mut self,
+        index: usize,
+        sat: f64,
+        total: f64,
+    ) -> Result<f64, TimingError> {
+        let f = &self.functions[index];
+        let epoch = sat + total / 86400.0;
+        let value = f.table.get_value(epoch, &mut self.diagnostics)?;
+        self.queries.push(TableQuery {
+            #[cfg(test)]
+            name: f.table.name.clone(),
+            #[cfg(test)]
+            epoch,
+            value,
+            function: index,
+        });
+        Ok(value)
+    }
+    pub fn fill_corrections(
+        &mut self,
+        obs: &mut ClockObservation,
+        sequence: usize,
+        to: &[u8],
+        from: &[u8],
+        total: &mut f64,
+    ) -> Result<bool, TimingError> {
+        let indices = self
+            .sequences
+            .get(sequence)
+            .ok_or_else(|| boundary("clock_sequence_storage"))?
+            .indices
+            .clone();
+        let mut current = from.to_vec();
+        for i in indices {
+            if clock_name_equals(&current, to) {
+                break;
+            }
+            if obs.count >= MAX_CLK_CORR as i32 {
+                self.diagnostics.display(
+                    2,
+                    b"CLK12",
+                    b"clock correction chain exceeded MAX_CLK_CORR",
+                    b"",
+                    0,
+                )?;
+                return Ok(false);
+            }
+            self.ensure_function_loaded(i)?;
+            if !clock_name_equals(&current, &self.functions[i].from) {
+                self.broken_chain(&current, i);
+                return Ok(false);
+            }
+            let value = self.evaluate_function(i, obs.sat.to_f64(), *total)?;
+            let slot = usize::try_from(obs.count)
+                .ok()
+                .and_then(|n| obs.corrections.get_mut(n))
+                .ok_or_else(|| boundary("clock_correction_storage"))?;
+            slot.correction = value;
+            clock_text::copy_string(&mut slot.corrects_to, &self.functions[i].to);
+            obs.count += 1;
+            *total += value;
+            current = self.functions[i].to.clone();
+        }
+        Ok(clock_name_equals(&current, to))
+    }
+    fn broken_chain(&mut self, current: &[u8], index: usize) {
+        self.diagnostics.log(
+            b'e',
+            "clkcorr.C",
+            625,
+            &[
+                b"Broken directed clock correction chain: expected ".as_slice(),
+                current,
+                b", got ",
+                &self.functions[index].from,
+            ]
+            .concat(),
+        );
+    }
+    pub fn accumulate_correction(
+        &mut self,
+        obs: &ClockObservation,
+        sequence: usize,
+        to: &[u8],
+        from: &[u8],
+        total: &mut f64,
+    ) -> Result<bool, TimingError> {
+        let indices = self
+            .sequences
+            .get(sequence)
+            .ok_or_else(|| boundary("clock_sequence_storage"))?
+            .indices
+            .clone();
+        let mut current = from.to_vec();
+        for i in indices {
+            if clock_name_equals(&current, to) {
+                break;
+            }
+            self.ensure_function_loaded(i)?;
+            if !clock_name_equals(&current, &self.functions[i].from) {
+                self.diagnostics.log(
+                    b'e',
+                    "clkcorr.C",
+                    659,
+                    &[
+                        b"Broken directed clock correction chain: expected ".as_slice(),
+                        &current,
+                        b", got ",
+                        &self.functions[i].from,
+                    ]
+                    .concat(),
+                );
+                return Ok(false);
+            }
+            *total += self.evaluate_function(i, obs.sat.to_f64(), *total)?;
+            current = self.functions[i].to.clone();
+        }
+        Ok(clock_name_equals(&current, to))
+    }
+    fn source_clock(
+        &mut self,
+        obs: &ClockObservation,
+        from: Option<&[u8]>,
+    ) -> Result<Vec<u8>, TimingError> {
+        let name = c_bytes(from.unwrap_or_default());
+        if !name.is_empty() {
+            return Ok(name.to_vec());
+        }
+        Ok(self
+            .observatories
+            .get(
+                &obs.tel_id,
+                self.root.as_deref(),
+                self.alias.as_deref(),
+                &mut self.diagnostics,
+            )?
+            .clock)
     }
     pub fn get_clock_corrections(
         &mut self,
-        root: &Path,
-        resources: &mut Vec<Resource>,
-        clock_from: &str,
-        clock_to: &str,
-        sat: f64,
-        warnings: &mut Vec<String>,
-    ) -> Result<Vec<ClockStep>, TimingError> {
-        let clock_from = clock_from.to_uppercase();
-        let clock_to = clock_to.to_uppercase();
-        if clock_from == clock_to {
-            return Ok(Vec::new());
+        obs: &mut ClockObservation,
+        from: Option<&[u8]>,
+        to: Option<&[u8]>,
+        warnings: i32,
+    ) -> Result<(), TimingError> {
+        obs.count = 0;
+        let mut from = self.source_clock(obs, from)?;
+        let original = from.clone();
+        let mut to = c_bytes(to.unwrap_or_default()).to_vec();
+        if clock_name_equals(&from, &to) {
+            return Ok(());
         }
-        let sequence =
-            self.get_clock_correction_sequence(root, resources, &clock_from, &clock_to, sat)?;
-        let sequence = if let Some(sequence) = sequence {
-            sequence
-        } else {
-            // Retain getClockCorrections/getCorrection's supported UTC assumption.
-            warnings.push(format!(
-                "CLK4/CLK6: no directed {clock_from} -> {clock_to} at {sat}; assuming {clock_from} = UTC"
-            ));
-            if clock_to == "UTC" {
-                return Ok(Vec::new());
+        let mut sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+        let mut approximation = false;
+        if sequence.is_none() {
+            if from.len() >= 1000 {
+                return Err(boundary("clock_message_storage"));
             }
-            if let Some(sequence) =
-                self.get_clock_correction_sequence(root, resources, "UTC", &clock_to, sat)?
-            {
-                sequence
-            } else {
-                // Source eventually returns an empty chain when even UTC->TT is
-                // unavailable, yielding apparently complete uncorrected timing.
-                // TT is indispensable for M1b: fail instead (decision 0004).
-                return Err(TimingError::new(
-                    root.join("clock"),
-                    None,
-                    "clock",
-                    format!("no indispensable UTC -> {clock_to} chain at MJD {sat}"),
-                ));
+            self.diagnostics
+                .display(1, b"CLK4", b"Trying assuming UTC =", &from, warnings)?;
+            from = b"UTC".to_vec();
+            if clock_name_equals(&from, &to) {
+                return Ok(());
             }
-        };
+            sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+            approximation = true;
+            if sequence.is_none() {
+                if to.len() >= 1000 {
+                    return Err(boundary("clock_message_storage"));
+                }
+                self.diagnostics.display(
+                    2,
+                    b"CLK5",
+                    b"Trying TT(TAI) instead of ",
+                    &to,
+                    warnings,
+                )?;
+                from = original;
+                to = b"TT(TAI)".to_vec();
+                if clock_name_equals(&from, &to) {
+                    return Ok(());
+                }
+                sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+                if sequence.is_none() {
+                    self.diagnostics
+                        .display(2, b"CLK8", b"Trying both", b"", warnings)?;
+                    from = b"UTC".to_vec();
+                    sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+                    if sequence.is_none() {
+                        if warnings == 0 {
+                            self.diagnostics.stdout(&[b"Warning [CLK:7], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(obs.sat.to_f64(),NumberFormat::Four),b"!\n"].concat());
+                        }
+                        return Ok(());
+                    }
+                }
+            }
+        }
         let mut total = 0.0;
-        let mut steps = Vec::new();
-        for i in sequence {
-            let function = &self.functions[i];
-            let value = function
-                .table
-                .as_ref()
-                .unwrap()
-                .get_value(sat + total / 86400.0, warnings)?;
-            total += value;
-            let relative = function
-                .path
+        if !self.fill_corrections(obs, sequence.unwrap(), &to, &from, &mut total)? {
+            self.diagnostics.display(
+                2,
+                b"CLK14",
+                b"Broken directed clock correction chain",
+                b"",
+                warnings,
+            )?;
+            obs.count = 0;
+            return Ok(());
+        }
+        if approximation {
+            self.diagnostics.display(
+                1,
+                b"CLK9",
+                b"... ok, using stated approximation",
+                b"",
+                warnings,
+            )?;
+        }
+        Ok(())
+    }
+    pub fn get_correction(
+        &mut self,
+        obs: &ClockObservation,
+        from: Option<&[u8]>,
+        to: Option<&[u8]>,
+        warnings: i32,
+    ) -> Result<f64, TimingError> {
+        let from = self.source_clock(obs, from)?;
+        self.diagnostics.version("clkcorr.C", "getCorrection()");
+        let to = c_bytes(to.unwrap_or_default());
+        if clock_name_equals(&from, to) {
+            return Ok(0.0);
+        }
+        let mut current = from.clone();
+        let mut sequence = self.get_sequence(&from, to, obs.sat.to_f64(), warnings)?;
+        if sequence.is_none() {
+            if current.len() >= 1000 {
+                return Err(boundary("clock_message_storage"));
+            }
+            self.diagnostics.display(
+                1,
+                b"CLK6",
+                b"Proceeding assuming UTC = ",
+                &current,
+                warnings,
+            )?;
+            if clock_name_equals(to, b"UTC") {
+                return Ok(0.0);
+            }
+            sequence = self.get_sequence(b"UTC", to, obs.sat.to_f64(), warnings)?;
+            current = b"UTC".to_vec();
+            if sequence.is_none() {
+                if warnings == 0 {
+                    self.diagnostics.stdout(&[b"!Warning [CLK:9], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(obs.sat.to_f64(),NumberFormat::Four),b"!\n"].concat());
+                }
+                return Ok(0.0);
+            }
+        }
+        let mut total = 0.0;
+        if !self.accumulate_correction(obs, sequence.unwrap(), to, &current, &mut total)? {
+            self.diagnostics.display(
+                2,
+                b"CLK14",
+                b"Broken directed clock correction chain",
+                b"",
+                warnings,
+            )?;
+            return Ok(0.0);
+        }
+        Ok(total)
+    }
+    pub fn export_observatory_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
+        for (path, r) in &self.observatories.resources {
+            let mut r = r.clone();
+            r.path = path
                 .strip_prefix(root)
-                .unwrap()
+                .unwrap_or(path)
                 .to_string_lossy()
                 .into_owned();
-            steps.push(ClockStep {
-                corrects_to: function.clock_to.clone(),
-                correction_s: crate::Scalar(rug::Float::with_val(crate::PRECISION_BITS, value)),
-                resource: relative,
-            });
+            if !resources.iter().any(|old| old.path == r.path) {
+                resources.push(r);
+            }
         }
-        Ok(steps)
     }
+    pub fn export_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
+        self.export_observatory_resources(root, resources);
+        for f in &self.functions {
+            let mut r = f.indexed.clone();
+            r.path = f
+                .path
+                .strip_prefix(root)
+                .unwrap_or(&f.path)
+                .to_string_lossy()
+                .into_owned();
+            if f.loaded {
+                r.sha256 = f.table.sha256.clone();
+                r.size_bytes = f.table.size_bytes;
+                r.coverage_mjd = Some([f.start, f.end]);
+                r.role = "inspected clock".into();
+            }
+            if let Some(old) = resources.iter_mut().find(|old| old.path == r.path) {
+                *old = r;
+            } else {
+                resources.push(r);
+            }
+        }
+    }
+    pub fn steps(&self, root: &Path, count: usize) -> Result<Vec<ClockStep>, TimingError> {
+        self.queries
+            .iter()
+            .take(count)
+            .map(|q| {
+                let f = &self.functions[q.function];
+                let text = std::str::from_utf8(&f.to).map_err(|_| boundary("clock_json_text"))?;
+                Ok(ClockStep {
+                    corrects_to: text.to_owned(),
+                    correction_s: Scalar(Float::with_val(PRECISION_BITS, q.value)),
+                    resource: f
+                        .path
+                        .strip_prefix(root)
+                        .unwrap_or(&f.path)
+                        .to_string_lossy()
+                        .into_owned(),
+                })
+            })
+            .collect()
+    }
+}
+pub(crate) fn get_correction_tt(obs: &ClockObservation) -> Result<f64, TimingError> {
+    let mut total = 0.0;
+    for i in 0..obs.count {
+        total += obs
+            .corrections
+            .get(i as usize)
+            .ok_or_else(|| boundary("clock_correction_storage"))?
+            .correction;
+    }
+    Ok(total)
+}
+
+#[cfg(test)]
+pub(crate) fn test_session() -> std::sync::MutexGuard<'static, ClockSession> {
+    SESSION.lock().unwrap()
+}
+
+/// Drain presentation events without resetting counters, key history or terminal state.
+pub fn take_clock_diagnostics() -> Vec<crate::clock_diagnostics::ClockDiagnostic> {
+    let Ok(mut session) = SESSION.lock() else {
+        return Vec::new();
+    };
+    session
+        .diagnostics
+        .events
+        .drain(..)
+        .map(
+            |(source_stderr, bytes)| crate::clock_diagnostics::ClockDiagnostic {
+                source_stderr,
+                bytes,
+            },
+        )
+        .collect()
 }
