@@ -43,3 +43,7 @@ Isolated assertions, exits, memory errors and nontermination must report the las
 Return `validation/clocks/REPORT.md`, the complete function/field/case matrix, reproducible inputs/exporter/checks, numerical scales and observed source outcomes, and coherent Conventional Commit IDs. Describe F ledger evidence strengthened by the run and new findings without changing Rust or accepting compatibility. Exact regeneration tests artifact integrity on the recorded host; J adopts no Rust tolerance.
 
 The later implementation contract must resolve table/query-specific undefined boundaries, source-global versus owned-context behavior, fallible adapters for process exits, warning/output handling, public clock controls and integration scope. Deterministic source fallbacks and cache behavior remain mandatory under decision 0008. M1/M2 gates and the unresolved exact SVD ordering diagnostics remain unchanged. J does not close broader IFTE/EOP/weather/observatory, legacy input formats, fitting or full-core coverage.
+
+## Dispatch
+
+Created **Assignment J: TEMPO2 clock and table reference**, chat `01a16796-3234-7a41-aebf-0943867d9d04`, in local project `rustify-tempo2` from contract commit `67aa77c`. Its active turn acknowledged the owned directory and began source inspection. I continues the JPL implementation independently; neither chat owns central acceptance.
