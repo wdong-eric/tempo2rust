@@ -1,0 +1,15 @@
+native delay 0 0 1 0 0 defined
+native delay 0 1 1 0 0 defined
+native delay 0 2 1 0 0 defined
+native delay 0 3 1 0 0 defined
+native delay 0 4 1 0 0 defined
+native delay 0 5 1 0 0 defined
+native delay 0 6 1 0 0 defined
+native delay 0 7 1 0 0 defined
+native delay 0 8 1 0 0 defined
+native delay 0 9 1 0 0 defined
+native delay 0 10 1 0 0 defined
+native delay 0 11 1 0 0 defined
+residual delay 0 0 1 0 0 defined
+residual delay 1 0 1 0 0 defined
+update_delay param_edot 0 0 2 0.000000125 0.00000003125 defined

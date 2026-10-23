@@ -1,0 +1,3456 @@
+{
+  "BT": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 58
+      },
+      {
+        "condition": "ecc < 0.0 || ecc > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 67
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 73
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 76
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 79
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 82
+      },
+      {
+        "condition": "orbits < 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 89
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 119
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 121
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 123
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 125
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 127
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 129
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 131
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 133
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 135
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 137
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 139
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 146
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_gamma || pos==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 151
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 156
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 161
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 166
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 171
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "sha256": "996da3a7e62dcc1c48a79eeda546ac63b707a59c2f3bc59de5e9a14815dd8047",
+    "source": "BTmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "BTJ": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 61
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 68
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 71
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 74
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 77
+      },
+      {
+        "condition": "psr[p].param[param_bpjep].paramSet[i]==1 && psr[p].obsn[ipos].bbat > psr[p].param[param_bpjep].val[i]",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 85
+      },
+      {
+        "condition": "orbits < 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 98
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 130
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 134
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 136
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 138
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 140
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 142
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 144
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 146
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 148
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 150
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 152
+      },
+      {
+        "condition": "psr[p].param[param_bpjep].paramSet[arr]==1 && psr[p].obsn[ipos].bbat > psr[p].param[param_bpjep].val[arr]",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 155
+      },
+      {
+        "condition": "param==param_bpjph",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 158
+      },
+      {
+        "condition": "param==param_bpja1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 159
+      },
+      {
+        "condition": "param==param_bpjec",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 160
+      },
+      {
+        "condition": "param==param_bpjom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 161
+      },
+      {
+        "condition": "param==param_bpjpb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 162
+      },
+      {
+        "condition": "pos==param_pb || pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_gamma || pos==param_edot || pos==param_bpjph || pos==param_bpja1 || pos==param_bpjec || pos==param_bpjom || pos==param_bpjpb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 169
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 180
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 185
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 190
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 195
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjep",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_ecc",
+      "param_edot",
+      "param_f",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "sha256": "90652414ba270d887ea662f88931d263086b306353b9f7f9f8b43515143a0aee",
+    "source": "BTJmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "BTX": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 59
+      },
+      {
+        "condition": "ecc < 0.0 || ecc > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 67
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 76
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 79
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 82
+      },
+      {
+        "condition": "psr[p].param[param_fb].paramSet[j]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 95
+      },
+      {
+        "condition": "orbits < 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 103
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 133
+      },
+      {
+        "condition": "param==param_fb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 136
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 149
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 154
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 156
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 158
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 165
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 167
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 169
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 171
+      },
+      {
+        "condition": "pos==param_fb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 178
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_gamma || pos==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 183
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 188
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 193
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 198
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 203
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_fb",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_fb",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "sha256": "42891cecf62c706a833a3431437be5e2f82c6917cc4774633e18a20a69217610",
+    "source": "BTXmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_fb",
+      "param_gamma",
+      "param_om",
+      "param_omdot",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "DD": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 53
+      },
+      {
+        "condition": "psr[p].param[param_dr].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 56
+      },
+      {
+        "condition": "psr[p].param[param_dtheta].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 58
+      },
+      {
+        "condition": "psr[p].param[param_sini].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 61
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 64
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 71
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 84
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 91
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 94
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 97
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 100
+      },
+      {
+        "condition": "psr[p].param[param_xpbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 103
+      },
+      {
+        "condition": "ecc < 0.0 || ecc > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 112
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 120
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 136
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 163
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 174
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 176
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 178
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 180
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 182
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 184
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 186
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 188
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 190
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 192
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 194
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 196
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 205
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_sini || pos==param_m2 || pos == param_gamma || pos==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 210
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 216
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 221
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 226
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 231
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0"
+    ],
+    "native_return": "binary128",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_dr",
+      "param_dtheta",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "sha256": "601997210145f00d2ef88cd71f46fdf3326ab2ccaa8ed05af6eba4538fba50f0",
+    "source": "DDmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "DDGR": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 66
+      },
+      {
+        "condition": "psr[p].param[param_sini].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 78
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 81
+      },
+      {
+        "condition": "psr[p].param[param_mtot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 87
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 94
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 97
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 100
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 103
+      },
+      {
+        "condition": "psr[p].param[param_xpbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 106
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 127
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 142
+      },
+      {
+        "condition": "brace<=0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 164
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 184
+      },
+      {
+        "condition": "param==-2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 246
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 272
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 274
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 276
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 278
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 280
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 282
+      },
+      {
+        "condition": "param==param_xpbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 284
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 286
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 288
+      },
+      {
+        "condition": "param==param_mtot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 290
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 292
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 300
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_sini || pos==param_m2 || pos==param_mtot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 305
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 311
+      },
+      {
+        "condition": "pos==param_pbdot || pos==param_xpbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 316
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 321
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 326
+      },
+      {
+        "condition": "m<0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 347
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_m2",
+      "param_mtot",
+      "param_om",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_dr",
+      "param_dtheta",
+      "param_ecc",
+      "param_edot",
+      "param_f",
+      "param_gamma",
+      "param_m2",
+      "param_mtot",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "sha256": "e4d66145b4f6892e24d7593f2750ae064ef4ab29f9abd5d5465b167f5de2b7e4",
+    "source": "DDGRmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_m2",
+      "param_mtot",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "DDH": {
+    "conditions": [
+      {
+        "condition": "psr[p].param[param_h3].paramSet[0] * psr[p].param[param_stig].paramSet[0] != 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 66
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 80
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 99
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 111
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 115
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 119
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 123
+      },
+      {
+        "condition": "psr[p].param[param_xpbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 127
+      },
+      {
+        "condition": "ecc < 0.0 || ecc > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 137
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 145
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 162
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 192
+      },
+      {
+        "condition": "param == param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 207
+      },
+      {
+        "condition": "param == param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 210
+      },
+      {
+        "condition": "param == param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 213
+      },
+      {
+        "condition": "param == param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 216
+      },
+      {
+        "condition": "param == param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 219
+      },
+      {
+        "condition": "param == param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 222
+      },
+      {
+        "condition": "param == param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 225
+      },
+      {
+        "condition": "param == param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 228
+      },
+      {
+        "condition": "param == param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 231
+      },
+      {
+        "condition": "param == param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 234
+      },
+      {
+        "condition": "param == param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 237
+      },
+      {
+        "condition": "param == param_h3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 240
+      },
+      {
+        "condition": "param == param_stig",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 243
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 253
+      },
+      {
+        "condition": "pos == param_a1 || pos == param_ecc || pos == param_t0 || pos == param_sini || pos == param_m2 || pos == param_gamma || pos == param_h3 || pos == param_stig",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 256
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 261
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 264
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 267
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 270
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_gamma",
+      "param_h3",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_h3",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "sha256": "66711b926ca55647c06602abd5ad8ae9163d5a7a623f4207ff912ab8393581d8",
+    "source": "DDHmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_gamma",
+      "param_h3",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "DDK": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 64
+      },
+      {
+        "condition": "psr[p].param[param_px].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 88
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 98
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 111
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 118
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 121
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 124
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 127
+      },
+      {
+        "condition": "psr[p].param[param_xpbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 130
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 177
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 193
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 219
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 278
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 280
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 282
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 284
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 286
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 288
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 290
+      },
+      {
+        "condition": "param==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 294
+      },
+      {
+        "condition": "param==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 296
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 298
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 300
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 312
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_sini || pos==param_m2 || pos == param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 317
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 323
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 328
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 333
+      },
+      {
+        "condition": "pos==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 338
+      },
+      {
+        "condition": "pos==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 343
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 348
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_ecc",
+      "param_gamma",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_pmdec",
+      "param_pmra",
+      "param_px",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "sha256": "6442893882a29fc83a96176e5f6e6ad1b672a72d679b0e5b6eed84dbfb45db00",
+    "source": "DDKmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_gamma",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "DDS": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 55
+      },
+      {
+        "condition": "psr[p].param[param_shapmax].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 61
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 68
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 81
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 88
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 91
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 94
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 97
+      },
+      {
+        "condition": "psr[p].param[param_xpbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 100
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 111
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 127
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 157
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 172
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 174
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 176
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 178
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 180
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 182
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 184
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 186
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 188
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 190
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 192
+      },
+      {
+        "condition": "param==param_shapmax",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 194
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 203
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_sini || pos==param_m2 || pos == param_gamma || pos == param_shapmax",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 208
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 214
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 219
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 224
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 229
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_t0",
+      "param_xpbdot"
+    ],
+    "sha256": "a2e414f0af6f4892ed1617f4d9a338fe373e83ce3991cf1b86b5b351cd6bdcf7",
+    "source": "DDSmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "ELL1": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 70
+      },
+      {
+        "condition": "psr[p].param[param_fb].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 75
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 80
+      },
+      {
+        "condition": "psr[p].param[param_sini].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 84
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 87
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 95
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 101
+      },
+      {
+        "condition": "psr[p].param[param_eps1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 108
+      },
+      {
+        "condition": "psr[p].param[param_eps2dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 110
+      },
+      {
+        "condition": "psr[p].param[param_fb].paramSet[j]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 120
+      },
+      {
+        "condition": "useHigherFB == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 128
+      },
+      {
+        "condition": "psr[p].param[param_fb].paramSet[j]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 134
+      },
+      {
+        "condition": "j==1 && psr[p].param[param_pbdot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 139
+      },
+      {
+        "condition": "psr[p].param[param_orbifunc].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 152
+      },
+      {
+        "condition": "psr[p].param[param_ifunc].val[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 157
+      },
+      {
+        "condition": "dt==0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 168
+      },
+      {
+        "condition": "psr[p].param[param_orbifunc].val[0] == 2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 181
+      },
+      {
+        "condition": "psr[p].param[param_orbifunc].val[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 186
+      },
+      {
+        "condition": "(double)psr[p].obsn[ipos].sat >= psr[p].orbifuncT[k]",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 192
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 203
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 226
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 236
+      },
+      {
+        "condition": "param==param_fb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 238
+      },
+      {
+        "condition": "k==0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 242
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 248
+      },
+      {
+        "condition": "param==param_eps1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 250
+      },
+      {
+        "condition": "param==param_tasc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 252
+      },
+      {
+        "condition": "param==param_eps2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 254
+      },
+      {
+        "condition": "param==param_eps1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 256
+      },
+      {
+        "condition": "param==param_eps2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 258
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 260
+      },
+      {
+        "condition": "psr[p].param[param_fb].paramSet[1]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 262
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 266
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 268
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 270
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 278
+      },
+      {
+        "condition": "pos==param_fb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 283
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_eps1 || pos==param_eps2 || pos==param_tasc || pos==param_sini || pos == param_m2 || pos==param_eps1dot || pos==param_eps2dot || pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 288
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 296
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 301
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_fb",
+      "param_m2",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_fb",
+      "param_ifunc",
+      "param_m2",
+      "param_omdot",
+      "param_orbifunc",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "sha256": "20d9bbb10159a7c7d38631fd50e388de529f046f0aa9c17144ffb14666a4899a",
+    "source": "ELL1model.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_fb",
+      "param_m2",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "ELL1H": {
+    "conditions": [
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 69
+      },
+      {
+        "condition": "psr[p].param[param_h3].paramSet[0] != 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 77
+      },
+      {
+        "condition": "psr[p].param[param_h4].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 85
+      },
+      {
+        "condition": "psr[p].param[param_nharm].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 87
+      },
+      {
+        "condition": "nharm > 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 89
+      },
+      {
+        "condition": "psr[p].param[param_stig].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 94
+      },
+      {
+        "condition": "psr[p].param[param_nharm].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 106
+      },
+      {
+        "condition": "psr[p].param[param_stig].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 110
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 122
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 128
+      },
+      {
+        "condition": "mode == 2 || mode == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 135
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 140
+      },
+      {
+        "condition": "mode == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 147
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 157
+      },
+      {
+        "condition": "psr[p].param[param_eps1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 167
+      },
+      {
+        "condition": "psr[p].param[param_eps2dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 172
+      },
+      {
+        "condition": "orbits < 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 181
+      },
+      {
+        "condition": "mode == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 208
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 211
+      },
+      {
+        "condition": "param == -1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 234
+      },
+      {
+        "condition": "param == param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 244
+      },
+      {
+        "condition": "param == param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 247
+      },
+      {
+        "condition": "param == param_eps1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 250
+      },
+      {
+        "condition": "param == param_tasc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 253
+      },
+      {
+        "condition": "param == param_eps2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 256
+      },
+      {
+        "condition": "param == param_eps1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 259
+      },
+      {
+        "condition": "param == param_eps2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 262
+      },
+      {
+        "condition": "param == param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 265
+      },
+      {
+        "condition": "param == param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 268
+      },
+      {
+        "condition": "param == param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 271
+      },
+      {
+        "condition": "param == param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 274
+      },
+      {
+        "condition": "param == param_stig",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 277
+      },
+      {
+        "condition": "param == param_h3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 284
+      },
+      {
+        "condition": "mode == 0 || mode == 2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 285
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 287
+      },
+      {
+        "condition": "mode == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 291
+      },
+      {
+        "condition": "param == param_h4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 296
+      },
+      {
+        "condition": "mode == 2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 297
+      },
+      {
+        "condition": "pos == param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 307
+      },
+      {
+        "condition": "pos == param_a1 || pos == param_eps1 || pos == param_eps2 || pos == param_tasc || pos == param_sini || pos == param_m2 || pos == param_eps1dot || pos == param_eps2dot || pos == param_h3 || pos == param_h4 || pos == param_stig",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 310
+      },
+      {
+        "condition": "pos == param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 316
+      },
+      {
+        "condition": "pos == param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 319
+      },
+      {
+        "condition": "pos == param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 323
+      },
+      {
+        "condition": "nharm > 5",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 348
+      },
+      {
+        "condition": "nharm > 6",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 360
+      },
+      {
+        "condition": "nharm > 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 372
+      },
+      {
+        "condition": "sel == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 378
+      },
+      {
+        "condition": "sel == 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 380
+      },
+      {
+        "condition": "sel == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 382
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_h3",
+      "param_h4",
+      "param_m2",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_tasc"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_h3",
+      "param_h4",
+      "param_m2",
+      "param_nharm",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_tasc"
+    ],
+    "sha256": "47163ad9aa054845f7f5200b82c952d1a829ba6781574b3556c8f9b5c7401867",
+    "source": "ELL1Hmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_h3",
+      "param_h4",
+      "param_m2",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_stig",
+      "param_tasc"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "ELL1k": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 71
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 78
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 81
+      },
+      {
+        "condition": "psr[p].param[param_sini].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 88
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 91
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 99
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 105
+      },
+      {
+        "condition": "psr[p].param[param_eps1dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 112
+      },
+      {
+        "condition": "psr[p].param[param_eps2dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 114
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 125
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 150
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 161
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 163
+      },
+      {
+        "condition": "param==param_eps1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 165
+      },
+      {
+        "condition": "param==param_tasc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 167
+      },
+      {
+        "condition": "param==param_eps2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 169
+      },
+      {
+        "condition": "param==param_eps1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 171
+      },
+      {
+        "condition": "param==param_eps2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 173
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 175
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 177
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 179
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 181
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 183
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 191
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_eps1 || pos==param_eps2 || pos==param_tasc || pos==param_sini || pos == param_m2 || pos==param_eps1dot || pos==param_eps2dot || pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 196
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 204
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 209
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_m2",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_m2",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "sha256": "859183adaad467f93a859feaded2d02f59b9c0a559d07abaaaae9be17780bc39",
+    "source": "ELL1kmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_m2",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_sini",
+      "param_tasc"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "MSS": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 64
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 68
+      },
+      {
+        "condition": "psr[p].param[param_m2].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 71
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 74
+      },
+      {
+        "condition": "psr[p].param[param_a2dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 76
+      },
+      {
+        "condition": "psr[p].param[param_e2dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 79
+      },
+      {
+        "condition": "psr[p].param[param_orbpx].paramSet[0] ==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 82
+      },
+      {
+        "condition": "psr[p].param[param_dtheta].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 89
+      },
+      {
+        "condition": "psr[p].param[param_sini].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 92
+      },
+      {
+        "condition": "psr[p].param[param_a0].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 95
+      },
+      {
+        "condition": "psr[p].param[param_b0].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 98
+      },
+      {
+        "condition": "psr[p].param[param_dr].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 101
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 104
+      },
+      {
+        "condition": "psr[p].param[param_gamma].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 107
+      },
+      {
+        "condition": "psr[p].param[param_om2dot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 110
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 113
+      },
+      {
+        "condition": "psr[p].param[param_shapmax].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 116
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 137
+      },
+      {
+        "condition": "ae < 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 159
+      },
+      {
+        "condition": "orbpx != 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 229
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 240
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 254
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 255
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 256
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 257
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 258
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 259
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 260
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 261
+      },
+      {
+        "condition": "param==param_a2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 262
+      },
+      {
+        "condition": "param==param_om2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 263
+      },
+      {
+        "condition": "param==param_shapmax",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 264
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 265
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 269
+      },
+      {
+        "condition": "param==param_e2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 270
+      },
+      {
+        "condition": "param==param_orbpx",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 271
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 279
+      },
+      {
+        "condition": "pos==param_a1 || pos==param_ecc || pos==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 284
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 289
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 294
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 299
+      },
+      {
+        "condition": "pos==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 304
+      },
+      {
+        "condition": "pos==param_a2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 309
+      },
+      {
+        "condition": "pos==param_om2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 314
+      },
+      {
+        "condition": "pos==param_shapmax",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 319
+      },
+      {
+        "condition": "pos==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 324
+      },
+      {
+        "condition": "pos==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 330
+      },
+      {
+        "condition": "pos==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 335
+      },
+      {
+        "condition": "pos==param_e2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 340
+      },
+      {
+        "condition": "pos==param_orbpx",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 345
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_e2dot",
+      "param_ecc",
+      "param_edot",
+      "param_m2",
+      "param_om",
+      "param_om2dot",
+      "param_omdot",
+      "param_orbpx",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a0",
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_b0",
+      "param_dr",
+      "param_dtheta",
+      "param_e2dot",
+      "param_ecc",
+      "param_edot",
+      "param_gamma",
+      "param_m2",
+      "param_om",
+      "param_om2dot",
+      "param_omdot",
+      "param_orbpx",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_t0"
+    ],
+    "sha256": "3cd9615f90a3dace92162508287e3a5af4c779bd80710373307425a0b5fc9db0",
+    "source": "MSSmodel.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_e2dot",
+      "param_ecc",
+      "param_edot",
+      "param_m2",
+      "param_om",
+      "param_om2dot",
+      "param_omdot",
+      "param_orbpx",
+      "param_pb",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_t0"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "T2": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 126
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 129
+      },
+      {
+        "condition": "psr[p].param[param_bp].paramSet[0]==1 && psr[p].param[param_bpp].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 164
+      },
+      {
+        "condition": "psr[p].param[param_mtot].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 175
+      },
+      {
+        "condition": "psr[p].param[param_t0].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 185
+      },
+      {
+        "condition": "psr[p].param[param_tasc].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 187
+      },
+      {
+        "condition": "ecc < 0.0 || ecc > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 199
+      },
+      {
+        "condition": "orbits<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 214
+      },
+      {
+        "condition": "psr[p].param[param_ecc].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 219
+      },
+      {
+        "condition": "ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 231
+      },
+      {
+        "condition": "psr[p].param[param_kin].paramSet[com]==1 && psr[p].param[param_kom].paramSet[com]==1 && (psr[p].param[param_pmra].paramSet[com]==1 || psr[p].param[param_pmdec].paramSet[com]==1)",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 243
+      },
+      {
+        "condition": "psr[p].param[param_shapmax].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 275
+      },
+      {
+        "condition": "psr[p].param[param_eps1].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 299
+      },
+      {
+        "condition": "psr[p].param[param_kin].paramSet[com]==1 && psr[p].param[param_kom].paramSet[com]==1 && (psr[p].param[param_pmra].paramSet[com]==1 || psr[p].param[param_pmdec].paramSet[com]==1)",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 306
+      },
+      {
+        "condition": "psr[p].param[param_h3].paramSet[0] * psr[p].param[param_stig].paramSet[0] == 1 || psr[p].param[param_h3].paramSet[0] * psr[p].param[param_h4].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 328
+      },
+      {
+        "condition": "psr[p].param[param_h4].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 338
+      },
+      {
+        "condition": "psr[p].param[param_nharm].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 342
+      },
+      {
+        "condition": "nharm > 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 345
+      },
+      {
+        "condition": "psr[p].param[param_stig].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 350
+      },
+      {
+        "condition": "psr[p].param[param_stig].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 363
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 375
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 381
+      },
+      {
+        "condition": "mode == 2 || mode == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 388
+      },
+      {
+        "condition": "si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 393
+      },
+      {
+        "condition": "mode == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 400
+      },
+      {
+        "condition": "mode == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 421
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 424
+      },
+      {
+        "condition": "onemecu != 0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 447
+      },
+      {
+        "condition": "param==-1 && com == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 464
+      },
+      {
+        "condition": "param!=-1 && com==arr",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 465
+      },
+      {
+        "condition": "psr[p].param[param_ecc].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 475
+      },
+      {
+        "condition": "psr[p].param[param_shapmax].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 484
+      },
+      {
+        "condition": "psr[p].param[param_sini].nLinkTo>0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 486
+      },
+      {
+        "condition": "psr[p].param[param_eps1].paramSet[com]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 492
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 504
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 505
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 506
+      },
+      {
+        "condition": "param==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 507
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 508
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 509
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 511
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 512
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].nLinkFrom>0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 513
+      },
+      {
+        "condition": "param==param_pb2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 524
+      },
+      {
+        "condition": "param==param_sini",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 529
+      },
+      {
+        "condition": "param==param_gamma",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 530
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 531
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 532
+      },
+      {
+        "condition": "param==param_a2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 533
+      },
+      {
+        "condition": "param==param_eps1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 534
+      },
+      {
+        "condition": "param==param_eps1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 535
+      },
+      {
+        "condition": "param==param_eps2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 536
+      },
+      {
+        "condition": "param==param_eps2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 537
+      },
+      {
+        "condition": "param==param_tasc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 538
+      },
+      {
+        "condition": "param==param_shapmax",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 539
+      },
+      {
+        "condition": "param==param_stig",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 540
+      },
+      {
+        "condition": "param==param_h3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 544
+      },
+      {
+        "condition": "mode == 0 || mode == 2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 545
+      },
+      {
+        "condition": "mode == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 547
+      },
+      {
+        "condition": "mode == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 551
+      },
+      {
+        "condition": "param == param_h4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 556
+      },
+      {
+        "condition": "mode == 2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 557
+      },
+      {
+        "condition": "param==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 562
+      },
+      {
+        "condition": "param==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 566
+      },
+      {
+        "condition": "psr[p].param[param_ecc].paramSet[com]== 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 569
+      },
+      {
+        "condition": "psr[p].param[param_kin].nLinkFrom>0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 574
+      },
+      {
+        "condition": "psr[p].param[param_bpjep].paramSet[arr]==1 && psr[p].obsn[ipos].bbat > psr[p].param[param_bpjep].val[arr]",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 579
+      },
+      {
+        "condition": "param==param_bpjph",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 582
+      },
+      {
+        "condition": "param==param_bpja1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 584
+      },
+      {
+        "condition": "param==param_bpjec",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 585
+      },
+      {
+        "condition": "param==param_bpjom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 586
+      },
+      {
+        "condition": "param==param_bpjpb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 587
+      },
+      {
+        "condition": "pos==param_pb || pos==param_a1 || pos==param_ecc || pos==param_t0 || pos==param_sini || pos==param_m2 || pos == param_gamma || pos==param_eps1 || pos==param_eps2 || pos==param_tasc || pos == param_bpjph || pos==param_bpja1 || pos==param_bpjec || pos==param_bpjom || pos == param_bpjpb || pos==param_shapmax || pos==param_h3 || pos==param_h4 || pos==param_stig || pos==param_edot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 599
+      },
+      {
+        "condition": "pos==param_om || pos==param_kom || pos==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 607
+      },
+      {
+        "condition": "pos==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 612
+      },
+      {
+        "condition": "pos==param_pb2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 617
+      },
+      {
+        "condition": "pos==param_a1dot || pos==param_a2dot || pos == param_eps1dot || pos==param_eps2dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 622
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 627
+      },
+      {
+        "condition": "k > psr->param[p].aSize",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 636
+      },
+      {
+        "condition": "psr->param[p].paramSet[k]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 640
+      },
+      {
+        "condition": "psr->param[p].nLinkTo>0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 641
+      },
+      {
+        "condition": "mtot<0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 666
+      },
+      {
+        "condition": "psr->param[param_bpjep].paramSet[i]==1 && psr->obsn[ipos].bbat > psr->param[param_bpjep].val[i]",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 747
+      },
+      {
+        "condition": "*si > 1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 790
+      },
+      {
+        "condition": "*si < -1.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 796
+      },
+      {
+        "condition": "psr->param[param_daop].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 902
+      },
+      {
+        "condition": "nharm > 5",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1040
+      },
+      {
+        "condition": "nharm > 6",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1052
+      },
+      {
+        "condition": "nharm > 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1064
+      },
+      {
+        "condition": "sel == 3",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1070
+      },
+      {
+        "condition": "sel == 4",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1072
+      },
+      {
+        "condition": "sel == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 1074
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_ecc",
+      "param_edot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_gamma",
+      "param_h3",
+      "param_h4",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pb2dot",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_stig",
+      "param_t0",
+      "param_tasc"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a0",
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_afac",
+      "param_b0",
+      "param_bp",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjep",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_bpp",
+      "param_daop",
+      "param_dr",
+      "param_dth",
+      "param_ecc",
+      "param_edot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_f",
+      "param_gamma",
+      "param_h3",
+      "param_h4",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_mtot",
+      "param_nharm",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pb2dot",
+      "param_pbdot",
+      "param_pmdec",
+      "param_pmra",
+      "param_px",
+      "param_shapmax",
+      "param_sini",
+      "param_stig",
+      "param_t0",
+      "param_tasc",
+      "param_xomdot",
+      "param_xpbdot"
+    ],
+    "sha256": "757b4d751d782c9ef20ebf0d31e8d808411b5b09ec7b2d2a7b239050d6f0a241",
+    "source": "T2model.C",
+    "update_default": "no_op",
+    "update_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_a2dot",
+      "param_bpja1",
+      "param_bpjec",
+      "param_bpjom",
+      "param_bpjpb",
+      "param_bpjph",
+      "param_ecc",
+      "param_edot",
+      "param_eps1",
+      "param_eps1dot",
+      "param_eps2",
+      "param_eps2dot",
+      "param_gamma",
+      "param_h3",
+      "param_h4",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pb2dot",
+      "param_pbdot",
+      "param_shapmax",
+      "param_sini",
+      "param_stig",
+      "param_t0",
+      "param_tasc"
+    ],
+    "wrapper_return": "binary64"
+  },
+  "T2-PTA": {
+    "conditions": [
+      {
+        "condition": "displayCVSversion == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 61
+      },
+      {
+        "condition": "psr[p].param[param_t0].paramSet[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 64
+      },
+      {
+        "condition": "psr[p].param[param_ecc].paramSet[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 74
+      },
+      {
+        "condition": "psr[p].param[param_edot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 78
+      },
+      {
+        "condition": "psr[p].param[param_pb].paramSet[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 87
+      },
+      {
+        "condition": "psr[p].param[param_pbdot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 94
+      },
+      {
+        "condition": "orbits < longdouble(0.0)",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 105
+      },
+      {
+        "condition": "Ae<0.0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 119
+      },
+      {
+        "condition": "psr[p].param[param_omdot].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 125
+      },
+      {
+        "condition": "psr[p].param[param_om].paramSet[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 132
+      },
+      {
+        "condition": "psr[p].param[param_a1].paramSet[0] == 0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 142
+      },
+      {
+        "condition": "psr[p].param[param_a1dot].paramSet[0] == 1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 146
+      },
+      {
+        "condition": "psr[p].param[param_kin].paramSet[0]==1 && psr[p].param[param_m2].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 154
+      },
+      {
+        "condition": "psr[p].param[param_pmra].paramSet[0]==1 && psr[p].param[param_pmdec].paramSet[0]==1 && psr[p].param[param_kin].paramSet[0]==1 && psr[p].param[param_kom].paramSet[0]==1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 164
+      },
+      {
+        "condition": "param==-1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 217
+      },
+      {
+        "condition": "param==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 250
+      },
+      {
+        "condition": "param==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 255
+      },
+      {
+        "condition": "param==param_pbdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 257
+      },
+      {
+        "condition": "param==param_a1",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 259
+      },
+      {
+        "condition": "param==param_a1dot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 261
+      },
+      {
+        "condition": "param==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 263
+      },
+      {
+        "condition": "param==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 265
+      },
+      {
+        "condition": "param==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 267
+      },
+      {
+        "condition": "param==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 269
+      },
+      {
+        "condition": "param==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 271
+      },
+      {
+        "condition": "param==param_t0",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 273
+      },
+      {
+        "condition": "param==param_ecc",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 278
+      },
+      {
+        "condition": "pos==param_pb",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 300
+      },
+      {
+        "condition": "pos==param_om",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 306
+      },
+      {
+        "condition": "pos==param_kom",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 311
+      },
+      {
+        "condition": "pos==param_kin",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 316
+      },
+      {
+        "condition": "pos==param_m2",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 321
+      },
+      {
+        "condition": "pos==param_omdot",
+        "coverage": "inventory_only_not_branch_instrumented",
+        "line": 326
+      }
+    ],
+    "derivative_labels": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_t0"
+    ],
+    "native_return": "binary64",
+    "parameter_reads": [
+      "param_a1",
+      "param_a1dot",
+      "param_ecc",
+      "param_edot",
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb",
+      "param_pbdot",
+      "param_pmdec",
+      "param_pmra",
+      "param_posepoch",
+      "param_px",
+      "param_t0"
+    ],
+    "sha256": "64a8703f41113bfc3b73d767513177a4a98e017509a8080b4aed29c527547e14",
+    "source": "T2-PTAmodel.C",
+    "update_default": "add_to_index_zero_for_any_other_label",
+    "update_labels": [
+      "param_kin",
+      "param_kom",
+      "param_m2",
+      "param_om",
+      "param_omdot",
+      "param_pb"
+    ],
+    "wrapper_return": "binary64"
+  }
+}
