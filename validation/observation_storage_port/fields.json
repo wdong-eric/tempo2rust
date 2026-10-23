@@ -1,0 +1,1091 @@
+{
+  "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_header_sha256": "0313b6eaf9f9ae9d7e5cce340379ad4b7068394e5222a01f73949e3a2640de93",
+  "fields": [
+    {
+      "name": "sat",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "sat",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "strict parse_longdouble unchanged"
+    },
+    {
+      "name": "origsat",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "origsat",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "sat_day",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "sat_day",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "sat_sec",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "sat_sec",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "bat",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "bat",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "batCorr",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "batCorr",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "bbat",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "bbat",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "pet",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "pet",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "clockCorr",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "clockCorr",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "delayCorr",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "delayCorr",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "deleted",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "deleted",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "prefitResidual",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "prefitResidual",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "residual",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "residual",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "residualtn",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "residualtn",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "addedNoise",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "addedNoise",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNRedSignal",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNRedSignal",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNRedErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNRedErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNDMSignal",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNDMSignal",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNDMErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNDMErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "SWGPSignal",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "SWGPSignal",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "SWGPErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "SWGPErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNGroupSignal",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNGroupSignal",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNGroupErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNGroupErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNChromSignal",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNChromSignal",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "TNChromErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "TNChromErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "freq",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "freq",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "strict parse_binary64 unchanged"
+    },
+    {
+      "name": "freqSSB",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "freqSSB",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "toaErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "toaErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "strict parse_binary64 unchanged"
+    },
+    {
+      "name": "toaDMErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "toaDMErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "origErr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "origErr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "phaseOffset",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "phaseOffset",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averagebat",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averagebat",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averageres",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averageres",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averageerr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averageerr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averagedmbat",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averagedmbat",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averagedmres",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averagedmres",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "averagedmerr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "averagedmerr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "fname",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FILELEN+1"
+      ],
+      "rust_name": "fname",
+      "rust_cell": "Option<u8>",
+      "extents": [
+        501
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "UTF-8 bytes through NUL; capacity 501"
+    },
+    {
+      "name": "telID",
+      "source_type": "char",
+      "dimensions": [
+        "100"
+      ],
+      "rust_name": "telID",
+      "rust_cell": "Option<u8>",
+      "extents": [
+        100
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "UTF-8 bytes through NUL; capacity 100"
+    },
+    {
+      "name": "correctionsTT",
+      "source_type": "clock_correction",
+      "dimensions": [
+        "MAX_CLK_CORR"
+      ],
+      "rust_name": "correctionsTT",
+      "rust_cell": "SourceClockCorrection",
+      "extents": [
+        30
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "nclock_correction",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "nclock_correction",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "correctionTT_TB",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "correctionTT_TB",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "einsteinRate",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "einsteinRate",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "correctionTT_calcEph",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "correctionTT_calcEph",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "correctionTT_Teph",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "correctionTT_Teph",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "correctionUT1",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "correctionUT1",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "sun_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "sun_ssb",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "sun_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "sun_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "planet_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ],
+      "rust_name": "planet_ssb",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        9,
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "planet_ssb_tmr",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ],
+      "rust_name": "planet_ssb_tmr",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        9,
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "planet_ssb_derv",
+      "source_type": "double",
+      "dimensions": [
+        "9",
+        "6"
+      ],
+      "rust_name": "planet_ssb_derv",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        9,
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "jupiter_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "jupiter_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "saturn_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "saturn_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "venus_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "venus_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "uranus_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "uranus_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "neptune_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "neptune_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "earthMoonBary_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "earthMoonBary_ssb",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "earthMoonBary_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "earthMoonBary_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "earth_ssb",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "earth_ssb",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "observatory_earth",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "observatory_earth",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "psrPos",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ],
+      "rust_name": "psrPos",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        3
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "zenith",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ],
+      "rust_name": "zenith",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        3
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "nutations",
+      "source_type": "double",
+      "dimensions": [
+        "6"
+      ],
+      "rust_name": "nutations",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        6
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "siteVel",
+      "source_type": "double",
+      "dimensions": [
+        "3"
+      ],
+      "rust_name": "siteVel",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        3
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shklovskii",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "shklovskii",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelaySun",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelaySun",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelayJupiter",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelayJupiter",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelaySaturn",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelaySaturn",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelayVenus",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelayVenus",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelayUranus",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelayUranus",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "shapiroDelayNeptune",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "shapiroDelayNeptune",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "troposphericDelay",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "troposphericDelay",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "tdis1",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "tdis1",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "tdis2",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "tdis2",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "roemer",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "roemer",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "torb",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "torb",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "nphase",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "nphase",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "phase",
+      "source_type": "longdouble",
+      "dimensions": [],
+      "rust_name": "phase",
+      "rust_cell": "Option<Float> (128 significant bits)",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "pulseN",
+      "source_type": "long long",
+      "dimensions": [],
+      "rust_name": "pulseN",
+      "rust_cell": "Option<i64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "flagID",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FLAGS",
+        "MAX_FLAG_LEN"
+      ],
+      "rust_name": "flagID",
+      "rust_cell": "Option<u8>",
+      "extents": [
+        40,
+        32
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "flagVal",
+      "source_type": "char",
+      "dimensions": [
+        "MAX_FLAGS",
+        "MAX_FLAG_LEN"
+      ],
+      "rust_name": "flagVal",
+      "rust_cell": "Option<u8>",
+      "extents": [
+        40,
+        32
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "nFlags",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "nFlags",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "jump",
+      "source_type": "int",
+      "dimensions": [
+        "MAX_FLAGS"
+      ],
+      "rust_name": "jump",
+      "rust_cell": "Option<i32>",
+      "extents": [
+        40
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "jumpScale",
+      "source_type": "double",
+      "dimensions": [
+        "MAX_FLAGS"
+      ],
+      "rust_name": "jumpScale",
+      "rust_cell": "Option<f64>",
+      "extents": [
+        40
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "obsNjump",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "obsNjump",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "fdjump",
+      "source_type": "int",
+      "dimensions": [
+        "MAX_FLAGS"
+      ],
+      "rust_name": "fdjump",
+      "rust_cell": "Option<i32>",
+      "extents": [
+        40
+      ],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "obsNfdjump",
+      "source_type": "int",
+      "dimensions": [],
+      "rust_name": "obsNfdjump",
+      "rust_cell": "Option<i32>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "efac",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "efac",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "equad",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "equad",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "snr",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "snr",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "pnoise",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "pnoise",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "tobs",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "tobs",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "chisq",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "chisq",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "bline",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "bline",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    },
+    {
+      "name": "spherical_solar_wind",
+      "source_type": "double",
+      "dimensions": [],
+      "rust_name": "spherical_solar_wind",
+      "rust_cell": "Option<f64>",
+      "extents": [],
+      "native_allocation": "unwritten",
+      "frontend_write": "unwritten"
+    }
+  ],
+  "clock_correction_fields": [
+    {
+      "name": "correction",
+      "source_type": "double",
+      "dimensions": []
+    },
+    {
+      "name": "corrects_to",
+      "source_type": "char",
+      "dimensions": [
+        "32"
+      ]
+    }
+  ],
+  "constants": {
+    "MAX_FILELEN": 500,
+    "MAX_FLAGS": 40,
+    "MAX_FLAG_LEN": 32,
+    "MAX_CLK_CORR": 30,
+    "MAX_FILELEN+1": 501
+  }
+}
