@@ -1,0 +1,136 @@
+{
+  "Cargo_manifest_lock_and_build_unchanged_from_L": true,
+  "M2_failure_content": [
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "debug/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+    "release/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10"
+  ],
+  "acceptance_checker_sha256": "8bbca83d10bc1103b92492e78b77e47156c041afe5ed25f083b47e83ffb76d19",
+  "central_did_not_rerun": [
+    "full Rust test suite",
+    "formatting",
+    "Clippy",
+    "clock/glob/provenance",
+    "JPL",
+    "M1a",
+    "M1b",
+    "M2"
+  ],
+  "central_driver_sha256": "e0583b7b04a040478f9f868187dd849bda1c9a8b085cebb10c42c8b726c39e31",
+  "central_execution": {
+    "all_raw_data_match_delivery": true,
+    "boundary_cases": 8,
+    "cells": 9616,
+    "comparison_counts_per_profile": {
+      "fields": 664159,
+      "numbers": 96906,
+      "scalars": 591516
+    },
+    "controls_per_profile": 30,
+    "exact_cases_per_profile": 10,
+    "focused_tests_per_profile": 4,
+    "fresh_build_and_direct_comparison": true,
+    "ordered_events_per_profile": 32,
+    "profiles": [
+      "debug",
+      "release"
+    ],
+    "slots": 2000,
+    "supplemental_copies": 2
+  },
+  "central_log_sha256": "9ad250b0f2c108b2e945b13e1485f804adb866eea89debac484482c2b82191ea",
+  "central_receipt_sha256": "324fb5e87395044f77030c7afd8086a1d36243472f3114a4ca00948cd00a4e38",
+  "current_cli": {
+    "debug": {
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/debug/tempo2-rust",
+      "sha256": "6d931c909548f5d35b58c2d6202bde1cc35fa8c429fc8dd77a36bb3e9162ef70"
+    },
+    "release": {
+      "path": "/Users/Eric.Dong/Downloads/tempo2rust/rust/target/release/tempo2-rust",
+      "sha256": "568a5e19a2d3a7bb8d652d1a94fc9244d1568e4f521bedf8ef3117c465305354"
+    }
+  },
+  "current_module_inventory": 36,
+  "decision": "0036",
+  "delivery_commit": "8d2be6f4219e461abb546fb16e4b8c6161fd83e2",
+  "evidence_commit": "7d24a918ef21b47e7687f386f3383cec3297d5d0",
+  "full_regression_evidence": {
+    "cases_per_profile": {
+      "exact": 142,
+      "safe_Rust_boundary": 8,
+      "unrun_cycle": 1
+    },
+    "counts_per_profile": {
+      "discrete": 68256,
+      "finite": 34818,
+      "nonfinite": 196
+    },
+    "executed_commit": "6b5d373769c5be2b5b8bc0b832fd10a912036a87",
+    "glob_supplemental": {
+      "helper_patterns": 18,
+      "integrated_cases": 3,
+      "mutations": 9,
+      "original_delivery_mismatches_rejected": 8
+    },
+    "independent_repositories": {
+      "tempo2": {
+        "head": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+        "status": ""
+      },
+      "validation/reference": {
+        "head": "7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
+        "status": ""
+      }
+    },
+    "jpl": "PASS: unchanged I gates",
+    "m1a": "PASS",
+    "m1b": "PASS (via M2)",
+    "m2_exit": 1,
+    "m2_failures": [
+      "debug/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+      "debug/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10",
+      "release/shared/dependent_columns/1: shared.solver.strict_raw_retention_order: exact mismatch [True, False] != [False, True]",
+      "release/shared/dependent_columns/1: shared.solver.strict_raw_singular_values[0]: |difference| 3.464101615137754594384695270973822809990706901186851371815329282255643829069923 > 3.46410161513775459438469527097382281E-10"
+    ],
+    "max_finite_difference": 0,
+    "native_symbols": {
+      "debug": {
+        "binary_sha256": "6d931c909548f5d35b58c2d6202bde1cc35fa8c429fc8dd77a36bb3e9162ef70",
+        "retained_C_clock_or_JPL_symbols": false
+      },
+      "release": {
+        "binary_sha256": "568a5e19a2d3a7bb8d652d1a94fc9244d1568e4f521bedf8ef3117c465305354",
+        "retained_C_clock_or_JPL_symbols": false
+      }
+    },
+    "profiles_identical": true,
+    "status": "L corrected gates PASS; central acceptance pending"
+  },
+  "nested_repositories": "clean at both pinned revisions",
+  "production_commit": "8bad0be9ebdc649d431ee60aaf9d6cd52e845c7e",
+  "protected_files": 1618,
+  "reviewed_current_sources": 54,
+  "scope": "Decision 0033 parameter-only storage, initialization, copy, strict frontend and existing evaluator/fitter integration; no full PAR/TIM/pulsar or M2 acceptance",
+  "unsafe_sites_unchanged_from_L": {
+    "rust/src/clock_text.rs": [
+      7,
+      35,
+      43,
+      57,
+      92
+    ],
+    "rust/src/get_obs_coord.rs": [
+      9,
+      71
+    ],
+    "rust/src/stdio.rs": [
+      14,
+      42,
+      60,
+      76,
+      96
+    ]
+  },
+  "verified_current_and_committed_delivery_artifacts": 230
+}
