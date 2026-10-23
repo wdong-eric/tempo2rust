@@ -83,6 +83,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment K: TEMPO2 parameter and PAR reference | `01a167ad-4f08-7061-ae55-4f25abc12a7f` | Corrected bounded reference accepted by decision 0026 at `38d62af`; ownership window closed |
 | Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Current bounded Rust owner under decision 0023; dispatched from `82fc09a` |
 | Assignment M: TEMPO2 numeric utility reference | `01a167fd-6e4d-7b31-ae87-f1fafd486df3` | Selected numeric/text/conversion/copy/link/diagnostic reference under decision 0025; dispatched from `c035834` |
+| Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | TIM/JBO/Fortran I/O and ordering reference under decision 0028; dispatched from `8f4d31e` |
 
 ## Shared working design
 

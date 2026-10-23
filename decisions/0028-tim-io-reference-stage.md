@@ -46,3 +46,7 @@ Fresh verification must build the actual source profile, check current executabl
 Add meaningful compiled disposable source mutations for format selection, state retention, directive/order effects, include/jump history, writer inversion/retained fields, comparison/sort behavior, endian/date arithmetic and direct I/O. Require observable data/state/output/return differences; changed source filenames alone do not prove sensitivity. Map measured function/line/branch coverage to cases, distinguish instrumentation from the numerical build, and explain every unexecuted branch. Scope claims follow executable evidence rather than fixture count. No Rust API, tolerance or safe-adapter disposition is accepted by this reference stage.
 
 Return `validation/tim_io/REPORT.md`, source/caller-state/dispatch maps, complete fixtures and raw/comparison evidence, regeneration and sensitivity commands, actual executed identities, coherent commits and explicit scientific/ABI/platform/unrun limits. General preprocessing, selection/noise model processing, specialized PAR records and full timing remain later stages. Rug128, accepted numerical budgets, L's ownership and M2's four unresolved raw-order diagnostics remain unchanged. Central owns acceptance and the later Rust release.
+
+## Dispatch
+
+Created **Assignment N: TEMPO2 TIM I/O reference**, chat `01a1681a-64c8-7350-b6ae-006587b2b2d9`, in the local `rustify-tempo2` project from release commit `8f4d31e`. Its reference directory is independent of L and M; central retains design and acceptance.
