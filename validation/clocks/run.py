@@ -25,7 +25,7 @@ def compile_probe(src, cc, flags, name='probe', mutations=None):
             p=src/filename;s=p.read_text();assert s.count(old)==1,(filename,old,s.count(old));p.write_text(s.replace(old,new))
     # Verbatim data prefix and CVSdisplayVersion; no unrelated timing routines or A2 changes.
     global_source=blob('global.C')
-    globals_data=global_source[:global_source.index(b'void extra_delays')] + global_source[global_source.index(b'void CVSdisplayVersion'):] 
+    globals_data=global_source[:global_source.index(b'void extra_delays')] + global_source[global_source.index(b'void CVSdisplayVersion'):]
     (src/'global_data.C').write_bytes(globals_data)
     actual_flags=[f for f in flags if not f.startswith('-I')]+['-I'+str(src)]
     dependencies=['observatory.C','TKlog.C','TKlongdouble.C','tempo2Util.C','global_data.C']
