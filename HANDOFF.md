@@ -95,6 +95,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment L: Rust clock and table transfer | `01a167e7-780c-7163-9ed3-e1af7cb9ec33` | Corrected bounded transfer accepted by decision 0031 at `84b6b86`; ownership window closed |
 | Assignment M: TEMPO2 numeric utility reference | `01a167fd-6e4d-7b31-ae87-f1fafd486df3` | Bounded reference accepted by decision 0030 at `a01d428`; ownership window closed |
 | Assignment N: TEMPO2 TIM I/O reference | `01a1681a-64c8-7350-b6ae-006587b2b2d9` | Bounded reference accepted by decision 0032 at `68de89a`; ownership window closed |
+| Assignment O: Rust parameter storage foundation | `01a168ce-9a6e-7a20-b8ff-f5df761fa336` | Sole Rust owner under decision 0033; dispatched from `73fc537` |
 
 ## Shared working design
 

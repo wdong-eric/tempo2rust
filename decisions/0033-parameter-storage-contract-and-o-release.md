@@ -54,3 +54,7 @@ Demonstrate that load, evaluation and fit updates use the canonical store and th
 Run debug and release Rust checks, formatting and Clippy. Rerun accepted clock/glob/provenance and JPL checks with outputs redirected into O, plus unchanged M1a/M1b comparisons. Run M2 to completion: its nonzero exit and exactly four historical dependent-column raw-order failures remain required and visible; no new failure or gate relaxation is accepted. Preserve accepted resources/fixtures and old verification files byte-for-byte. Changes to active test call sites must be reported as API adaptation, not rewritten expectations.
 
 Deliver `rust/PARAMETER_STORAGE_REPORT.md`, source/case/field maps, exact comparison counts, actual execution receipts, current module/unsafe inventory and coherent Conventional Commits. This work should need no new unsafe block. If evidence identifies a new scientific/API decision outside this contract, return the reproducer and recommendation to central while continuing independent work. Central alone accepts the stage and releases later owners.
+
+## Dispatch
+
+Created **Assignment O: Rust parameter storage foundation**, chat `01a168ce-9a6e-7a20-b8ff-f5df761fa336`, in the local `rustify-tempo2` project from release commit `73fc537`. The initial status snapshot confirms an active implementation turn. O is the sole current Rust owner; this records dispatch, not implementation completion or acceptance.
