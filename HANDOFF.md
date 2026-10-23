@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 24 October 2026 for I/J/K/L/M/N/O acceptance, P/Q's independent references and R's observation-storage Rust release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 24 October 2026 for I/J/K/L/M/N/O acceptance, R's observation-storage Rust release and P/Q/S's independent references. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -64,6 +64,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0037](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0037-observation-storage-contract-and-r-release.md) releases R as the next sole Rust owner. It transfers all 95 source observation fields, explicit unwritten state and fixed backing, integrates existing input/evaluation/fitting access and consolidates the clock observation representation. The owned observations snapshot is authorized; strict parsing, JSON output, Rug128 and numerical gates remain unchanged. Full pulsar state and source readers remain subsequent input-lifecycle work.
 
+[Decision 0038](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0038-pulsar-lifecycle-reference-stage.md) releases S's independent whole-pulsar state/lifecycle reference: all 349 fields and twelve initialization, allocation/accessor, destruction and copy routines. It distinguishes native covariance zeros from unwritten observations and records retained, repeated and alias-dependent behavior before a later Rust ownership contract. S owns only its new reference directory; R retains sole Rust ownership.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -87,8 +89,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [P Preprocessing reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/16-preprocessing-reference.md) | `validation/preprocessing/` only | Released by decision 0034 independently of O | `REPORT.md`, complete primary routine/branch/caller maps and exact native preprocessing/unit/epoch history evidence |
 | [Q Specialized PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/17-specialized-par-reference.md) | `validation/par_specialized/` only | Released by decision 0035 independently of O/P | `REPORT.md`, complete released branch/caller maps and exact native specialized PAR state/stream evidence |
 | [R Observation storage Rust foundation](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/18-observation-storage-rust.md) | `rust/`, `validation/observation_storage_port/`, narrow O-verifier routing if needed | Released by decision 0037 after O ownership closure | `rust/OBSERVATION_STORAGE_REPORT.md`, complete 95-field/caller projection, consolidated state and unchanged regressions |
+| [S Pulsar lifecycle reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/19-pulsar-lifecycle-reference.md) | `validation/pulsar_lifecycle/` only | Released by decision 0038 independently of P/Q/R | `REPORT.md`, complete pulsar/nested-state and native initialization/copy/lifetime evidence |
 
-A through O have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O's bounded Rust transfers and K/M/N's bounded references are accepted with their ownership windows closed. P and Q prepare independent preprocessing and specialized PAR reference evidence. R owns the observation-storage Rust stage under decision 0037. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through O have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O's bounded Rust transfers and K/M/N's bounded references are accepted with their ownership windows closed. P, Q and S prepare independent preprocessing, specialized PAR and pulsar-lifecycle reference evidence. R owns the observation-storage Rust stage under decision 0037. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 

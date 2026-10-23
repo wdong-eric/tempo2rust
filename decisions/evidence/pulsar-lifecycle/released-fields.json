@@ -1,0 +1,2465 @@
+{
+  "schema_version": 1,
+  "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "source_header_sha256": "0313b6eaf9f9ae9d7e5cce340379ad4b7068394e5222a01f73949e3a2640de93",
+  "accepted_m_inventory_sha256": "471a5b510b3162601ad2c31a11b89fd4c1254fb33e97c06027c3cdb881845a52",
+  "field_count": 349,
+  "fields": [
+    {
+      "name": "name",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "eopc04_file",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_FILELEN"
+      ]
+    },
+    {
+      "name": "fixedFormat",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "param",
+      "source_type": "parameter",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_PARAMS"
+      ]
+    },
+    {
+      "name": "rajStrPre",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "decjStrPre",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "rajStrPost",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "decjStrPost",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "binaryModel",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "ToAextraCovar",
+      "source_type": "double",
+      "pointer_depth": 2,
+      "dimensions": []
+    },
+    {
+      "name": "dmoffsDMnum",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "dmoffsCMnum",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "dmoffsDM_mjd",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsDM",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsDM_error",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsDM_weight",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsCM_mjd",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsCM",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsCM_error",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "dmoffsCM_weight",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "gwsrc_ra",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_dec",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_aplus_r",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_aplus_i",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_across_r",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_across_i",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_aplus_r_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_aplus_i_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_across_r_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_across_i_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_epoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwsrc_psrdist",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "cgw_h0",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "cgw_cosinc",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "cgw_angpol",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "cgw_mc",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwm_raj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwm_decj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwm_epoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwm_phi",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwm_dphase",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_raj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_decj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_epoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_width",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_geom_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwcs_geom_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_epoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_width",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_raj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_decj",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_geom_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwb_geom_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_ra",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_dec",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_m1",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_m2",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_inc",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_theta_nodes",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_nodes_orientation",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_theta_0",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_orbital_period",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_distance",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_redshift",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_epoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_psrdist",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "gwecc_pulsarTermOn",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "posPulsar",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "velPulsar",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "accPulsar",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "phaseJump",
+      "source_type": "longdouble",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "phaseJumpDir",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "phaseJumpID",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "nPhaseJump",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "dmOffset",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "ne_sw",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nCompanion",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "eclCoord",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nJumps",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fjumpID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "16"
+      ]
+    },
+    {
+      "name": "jumpVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "jumpSAT",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "fitJump",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "jumpValErr",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "jumpStr",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS",
+        "MAX_STRLEN"
+      ]
+    },
+    {
+      "name": "jumpScaled",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "nfdJumps",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fdjump_pint_format",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fdjumpVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "fdjumpIdx",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "fitfdJump",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "fdjumpValErr",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS"
+      ]
+    },
+    {
+      "name": "fdjumpStr",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_JUMPS",
+        "MAX_STRLEN"
+      ]
+    },
+    {
+      "name": "fdjump_log",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "filterStr",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_STRLEN"
+      ]
+    },
+    {
+      "name": "passStr",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_STRLEN"
+      ]
+    },
+    {
+      "name": "tOffset",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET"
+      ]
+    },
+    {
+      "name": "tOffset_f1",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET"
+      ]
+    },
+    {
+      "name": "tOffset_f2",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET"
+      ]
+    },
+    {
+      "name": "tOffset_t1",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET"
+      ]
+    },
+    {
+      "name": "tOffset_t2",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET"
+      ]
+    },
+    {
+      "name": "tOffsetSite",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET",
+        "100"
+      ]
+    },
+    {
+      "name": "tOffsetFlags",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TOFFSET",
+        "1000"
+      ]
+    },
+    {
+      "name": "nToffset",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "ndmx",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nSx",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nchromx",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fitChisq",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fitNfree",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "globalNfit",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "globalNoConstrain",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nFit",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nParam",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nGlobal",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fitMode",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "robust",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "rescaleErrChisq",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "offset",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "offset_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "covar",
+      "source_type": "double",
+      "pointer_depth": 2,
+      "dimensions": []
+    },
+    {
+      "name": "calcShapiro",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "planetShapiro",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "jboFormat",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "obsn",
+      "source_type": "observation",
+      "pointer_depth": 1,
+      "dimensions": []
+    },
+    {
+      "name": "nobs",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "units",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "setUnits",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "tempo1",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "dilateFreq",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "timeEphemeris",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "t2cMethod",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "correctTroposphere",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "noWarnings",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "sorted",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "clock",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "16"
+      ]
+    },
+    {
+      "name": "clockFromOverride",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "64"
+      ]
+    },
+    {
+      "name": "JPL_EPHEMERIS",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_FILELEN"
+      ]
+    },
+    {
+      "name": "ephemeris",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_FILELEN"
+      ]
+    },
+    {
+      "name": "useCalceph",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "storePrec",
+      "source_type": "storePrecision",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_STOREPRECISION"
+      ]
+    },
+    {
+      "name": "nStorePrecision",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "bootStrap",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "tzrsite",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "rmsPre",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "rmsPost",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "rmstn",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "deleteFileName",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "100"
+      ]
+    },
+    {
+      "name": "nits",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "ipm",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "swm",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "wave_sine",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_sine_err",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_cos",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_cos_err",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_sine_dm",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_sine_dm_err",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_cos_dm",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "wave_cos_dm_err",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_WHITE"
+      ]
+    },
+    {
+      "name": "nWhite",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nWhite_dm",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "waveScale",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_aplus_r",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_aplus_r_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_aplus_i",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_aplus_i_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_across_r",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_across_r_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_across_i",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quad_across_i_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_QUAD"
+      ]
+    },
+    {
+      "name": "quadEpoch",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quadRA",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quadDEC",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nQuad",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "ifuncT",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ifuncV",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ifuncE",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ifunc_weights",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ifuncN",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "orbifuncT",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "orbifuncV",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "orbifuncE",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "orbifuncN",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "clk_offsT",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_CLK_OFFS"
+      ]
+    },
+    {
+      "name": "clk_offsV",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_CLK_OFFS"
+      ]
+    },
+    {
+      "name": "clk_offsE",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_CLK_OFFS"
+      ]
+    },
+    {
+      "name": "clkOffsN",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifuncT_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncV_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncE_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncN_p",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifuncT_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncV_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncE_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "quad_ifuncN_c",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_p_RA",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_p_DEC",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_c_RA",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_c_DEC",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_geom_p",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "quad_ifunc_geom_c",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTelDX",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "setTelVelX",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "telDX_t",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DX"
+      ]
+    },
+    {
+      "name": "telDX_v",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DX"
+      ]
+    },
+    {
+      "name": "telDX_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DX"
+      ]
+    },
+    {
+      "name": "telDX_vel",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DX"
+      ]
+    },
+    {
+      "name": "telDX_vel_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DX"
+      ]
+    },
+    {
+      "name": "nTelDY",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "setTelVelY",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "telDY_t",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DY"
+      ]
+    },
+    {
+      "name": "telDY_v",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DY"
+      ]
+    },
+    {
+      "name": "telDY_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DY"
+      ]
+    },
+    {
+      "name": "telDY_vel",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DY"
+      ]
+    },
+    {
+      "name": "telDY_vel_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DY"
+      ]
+    },
+    {
+      "name": "nTelDZ",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "setTelVelZ",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "telDZ_v",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DZ"
+      ]
+    },
+    {
+      "name": "telDZ_t",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DZ"
+      ]
+    },
+    {
+      "name": "telDZ_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DZ"
+      ]
+    },
+    {
+      "name": "telDZ_vel",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DZ"
+      ]
+    },
+    {
+      "name": "telDZ_vel_e",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TEL_DZ"
+      ]
+    },
+    {
+      "name": "nT2efac",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nT2equad",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "T2efacFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EFAC",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "T2efacFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EFAC",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "T2efacVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EFAC"
+      ]
+    },
+    {
+      "name": "T2equadFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EQUAD",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "T2equadFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EQUAD",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "T2equadVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_T2EQUAD"
+      ]
+    },
+    {
+      "name": "T2globalEfac",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNEF",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNEQ",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNSQ",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNECORR",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNSECORR",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNEFFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEF",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNEFFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEF",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNEFVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEF"
+      ]
+    },
+    {
+      "name": "TNGlobalEF",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNEQFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEQ",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNEQFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEQ",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNEQVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNEQ"
+      ]
+    },
+    {
+      "name": "TNGlobalEQ",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "addTNGlobalEQ",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNSQFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSQ",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNSQFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSQ",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNSQVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSQ"
+      ]
+    },
+    {
+      "name": "TNECORRFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNECORR",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNECORRFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNECORR",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNECORRVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNECORR"
+      ]
+    },
+    {
+      "name": "TNSECORRFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSECORR",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNSECORRFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSECORR",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNSECORRVal",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNSECORR"
+      ]
+    },
+    {
+      "name": "TNRedAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedAmp2",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedGam2",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedCoeffs",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "200"
+      ]
+    },
+    {
+      "name": "TNRedFLow",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRedCorner",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDMAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDMGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDMC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDMCoeffs",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "200"
+      ]
+    },
+    {
+      "name": "SWGPAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "SWGPGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "SWGPC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "SWGPCoeffs",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "200"
+      ]
+    },
+    {
+      "name": "TNChromAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChromGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChromIdx",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChromC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChromCoeffs",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "200"
+      ]
+    },
+    {
+      "name": "TNsubtractDM",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNsubtractRed",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNsubtractChrom",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNsubtractSWGP",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "AverageResiduals",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "AverageDMResiduals",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "AverageFlag",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "AverageEpochWidth",
+      "source_type": "float",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "detL",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "outputTMatrix",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "useTNOrth",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNBandDMAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNBandDMGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNBandDMC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nTNBandNoise",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNBandNoiseLF",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNBN"
+      ]
+    },
+    {
+      "name": "TNBandNoiseHF",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNBN"
+      ]
+    },
+    {
+      "name": "TNBandNoiseAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNBN"
+      ]
+    },
+    {
+      "name": "TNBandNoiseGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNBN"
+      ]
+    },
+    {
+      "name": "TNBandNoiseC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNBN"
+      ]
+    },
+    {
+      "name": "nTNGroupNoise",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNGroupNoiseFlagID",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNGN",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNGroupNoiseFlagVal",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNGN",
+        "MAX_FLAG_LEN"
+      ]
+    },
+    {
+      "name": "TNGroupNoiseAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNGN"
+      ]
+    },
+    {
+      "name": "TNGroupNoiseGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNGN"
+      ]
+    },
+    {
+      "name": "TNGroupNoiseC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNGN"
+      ]
+    },
+    {
+      "name": "nDMEvents",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "nDMEventC",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDMEvStart",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvLength",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvAmp",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvGam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvOff",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvLin",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNDMEvQuad",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "nTNShapeletEvents",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNShapeletEvN",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNShapeletEvPos",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNShapeletEvWidth",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNShapeletEvFScale",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "TNShapeletEvCoef",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv",
+        "MAX_TNShapeCoef"
+      ]
+    },
+    {
+      "name": "TNShapeletEvCoefErr",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv",
+        "MAX_TNShapeCoef"
+      ]
+    },
+    {
+      "name": "TNShapeletEvFitFlag",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_TNDMEv"
+      ]
+    },
+    {
+      "name": "whiteNoiseModelFile",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_STRLEN"
+      ]
+    },
+    {
+      "name": "rasim",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "decsim",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "simflag",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "fitFunc",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_FILELEN"
+      ]
+    },
+    {
+      "name": "nconstraints",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "constraint_efactor",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "constraints",
+      "source_type": "enum constraint",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_PARAMS"
+      ]
+    },
+    {
+      "name": "auto_constraints",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "constraint_special",
+      "source_type": "char",
+      "pointer_depth": 1,
+      "dimensions": [
+        "MAX_PARAMS"
+      ]
+    },
+    {
+      "name": "fitinfo",
+      "source_type": "FitInfo",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "brace",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "tzrobs",
+      "source_type": "observation",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "refphs",
+      "source_type": "char",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "posPulsarEquatorial",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "3"
+      ]
+    },
+    {
+      "name": "dm_series_type",
+      "source_type": "enum series_type",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TN_QpPeriod",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TN_QpSig",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TN_QpLam",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TN_QpRatio",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRed_log_freqs",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNRed_log_factor",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "ne_sw_ifuncT",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ne_sw_ifuncV",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ne_sw_ifuncE",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": [
+        "MAX_IFUNC"
+      ]
+    },
+    {
+      "name": "ne_sw_ifuncN",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDM_log_freqs",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNDM_log_factor",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChrom_log_freqs",
+      "source_type": "int",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNChrom_log_factor",
+      "source_type": "double",
+      "pointer_depth": 0,
+      "dimensions": []
+    },
+    {
+      "name": "TNsubtractPoly",
+      "source_type": "uint64_t",
+      "pointer_depth": 0,
+      "dimensions": []
+    }
+  ],
+  "nested_types": [
+    "parameter",
+    "observation",
+    "clock_correction",
+    "storePrecision",
+    "FitInfo",
+    "FitOutput"
+  ],
+  "primary_routines": {
+    "initialise.C": [
+      "initialise",
+      "initialiseOne",
+      "allocateMemory",
+      "destroyOne",
+      "destroyMemory"
+    ],
+    "tempo2Util.C": [
+      "copyPSR"
+    ],
+    "TKmatrix.C": [
+      "malloc_blas",
+      "free_blas",
+      "get_blas_rows",
+      "get_blas_cols",
+      "malloc_uinv",
+      "free_uinv"
+    ]
+  },
+  "primary_routine_count": 12,
+  "interpretation": "Released source state/routine inventory. Initialization, alias and lifetime behavior require separately classified native evidence; no Rust ABI or adapter decision is made."
+}
