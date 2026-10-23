@@ -1,13 +1,15 @@
 # Assignment L: clock and table transfer
 
-23 October 2026. The released L implementation and comparison gates are complete
-for central review. Both build profiles match all 142 executed J cases exactly;
+23 October 2026. This is the corrected delivery under decision 0029. Central
+withheld acceptance of `189fed3` after finding eight defined glob mismatches.
+The correction restores native membership, full-string order and path spelling.
+Both build profiles match all 142 executed J cases exactly;
 eight separate Rust boundary checks pass and the predecessor cycle stays unrun.
 JPL, M1a and M1b regressions pass. **M2 remains unaccepted:** its verifier returned
 1 with exactly the four historical dependent-column raw-order diagnostics.
 This report does not accept the overall transfer.
 
-The governing contracts are decisions 0023 and 0027. The latter records the
+The governing contracts are decisions 0023, 0027 and 0029. Decision 0027 records the
 user's explicit authorization of the single final interpolation contraction.
 The TEMPO2 source pin remains `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 
@@ -18,21 +20,29 @@ The TEMPO2 source pin remains `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 | Projection and 32-entry source map, before implementation | `eaf8b29` |
 | Source tables, clocks, dependencies, integration and active test replacements | `a2a0911` |
 | Fresh-process comparison, mutations and redirected regression runner | `07d27fa0d6a3f09b7f51d8b021b89ba4f57868f1` |
-| Saved final evidence and artifact digests | `4cd1601` |
+| Original delivery evidence and artifact digests | `4cd1601` |
+| Correct pinned glob membership, full-string order and raw path bytes | `e149369` |
+| Supplemental native comparisons and correction verification driver | `c5aed3f` |
+| Corrected full-run evidence and artifact digests | `aa0dd19` |
 
-The final full run executed `07d27fa`; the evidence and report commits add
-documentation and saved results only. Exact executed file hashes are in
-[`verification/clocks/source_hashes.json`](verification/clocks/source_hashes.json).
-The direct runner also embeds those 45 hashes in each profile result. Existing
+The corrected Rust and verification code is committed at `c5aed3f`; both JPL
+stage manifests record that execution HEAD. The delivery receipt records the
+shared workspace's final HEAD `539299a`: central committed numeric-reference
+acceptance documents during the run. All 46 executed source hashes stayed
+unchanged. `07d27fa` remains the original run's identity.
+New evidence is stored in `verification/clocks/glob_correction/` and
+the original L evidence remains unchanged. Exact executed file hashes are in
+[`source_hashes.json`](verification/clocks/glob_correction/source_hashes.json).
+The direct and supplemental runners embed those hashes in each profile result. Existing
 JPL/M1/M2 runners retain their broader manifests in their redirected directories.
 
 | Executable | SHA-256 |
 | --- | --- |
-| Accepted J executable, inspected but not rerun | `ad01bde230053e437536c204ead2a7235e52c7e08b612910d2ab939024ee900f` |
-| Executed debug Rust test probe | `e9daf8a6dfb43c3d5b8f23b65cc3d986c252fdb36cad0fe02fdf6d4bb4bd9708` |
-| Executed release Rust test probe | `45ee662effcf30fbcdc535e2e9fe8f3c2e34b4fdb4115ff0b53ea9c0d09092f4` |
-| Final debug CLI | `8f55397c4f6e69fe71269a5e2ae191ed929485c411133c5096104729d7610faf` |
-| Final release CLI | `39bb9ae784bc74e6fce5d76d3905af5f80eaaa1334077631d6dbcaca596532d1` |
+| Accepted J executable, used for three new safe integrated cases per profile | `ad01bde230053e437536c204ead2a7235e52c7e08b612910d2ab939024ee900f` |
+| Executed debug Rust test probe | `60a1eee8a12e429ea47fab6956730faeee4064c7615ab6369361bee93ac2f8f9` |
+| Executed release Rust test probe | `9e6a2ff0b604d1e7a906192ac4ded086ed8410e10beb0949a20abff845672a0b` |
+| Final debug CLI | `29c3e35e897cab763d4ef0c04f9534e01b82334a28746c8d31f93a145156957b` |
+| Final release CLI | `142c157f6ec199f7d150fcc07f4a1772967abbc71f1ed1fb61908e0adb4f31d1` |
 
 Host: macOS 26.7 build 25G229, arm64, C locale; rustc 1.97.1
 (`8bab26f4f`, LLVM 22.1.6). Rug 1.30.0 keeps the approved 128-bit significand.
@@ -54,7 +64,7 @@ have one caller; a separate function is not required for correspondence.
 | --- | --- |
 | `tabulated_function.rs` | Source 1023-byte chunks, first-byte header, C-string termination, permissive rows, duplicate/decreasing/nonfinite samples, endpoints, bracket search and exact host interpolation |
 | `clock_text.rs` | Byte whitespace/token/copy rules; private typed `%lf %lf`, `%lf%n`, `%63s %63s %f` scans and enum-selected bounded diagnostic formatting |
-| `clock_glob.rs` | Sorted byte/C-locale glob matching, wildcard directory components, escaping, brackets and leading-dot exclusion |
+| `clock_glob.rs` | Pinned Darwin flags-zero byte grammar, raw wildcard traversal with dot entries, preserved separators and full-string byte ordering |
 | `observatory.rs` | Actual observatory definitions and aliases, independent lazy initialization, alias accumulation/once-per-list warning defect, selected existing geometry calculation |
 | `clock_diagnostics.rs` | Shared displayMsg key history and DUP1, used TKlog channels/counters/30-message storage, source truncation, selected CVS version deduplication |
 | `clkcorr.rs` | Header index, lazy samples, distinct header/sample provenance, binary32 directed route algorithm, strict ties, invalid-edge retries, reverse hints, explicit chains, first matching cache and all four operations |
@@ -87,6 +97,50 @@ end phase, event-array index **7**, J produces `4033ffffffffffff`
 that one-site exception to 0023. Read-only disassembly and the reproducer are in
 [`interpolation_contract.json`](verification/clocks/interpolation_contract.json).
 No native clock experiment was executed to obtain that evidence.
+
+## Decision 0029 glob correction
+
+The first delivery used PathBuf component ordering and joining, omitted `.` and
+`..` from traversal, treated `^` as bracket negation, and interpreted nested
+POSIX class/equivalence/collating syntax. Central's pinned native reproducer
+showed eight mismatches among eighteen ordinary patterns. These change scientific
+input membership and equal-cost selection; they were not acceptable presentation
+differences.
+
+The helper now accepts a complete source pattern and retains path bytes through
+traversal and sorting. Only `!` negates a set; the pinned host treats those nested
+POSIX spellings as ordinary bracket bytes. Traversal explicitly supplies dot
+entries omitted by Rust's `read_dir`, while retaining the native leading-dot
+rule. Clock and observatory callers concatenate the source pattern bytes.
+Observatory fixed paths and its default-file exclusion also use byte spelling.
+The correction uses no new unsafe site or native production dependency.
+
+[`supplemental.py`](../validation/clocks_port/supplemental.py) compiles the
+verbatim pinned `globClockFiles` function into an isolated reference helper.
+Its function SHA-256 is
+`0fbb59b932cf2ce934917d89e4307e1aedc353ecc108c75a439a1b85110b1543`.
+Each profile records the compiler, source slice, complete harness, executable,
+input and Rust execution identities. The accepted J executable supplies the
+three integrated references on new safe temporary inputs; frozen J fixtures and
+outputs are not regenerated.
+
+| New check, in each profile | Result |
+| --- | --- |
+| All 18 original review patterns | Exact native agreement; 35 returned path byte strings |
+| Wildcard clock-directory tie | Full-string ordering loads `a b/clock/edge.clk` first and selects 20 s; component ordering would select 10 s |
+| Observatory file order | Native first matching duplicate code selects the SPACE clock and 20 s; alternate ordering would select SHORT and 10 s |
+| Repeated root separators | Exact index paths, observatory read paths and debug diagnostics, retaining the extra separators |
+| Three integrated cases | 36 complete events, 516 finite records and 1,029 discrete records; finite difference 0 |
+| Deliberate membership/order/path/selected-value mutations | Nine rejected by the normal comparator |
+| Original delivered mismatch records | All eight rejected; the ten original positive controls still pass |
+
+Helper paths compare as full hex-encoded byte strings. Temporary base substitution
+occurs only after exact comparison; interior separators, dot components and
+spaces remain visible. Integrated cases use the existing complete comparator,
+including routes, cache/index order, query values, slot bytes and diagnostics.
+Debug/release helper results and all integrated projections agree exactly.
+See [`debug_glob_supplemental.json`](verification/clocks/glob_correction/debug_glob_supplemental.json)
+and its release counterpart for every returned path and event.
 
 ## Direct comparison and controls
 
@@ -178,7 +232,7 @@ this is provenance observation, not eager table loading.
 ## Integration and unchanged regression gates
 
 The full final driver is [`../validation/clocks_port/verify.py`](../validation/clocks_port/verify.py).
-Its subprocess statuses and logs are in `verification/clocks/commands.json`.
+Its corrected subprocess statuses and logs are in `verification/clocks/glob_correction/commands.json`.
 Only `validation/jpl_port/run.py` received output/build-directory plumbing;
 I's comparators, projections, expected data and supplemental gates are unchanged.
 
@@ -199,18 +253,19 @@ unchanged `1e-12 s` budget; its maximum phase difference is
 `1.1368683694106456e-13 turn` against `1e-10 turn`. The maximum TT clock decimal
 transport difference is `4.668e-35 s`. The largest 4 ns BAT-response diagnostic
 error is `1.4168753360457828e-13 s` against `1e-12 s`. Full signed maxima remain
-in [`m2/m1b/numerical_errors.json`](verification/clocks/m2/m1b/numerical_errors.json).
+in [`m2/m1b/numerical_errors.json`](verification/clocks/glob_correction/m2/m1b/numerical_errors.json).
 These integrated budgets were not substituted for the exact direct clock gates.
 
-[`m2/open_gate_failures.json`](verification/clocks/m2/open_gate_failures.json)
+[`m2/open_gate_failures.json`](verification/clocks/glob_correction/m2/open_gate_failures.json)
 equals the historical file exactly: raw retention order and first raw singular
 value for `dependent_columns`, once in debug and once in release. No extra
 failure, tolerance, reordered scientific output or M2 acceptance was introduced.
 
-The final runner checked 615 protected reference/fixture/historical files before
-and after. Their hashes are unchanged. J and both independent repositories were
+The corrected runner checked 824 protected reference/fixture/historical files
+before and after, including all original L evidence. Their hashes are unchanged.
+J and both independent repositories were
 untouched; Git status was clean for `tempo2` and `validation/reference`, at
-`fda6ad4…` and `7795d53…` respectively. Concurrent parameter/numeric-toolkit work
+`fda6ad4…` and `7795d53…` respectively. Concurrent parameter/numeric-toolkit/TIM work
 was neither staged nor changed by L. Native symbol checks find no retained C
 clock or JPL entry points in either freshly executed CLI.
 
