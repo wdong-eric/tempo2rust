@@ -1,0 +1,94 @@
+source	batch	status	rust_locations	responsibility_and_remaining_work
+BTJmodel.C	binary-keplerian	missing	-	BTJ orbital jumps: delay, derivatives and updateBTJ; all branches absent.
+BTXmodel.C	binary-keplerian	missing	-	BTX orbital-frequency expansion, delay, derivatives and updates; all branches absent.
+BTmodel.C	binary-keplerian	missing	-	BT delay, derivatives and updateBT; all branches absent.
+DDGRmodel.C	binary-relativistic	missing	-	DDGR, mass2dd and updates; mass-dependent relativistic constraints absent.
+DDHmodel.C	binary-relativistic	missing	-	DDH orthometric Shapiro delay, derivatives and updates; historical ideal-DDH failure remains unexplained.
+DDKmodel.C	binary-relativistic	missing	-	DDK Kopeikin terms, delay, derivatives and updates absent.
+DDSmodel.C	binary-relativistic	missing	-	DDS Shapiro-shape model, derivatives and updates absent.
+DDmodel.C	binary-relativistic	missing	-	DD delay, derivatives, updates and source SINI clamping/warnings absent; preserve these semantics when porting.
+ELL1Hmodel.C	binary-relativistic	missing	-	ELL1H and calcDH harmonic Shapiro terms and updates absent.
+ELL1kmodel.C	binary-keplerian	missing	-	ELL1k low-eccentricity evolution and updates absent.
+ELL1model.C	binary-keplerian	missing	-	ELL1 low-eccentricity delay, derivative and update paths absent.
+GWsim.C	gw-spectrum	missing	-	Library GW source/background generation, anisotropy, general polarizations, eccentric-source evolution, residuals and file I/O absent; library membership keeps this in inventory despite plugin callers.
+MSSmodel.C	binary-relativistic	missing	-	MSS spinning companion delay, derivatives and updates absent.
+T2-PTAmodel.C	binary-relativistic	missing	-	T2_PTAmodel delay/computeU/update path absent.
+T2accel.C	fit-noise	missing	-	Optional accelerated Cholesky, upper inverse, QR least squares and BLAS matrix paths absent; reference disables acceleration, which does not remove these source branches from scope.
+T2model.C	binary-relativistic	missing	-	Unified multi-companion T2, Keplerian jumps, GR, Kopeikin and Shapiro branches and updates absent.
+T2toolkit.C	toolkit	missing	-	Statistics, sorting, random generators and TKsign_d absent as source toolkit APIs; generic Rust math does not establish this library transfer.
+TKfit.C	fit-basic	missing	-	Least squares, constrained/robust wrappers, polynomial removal and covariance/error calculation absent at baseline; E targets only selected nonaccelerated SVD solve.
+TKlog.C	output-integration	missing	-	Library logging levels, timing/debug checks and legacy diagnostics absent; Rust contextual errors are a different adapter.
+TKlongdouble.C	numeric-toolkit	partial	rust/src/longdouble.rs:1;rust/src/tempo2_util.rs:6	Decimal input and output supplied by finite Rug128 Scalar; legacy printf/scanf formatting, power overloads, longdouble ABI and native precision alternatives are not ported.
+TKmatrix.C	fit-noise	missing	-	Matrix multiplication, forward substitution and source allocation/layout interfaces absent.
+TKrobust.C	fit-noise	missing	-	Huber, bisquare and Welsch reweighting/iteration absent.
+TKspectrum.C	gw-spectrum	missing	-	Spectrum estimators, FFT/DFT/Lomb, smoothing/splines, sigmaz and spectral errors absent.
+TKsvd.C	fit-basic	missing	-	Source extended SVD, bidiagonalization, back substitution, cutoff and convergence behavior absent at baseline; E is concurrent and unreviewed here.
+bootstrap.C	fit-noise	missing	-	Bootstrap resampling, RNG and parameter uncertainty lifecycle absent.
+calculate_bclt.C	propagation	partial	rust/src/form_bats.rs:83;rust/src/form_bats.rs:179	Static equatorial direction, Roemer, iterative six-body Shapiro/DM calculation with source Sun+Jupiter convergence sum; no PM/parallax/radial motion/acceleration, alternate ephemeris perturbations or general multi-pulsar branch coverage.
+cheby2d.c	prediction	missing	-	Cheby2D and ChebyModel/Set evaluation, frequency derivative, selection, ownership and serialization absent; compile-time test main is not a production predictor entry.
+cheby2d_int.C	prediction	missing	-	Construct/test predictors by sampling timing engine over time/frequency and fitting Chebyshev coefficients absent.
+cholesky.C	fit-noise	missing	-	Diagonal weights, covariance-model parsing, kernels, Cholesky whitening and inverse absent; E targets only independent uncertainties.
+choleskyAutomatic.C	fit-noise	missing	-	Automatic covariance-function estimation absent; core library even when called by plugins.
+choleskyRoutines.C	fit-noise	missing	-	Covariance/spectrum estimation, smoothing and Cholesky decomposition absent; despite xtra_dist comment this file is explicitly in both core library source lists.
+clkcorr.C	resources	partial	rust/src/clkcorr.rs:1	Directed route search, badness, coverage/ties, sequence caching and sequential interpolation for PKS UTC/TT(TAI); explicit user-defined chains, full clock alternatives/fallback ladder and global repeat-state semantics remain; indispensable-chain failure differs.
+constraints.C	fit-noise	missing	-	Constraint naming/automatic selection, weights, DM/CM/IFUNC/quad/telescope functions and dispatch absent.
+constraints_covar.C	fit-noise	missing	-	IFUNC and DM-model covariance constraints absent.
+constraints_nestlike.C	fit-noise	missing	-	Red/DM/chromatic/SWGP/jitter/band/group priors and constraints absent; compiled core despite nestlike naming.
+constraints_param.C	fit-noise	missing	-	Generic parameter constraint callback absent.
+displayParameters.C	output-integration	missing	-	Full supported parameter/help listing absent.
+dm_delays.C	dispersion	partial	rust/src/form_bats.rs:212	Constant DM, frequency dilation and default spherical IPM=1 NE_SW=4 SWM=0 expression only; DM derivatives, CM/chromatic/FD/FDDC, DMX, DMMODEL, NE_SW interpolation/sinusoid and SWM=1 paths absent. Spherical default lives here, not in sw_delay.C.
+doFit.C	fit-extended	missing	-	Legacy doFitAll/getParamDeriv wrappers and plugin fit dispatch absent; plugin ABI is separate from core wrapper disposition.
+enum_str.C	output-integration	missing	-	Generated enum names from extract_enums.sh and tempo2.h; no matching complete parameter/constraint enum or string registry.
+eop.C	resources	partial	rust/src/eop.rs:1	Leap-aware IAU2000 EOP parsing/interpolation and lower proxy; source global first-load state replaced, upper endpoint rejected, alternate file formats/whole API not verified.
+formBats.C	propagation	partial	rust/src/form_bats.rs:261;rust/src/form_residuals.rs:38	TCB BAT sum for PKS and BAT=SAT for @; general flags/clock/time/model branches and full observation mutation API absent.
+formResiduals.C	residual-models	partial	rust/src/form_residuals.rs:29	Isolated F0-F3 split phase, first-input fractional reference, signed pulse rounding and uncentered residuals; F4+, braking, binary, glitches, waves, IFUNC, GW, noise, tracking, pulse flags, jumps, selections, TZR and averaging/mean-removal branches absent at baseline.
+getInputs.C	input-lifecycle	partial	rust/src/main.rs:1	Minimal residuals --par/--tim/--runtime CLI only; upstream input options, resource configuration, multi-pulsar lists, switches and plugin path discovery absent.
+get_obsCoord.C	astrometry-time	partial	rust/src/get_obs_coord.rs:1	IAU2000B with native SOFA and fixed PKS Cartesian geometry; TEMPO1/precession, special site/barycentric/spacecraft coordinates, telescope interpolation/offsets and other configuration paths absent.
+global.C	input-lifecycle	partial	rust/src/form_bats.rs:43	PKS rough/refined time-ephemeris-site orchestration plus residual evaluation; multi-pulsar, refphs lifecycle, updateBatsAll optimization, CALCEPH and process-global controls absent; repeat-call initialization differs.
+ifteph.C	resources	partial	rust/src/ifteph.rs:1	IF99 DE405 two-component time/velocity image and Chebyshev derivatives in safe Rust; fixed dimensions/file constraints, close/reinit/global state and malformed/range outcomes differ; full external IFTE API not exposed.
+ifunc.C	residual-models	missing	-	Piecewise linear/sinc scalar and strided interpolation utilities absent.
+initialise.C	input-lifecycle	partial	rust/src/read_parfile.rs:115;rust/src/lib.rs:77;rust/src/runtime.rs:201	Owned minimal fields/defaults replace pulsar allocation/initialization; full source parameter defaults, global allocations and reinit/destruction semantics absent; A2 initializer is a separate corrected reference.
+jpleph.c	resources	retained_native_modified	rust/native/jpleph.c:135;rust/src/read_ephemeris.rs:11	Native low-level reader/state/interpolation retained with header-zeroing and cache corrections; Rust exposes DE405 selected targets, not whole native API. Native retention is not a Rust rewrite or full-core acceptance.
+observatory.C	resources	partial	rust/src/runtime.rs:90	PKS Cartesian table lookup and ITRF_to_GRS80 only; aliases, geodetic/legacy table conversion, arbitrary observatories and global caching absent or changed.
+polyco.C	prediction	missing	-	TEMPO1 polynomial predictor construction, artificial TOAs, tzFit/chebpc/pcshft absent.
+preProcess.C	input-lifecycle	missing	-	Command-driven model edits, epoch changes, selection, global settings, noise models and preprocessing orchestration absent.
+preProcessSimple.C	input-lifecycle	partial	rust/src/read_parfile.rs:189	Only the adopted omitted-UNITS/EPHVER=5 resolution is represented; three-pass wave defaults, unit transformations, phase offsets, selections, jumps, DM modifications and flag processing absent.
+readEphemeris.C	astrometry-time	partial	rust/src/read_ephemeris.rs:47	DE405 source-order Sun/planet/Earth/EMB/nutation reads and SI/TCB conversion; alternate DE files/units, ecliptic rotation, perturbations/mass and planet-series branches absent; ignored native errors now stop evaluation.
+readEphemeris_calceph.C	astrometry-time	missing	-	CALCEPH ephemeris/time conversion branch and no-CALCEPH failure stubs absent; conditional source remains listed even when disabled.
+readJBO_bat.C	resources	missing	-	Legacy JBO clock/binary record parsing and endian/date helpers absent.
+readParfile.C	input-lifecycle	partial	rust/src/read_parfile.rs:1	13 numeric keys and five text keys; F0-F3/epochs/DM/RAJ/DECJ and inactive TZR metadata, fit flags recorded only; all remaining parameter branches, indexed families, defaults/checkAllSet/global parsing and duplicate assignment semantics need transfer.
+readTimfile.C	input-lifecycle	partial	rust/src/read_timfile.rs:1;rust/src/input.rs:23	Single FORMAT 1, exactly five tokens, homogeneous @ or PKS, raw input identity; no other formats/sites/aliases, flags, INCLUDE, selection, clock/time/phase/error/weight directives, pulse numbering or writeTim.
+refphs.C	residual-models	missing	-	Synthetic TZR reference observation insertion/removal absent; retaining TZRMJD/TZRFRQ/TZRSITE tokens is not activating REFPHS_TZR.
+secularMotion.C	astrometry-time	partial	rust/src/form_residuals.rs:42	Only zero-delay isolated BBAT=BAT identity; DSHK/Shklovskii secular correction absent.
+shapelet.C	residual-models	missing	-	Shapelet/Hermite recurrence and transient basis evaluation absent.
+shapiro_delay.C	propagation	partial	rust/src/form_bats.rs:194	Sun and five planetary logarithms embedded in PKS calculation; switches, ecliptic/position evolution and general public routine branches absent.
+sortToAs.C	input-lifecycle	missing	-	Source stable/deleted observation ordering behavior absent; current API intentionally retains input order.
+storePrecision.C	output-integration	missing	-	Legacy recordPrecision scientific/display precision diagnostics absent; JSON strings do not implement that API.
+sw_delay.C	dispersion	missing	-	SWM=1 solar current-sheet/rotation model and supporting astronomy/file handling absent; current default spherical formula is in dm_delays.C.
+t1polyco.c	prediction	missing	-	T1Polyco/Set read/write, nearest-segment selection and phase/frequency evaluation absent.
+t2fit.C	fit-basic	missing	-	Modern fit orchestration, column enumeration, selection, global/local assembly, updates, pre/postfit and legacy wrappers absent at baseline; E covers only ZERO/F0-F3 independent-noise profile.
+t2fit_dmmodel.C	fit-extended	missing	-	DMMODEL DM and common-mode derivative/update callbacks absent.
+t2fit_dmother.C	fit-extended	missing	-	DMX, chromatic exponent, FD/FDDC and DM sinusoid callbacks absent.
+t2fit_fitwaves.C	fit-extended	missing	-	FITWAVES basis and update callbacks absent.
+t2fit_glitch.C	fit-extended	missing	-	Glitch, exponential dip and Gaussian dip derivative/update callbacks absent.
+t2fit_gw.C	fit-extended	missing	-	GW memory/burst/cosmic-string/single source/quadrupole derivative/update callbacks absent.
+t2fit_ifunc.C	fit-extended	missing	-	IFUNC/SIFUNC derivatives and updates absent.
+t2fit_nestlike.C	fit-noise	missing	-	Red/DM/chromatic/SWGP/band/group/jitter/shapelet noise basis, polynomial subtraction and updates absent.
+t2fit_position.C	fit-extended	missing	-	Astrometry position/proper-motion/parallax derivative/update callbacks absent.
+t2fit_solarwind.C	fit-extended	missing	-	NE_SW, sinusoid, interpolation derivative/update and constraint callbacks absent.
+t2fit_stdFitFuncs.C	fit-basic	missing	-	ZERO/spin/binary/planet/DM/CM/telescope/jump derivatives and physical updates absent at baseline; E supplies only ZERO/F0-F3 subset.
+t2spectrum.C	gw-spectrum	missing	-	Timing spectral estimators using fits/IFUNC and cosine/sine callbacks absent.
+t2toolkit_global.C	toolkit	missing	-	Toolkit global flags and spectral controls for standalone linkage absent.
+tabulatedfunction.C	resources	partial	rust/src/tabulated_function.rs:1	Linear table interpolation, inclusive range and endpoint proxies retained; malformed/decreasing rows and degenerate intervals now errors, names/header storage and API differ.
+tai2tt.C	resources	missing	-	Legacy dedicated TAI-to-TT table path absent; current modern clkcorr chain can include that conversion but does not transfer this routine.
+tai2ut1.C	resources	missing	-	Legacy UT1 table/ut1red path absent; modern IAU2000B obtains UT1 through EOP. Source T2C_TEMPO-only branch needs explicit disposition.
+tempo2Util.C	numeric-toolkit	partial	rust/src/tempo2_util.rs:1	Binary64 RA/DEC conversion, dotproduct and signed mod/nlong subset; formatters, vector operations, ecliptic transforms, copy helpers, warnings and linked parameter lookup absent; numeric range guards differ.
+tempo2pred.c	prediction	missing	-	Public T2Predictor object, T1/Chebyshev dispatch, read/write/copy/insert/keep, metadata, phase/frequency and plan APIs absent.
+textOutput.C	output-integration	missing	-	Full fit/results/PAR output, RMS and derived astrophysical/glitch values absent; minimal Rust JSON is an adapter with different output contract.
+toa2utc.C	resources	partial	rust/src/clkcorr.rs:215;rust/src/form_bats.rs:99	Modern getClockCorrections path represented for PKS; legacy NIST/JBO conversion, special site and clock override branches absent.
+tropo.C	propagation	partial	rust/src/tropo.rs:1	Niell hydrostatic/wet and source missing/zero/out-of-range weather defaults retained for PKS; general sites/switches/global weather state absent or changed.
+tt2tdb.C	astrometry-time	partial	rust/src/tt2tdb.rs:1	IF99 SI/TCB correction with velocity/time derivatives; retains second obsTerm scaling expression. FB90, TDB/TEMPO1, alternate unit/ephemeris choices and general switches absent.
+units.C	astrometry-time	missing	-	TCB/TDB parameter, epoch, error and dimension-dependent conversion absent; current parser accepts TCB only.
+updateEpoch.C	input-lifecycle	missing	-	Epoch selection/re-expansion of spin, DM, position and binary models absent.
+utc2tai.C	resources	missing	-	Legacy UTC-to-TAI clock routine absent; modern directed chains are separately partial in clkcorr.C.
+vectorPulsar.C	astrometry-time	partial	rust/src/form_bats.rs:83	Static RAJ/DECJ direction and normalization only; proper motion, ecliptic conventions, distance/parallax and related vector state absent.

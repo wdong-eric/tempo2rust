@@ -1,0 +1,71 @@
+{
+  "compiler": "gcc-16 (Homebrew GCC 16.2.0) 16.2.0",
+  "native_layout": {
+    "au_offset": 28,
+    "au_offset_aligned_for_double": false,
+    "command": [
+      "/opt/homebrew/bin/gcc-16",
+      "-std=c11",
+      "-I",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/retained",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/layout.c",
+      "-o",
+      "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/layout"
+    ],
+    "double_alignment": 8,
+    "probe_source": "#include <stdio.h>\n#include <stdint.h>\n#include <stddef.h>\n#include \"jpl_int.h\"\nint main(void) {\n    printf(\"{\\\"au_offset\\\":%zu,\\\"double_alignment\\\":%zu,\\\"struct_size\\\":%zu}\\n\",\n           offsetof(struct jpl_eph_data, au), _Alignof(double), sizeof(struct jpl_eph_data));\n    return 0;\n}\n",
+    "scope": "layout only; no unaligned getter execution or sanitizer result",
+    "struct_size": 648
+  },
+  "original_resource_sha256": "86786f07aeddc1c5b6ddb24d8c65930803458938c6a2f920e8ea72a86da7479c",
+  "platform": "macOS-26.7-arm64-arm-64bit",
+  "probe_source_sha256": "1e5be8cbf57daf8bbfa5ab45b4324355a534c34d019feb0068cd848e8b87e830",
+  "results": {
+    "original": {
+      "command": [
+        "/opt/homebrew/bin/gcc-16",
+        "-O2",
+        "-I",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/original",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/probe.c",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/original/jpleph.c",
+        "-o",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/original/probe"
+      ],
+      "compile_stderr": "",
+      "jpleph_sha256": "d032fc069e9020af37333038d49f078d1ddefeb2ae253f520c17f8881c98960e",
+      "run_command": [
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/original/probe",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/truncated.de405"
+      ],
+      "stderr": "",
+      "stdout": "0 -2 0 0 0"
+    },
+    "retained": {
+      "command": [
+        "/opt/homebrew/bin/gcc-16",
+        "-O2",
+        "-I",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/retained",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/probe.c",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/retained/jpleph.c",
+        "-o",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/retained/probe"
+      ],
+      "compile_stderr": "",
+      "jpleph_sha256": "d8ae1becbab4585af6b2b76abbeac1599fe17f9a452ac3f4d7da694eb930d88d",
+      "run_command": [
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/retained/probe",
+        "/Users/Eric.Dong/Downloads/tempo2rust/validation/coverage/build/native-replay/truncated.de405"
+      ],
+      "stderr": "",
+      "stdout": "0 -2 -2 0 0"
+    }
+  },
+  "rust_revision": "ddc07b2",
+  "scope": "native kernel cache reproducer; not full Rust timing validation",
+  "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "status": "PASS",
+  "truncated_bytes": 4000,
+  "truncated_resource_sha256": "c91ca9f3b91c1ca2e890cef3eb8e784bc012966b0c4621ecb4c4d5fb14607042"
+}

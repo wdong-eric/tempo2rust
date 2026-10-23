@@ -1,0 +1,411 @@
+# Behavior-difference ledger
+
+All `S:path:line` references mean raw canonical Git blobs at `fda6ad4a9753ad7dc5d291406f2f310a9161423f`; all `R:path:line` mean primary baseline `ddc07b20fafc21fe92f2ecc1dd24c59db9df4142`. Use `git -C tempo2 show COMMIT:path | nl -ba` or `git show COMMIT:path | nl -ba`. Live Rust files may already differ because E is active. Generated from the checked JSON/curated TSV; no milestone acceptance is implied.
+
+Evidence levels are stated per entry. Fresh F execution covers the native JPL cache and defined table/parser cases only; baseline Rust behavior is inspected against its code and historical tests. Existing acceptance reports are bounded historical evidence. No old test, reference artifact, algorithm or acceptance threshold is changed.
+
+## B01: undefined_source
+
+`S:initialise.C:119`, `S:readParfile.C:1226`, `S:dm_delays.C:320`; `R:rust/src/form_bats.rs:223`.
+
+**Canonical behavior.** initialiseOne leaves ne_sw_ifuncN unwritten. In A's explicitly poisoned 0x55 probe it remains 1431655765 after initialise/parse/preprocess; ordinary uninitialized allocations have no portable value. Subsequent sample append/indexing can be invalid.
+
+**Baseline/reference difference.** A2 adds ne_sw_ifuncN=0 after ifuncN; baseline Rust uses fixed spherical NE_SW=4 without sample storage, rejects _NE_SW.
+
+**Reproducer and evidence.** Reference 5289797:initialization_probe.cc and checks/initialization-probe.log preserve uncorrected probe; A2 7795d53:initializer-correction.patch, initialization_probe.cc and checks/initialization-{empty,samples}.log check zero and two samples. Six goldens have identical scientific fields across A/A2 per checks/results.json.
+
+**Existing test expectation.** A2 initialization_probe.cc:16,20,27,29 explicitly requires corrected initialization; check_reference.py uses it. These cannot certify canonical initializer behavior.
+
+**Confidence and next evidence.** Historical runtime evidence inspected; no canonical timing run on poisoned storage. Preserve defect record and obtain central undefined-state disposition; do not invent a numerical value or undo A2 artifacts.
+
+## B02: undefined_source
+
+`S:jpleph.c:706`, `S:jpleph.c:770`, `S:jpleph.c:825`; `R:rust/native/jpleph.c:710`.
+
+**Canonical behavior.** Pre-DE430 init leaves some IPT/temp_data fields unwritten before swap/copy; invalid/uninitialized reads have no portable comparison value.
+
+**Baseline/reference difference.** Retained native initializes temp_data={0}; valid active DE405 interpolation unchanged in saved fixtures.
+
+**Reproducer and evidence.** rust/native/departures.patch second hunk; native/upstream_manifest.json; m1b/native_source_probe.json and source hash checks.
+
+**Existing test expectation.** Resource tests initialize DE405/synthetic headers through corrected native code; they do not test canonical uninitialized bytes.
+
+**Confidence and next evidence.** Source and patch verified; no independent sanitizer claim. Keep separate from the deterministic cache fix B03.
+
+## B03: deterministic
+
+`S:jpleph.c:592`, `S:jpleph.c:594`, `S:jpleph.c:599`; `R:rust/native/jpleph.c:594`, `R:rust/native/jpleph.c:606`.
+
+**Canonical behavior.** Record number is cached before fread. After a short read the second request skips I/O and reports success with a partial/stale buffer: statuses 0,-2,0,0 on recorded probe.
+
+**Baseline/reference difference.** Cache invalidated before read and committed only after success: 0,-2,-2,0. Final recovered x-position difference is exactly 0 on recorded probe.
+
+**Reproducer and evidence.** Copy pinned DE405, truncate last 4000 bytes, request JD 2450000.5, end-8 twice, then 2450000.5. Full original/retained C source/commands in baseline rust/verification/m1b/native_source_probe.json; F reproduce_native.py replays it and saves native_replay.json.
+
+**Existing test expectation.** rust/src/resource_tests.rs:407 native_read_failure_recovers_without_stale_cached_record expects both bad reads to fail; retained native probe expects second -2. Those corrected expectations conflict with deterministic preservation.
+
+**Confidence and next evidence.** Historical and fresh local runtime evidence; deterministic native status difference. Later bounded reconciliation must choose source-faithful repeat-read target, with unsafe-output aspects separately assessed; no fix in F.
+
+## B04: adapter, deterministic_status
+
+`S:readEphemeris.C:56`, `S:jpleph.c:135`, `S:jpleph.c:564`; `R:rust/src/read_ephemeris.rs:189`.
+
+**Canonical behavior.** High-level readEphemeris ignores jpl_pleph return status. Native range/read errors may leave old or partial output; first-use uninitialized results must be classified separately from reused initialized state.
+
+**Baseline/reference difference.** Checks nonzero status and returns contextual TimingError; no result vector published. Also rejects nonfinite returned vectors.
+
+**Reproducer and evidence.** Resource test native_read_failure_recovers_without_stale_cached_record includes range/short read/recovery; public checker tests resource errors. Direct native B03 does not by itself establish a complete canonical high-level numerical result after failure.
+
+**Existing test expectation.** resource_tests.rs:407 and examples/check_terrestrial_resources.rs:98 require errors/recovery; no equivalent successful canonical-output oracle.
+
+**Confidence and next evidence.** Source-inspected adapter boundary, recorded Rust tests. Need controlled initialized-state canonical subprocess for high-level repeat sequences; retain source error classes without fabricating data.
+
+## B05: undefined_source, coverage_guard
+
+`S:jpleph.c:315`, `S:jpleph.c:564`, `S:jpleph.c:698`; `R:rust/src/read_ephemeris.rs:73`, `R:rust/src/read_ephemeris.rs:132`, `R:rust/src/read_ephemeris.rs:178`.
+
+**Canonical behavior.** Native dimensions, title atoi and floating-to-u32 record conversion trust headers; offset arithmetic can wrap and pointers can go out of bounds. D pre-correction exact tiny-step mutation caused SIGBUS.
+
+**Baseline/reference difference.** DE405-only preflight bounds title/counts/dimensions/grid/native seek offset and finite epochs, returning Err. Bounds also reject untested but potentially defined alternate layouts.
+
+**Reproducer and evidence.** Set pinned DE405 big-endian f64 at byte 2668 from 32 to 1e-300. decisions/evidence/0005-m1b-review.json records earlier crash; baseline m1b/resource_checks{,_release}.json and examples/check_terrestrial_resources.rs:59 record error and restore recovery.
+
+**Existing test expectation.** jpl_record_grid_bounds_and_endpoints_recover at resource_tests.rs:362; public byte-mutation check expects record-grid error.
+
+**Confidence and next evidence.** Prior crash is D implementation/native-path evidence, not proof of every canonical malformed-header outcome. Undefined/invalid-access cases do not mandate unsafe emulation; broader finite rejection domain needs coverage review.
+
+## B06: undefined_source, adapter, coverage_guard
+
+`S:ifteph.C:149`, `S:ifteph.C:239`, `S:ifteph.C:246`, `S:ifteph.C:266`; `R:rust/src/ifteph.rs:31`, `R:rust/src/ifteph.rs:86`, `R:rust/src/ifteph.rs:133`.
+
+**Canonical behavior.** Header fread calls are unchecked; data fread at 266 is checked and exits on short reads. Lower coverage exits. Extreme record conversion can be undefined; source does not reject upper dates before attempting read.
+
+**Baseline/reference difference.** Owns complete validated image, checks grid/offsets/finite coefficients/upper dates and returns Err. Earlier D version overflowed on record_index+2 for tiny step.
+
+**Reproducer and evidence.** Set pinned IF99 big-endian f64 at byte 280 to 1e-300. decision 0005 evidence records earlier Rust overflow panic. ifte_record_grid_rejects_impossible_steps_and_recovers and public debug/release copies require constructor error/restored success; ifte_endianness_derivative_boundaries_and_recovery covers ordinary bounds.
+
+**Existing test expectation.** resource_tests.rs:261,302 and examples/check_terrestrial_resources.rs:59. Existing error expectations are adapter/guard checks, not exact source output.
+
+**Confidence and next evidence.** Historical runtime plus source inspection. Baseline ifteph.rs:133 and D report overstate unchecked data reads; document actual checked-exit path. Need explicit finite alternate-layout/partial-file source probes before treating every guard as undefined-source.
+
+## B07: deterministic
+
+`S:tabulatedfunction.C:79`, `S:tabulatedfunction.C:83`; `R:rust/src/tabulated_function.rs:21`.
+
+**Canonical behavior.** Malformed row with fewer than two sscanf conversions is skipped; valid rows before/after remain usable. Valid numeric prefixes/trailing tokens can be accepted.
+
+**Baseline/reference difference.** Malformed rows are errors; strict decimal parser rejects prefix junk/nonfinite values.
+
+**Reproducer and evidence.** Minimal table '# A B\n1 0\nbad row\n2 0\n' is in resource_tests.rs:49. F table_probe.cc compiles raw canonical tabulatedfunction.C, links hash-verified A2 support library: two samples, value 0 at 1.5 (table_replay.json).
+
+**Existing test expectation.** table_steps_endpoints_and_invalid_data at resource_tests.rs:43-52 asserts Err for this table, encoding a deterministic departure.
+
+**Confidence and next evidence.** Fresh canonical runtime observation plus existing Rust rejection test; preserve finite skipped-row behavior in later bounded reconciliation.
+
+## B08: deterministic_nonfinite
+
+`S:tabulatedfunction.C:149`, `S:tabulatedfunction.C:163`; `R:rust/src/tabulated_function.rs:42`, `R:rust/src/tabulated_function.rs:83`.
+
+**Canonical behavior.** With >=2 all-equal samples, or duplicate final samples at the final epoch, valid indices reach division by zero (0/0) and NaN; floating nonfinite behavior is distinct from invalid memory access.
+
+**Baseline/reference difference.** All-equal table rejected at parse; duplicate final interpolation returns zero-width error.
+
+**Reproducer and evidence.** Existing '# A B\n1 0\n1 1\n' parse case and '# A B\n1 0\n2 1\n2 2\n' evaluated at 2, resource_tests.rs:50,54-55. F table_replay.json observes NaN for both cases through raw canonical table source.
+
+**Existing test expectation.** resource_tests.rs:52 and :55 expect corrected Err instead of source nonfinite outcome.
+
+**Confidence and next evidence.** Fresh canonical nonfinite-class observation plus existing Rust error tests. Preserve NaN at these defined floating stages; do not group with singleton out-of-bounds B09.
+
+## B09: undefined_source
+
+`S:tabulatedfunction.C:149`, `S:tabulatedfunction.C:163`; `R:rust/src/tabulated_function.rs:42`.
+
+**Canonical behavior.** Singleton table at its epoch uses samp[isamp-1] with isamp=0; no portable numerical result. Out-of-range queries can return its single endpoint before that access.
+
+**Baseline/reference difference.** Parser rejects singleton for every query, including defined endpoint-proxy cases.
+
+**Reproducer and evidence.** resource_tests.rs:46 checks '# A B\n1 0\n'; inspect getValue endpoint return paths 123-139 versus 163. F table_replay.json observes singleton off-epoch proxy value 0 at x=0; exact-epoch invalid access deliberately not executed.
+
+**Existing test expectation.** table_steps_endpoints_and_invalid_data rejects singleton globally.
+
+**Confidence and next evidence.** Undefined at exact epoch; defined off-epoch source proxy is additionally a deterministic rejection domain. Need query-specific disposition rather than blanket undefined label.
+
+## B10: deterministic_guard
+
+`S:tabulatedfunction.C:84`, `S:eop.C:55`; `R:rust/src/tabulated_function.rs:37`, `R:rust/src/eop.rs:42`.
+
+**Canonical behavior.** Table parser retains decreasing samples and warns; source EOP assumes ordered samples. Outcomes depend on values/query, not universally undefined.
+
+**Baseline/reference difference.** Rejects decreasing tables and unordered/insufficient EOP before interpolation.
+
+**Reproducer and evidence.** resource_tests.rs:47 decreasing two-row table and EOP test :98; no complete native outcome survey. F table_replay.json observes decreasing table [(2,0),(1,0)] at 1.5 return 0 with source warning.
+
+**Existing test expectation.** Resource parser tests expect Err; canonical warn-through behavior not equivalent.
+
+**Confidence and next evidence.** Fresh defined decreasing-table proxy result; broader invalid-order/EOP behavior remains unmeasured. Separate insufficient data/upper OOB B11.
+
+## B11: undefined_source
+
+`S:eop.C:159`, `S:eop.C:178`, `S:eop.C:186`; `R:rust/src/eop.rs:92`.
+
+**Canonical behavior.** At/after last EOP date, proxy sets mjd=last and scan yields isamp=size; derivative reads samp[size]. Insufficient samples likewise unsafe.
+
+**Baseline/reference difference.** Rejects upper endpoint/after endpoint; preserves lower proxy and leap-aware interior calculation.
+
+**Reproducer and evidence.** eop_upper_boundary_recovers_and_leap_is_not_interpolated at resource_tests.rs:98; baseline resource recovery records.
+
+**Existing test expectation.** Upper-bound error tests protect safe adapter; not source-success equality.
+
+**Confidence and next evidence.** Source invalid-access proof, existing synthetic tests. No invented legacy xp/yp/dut1dot for upper endpoint.
+
+## B12: deterministic_status
+
+`S:clkcorr.C:744`, `S:clkcorr.C:781`, `S:clkcorr.C:810`; `R:rust/src/clkcorr.rs:245`.
+
+**Canonical behavior.** After failed original/UTC and TT(TAI) fallback attempts getClockCorrections returns with nclock_correction=0; getCorrectionTT sums to 0, so caller can continue.
+
+**Baseline/reference difference.** Missing indispensable UTC-to-TT chain becomes Err; supported site-to-UTC assumption is still retained.
+
+**Reproducer and evidence.** Remove utc2tai.clk in copied runtime (public resource checker) or isolated synthetic no-route root, resource_tests.rs:123. Canonical empty-chain/zero is source-inspected; no new native route run.
+
+**Existing test expectation.** clock_routes_coverage_ties_fallback_and_recovery and public missing-resource check assert Err for no indispensable route.
+
+**Confidence and next evidence.** Deterministic returned-status difference needing reconciliation; an apparently bad result does not authorize changing it under decision 0008.
+
+## B13: deterministic_guard
+
+`S:clkcorr.C:363`; `R:rust/src/clkcorr.rs:65`.
+
+**Canonical behavior.** Source accepts float badness weights including values outside valid Dijkstra assumptions; specific malformed graphs may yield paths, cycles or nontermination.
+
+**Baseline/reference difference.** Rejects negative/nonfinite badness; malformed absent/failed conversion still defaults 1 in both intended paths.
+
+**Reproducer and evidence.** Synthetic route test mutates header badness and restores, resource_tests.rs:123; inspect indexed native parser/graph. No exhaustive native graph outcome recorded.
+
+**Existing test expectation.** clock_routes_coverage_ties_fallback_and_recovery requires Err for negative weights.
+
+**Confidence and next evidence.** Guard departure; source result must be probed per graph. Do not label all negative weights C undefined behavior or all as corrected numerical results.
+
+## B14: repeat_state
+
+`S:global.C:75`, `S:global.C:103`, `S:tt2tdb.C:116`; `R:rust/src/form_bats.rs:111`.
+
+**Canonical behavior.** Rough tt2tb pass can consume previous initialized earth/site vectors on repeat formBatsAll calls; first-use uninitialized state is a separate case.
+
+**Baseline/reference difference.** Each observation starts rough pass with zero vectors, so prior calls/failures cannot seed that pass.
+
+**Reproducer and evidence.** Baseline M1B_REPORT intentional-departure row; examples/check_terrestrial_resources.rs:145 repeated result equality. Valid final fixture results unchanged; no saved paired canonical repeated-call delta isolates this effect.
+
+**Existing test expectation.** Same-context recovery equality encodes stateless expectation but does not prove canonical repeat-call equivalence.
+
+**Confidence and next evidence.** Source-inspected repeat-state difference; magnitude/which sequences alter final BAT remains unmeasured. Probe initialized repeated model/TOA changes before claiming deterministic final numerical disagreement.
+
+## B15: repeat_state, adapter
+
+`S:clkcorr.C:1`, `S:eop.C:142`, `S:tropo.C:221`, `S:ifteph.C:128`, `S:tt2tdb.C:197`; `R:rust/src/runtime.rs:201`, `R:rust/src/clkcorr.rs:89`, `R:rust/src/ifteph.rs:33`.
+
+**Canonical behavior.** Clock/EOP/weather initialization flags and caches are process-global; IFTE global file/cache and first-use initialization can preserve first runtime state or partial failure.
+
+**Baseline/reference difference.** Per-context clocks/EOP/weather/IFTE image; new context loads current root. JPL init/error slot serialized; contexts do not reuse each other's resources.
+
+**Reproducer and evidence.** Resource restore/reconstruct checks, independent JPL handles and IFTE recovery in resource_tests; accepted M1b records. No native multiple-root comparison isolates every global subsystem.
+
+**Existing test expectation.** failed_library_processing_then_valid_processing_is_stateless and public recovery tests specify owned API behavior.
+
+**Confidence and next evidence.** Observable ownership/state limitation, not proof of exact source repeat-call behavior; later sequence fixtures must compare initialized state and chosen roots.
+
+## B16: deterministic_nonfinite
+
+`S:observatory.C:394`, `S:tropo.C:367`; `R:rust/src/runtime.rs:139`, `R:rust/src/runtime.rs:161`.
+
+**Canonical behavior.** Invalid GRS80/zero zenith geometry can produce IEEE NaN/Inf; downstream timing may later encounter undefined integer conversions.
+
+**Baseline/reference difference.** Rejects nonfinite GRS80 quantities or zero height before timing.
+
+**Reproducer and evidence.** Public checker replaces PKS row with '0 0 0 Parkes PKS', examples/check_terrestrial_resources.rs:126; saved resource_checks.json.
+
+**Existing test expectation.** Public checker expects invalid GRS80 geometry error and later recovery.
+
+**Confidence and next evidence.** Defined floating-stage nonfinite versus error is a departure; no complete finite legacy residual claimed. Need stage-classifying canonical probe.
+
+## B17: deterministic_nonfinite
+
+`S:calculate_bclt.C:41`, `S:dm_delays.C:41`, `S:formResiduals.C:2160`; `R:rust/src/form_bats.rs:240`, `R:rust/src/read_ephemeris.rs:217`, `R:rust/src/ifteph.rs:185`.
+
+**Canonical behavior.** Nonfinite coefficients/propagation may flow through floating computations; later pulse/integer conversion may be undefined, but nonfinite stages are not automatically undefined.
+
+**Baseline/reference difference.** Finite-result guards return errors before exposing these stages.
+
+**Reproducer and evidence.** Replace DM 100.0 by 1e1000 (finite binary128/MPFR, overflows binary64 narrowing) in copied PAR; examples/check_terrestrial_resources.rs:133-152 expects nonfinite correction and valid reuse. Other nonfinite coefficient guards source-inspected.
+
+**Existing test expectation.** Public overflow-DM check encodes corrected preemptive error; does not compare canonical stage classes.
+
+**Confidence and next evidence.** Existing Rust runtime evidence only for DM case, canonical stage behavior inferred. Freeze finite/nonfinite classes and last defined stage in later isolated source probe.
+
+## B18: deterministic_parser
+
+`S:readParfile.C:159`, `S:readParfile.C:2762`; `R:rust/src/read_parfile.rs:153`, `R:rust/src/read_parfile.rs:164`.
+
+**Canonical behavior.** Repeated ordinary parameters are assigned sequentially by parser; MODE/WEIGHT last declaration wins. Source readValue scans up to three suffix tokens rather than requiring complete line consumption.
+
+**Baseline/reference difference.** Baseline rejects duplicate numeric/text parameters and surplus tokens; baseline does not accept MODE/WEIGHT/NITS at all.
+
+**Reproducer and evidence.** Two F0 lines in a valid PAR; tests/behavior.rs:234 rejection family. Decision 0008 specifically amends repeated MODE/WEIGHT for E; E source is outside this audit.
+
+**Existing test expectation.** Duplicate/extra-field tests in rejects_malformed_and_unsupported_inputs_with_context encode parser boundary differences.
+
+**Confidence and next evidence.** Source-inspected deterministic parser difference; broaden duplicate regression by key/family rather than assuming all indexed keywords overwrite identically.
+
+## B19: deterministic_parser, coverage
+
+`S:TKlongdouble.C:58`, `S:readParfile.C:2827`; `R:rust/src/longdouble.rs:19`, `R:rust/src/longdouble.rs:43`, `R:rust/src/tempo2_util.rs:9`.
+
+**Canonical behavior.** Binary128 parser strtoflt128 with null end pointer accepts numeric prefixes/hex/nonfinite spellings; PAR readValue normalizes D exponent. Native errno/overflow/underflow policies differ.
+
+**Baseline/reference difference.** Complete finite decimal grammar only; hexadecimal/junk/NaN/Inf and nonzero underflow are errors. Direct decimal-to-MPFR uses a different exponent range/precision.
+
+**Reproducer and evidence.** tests/behavior.rs:43 strict_decimals_and_nanosecond_round_trips; :234 malformed input cases; raw helper comparison is source-inspected, not every full parser context. F table_replay.json observes parse_longdouble(1junk)=1, parse_longdouble(0x1p0)=1 and NaN class through hash-verified unchanged binary128 parser object; full PAR contexts not executed.
+
+**Existing test expectation.** Strict decimal tests define adapter grammar, not complete source parser fidelity.
+
+**Confidence and next evidence.** Fresh helper observations and existing strict Rust tests. Separate defined helper differences from full malformed parser paths with uninitialized fields; probe exact contexts later.
+
+## B20: coverage
+
+`S:initialise.C:117`, `S:preProcessSimple.C:88`, `S:readParfile.C:2413`, `S:readTimfile.C:119`; `R:rust/src/read_parfile.rs:11`, `R:rust/src/read_parfile.rs:189`, `R:rust/src/read_timfile.rs:33`, `R:rust/src/input.rs:23`.
+
+**Canonical behavior.** General source supports many parameters, formats/sites/aliases/flags/directives, defaults and mixed observation types.
+
+**Baseline/reference difference.** Explicit supported subset only: TCB/EPHVER5, 13 numeric and 5 text keys, homogeneous @/PKS FORMAT1; extra active inputs rejected even when zero. Terrestrial required epochs/metadata stricter than source defaults.
+
+**Reproducer and evidence.** Input key arrays/dispatch and tests/behavior.rs:234; source_map.tsv and inventory lexical string/param references retain the larger scope.
+
+**Existing test expectation.** Unsupported-keyword/site/missing-metadata tests protect declared subset, but cannot be final full-core tests for features later implemented.
+
+**Confidence and next evidence.** Coverage restriction, not evidence that source rejects or mishandles these inputs. All corresponding source rows remain open.
+
+## B21: undefined_source, representation
+
+`S:formResiduals.C:515`, `S:tempo2Util.C:186`, `S:tempo2Util.C:211`; `R:rust/src/form_residuals.rs:9`, `R:rust/src/form_residuals.rs:82`, `R:rust/src/tempo2_util.rs:40`.
+
+**Canonical behavior.** Signed-int casts/product and fortran_mod quotient cast can exceed int; nlong uses platform long. Such overflow/conversions have no portable result.
+
+**Baseline/reference difference.** Checked i32 product/day/F0 and i64 pulse limits return Err; Rug remainder avoids the source quotient int cast and can return a defined value where source cannot.
+
+**Reproducer and evidence.** tests/behavior.rs:288 overflow/recovery cases and form_residuals.rs unit tests; M1A report states this boundary. No runtime source UB imitation.
+
+**Existing test expectation.** Overflow errors/recovery checks protect API; Rug large-remainder semantics do not prove canonical behavior beyond int range.
+
+**Confidence and next evidence.** Undefined-source limits explicit; additionally platform long width must be reviewed for non-LP64 platforms.
+
+## B22: representation
+
+`S:TKlongdouble.float128.h:1`, `S:TKlongdouble.C:58`; `R:rust/src/longdouble.rs:6`, `R:rust/src/form_residuals.rs:86`.
+
+**Canonical behavior.** Accepted source build uses IEEE binary128, 113-bit significand; ordinary native long double is 53 bits on this host. Predictor code also uses native long double.
+
+**Baseline/reference difference.** Rug1.30/MPFR fixed 128 significand bits and larger exponent range, decimal strings; f64 operation boundaries deliberately retained. Not bitwise binary128 equivalence.
+
+**Reproducer and evidence.** validation/precision/REPORT.md at baseline and M1A/M1B numerical_errors.json; largest recorded M1a residual difference 3.76201e-25 s, M1b residual 1.13686836941064559950026880243e-13 s, bounded fixtures only.
+
+**Existing test expectation.** Precision/fixture tests use approved finite budgets; not exact floating bit or full exponent-domain tests.
+
+**Confidence and next evidence.** Approved representation difference remains a ledger item; no tolerance change requested. Platform, overflow, signed-zero and all future native-type boundaries need separate evidence.
+
+## B23: adapter
+
+`S:getInputs.C:52`, `S:textOutput.C:60`, `S:initialise.C:849`; `R:rust/src/lib.rs:36`, `R:rust/src/main.rs:1`, `R:rust/src/input.rs:18`.
+
+**Canonical behavior.** Source mutates caller pulsar/observation storage, emits text and may exit/abort after partial work.
+
+**Baseline/reference difference.** Owned input/results, borrowed evaluation, contextual Result and complete JSON-before-stdout publication; source warnings represented as strings/provenance. Missing files return errors.
+
+**Reproducer and evidence.** tests/behavior.rs:343 cli_publishes_complete_json_or_no_result; :288 stateless processing; resource checker late failure leaves inputs unchanged. A2 driver process publication is distinct from same-process native recovery.
+
+**Existing test expectation.** These tests establish public Rust adapter contract; they do not reproduce process termination or partial legacy buffers.
+
+**Confidence and next evidence.** Keep adapter limitation explicit; no successful numerical value fabricated for undefined/terminated paths. OS stdout write failure is not atomically recoverable.
+
+## B24: adapter, threading
+
+`S:sofa/Makefile.am:3`, `S:jpleph.c:664`; `R:rust/build.rs:29`, `R:rust/src/read_ephemeris.rs:27`.
+
+**Canonical behavior.** Original SOFA flags do not request recursive locals; JPL initialization uses a global error slot.
+
+**Baseline/reference difference.** -frecursive for retained Fortran and mutex over native initialization/error retrieval; opaque NonNull handle is neither Send nor Sync.
+
+**Reproducer and evidence.** Historical native debug/release fixtures and source/flags; no concurrency stress test was run or claimed.
+
+**Existing test expectation.** Independent-context sequential tests are not parallel execution tests.
+
+**Confidence and next evidence.** Need explicit ABI/threading documentation; no safe Rust alternative already implemented. U1 stable-file precondition is additional unresolved safety evidence.
+
+## B25: coverage, adapter
+
+`S:global.C:134`, `S:calculate_bclt.C:80`, `S:formBats.C:52`; `R:rust/src/form_residuals.rs:29`.
+
+**Canonical behavior.** Legacy @ orchestration may still read otherwise unused resources and do position work before bypassing delays.
+
+**Baseline/reference difference.** Resource-free evaluate_barycentric sets SAT=BAT=BBAT for isolated supported inputs and omits inactive resource operations.
+
+**Reproducer and evidence.** Accepted barycentric fixtures, tests/behavior.rs, M1A report; no runtime required for this API.
+
+**Existing test expectation.** Barycentric success without resources encodes adapter scope, not complete legacy wrapper I/O/failure behavior.
+
+**Confidence and next evidence.** Scientific fixture values agree within gates; missing-resource statuses/work performed differ. Preserve this distinction during full orchestration transfer.
+
+## B26: preserved_quirk
+
+`S:tt2tdb.C:158`, `S:tt2tdb.C:163`, `S:tropo.C:160`; `R:rust/src/tt2tdb.rs:44`, `R:rust/src/tropo.rs:164`.
+
+**Canonical behavior.** Source scales obsTerm again rather than obsTermDot; NMF_wet c interpolation uses b[j].
+
+**Baseline/reference difference.** Both expressions deliberately retained, not corrected.
+
+**Reproducer and evidence.** tropo.rs:194 niell_mapping_matches_pinned_source expects 6.3735950766954428 hydrostatic and 6.5370360886066781 wet at specified MJD/geometry; terrestrial fixture evidence covers time correction.
+
+**Existing test expectation.** These compatibility tests should remain source-faithful; no corrected expectation identified here.
+
+**Confidence and next evidence.** Static expression and historical numerical evidence; apparent defect is not independently established physical error. Keep deferred-fix notes separate from transfer.
+
+## B27: coverage, source_failure
+
+`S:DDHmodel.C:42`, `S:formResiduals.C:396`; —.
+
+**Canonical behavior.** A2 checkIdeal original abs(residual)<1e-9 s fails before fitting: 120/284 outside gate, maximum 4.59895516385995339247551543745087149e-9 s.
+
+**Baseline/reference difference.** No baseline binary/DDH path; BINARY inputs rejected. No claim that Rust fixes or reproduces failure.
+
+**Reproducer and evidence.** A2 checks/ddh.json, checks/ddh-diagnostic.log and original testEndToEnd.checkIdeal.log; first failure zero-based index35, SAT55594.45971978297532701, residual1.13758502732523367544302697283684274e-9 s. Downstream polynomial replay does not isolate upstream cause.
+
+**Existing test expectation.** gracefulBadFit is separately excluded from acceptance because of tautological final assertion; never cite it as robustness proof.
+
+**Confidence and next evidence.** Historical bounded failure remains open under unchanged gate. Binary/prediction stages must preserve and diagnose, not tune fixtures or fit away discrepancy.
+
+## B28: coverage, future_stage
+
+`S:TKfit.C:325`, `S:TKsvd.C:40`, `S:t2fit_stdFitFuncs.C:95`; —.
+
+**Canonical behavior.** Square n=p rescaled solve produces nonfinite errors; callbacks error>=0 leave stored error unchanged for NaN. n<p can return with uninitialized estimates. MODE/WEIGHT assignments are sequential.
+
+**Baseline/reference difference.** No fitting in fixed baseline. E is implementing amended contract, not audited here.
+
+**Reproducer and evidence.** decisions/evidence/m2/result.json and source_probe.cc are historical source probes; decisions0007/0008 classify finite/nonfinite and adapter paths. E must produce own evidence.
+
+**Existing test expectation.** Old prospective rejection of square fits in decision0007 is superseded, not a baseline Rust regression to delete; do not invent tests that do not yet exist at ddc07b2.
+
+**Confidence and next evidence.** Explicit future-stage boundary, no M2 acceptance or comparison claim. E changes never shift this inventory target.
+
+## B29: undefined_source, native_portability
+
+`S:jpl_int.h:30`, `S:jpleph.c:75`, `S:jpleph.h:75`; `R:rust/src/read_ephemeris.rs:160`.
+
+**Canonical behavior.** Packed native struct places au at offset28; generic getter casts base+offset to double* and dereferences. This does not provide a portable double-alignment guarantee.
+
+**Baseline/reference difference.** Retained native getter is unchanged and Rust calls it at field28; ordinary fixture success does not discharge the C alignment obligation.
+
+**Reproducer and evidence.** F native_replay.json native_layout probe: au_offset=28, double_alignment=8, struct_size=648. Probe computes offsetof/alignment only; no unaligned dereference, sanitizer or crash claim.
+
+**Existing test expectation.** No alignment-specific baseline test. Existing native/terrestrial fixtures exercise the getter under the recorded host/compiler profile.
+
+**Confidence and next evidence.** U2 is a source-inspected retained-native safety/portability gap, not a new behavior correction. Require central disposition and bounded native-boundary evidence; F leaves source and wrapper untouched.
