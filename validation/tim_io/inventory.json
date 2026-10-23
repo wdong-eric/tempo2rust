@@ -1,0 +1,1481 @@
+{
+  "caller_candidates": [
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:bootstrap.C:182:        writeTim(\"testout.tim\",psr,\"fred\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:cheby2d_int.C:116:    writeTim(\"pred.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:ifteph.C:70:IFTswap4(char *word)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:ifteph.C:80:    IFTswap4((char *)word);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:ifteph.C:88:        IFTswap4((char *)(word+i));",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:ifteph.C:92:IFTswap8(char *dword)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:ifteph.C:104:    IFTswap8((char *)dbl);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWanisobkgrd_plug.C:273:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWanisobkgrd_plug.C:381:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWanisobkgrd_plug.C:436:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrd_plug.C:238:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrd_plug.C:337:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrd_plug.C:392:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrdfromfile_plug.C:232:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrdfromfile_plug.C:335:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrdfromfile_plug.C:393:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWbkgrdfromfile_plug.C:454:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdetect_plug.C:99:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdipolebkgrd_plug.C:306:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdipolebkgrd_plug.C:413:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWdipolebkgrd_plug.C:468:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWevolve_plug.C:218:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWevolve_plug.C:372:  writeTim(\"evolve.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWevolve_plug.C:379:  writeTim(\"evolveGW.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralanisobkgrd_plug.C:423:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralanisobkgrd_plug.C:542:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralanisobkgrd_plug.C:597:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralbkgrd_plug.C:301:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralbkgrd_plug.C:410:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWgeneralbkgrd_plug.C:465:\t  writeTim(fname,psr+j,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsens_plug.C:61:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsens_plug.C:325:\t\twriteTim(\"sim0.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsens_plug.C:354:      writeTim(fname,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsingle_plug.C:172:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWsingle_plug.C:215:\t  writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:178:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:227:      readTimfile(psr,timFile,*npsr);         /* Load the arrival times             */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:251:  readTimfile(psr,timFile,*npsr);         /* Load the arrival times             */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/GWwhiteLimit_plug.C:532:\t      /*\t      writeTim(\"test.tim\",&psr,\"tempo2\"); */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/addRed_plug.C:83:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/addRed_plug.C:141:  writeTim(\"new.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/add_pulseNumber_plug.C:92:  writeTim(\"withpn.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/analyticChol_plug.C:101:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/applet_plug.C:119:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/autoDM_plug.C:81:   readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/autoDM_plug.C:87:   sortToAs(psr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/autoSpectralFit_plug.C:81:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:176:      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:177:      sortToAs(&psr[0]);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:216:      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:217:      sortToAs(&psr[0]);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:295:      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/averageData_plug.C:351:      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/basic_plug.C:93:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/calcDMe_plug.C:251:  readTimfile(psr, timFile, *npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/calcDMe_plug.C:283:    writeTim(\"afterFit.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/calcDMe_plug.C:338:\twriteTim(tmpstring,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/calcDMe_plug.C:1142:  writeTim(str,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/checkWhite_plug.C:87:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/cholSpectra_plug.C:149:   readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/cholSpectra_plug.C:154:\t  sortToAs(psr+p); // sort the ToAs",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/clock_plug.C:131:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/clock_plug.C:213:      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareBackends_plug.C:87:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:92:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:111:      writeTim((char *)\"compare_dset1.tim\",&psr[0],(char *)\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:112:      writeTim((char *)\"compare_dset2.tim\",&psr[1],(char *)\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:396:\t    writeTim((char *)\"compare_dset1.tim\",&psr[0],(char *)\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/compareDsets_plug.C:397:\t    writeTim((char *)\"compare_dset2.tim\",&psr[1],(char *)\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/delays_plug.C:134:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/designmatrix_plug.C:103:    readTimfile(pPsr, timFile, *pnPsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/detectGWB_plug.C:172:      readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/detectGWBnew_plug.C:166:   readTimfile(psr,timFile,*npsr);         /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:101:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:141:      readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/dm_plug.C:205:  readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/efacEquad_plug.C:172:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fake_plug.C:429:\t  writeTim(str,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fake_plug.C:451:\t  readTimfile(psr,timFile,*npsr); ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fake_plug.C:489:      writeTim(str,psr,formstr);      ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fermi_plug.C:756:    readTimfile(psr,timFile,*npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fermi_plug.C:883:        readTimfile(psr,timFile,*npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/findCW_plug.C:77:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/findCWs_plug.C:83:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fitStability_plug.C:86:   readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fixData_plug.C:146:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fixData_plug.C:801:\twriteTim(\"sim.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/fixData_plug.C:1021:  writeTim(\"fixData.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/flagOutliers_plug.C:562:\t\twriteTim(cfg.outputTim, &psr[0], \"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/flagOutliers_plug.C:569:\t\t\twriteTim(outName, &psr[pw], \"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glast_plug.C:162:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glitch_plug.C:392:      readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glitch_plug.C:489:\t  readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/glitch_plug.C:647:      readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/grTemplate_plug.C:79:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/gwmStats_plug.C:123:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/gwm_plug.C:99:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/gwm_plug.C:177:\t       //\t       writeTim(fname,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/icLimit_plug.C:237:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/icLimit_plug.C:336:\t    //\t    \t    writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/interpolate_plug.C:180:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/mjk_plug.C:120:   readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/photons_plug.C:495:    readTimfile(psr,timFile,*npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/photons_plug.C:580:        readTimfile(psr,timFile,*npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/planet_plug.C:266:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/planet_plug.C:759:\t      readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/planet_plug.C:2157:  sortToAs(psr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:555:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:596:        writeTim(str,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:2067:                    writeTim(\"withpn.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:2070:                    writeTim(timFile[0],psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:2737:                    readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:3591:            readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plk_plug.C:4136:    writeTim(newtim,psr,format);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/plotMany_plug.C:200: readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:421:        readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:1891:                    writeTim(outname,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:1921:                    writeTim(outname,psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:1931:                    writeTim(\"withpn.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:1934:                    writeTim(timFile[0],psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:2535:                    readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:3386:            readTimfile(psr,timFile,1); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/quickplot_plug.C:3869:    writeTim(newtim,psr,format);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:292:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */  ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:515:  writeTim(\"ideal.tim\",&psr[0],\"tempo2\");  ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:620:\t  writeTim(\"sigmaz_gwsim.tim\",&psr[0],\"tempo2\");  ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:783:  writeTim(\"ideal.tim\",&psr[0],\"tempo2\");  ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:792:      writeTim(\"idealPlusWhite.tim\",&psr[0],\"tempo2\");  ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/sigmaz_plug.C:852:  writeTim(\"gw.tim\",&psr[0],\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/simRedNoise_plug.C:100:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/simRedNoise_plug.C:179:      writeTim(fname,psr+p,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/simulDM_plug.C:88:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/spectralModel_plug.C:208:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/spectralModel_plug.C:1897:  sortToAs(psr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/spectrum_plug.C:115:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/splk_plug.C:120:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/storeTNDM_plug.C:61:    void writeTim(const char *timname,pulsar *psr,const char *fileFormat);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/storeTNDM_plug.C:63:    writeTim(\"tndm.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:plugin/stridefit2_plug.C:141:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:polyco.C:154:        writeTim(fname3,psr,\"tempo2\"); ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:37:double date2mjd(int idat);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:39:void makechars(char* raw, char cbuf[25][9]);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:40:void swap4(char*);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:41:void swap8(char*);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:42:void swap8(double* in){ swap8((char*)in);}",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:44:void readJBO_bat(char *fname,pulsar *psr,int p)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:58:    if (displayCVSversion == 1) CVSdisplayVersion(\"readJBO_bat.C\",\"readJBO_bat()\",CVS_verNum);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:73:        swap4((char*)(&itype));",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:79:                makechars(raw_record,cbuf);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:83:                makechars(raw_record,cbuf);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:87:                makechars(raw_record,cbuf);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:88:                swap8(doubles+3);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:89:                swap8(doubles+4);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:90:                swap8(doubles+5);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:102:                makechars(raw_record,cbuf);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:107:                        swap8(doubles+i);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:114:                double diff = (double)(date2mjd((int)doubles[23])*86400.0+doubles[24]) -",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:115:                    (double)(date2mjd((int)doubles[0])*86400.0+doubles[1]);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:119:                longdouble bat = (longdouble)(date2mjd((int)doubles[0])+doubles[1]/86400.0);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:147:       { buf.dbl[i] = read_double2(); }",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:148:       read_record_int2(); read_record_int2(); ",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:168:       psr->obsn[nobs].bat = (longdouble)(date2mjd((int)buf.dbl[0])+buf.dbl[1]/86400.0);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:189:double date2mjd(int idat)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:212:void swap4(char* raw){",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:222:void swap8(char* raw){",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:223:    swap4(raw);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:224:    swap4(raw+4);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readJBO_bat.C:232:void makechars(char* raw, char cbuf[25][9]){",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:53:void readTim(char *timname,pulsar *psr,int *jumpVal, int *fdjumpVal);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:54:void removeCR2(char *str);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:56:void readTimfile(pulsar *psr,char timFile[][MAX_FILELEN],int npsr)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:64:    if (displayCVSversion == 1) CVSdisplayVersion(\"readTimfile.C\",\"readTimfile()\",CVS_verNum);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:85:            readJBO_bat(timFile[p],&psr[p],p);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:88:            readTim(timFile[p],&psr[p],&jumpVal,&fdjumpVal);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:119:void readTim(char *timname,pulsar *psr,int *jumpVal, int *fdjumpVal)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:187:            fgets(line,1000,fin); removeCR2(line);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:627:                        //\t\t      readTim(newtim,psr,jumpVal);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:628:                        readTim(relPath,psr,jumpVal,fdjumpVal);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:666:void writeTim(const char *timname,pulsar *psr,const char *fileFormat)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:readTimfile.C:834:void removeCR2(char *str)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:35:void open_file2(char *fname,int *swap)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:68:void close_file2()",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:73:void read_character2(int len,char *str)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:88:int read_int2()",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:114:float read_float2()",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:138:double read_double2()",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:read_fortran2.h:169:int read_record_int2()",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:sortToAs.C:8:int compareObs(const void *o1, const void *o2);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:sortToAs.C:12:void sortToAs(pulsar* psr){",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:sortToAs.C:23:int compareObs(const void *o1, const void *o2)",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:t2fit.C:163:            sortToAs(psr+ipsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.C:366:        readTimfile(psr,timFile,npsr); /* Read .tim file to define the site-arrival-times */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.C:375:        writeTim(\"out.tim\",psr,\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:965:    void readTimfile(pulsar *psr,char timFile[][MAX_FILELEN],int npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:986:    void sortToAs(pulsar* psr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1027:    void readJBO_bat(char *fname,pulsar *psr,int p);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tempo2.h:1035:    void writeTim(const char *timname,pulsar *psr,const char *fileFormat);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:19:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:51:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:85:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:117:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:152:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:183:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testEndToEnd.C:223:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testTempo2.C:372:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testTempo2.C:395:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testTempo2.C:439:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:tests/testTempo2.C:476:    readTimfile(psr,timFile,npsr);",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/glast/glast_plug.C:162:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/mjkbayes/mjkbayes_plug.C:110:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/add2state_plug.C:131:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addArbitraryDM_plug.C:105:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addCGW_plug.C:124:\treadTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addChromVar_plug.C:146:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addDmVar_plug.C:157:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addGWB_plug.C:168:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addGaussian_plug.C:120:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addInstrumentalIssues_plug.C:102:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/addRedNoise_plug.C:161:    readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/createRealisation_plug.C:110:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/createRealisation_plug.C:139:      writeTim(nname,&psr[p],\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/formIdeal_plug.C:83:  readTimfile(psr,timFile,*npsr); /* Load the arrival times    */",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/formIdeal_plug.C:107:      writeTim(\"tryit.tim\",&psr[0],\"tempo2\");",
+    "fda6ad4a9753ad7dc5d291406f2f310a9161423f:unsupported_plugins/toasim/formIdeal_plug.C:132:      writeTim(fname,&psr[p],\"tempo2\");"
+  ],
+  "caller_method": "Raw pinned git grep; definitions/prototypes/comments included, no implied execution",
+  "classifications_document_sha256": "6580155ff434c1070be071ab6224750e10293655ab650f9f22f83c677649c3b4",
+  "files": {
+    "readJBO_bat.C": {
+      "lines": 238,
+      "preprocessor": [
+        {
+          "line": 1,
+          "text": "#ifdef HAVE_CONFIG_H"
+        },
+        {
+          "line": 2,
+          "text": "#include <config.h>"
+        },
+        {
+          "line": 3,
+          "text": "#endif"
+        },
+        {
+          "line": 30,
+          "text": "#include <math.h>"
+        },
+        {
+          "line": 31,
+          "text": "#include <stdio.h>"
+        },
+        {
+          "line": 32,
+          "text": "#include <stdlib.h>"
+        },
+        {
+          "line": 33,
+          "text": "#include <string.h>"
+        },
+        {
+          "line": 34,
+          "text": "#include \"tempo2.h\""
+        },
+        {
+          "line": 35,
+          "text": "#include \"read_fortran2.h\""
+        }
+      ],
+      "routines": [
+        {
+          "accesses": [],
+          "arguments": "double* in",
+          "conditions": [],
+          "end": 42,
+          "name": "swap8",
+          "start": 42
+        },
+        {
+          "accesses": [
+            "nobs",
+            "obsn"
+          ],
+          "arguments": "char *fname,pulsar *psr,int p",
+          "conditions": [
+            {
+              "line": 58,
+              "text": "if (displayCVSversion == 1) CVSdisplayVersion(\"readJBO_bat.C\",\"readJBO_bat()\",CVS_verNum);"
+            },
+            {
+              "line": 70,
+              "text": "while(!feof(batfile)) { "
+            },
+            {
+              "line": 77,
+              "text": "switch(itype){"
+            },
+            {
+              "line": 78,
+              "text": "case 3:"
+            },
+            {
+              "line": 82,
+              "text": "case 0:"
+            },
+            {
+              "line": 86,
+              "text": "case 1:"
+            },
+            {
+              "line": 96,
+              "text": "for (unsigned i=0; i < strlen(sites[nsite]); i++){"
+            },
+            {
+              "line": 97,
+              "text": "if(sites[nsite][i] == ' ')sites[nsite][i]='\\0';"
+            },
+            {
+              "line": 101,
+              "text": "case 2:"
+            },
+            {
+              "line": 103,
+              "text": "for (int i=0; i < 25; i++){"
+            },
+            {
+              "line": 104,
+              "text": "if(i==13){"
+            },
+            {
+              "line": 106,
+              "text": "else"
+            }
+          ],
+          "end": 187,
+          "name": "readJBO_bat",
+          "start": 44
+        },
+        {
+          "accesses": [],
+          "arguments": "int idat",
+          "conditions": [
+            {
+              "line": 199,
+              "text": "if (fortran_mod(iyr,4) == 0) "
+            },
+            {
+              "line": 204,
+              "text": "else"
+            },
+            {
+              "line": 207,
+              "text": "for (i=1;i<imn;i++)"
+            }
+          ],
+          "end": 210,
+          "name": "date2mjd",
+          "start": 189
+        },
+        {
+          "accesses": [],
+          "arguments": "char* raw",
+          "conditions": [],
+          "end": 221,
+          "name": "swap4",
+          "start": 212
+        },
+        {
+          "accesses": [],
+          "arguments": "char* raw",
+          "conditions": [],
+          "end": 230,
+          "name": "swap8",
+          "start": 222
+        },
+        {
+          "accesses": [],
+          "arguments": "char* raw, char cbuf[25][9]",
+          "conditions": [
+            {
+              "line": 234,
+              "text": "for(i=0; i < 25 ; i++){"
+            }
+          ],
+          "end": 238,
+          "name": "makechars",
+          "start": 232
+        }
+      ],
+      "sha256": "0c7046c8f5db8e19829dfe70bab90c6fcc44ae16c5476c6fb321eb17b393b956"
+    },
+    "readTimfile.C": {
+      "lines": 837,
+      "preprocessor": [
+        {
+          "line": 1,
+          "text": "#ifdef HAVE_CONFIG_H"
+        },
+        {
+          "line": 2,
+          "text": "#include <config.h>"
+        },
+        {
+          "line": 3,
+          "text": "#endif"
+        },
+        {
+          "line": 30,
+          "text": "#include <math.h>"
+        },
+        {
+          "line": 31,
+          "text": "#include <stdio.h>"
+        },
+        {
+          "line": 32,
+          "text": "#include <stdlib.h>"
+        },
+        {
+          "line": 33,
+          "text": "#include <string.h>"
+        },
+        {
+          "line": 34,
+          "text": "#include <limits.h>"
+        },
+        {
+          "line": 35,
+          "text": "#include \"tempo2.h\""
+        },
+        {
+          "line": 601,
+          "text": "#ifdef PATH_MAX"
+        },
+        {
+          "line": 603,
+          "text": "#else"
+        },
+        {
+          "line": 605,
+          "text": "#endif"
+        },
+        {
+          "line": 611,
+          "text": "#ifdef PATH_MAX"
+        },
+        {
+          "line": 613,
+          "text": "#else"
+        },
+        {
+          "line": 615,
+          "text": "#endif"
+        },
+        {
+          "line": 629,
+          "text": "#ifndef PATH_MAX"
+        },
+        {
+          "line": 631,
+          "text": "#endif"
+        },
+        {
+          "line": 636,
+          "text": "#ifdef PATH_MAX"
+        },
+        {
+          "line": 638,
+          "text": "#endif"
+        }
+      ],
+      "routines": [
+        {
+          "accesses": [
+            "deleteFileName",
+            "jboFormat",
+            "nobs",
+            "obsn"
+          ],
+          "arguments": "pulsar *psr,char timFile[][MAX_FILELEN],int npsr",
+          "conditions": [
+            {
+              "line": 64,
+              "text": "if (displayCVSversion == 1) CVSdisplayVersion(\"readTimfile.C\",\"readTimfile()\",CVS_verNum);"
+            },
+            {
+              "line": 68,
+              "text": "for (p=0;p<npsr;p++)"
+            },
+            {
+              "line": 83,
+              "text": "if (psr[0].jboFormat!=0){"
+            },
+            {
+              "line": 87,
+              "text": "else"
+            },
+            {
+              "line": 92,
+              "text": "if (strcmp(psr[0].deleteFileName,\"NONE\")!=0)"
+            },
+            {
+              "line": 95,
+              "text": "if (!(fin = fopen(psr[0].deleteFileName,\"r\")))"
+            },
+            {
+              "line": 97,
+              "text": "else"
+            },
+            {
+              "line": 100,
+              "text": "while (!feof(fin))"
+            },
+            {
+              "line": 103,
+              "text": "if (fscanf(fin,\"%1023s\",inputstr)==1)"
+            },
+            {
+              "line": 106,
+              "text": "for (i=0;i<psr[p].nobs;i++)"
+            },
+            {
+              "line": 108,
+              "text": "if (fabs(psr[p].obsn[i].sat-input)<0.001)"
+            }
+          ],
+          "end": 117,
+          "name": "readTimfile",
+          "start": 56
+        },
+        {
+          "accesses": [
+            "T2efacFlagID",
+            "T2efacFlagVal",
+            "T2efacVal",
+            "T2equadFlagID",
+            "T2equadFlagVal",
+            "T2equadVal",
+            "T2globalEfac",
+            "fitMode",
+            "fixedFormat",
+            "nPhaseJump",
+            "nT2efac",
+            "nT2equad",
+            "name",
+            "noWarnings",
+            "nobs",
+            "obsn",
+            "phaseJump",
+            "phaseJumpDir",
+            "phaseJumpID"
+          ],
+          "arguments": "char *timname,pulsar *psr,int *jumpVal, int *fdjumpVal",
+          "conditions": [
+            {
+              "line": 155,
+              "text": "if (!(fin = fopen(timname,\"r\")))"
+            },
+            {
+              "line": 163,
+              "text": "if (psr->fixedFormat > 0)"
+            },
+            {
+              "line": 167,
+              "text": "for (k=0;k<psr->fixedFormat;k++)"
+            },
+            {
+              "line": 170,
+              "text": "else"
+            },
+            {
+              "line": 173,
+              "text": "while (!feof(fin))"
+            },
+            {
+              "line": 176,
+              "text": "if (strcmp(firstWord,\"FORMAT\")==0)                    "
+            },
+            {
+              "line": 178,
+              "text": "else if (strcmp(firstWord,\"HEAD\")==0)                  "
+            },
+            {
+              "line": 184,
+              "text": "if (format==2)"
+            },
+            {
+              "line": 188,
+              "text": "while (strcasecmp(line,\"TOAS\")!=0 && feof(fin)==0);"
+            },
+            {
+              "line": 192,
+              "text": "while (!feof(fin) && endit==0)"
+            },
+            {
+              "line": 195,
+              "text": "if (format==0)                                                  "
+            },
+            {
+              "line": 197,
+              "text": "if (nread<5 && strlen(line)>1)"
+            },
+            {
+              "line": 203,
+              "text": "if (fgets(line,1000,fin)==NULL)                                           "
+            },
+            {
+              "line": 208,
+              "text": "while (strlen(line) > 0 && isspace(line[strlen(line)-1])) line[strlen(line)-1]='\\0';"
+            },
+            {
+              "line": 209,
+              "text": "if (line[0]!='C' && line[0]!='#')                               "
+            },
+            {
+              "line": 212,
+              "text": "if (strlen(line)>0)"
+            },
+            {
+              "line": 217,
+              "text": "if (line[0]=='I')"
+            },
+            {
+              "line": 224,
+              "text": "else"
+            },
+            {
+              "line": 229,
+              "text": "if (strlen(profileDir)>0)"
+            },
+            {
+              "line": 236,
+              "text": "if (nread >=5) {"
+            },
+            {
+              "line": 274,
+              "text": "for (i=0;i<(int)strlen(line)-1;i++)"
+            },
+            {
+              "line": 276,
+              "text": "if (line[i]=='-' && (line[i+1] < 48 || line[i+1] > 57))"
+            },
+            {
+              "line": 279,
+              "text": "if (strchr(line+i,' ')!=NULL)"
+            },
+            {
+              "line": 285,
+              "text": "if (strchr(line+i,' ')!=NULL)"
+            },
+            {
+              "line": 288,
+              "text": "for (j=i;j<(int)strlen(line);j++)"
+            },
+            {
+              "line": 290,
+              "text": "if (line[j]!=' ')"
+            },
+            {
+              "line": 300,
+              "text": "if (strcmp(psr->obsn[nObs].flagID[psr->obsn[nObs].nFlags],\"-addsat\")==0)"
+            },
+            {
+              "line": 308,
+              "text": "if (strcmp(psr->obsn[nObs].flagID[psr->obsn[nObs].nFlags],\"-dme\")==0)"
+            },
+            {
+              "line": 323,
+              "text": "if (psr->obsn[nObs].nFlags >= MAX_FLAGS)"
+            },
+            {
+              "line": 334,
+              "text": "else"
+            },
+            {
+              "line": 338,
+              "text": "if (nread>=5 && valid==0) valid=1;"
+            },
+            {
+              "line": 340,
+              "text": "else"
+            },
+            {
+              "line": 343,
+              "text": "else if (format==1)                                            "
+            },
+            {
+              "line": 345,
+              "text": "if (fgets(line,1000,fin)==NULL)                                           "
+            },
+            {
+              "line": 347,
+              "text": "else"
+            },
+            {
+              "line": 350,
+              "text": "if (line[strlen(line)-1]=='\\n') line[strlen(line)-1]='\\0';"
+            },
+            {
+              "line": 356,
+              "text": "if (strcmp(param1,\"C\")==0 || strcmp(param1,\"c\")==0)                   "
+            },
+            {
+              "line": 362,
+              "text": "else"
+            },
+            {
+              "line": 366,
+              "text": "if (strcasecmp(param1,\"INCLUDE\")!=0)"
+            },
+            {
+              "line": 368,
+              "text": "if (line[0+add]==' ')                         "
+            },
+            {
+              "line": 371,
+              "text": "if (strlen(line)+add < 79) valid=-2;"
+            },
+            {
+              "line": 372,
+              "text": "else"
+            },
+            {
+              "line": 375,
+              "text": "if (strlen(param1)<2) valid=-2; "
+            },
+            {
+              "line": 377,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].freq))!=1) valid=-2;"
+            },
+            {
+              "line": 381,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].phaseOffset))!=1) valid=-2;"
+            },
+            {
+              "line": 383,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].toaErr))!=1) valid=-2;"
+            },
+            {
+              "line": 387,
+              "text": "else if (line[1+add]==' ')                       "
+            },
+            {
+              "line": 394,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].freq))!=1) valid=-2;"
+            },
+            {
+              "line": 398,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].toaErr))!=1) valid=-2;"
+            },
+            {
+              "line": 400,
+              "text": "if (sscanf(param1,\"%lf\",&dmoffset)==1)"
+            },
+            {
+              "line": 408,
+              "text": "else if (strlen(line)>14 && line[14+add]=='.')                   "
+            },
+            {
+              "line": 415,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].toaErr))!=1) valid=-2;"
+            },
+            {
+              "line": 417,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].freq))!=1) valid=-2;"
+            },
+            {
+              "line": 419,
+              "text": "if (sscanf(param1,\"%lf\",&(psr->obsn[nObs].phaseOffset))!=1) valid=-2;"
+            },
+            {
+              "line": 426,
+              "text": "if (valid==1)                                      "
+            },
+            {
+              "line": 435,
+              "text": "if (psr->obsn[nObs].telID[0]=='@'                                               "
+            },
+            {
+              "line": 441,
+              "text": "else if (strcmp(psr->obsn[nObs].telID,\"STL\")==0)"
+            },
+            {
+              "line": 446,
+              "text": "else if (strcmp(psr->obsn[nObs].telID,\"STL_FBAT\")==0)"
+            },
+            {
+              "line": 451,
+              "text": "else"
+            },
+            {
+              "line": 473,
+              "text": "if (sigma!=0.0)"
+            },
+            {
+              "line": 488,
+              "text": "if (eset>-1)"
+            },
+            {
+              "line": 498,
+              "text": "if (time!=0.0) "
+            },
+            {
+              "line": 503,
+              "text": "if (efloor!=-1 && psr->obsn[nObs].toaErr < efloor) psr->obsn[nObs].toaErr = efloor;"
+            },
+            {
+              "line": 504,
+              "text": "if (emax!=-1 && psr->obsn[nObs].toaErr > emax) psr->obsn[nObs].deleted = 1;"
+            },
+            {
+              "line": 505,
+              "text": "if (emin!=-1 && psr->obsn[nObs].toaErr < emin) psr->obsn[nObs].deleted = 1;"
+            },
+            {
+              "line": 506,
+              "text": "if (fmax!=-1 && psr->obsn[nObs].freq > fmax) valid=0;"
+            },
+            {
+              "line": 507,
+              "text": "if (fmin!=-1 && psr->obsn[nObs].freq < fmin) valid=0;"
+            },
+            {
+              "line": 508,
+              "text": "if (infoNum!=-1)"
+            },
+            {
+              "line": 513,
+              "text": "if (psr->obsn[nObs].nFlags >= MAX_FLAGS)"
+            },
+            {
+              "line": 520,
+              "text": "if (skip==1) valid=0;"
+            },
+            {
+              "line": 523,
+              "text": "if (valid==1)(psr->nobs)++;"
+            },
+            {
+              "line": 524,
+              "text": "if (psr->nobs > MAX_OBSN-2)"
+            },
+            {
+              "line": 530,
+              "text": "else if (valid!=-2)                                                                            "
+            },
+            {
+              "line": 533,
+              "text": "if (skip==0 && nread2 > 0)"
+            },
+            {
+              "line": 535,
+              "text": "if (strcasecmp(param1,\"END\")==0)"
+            },
+            {
+              "line": 538,
+              "text": "else if (strcasecmp(param1,\"PROFILE_DIR\")==0)"
+            },
+            {
+              "line": 540,
+              "text": "else if (strcasecmp(param1,\"GLOBAL_EFAC\")==0)"
+            },
+            {
+              "line": 542,
+              "text": "else if (strcasecmp(param1,\"EFAC\")==0)                                    "
+            },
+            {
+              "line": 544,
+              "text": "else if (strcasecmp(param1,\"EFLOOR\")==0)                                                "
+            },
+            {
+              "line": 546,
+              "text": "else if (strcasecmp(param1,\"T2EFAC\")==0)                                             "
+            },
+            {
+              "line": 553,
+              "text": "else if (strcasecmp(param1,\"T2EQUAD\")==0)                                            "
+            },
+            {
+              "line": 560,
+              "text": "else if (strcasecmp(param1,\"EMAX\")==0)                                               "
+            },
+            {
+              "line": 562,
+              "text": "else if (strcasecmp(param1,\"EMIN\")==0)                                               "
+            },
+            {
+              "line": 564,
+              "text": "else if (strcasecmp(param1,\"ESET\")==0)                                               "
+            },
+            {
+              "line": 566,
+              "text": "else if (strcasecmp(param1,\"FMAX\")==0)                                               "
+            },
+            {
+              "line": 568,
+              "text": "else if (strcasecmp(param1,\"FMIN\")==0)                                               "
+            },
+            {
+              "line": 570,
+              "text": "else if (strcasecmp(param1,\"INFO\")==0)                                               "
+            },
+            {
+              "line": 574,
+              "text": "else if (strcasecmp(param1,\"PHASE\")==0)                                              "
+            },
+            {
+              "line": 581,
+              "text": "else if (strcasecmp(param1,\"EQUAD\")==0)                                               "
+            },
+            {
+              "line": 583,
+              "text": "else if (strcasecmp(param1,\"SIGMA\")==0)                                               "
+            },
+            {
+              "line": 585,
+              "text": "else if (strcasecmp(param1,\"TIME\")==0)                                                "
+            },
+            {
+              "line": 593,
+              "text": "else if (strcasecmp(param1,\"MODE\")==0)                      "
+            },
+            {
+              "line": 598,
+              "text": "else if (strcasecmp(param1,\"INCLUDE\")==0)                                "
+            },
+            {
+              "line": 603,
+              "text": "else"
+            },
+            {
+              "line": 606,
+              "text": "if (sscanf(line,\"%99s %1023s\",param1,newtim)==2)"
+            },
+            {
+              "line": 613,
+              "text": "else"
+            },
+            {
+              "line": 617,
+              "text": "for (ii=strlen(relPath);ii>0;ii--)"
+            },
+            {
+              "line": 619,
+              "text": "if (relPath[ii]=='/')"
+            },
+            {
+              "line": 633,
+              "text": "else"
+            },
+            {
+              "line": 641,
+              "text": "else if (strcasecmp(param1,\"SKIP\")==0)                "
+            },
+            {
+              "line": 643,
+              "text": "else if (strcasecmp(param1,\"JUMP\")==0)           "
+            },
+            {
+              "line": 645,
+              "text": "else if (strcasecmp(param1,\"NOSKIP\")==0)                         "
+            },
+            {
+              "line": 648,
+              "text": "else"
+            },
+            {
+              "line": 650,
+              "text": "if (strcasecmp(param1,\"NOSKIP\")==0)                         "
+            }
+          ],
+          "end": 662,
+          "name": "readTim",
+          "start": 119
+        },
+        {
+          "accesses": [
+            "T2efacFlagID",
+            "T2efacFlagVal",
+            "T2efacVal",
+            "T2equadFlagID",
+            "T2equadFlagVal",
+            "T2equadVal",
+            "T2globalEfac",
+            "fitMode",
+            "nT2efac",
+            "nT2equad",
+            "nToffset",
+            "nobs",
+            "obsn",
+            "param",
+            "tOffset",
+            "tOffsetFlags",
+            "tOffsetSite",
+            "tOffset_f1",
+            "tOffset_f2",
+            "tOffset_t1",
+            "tOffset_t2"
+          ],
+          "arguments": "const char *timname,pulsar *psr,const char *fileFormat",
+          "conditions": [
+            {
+              "line": 676,
+              "text": "if (!(fout = fopen(timname,\"w\")))"
+            },
+            {
+              "line": 681,
+              "text": "if (strcmp(fileFormat,\"tempo2\")==0) fprintf(fout,\"FORMAT 1\\n\");"
+            },
+            {
+              "line": 682,
+              "text": "if (psr->fitMode==1) fprintf(fout,\"MODE 1\\n\");    "
+            },
+            {
+              "line": 685,
+              "text": "if (psr[0].T2globalEfac != 1)"
+            },
+            {
+              "line": 688,
+              "text": "for (i=0;i<psr[0].nT2equad;i++)"
+            },
+            {
+              "line": 691,
+              "text": "for (i=0;i<psr[0].nT2efac;i++)"
+            },
+            {
+              "line": 696,
+              "text": "if(current_equad!=0.0)"
+            },
+            {
+              "line": 698,
+              "text": "if(current_efac!=1.0)"
+            },
+            {
+              "line": 701,
+              "text": "for (i=0;i<psr->nobs;i++)"
+            },
+            {
+              "line": 703,
+              "text": "if((double)psr[0].obsn[i].equad !=  current_equad){"
+            },
+            {
+              "line": 707,
+              "text": "if(psr[0].obsn[i].efac!=current_efac){"
+            },
+            {
+              "line": 711,
+              "text": "if (psr[0].obsn[i].deleted==1)"
+            },
+            {
+              "line": 714,
+              "text": "if (strcmp(fileFormat,\"tempo2\")==0) "
+            },
+            {
+              "line": 722,
+              "text": "if (psr->param[param_f].val[0] > 0)"
+            },
+            {
+              "line": 726,
+              "text": "for (int k=0;k<psr->nToffset;k++)                             "
+            },
+            {
+              "line": 731,
+              "text": "if ((psr->tOffset_f1[k]==0.0 || (psr->obsn[i].freq > psr->tOffset_f1[k])) &&"
+            },
+            {
+              "line": 740,
+              "text": "if (strlen(psr->tOffsetFlags[k])>0)"
+            },
+            {
+              "line": 747,
+              "text": "if (myStr[0]=='-' && (myStr[1]<48 || myStr[1]>57))                    "
+            },
+            {
+              "line": 751,
+              "text": "for (int l=0;l<psr->obsn[i].nFlags;l++)"
+            },
+            {
+              "line": 753,
+              "text": "if (strcmp(flagID,psr->obsn[i].flagID[l])==0"
+            },
+            {
+              "line": 761,
+              "text": "while ((myStr = strtok(NULL,\" \"))!=NULL);"
+            },
+            {
+              "line": 763,
+              "text": "if (use==1) {oldsat -= psr->tOffset[k]/SECDAY;}"
+            },
+            {
+              "line": 766,
+              "text": "for (int k=0;k<psr->obsn[i].nFlags;k++)"
+            },
+            {
+              "line": 768,
+              "text": "if (strcmp(psr->obsn[i].flagID[k],\"-to\")==0)"
+            },
+            {
+              "line": 777,
+              "text": "for (int k=0;k<psr->obsn[i].nFlags;k++)"
+            },
+            {
+              "line": 779,
+              "text": "if (strcmp(psr->obsn[i].flagID[k],\"-addsat\")==0)"
+            },
+            {
+              "line": 798,
+              "text": "if(interim_error<longdouble(0.0)){"
+            },
+            {
+              "line": 804,
+              "text": "for (j=0;j<psr->obsn[i].nFlags;j++)"
+            },
+            {
+              "line": 806,
+              "text": "if (strcasecmp(psr->obsn[i].flagID[j],\"-selectAll\")!=0)"
+            },
+            {
+              "line": 811,
+              "text": "else"
+            },
+            {
+              "line": 813,
+              "text": "if (strlen(psr[0].obsn[i].fname) > 22)"
+            }
+          ],
+          "end": 831,
+          "name": "writeTim",
+          "start": 666
+        },
+        {
+          "accesses": [],
+          "arguments": "char *str",
+          "conditions": [
+            {
+              "line": 836,
+              "text": "if (str[strlen(str)-1]=='\\n') str[strlen(str)-1] = '\\0';"
+            }
+          ],
+          "end": 837,
+          "name": "removeCR2",
+          "start": 834
+        }
+      ],
+      "sha256": "01463be0d78e75078cdbba7ae7fcd578e5d7db08fbec476d4f289488803a1ea2"
+    },
+    "read_fortran2.h": {
+      "lines": 174,
+      "preprocessor": [
+        {
+          "line": 29,
+          "text": "#include <stdio.h>"
+        },
+        {
+          "line": 30,
+          "text": "#include <string.h>"
+        }
+      ],
+      "routines": [
+        {
+          "accesses": [],
+          "arguments": "char *fname,int *swap",
+          "conditions": [
+            {
+              "line": 46,
+              "text": "if (intcnv.asChar[0]==1)"
+            },
+            {
+              "line": 48,
+              "text": "else"
+            },
+            {
+              "line": 54,
+              "text": "for (i=0;fname[i];i++)"
+            },
+            {
+              "line": 56,
+              "text": "if (fname[i]==' ') "
+            },
+            {
+              "line": 62,
+              "text": "if (!(c_fileptr2 = fopen(fname,\"rb\")))"
+            }
+          ],
+          "end": 67,
+          "name": "open_file2",
+          "start": 35
+        },
+        {
+          "accesses": [],
+          "arguments": "",
+          "conditions": [],
+          "end": 71,
+          "name": "close_file2",
+          "start": 68
+        },
+        {
+          "accesses": [],
+          "arguments": "int len,char *str",
+          "conditions": [
+            {
+              "line": 76,
+              "text": "if (swapByte2==1)"
+            },
+            {
+              "line": 78,
+              "text": "for (i=len-1;i>=0;i--)"
+            },
+            {
+              "line": 81,
+              "text": "else"
+            },
+            {
+              "line": 83,
+              "text": "for (i=0;i<len;i++)"
+            }
+          ],
+          "end": 86,
+          "name": "read_character2",
+          "start": 73
+        },
+        {
+          "accesses": [],
+          "arguments": "",
+          "conditions": [
+            {
+              "line": 98,
+              "text": "if (swapByte2==1)"
+            },
+            {
+              "line": 100,
+              "text": "for (i=sizeof(int)-1;i>=0;i--)"
+            },
+            {
+              "line": 103,
+              "text": "else"
+            },
+            {
+              "line": 105,
+              "text": "for (i=0;i<(int)sizeof(int);i++)"
+            }
+          ],
+          "end": 112,
+          "name": "read_int2",
+          "start": 88
+        },
+        {
+          "accesses": [],
+          "arguments": "",
+          "conditions": [
+            {
+              "line": 123,
+              "text": "if (swapByte2==1)"
+            },
+            {
+              "line": 125,
+              "text": "for (i=sizeof(float)-1;i>=0;i--)"
+            },
+            {
+              "line": 128,
+              "text": "else"
+            },
+            {
+              "line": 130,
+              "text": "for (i=0;i<(int)sizeof(float);i++)"
+            }
+          ],
+          "end": 136,
+          "name": "read_float2",
+          "start": 114
+        },
+        {
+          "accesses": [],
+          "arguments": "",
+          "conditions": [
+            {
+              "line": 149,
+              "text": "if (swapByte2==1)"
+            },
+            {
+              "line": 151,
+              "text": "for (i=sizeof(double)-1;i>=0;i--)"
+            },
+            {
+              "line": 157,
+              "text": "else"
+            },
+            {
+              "line": 159,
+              "text": "for (i=0;i<(int)sizeof(double);i++)"
+            }
+          ],
+          "end": 168,
+          "name": "read_double2",
+          "start": 138
+        },
+        {
+          "accesses": [],
+          "arguments": "",
+          "conditions": [],
+          "end": 174,
+          "name": "read_record_int2",
+          "start": 169
+        }
+      ],
+      "sha256": "c42706c8c960dfc4b9693e5f3f33b03549f40ee1e40371c33f0628c49e722fca"
+    },
+    "sortToAs.C": {
+      "lines": 34,
+      "preprocessor": [
+        {
+          "line": 1,
+          "text": "#include <stdio.h>"
+        },
+        {
+          "line": 2,
+          "text": "#include <stdlib.h>"
+        },
+        {
+          "line": 3,
+          "text": "#include <string.h>"
+        },
+        {
+          "line": 4,
+          "text": "#include <ctype.h>"
+        },
+        {
+          "line": 5,
+          "text": "#include <math.h>"
+        },
+        {
+          "line": 6,
+          "text": "#include <tempo2.h>"
+        }
+      ],
+      "routines": [
+        {
+          "accesses": [
+            "name",
+            "nobs",
+            "obsn",
+            "sorted"
+          ],
+          "arguments": "pulsar* psr",
+          "conditions": [
+            {
+              "line": 13,
+              "text": "if (!psr->sorted){"
+            }
+          ],
+          "end": 21,
+          "name": "sortToAs",
+          "start": 12
+        },
+        {
+          "accesses": [],
+          "arguments": "const void *o1, const void *o2",
+          "conditions": [
+            {
+              "line": 28,
+              "text": "if ( elem1->sat < elem2->sat)"
+            },
+            {
+              "line": 30,
+              "text": "else if (elem1->sat > elem2->sat)"
+            },
+            {
+              "line": 32,
+              "text": "else"
+            }
+          ],
+          "end": 34,
+          "name": "compareObs",
+          "start": 23
+        }
+      ],
+      "sha256": "59dea2a1e05373edb049725379c90be41939618a261b6601e5026acaac82ec49"
+    }
+  },
+  "initializer_source_sha256": "5da876556455e5fda635b30917ae9e745ef880b93ef513b47b6e4823458868c1",
+  "observation_fields": [
+    "sat",
+    "origsat",
+    "sat_day",
+    "sat_sec",
+    "bat",
+    "batCorr",
+    "bbat",
+    "pet",
+    "clockCorr",
+    "delayCorr",
+    "deleted",
+    "prefitResidual",
+    "residual",
+    "residualtn",
+    "addedNoise",
+    "TNRedSignal",
+    "TNRedErr",
+    "TNDMSignal",
+    "TNDMErr",
+    "SWGPSignal",
+    "SWGPErr",
+    "TNGroupSignal",
+    "TNGroupErr",
+    "TNChromSignal",
+    "TNChromErr",
+    "freq",
+    "freqSSB",
+    "toaErr",
+    "toaDMErr",
+    "origErr",
+    "phaseOffset",
+    "averagebat",
+    "averageres",
+    "averageerr",
+    "averagedmbat",
+    "averagedmres",
+    "averagedmerr",
+    "fname",
+    "telID",
+    "correctionsTT",
+    "nclock_correction",
+    "correctionTT_TB",
+    "einsteinRate",
+    "correctionTT_calcEph",
+    "correctionTT_Teph",
+    "correctionUT1",
+    "sun_ssb",
+    "sun_earth",
+    "planet_ssb",
+    "planet_ssb_tmr",
+    "planet_ssb_derv",
+    "jupiter_earth",
+    "saturn_earth",
+    "venus_earth",
+    "uranus_earth",
+    "neptune_earth",
+    "earthMoonBary_ssb",
+    "earthMoonBary_earth",
+    "earth_ssb",
+    "observatory_earth",
+    "psrPos",
+    "zenith",
+    "nutations",
+    "siteVel",
+    "shklovskii",
+    "shapiroDelaySun",
+    "shapiroDelayJupiter",
+    "shapiroDelaySaturn",
+    "shapiroDelayVenus",
+    "shapiroDelayUranus",
+    "shapiroDelayNeptune",
+    "troposphericDelay",
+    "tdis1",
+    "tdis2",
+    "roemer",
+    "torb",
+    "nphase",
+    "phase",
+    "pulseN",
+    "flagID",
+    "flagVal",
+    "nFlags",
+    "jump",
+    "jumpScale",
+    "obsNjump",
+    "fdjump",
+    "obsNfdjump",
+    "efac",
+    "equad",
+    "snr",
+    "pnoise",
+    "tobs",
+    "chisq",
+    "bline",
+    "spherical_solar_wind"
+  ],
+  "pin": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+  "routine_count": 19
+}
