@@ -13,11 +13,34 @@ const NUMERIC: [&str; 13] = [
     "TZRMJD", "TZRFRQ",
 ];
 
+/// PAR controls from readParfile.C; source spelling/order is retained.
+#[derive(Clone, Debug, serde::Serialize)]
+pub struct FitControls {
+    pub mode: u8,
+    pub nits: usize,
+    pub mode_defaulted: bool,
+    pub nits_defaulted: bool,
+    pub declarations: Vec<ParameterLine>,
+}
+
+impl Default for FitControls {
+    fn default() -> Self {
+        Self {
+            mode: 0,
+            nits: 1,
+            mode_defaulted: true,
+            nits_defaulted: true,
+            declarations: Vec::new(),
+        }
+    }
+}
+
 /// Validated PAR contents used to assemble the owned TimingInput.
 pub(crate) struct ParFile {
     pub param: BTreeMap<String, Parameter>,
     pub text_parameters: BTreeMap<String, ParameterLine>,
     pub conventions: Conventions,
+    pub fit_controls: FitControls,
 }
 
 fn read_position(token: &str, ra: bool) -> Result<Scalar, String> {
@@ -129,6 +152,7 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
         })
         .collect();
     let mut text_parameters: BTreeMap<String, ParameterLine> = BTreeMap::new();
+    let mut fit_controls = FitControls::default();
     for (index, raw) in par.text.lines().enumerate() {
         let tokens: Vec<_> = raw.split_whitespace().collect();
         if ignored_line(&tokens) {
@@ -150,7 +174,32 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
             tokens: tokens[1..].iter().map(|t| (*t).into()).collect(),
             raw_line: raw.into(),
         };
-        if NUMERIC.contains(&key.as_str()) {
+        if matches!(key.as_str(), "MODE" | "WEIGHT" | "NITS") {
+            if tokens.len() != 2 {
+                return Err(error("expected one integer control value".into()));
+            }
+            if key == "NITS" {
+                // Positive NITS is this released profile; upstream permits other counts.
+                fit_controls.nits = tokens[1]
+                    .parse::<i32>()
+                    .ok()
+                    .filter(|n| *n > 0)
+                    .ok_or_else(|| {
+                        error("NITS must be a positive source-range integer for M2".into())
+                    })? as usize;
+                fit_controls.nits_defaulted = false;
+            } else {
+                fit_controls.mode = tokens[1]
+                    .parse::<i32>()
+                    .ok()
+                    .filter(|n| matches!(n, 0 | 1))
+                    .ok_or_else(|| error("MODE/WEIGHT must be 0 or 1 for M2".into()))?
+                    as u8;
+                fit_controls.mode_defaulted = false;
+            }
+            // readParfile.C assigns sequentially: the last MODE/WEIGHT wins.
+            fit_controls.declarations.push(original);
+        } else if NUMERIC.contains(&key.as_str()) {
             if param.get(&key).is_some_and(|parameter| parameter.set) {
                 return Err(error("duplicate parameter".into()));
             }
@@ -205,6 +254,7 @@ pub(crate) fn read_parfile(par: &SourceFile) -> Result<ParFile, TimingError> {
     };
 
     Ok(ParFile {
+        fit_controls,
         param,
         text_parameters,
         conventions: Conventions {

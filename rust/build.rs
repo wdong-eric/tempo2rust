@@ -1,3 +1,4 @@
+//! Rust-only Cargo build glue for retained TEMPO2 jpleph.c and SOFA; replaces their Makefile rules.
 use std::{env, fs, path::Path, process::Command};
 
 fn run(program: &str, args: &[&str]) {

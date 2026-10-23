@@ -1,6 +1,10 @@
+//! TEMPO2 get_obsCoord.C::get_obsCoord_IAU2000B; retained SOFA rotations.
 // get_obsCoord_IAU2000B orchestration in Rust; bundled SOFA does rotations.
 use crate::{TimingError, eop::Eop, runtime::Observatory};
 use rug::Float;
+// Necessity: retain the accepted SOFA Fortran implementation through its C ABI.
+// Safety contract: by-reference f64 scalars and contiguous column-major arrays
+// of 3/6/9 elements; no pointers escape. The call site owns all output storage.
 unsafe extern "C" {
     fn iau_pom00_(xp: *const f64, yp: *const f64, sp: *const f64, r: *mut f64);
     fn iau_rxp_(r: *const f64, p: *const f64, rp: *mut f64);
@@ -57,7 +61,12 @@ pub(crate) fn get_obs_coord(
         site_velocity: [0.0; 3],
         zenith: [0.0; 3],
     };
-    // Fortran column-major storage stays opaque; arrays match upstream call layout.
+    // Necessity: SOFA rotations are retained native numerical dependencies.
+    // SAFETY: all f64 pointers are aligned and live for the calls; matrices/vectors
+    // have the required 9/6/3 initialized elements. Output arrays are exclusive.
+    // pxp reads terrestrial_state[0..3] and writes its disjoint [3..6] slice;
+    // all other input/output buffers are distinct. Fortran retains no pointers,
+    // and -frecursive gives each call its own local state (see build.rs).
     unsafe {
         iau_pom00_(&xp, &yp, &0.0, polar_motion_matrix.as_mut_ptr());
         iau_rxp_(

@@ -1,8 +1,12 @@
-//! Fixed-parameter timing for isolated-pulsar TCB `@` and PKS terrestrial profiles.
+//! Rust-only public ownership/API/serialization glue for tempo2.h, readParfile.C,
+//! readTimfile.C, formBats.C, formResiduals.C and t2fit.C. No standalone source counterpart.
+//! Timing and selected spin fitting for isolated-pulsar TCB `@` and PKS profiles.
 //! See README.md for accepted input syntax and scientific conventions.
 
 mod clkcorr;
 mod eop;
+#[cfg(test)]
+mod fitting_tests;
 mod form_bats;
 mod form_residuals;
 mod get_obs_coord;
@@ -15,8 +19,12 @@ mod read_timfile;
 #[cfg(test)]
 mod resource_tests;
 mod runtime;
+mod std_freq;
+mod t2fit;
 mod tabulated_function;
 mod tempo2_util;
+mod tkfit;
+mod tksvd;
 mod tropo;
 mod tt2tdb;
 
@@ -25,7 +33,10 @@ pub use form_bats::{Corrections, TerrestrialResult, form_bats_all as evaluate_te
 pub use form_residuals::form_residuals as evaluate_barycentric;
 pub use input::load;
 pub use longdouble::{PRECISION_BITS, Scalar};
+pub use read_parfile::FitControls;
 pub use runtime::{Resource, RuntimeContext};
+pub use t2fit::{FitCycle, FitOptions, FitResult, FitTiming, fit_barycentric, fit_terrestrial};
+pub use tkfit::{FitNumber, LeastSquares};
 pub use tropo::{Weather, WeatherValue};
 
 use serde::Serialize;
@@ -133,9 +144,15 @@ pub struct TimingInput {
     pub(crate) text_parameters: BTreeMap<String, ParameterLine>,
     pub(crate) observations: Vec<Observation>,
     pub(crate) conventions: Conventions,
+    // Kept out of the existing fixed-evaluation JSON contract. Fits expose controls explicitly.
+    #[serde(skip)]
+    pub(crate) fit_controls: FitControls,
 }
 
 impl TimingInput {
+    pub fn fit_controls(&self) -> &FitControls {
+        &self.fit_controls
+    }
     pub fn par_source(&self) -> &SourceFile {
         &self.par
     }

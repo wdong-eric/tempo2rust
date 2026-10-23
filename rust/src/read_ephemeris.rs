@@ -1,3 +1,4 @@
+//! TEMPO2 readEphemeris.C using retained jpleph.c numerical operations.
 // Narrow interface to the pinned low-level JPL library; timing remains in Rust.
 use crate::{PRECISION_BITS, TimingError, ifteph::IFTE_KM1};
 use rug::Float;
@@ -8,6 +9,9 @@ use std::{
     sync::Mutex,
 };
 
+// Necessity: the accepted JPL interpolation dependency exposes only a C ABI.
+// Safety contract: live exclusive native handles, NUL-terminated paths and six
+// aligned f64 output elements. Null optional init arrays request no constants.
 unsafe extern "C" {
     fn jpl_init_ephemeris(path: *const c_char, names: *mut c_void, values: *mut f64)
     -> *mut c_void;
@@ -149,14 +153,23 @@ impl JplEphemeris {
         let _guard = JPL_INIT_LOCK
             .lock()
             .map_err(|_| error("JPL initialization lock poisoned"))?;
+        // Necessity: create the retained C reader. SAFETY: name is NUL terminated
+        // and live; optional arrays may be null by ABI contract. The lock protects
+        // global initialization status. Preflight bounds the bytes just inspected,
+        // but C reopens this path: unchanged file identity/content until and during
+        // native use is an UNENFORCED assumption (see BEHAVIOR_DIFFERENCES.md).
         let raw = unsafe {
             jpl_init_ephemeris(name.as_ptr(), std::ptr::null_mut(), std::ptr::null_mut())
         };
         let handle = NonNull::new(raw).ok_or_else(|| {
+            // Necessity: fetch the native initializer status. SAFETY: the same
+            // initialization lock is held, and this function takes no pointers.
             error(&format!("native initialization error {}", unsafe {
                 jpl_init_error_code()
             }))
         })?;
+        // Necessity: read the native AU constant. SAFETY: successful non-null
+        // handle is still live and exclusively owned; 28 is JPL_EPHEM_AU_IN_KM.
         let one_au_m = unsafe { jpl_get_double(raw, 28) } * 1000.0;
         // readEphemeris.C: one_au *= IFTE_K promotes the product to longdouble.
         let k = Float::with_val(PRECISION_BITS, 1.0) + IFTE_KM1;
@@ -186,6 +199,11 @@ impl JplEphemeris {
             ));
         }
         let mut result = [0.0; 6];
+        // Necessity: run retained JPL interpolation. SAFETY: &mut self ensures
+        // exclusive handle/cache access and jd is finite. Native storage bounds
+        // assume the reopened file matches preflight and stays unchanged; this
+        // assumption is not enforced. result owns six initialized aligned f64 slots, has no aliases,
+        // and the C function retains neither pointer. Callers use source body IDs.
         let code = unsafe {
             jpl_pleph(
                 self.handle.as_ptr(),
@@ -227,6 +245,9 @@ impl JplEphemeris {
 }
 impl Drop for JplEphemeris {
     fn drop(&mut self) {
+        // Necessity: release C-owned storage using its matching allocator.
+        // SAFETY: this non-cloneable handle came from successful initialization;
+        // Drop runs once, with no outstanding calls or escaped pointers.
         unsafe { jpl_close_ephemeris(self.handle.as_ptr()) };
     }
 }

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 publish = false
 license = "GPL-3.0-or-later"
-description = "Fixed-parameter TEMPO2 barycentric timing subset"
+description = "TEMPO2 isolated timing and ZERO/F0-F3 fitting subset"
 
 [dependencies]
 rug = { version = "=1.30.0", default-features = false, features = ["float", "integer", "std"] }

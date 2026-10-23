@@ -1,3 +1,5 @@
+//! Rust-owned context for TEMPO2 observatory.C, clkcorr.C, eop.C and ephemeris resources.
+//! get_observatory follows observatory.C::getObservatory; the context has no standalone counterpart.
 use crate::{
     TimingError, clkcorr::ClockCorrections, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris,
     tabulated_function::TabulatedFunction,

@@ -1,3 +1,4 @@
+//! Rust-only CLI/JSON glue for TEMPO2 tempo2.C timing and fitting entry points.
 use std::{
     env,
     ffi::OsString,
@@ -5,9 +6,12 @@ use std::{
     path::PathBuf,
     process::ExitCode,
 };
-use tempo2_rust::{RuntimeContext, evaluate_barycentric, evaluate_terrestrial, load};
+use tempo2_rust::{
+    FitOptions, RuntimeContext, evaluate_barycentric, evaluate_terrestrial, fit_barycentric,
+    fit_terrestrial, load,
+};
 
-const USAGE: &str = "Usage: tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]";
+const USAGE: &str = "Usage: tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<OsString> = env::args_os().skip(1).collect();
@@ -15,27 +19,51 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         println!("{USAGE}");
         return Ok(());
     }
-    if ![5, 7].contains(&args.len()) || args[0] != "residuals" {
+    if args.is_empty() || (args[0] != "residuals" && args[0] != "fit") {
         return Err(USAGE.into());
     }
     let mut par = None;
     let mut tim = None;
     let mut runtime = None;
-    for pair in args[1..].chunks_exact(2) {
-        if pair[0] == "--par" && par.is_none() {
-            par = Some(PathBuf::from(&pair[1]));
-        } else if pair[0] == "--tim" && tim.is_none() {
-            tim = Some(PathBuf::from(&pair[1]));
-        } else if pair[0] == "--runtime" && runtime.is_none() {
-            runtime = Some(PathBuf::from(&pair[1]));
+    let fit = args[0] == "fit";
+    let mut options = FitOptions::default();
+    let mut i = 1;
+    while i < args.len() {
+        if args[i] == "--norescale" && fit && options.rescale_err_chisq {
+            options.rescale_err_chisq = false;
+            i += 1;
+            continue;
+        }
+        let value = args.get(i + 1).ok_or(USAGE)?;
+        if args[i] == "--par" && par.is_none() {
+            par = Some(PathBuf::from(value));
+        } else if args[i] == "--tim" && tim.is_none() {
+            tim = Some(PathBuf::from(value));
+        } else if args[i] == "--runtime" && runtime.is_none() {
+            runtime = Some(PathBuf::from(value));
         } else {
             return Err(USAGE.into());
         }
+        i += 2;
     }
     let (par, tim) = par.zip(tim).ok_or(USAGE)?;
     let input = load(&par, &tim)?;
     // Calculation and serialization finish before any successful JSON is published.
-    let mut json = if input.observations()[0].original.site == "@" {
+    let mut json = if fit {
+        let result = if input.observations()[0].original.site == "@" {
+            fit_barycentric(&input, &options)?
+        } else {
+            let root = runtime.ok_or("PKS observations require --runtime PATH")?;
+            fit_terrestrial(&input, &mut RuntimeContext::new(&root)?, &options)?
+        };
+        let json = serde_json::to_vec_pretty(&result)?;
+        for cycle in &result.cycles {
+            for warning in cycle.warnings.iter().chain(&cycle.postfit.warnings) {
+                eprintln!("tempo2-rust: cycle {}: {warning}", cycle.iteration);
+            }
+        }
+        json
+    } else if input.observations()[0].original.site == "@" {
         serde_json::to_vec_pretty(&evaluate_barycentric(&input)?)?
     } else {
         let root = runtime.ok_or("PKS observations require --runtime PATH")?;

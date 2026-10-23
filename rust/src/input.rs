@@ -1,3 +1,4 @@
+//! Rust-only file ownership glue for readParfile.C/readTimfile.C; no standalone counterpart.
 //! File ownership and the public load operation.
 use crate::{SourceFile, TimingError, TimingInput};
 use crate::{read_parfile::read_parfile, read_timfile::read_timfile};
@@ -37,6 +38,7 @@ pub fn load(par_path: &Path, tim_path: &Path) -> Result<TimingInput, TimingError
         par,
         tim,
         parameters: psr.param,
+        fit_controls: psr.fit_controls,
         text_parameters: psr.text_parameters,
         observations: obsn,
         conventions: psr.conventions,
