@@ -1,0 +1,1258 @@
+{
+  "reviewed_revision": "d70b075c81fb9b5bf8aeaffce8abaf0783377d5d",
+  "snapshot_hashes": {
+    "validation/clocks/SOURCE_MAP.md": "31dc443b432d5891c78ea4482d08fb1598b2fe7f354927fd4235ba83f8c75e11",
+    "validation/clocks/cases.json": "2fd5f47fedad182eacb58256a1b2c5048509c8a52d260d87ae30a1bb5913e4e4",
+    "validation/clocks/fixtures.py": "cdcc19720be8fcbae6181cf6a41f9affc24037d9082042cd1b791dfbfa3acfe6",
+    "validation/clocks/outputs/checks.json": "d46eda1ba21830276b9b4bd7157fea8eca9659174cfe110921363b85642147ed",
+    "validation/clocks/outputs/isolated.json": "742718f00e94aa576d3837283c80647e0bbd4aa8e33e70de0708e3d959d789a9",
+    "validation/clocks/outputs/last_execution.json": "6e5a4c6c6d63a90883f3ad3c33742594cc56d1ab11829a9c8487309f18e8b1cc",
+    "validation/clocks/outputs/manifest.json": "551df45df59ba8837c307d1bebc15a0d69e786dbdefed0bc655ae66f8ec31eb8",
+    "validation/clocks/outputs/reference.json": "9f189fd0765acaa9ee3eda0299993eb7d3fb1d13bf1f103aa688fa1ea165ccaa",
+    "validation/clocks/probe.cc": "74f47062c2ad2acd93a95e7a6b0910336ee4b5ff09416a139a41987ccf0f62a3",
+    "validation/clocks/profile.json": "59711ea9b532342ebc0adb68a8daaa9eeede2e0cf0de589bd76f1dcef6f42160",
+    "validation/clocks/profile.py": "636855e03c988b79683f4a61a7136b124057b235432a561a1a122c7e667c94c8",
+    "validation/clocks/run.py": "625d465722be34407fa5ef9c1591fac47040277bfda6f380a811416c5b17005b",
+    "validation/clocks/verify.py": "669dd45a4e99cbdc60d4ab3c2398715dfb424afc94b8a12bc22339d0884307a5"
+  },
+  "scope": "Independent temporary build and complete executed-case replay; withheld cases are not executed.",
+  "status": "PASS",
+  "case_classes": {
+    "ordinary": 122,
+    "exit": 20,
+    "undefined": 8,
+    "bounded": 1
+  },
+  "executed_cases": 142,
+  "events": 1964,
+  "unrun": [
+    "table_singleton_exact",
+    "table_singleton_nan",
+    "table_empty_value",
+    "table_empty_start",
+    "table_empty_end",
+    "table_header_256",
+    "table_header_800",
+    "weights_cycle",
+    "toa_capacity_29"
+  ],
+  "artifact_mutations": 19,
+  "source_mutations": [
+    "table_numeric_prefix",
+    "table_duplicate_bracket",
+    "directed_reverse",
+    "route_tie",
+    "fallback_empty_count",
+    "sequential_epoch",
+    "loaded_table_cache",
+    "index_lifetime",
+    "sat_jump_index",
+    "sat_extra_shift",
+    "capacity_limit",
+    "table_exit_status"
+  ],
+  "behavior_contracts": [
+    "F five exact fixtures",
+    "F duplicate arithmetic remains NaN",
+    "ordinary inclusive endpoints and adjacent dates",
+    "binary32 path sum rounding",
+    "negative acyclic path retained",
+    "nonfinite edge classification",
+    "overflowing float route returns empty",
+    "reverse hint never traverses backward",
+    "explicit chain precedence and first cached match",
+    "full path explicit token still chooses first basename",
+    "fallback four stages return declared corrections",
+    "getCorrection has only UTC fallback",
+    "exact exhausted fallback diagnostic order",
+    "noWarnings=2 retains errors",
+    "warning suppression is process-global",
+    "actual shifted table epochs",
+    "shift can exceed original validated range",
+    "capacity 30 succeeds, 31 resets count but preserves writes",
+    "accumulator independent capacity",
+    "changed header before lazy load retains indexed edge",
+    "loaded values survive root, replacement and removal",
+    "added files absent from fixed index",
+    "every getCorrection/getCorrectionTT leaves initialized observation state unchanged",
+    "SAT l-index membership and k-order",
+    "SAT extra shifted slot within storage",
+    "clockCorr 0 and 2 bypass initialization",
+    "PKS real route has five stored components"
+  ],
+  "native_profile": {
+    "command": [
+      "/opt/homebrew/bin/g++-16",
+      "-O2",
+      "-std=gnu++11",
+      "-DHAVE_CONFIG_H",
+      "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/observatory.C",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/TKlog.C",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/TKlongdouble.C",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/tempo2Util.C",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/global_data.C",
+      "-lquadmath",
+      "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/central_probe.map",
+      "-o",
+      "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/central_probe"
+    ],
+    "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+    "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+    "executable_sha256": "0cda97c54969a9984f3376ffe3b8b4eca8489ed02bc57e96ef8ee3a6b7af1de3",
+    "link_map_sha256": "74ed65377bb5c2ac838ed5a067393f7cd6f00f68612753c420d711425935c82f",
+    "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+    "globals_source_slices": [
+      "global.C:1-64",
+      "global.C:176-200"
+    ],
+    "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dependencies": {
+      "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+      "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+      "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+      "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+      "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+    },
+    "primary": {
+      "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+      "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+      "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+    },
+    "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+    "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+    "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+    "dynamic_libraries": [
+      "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+      "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+      "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+    ],
+    "runtime_hashes": {
+      "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+      "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+      "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+    }
+  },
+  "source_profile": {
+    "source_revision": "fda6ad4a9753ad7dc5d291406f2f310a9161423f",
+    "central_release": "67aa77c",
+    "sources": {
+      "tabulatedfunction.C": {
+        "sha256": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+        "size": 5125,
+        "origin": "pinned Git blob"
+      },
+      "tabulatedfunction.h": {
+        "sha256": "99420358a63a8a3edf66d38328b67103f8c2d8aba0494625db011f0ab4f7e2d0",
+        "size": 1780,
+        "origin": "pinned Git blob"
+      },
+      "clkcorr.C": {
+        "sha256": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+        "size": 26739,
+        "origin": "pinned Git blob"
+      },
+      "toa2utc.C": {
+        "sha256": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20",
+        "size": 14762,
+        "origin": "pinned Git blob"
+      },
+      "tempo2.h": {
+        "sha256": "0313b6eaf9f9ae9d7e5cce340379ad4b7068394e5222a01f73949e3a2640de93",
+        "size": 52147,
+        "origin": "pinned Git blob"
+      },
+      "observatory.C": {
+        "sha256": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+        "size": 13887,
+        "origin": "pinned Git blob"
+      },
+      "TKlog.C": {
+        "sha256": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+        "size": 2443,
+        "origin": "pinned Git blob"
+      },
+      "TKlog.h": {
+        "sha256": "977dc204af66a0e61fe3b6288c630e3a3343ebc9dc08d5e1f2e535b5ea518e3c",
+        "size": 2666,
+        "origin": "pinned Git blob"
+      },
+      "TKlongdouble.C": {
+        "sha256": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+        "size": 5546,
+        "origin": "pinned Git blob"
+      },
+      "TKlongdouble.float128.h": {
+        "sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+        "size": 1899,
+        "origin": "pinned Git blob"
+      },
+      "TKlongdouble.ld.h": {
+        "sha256": "b9acbfa5a68e3427f83ed3a8ec9551d9fb202d8b73502be219205ad1269a713d",
+        "size": 1414,
+        "origin": "pinned Git blob"
+      },
+      "tempo2Util.C": {
+        "sha256": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+        "size": 12442,
+        "origin": "pinned Git blob"
+      },
+      "global.C": {
+        "sha256": "e61fc1a83a9adf0b6d905d2c5a58cd764a1fd0261c276fccb33daadb6788a2a7",
+        "size": 6382,
+        "origin": "pinned Git blob"
+      },
+      "tai2tt.C": {
+        "sha256": "cd4ab8ba188607c66ff809b0175a459f060a545b27bd925526e5d0a12d18d483",
+        "size": 2596,
+        "origin": "pinned Git blob"
+      },
+      "utc2tai.C": {
+        "sha256": "e8254e3519c295c86b3a61db84d6b8df0ccefff7c2d8ce06fa323feb6baab6f4",
+        "size": 4505,
+        "origin": "pinned Git blob"
+      },
+      "readJBO_bat.C": {
+        "sha256": "0c7046c8f5db8e19829dfe70bab90c6fcc44ae16c5476c6fb321eb17b393b956",
+        "size": 7328,
+        "origin": "pinned Git blob"
+      },
+      "read_fortran2.h": {
+        "sha256": "c42706c8c960dfc4b9693e5f3f33b03549f40ee1e40371c33f0628c49e722fca",
+        "size": 3858,
+        "origin": "pinned Git blob"
+      },
+      "TKlongdouble.h": {
+        "sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+        "origin": "TKlongdouble.float128.h verbatim"
+      },
+      "config.h": {
+        "sha256": "470c61b68a61504558e76ef772639e46b565a1e4500115d6e3fb6a71286dd69e",
+        "text": "#define PACKAGE_STRING \"Tempo2 2026.09.1\"\n#define VERSION \"2026.09.1\"\n#define TEMPO2_ARCH \"darwin-arm64-reference\"\n",
+        "origin": "A2 generated minimal config"
+      }
+    },
+    "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+    "platform": "macOS-26.7-arm64-arm-64bit",
+    "machine": "arm64",
+    "locale": "C",
+    "flags": [
+      "-O2",
+      "-std=gnu++11",
+      "-DHAVE_CONFIG_H",
+      "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source"
+    ],
+    "support_archive_sha256": "313507c5063cb6a8156a0e5fd0f752e2baa59a77c78b5b32822d8efeddd2dbf5",
+    "archive_selected_defined_symbols": {
+      "toa2utc": [
+        "0000000000000000 T _toa2utc"
+      ],
+      "defineClockCorrectionSequence": [
+        "0000000000003c70 T _defineClockCorrectionSequence"
+      ],
+      "getClockCorrections": [
+        "0000000000005880 T _getClockCorrections"
+      ],
+      "getCorrectionTT": [
+        "0000000000000aec T _getCorrectionTT"
+      ],
+      "getCorrection": [
+        "0000000000005fe0 T _getCorrection"
+      ],
+      "readJBO_bat": [
+        "00000000000004b0 T _readJBO_bat"
+      ],
+      "tai2tt": [],
+      "utc2tai": [],
+      "convertTOA": [],
+      "toa2utc_nist": [],
+      "linearInterpolate": []
+    },
+    "preprocessed": {
+      "toa2utc.C": {
+        "command": [
+          "/opt/homebrew/bin/g++-16",
+          "-O2",
+          "-std=gnu++11",
+          "-DHAVE_CONFIG_H",
+          "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source",
+          "-E",
+          "-P",
+          "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/toa2utc.C"
+        ],
+        "sha256": "b040c96e704e40b51ce6a36651bf72d050167d38c26bedca55790b8750dfb733",
+        "definitions": [
+          "toa2utc"
+        ]
+      },
+      "tai2tt.C": {
+        "command": [
+          "/opt/homebrew/bin/g++-16",
+          "-O2",
+          "-std=gnu++11",
+          "-DHAVE_CONFIG_H",
+          "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source",
+          "-E",
+          "-P",
+          "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/tai2tt.C"
+        ],
+        "sha256": "c7a53908127fb6a9567b9dbb930d95a35fc8640ae823fa04f1a87a0d69597971",
+        "definitions": []
+      },
+      "utc2tai.C": {
+        "command": [
+          "/opt/homebrew/bin/g++-16",
+          "-O2",
+          "-std=gnu++11",
+          "-DHAVE_CONFIG_H",
+          "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source",
+          "-E",
+          "-P",
+          "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/utc2tai.C"
+        ],
+        "sha256": "c7a53908127fb6a9567b9dbb930d95a35fc8640ae823fa04f1a87a0d69597971",
+        "definitions": []
+      },
+      "readJBO_bat.C": {
+        "command": [
+          "/opt/homebrew/bin/g++-16",
+          "-O2",
+          "-std=gnu++11",
+          "-DHAVE_CONFIG_H",
+          "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source",
+          "-E",
+          "-P",
+          "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/source/readJBO_bat.C"
+        ],
+        "sha256": "377f666d17416da97bd6d3c487d20843ce942c040649f7f965f102e1af290556",
+        "definitions": [
+          "readJBO_bat"
+        ]
+      }
+    },
+    "support_policy": "Raw primary, observatory, TKlog, TKlongdouble and tempo2Util; verbatim global.C data prefix and CVSdisplayVersion. No archive is linked. A2 config and archive symbol evidence are verified; initialiseOne and A2 resource tracing never execute."
+  },
+  "reference_sha256": "9f189fd0765acaa9ee3eda0299993eb7d3fb1d13bf1f103aa688fa1ea165ccaa",
+  "checks": {
+    "behavior_contracts": [
+      "F five exact fixtures",
+      "F duplicate arithmetic remains NaN",
+      "ordinary inclusive endpoints and adjacent dates",
+      "binary32 path sum rounding",
+      "negative acyclic path retained",
+      "nonfinite edge classification",
+      "overflowing float route returns empty",
+      "reverse hint never traverses backward",
+      "explicit chain precedence and first cached match",
+      "full path explicit token still chooses first basename",
+      "fallback four stages return declared corrections",
+      "getCorrection has only UTC fallback",
+      "exact exhausted fallback diagnostic order",
+      "noWarnings=2 retains errors",
+      "warning suppression is process-global",
+      "actual shifted table epochs",
+      "shift can exceed original validated range",
+      "capacity 30 succeeds, 31 resets count but preserves writes",
+      "accumulator independent capacity",
+      "changed header before lazy load retains indexed edge",
+      "loaded values survive root, replacement and removal",
+      "added files absent from fixed index",
+      "every getCorrection/getCorrectionTT leaves initialized observation state unchanged",
+      "SAT l-index membership and k-order",
+      "SAT extra shifted slot within storage",
+      "clockCorr 0 and 2 bypass initialization",
+      "PKS real route has five stored components"
+    ],
+    "artifact_mutations": [
+      {
+        "name": "missing_case",
+        "rejected": "$.cases: lengths 142 != 141"
+      },
+      {
+        "name": "extra_case",
+        "rejected": "$.cases: lengths 142 != 143"
+      },
+      {
+        "name": "case_order",
+        "rejected": "$.cases[0].id: 'table_F_skipped_row' != 'cvs_and_debug'"
+      },
+      {
+        "name": "missing_event",
+        "rejected": "$.events: lengths 12 != 11"
+      },
+      {
+        "name": "extra_event",
+        "rejected": "$.events: lengths 12 != 13"
+      },
+      {
+        "name": "event_order",
+        "rejected": "$.events[0]: field membership {'clock_state', 'table_queries', 'result'}"
+      },
+      {
+        "name": "missing_field",
+        "rejected": "$.events[1]: field membership {'table_queries'}"
+      },
+      {
+        "name": "extra_field",
+        "rejected": "$.events[1]: field membership {'invented'}"
+      },
+      {
+        "name": "component_count",
+        "rejected": "$.events[7].result.after.count: '1' != '0'"
+      },
+      {
+        "name": "destination_order",
+        "rejected": "$.events[7].result.after.slots[0].value.decimal: '86400' != '929'"
+      },
+      {
+        "name": "binary64_bits",
+        "rejected": "$.events[9].result.value.bits: '3ff0000000000000' != '0000000000000000'"
+      },
+      {
+        "name": "nonfinite_class",
+        "rejected": "$.events[5].result.value.class: 'NaN' != '+Infinity'"
+      },
+      {
+        "name": "binary32_weight",
+        "rejected": "$.events[7].clock_state.functions[0].badness.binary32: '3f800000' != '00000000'"
+      },
+      {
+        "name": "epoch_shift",
+        "rejected": "$.events[7].table_queries[1].epoch.decimal: '6' != '5'"
+      },
+      {
+        "name": "cache_loaded_flag",
+        "rejected": "$.events[7].clock_state.functions[0].loaded: 'True' != 'False'"
+      },
+      {
+        "name": "slot_write_mask",
+        "rejected": "$.events[7].result.after.slots[0].changed_bytes: '0000011111000000000000000000000000000000' != '0000000000000000000000000000000000000000'"
+      },
+      {
+        "name": "exit_status",
+        "rejected": "$.returncode: '1' != '0'"
+      },
+      {
+        "name": "last_defined_stage",
+        "rejected": "$.events[2].phase: 'begin' != 'end'"
+      },
+      {
+        "name": "unrun_cannot_be_pass",
+        "rejected": "$.cases[0].status: 'unrun' != 'passed'"
+      }
+    ],
+    "source_mutations": [
+      {
+        "name": "table_numeric_prefix",
+        "case": "table_permissive",
+        "changes": [
+          {
+            "source": "tabulatedfunction.C",
+            "old": "==2){",
+            "new": "==2 && strchr(line,'j')==NULL){"
+          }
+        ],
+        "rejected": "$.events[3].result.table.start.decimal: '1' != '2'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_numeric_prefix"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "3dd1626bba391fda0a79683bc4b98b43f643ce044c7c55c87440c838f7574615",
+          "link_map_sha256": "d4c83858e5cf86a0252c46e5368b4b40ac80ee0b222eb6c28b912f2fb7a428cf",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+            "tabulatedfunction.C": "216004eae1da0f12fdd982df1766b9cfb97c39e46fc36b2efac0ac7d1e7c399c",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "table_duplicate_bracket",
+        "case": "table_internal_duplicate",
+        "changes": [
+          {
+            "source": "tabulatedfunction.C",
+            "old": "if (samp[imid].x > x)",
+            "new": "if (samp[imid].x >= x)"
+          }
+        ],
+        "rejected": "$.events[9].result.value.decimal: '30' != '20'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_duplicate_bracket"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "fa71723cd100e31cde09792bfbc23c8aabab9939184f3e41045d6d1ccb7d739d",
+          "link_map_sha256": "0f2325eb20eb5a5166794cc6d77ed2173fd649378f9dde5b114b2839906f9134",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+            "tabulatedfunction.C": "9c01ac96c580a55d081a88fdfc1f659b04b38081d7df85859b760064f78f19db",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "directed_reverse",
+        "case": "route_reverse",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "e.from = fromNode;",
+            "new": "e.from = toNode;"
+          },
+          {
+            "source": "clkcorr.C",
+            "old": "e.to = toNode;",
+            "new": "e.to = fromNode;"
+          }
+        ],
+        "rejected": "$.events[7].clock_state.functions[0]: field membership {'header', 'samples'}",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_directed_reverse"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "fa082c2b0a1a75569aa7a939ad7f5340f236924d0fd4b3e825f0677fa29f3bf5",
+          "link_map_sha256": "0f0b69078135e38d7b8729e17f770cdd590212e4b36a75eea72ccd60304c9810",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "1fbca9d268a8ebd44929c43db29945c4ecb9185faf009e0528a8a80dbd04214a",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "route_tie",
+        "case": "route_parallel",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "if (newDist < dist[edge.to])",
+            "new": "if (newDist <= dist[edge.to])"
+          }
+        ],
+        "rejected": "$.events[7].result.after.slots[0].value.decimal: '11' != '22'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_route_tie"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "0d72395e5ed2304703b0cf8f0d3dc728adbaa5521405a932089bd46eb14bc924",
+          "link_map_sha256": "c1ecf7cd25da7a60738e3afb2b405b31aaa840b92982ee22df44bfbbb97f6a5f",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "c66b828f44b59b9b4f4343c422859d9534978580b4d19d470742fd1bee3912d5",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "fallback_empty_count",
+        "case": "fallback_empty_w0",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "          return;\n        }\n      }\n    }\n  }\n\n  double correction",
+            "new": "          obs->nclock_correction = 1; return;\n        }\n      }\n    }\n  }\n\n  double correction"
+          }
+        ],
+        "rejected": "$.events[7].result.after.count: '0' != '1'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_fallback_empty_count"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "4b50e10e8b8a0ccc07d90e065a66b22883b589e217a73adcced2e82c84fb07a0",
+          "link_map_sha256": "d0acea974160f7a5367132b62240563bb42319156f9688522d38c906b4b12e5d",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "e50550124adb7f7090500c3f83fbea3d29def32f9bb79a76bfdc9b485e2e8a24",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "sequential_epoch",
+        "case": "sequential_epochs",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "(double)obs->sat + *totalCorrection / SECDAY",
+            "new": "(double)obs->sat + 0.0 / SECDAY"
+          }
+        ],
+        "rejected": "$.events[7].result.after.slots[1].value.decimal: '60' != '50'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sequential_epoch"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "2998fbb953a8fbd4f2509a5b80f68063e87f496731c6f90421f60e678d242d27",
+          "link_map_sha256": "8b5c2afbeb05041e4e35e897f60c627a474a6c46aada9844350d8490217d9fcc",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "175c0fcce6c6c93063caa6442f84a8eb155a52e9eaa0a5a659c9caf432de5bce",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "loaded_table_cache",
+        "case": "lifetime_after_load_copy",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "if (func->loaded)",
+            "new": "if (false && func->loaded)"
+          }
+        ],
+        "rejected": "$.events[17].result.after.slots[0].value.decimal: '1' != '77'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_loaded_table_cache"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "ff028bd0e72c6a9b8bfeff4e8817d25bbbef4e46ff07d898a5abea9d08b1938e",
+          "link_map_sha256": "1ab181a190f6a236132d6ec4fd7b70f0ae7b2330f9ed829b493f0125b536a463",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "764febbdf92a6f35d276bfda4c729b17d78bb813243937c70420547f15811814",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "index_lifetime",
+        "case": "lifetime_root_extra",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "if (g_clockCorrectionsInitialized)",
+            "new": "if (false && g_clockCorrectionsInitialized)"
+          }
+        ],
+        "rejected": "$.events[11].clock_state.functions: lengths 1 != 2",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_index_lifetime"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "c436405fd09f94f147b74c4de2befa0e16be6a77815dc71b8bfce9c50a152fe4",
+          "link_map_sha256": "dd4c77a9bf739d63a8fc65fb013c5e0a20c989a35797ef50a415266472c7a920",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "8d48bc389837c3ae3bb5c8645c52bc94ecf6b6fcf1b225d6e59fe56969cad498",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "sat_jump_index",
+        "case": "toa_multiple_pulsars",
+        "changes": [
+          {
+            "source": "toa2utc.C",
+            "old": "psr[p].jumpSAT[l]==1",
+            "new": "psr[p].jumpSAT[k]==1"
+          }
+        ],
+        "rejected": "$.events[45].result.observations[2].after.count: '3' != '2'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_jump_index"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "c444b8284fb199c2d2dfeb376c6cdf7de3d58c58cb62aaf5873e97af95208016",
+          "link_map_sha256": "a1fe87a271b2b660d42dd728403cb6d9e620a156f3a64ec1b36993d52f4d7b19",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "8f3567b3efaffa48225a0698d467a31a24a81f5efc14f83a34feb3bdb619ec76"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "sat_extra_shift",
+        "case": "toa_capacity_0",
+        "changes": [
+          {
+            "source": "toa2utc.C",
+            "old": "int icc=obs->nclock_correction;",
+            "new": "int icc=obs->nclock_correction-1;"
+          }
+        ],
+        "rejected": "$.events[15].result.observations[0].after.slots[1].value.decimal: '900' != '901'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_sat_extra_shift"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "8e01e0e0ee5fb3313874c0191462d8bd93fc3a207d6659d936b8c503f611be55",
+          "link_map_sha256": "a3219996c1361461b0387f8f887c08332feea31466dae6bd93dccb157857845d",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "8aeb7d0f119951d5dc59c5880e93d9f65ee72a8c4e15f36c1ddbda92cc8d9fae"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "capacity_limit",
+        "case": "capacity_30",
+        "changes": [
+          {
+            "source": "clkcorr.C",
+            "old": "obs->nclock_correction >= MAX_CLK_CORR",
+            "new": "obs->nclock_correction >= MAX_CLK_CORR-1"
+          }
+        ],
+        "rejected": "$.events[7].result.after.count: '30' != '0'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_capacity_limit"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "6cd45119e48dbf2ade2aa26822131221b08787c51305a0c3e0bdb135dc7cd6b4",
+          "link_map_sha256": "c031fc32c1055b3a9233ddb468ce3f96353c5d03a13d212f184b3077c744c01b",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "b890d86b852ba2c39c217aec0bf5d194927d9ae05239afeefe93312c5dba12f0",
+            "tabulatedfunction.C": "0c3e90a2594e442c5135ca224f603a6f69e6278fa9f68382bc9e451bfe7b54c4",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      },
+      {
+        "name": "table_exit_status",
+        "case": "table_bad_header",
+        "changes": [
+          {
+            "source": "tabulatedfunction.C",
+            "old": "fileName);\n        exit(1);\n    }\n    for (c=line;",
+            "new": "fileName);\n        exit(2);\n    }\n    for (c=line;"
+          }
+        ],
+        "rejected": "$.returncode: '1' != '2'",
+        "build": {
+          "command": [
+            "/opt/homebrew/bin/g++-16",
+            "-O2",
+            "-std=gnu++11",
+            "-DHAVE_CONFIG_H",
+            "-I/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/probe.cc",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source/observatory.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source/TKlog.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source/TKlongdouble.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source/tempo2Util.C",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status_source/global_data.C",
+            "-lquadmath",
+            "-Wl,-map,/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status.map",
+            "-o",
+            "/private/tmp/tempo2-clocks-central-8llmqxay/clocks/build/mutation_table_exit_status"
+          ],
+          "compiler": "g++-16 (Homebrew GCC 16.2.0) 16.2.0",
+          "numeric_header_sha256": "214911b81f82489996d698626cf8d30ab5bcc20099f6b5c5aa089715b85bc55e",
+          "executable_sha256": "66f843a8b7d5bfadd6828cd0783b57c2ba3ab352c9a9d61e589935a061778c62",
+          "link_map_sha256": "fe5aa6cb48f0aeed0fccbbf2ba6061353175ac3d968b411234403347f10a040f",
+          "globals_prefix_sha256": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7",
+          "globals_source_slices": [
+            "global.C:1-64",
+            "global.C:176-200"
+          ],
+          "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "dependencies": {
+            "observatory.C": "fabfaabc78b75652590c5a81c1c2bb05f806550f99dbd7dd3f1ab43d056bf2c3",
+            "TKlog.C": "696904f67674dcfa51a485b0943d10bd39358daeb14649fe4c5d728d667f1d90",
+            "TKlongdouble.C": "4e8da8ed6c9fd6d60a671e330f09f975e32caba7aacd0c522e8c9a5a0d75a05c",
+            "tempo2Util.C": "1f8f7534c98404958d8839250d5107b2af90ad8d790547405a391c5494264765",
+            "global_data.C": "4806f49b014b2174a8bb98a6a52064542f5d8d33f3102c3389c2c929b62608f7"
+          },
+          "primary": {
+            "clkcorr.C": "39d69133304ae2f92e9156f264db338cc103e7762f3f9b144ac0b17fdac0f163",
+            "tabulatedfunction.C": "e005bf706197ef1b282706df7b2529ca531fe20103af2675e0e893c8261d8a53",
+            "toa2utc.C": "9df5cb0d689b296c2d25637bbdab208b2f312842e268d7600bec823287afbb20"
+          },
+          "profile": "GCC binary128 input, binary32 weights, binary64 tables",
+          "compiler_sha256": "b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363",
+          "table_value_instrumentation": "Macro renames raw TabulatedFunction_getValue to J_Table_getValue; forwarding function records binary64 arguments/results after return, then returns the unchanged value.",
+          "dynamic_libraries": [
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib (compatibility version 1.0.0, current version 1.0.0)",
+            "\t/opt/homebrew/opt/gcc/lib/gcc/current/libstdc++.6.dylib (compatibility version 7.0.0, current version 7.36.0)",
+            "\t/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1356.0.0)"
+          ],
+          "runtime_hashes": {
+            "libquadmath.0.dylib": "6f885df6ad8277edf614f0f5f7fbc6f8564a95b64679b88fb860382c9d1c0e9a",
+            "libstdc++.6.dylib": "6b6012c574ec8d680aaadeaed32a488449b7b75fafcd7bc45348bafdc1d8400c",
+            "libgcc_s.1.1.dylib": "5b741a6f933be1fea16db7361121d178bb88b81fc8c567846d1d5593bd0cc146"
+          }
+        }
+      }
+    ],
+    "unrun_cases": [
+      "table_singleton_exact",
+      "table_singleton_nan",
+      "table_empty_value",
+      "table_empty_start",
+      "table_empty_end",
+      "table_header_256",
+      "table_header_800",
+      "weights_cycle",
+      "toa_capacity_29"
+    ],
+    "scope": "Exact recorded-host integrity and source reachability, no Rust tolerance or acceptance",
+    "status": "PASS"
+  }
+}
