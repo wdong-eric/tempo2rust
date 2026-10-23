@@ -1,10 +1,12 @@
 //! Active toa2utc.C::toa2utc (USE_NEW_CLK_CORR), including its SAT jump index
-//! mismatch and extra shifted slot. Owned fields project only those consumed here.
+//! mismatch and extra shifted slot. Reads/writes the canonical source observation.
 use crate::{
     TimingError,
-    clkcorr::{ClockObservation, ClockSession},
+    clkcorr::ClockSession,
     clock_diagnostics::boundary,
-    clock_text::{c_bytes, copy_string},
+    clock_text::c_bytes,
+    observation::{format_string, read},
+    tempo2::SourceObservation,
 };
 
 pub(crate) struct ClockPulsar {
@@ -34,7 +36,7 @@ impl Default for ClockPulsar {
 pub(crate) fn toa2utc(
     session: &mut ClockSession,
     pulsars: &[ClockPulsar],
-    observations: &mut [Vec<ClockObservation>],
+    observations: &mut [Vec<SourceObservation>],
     npsr: i32,
 ) -> Result<(), TimingError> {
     session.diagnostics.version("toa2utc.C", "toa2utc__1()");
@@ -47,7 +49,8 @@ pub(crate) fn toa2utc(
                 .get_mut(p as usize)
                 .and_then(|v| v.get_mut(i as usize))
                 .ok_or_else(|| boundary("clock_observation_storage"))?;
-            if obs.clock_corr != 0 && obs.clock_corr != 2 {
+            if *read(&obs.clockCorr, "clockCorr")? != 0 && *read(&obs.clockCorr, "clockCorr")? != 2
+            {
                 session.get_clock_corrections(
                     obs,
                     Some(&psr.from),
@@ -56,45 +59,66 @@ pub(crate) fn toa2utc(
                 )?;
             }
             for k in 1..=psr.njumps {
-                for l in 0..obs.jumps.len() {
-                    if obs.jumps[l] == k
+                for l in 0..*read(&obs.obsNjump, "obsNjump")? {
+                    let l = l as usize;
+                    if *read(
+                        obs.jump
+                            .get(l)
+                            .ok_or_else(|| boundary("clock_jump_storage"))?,
+                        &format!("jump[{l}]"),
+                    )? == k
                         && *psr
                             .jump_sat
                             .get(l)
                             .ok_or_else(|| boundary("clock_jump_storage"))?
                             == 1
                     {
-                        obs.count = obs
-                            .count
-                            .checked_add(1)
-                            .ok_or_else(|| boundary("clock_count_integer"))?;
-                        for index in (1..=obs.count).rev() {
+                        obs.nclock_correction = Some(
+                            read(&obs.nclock_correction, "nclock_correction")?
+                                .checked_add(1)
+                                .ok_or_else(|| boundary("clock_count_integer"))?,
+                        );
+                        for index in (1..=*read(&obs.nclock_correction, "nclock_correction")?).rev()
+                        {
                             let index = index as usize;
                             let old = obs
-                                .corrections
+                                .correctionsTT
                                 .get(index - 1)
                                 .ok_or_else(|| boundary("clock_correction_storage"))?
                                 .clone();
                             let target = obs
-                                .corrections
+                                .correctionsTT
                                 .get_mut(index)
                                 .ok_or_else(|| boundary("clock_correction_storage"))?;
-                            target.correction = old.correction;
-                            let text = c_bytes(&old.corrects_to);
-                            let n = text.len().min(31);
-                            target.corrects_to[..n].copy_from_slice(&text[..n]);
-                            target.corrects_to[n..31].fill(0); // strncpy padding, byte 31 untouched
+                            target.correction = Some(*read(
+                                &old.correction,
+                                &format!("correctionsTT[{}].correction", index - 1),
+                            )?);
+                            let mut terminated = false;
+                            for j in 0..31 {
+                                let byte = if terminated {
+                                    0
+                                } else {
+                                    *read(
+                                        &old.corrects_to[j],
+                                        &format!("correctionsTT[{}].corrects_to[{j}]", index - 1),
+                                    )?
+                                };
+                                target.corrects_to[j] = Some(byte);
+                                terminated |= byte == 0;
+                            } // strncpy padding, byte 31 untouched
                         }
-                        obs.corrections[0].correction = *psr
-                            .jump_value
-                            .get(k as usize)
-                            .ok_or_else(|| boundary("clock_jump_storage"))?;
+                        obs.correctionsTT[0].correction = Some(
+                            *psr.jump_value
+                                .get(k as usize)
+                                .ok_or_else(|| boundary("clock_jump_storage"))?,
+                        );
                         let label = psr
                             .jump_string
                             .get(k as usize)
                             .ok_or_else(|| boundary("clock_jump_storage"))?;
-                        copy_string(
-                            &mut obs.corrections[0].corrects_to[..31],
+                        format_string(
+                            &mut obs.correctionsTT[0].corrects_to[..31],
                             &[b"SATJMP ".as_slice(), c_bytes(label)].concat(),
                         );
                     }

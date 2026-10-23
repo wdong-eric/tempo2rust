@@ -6,9 +6,11 @@ use crate::{
     PRECISION_BITS, Scalar, TimingError,
     clock_diagnostics::{Diagnostics, boundary, terminal},
     clock_text::{self, NumberFormat, c_bytes, format_number},
+    observation::{format_string, read, read_string},
     observatory::{ObservatoryDatabase, resource, source_files},
     runtime::Resource,
     tabulated_function::{TabulatedFunction, chunks, os_error},
+    tempo2::{MAX_CLK_CORR, SourceObservation},
 };
 use rug::Float;
 use serde::Serialize;
@@ -19,41 +21,6 @@ use std::{
     sync::{LazyLock, Mutex},
 };
 
-pub(crate) const MAX_CLK_CORR: usize = 30;
-#[derive(Clone)]
-pub(crate) struct ClockCorrection {
-    pub correction: f64,
-    pub corrects_to: [u8; 32],
-}
-impl Default for ClockCorrection {
-    fn default() -> Self {
-        Self {
-            correction: 0.0,
-            corrects_to: [0; 32],
-        }
-    }
-}
-#[derive(Clone)]
-pub(crate) struct ClockObservation {
-    pub sat: Float,
-    pub tel_id: Vec<u8>,
-    pub clock_corr: i32,
-    pub count: i32,
-    pub corrections: [ClockCorrection; MAX_CLK_CORR],
-    pub jumps: Vec<i32>,
-}
-impl Default for ClockObservation {
-    fn default() -> Self {
-        Self {
-            sat: Float::with_val(PRECISION_BITS, 0),
-            tel_id: Vec::new(),
-            clock_corr: 0,
-            count: 0,
-            corrections: std::array::from_fn(|_| ClockCorrection::default()),
-            jumps: Vec::new(),
-        }
-    }
-}
 #[derive(Debug, Serialize, Clone)]
 pub struct ClockStep {
     pub corrects_to: String,
@@ -704,7 +671,7 @@ impl ClockSession {
     }
     pub fn fill_corrections(
         &mut self,
-        obs: &mut ClockObservation,
+        obs: &mut SourceObservation,
         sequence: usize,
         to: &[u8],
         from: &[u8],
@@ -721,7 +688,7 @@ impl ClockSession {
             if clock_name_equals(&current, to) {
                 break;
             }
-            if obs.count >= MAX_CLK_CORR as i32 {
+            if *read(&obs.nclock_correction, "nclock_correction")? >= MAX_CLK_CORR as i32 {
                 self.diagnostics.display(
                     2,
                     b"CLK12",
@@ -736,14 +703,14 @@ impl ClockSession {
                 self.broken_chain(&current, i);
                 return Ok(false);
             }
-            let value = self.evaluate_function(i, obs.sat.to_f64(), *total)?;
-            let slot = usize::try_from(obs.count)
+            let value = self.evaluate_function(i, read(&obs.sat, "sat")?.to_f64(), *total)?;
+            let slot = usize::try_from(*read(&obs.nclock_correction, "nclock_correction")?)
                 .ok()
-                .and_then(|n| obs.corrections.get_mut(n))
+                .and_then(|n| obs.correctionsTT.get_mut(n))
                 .ok_or_else(|| boundary("clock_correction_storage"))?;
-            slot.correction = value;
-            clock_text::copy_string(&mut slot.corrects_to, &self.functions[i].to);
-            obs.count += 1;
+            slot.correction = Some(value);
+            format_string(&mut slot.corrects_to, &self.functions[i].to);
+            obs.nclock_correction = Some(*read(&obs.nclock_correction, "nclock_correction")? + 1);
             *total += value;
             current = self.functions[i].to.clone();
         }
@@ -765,7 +732,7 @@ impl ClockSession {
     }
     pub fn accumulate_correction(
         &mut self,
-        obs: &ClockObservation,
+        obs: &SourceObservation,
         sequence: usize,
         to: &[u8],
         from: &[u8],
@@ -798,14 +765,14 @@ impl ClockSession {
                 );
                 return Ok(false);
             }
-            *total += self.evaluate_function(i, obs.sat.to_f64(), *total)?;
+            *total += self.evaluate_function(i, read(&obs.sat, "sat")?.to_f64(), *total)?;
             current = self.functions[i].to.clone();
         }
         Ok(clock_name_equals(&current, to))
     }
     fn source_clock(
         &mut self,
-        obs: &ClockObservation,
+        obs: &SourceObservation,
         from: Option<&[u8]>,
     ) -> Result<Vec<u8>, TimingError> {
         let name = c_bytes(from.unwrap_or_default());
@@ -815,7 +782,7 @@ impl ClockSession {
         Ok(self
             .observatories
             .get(
-                &obs.tel_id,
+                &read_string(&obs.telID, "telID")?,
                 self.root.as_deref(),
                 self.alias.as_deref(),
                 &mut self.diagnostics,
@@ -824,19 +791,20 @@ impl ClockSession {
     }
     pub fn get_clock_corrections(
         &mut self,
-        obs: &mut ClockObservation,
+        obs: &mut SourceObservation,
         from: Option<&[u8]>,
         to: Option<&[u8]>,
         warnings: i32,
     ) -> Result<(), TimingError> {
-        obs.count = 0;
+        obs.nclock_correction = Some(0);
         let mut from = self.source_clock(obs, from)?;
         let original = from.clone();
         let mut to = c_bytes(to.unwrap_or_default()).to_vec();
         if clock_name_equals(&from, &to) {
             return Ok(());
         }
-        let mut sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+        let mut sequence =
+            self.get_sequence(&from, &to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
         let mut approximation = false;
         if sequence.is_none() {
             if from.len() >= 1000 {
@@ -848,7 +816,7 @@ impl ClockSession {
             if clock_name_equals(&from, &to) {
                 return Ok(());
             }
-            sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+            sequence = self.get_sequence(&from, &to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
             approximation = true;
             if sequence.is_none() {
                 if to.len() >= 1000 {
@@ -866,15 +834,17 @@ impl ClockSession {
                 if clock_name_equals(&from, &to) {
                     return Ok(());
                 }
-                sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+                sequence =
+                    self.get_sequence(&from, &to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
                 if sequence.is_none() {
                     self.diagnostics
                         .display(2, b"CLK8", b"Trying both", b"", warnings)?;
                     from = b"UTC".to_vec();
-                    sequence = self.get_sequence(&from, &to, obs.sat.to_f64(), warnings)?;
+                    sequence =
+                        self.get_sequence(&from, &to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
                     if sequence.is_none() {
                         if warnings == 0 {
-                            self.diagnostics.stdout(&[b"Warning [CLK:7], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(obs.sat.to_f64(),NumberFormat::Four),b"!\n"].concat());
+                            self.diagnostics.stdout(&[b"Warning [CLK:7], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(read(&obs.sat, "sat")?.to_f64(),NumberFormat::Four),b"!\n"].concat());
                         }
                         return Ok(());
                     }
@@ -890,7 +860,7 @@ impl ClockSession {
                 b"",
                 warnings,
             )?;
-            obs.count = 0;
+            obs.nclock_correction = Some(0);
             return Ok(());
         }
         if approximation {
@@ -906,7 +876,7 @@ impl ClockSession {
     }
     pub fn get_correction(
         &mut self,
-        obs: &ClockObservation,
+        obs: &SourceObservation,
         from: Option<&[u8]>,
         to: Option<&[u8]>,
         warnings: i32,
@@ -918,7 +888,8 @@ impl ClockSession {
             return Ok(0.0);
         }
         let mut current = from.clone();
-        let mut sequence = self.get_sequence(&from, to, obs.sat.to_f64(), warnings)?;
+        let mut sequence =
+            self.get_sequence(&from, to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
         if sequence.is_none() {
             if current.len() >= 1000 {
                 return Err(boundary("clock_message_storage"));
@@ -933,11 +904,11 @@ impl ClockSession {
             if clock_name_equals(to, b"UTC") {
                 return Ok(0.0);
             }
-            sequence = self.get_sequence(b"UTC", to, obs.sat.to_f64(), warnings)?;
+            sequence = self.get_sequence(b"UTC", to, read(&obs.sat, "sat")?.to_f64(), warnings)?;
             current = b"UTC".to_vec();
             if sequence.is_none() {
                 if warnings == 0 {
-                    self.diagnostics.stdout(&[b"!Warning [CLK:9], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(obs.sat.to_f64(),NumberFormat::Four),b"!\n"].concat());
+                    self.diagnostics.stdout(&[b"!Warning [CLK:9], no directed clock correction available for TOA @ MJD ".as_slice(),&format_number(read(&obs.sat, "sat")?.to_f64(),NumberFormat::Four),b"!\n"].concat());
                 }
                 return Ok(0.0);
             }
@@ -1012,14 +983,16 @@ impl ClockSession {
             .collect()
     }
 }
-pub(crate) fn get_correction_tt(obs: &ClockObservation) -> Result<f64, TimingError> {
+pub(crate) fn get_correction_tt(obs: &SourceObservation) -> Result<f64, TimingError> {
     let mut total = 0.0;
-    for i in 0..obs.count {
-        total += obs
-            .corrections
-            .get(i as usize)
-            .ok_or_else(|| boundary("clock_correction_storage"))?
-            .correction;
+    for i in 0..*read(&obs.nclock_correction, "nclock_correction")? {
+        total += *read(
+            &obs.correctionsTT
+                .get(i as usize)
+                .ok_or_else(|| boundary("clock_correction_storage"))?
+                .correction,
+            &format!("correctionsTT[{i}].correction"),
+        )?;
     }
     Ok(total)
 }

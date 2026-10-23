@@ -99,13 +99,3 @@ pub(crate) fn format_number(x: f64, style: NumberFormat) -> Vec<u8> {
     }
     c_bytes(&out).to_vec()
 }
-/// snprintf("%s") preserves bytes after its terminating NUL.
-pub(crate) fn copy_string(destination: &mut [u8], source: &[u8]) {
-    if destination.is_empty() {
-        return;
-    }
-    let source = c_bytes(source);
-    let n = source.len().min(destination.len() - 1);
-    destination[..n].copy_from_slice(&source[..n]);
-    destination[n] = 0;
-}

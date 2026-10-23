@@ -194,8 +194,8 @@ fn t2_fit(
         let sigma: Vec<_> = input
             .observations
             .iter()
-            .map(|o| o.toa_error_us * 1e-6)
-            .collect();
+            .map(|o| crate::observation::read(&o.toaErr, "toaErr").map(|v| *v * 1e-6))
+            .collect::<Result<_, _>>()?;
         let f0 = model.parameter_cell("F0").val.to_f64();
         let matrix: Vec<Vec<f64>> = x
             .iter()
@@ -210,7 +210,7 @@ fn t2_fit(
             if row.iter().any(|v| v.is_nan()) {
                 return Err(TimingError::new(
                     &input.tim.path,
-                    Some(input.observations[i].original.line),
+                    Some(input.observation_metadata[i].line),
                     "design matrix",
                     format!("cycle {iteration}: source exits on NaN matrix element"),
                 ));
@@ -283,11 +283,7 @@ fn t2_fit(
             before_errors,
             after_values: spin_values(&model).map(Scalar),
             after_errors: spin_errors(&model),
-            row_indices: input
-                .observations
-                .iter()
-                .map(|o| o.original.index)
-                .collect(),
+            row_indices: input.observation_metadata.iter().map(|o| o.index).collect(),
             prefit,
             postfit,
             x_days: x.into_iter().map(FitNumber::from).collect(),

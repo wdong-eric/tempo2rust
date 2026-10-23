@@ -30,15 +30,21 @@ fn pulse_integer(value: &Float) -> Option<i64> {
 /// All input observations are eligible; the first one's signed fractional phase
 /// sets the reference. No fit, tracking, sorting, cuts or mean subtraction occurs.
 pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
-    if psr.observations.iter().any(|o| o.original.site != "@") {
-        return Err(TimingError::new(
-            &psr.tim.path,
-            None,
-            "site",
-            "use evaluate_terrestrial with a RuntimeContext for PKS",
-        ));
+    for i in 0..psr.observations.len() {
+        if psr.observation_site(i)? != b"@" {
+            return Err(TimingError::new(
+                &psr.tim.path,
+                None,
+                "site",
+                "use evaluate_terrestrial with a RuntimeContext for PKS",
+            ));
+        }
     }
-    let epochs: Vec<_> = psr.observations.iter().map(|o| o.sat_mjd.clone()).collect();
+    let epochs: Vec<_> = psr
+        .observations
+        .iter()
+        .map(|o| crate::observation::read(&o.sat, "sat").map(|v| Scalar(v.clone())))
+        .collect::<Result<_, _>>()?;
     form_residuals_at(psr, &epochs)
 }
 
@@ -73,12 +79,12 @@ pub(crate) fn form_residuals_at(
     })?;
     let ff0 = f0.clone() - nf0;
     let mut phase_terms = Vec::with_capacity(psr.observations.len());
-    for (o, epoch) in psr.observations.iter().zip(epochs) {
+    for (original, epoch) in psr.observation_metadata.iter().zip(epochs) {
         let error = |message| {
             TimingError::new(
                 &psr.tim.path,
-                Some(o.original.line),
-                &format!("observation {} ({})", o.original.index, o.original.name),
+                Some(original.line),
+                &format!("observation {} ({})", original.index, original.name),
                 message,
             )
         };
@@ -119,13 +125,18 @@ pub(crate) fn form_residuals_at(
     // Rug % uses a truncating quotient, matching the adopted fortran_mod semantics.
     let phas1 = fortran_mod(phase_terms[0].1.clone(), 1.0f64);
     let mut observations = Vec::with_capacity(phase_terms.len());
-    for ((o, epoch), (phaseint, mut phase5)) in psr.observations.iter().zip(epochs).zip(phase_terms)
+    for (((o, original), epoch), (phaseint, mut phase5)) in psr
+        .observations
+        .iter()
+        .zip(&psr.observation_metadata)
+        .zip(epochs)
+        .zip(phase_terms)
     {
         let error = |message| {
             TimingError::new(
                 &psr.tim.path,
-                Some(o.original.line),
-                &format!("observation {} ({})", o.original.index, o.original.name),
+                Some(original.line),
+                &format!("observation {} ({})", original.index, original.name),
                 message,
             )
         };
@@ -140,8 +151,8 @@ pub(crate) fn form_residuals_at(
             return Err(error("nonfinite residual"));
         }
         observations.push(ToaResult {
-            index: o.original.index,
-            sat_mjd: o.sat_mjd.clone(),
+            index: original.index,
+            sat_mjd: Scalar(crate::observation::read(&o.sat, "sat")?.clone()),
             bat_mjd: epoch.clone(),
             bbat_mjd: epoch.clone(),
             phase_turn: Scalar(phaseint + phase5),

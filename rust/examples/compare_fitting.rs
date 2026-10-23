@@ -45,7 +45,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let options = FitOptions {
             rescale_err_chisq: case["rescale"].as_bool().unwrap(),
         };
-        let result = if input.observations()[0].original.site == "@" {
+        let result = if input.observation_site(0)? == b"@" {
             fit_barycentric(&input, &options)?
         } else {
             fit_terrestrial(

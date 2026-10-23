@@ -669,3 +669,8 @@ impl ParameterStore {
         &self.slots[label as usize]
     }
 }
+
+// Complete observation storage uses source names; no C layout equivalence.
+pub use crate::observation::{
+    MAX_CLK_CORR, MAX_FILELEN, MAX_FLAG_LEN, MAX_FLAGS, SourceClockCorrection, SourceObservation,
+};

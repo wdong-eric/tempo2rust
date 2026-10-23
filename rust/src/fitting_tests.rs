@@ -282,7 +282,7 @@ fn terrestrial_fit_failure_recovers_with_the_same_runtime() {
         serde_json::to_value(crate::fit_terrestrial(&valid, &mut runtime, &options).unwrap())
             .unwrap();
     let mut invalid = valid.clone();
-    invalid.observations[0].toa_error_us = 0.0;
+    invalid.observations[0].toaErr = Some(0.0);
     let before = serde_json::to_vec(&invalid).unwrap();
     let error = crate::fit_terrestrial(&invalid, &mut runtime, &options).unwrap_err();
     assert!(error.message.contains("source boundary"), "{error}");

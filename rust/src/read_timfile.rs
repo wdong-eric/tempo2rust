@@ -3,11 +3,17 @@
 use crate::input::ignored_line;
 use crate::longdouble::parse_longdouble;
 use crate::tempo2_util::parse_binary64;
-use crate::{Observation, OriginalObservation, SourceFile, TimingError};
+use crate::{
+    OriginalObservation, SourceFile, TimingError, observation::write_string,
+    tempo2::SourceObservation,
+};
 
-pub(crate) fn read_timfile(tim: &SourceFile) -> Result<Vec<Observation>, TimingError> {
+pub(crate) fn read_timfile(
+    tim: &SourceFile,
+) -> Result<(Vec<SourceObservation>, Vec<OriginalObservation>), TimingError> {
     let mut format_seen = false;
     let mut obsn = Vec::new();
+    let mut provenance = Vec::new();
     for (index, raw) in tim.text.lines().enumerate() {
         let tokens: Vec<_> = raw.split_whitespace().collect();
         if ignored_line(&tokens) {
@@ -92,21 +98,27 @@ pub(crate) fn read_timfile(tim: &SourceFile) -> Result<Vec<Observation>, TimingE
                 "uncertainty must be nonnegative".into(),
             ));
         }
-        obsn.push(Observation {
-            sat_mjd: sat,
-            frequency_mhz: freq,
-            toa_error_us: toa_err,
-            original: OriginalObservation {
-                index: obsn.len(),
-                line: index + 1,
-                name: tokens[0].into(),
-                raw_line: raw.into(),
-                frequency_mhz_text: tokens[1].into(),
-                sat_mjd_text: tokens[2].into(),
-                toa_error_us_text: tokens[3].into(),
-                site: tokens[4].into(),
-            },
+        let mut obs = SourceObservation {
+            sat: Some(sat.0),
+            freq: Some(freq),
+            toaErr: Some(toa_err),
+            ..Default::default()
+        };
+        write_string(&mut obs.fname, tokens[0].as_bytes(), "fname")
+            .map_err(|e| error("fname", format!("{}: {}", e.field, e.message)))?;
+        write_string(&mut obs.telID, tokens[4].as_bytes(), "telID")
+            .map_err(|e| error("site", format!("{}: {}", e.field, e.message)))?;
+        provenance.push(OriginalObservation {
+            index: obsn.len(),
+            line: index + 1,
+            name: tokens[0].into(),
+            raw_line: raw.into(),
+            frequency_mhz_text: tokens[1].into(),
+            sat_mjd_text: tokens[2].into(),
+            toa_error_us_text: tokens[3].into(),
+            site: tokens[4].into(),
         });
+        obsn.push(obs);
     }
     if obsn.is_empty() {
         return Err(TimingError::new(
@@ -116,5 +128,5 @@ pub(crate) fn read_timfile(tim: &SourceFile) -> Result<Vec<Observation>, TimingE
             "no FORMAT 1 observations supplied",
         ));
     }
-    Ok(obsn)
+    Ok((obsn, provenance))
 }

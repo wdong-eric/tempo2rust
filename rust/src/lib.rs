@@ -23,6 +23,9 @@ mod initialise;
 mod input;
 mod jpleph;
 mod longdouble;
+mod observation;
+#[cfg(test)]
+mod observation_storage_tests;
 mod observatory;
 #[cfg(test)]
 mod parameter_storage_tests;
@@ -169,7 +172,8 @@ pub struct TimingInput {
     pub(crate) parameter_store: tempo2::ParameterStore,
     pub(crate) parameter_metadata: BTreeMap<String, ParameterMetadata>,
     pub(crate) text_parameters: BTreeMap<String, ParameterLine>,
-    pub(crate) observations: Vec<Observation>,
+    pub(crate) observations: Vec<tempo2::SourceObservation>,
+    pub(crate) observation_metadata: Vec<OriginalObservation>,
     pub(crate) conventions: Conventions,
     // Kept out of the existing fixed-evaluation JSON contract. Fits expose controls explicitly.
     pub(crate) fit_controls: FitControls,
@@ -221,8 +225,32 @@ impl TimingInput {
     pub fn text_parameters(&self) -> &BTreeMap<String, ParameterLine> {
         &self.text_parameters
     }
-    pub fn observations(&self) -> &[Observation] {
+    /// Detached compatibility snapshot. Numeric values come from source storage;
+    /// original text remains provenance. Mutating the snapshot does not change input.
+    pub fn observations(&self) -> Vec<Observation> {
+        self.observations
+            .iter()
+            .zip(&self.observation_metadata)
+            .map(|(o, original)| Observation {
+                original: original.clone(),
+                sat_mjd: Scalar(o.sat.as_ref().expect("validated frontend SAT").clone()),
+                frequency_mhz: o.freq.expect("validated frontend frequency"),
+                toa_error_us: o.toaErr.expect("validated frontend uncertainty"),
+            })
+            .collect()
+    }
+    /// Complete read-only source records. The bounded frontend writes only sat,
+    /// freq, toaErr, fname and telID; remaining cells/bytes are explicitly unwritten.
+    pub fn source_observations(&self) -> &[tempo2::SourceObservation] {
         &self.observations
+    }
+    /// Current source site, independent of historical token provenance.
+    pub fn observation_site(&self, index: usize) -> Result<Vec<u8>, TimingError> {
+        let o = self
+            .observations
+            .get(index)
+            .ok_or_else(|| crate::clock_diagnostics::boundary("clock_observation_storage"))?;
+        observation::read_string(&o.telID, "telID")
     }
     pub fn conventions(&self) -> &Conventions {
         &self.conventions
@@ -278,7 +306,7 @@ impl Serialize for TimingInput {
         out.serialize_field("tim", &self.tim)?;
         out.serialize_field("parameters", &self.parameters())?;
         out.serialize_field("text_parameters", &self.text_parameters)?;
-        out.serialize_field("observations", &self.observations)?;
+        out.serialize_field("observations", &self.observations())?;
         out.serialize_field("conventions", &self.conventions)?;
         out.end()
     }

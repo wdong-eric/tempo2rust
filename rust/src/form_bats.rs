@@ -49,17 +49,15 @@ pub fn form_bats_all(
     input: &TimingInput,
     runtime: &mut RuntimeContext,
 ) -> Result<TerrestrialResult, TimingError> {
-    if input
-        .observations
-        .iter()
-        .any(|o| !o.original.site.eq_ignore_ascii_case("pks"))
-    {
-        return Err(TimingError::new(
-            &input.tim.path,
-            None,
-            "site",
-            "terrestrial evaluation requires PKS observations",
-        ));
+    for i in 0..input.observations.len() {
+        if !input.observation_site(i)?.eq_ignore_ascii_case(b"pks") {
+            return Err(TimingError::new(
+                &input.tim.path,
+                None,
+                "site",
+                "terrestrial evaluation requires PKS observations",
+            ));
+        }
     }
     for key in ["RAJ", "DECJ", "DM", "POSEPOCH", "DMEPOCH"] {
         if !input.parameter_metadata.contains_key(key) {
@@ -98,15 +96,11 @@ pub fn form_bats_all(
     let mut corrections = Vec::new();
     let mut bats = Vec::new();
     let mut warnings = Vec::new();
-    for obs in &input.observations {
+    for (obs, original) in input.observations.iter().zip(&input.observation_metadata) {
         let calculated = (|| {
-            let sat = &obs.sat_mjd.0;
-            let mut clock_observation = crate::clkcorr::ClockObservation {
-                sat: sat.clone(),
-                tel_id: obs.original.site.as_bytes().to_vec(),
-                clock_corr: 1,
-                ..Default::default()
-            };
+            let sat = crate::observation::read(&obs.sat, "sat")?;
+            let mut clock_observation = obs.clone();
+            clock_observation.seed_clock_caller();
             let (clock_steps, clock_tt) = crate::clkcorr::with_session(&runtime.root, |session| {
                 session.queries.clear();
                 // The selected timing input has no SAT jumps; direct source-field
@@ -121,7 +115,13 @@ pub fn form_bats_all(
                 crate::toa2utc::toa2utc(session, &[pulsar], &mut observations, 1)?;
                 clock_observation = observations[0].remove(0);
                 let total = crate::clkcorr::get_correction_tt(&clock_observation)?;
-                let steps = session.steps(&runtime.root, clock_observation.count as usize)?;
+                let steps = session.steps(
+                    &runtime.root,
+                    *crate::observation::read(
+                        &clock_observation.nclock_correction,
+                        "nclock_correction",
+                    )? as usize,
+                )?;
                 session.export_resources(&runtime.root, &mut runtime.resources);
                 warnings.extend(
                     session
@@ -239,7 +239,7 @@ pub fn form_bats_all(
                         * gravitational_time
                         * (radius / 499.00478364 * (1.0 + cos_theta)).ln();
                 }
-                freq_ssb = obs.frequency_mhz
+                freq_ssb = *crate::observation::read(&obs.freq, "freq")?
                     * 1.0e6
                     * (1.0 - dot_product(pulsar_direction, observatory_velocity_ssb));
                 if freq_ssb > 0.0 && time_correction.einstein_rate != 0.0 {
@@ -283,7 +283,7 @@ pub fn form_bats_all(
             {
                 return Err(TimingError::new(
                     &input.tim.path,
-                    Some(obs.original.line),
+                    Some(original.line),
                     "propagation",
                     "nonfinite correction",
                 ));
@@ -300,7 +300,7 @@ pub fn form_bats_all(
             let bat = (sat.clone() + clock_tt / 86400.0f64) + propagation;
             let scalar = |x| Scalar(Float::with_val(PRECISION_BITS, x));
             let correction = Corrections {
-                index: obs.original.index,
+                index: original.index,
                 clock_steps,
                 clock_tt_s: scalar(clock_tt),
                 clock_utc_steps,
@@ -326,7 +326,13 @@ pub fn form_bats_all(
         .map_err(|mut error: TimingError| {
             error.message = format!(
                 "observation {} ({}) at SAT {}: {}",
-                obs.original.index, obs.original.name, obs.sat_mjd, error.message
+                original.index,
+                original.name,
+                obs.sat
+                    .as_ref()
+                    .map(|v| v.to_string_radix(10, None))
+                    .unwrap_or_else(|| "unwritten".into()),
+                error.message
             );
             error
         })?;

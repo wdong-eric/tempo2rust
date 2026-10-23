@@ -328,3 +328,38 @@ This writes only `rust/verification/parameter_storage/` and build caches. Existi
 clock/JPL/M1/M2 runners retain their projections and tolerances. M2 must still exit
 nonzero with its four historical raw-mode-order diagnostics. See
 `PARAMETER_STORAGE_REPORT.md` for executed identities and scope.
+
+## Source observation storage (Assignment R)
+
+`TimingInput` now owns one complete `tempo2::SourceObservation` per input row.
+`source_observations()` exposes these records read-only. Fields keep the pinned
+header's names, signed integer types and fixed array capacities. `None` means
+source-unwritten for each scalar, array cell and byte; it does not mean zero.
+`SourceObservation::default()` is wholly unwritten. `Clone` copies full backing,
+including initializedness and inactive tails, into independent owned storage.
+This is whole-record assignment support, not a port of `copyPSR` or C layout.
+
+The strict FORMAT 1 adapter supplies only `sat`, `freq`, `toaErr`, `fname` and
+`telID`. The filename capacity is 501 bytes including NUL; the last fitting
+UTF-8 filename is 500 bytes. Oversized names return a storage error with the
+source line. Numeric parsing and the supported input grammar are unchanged.
+Original lines, indices and tokens are separate provenance. Evaluators use the
+source SAT/frequency/site; fitting weights use source `toaErr`. Output BAT and
+residual records do not implicitly initialize the input record.
+
+**API change:** `observations()` returns a fresh owned `Vec<Observation>`,
+previously `&[Observation]`. Bind the returned vector when retaining references
+to its entries. Editing it cannot modify the input. Existing JSON keys, values
+and original text remain unchanged. `observation_site(index)` reads the source
+site bytes without substituting historical provenance.
+
+Clock operations use the same source record. The bounded timing caller clones
+it and explicitly seeds its historical zero correction buffers/count and no
+SAT jumps; those caller inputs are not allocation defaults. Source reads are
+checked only when executed, preserving identity-clock early returns, signed
+counts, partial writes, destination suffix bytes and existing terminal sessions.
+
+Reproduce R's exact native assignment and M projection comparisons and all
+required regressions with `python3 ../validation/observation_storage_port/verify.py`
+from this directory. All new evidence is under `verification/observation_storage/`.
+See `OBSERVATION_STORAGE_REPORT.md` for identities, source maps and remaining scope.

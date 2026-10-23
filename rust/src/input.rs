@@ -21,15 +21,17 @@ pub fn load(par_path: &Path, tim_path: &Path) -> Result<TimingInput, TimingError
     let par = read_source(par_path)?;
     let tim = read_source(tim_path)?;
     let mut psr = read_parfile(&par)?;
-    let obsn = read_timfile(&tim)?;
-    let terrestrial = obsn[0].original.site != "@";
-    if obsn.iter().any(|o| (o.original.site != "@") != terrestrial) {
-        return Err(TimingError::new(
-            &tim.path,
-            None,
-            "site",
-            "mixed barycentric and terrestrial observations are outside the supported profiles",
-        ));
+    let (obsn, observation_metadata) = read_timfile(&tim)?;
+    let terrestrial = crate::observation::read_string(&obsn[0].telID, "telID")? != b"@";
+    for o in &obsn {
+        if (crate::observation::read_string(&o.telID, "telID")? != b"@") != terrestrial {
+            return Err(TimingError::new(
+                &tim.path,
+                None,
+                "site",
+                "mixed barycentric and terrestrial observations are outside the supported profiles",
+            ));
+        }
     }
     if terrestrial {
         psr.conventions.time_scale = "SAT: observatory clock; model/BAT/BBAT: TCB";
@@ -43,6 +45,7 @@ pub fn load(par_path: &Path, tim_path: &Path) -> Result<TimingInput, TimingError
         fit_controls: psr.fit_controls,
         text_parameters: psr.text_parameters,
         observations: obsn,
+        observation_metadata,
         conventions: psr.conventions,
     })
 }

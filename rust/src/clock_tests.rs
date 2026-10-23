@@ -2,15 +2,26 @@
 //! Fresh processes drive the production process session; no reset entry point.
 use crate::{
     PRECISION_BITS, TimingError,
-    clkcorr::{self, ClockObservation, ClockSession},
+    clkcorr::{self, ClockSession},
     clock_diagnostics::boundary,
     clock_text,
+    observation::{format_string, read_string},
     tabulated_function::TabulatedFunction,
+    tempo2::SourceObservation,
     toa2utc::{ClockPulsar, toa2utc},
 };
 use rug::Float;
 use serde_json::{Value, json};
 use std::{fs, path::Path};
+// L's explicit caller state; SourceObservation::default remains wholly unwritten.
+fn caller() -> SourceObservation {
+    let mut o = SourceObservation::default();
+    o.seed_clock_caller();
+    o.sat = Some(Float::with_val(PRECISION_BITS, 0));
+    o.telID.fill(Some(0));
+    o.clockCorr = Some(0);
+    o
+}
 fn number(x: f64) -> Value {
     if x.is_nan() {
         json!({"class":"NaN"})
@@ -42,13 +53,13 @@ fn state(s: &ClockSession) -> Value {
         if f.loaded{v["samples"]=json!(f.table.samples.len());v["header"]=json!(text(&f.table.header));}v
     }).collect::<Vec<_>>(),"sequences":s.sequences.iter().map(|q|json!({"from":text(&q.from),"to":text(&q.to),"from_key":text(&q.from_key),"to_key":text(&q.to_key),"start":number(q.start),"end":number(q.end),"indices":q.indices})).collect::<Vec<_>>(),"warnings":s.diagnostics.warnings,"errors":s.diagnostics.errors})
 }
-fn obs_state(o: &ClockObservation, before: Option<&ClockObservation>) -> Value {
-    json!({"sat":o.sat.to_string_radix(10,Some(40)),"sat_binary64":number(o.sat.to_f64()),"telID":text(&o.tel_id),"clockCorr":o.clock_corr,"count":o.count,"slots":o.corrections.iter().enumerate().map(|(i,c)|{
-        let mut v=json!({"value":number(c.correction),"destination_bytes":hex(&c.corrects_to)});
+fn obs_state(o: &SourceObservation, before: Option<&SourceObservation>) -> Value {
+    json!({"sat":o.sat.as_ref().unwrap().to_string_radix(10,Some(40)),"sat_binary64":number(o.sat.as_ref().unwrap().to_f64()),"telID":text(&read_string(&o.telID, "telID").unwrap()),"clockCorr":o.clockCorr,"count":o.nclock_correction,"slots":o.correctionsTT.iter().enumerate().map(|(i,c)|{
+        let mut v=json!({"value":number(c.correction.unwrap()),"destination_bytes":hex(&c.corrects_to.map(Option::unwrap))});
         if let Some(before)=before{
-            let old=&before.corrections[i];
-            let current=[c.correction.to_le_bytes().as_slice(),&c.corrects_to].concat();
-            let prior=[old.correction.to_le_bytes().as_slice(),&old.corrects_to].concat();
+            let old=&before.correctionsTT[i];
+            let current=[c.correction.unwrap().to_le_bytes().as_slice(),&c.corrects_to.map(Option::unwrap)].concat();
+            let prior=[old.correction.unwrap().to_le_bytes().as_slice(),&old.corrects_to.map(Option::unwrap)].concat();
             let mask:String=current.iter().zip(prior).map(|(a,b)|if *a==b{'0'}else{'1'}).collect();v["changed_bytes"]=json!(mask);
         }v
     }).collect::<Vec<_>>()})
@@ -72,7 +83,7 @@ fn probe() {
     let mut session = clkcorr::test_session();
     session.diagnostics.source_directory =
         std::env::var("CLOCK_SOURCE_LOCATION").unwrap().into_bytes();
-    let mut observations = vec![vec![ClockObservation::default(); 3]; 2];
+    let mut observations = vec![vec![caller(); 3]; 2];
     let mut pulsars = vec![ClockPulsar::default(), ClockPulsar::default()];
     let mut table = TabulatedFunction::default();
     let mut events = Vec::new();
@@ -97,12 +108,12 @@ fn probe() {
                 "index"=>s.ensure_initialized(integer(1))?,
                 "index_file"=>s.add_indexed_clock_file(Path::new(&a[1]),integer(2))?,
                 "obs"=>{
-                    let o=&mut observations[index(1)/3][index(1)%3];*o=ClockObservation::default();
-                    o.sat=Float::with_val(PRECISION_BITS,Float::parse(&a[2]).unwrap());o.tel_id=a[3].as_bytes().to_vec();o.clock_corr=integer(4);o.count=integer(5);
-                    for(i,c)in o.corrections.iter_mut().enumerate(){c.correction=900.0+i as f64;c.corrects_to.fill(b'~');clock_text::copy_string(&mut c.corrects_to[..31],format!("sentinel_{i:02}").as_bytes());}
+                    let o=&mut observations[index(1)/3][index(1)%3];*o=caller();
+                    o.sat=Some(Float::with_val(PRECISION_BITS,Float::parse(&a[2]).unwrap()));format_string(&mut o.telID,a[3].as_bytes());o.clockCorr=Some(integer(4));o.nclock_correction=Some(integer(5));
+                    for(i,c)in o.correctionsTT.iter_mut().enumerate(){c.correction=Some(900.0+i as f64);c.corrects_to.fill(Some(b'~'));format_string(&mut c.corrects_to[..31],format!("sentinel_{i:02}").as_bytes());}
                     result["observation"]=obs_state(o,None);
                 },
-                "slot"=>{let o=&mut observations[index(1)/3][index(1)%3];let c=&mut o.corrections[index(2)];c.correction=numeric(&a[3]);let bytes=a[4].as_bytes();if bytes.len()>=32{return Err(boundary("clock_correction_string_storage"));}clock_text::copy_string(&mut c.corrects_to,bytes);},
+                "slot"=>{let o=&mut observations[index(1)/3][index(1)%3];let c=&mut o.correctionsTT[index(2)];c.correction=Some(numeric(&a[3]));let bytes=a[4].as_bytes();if bytes.len()>=32{return Err(boundary("clock_correction_string_storage"));}format_string(&mut c.corrects_to,bytes);},
                 "load"=>{table.load(Path::new(&a[1]),&mut s.diagnostics)?;result["table"]=table_state(&table);},
                 "value"|"empty_value"=>{let x=if op=="value"{numeric(&a[1])}else{1.0};let value=table.get_value(x,&mut s.diagnostics)?;if op=="value"{result["query"]=number(x);}result["value"]=number(value);direct_queries.push(json!({"name":text(&table.name),"epoch":number(x),"value":number(value)}));},
                 "empty_start"=>result["value"]=number(table.start()?),"empty_end"=>result["value"]=number(table.end()?),
@@ -124,7 +135,7 @@ fn probe() {
                 },
                 "pulsar"=>{let p=&mut pulsars[index(1)];p.nobs=integer(2);p.njumps=integer(3);p.from=a[4].as_bytes().to_vec();p.to=a[5].as_bytes().to_vec();p.no_warnings=integer(6);},
                 "jump"=>{let p=&mut pulsars[index(1)];let i=index(2);p.jump_value[i]=numeric(&a[3]);p.jump_sat[i]=integer(4) as i8;p.jump_string[i]=a[5].as_bytes().to_vec();},
-                "members"=>observations[index(1)/3][index(1)%3].jumps=a[2..].iter().map(|x|x.parse().unwrap()).collect(),
+                "members"=>{let o=&mut observations[index(1)/3][index(1)%3];o.obsNjump=Some((a.len()-2) as i32);for(i,x)in a[2..].iter().enumerate(){*o.jump.get_mut(i).ok_or_else(||boundary("clock_jump_storage"))?=Some(x.parse().unwrap());}},
                 "toa"=>{
                     let before=observations.clone();toa2utc(s,&pulsars,&mut observations,integer(1))?;let mut rows=Vec::new();
                     for p in 0..index(1){for i in 0..pulsars[p].nobs as usize{rows.push(json!({"index":p*3+i,"before":obs_state(&before[p][i],None),"after":obs_state(&observations[p][i],Some(&before[p][i]))}));}}
@@ -250,9 +261,9 @@ fn process_provenance() {
     let replacement = b"# X Y\n0 7\n10 7\n";
     fs::write(&path, original).unwrap();
     fs::write(b.join("clock/edge.clk"), b"# A B\n0 99\n10 99\n").unwrap();
-    let mut obs = ClockObservation {
-        sat: Float::with_val(PRECISION_BITS, 5),
-        ..Default::default()
+    let mut obs = SourceObservation {
+        sat: Some(Float::with_val(PRECISION_BITS, 5)),
+        ..caller()
     };
     clkcorr::with_session(&a, |s| {
         s.get_clock_corrections(&mut obs, Some(b"A"), Some(b" a "), 0)?;

@@ -52,7 +52,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let input = load(&par, &tim)?;
     // Calculation and serialization finish before any successful JSON is published.
     let mut json = if fit {
-        let result = if input.observations()[0].original.site == "@" {
+        let result = if input.observation_site(0)? == b"@" {
             fit_barycentric(&input, &options)?
         } else {
             let root = runtime.ok_or("PKS observations require --runtime PATH")?;
@@ -65,7 +65,7 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         json
-    } else if input.observations()[0].original.site == "@" {
+    } else if input.observation_site(0)? == b"@" {
         serde_json::to_vec_pretty(&evaluate_barycentric(&input)?)?
     } else {
         let root = runtime.ok_or("PKS observations require --runtime PATH")?;
