@@ -30,7 +30,7 @@ def main():
  baseline=json.loads((OUT/'freeze/baseline.json').read_text())
  unchanged={p:meta['sha256']==baseline['rust'][p] for p,meta in modules.items() if meta['unsafe_lines']};assert all(unchanged.values())
  save(OUT/'modules.json',modules)
- artifacts={str(p.relative_to(OUT)):sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and not any(k in p.relative_to(OUT).parts for k in ['build','native','prior_0048']) and p.name not in ['delivery.json','artifacts.json']}
+ artifacts={str(p.relative_to(OUT)):sha(p) for p in sorted(OUT.rglob('*')) if p.is_file() and not any(k in p.relative_to(OUT).parts for k in ['build','native','prior_0048','prior_0052']) and p.name not in ['delivery.json','artifacts.json']}
  save(OUT/'artifacts.json',artifacts)
  save(receipt,dict(status='T checks pass; central acceptance pending; M2 unaccepted',executed_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),identity=started,cases_per_profile=30,events_per_profile=133,records_per_profile=sum(c['records'] for c in profiles[0]['cases']),controls_per_profile=len(profiles[0]['controls']),protected_files=n,unchanged_unsafe_files=unchanged,regression_receipt_sha256=sha(OUT/'R/delivery_checks.json'),routing_receipt_sha256=sha(OUT/'routing/receipt.json'),M2_failures=m2,commands_sha256=sha(OUT/'commands.json'),modules_sha256=sha(OUT/'modules.json'),artifacts_sha256=sha(OUT/'artifacts.json')))
  print('T complete; exact S/Q, native witnesses, controls and regressions pass; historical M2 failures retained.',flush=True)

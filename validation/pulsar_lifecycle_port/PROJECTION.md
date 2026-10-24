@@ -4,6 +4,14 @@ The freeze in `rust/verification/pulsar_lifecycle/freeze/` precedes production e
 
 Compare every corrected S case and ordered event, retaining complete record membership/order, typed values, knownness, fixed capacities, suffixes and symbolic owner/offset relationships. Map native layout/sizeof and logger address presentation separately; do not treat those as Rust layout equivalence. The native binary128 significand is 113 bits; finite decoding to the existing 128-significant-bit Rug value is exact. Signed zeros and the accepted nonfinite classes remain distinct. No numeric tolerance is introduced. Full covariance checks read every one of 100 million cells and all 10,000 row offsets.
 
+Decision 0052 requires recursive scalar-type equality: matching dictionary/list
+types never bypass traversal of their contents. The actual projected matrix_1_1
+case supplies an unchanged positive control and three rejected changes to its
+profile MAX_OBSN record: integer count 1 to true, count 1 to 1.0, and nested
+run-length count 1 to true. Source values and projection remain unchanged.
+The preceding delivery and its accepted malformed-type reproducer are preserved
+under `prior_0052/`; central's separate pre0052 evidence remains read-only.
+
 Q projection includes its `initial_and_helpers` initial packed value and all helper results; unrelated parser semantics remain out of scope. Supplemental native witnesses cover valid generic shifts, clamp boundaries and partially seeded embedded parameter links. Rust-only boundaries are explicit expected behavior, never native goldens.
 
 Observation/matrix/payload pointers map to typed context handles and offsets. Parameter replacement returns the actual prior buffers with retained embedded metadata; retaining this bundle is the one ownership path for old parameter allocations. Source string copying consumes known bytes through the first NUL and retains destination suffixes. Record assignment transfers knownness without semantic reads; forward shared-buffer copies observe each preceding assignment. Independent context Clone duplicates the owner graph; its matrices use immutable shared backing and detach on writes.

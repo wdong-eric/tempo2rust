@@ -33,7 +33,7 @@ def project_expected(expected):
  assert prior==len(expected['stdout'])
  return out
 def compare(a,b,path='$'):
- if a==b:return
+ # Equal containers can hide bool/int/float changes; always visit scalar leaves.
  assert type(a)==type(b),(path,'type',type(a),type(b))
  if isinstance(a,dict):
   assert a.keys()==b.keys(),(path,'membership',a.keys()^b.keys())
@@ -41,7 +41,7 @@ def compare(a,b,path='$'):
  elif isinstance(a,list):
   assert len(a)==len(b),(path,'length',len(a),len(b))
   for i,(x,y) in enumerate(zip(a,b)):compare(x,y,path+f'[{i}]')
- else:raise AssertionError((path,str(a)[:150],str(b)[:150]))
+ else:assert a==b,(path,str(a)[:150],str(b)[:150])
 def validate_launch(value,token,ih):
  assert value==dict(phase='launch',nonce=token,input_sha256=ih),'launch challenge/input identity'
 

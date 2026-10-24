@@ -1,7 +1,7 @@
 """Comparator and live identity rejection controls over complete accepted S records."""
 import copy,gzip,json
 from pathlib import Path
-from run import ROOT,OUT,identity,project,compare,save,validate_launch
+from run import ROOT,OUT,identity,project,project_expected,compare,save,validate_launch
 
 def run(profile,exe,ident):
  results=[]
@@ -19,6 +19,14 @@ def run(profile,exe,ident):
   r=record(events,path,phase);r.clear();r.update(path=path,state='unwritten')
  def change_byte(events,path,phase=None):
   r=record(events,path,phase);n,h=r['runs'][0];b=bytearray.fromhex(h);b[0]^=1;r['runs'][0]=[n,b.hex()]
+ matrix=project_expected(json.load(gzip.open(ROOT/'validation/pulsar_lifecycle/expected/matrix_1_1.json.gz')))
+ compare(matrix,matrix);results.append(dict(name='matrix_1_1 unchanged positive',status='accepted'))
+ count=record(matrix,'MAX_OBSN','profile')
+ assert type(count['count']) is int and count['count']==1
+ assert type(count['runs'][0][0]) is int and count['runs'][0][0]==1
+ mutation('matrix_1_1 count_boolean',lambda x:record(x,'MAX_OBSN','profile').update(count=True),matrix)
+ mutation('matrix_1_1 count_float',lambda x:record(x,'MAX_OBSN','profile').update(count=1.0),matrix)
+ mutation('matrix_1_1 run_count_boolean',lambda x:record(x,'MAX_OBSN','profile')['runs'][0].__setitem__(0,True),matrix)
  mutation('omitted event',lambda x:x.pop(1));mutation('permuted event',lambda x:x.reverse());mutation('omitted field',lambda x:x[1]['state'].pop(3));mutation('permuted fields',lambda x:x[1]['state'].reverse())
  mutation('known to unwritten',lambda x:unwritten(x,'destination.offset','after_copy_0'))
  mutation('lost string suffix',lambda x:record(x,'destination.name','after_copy_0')['runs'].pop())
