@@ -91,3 +91,7 @@ Deliver `validation/time_ephemeris/REPORT.md`, complete source/branch/caller/lif
 Protect accepted references and both independent repositories. T's active `rust/` and `validation/pulsar_lifecycle_port/`, U's `validation/terrestrial_resources/`, and central documents are concurrent work outside V's immutable membership. Use accepted Git revisions for fixed Rust context rather than treating T's working files as an oracle.
 
 No Rust edits, source repairs, new numerical dependencies/backends/tolerances or milestone decisions are delegated. General planetary ephemeris/CALCEPH implementations, astrometry/site transformations, BAT/propagation assembly, broader file-fault/platform/concurrency behavior and the unresolved M2 gate remain separate work. Return concrete out-of-contract findings to central while continuing independent cases.
+
+## Dispatch
+
+Created **Assignment V: TEMPO2 time ephemeris reference**, chat `01a16bdb-8e82-71a0-b823-67399b391ae0`, in the local `rustify-tempo2` project from release commit `8e56df0`. An immediate snapshot confirms an active reference turn. T and U received V's separate ownership boundary; T remains the sole Rust owner. The dispatch preserves policy 0039 and central acceptance authority. This is active reference work, not accepted evidence.

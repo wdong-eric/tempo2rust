@@ -139,8 +139,9 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment S: TEMPO2 pulsar lifecycle reference | `01a16912-7fd8-7392-9c1e-79436775676e` | Accepted at `58ddc07` under decision 0044; ownership closed |
 | Assignment T: Rust pulsar state and lifecycle | `01a16bca-89a0-7cd0-a371-9555df226d7d` | Dispatched from `d350727` under decision 0045; sole Rust owner; delivery and central acceptance pending |
 | Assignment U: TEMPO2 terrestrial resource reference | `01a16bd2-a746-7871-9dfb-52a76ae73c64` | Dispatched from `43001af` under decision 0046; owns only `validation/terrestrial_resources/`; central review pending |
+| Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Dispatched from `8e56df0` under decision 0047; owns only `validation/time_ephemeris/`; central review pending |
 
-**Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T.
+**Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
 
 ## Shared working design
 
