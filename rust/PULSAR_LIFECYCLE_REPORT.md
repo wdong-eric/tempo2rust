@@ -1,6 +1,6 @@
 # Assignment T: canonical pulsar state and lifecycle
 
-Implementation under decision 0045, from release `d3507274e9ee9a7c4cf2bb3b2f9132d282694ebf`. Central retains design and acceptance. This report does not accept T or M2.
+Implementation under decision 0045, with verification routing corrected by 0050, from release `d3507274e9ee9a7c4cf2bb3b2f9132d282694ebf`. Central retains design and acceptance. This report does not accept T or M2.
 
 ## Delivered behavior
 
@@ -56,7 +56,11 @@ From the workspace root:
 python3 validation/pulsar_lifecycle_port/verify.py
 ```
 
-This runs formatting/Clippy, corrected S comparison and controls in debug/release, Q and supplemental native witnesses, the isolated diagnostic-state check, then R's verifier with `TEMPO2_OBSERVATION_VERIFICATION_ROOT` beneath T. R dispatches O and its unchanged clock/glob/provenance, JPL, M1a/M1b and complete M2 gates. Only R's output-root selection changed; its comparison, fixtures, projection and expectations are unchanged. Decision 0048 approves that exact runner identity, `5f0cb7bfa0c2ebc8606c789e157ab96b7d5fa248d54703e01f9c5c7495e0c4d6`, which remains unchanged at delivery. The runners use the existing crate-local Cargo/GMP caches, locked offline dependencies, C locale and serial ordinary tests.
+This runs formatting/Clippy, corrected S comparison and controls in debug/release, Q and supplemental native witnesses, the isolated diagnostic-state check, then T's `regressions.py`. That caller stages R's verifier beneath T and R dispatches O and its unchanged clock/glob/provenance, JPL, M1a/M1b and complete M2 gates. The runners use the existing crate-local Cargo/GMP caches, locked offline dependencies, C locale and serial ordinary tests.
+
+Decision 0050 supersedes 0048's proposed exception. The live `validation/observation_storage_port/run.py` is restored byte-for-byte to accepted revision `04918d5`, SHA-256 `7d6424654a666d3852255bd9264ba0fbb88ba3c6e57f7bf717da4087a6b10529`. All 13 top-level R harness files are copied to T's ignored `routing/observation_storage_port/`. Only the copied run.py's ROOT and OUT assignments change: ROOT names this repository and OUT names T's `R/` output directory. Reversing those substitutions must recover the original bytes. All other copied files, including comparison code, fixtures, projection, membership and expectations, remain byte-identical. Exact accepted and staged identities, the unified routing diff and before/after preservation checks are recorded under `routing/`. No original R source or accepted evidence is written during verification.
+
+The executed staged run.py has SHA-256 `7b0a951a4429b16ff594276a8c7978d8fa9f9ce837356094e91f186f8c2f32f8`, distinct from the restored original above. The one-line unified diff is `routing/run.diff`, SHA-256 `10d9b428e916fb4a6c2c17b3e327c9192c72d28713d694979aae245af59efb01`. R's copied `verify.py` and `native.py` remain identical to revision `04918d5`, respectively `e3e56140a9b06635e9d3fe07873e33c0a1bd87e6c1171b614e901aede9c29866` and `d10a35686b2a6cf0629b413d52027cf5608f7b91a326ee1fb51cb61f0680d290`. T checks these accepted identities before staging and checks every original and staged file again after the regression chain.
 
 Individual gates:
 
@@ -65,12 +69,14 @@ python3 validation/pulsar_lifecycle_port/run.py --profile debug
 python3 validation/pulsar_lifecycle_port/run.py --profile release
 python3 validation/pulsar_lifecycle_port/supplement.py --profile debug
 python3 validation/pulsar_lifecycle_port/supplement.py --profile release
-TEMPO2_OBSERVATION_VERIFICATION_ROOT="$PWD/rust/verification/pulsar_lifecycle/R" RUST_TEST_THREADS=1 python3 validation/observation_storage_port/verify.py
+python3 validation/pulsar_lifecycle_port/regressions.py
 ```
 
 The original freeze is not regenerated. `freeze.py` refuses overwrite. It preserves complete field/type/extent/knownness/ownership and routine-body maps, current caller sites, S/Q membership, raw source hashes, baseline Rust hashes, both nested-repository identities and 8,141 protected-file hashes. U/V's active directories and concurrent central documents are outside its membership. Raw pinned Git blobs are authoritative; clean checkout bytes can differ because of Git `$Id$` expansion.
 
 Local evidence root: `rust/verification/pulsar_lifecycle/`. Its `.gitignore` keeps all reproducible payloads, native staging and logs out of Git. The exact pre-edit maps are under `freeze/`; complete challenged per-case output is under `debug/` and `release/`; native helper/link runs and compiled mutations are under each profile's `native/`; required regressions are under `R/`. `commands.json`, `artifacts.json`, `modules.json` and `delivery.json` bind executed commands, source/compiler/runner/input/executable identities, artifact hashes and outcomes. No generated JSON/JSONL, compressed evidence, binaries or raw source staging is committed.
+
+The entire completed run using the superseded 0048 routing is retained under `prior_0048/`. All 518 indexed artifacts preserved their hashes during relocation, and its historical delivery receipt remains `a08aecb21ff6470d2523fddd33bbd2c1e62c02fbf7df017c75d238e9e5d85c98`. Absolute paths inside those receipts describe their original execution locations. That bundle is historical evidence, excluded from the current artifact index; the original pre-production freeze remains unchanged.
 
 The S comparison retains all 30 cases and 133 ordered events. Only four native ABI profile fields (sizeof/layout/significand presentation) are separated from typed state comparison. All source state records, fixed tails, owner offsets, knownness and action boundaries remain checked. Every exposed full covariance visits all 100 million cells and all 10,000 actual row offsets. Finite binary128 representation is compared exactly, without decimal roundtrips or tolerance; additional Rust decoding/assignment checks cover subnormal values, signed zero and nonfinite classes.
 
@@ -78,7 +84,7 @@ Q coverage consists of its nine accepted helper actions and initial packed value
 
 ## Verification status and limits
 
-The complete verifier exited zero on 24 October 2026. Its recorded repository HEAD is `a738a8e4fc782f0f008755fc9ff1e62125de2acb`; source-byte checks bind the run independently of concurrent central documentation commits. T's implementation commits are `08eeae3` (freeze/generator), `c6de1fc` (canonical state and consumers), `aa29269` (diagnostic-state isolation) and `2887220` (harness, native witnesses and R routing). This report and the README are documentation-only additions after that run.
+The complete verifier exited zero on 24 October 2026 using the restored accepted R sources and T-owned staging. Its recorded repository HEAD is `f179ce5f8d2f5418c29d26413349e0ea60230420`; source-byte checks bind the run independently of concurrent commits. T's implementation commits are `08eeae3` (freeze/generator), `c6de1fc` (canonical state and consumers), `aa29269` (diagnostic-state isolation), `2887220` (harness and native witnesses) and `8daa4aa` (0050 restoration and disposable regression staging). The original 0048 routing in `2887220` is reversed by `8daa4aa`. All 51 Rust source/build inputs and both Rust test executables are byte-identical to the preserved prior run. This report update is documentation-only.
 
 | Check | Final observed result |
 | --- | --- |
@@ -92,7 +98,7 @@ The complete verifier exited zero on 24 October 2026. Its recorded repository HE
 | Clock / glob / provenance / JPL | All required gates pass. Clock comparison has zero finite difference; JPL and comparator mutation gates pass. |
 | M1a / M1b | Pass, with M1b exercised through the complete M2 run. |
 | M2 | Completes with exit 1 and exactly the four historical failure strings; no new failure or acceptance. |
-| Preservation | All 8,141 frozen protected files unchanged. Both independent repositories remain clean at their pinned HEADs. All three existing unsafe-containing Rust files are byte-identical to the freeze. |
+| Preservation | All 8,141 frozen protected files unchanged. The restored accepted R runners and all 13 original/staged harness files pass exact identity checks. Both independent repositories remain clean at their pinned HEADs. All three existing unsafe-containing Rust files are byte-identical to the freeze. |
 
 Rust toolchain: `rustc 1.97.1 (8bab26f4f 2026-07-14)`, host `aarch64-apple-darwin`, LLVM 22.1.6. Compiler SHA-256 is `210df6794001b73ec3d453878707fa1e0bdcb63c427024a6e6574bbe5615a4da`; Cargo SHA-256 is `7672ead309d505577c018fff2cafb3433601f073e38cbe87359ac1f7b944bbf5`. Supplemental native builds use `/opt/homebrew/Cellar/gcc/16.2.0/bin/g++-16`, SHA-256 `b1f98e3089a1f165872b09e8628e4c92a315f5bc6e9a61ef85aa0c1c2887f363`; its recorded compiler-backend SHA-256 is `9d8bd8a5840699af210fd5f46e743031005a7a5bb8bc00080b99c02fbcd0a62b`.
 
@@ -112,15 +118,18 @@ The following paths are relative to `rust/verification/pulsar_lifecycle/`. These
 | `freeze/baseline.json` | `40b10e54ab938b3af655c3bcef315a6c1032cc67833b2af36c074d2d77bdb004` |
 | `freeze/membership.json` | `44e73ce0f8c91386da7ab3719f78db935451eba8db4ff98cee75e9d0fca7f7e8` |
 | `freeze/protected.json` | `c726022712e180bcd3e830db3781b348b7d2e0b13f15cdfe9e266ffbb807bc8b` |
-| `debug/direct.json` | `0689a88eaf9885e035b374b009913e5cd807a8a588dcb0b4904f3a9df43539d6` |
-| `release/direct.json` | `7d946685b2b16bc91cca778c4dc2cc3c2cfd3b99df5022aa7c50f690d2b088bb` |
-| `debug/helpers/receipt.json` | `ad8819a60b87caa518651fafc1e466c3c989ec139742794938d1da9e11007a11` |
-| `release/helpers/receipt.json` | `5de02774b019d12dc63c39228b73e7acedf9a05ba99494e84e0cbb138646f49f` |
-| `R/delivery_checks.json` | `d2010268a5e3ea26c4f03d1c2a2c57edfbb1ed37c67dd877f77caeb8a4451d1f` |
-| `commands.json` | `9ac56d32c411130fd663185557229d5d564dcbfa8970a1193f56b41ec31ba175` |
+| `debug/direct.json` | `cb3225c115debeedf05361ababee3f0633628322ce0a2191ce83eaee9fb74358` |
+| `release/direct.json` | `f9a7d409cb9eeecbfd14da74f543667006018700b574f7aca11ad5c21abd1e34` |
+| `debug/helpers/receipt.json` | `561ff4baaed9c99ed6a5ee84d39efe82419478af7935aaf77d15dcbf28d3d34c` |
+| `release/helpers/receipt.json` | `6b502ac64bc84e316b2a3122571784c35926882e02b8169e3c7e1cc00cd191ec` |
+| `R/delivery_checks.json` | `720ec5e381673d0d5fce2244485826d44f8f6f9a6654253978d1e838784caeef` |
+| `routing/identity.json` | `32ac144e647a44c2c8c03df0a84d560f8c48de520fa9072517178cca8819af17` |
+| `routing/run.diff` | `10d9b428e916fb4a6c2c17b3e327c9192c72d28713d694979aae245af59efb01` |
+| `routing/receipt.json` | `dab840eed25133808d6504947d4b2431b3e218231e0e8384d813f4d4414ea871` |
+| `commands.json` | `7db57b6a8aad5123994e26a096b547d1412dcf819b94328cd32289832d3a3b75` |
 | `modules.json` | `19cca83788ff7073c9388e72e456278e0133ccac0a26afad6dfcbd41dc4a6d1c` |
-| `artifacts.json` | `8990d69bf7b4fbf30410fb19c4ae7c53e754481d41212961f667543738624d6b` |
-| `delivery.json` | `a08aecb21ff6470d2523fddd33bbd2c1e62c02fbf7df017c75d238e9e5d85c98` |
+| `artifacts.json` | `f8b5058a7f7d1c97b3f23776f353d6ea2931a119db9e72b5600922c66c15349e` |
+| `delivery.json` | `ac7b19e79ad308f978ace5f785371224dc3e0b6a66211ce37926b7a1a78708f5` |
 
 M2 remains unaccepted. The complete strings in `R/O/regressions/m2/open_gate_failures.json` and `delivery.json` compare equal to the original `rust/verification/m2/open_gate_failures.json`: debug and release each retain the dependent-column raw retention-order mismatch `[True, False] != [False, True]` and the singular-value-index-zero difference of `3.464101615137754594384695270973822809990706901186851371815329282255643829069923` against threshold `3.46410161513775459438469527097382281E-10`. No ordering repair or tolerance waiver is part of T. Central acceptance of T remains pending.
 
