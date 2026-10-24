@@ -92,6 +92,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0051](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0051-terrestrial-resource-reference-acceptance.md) accepts U at `051d2ea` with sources `2cd8c91`, after central fresh replay of 130 cases / 2,256 events, 29 controls and thirteen compiled mutations, plus coverage/observer/history audits. U's ownership closes. Its native-invalid, host and defined coverage limits remain open.
 
+[Decision 0052](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0052-lifecycle-comparator-type-correction.md) returns a bounded comparator correction to T. Fresh central debug/release lifecycle checks pass, but the current equality shortcut accepts nested boolean/float substitutions for integer counts. T remains sole Rust owner; acceptance requires recursive type checking and demonstrated rejection controls.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -143,7 +145,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment Q: TEMPO2 specialized PAR reference | `01a168e7-6a90-7d63-b906-362363a4c15f` | Accepted at `bb7e629` under decision 0043; ownership closed |
 | Assignment R: Rust observation storage foundation | `01a16903-61ef-7651-a9c9-41e6c8943e41` | Delivery `04918d5` accepted by decision 0041; ownership window closed |
 | Assignment S: TEMPO2 pulsar lifecycle reference | `01a16912-7fd8-7392-9c1e-79436775676e` | Accepted at `58ddc07` under decision 0044; ownership closed |
-| Assignment T: Rust pulsar state and lifecycle | `01a16bca-89a0-7cd0-a371-9555df226d7d` | Dispatched from `d350727` under decision 0045; sole Rust owner; delivery and central acceptance pending |
+| Assignment T: Rust pulsar state and lifecycle | `01a16bca-89a0-7cd0-a371-9555df226d7d` | Delivery `4225f48` reviewed; comparator correction 0052 pending; sole Rust owner; central acceptance pending |
 | Assignment U: TEMPO2 terrestrial resource reference | `01a16bd2-a746-7871-9dfb-52a76ae73c64` | Accepted at `051d2ea` under decision 0051; ownership closed |
 | Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Dispatched from `8e56df0` under decision 0047; owns only `validation/time_ephemeris/`; central review pending |
 
