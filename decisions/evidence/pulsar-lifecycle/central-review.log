@@ -1,0 +1,49 @@
+PASS exact copied caller sources and fresh stable profile
+natural_-7 0 4
+natural_0 0 4
+natural_1 0 4
+natural_9 0 4
+wrapper_0 0 3
+wrapper_1 0 4
+wrapper_2 0 5
+wrapper_debug_cvs 0 4
+seeded_reinitialise 0 6
+allocate_-3 0 6
+allocate_0 0 6
+allocate_1 0 6
+allocate_5 0 6
+destroy_constraints 0 4
+destroy_null_observation 0 4
+matrix_1_1 0 5
+matrix_2_3 0 5
+matrix_3_2 0 5
+matrix_4_4 0 5
+matrix_uinv 0 5
+matrix_zero_rows -6 2
+matrix_zero_cols -6 2
+copy_negative 0 4
+copy_zero 0 4
+copy_partial 0 4
+copy_last 0 4
+copy_shared 0 4
+copy_forward_overlap 0 4
+copy_backward_overlap 0 4
+copy_repeat 0 6
+mutation rejected: initial_nits state[2][76620].runs[0][1]: value differs '01000000' / '02000000'
+mutation rejected: omitted_control_write state[2][77124].runs[0][1]: value differs '0b000000' / '00000000'
+mutation rejected: name_suffix state[2][79130].runs[3][1]: value differs '43' / '4c'
+mutation rejected: matrix_columns state[2][1].runs[0][1]: value differs '0300000000000000' / '0200000000000000'
+mutation rejected: matrix_stride state[2][2].runs[1][1]: value differs '0300000000000000' / '0200000000000000'
+mutation rejected: observation_order state[2][158584].runs[0][1]: value differs '00000000000000000000000000f20340' / '00000000000000000000000000010440'
+mutation rejected: inclusive_jumps state[2][155674].runs: length differs
+mutation rejected: destination_fd_count state[2][155682].runs[0][0]: value differs 4 / 2
+mutation rejected: omitted_fd_count_copy state[2][155680].runs[0][1]: value differs '03000000' / '01000000'
+mutation rejected: zero_covariance state[2][3].runs: length differs
+mutation rejected: reset_linkTo_allocate state[4][3].runs[0][1]: value differs '0b000000' / '00000000'
+mutation rejected: reset_linkTo_initialise state[2][6].runs[0][1]: value differs '0b000000' / '00000000'
+mutation rejected: reset_linkFrom_allocate state[4][4].runs[0][1]: value differs '0b000000' / '00000000'
+mutation rejected: reset_linkFrom_initialise state[2][7].runs[0][1]: value differs '0b000000' / '00000000'
+PASS 25 controls and 14 compiled mutations
+PASS: 24,000 retained-link records and four initial extra-covariance records; all other projected state unchanged
+PASS 30 cases 133 events 5329662 field records 25 controls 14 post-profile mutation witnesses
+OUTPUT /private/tmp/tempo2-pulsar-lifecycle-central-wl14pblw
