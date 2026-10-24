@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 24 October 2026 for I/J/K/L/M/N/O/P/Q/R/S acceptance and the generated-output policy. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 24 October 2026 for I/J/K/L/M/N/O/P/Q/R/S acceptance, the generated-output policy and T release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, with source behavior preserved and central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -80,6 +80,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0044](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0044-pulsar-lifecycle-reference-acceptance.md) accepts S's corrected lifecycle reference at `58ddc07`, closes both 0042 findings and closes S's ownership. Central freshly passed all 30 cases / 133 events / 5,329,662 field records, 25 controls and fourteen mutation/witness runs, plus raw/delta and correction audits. A separate whole-pulsar Rust contract is still required.
 
+[Decision 0045](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0045-pulsar-lifecycle-contract-and-t-release.md) releases T as sole Rust owner for complete pulsar state, twelve lifecycle/copy/matrix routines, ten packed-polynomial helpers and canonical integration of current consumers. It fixes ownership/alias, unwritten-state, matrix, clone, callback and frontend boundaries. Accepted S/Q evidence is read-only; generated outputs stay local under 0039. M2 remains unaccepted.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -104,8 +106,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [Q Specialized PAR reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/17-specialized-par-reference.md) | `validation/par_specialized/` only | Accepted in decision 0043 at `bb7e629`; ownership closed | `REPORT.md`, complete released branch/caller maps and exact native specialized PAR state/stream evidence |
 | [R Observation storage Rust foundation](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/18-observation-storage-rust.md) | Delivered local evidence read-only; ownership window closed | Accepted by decision 0041 at `04918d5`; production `b7a4d17` | `rust/OBSERVATION_STORAGE_REPORT.md`, complete 95-field/caller projection, consolidated state and unchanged regressions |
 | [S Pulsar lifecycle reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/19-pulsar-lifecycle-reference.md) | `validation/pulsar_lifecycle/` only | Accepted in decision 0044 at `58ddc07`; ownership closed | `REPORT.md`, complete pulsar/nested-state and native initialization/copy/lifetime evidence |
+| [T Pulsar state and lifecycle Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/20-pulsar-lifecycle-rust.md) | `rust/` and `validation/pulsar_lifecycle_port/`; narrowly permitted R output routing | Released by decision 0045 after R/S closure; sole Rust owner | `rust/PULSAR_LIFECYCLE_REPORT.md`, complete state/lifetime/caller projection and unchanged regressions |
 
-A through S have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O/R's bounded Rust transfers and K/M/N/P/Q/S's bounded references are accepted with their ownership windows closed. No subsequent Rust owner is released; the whole-pulsar storage/lifecycle contract is next. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+A through S have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O/R's bounded Rust transfers and K/M/N/P/Q/S's bounded references are accepted with their ownership windows closed. T is now the sole Rust owner under decision 0045, implementing whole-pulsar storage/lifecycle and current-consumer integration. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
