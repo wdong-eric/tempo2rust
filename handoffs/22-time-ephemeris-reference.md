@@ -1,5 +1,7 @@
 # Assignment V: TEMPO2 time ephemeris reference
 
+**Current amendment:** [Decision 0053](../decisions/0053-small-upstream-bug-fixes-during-transfer.md) permits small demonstrated source-bug fixes in Rust implementation assignments. V still records the unchanged pinned native behavior; do not patch its original oracle or reinterpret its reference contract. Report demonstrated bugs for the later Rust handoff. U is now accepted and read-only under 0051.
+
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, policies 0008/0012/0039, accepted J/M/N/S context and [contract 0047](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0047-time-ephemeris-reference-stage.md). Inspect unchanged raw ifteph.C/.h, tt2tdb.C and read_fortran.h before defining fixtures. Central owns later Rust contracts and acceptance.
 
 You are not alone in the workspace. Own only new `validation/time_ephemeris/`. T owns Rust and `validation/pulsar_lifecycle_port/`; U owns `validation/terrestrial_resources/`. Preserve their work, all accepted reference/evidence/projection files, both nested repositories and central documents. Exclude evolving T/U/central paths from immutable evidence membership.
