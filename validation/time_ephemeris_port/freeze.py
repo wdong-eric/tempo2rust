@@ -1,4 +1,4 @@
-"""Y immutable accepted inputs; central/Z evolution is deliberately not frozen."""
+"""Y immutable accepted inputs; central/Z/AB evolution is deliberately not frozen."""
 import hashlib,json,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
@@ -29,7 +29,7 @@ if __name__=='__main__':
     for base in ('validation','rust/verification'):
         for p in (ROOT/base).rglob('*'):
             parts=p.relative_to(ROOT).parts
-            if p.is_file() and not any(v in parts for v in ('time_ephemeris_port','planetary_ephemeris','.git','target','.cargo-home','__pycache__')):
+            if p.is_file() and not any(v in parts for v in ('time_ephemeris_port','planetary_ephemeris','propagation','.git','target','.cargo-home','__pycache__')):
                 # Reference build/dependency trees are pinned by their own Git and
                 # accepted manifests. Protect authored/evidence files, not rebuild trees.
                 if 'build' in parts and 'terrestrial_resources_port' not in parts:continue

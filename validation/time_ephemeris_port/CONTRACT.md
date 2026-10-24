@@ -1,6 +1,6 @@
 # Assignment Y frozen transfer contract
 
-Frozen before production changes at central release 5920affdcb2de05df7b2101c6f53455e9ff31d1a. W delivery bd290cc163ad706d8044d5deb2a637c9ed7803e0, final production eb2a589. V delivery f179ce5, authored sources 573d667; ordinary oracle outputs/reference-corrected only. Raw TEMPO2 fda6ad4a9753ad7dc5d291406f2f310a9161423f; A2 7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572. Central/Z are evolving and excluded from immutable membership. No changes to accepted runners or evidence are authorized.
+Frozen before production changes at central release 5920affdcb2de05df7b2101c6f53455e9ff31d1a. W delivery bd290cc163ad706d8044d5deb2a637c9ed7803e0, final production eb2a589. V delivery f179ce5, authored sources 573d667; ordinary oracle outputs/reference-corrected only. Raw TEMPO2 fda6ad4a9753ad7dc5d291406f2f310a9161423f; A2 7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572. Central/Z/AB are evolving and excluded from immutable membership. No changes to accepted runners or evidence are authorized.
 
 ## Counterparts and dependency order
 
@@ -246,3 +246,41 @@ so three initialized coefficients suffice. An additional tt history sets
 p0.nobs=1, p1.nobs=4 with all four p0 slots initialized and FB90 plus supplied
 CALCEPH enabled on p1; reads through p0's unused logical slots remain valid.
 These extensions are declared before their native execution.
+
+## Executed ownership projection (before corrected Rust replay)
+
+The four native terminal cases ifte_short, ifte_truncate, fb_before and fb_after
+retain a live FILE in their native exit event. Rust releases the failed owner;
+only that final event's corresponding owner changes to released-on-error and
+position/eof/error disappear because no stream remains to inspect. The native
+raw event and its three integer observations remain in the separate corrected
+native artifact. All other fields, action/event membership, diagnostics and
+status continue to compare. The probe explicitly reports actual release rather
+than retaining a fictional live owner. No numerical field is exempted.
+
+Binary64 hexadecimal text and binary128 decimal text are redundant presentations
+of the independently retained typed IEEE bit fields. The comparison projects
+those textual representations away in both engines; finite bits, zero signs and
+nonfinite bits/classes remain exact. Production Rug arithmetic is always 128;
+only the exporter rounds to 113 for IEEE binary128 serialization.
+
+
+## Successor routing and applicable mutation controls
+
+Decision 0063's evolving `validation/propagation/` was absent at the original
+freeze and is explicitly excluded from the generator. The original 23,666-file
+manifest is unchanged. Accepted X remains protected; AA is not released.
+
+Y runs eleven unchanged compiled V mutations against the corrected native
+baseline. Two are explicitly adapted: CALCEPH reverts the current-pulsar fix;
+FB removes the content-change reset. V's forced-reload mutation no longer
+separates the corrected fixture because content changes already invalidate its
+cache. Its original witness stays protected, while the Y reversion demonstrates
+the corrected contract. All thirteen controls retain actual compiled-source,
+executable and fresh-launch identities. They do not change production behavior.
+
+Current successful profile receipts are published only after all direct cases
+and controls finish. A new invocation removes the selected profile's stale
+success/control pointers before argument validation or compilation; prior direct
+receipts retain separate history identities. Earlier failed development logs
+remain diagnostic evidence, never final-source passing receipts.

@@ -126,7 +126,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let bad = out.join("outside-coverage.tim");
     fs::write(&bad, "FORMAT 1\noutside 1400 80000 10 pks\n")?;
     let failure = evaluate_terrestrial(&load(&par, &bad)?, &mut runtime).unwrap_err();
-    assert!(failure.to_string().contains("IF99"));
+    assert_eq!(failure.field, "source_exit");
+    assert!(failure.message.contains("IFTE_short_record"));
+    assert!(failure.path.ends_with("ephemeris/TIMEEPH_short.te405"));
     let after = evaluate_terrestrial(&input, &mut runtime)?;
     assert_eq!(before, serde_json::to_value(&after.timing.observations)?);
     assert_eq!(input_before, serde_json::to_vec(&input)?);
