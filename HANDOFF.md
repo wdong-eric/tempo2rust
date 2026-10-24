@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 24 October 2026 for T/U/V acceptance, W implementation and X reference release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 24 October 2026 for T/U/V/X acceptance, W implementation and Y contract preparation. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, preserving established behavior except for documented, tested corrections of demonstrated bugs under decision 0053, with central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -16,7 +16,7 @@ The active objective is to transfer the TEMPO2 core in staged implementation cha
 
 Workspace: `/Users/Eric.Dong/Downloads/tempo2rust`.
 
-The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted within their declared historical scope. E is delivered; M2 remains unaccepted at the exact SVD order gate. F/G/H/J/K/M/N/P/Q/S/U/V evidence is accepted within its declared planning/reference scope. I's JPL, L's clock/table, O's parameter-storage, R's observation-storage and T's pulsar-state/lifecycle Rust transfers are accepted within their bounded scopes.** Later decisions govern current ownership and preservation requirements.
+The reference checkout is `/Users/Eric.Dong/Downloads/tempo2rust/tempo2`, from `https://github.com/wdong-eric/tempo2.git`, pinned to `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and still clean. A delivered the original binary128 reference at `5289797`; A2 delivered the corrected reference at `7795d53`; B delivered the precision study. C delivered the Rust barycentric library and CLI, including the TEMPO2 naming pass, at project commit `49e122c3648e5cb91bae17233a062a444a10f9e4`. **M0, M1a and M1b are accepted within their declared historical scope. E is delivered; M2 remains unaccepted at the exact SVD order gate. F/G/H/J/K/M/N/P/Q/S/U/V/X evidence is accepted within its declared planning/reference scope. I's JPL, L's clock/table, O's parameter-storage, R's observation-storage and T's pulsar-state/lifecycle Rust transfers are accepted within their bounded scopes.** Later decisions govern current ownership and preservation requirements.
 
 `tempo2/` and `validation/reference/` are independent Git repositories. The primary project repository tracks the central documents, Rust crate and precision study, and ignores those two nested repositories. E's new fitting-validation directory will also be tracked by the primary repository. The accepted D delivery is now committed as `3f08a8c` (implementation), `31d55bf` (validation) and `87f3933` (design/acceptance documentation), preserving the report/source-manifest hashes in decision 0006. Both independent repositories remain clean. Preserve existing histories and do not flatten or implicitly stage either nested repository. Inspect live Git status before starting new work.
 
@@ -108,6 +108,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0058](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0058-time-ephemeris-rust-contract.md) prepares Y for the full 29-routine time-ephemeris Rust transfer, including demonstrated IFTE/FB/CALCEPH corrections and the required remainder dependency. Y is not released: W must first be accepted and close Rust ownership. The minimal IFTE reset has fresh central causal evidence; no production change is accepted by this preparation.
 
+[Decision 0059](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0059-observer-coordinate-reference-acceptance.md) accepts X at `02234cd`: central freshly rebuilt and replayed all 133 cases twice, 35 controls, fifteen compiled mutations and the complete private-state observer. Audited coverage enters all nine routines, with 327/333 lines and 207/214 branches; limits remain explicit. X ownership closes. W retains Rust, and Y remains prepared until W acceptance.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -137,7 +139,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [V Time ephemeris reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/22-time-ephemeris-reference.md) | Delivered native evidence read-only; ownership closed | Accepted at `f179ce5` by decision 0054 | `REPORT.md`, complete source/caller/format/lifetime maps and exact native IFTE/FB90/conversion histories |
 | [W Terrestrial resources Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/23-terrestrial-resources-rust.md) | `rust/` and new `validation/terrestrial_resources_port/`; sole Rust owner | Released by decision 0056 after T acceptance | `rust/TERRESTRIAL_RESOURCES_REPORT.md`, complete 22-routine transfer, integrated resource state and direct/regression evidence |
 
-| [X Observer-coordinate reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/24-observer-coordinate-reference.md) | `validation/observer_coordinates/` only | Released by decision 0057; independent of W | `REPORT.md`, complete nine-routine/source/state maps, native histories and verification |
+| [X Observer-coordinate reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/24-observer-coordinate-reference.md) | Delivered reference read-only; ownership closed | Accepted at `02234cd` by decision 0059 | `REPORT.md`, complete nine-routine/source/state maps, native histories and verification |
 
 | [Y Time ephemeris Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/25-time-ephemeris-rust.md) | After release: `rust/` and new `validation/time_ephemeris_port/` | Prepared under 0058; wait for W acceptance and explicit central release | `rust/TIME_EPHEMERIS_REPORT.md`, full 29-routine transfer, corrected contracts and integrated verification |
 
@@ -168,7 +170,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment U: TEMPO2 terrestrial resource reference | `01a16bd2-a746-7871-9dfb-52a76ae73c64` | Accepted at `051d2ea` under decision 0051; ownership closed |
 | Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Accepted at `f179ce5` by decision 0054; ownership closed |
 | Assignment W: Rust terrestrial resources | `01a16c39-0b79-75f2-9014-0b8dffc5c63c` | Dispatched from `17fc107` under decision 0056; sole Rust owner; owns `rust/` and `validation/terrestrial_resources_port/` |
-| Assignment X: TEMPO2 observer coordinates | `01a16c44-a1ca-7e43-a83a-1cdce98d44e8` | Dispatched from `64cab7f` under decision 0057; owns only `validation/observer_coordinates/` |
+| Assignment X: TEMPO2 observer coordinates | `01a16c44-a1ca-7e43-a83a-1cdce98d44e8` | Accepted at `02234cd` by decision 0059; ownership closed |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
 
@@ -220,6 +222,7 @@ Implementers are not alone in this workspace. Preserve others' edits, stay withi
 | Terrestrial resource reference | U accepted by decision 0051 at `051d2ea`; ownership closed | 130 exact central cases, 29 controls, thirteen compiled mutations; audited 22-routine coverage and restored exact preservation |
 | Time ephemeris reference | V accepted by decision 0054 at `f179ce5`; ownership closed | 97 exact central cases, thirty controls, 36 analytic checks, thirteen mutations; audited 29-routine O0 coverage and explicit O0/O2 numeric differences |
 | Pulsar state/lifecycle Rust transfer | T accepted by decision 0055 at `6c8cf68`; ownership closed | 349-field canonical state and released routines; exact S/Q checks, 35 controls per profile, restored R staging and audited final regressions |
+| Observer-coordinate reference | X accepted by decision 0059 at `02234cd`; ownership closed | 133 exact central fresh/replay cases, 35 controls, fifteen mutations and observer equivalence; reviewed nine-routine coverage and explicit gaps |
 | Generated validation output | Decision 0039 adopted at `3848f5a` | Local generated evidence; tracked source/contracts/reports; no history rewrite |
 
 The central chat updates this table when a decision is made. Implementation chats can make routine choices inside their accepted contract without requesting approval again. For a choice that changes scientific meaning, time scale, phase convention, shared public output, dependency architecture, or acceptance tolerances, provide the concrete alternatives and evidence for central review. Continue independent work while that decision is unresolved.
