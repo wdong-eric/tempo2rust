@@ -127,3 +127,22 @@ excludes only that first warning batch, retaining exact comparison everywhere
 else. U's warning histories remain exact gates. The original failure and its
 complete field-level diff remain in W's failed_attempt_1/; no fitting algorithm
 or numerical expectation changed.
+
+## Final guard review under the updated standing rules
+
+After the complete regression run finished, review of the actual loader contract
+proved MeteorologyFunction::load's site.len() >= 256 guard redundant:
+TabulatedFunction::read_bytes rejects headers longer than 255 bytes and requires
+'#', so a token from header[1..] is at most 254 bytes. Remove only that duplicate
+guard and document the dependency invariant. EOP bracket checks still belong at
+the query boundary because load intentionally accepts unordered/duplicate rows;
+T scoped owner checks protect real release/view operations. Canonical source
+storage may be partly initialized; it is not a fully validated TimingInput.
+
+The complete pre-removal regression receipts remain unchanged, with U traces and
+executables copied under before_guard_review/. final_review.py proves that this
+is the only subsequent production-code delta, verifies unchanged dependent
+algorithms/examples, and runs focused existing loader/meteorology tests,
+formatting/Clippy and all 130 U cases/controls in both profiles. final_scope.json
+binds the final sources/binaries without relabeling the older full regression
+receipts. The unrelated full chains are not rerun solely for a source stamp.

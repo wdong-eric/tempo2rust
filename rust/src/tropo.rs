@@ -50,9 +50,8 @@ impl MeteorologyFunction {
             );
             return Err(terminal(path, "meteorology_site"));
         };
-        if site.len() >= 256 {
-            return Err(boundary("meteorology_site_storage"));
-        }
+        // load() guarantees a '#' header of at most 255 bytes; this token
+        // therefore fits siteName[256], including its NUL terminator.
         self.site.resize(self.site.len().max(site.len() + 1), 0);
         self.site[..site.len()].copy_from_slice(site);
         self.site[site.len()] = 0;
