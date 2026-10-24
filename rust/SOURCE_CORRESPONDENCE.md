@@ -34,7 +34,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/stdio.rs` | Rust ownership glue for JPL's libc I/O; no standalone scientific counterpart, no JPL algorithm |
 | `src/get_obs_coord.rs` | Selected `get_obsCoord.C::get_obsCoord_IAU2000B`; retained `sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for` routines `iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP` and their pinned closure |
 | `src/tt2tdb.rs` | `tt2tdb.C::tt2tb`, accepted IF99 SI/TCB branch |
-| `src/tropo.rs` | `tropo.C::getMeteorologicalValue/getZenithWetDelay/getSurfaceAtmosphericPressure/NMF_hydrostatic/NMF_wet/compute_tropospheric_delays`; combined lookup/provenance and single-TOA Rust operation |
+| `src/tropo.rs` | All twelve active `tropo.C` routines: complete MeteorologyFunction wrappers, table lifecycle, meteorological getters, Niell helpers and full multi-pulsar driver; shared body and actual lookup provenance for the frontend |
 | `src/std_freq.rs` | `t2fit_stdFitFuncs.C::t2FitFunc_stdFreq/t2UpdateFunc_stdFreq` |
 | `src/tksvd.rs` | `TKsvd.C::TKbidiagonal/TKsingularValueDecomposition_lsq/TKbacksubstitution_svd/TKpythag`; `T2toolkit.C::TKsign_d/TKretMax_d` |
 | `src/tkfit.rs` | `TKfit.C` nonaccelerated `TKleastSquares` route: covariance, back substitution, mixed-precision chi-square, error rescaling; `FitNumber` is Rust-only diagnostic transport |
@@ -133,3 +133,23 @@ buffers; failed destinations retain a diagnostic prefix and reject further
 scientific reads/copies. No unsafe site, dependency or numerical operation was
 added. The source's overwritten D_AOP label is retained; both source IPERHARM
 labels follow the user's explicit clarification of 0033.
+
+
+## Assignment W resource transfer
+
+The complete 22-routine, field/knownness, branch, caller and lifetime map is in
+`../validation/terrestrial_resources_port/CONTRACT.md`, incorporating U's original
+frozen map by identity. `TERRESTRIAL_RESOURCES_REPORT.md` records the executed
+coverage and exact comparison dispositions. Canonical ownership is
+`ClockSession::{observatories,eop,meteorology}`; `RuntimeContext` retains IF99/JPL
+and derived observatory/provenance snapshots. `form_bats` queries the common EOP
+cache and calls the same `tropo::compute_observation` body used by the full source
+driver. `get_obs_coord` consumes those four EOP outputs. No second EOP parser,
+weather cache or weather-only calculation remains.
+
+`NMF_wet` corrects the pinned mixed b/c upper coefficient under 0053. Adjacent
+comments identify the original source and the continuity invariant. Expression
+specific `mul_add` sites reproduce compiled GCC16 O2 operations, documented in
+W's CORRECTIONS.md and bounded assembly/witness evidence. Rug128, all numerical
+budgets and M2 mode ordering are unchanged. The existing SOFA and libc unsafe
+blocks are byte-identical; the added integer scanner and resource code are safe.

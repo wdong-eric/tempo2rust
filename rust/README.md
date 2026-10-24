@@ -80,7 +80,8 @@ routine map and exact before/after naming-pass verification.
 The terrestrial implementation follows the same convention:
 `form_bats::form_bats_all` (re-exported as `evaluate_terrestrial`),
 `get_clock_corrections`, `get_correction`, `get_sequence`, `toa2utc`, `load_eop`,
-`get_eop`, `read_ephemeris`, `get_obs_coord` and `compute_tropospheric_delay`.
+`get_eop`, `read_ephemeris`, `get_obs_coord` and `compute_tropospheric_delays`
+(with a shared single-observation body for the bounded frontend).
 `tt2tdb.rs` matches the original filename and retains its routine name `tt2tb`.
 The shared `dot_product` lives in `tempo2_util`, matching `tempo2Util.C`.
 
@@ -194,16 +195,22 @@ samples, and preserve endpoint proxies and defined IEEE results. Exhausted clock
 fallbacks return zero; source exits become terminal-source errors. The approved
 storage boundaries are listed in `CLOCK_REPORT.md`. Other indispensable resource
 errors and existing timing guards remain in force. EOP at/after its last sample is an error because the source's derivative
-access is out of bounds there. No scientific coefficient correction is included.
+access is out of bounds there. Assignment W corrects the demonstrable upper
+coefficient typo in `NMF_wet`; its original witness and exact changed expectations
+are preserved in [TERRESTRIAL_RESOURCES_REPORT.md](TERRESTRIAL_RESOURCES_REPORT.md).
 
-`RuntimeContext` owns the timing resources, while clock tables/index/sequences,
-selected observatory lookup and diagnostic history have synchronized process
-lifetime. A new context or changed root does not clear those caches. Indexing and
-sample loading are independently lazy; provenance retains the actual cached
-resource identity. IF99/JPL/EOP/weather state retains its existing context scope.
+`RuntimeContext` owns IF99 and JPL resources. Observatory records/aliases, EOP,
+meteorology tables, clock tables/index/sequences and diagnostic history have
+synchronized process lifetime. A new context, changed root or changed file does
+not clear those caches. The source counterparts retain explicit observatory
+append and meteorology replacement operations; the public constructor initializes
+EOP/weather on first use. Provenance records the actual cached bytes and table
+selection, including resources retained from an earlier root.
 A failed evaluation publishes no partial result. A clock source-exit or storage
 boundary latches the shared session; later clock operations return that terminal
-state until a fresh process. Unrelated JPL/IF99/EOP recovery remains supported.
+state until a fresh process. Independent observatory, EOP, meteorology and
+lifecycle operations remain accessible; they do not inherit the clock fault.
+Recoverable EOP query boundaries and JPL/IF99 recovery retain their scope.
 `take_clock_diagnostics()` drains source-channel byte events without resetting
 history or terminal state; the CLI routes pending error-prefix bytes to stderr.
 Native dependencies are described in `native/README.md` and `CLOCK_REPORT.md`.
@@ -370,3 +377,24 @@ Reproduce R's exact native assignment and M projection comparisons and all
 required regressions with `python3 ../validation/observation_storage_port/verify.py`
 from this directory. All new evidence is under `verification/observation_storage/`.
 See `OBSERVATION_STORAGE_REPORT.md` for identities, source maps and remaining scope.
+
+
+## Assignment W terrestrial resources
+
+All 22 active observatory/EOP/meteorology/Niell/tropospheric routines now use the
+canonical process owner and T/O/R records. Full internal source routines and the
+bounded PKS public frontend share the tropospheric calculation. The frontend's
+supported sites and JSON schema remain unchanged. See
+[TERRESTRIAL_RESOURCES_REPORT.md](TERRESTRIAL_RESOURCES_REPORT.md) for exact U
+coverage, source corrections, safe boundaries and remaining limits.
+
+```sh
+python3 ../validation/terrestrial_resources_port/verify.py
+```
+
+This compares all 130 U histories in both profiles and runs the accepted T/O/R,
+clock/glob/provenance, JPL and M1/M2 checks into ignored
+`verification/terrestrial_resources/`. Native correction artifacts and the
+pre-edit freeze must already exist; ordinary verification does not record new
+expectations. Central retains acceptance; M2's four historical mode-order
+diagnostics remain unresolved.

@@ -83,7 +83,7 @@ Only their source-description comment changed in this review follow-up.
 | Normal source exit | Contextual `source_exit` with cause and defined diagnostic prefix; session/standalone table becomes terminal |
 | Empty/singleton/header/basename/correction storage, invalid indices/unwritten fields/integer conversions | Operation-local named boundary before undefined operation, defined prefix retained; no guessed value or unsafe emulation |
 | Source output and public JSON | Raw source-channel byte sink; CLI stderr routing on error; whole timing JSON only after success. Warning history is not reset |
-| Weather/IF99/EOP/geometry/timing guards beyond selected table/lookup dependencies | Existing bounded adapters remain; no claim of complete resource-process fidelity |
+| Historical L scope outside selected table/lookup dependencies | W later transfers EOP/weather/observatory state as detailed below; IF99/geometry/timing remain bounded adapters |
 
 All nine withheld native clock experiments stay unrun. Eight have separate safe
 Rust checks; the cycle has no execution result. Historical reports/reference
@@ -113,3 +113,37 @@ label param_iperharm IPERHARM. Both are preserved following the user's explicit
 clarification in O's chat. This corrects the contract's prose assumption, not the
 source defect or accepted K registry. General initialization, parser expansion,
 linked-value arithmetic and full copyPSR remain deferred; M2 remains unaccepted.
+
+
+## W observatory/EOP/meteorology dispositions
+
+- Fixed observatory strings and MeteorologyFunction buffers retain initialized
+  prefixes and tails. Aliases accumulate, warning state persists, and explicit
+  observatory initialization appends. Read access cannot consume unwritten bytes.
+- EOP caller loading appends without sorting or filtering. One process cache
+  retains its first successful load across contexts and root/file changes.
+  Checked output indices reproduce aliases and source write order. The upper
+  proxy writes survive the contextual error before the invalid following-row
+  read; a later valid query remains usable. Malformed bracket storage has no
+  invented derivative or substitute sample.
+- Shared weather initialization replaces the selected vectors in source order;
+  lazy initialization happens once. Direct table objects remain independent.
+  Missing/zero wet data gives zero; missing/zero pressure gives 101.325 kPa with
+  source warning history. Warning-dependent glob NOMATCH that leads to a null
+  native access returns a named safe error, with its defined prefix retained.
+- The complete tropospheric driver preserves signed loop counts, reset and
+  bypass order, per-pulsar warnings, SAT weather selection and clock-shifted UTC
+  season. Only `troposphericDelay` changes in canonical source records. The public
+  PKS frontend supplies its already selected geometry and clock-active adapter
+  flag to the shared body; its input record remains unchanged.
+- Native exits become contextual errors with diagnostics and observable prefixes.
+  Independent resources/lifecycle diagnostics can run after a terminal clock
+  failure. The existing terminal clock and direct-table fault policies remain.
+- The NMF_wet upper c interpolation now reads the c table. This is an explicit
+  0053 correction, with 10 affected U cases/31 wet-result fields in a separately
+  pinned native experiment. Original U evidence is preserved. Source-matched
+  binary64 contractions are explicit and bounded; no tolerance/backend change.
+
+These checks establish source correspondence on the declared Darwin arm64 host,
+not complete physical-model validation, concurrency behavior, or a general
+PAR/TIM/site frontend. See W's report for native-invalid and unrun gaps.
