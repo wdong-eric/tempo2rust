@@ -22,7 +22,7 @@ will bind these ranges to raw hashes and every compiler edge separately.
 | IFTswapDoubles | 122–126 | calls swap8N; get_Vals record |
 | IFTE_init | 128–195 | !f 141; swap 159; ncon!=2 160; swap 166/174/182/185; direct/init_ifte |
 | IFTE_close_file | 197–201 | f!=NULL 199; direct/tt2tb |
-| IFTE_get_Vals | 204–284 | date<start 236; date==end 246; irec!=cache 257; fseek<0 259; short read 265; swap 273; kind==1 277; all convenience routines |
+| IFTE_get_Vals | 204–284 | date<start 238; date==end 248; irec!=cache 259; fseek<0 261; short read 267; swap 273; kind==1 277; all convenience routines |
 | IFTE_get_DeltaT_DeltaTDot | 287–294 | no conditions; scalar wrappers |
 | IFTE_DeltaT | 296–301 | no conditions; IF_deltaT |
 | IFTE_DeltaTDot | 303–308 | no conditions; tt2tb dilation |
@@ -59,7 +59,7 @@ copied into ifte.title. Both byte orders use ncon==2 as discriminator. Each
 record has R=8*(ipt[1][0]-1+3*ipt[1][1]*ipt[1][2]) bytes. Constants at R:
 binary64 ephver (floor then int), binary64 L_C. Coefficients start at 2R;
 ipt offsets are one-based doubles. Each group is [subinterval][component][ncf].
-Require R>=316, R/8<=322, positive finite step, ncf 0..18, positive na,
+Require R>=316, R/8<=322, finite nonzero step, ncf 0..18, positive na,
 valid coefficient extents and bounded seek products. Main synthetic layout is
 ncf=4, na=4, ipt=(3,4,4,19,4,4), R=528. Alternate maximum layout uses ncf=18,
 na=1, ipt=(3,18,1,21,18,1), R=592. Spare records permit dates above end without
@@ -162,8 +162,9 @@ open, query before start, complete header with short coefficient record, and
 FB nr<1/date>end. fseek failure is defined with an appropriate live stream,
 but ordinary regular files do not provoke it; classify still-defined/unverified
 unless a bounded valid stream fixture is separately justified. IFTE cache-hit
-skip is unreachable under normal successful init/get histories because irec
-never changes; do not seed source state to pretend it is reachable.
+skip is unreachable for ordinary positive-step headers because irec never
+changes. The separately analyzed negative-step case below reaches it without
+seeding native state.
 
 Host-qualified: signed-char fgetc EOF narrowing, union-based numeric reads,
 byte-swapped scalar storage, native record-int order, stdio buffer/file-edit
@@ -184,3 +185,22 @@ planetary/BAT/residual pipelines are outside this release.
 5. REPORT.md records actual final identities, commands, local paths/hashes,
    findings and limits. Explicit-path Conventional Commits contain authored
    sources/contracts/reports only. Generated evidence stays ignored locally.
+
+## Pre-execution extension: negative step and backing bounds
+
+Inspection after the initial ordinary suite identified a defined route to the
+irec==-1 cache-hit arm: a complete header with step=-4 and normalized epoch
+start+12 gives floor(12/-4)+2=-1. The read block is skipped; t0=0 and both
+coefficient spans remain inside the initialized static 322-double buffer.
+This is executed both cold (static zeros) and after saving a live positive-step
+owner, reinitializing, and retaining that owner's last coefficient record.
+No negative seek or invalid conversion occurs. It is a source-defined malformed
+header behavior, not a physical ephemeris interpretation. Other negative-step
+histories are still-defined/unverified or invalid depending on their exact
+seek and interpolation bounds, never blanket-classified as undefined.
+
+Direct extrapolation t0=-.125 and 1.125 with na=1 yields l=0 in both cases,
+so three initialized coefficients suffice. An additional tt history sets
+p0.nobs=1, p1.nobs=4 with all four p0 slots initialized and FB90 plus supplied
+CALCEPH enabled on p1; reads through p0's unused logical slots remain valid.
+These extensions are declared before their native execution.
