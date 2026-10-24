@@ -113,6 +113,17 @@ pub(crate) fn with_diagnostics<T>(
         .map_err(|_| boundary("clock_session_poisoned"))?;
     session.run(|s| operation(&mut s.diagnostics))
 }
+/// Lifecycle logging uses the same sink, but is independent of a terminal clock
+/// calculation. Native allocation/initialization logs do not reenter that work.
+pub(crate) fn lifecycle_diagnostics(
+    operation: impl FnOnce(&mut Diagnostics),
+) -> Result<(), TimingError> {
+    let mut session = SESSION
+        .lock()
+        .map_err(|_| boundary("clock_session_poisoned"))?;
+    operation(&mut session.diagnostics);
+    Ok(())
+}
 pub(crate) fn trim(name: &[u8]) -> &[u8] {
     let mut start = 0;
     let mut end = name.len();

@@ -801,9 +801,6 @@ fn copy_string(
 fn diagnostic(
     f: impl FnOnce(&mut crate::clock_diagnostics::Diagnostics),
 ) -> Result<(), LifecycleBoundary> {
-    crate::clkcorr::with_diagnostics(|d| {
-        f(d);
-        Ok(())
-    })
-    .map_err(|e| fail("diagnostics", e.field, "session_boundary"))
+    crate::clkcorr::lifecycle_diagnostics(f)
+        .map_err(|e| fail("diagnostics", e.field, "session_boundary"))
 }

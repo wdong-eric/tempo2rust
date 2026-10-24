@@ -1109,3 +1109,26 @@ fn binary128_decode_and_record_assignment_preserve_exact_classes() {
     let mut empty = PulsarContext::unwritten(0);
     assert!(empty.initialise(-7, 4, -2).unwrap().is_empty());
 }
+
+#[test]
+#[ignore = "run alone: checks shared clock terminal state without cross-test interference"]
+fn lifecycle_logging_after_clock_fault() {
+    let previous = {
+        let mut session = crate::clkcorr::test_session();
+        session
+            .fault
+            .replace(crate::clock_diagnostics::boundary("terminal-clock-fixture"))
+    };
+    let mut context = PulsarContext::unwritten(0);
+    let result = context.malloc_blas(2, 3);
+    {
+        let mut session = crate::clkcorr::test_session();
+        assert_eq!(
+            session.fault.as_ref().unwrap().field,
+            "terminal-clock-fixture"
+        );
+        session.fault = previous;
+    }
+    assert!(result.is_ok());
+    assert!(context.boundary().is_none());
+}
