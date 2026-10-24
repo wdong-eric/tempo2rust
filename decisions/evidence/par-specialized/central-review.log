@@ -1,0 +1,30 @@
+REPLAY 1 107 initial_and_helpers exact
+REPLAY 11 107 samples_WAVE_SIN exact
+REPLAY 21 107 samples_TEL_DZ exact
+REPLAY 31 107 exit_TEL_DY exact
+REPLAY 41 107 constraint_NE_SW_IFUNC_SIGMA exact
+REPLAY 51 107 constraint_DMMODEL_OLD exact
+REPLAY 61 107 constraint_QIFUNC_p exact
+REPLAY 71 107 gwecc_flag_1 exact
+REPLAY 81 107 flags_TNECORR exact
+REPLAY 91 107 shape_count_1 exact
+REPLAY 101 107 reader_global exact
+REPLAY 107 107 clock_disconnected exact
+PASS compiled precedence
+PASS compiled count_reset
+PASS compiled reader_reset
+PASS compiled jump_retention
+PASS compiled ifunc_weight
+PASS compiled ifunc_error
+PASS compiled constraint_accumulation
+PASS compiled constraint_terminator
+PASS compiled subtract_packing
+PASS compiled rn_conversion
+PASS compiled shape_zeroing
+PASS compiled shape_consumption
+PASS compiled offset_flag
+PASS compiled fd_pint
+PASS identity, comparator, launch and compiled semantic controls
+PASS 17 semantic witnesses and raw reconstruction
+PASS 107 cases 2252 events 27 controls 14 post-initial compiled witnesses
+OUTPUT /private/tmp/tempo2-par-specialized-central-ukj7almr
