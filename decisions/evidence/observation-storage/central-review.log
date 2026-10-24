@@ -1,0 +1,6 @@
+PASS delivered artifacts and source/projection hashes; protected 1964
+debug {'fields': 103938, 'numbers': 22449, 'scalars': 439192} 39 controls PASS
+PASS fresh debug data equals delivery; focused tests 5 passed
+release {'fields': 103938, 'numbers': 22449, 'scalars': 439192} 39 controls PASS
+PASS fresh release data equals delivery; focused tests 5 passed
+PASS complete central R direct review /tmp/tempo2-observation-central-review.json
