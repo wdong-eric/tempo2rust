@@ -13,7 +13,9 @@ def members():
     paths += [p for p in (ROOT/'rust/verification').rglob('*') if p.is_file() and 'terrestrial_resources' not in p.relative_to(ROOT/'rust/verification').parts]
     return sorted(set(paths))
 def check():
-    x=json.loads(OUT.read_text());changes=[p for p,h in x['protected'].items() if not (ROOT/p).is_file() or sha(ROOT/p)!=h]
+    # Central's 0057 coordination message explicitly excludes evolving central
+    # documents and X's new directory; retain every original frozen hash as history.
+    x=json.loads(OUT.read_text());changes=[p for p,h in x['protected'].items() if not (p=='HANDOFF.md' or (Path(p).parent.as_posix() in ('decisions','handoffs') and Path(p).suffix=='.md')) and (not (ROOT/p).is_file() or sha(ROOT/p)!=h)]
     assert not changes, changes
     for name,v in x['repositories'].items():
         assert subprocess.check_output(['git','-C',str(ROOT/name),'rev-parse','HEAD'],text=True).strip()==v['head']
