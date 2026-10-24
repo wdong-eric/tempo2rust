@@ -83,3 +83,7 @@ Run formatting, Clippy and ordinary Rust tests; fresh O/R storage and comparison
 Deliver `rust/PULSAR_LIFECYCLE_REPORT.md`, reproducible commands, exact source/toolchain/input/runner/executable identities, field/caller/ownership/source and module/unsafe maps, retained local raw/comparison receipts, limitations and coherent Conventional Commits. This stage should add no unsafe block or numerical dependency. Report concrete evidence for any decision outside this contract while continuing independent work.
 
 Full PAR/TIM/preprocessing, bootstrap and physical callbacks/models, additional fitting/noise algorithms, performance, new platforms and distribution remain later work. Storage representation is not acceptance of those consumers. Central alone accepts T and releases subsequent implementation.
+
+## Dispatch
+
+Created **Assignment T: Rust pulsar state and lifecycle**, chat `01a16bca-89a0-7cd0-a371-9555df226d7d`, in the local `rustify-tempo2` project from release commit `d350727`. An immediate snapshot confirms an active implementation turn. T is the sole Rust owner; all accepted reference ownership windows remain closed. The dispatch explicitly carries policy 0039 and preserves central design/acceptance authority. This records release and dispatch, not completed or accepted implementation.

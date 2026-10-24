@@ -131,6 +131,9 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment Q: TEMPO2 specialized PAR reference | `01a168e7-6a90-7d63-b906-362363a4c15f` | Accepted at `bb7e629` under decision 0043; ownership closed |
 | Assignment R: Rust observation storage foundation | `01a16903-61ef-7651-a9c9-41e6c8943e41` | Delivery `04918d5` accepted by decision 0041; ownership window closed |
 | Assignment S: TEMPO2 pulsar lifecycle reference | `01a16912-7fd8-7392-9c1e-79436775676e` | Accepted at `58ddc07` under decision 0044; ownership closed |
+| Assignment T: Rust pulsar state and lifecycle | `01a16bca-89a0-7cd0-a371-9555df226d7d` | Dispatched from `d350727` under decision 0045; sole Rust owner; delivery and central acceptance pending |
+
+**Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance.
 
 ## Shared working design
 
