@@ -73,3 +73,7 @@ Deliver `validation/observer_coordinates/REPORT.md`, complete source/caller/stat
 Protect both independent repositories and accepted evidence. W's evolving `rust/` and `validation/terrestrial_resources_port/`, X's own directory and central documents are outside X's immutable preservation membership. Do not edit W's files or accepted reference runners, or freeze W's dirty working state as an oracle. Preserve source-defined process boundaries.
 
 This release does not accept a Rust geometry implementation, full SOFA, new precision/tolerances, JPL/CALCEPH integration, secular motion, full BAT/propagation, concurrency/platform behavior or M2. Return concrete contract questions with evidence while completing independent work. Central acceptance follows review of the delivered reference.
+
+## Dispatch
+
+Created Assignment X in the local rustify-tempo2 project from release commit `64cab7f`, chat `01a16c44-a1ca-7e43-a83a-1cdce98d44e8`. An immediate status snapshot confirms its reference turn is active. W received the separate ownership boundary and remains the sole Rust owner. Both chats inherit 0053 and 0039; central retains acceptance. This records dispatch, not completed or accepted evidence.
