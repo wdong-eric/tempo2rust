@@ -110,6 +110,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0059](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0059-observer-coordinate-reference-acceptance.md) accepts X at `02234cd`: central freshly rebuilt and replayed all 133 cases twice, 35 controls, fifteen compiled mutations and the complete private-state observer. Audited coverage enters all nine routines, with 327/333 lines and 207/214 branches; limits remain explicit. X ownership closes. W retains Rust, and Y remains prepared until W acceptance.
 
+[Decision 0060](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0060-planetary-ephemeris-reference-stage.md) releases Z for the complete three-routine native readEphemeris.C driver/random-helper reference, using real pinned JPL dependencies. It owns only new `validation/planetary_ephemeris/`; W retains Rust until accepted and Y remains prepared. Existing accepted references are read-only.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -142,6 +144,7 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [X Observer-coordinate reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/24-observer-coordinate-reference.md) | Delivered reference read-only; ownership closed | Accepted at `02234cd` by decision 0059 | `REPORT.md`, complete nine-routine/source/state maps, native histories and verification |
 
 | [Y Time ephemeris Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/25-time-ephemeris-rust.md) | After release: `rust/` and new `validation/time_ephemeris_port/` | Prepared under 0058; wait for W acceptance and explicit central release | `rust/TIME_EPHEMERIS_REPORT.md`, full 29-routine transfer, corrected contracts and integrated verification |
+| [Z Planetary ephemeris reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/26-planetary-ephemeris-reference.md) | `validation/planetary_ephemeris/` only | Released by decision 0060; independent of W/Y Rust ownership | `REPORT.md`, complete three-routine state/caller map, native driver/random histories and verification |
 
 A through V have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O/R/T's bounded Rust transfers and K/M/N/P/Q/S/U/V's bounded references are accepted with their ownership windows closed. T's whole-pulsar storage/lifecycle and current-consumer integration are accepted under 0055. W is the next sole Rust owner under 0056, transferring the full accepted U resource scope. X independently prepares observer-coordinate reference evidence under 0057. Y's time-ephemeris contract is prepared under 0058; no Y chat or concurrent Rust ownership has been released. U's terrestrial-resource reference is accepted at `051d2ea` under decision 0051 and its ownership is closed. V's time-ephemeris reference is accepted at `f179ce5` under decision 0054 and its ownership is closed. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
@@ -179,6 +182,8 @@ Starting an assignment means opening an implementation chat in this workspace an
 **X dispatched 24 October 2026:** The independent native observer-coordinate reference chat started from `64cab7f` under 0057. Its active turn is confirmed; W received the separate ownership boundary. Generated evidence remains local under 0039, and current bug policy 0053 applies.
 
 ## Shared working design
+
+Production checks must address realistic failures in intended call paths. Trust canonical validated objects and dependency guarantees; deliberate contract violations in verifier tests do not justify duplicate internal validation. This applies the user’s replacement standing rules of 24 October 2026.
 
 Use one Rust crate with a library and a small CLI initially. Owned model and observation values hold the input; fallible operations return results with contextual errors. The initial barycentric operation needs no observatory resources. D introduces an explicit runtime context when the terrestrial path needs resources. Preserve recognizable correspondence with TEMPO2 routines and the original calculation order, including the accepted source-corresponding module and helper names. Retain established numerical libraries behind small interfaces when justified by the selected path.
 
