@@ -174,6 +174,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Accepted at `f179ce5` by decision 0054; ownership closed |
 | Assignment W: Rust terrestrial resources | `01a16c39-0b79-75f2-9014-0b8dffc5c63c` | Accepted at `bd290cc` by 0061; ownership closed |
 | Assignment X: TEMPO2 observer coordinates | `01a16c44-a1ca-7e43-a83a-1cdce98d44e8` | Accepted at `02234cd` by decision 0059; ownership closed |
+| Assignment Y: Rust time ephemerides | `01a16c81-884a-70b0-9791-627bb0b21c0c` | Dispatched from `5920aff` under 0058/0061; sole Rust owner, plus `validation/time_ephemeris_port/` |
 | Assignment Z: TEMPO2 planetary ephemeris | `01a16c74-090a-70a3-a4a8-29ecb51fe5de` | Dispatched from `7946aee` under 0060; owns only `validation/planetary_ephemeris/` |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
@@ -183,6 +184,8 @@ Starting an assignment means opening an implementation chat in this workspace an
 **X dispatched 24 October 2026:** The independent native observer-coordinate reference chat started from `64cab7f` under 0057. Its active turn is confirmed; W received the separate ownership boundary. Generated evidence remains local under 0039, and current bug policy 0053 applies.
 
 **Z dispatched 24 October 2026:** The independent native planetary-ephemeris reference chat started from `7946aee` under 0060. Its active turn is confirmed and W received the separate ownership boundary. X is closed; W remains sole Rust owner while its final verification/report is completed. Y remains prepared until central acceptance of W.
+
+**Y dispatched 24 October 2026:** The separate Rust time-ephemeris chat started from `5920aff` after W acceptance at `bd290cc`. Its active turn is confirmed. Y owns `rust/` and `validation/time_ephemeris_port/`; Z received the independent ownership boundary. The released 0058/0061 contract and current bug/validation policies apply. Central retains design and milestone acceptance.
 
 ## Shared working design
 
