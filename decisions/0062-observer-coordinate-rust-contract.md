@@ -1,0 +1,85 @@
+# Observer-coordinate Rust contract and prepared Assignment AA
+
+Central decision, 24 October 2026. **Prepare Assignment AA; do not release implementation until Y is centrally accepted and its Rust ownership closes.** AA will own `rust/` and new `validation/observer_coordinates_port/`. Y remains the sole Rust writer; Z independently owns its planetary-ephemeris reference. Central will pin the accepted Y revision and record an explicit release before creating AA's implementation chat.
+
+This transfers the nine-routine scope accepted from X under 0059. Current policy 0053 permits small demonstrated fixes, with adjacent source-mapped comments, focused regressions and explicit corrected expectations. Rug128, source notation, necessary-unsafe explanations, 0039's generated-output rule, 0050's preservation rule and 0012's unresolved M2 gate remain in force. This preparation accepts no production change.
+
+## Source membership and existing implementation
+
+Use raw TEMPO2 `fda6ad4a9753ad7dc5d291406f2f310a9161423f`, X's accepted delivery `02234cd`, frozen contract `a59be00` and harness `6d19dd4`. Read X's CONTRACT.md, REPORT.md, GAPS.md and local frozen source map. Raw primary hashes are:
+
+| File | SHA-256 | Routines |
+| --- | --- | --- |
+| get_obsCoord.C | `40184b982564c13a4c02865d04045139c078edbd08a9ec40fc25c2265c7bf1d3` | get_obsCoord_IAU2000B, get_obsCoord, remove_white, lmst, get_precessionMatrix, ang |
+| vectorPulsar.C | `46091a30f1bab414599acf0db631e57db6ad4d77396d3618a4ddcdd81c7df7df` | vectorPulsar |
+| tai2ut1.C | `95b4e823ec95984bdd45de6526238f593ab6a1678aa5312880f2ce50bee4782b` | tai2ut1, ut1red |
+
+Central inspected the raw bodies and callers and the accepted W implementation at `bd290cc`. That revision has only the selected IAU/PKS geometry in get_obs_coord.rs, fixed-direction vector arithmetic inside form_bats.rs, canonical observatory/EOP resources in ClockSession and a scoped pulsar/observation borrow in pulsar_lifecycle.rs. Y is changing related time/runtime consumers. At release, freeze the actual accepted Y state and all nine routine/field/branch/caller/lifetime mappings before editing; the W inspection is planning context, not a substitute for Y's final code.
+
+Extend get_obs_coord.rs; add vector_pulsar.rs and tai2ut1.rs for their actual counterparts. Reuse existing typed pulsar, parameter and observation storage, byte scanners, numeric utilities, diagnostics and resources. Preserve source-written prefixes and retained tails rather than rebuilding whole records. Do not retain the old subset as a second authoritative mathematical implementation.
+
+## Ownership, caches and integration
+
+Add UT1's own process-lifetime state to the existing ClockSession resource owner. It is separate from EOP, observatory, meteorology, IFTE, Fortran-reader and clock-routing state. Preserve first-use loading and retained table cells across resource-root changes. Acquire the outer mutex once; pass scoped borrows to nested operations. Do not make unrelated resource work inherit a terminal clock fault or recursively acquire the mutex. Calls that actually need clock corrections still use the established clock error contract.
+
+The full driver needs mutable access to the canonical pulsar and its observations: STL_BAT writes pulsar.correctTroposphere. Adapt the existing split-borrow method as needed, including its callers, instead of cloning an authoritative pulsar or adding another state store. Retain the owner/view lifetime checks that protect real revocable references. Signed nonpositive loop counts are source no-ops; no observation owner is needed when the loop does not execute. Vector formation does not need an observation owner at all.
+
+IMAG must resolve the existing shared observatory through ObservatoryDatabase.index and update that record's xyz in place. Geodetic latitude/longitude/height remain cached as in the source. A clone returned by get is a derived view, not the mutation target. The strict frontend must obtain geometry from the same canonical resources when used; remove any authoritative RuntimeContext geometry snapshot if it can become stale after an IMAG alias changes that record. Preserve existing public input/output scope and resource provenance, recording bytes actually consumed or cached without a second stateful lookup for reporting.
+
+Use one IAU calculation for the full driver and existing form_bats consumers. Likewise, the position-vector arithmetic used by the full vectorPulsar and fixed-direction frontend must have one canonical implementation. The validated frontend can supply its established values through a thin adapter; it need not pretend unsupported PM fields were initialized or accept new PAR/TIM forms. Keep the normalized direction used by downstream propagation distinct from vectorPulsar's unnormalized source writes. Full BAT orchestration, additional planetary propagation, scientific model expansion and parser acceptance are separate work.
+
+Trust validated canonical inputs and dependency guarantees. Add checks only for realistic boundary failures: unwritten source fields actually read, revoked storage, untrusted file bytes, or invalid numeric conversions/accesses. Fabricated internal contract violations do not justify duplicate production validation. Do not add blanket finite/domain checks that reject source-defined nonfinite arithmetic or duplicate a validated frontend guard.
+
+## Vector, satellite and terrestrial behavior
+
+vectorPulsar first narrows RAJ/DECJ to double for trigonometry, writes posPulsar and its equatorial copy, converts only the copy for any nonzero eclCoord, and then evaluates PM/PM2 expressions with their actual extended coefficients before narrowing. Preserve the mas/year to radians/century factors and second-derivative factors. Do not cancel cos(dec), normalize these source vectors or replace coefficients with f64. All four three-vectors and non-target fields are observed.
+
+get_obsCoord traverses pulsars and observations in source order. delayCorr==0 retains coordinates and follows the first-observation warning condition. Exact STL and STL_FBAT spellings select satellite polynomials; base paramSet must equal 1, while each derivative is independently selected. The missing epoch defaults to zero except the source's X-velocity error, which follows clearing velocity and precedes position assignment. Preserve that asymmetry unless a separate 0053 proof establishes a correction.
+
+Flags follow polynomials and scan in order. Duplicates overwrite; unsuccessful scans retain the target, after which STL still divides by c. Each axis's offset table has its own count and selector: modes 0/1 interpolate, 2 holds, others add zero; the first matching interval is left inclusive/right exclusive. Count one performs no interpolation. Retain source grouping and native-defined writes rather than imposing a new interpolation policy. STL_BAT clears only the position prefix and velocity and disables pulsar-wide troposphere; it retains zenith and coordinate tails.
+
+All other telescope strings use the real observatory/alias resource path. IMAG overrides xyz only, as above. Exactly t2cMethod==IAU2000B selects IAU; every other value selects the legacy calculation. The IAU UTC correction is bypassed for clockCorr 0 or 2, while TT independently sums stored corrections. Ecliptic conversion here requires exactly eclCoord==1. Preserve the legacy zenith zeroing, supplied UT1/nutations, precession matrix order, velocity calculation after the position rotation, and velocity rotation. These older choices are not demonstrated bugs merely because their comments are uncertain.
+
+Keep all six observatory_earth and nutation cells in state comparisons; only the documented prefixes are written. Avoid an eager check/read of retained or bypassed cells that the source does not access. Test actual multiple-pulsar and shared-observatory histories, including IMAG aliases and a later canonical lookup/frontend use.
+
+## UT1 behavior and error boundaries
+
+ut1red retains read, mjd1/mjd2, mjdVal[1000], entry[10000], count/count2 with the source's static zero initialization. Read the actual UT1_FILE path, two header reads and 57-byte row prefix; preserve partial scanner writes before count advancement, zero-sentinel stopping and the row-limit failure prefix. The thousandth row's valid writes precede the source count>999 exit. The local itsav=-1 is recreated on every call; do not invent an inter-call interpolation-index cache.
+
+Preserve strict interior comparisons, four-sample second-difference interpolation, endpoint/extrapolation values, warning history and the final negative sign. Native limits are based on the stored dates and counts, not inferred table monotonicity. Source-safe histories with retained initialized cells are distinct from invalid brackets or unwritten reads. Missing files and defined native exits become contextual errors with observable prefixes. Empty/inconsistent tables, invalid integer conversion/backing and unterminated/unwritten byte input need safe boundary dispositions before invalid access; do not invent a successful native value.
+
+Do not publish a partial or failed load as a complete UT1 cache. Keep the failure prefix available for verification, and explain any safe recovery or terminal-state behavior beyond the source's exit boundary. An unrelated IAU/resource operation must remain usable after a UT1 failure. Reuse existing resource/diagnostic/error patterns; no new process-wide failure latch is required.
+
+tai2ut1 acts only for exactly T2C_TEMPO. Nonzero clockCorr uses ut1red(SAT) and the real correction to TAI; zero writes zero; other methods retain correctionUT1. Preserve the original double additions and extended-field conversion, actual read/write ordering and warnings. Do not substitute EOP UT1 data for this separate legacy table or change its time-scale argument.
+
+## Numeric utilities and retained SOFA
+
+lmst uses the public extended fortran_mod symbol, even though its locals are double. Use Y's canonical source-expression helper at Rug128 with divisor one and the same narrowing boundary, not Rust remainder or the private native double overload. Preserve truncation-to-native-int and the following integer subtraction, checking their actual defined bounds. ang uses floor for packed fields; it is not interchangeable with observatory fang's truncation. Preserve selectors and the source precession/nutation matrix transpose/write order.
+
+Keep native binary64 and extended promotion boundaries, literal construction and expression grouping throughout. The production extended backend stays Rug128. Any expression-specific FMA must have actual compiled-source evidence, a bounded witness and an adjacent explanation. No global contraction, reassociation, solver/backend substitution, sort, tolerance change or temporary lower-precision mode is authorized. The four historical 0049 utility-boundary differences remain explicitly unresolved.
+
+Reuse the already retained 36-routine SOFA Fortran closure and existing get_obs_coord.rs FFI boundary. The original eight direct entries are cp, pom00, rxp, sxp, pxp, c2t00b, trxpv and trxp; a safe copy can implement cp's copy semantics. c2t00a is declared but uncalled. Keep the actual Fortran matrix layout, separate initialized input/output buffers and 3/6/9 element extents clear. Retain the existing build's automatic-local/reentrancy protection; do not create a second SOFA implementation or another FFI layer. Every necessary unsafe block needs its local necessity, ownership, alias and lifetime explanation. No new unsafe is needed for the Rust coordinate, UT1 or whitespace calculations.
+
+## Selected remove_white correction
+
+At pinned get_obsCoord.C::remove_white:464,469,474, shifting a suffix left with strcpy can copy overlapping ranges. For the valid input `"  x"`, the first copy reads byte interval [1,4) and writes [0,3); strcpy does not define that operation. Some one-byte terminating-NUL moves are disjoint. X conservatively excluded every shifting branch, so this correction does not reclassify or replace an original X golden.
+
+Adopt overlap-safe movement of the same suffix including its NUL, keeping the source's branch order and buffer effects. A safe Rust copy_within over known initialized bytes can provide that behavior. Retain the first space/tab of an internal run, one trailing separator, removal of leading spaces/tabs and all newlines, unchanged carriage returns/non-ASCII bytes, first-NUL termination and untouched bytes beyond the old NUL. Do not replace this with generic Unicode whitespace normalization or a string trim. No core caller of this helper was found in the pinned source; transferring it is not permission to insert it into parsing paths.
+
+An adjacent comment must name all three source sites, describe the overlapping-copy bug and the safe move; add a focused regression for the corrected paths and unchanged neighbors. Compare complete caller buffers, including stale tail bytes created by repeated moves, against the separately corrected native experiment. There is no original numerical value to preserve for an invalid overlapping copy.
+
+Central's routine-only reproducer is `decisions/evidence/observer-whitespace/central-review.py` (SHA-256 `4f0ccd86e02790a751fe93b73f713b5ecf2c6da2b6d4b8e3047ea374c86d6c65`). It extracts the exact raw function and changes only those three calls to `memmove(str+i,str+i+1,strlen(str+i+1)+1)`. Seven original no-shift cases and nineteen corrected cases each ran twice in fresh processes. The seven common complete buffers match exactly; all corrected prefixes, guards and bytes after the old NUL pass. Mixed separators, embedded NUL, carriage returns and non-ASCII bytes are covered. Original overlapping copies were never executed. The source checkout remained clean. This is a small string-helper proof, not a full X replay, production acceptance or scientific validation.
+
+Local bundle: `decisions/evidence/observer-whitespace/build/central-il7tunxj/`; receipt SHA-256 `cb9ff2427e37a7b1df76fd377b41efc396f69889f5ae77b9e694c351c5ed9239`. Actual source/driver/compiler/executable hashes, commands and complete buffers are recorded; empty stderr and identical repeated stdout were checked. AA must retain this evidence and produce its own corrected Rust/debug/release comparisons. Other demonstrated local corrections remain permitted by 0053; unexplained discrepancies are not bug proof.
+
+## Verification and delivery
+
+Freeze original/corrected dispositions before verification. Replay all **133 X cases / 1,734 actions / 3,462 original events**, including six defined exit-prefix cases, in Rust debug and release. Record any intentional changed membership/status/field separately; no silent dropped case, normalized diagnostic, tolerance or fabricated native output is permitted. Preserve exact ordered types/membership, knownness, prefixes/tails, logical owners, resource/diagnostic histories, finite double bits, signed zero and nonfinite classes. Extended outputs use an explicitly recorded binary128 export from Rug128. Remaining differences need a bounded explanation and central disposition.
+
+Carry over X's 35 controls, fifteen behavior-mutation witnesses and nineteen supporting checks as applicable, and add controls/regressions for the correction and real ownership/cache integration. Verify the full UT1 retained state against X's separately audited observer, including all array cells and failures; this does not require modifying the ordinary native oracle. Keep path-sensitive raw diagnostics and actual execution identities. X's unhit CVS branches, native-invalid boundaries, alias/fault/concurrency/platform gaps remain declared unless new evidence closes them.
+
+Run affected canonical lifecycle/parameter/observation, clock/table, W terrestrial, accepted Y time, JPL, M1/M2 and public resource/CLI recovery checks, formatting and Clippy. Use owned staging for successor routing and preserve accepted runners and membership under 0050. Freeze exact accepted Y/W applicability at release; do not label historical receipts as fresh verification. The only pre-existing M2 failures remain the four exact-order diagnostics under 0012. Subsequent valid processing and stale-output removal must hold for changed public boundaries.
+
+Deliver `rust/OBSERVER_COORDINATES_REPORT.md`, complete routine/field/caller and unsafe/ownership maps, original-versus-corrected evidence, actual source/input/compiler/executable identities, reproducible commands and explicit remaining limits. Commit sources, generators, authored contracts/expectations and concise reports with explicit-path Conventional Commits. Reproducible JSON/JSONL/compressed traces, generated fixtures, archives and builds remain local and ignored under 0039. Do not freeze evolving central or independent assignment paths as immutable implementation inputs.
+
+Central retains design, release and acceptance. AA may start only after a subsequent decision accepts/closes Y and names AA as sole Rust owner. This prepared contract changes neither current ownership nor any milestone status.
