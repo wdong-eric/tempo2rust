@@ -1,0 +1,92 @@
+# W frozen transfer contract
+
+Frozen before production edits, 24 October 2026. Governing decision 0056;
+raw pin fda6ad4a9753ad7dc5d291406f2f310a9161423f. U's immutable
+CONTRACT.md, GAPS.md, outputs/frozen/source_map.json and cases.json are incorporated
+by exact identity in build/freeze.json. The complete routine bodies, every branch,
+all native caller occurrences and 349/95-field type map remain at those original
+paths and are checked, not reauthored or rebaselined. W owns rust/ and this harness.
+
+## Correspondence, fields, lifetime and callers
+
+| Source routine | Canonical Rust target | State / branches / callers |
+| --- | --- | --- |
+| readObservatoryFile | ObservatoryDatabase::read_file | Append six f64 cells; fixed name[32], code[16], clock[16] Option bytes, retaining local tails across rows, reset per file. Numeric-prefix scan, comments/chunks, geodetic-before-count error, 5/6 fields, default clock truncation; direct/init callers. |
+| readAliases | ObservatoryDatabase::read_aliases | code[100] Option bytes retained per call; accumulated alias list, warned flag, file order; init/direct callers. |
+| initObservatories | ObservatoryDatabase::initialize | Explicit call always appends main before glob extras, then aliases, publishing initialized only on success; root/alias selectors. |
+| lookup_observatory_alias | ObservatoryDatabase::lookup_alias | Lazy guard only here; first case-insensitive match, warning per list, initialized output storage and retained tails, in-place identity supported. Used by get and future preprocessing/TIM consumers. |
+| getObservatory | ObservatoryDatabase::get/index | Alias before code/name first match; index/derived snapshot survives vector relocation. Clock source lookup, runtime, tropo, geometry consumers. Unknown site explicit source_exit. |
+| fang | fang | Both checked integer conversions, all mode conditions, binary64 expression order. Geodetic-error path and direct caller. |
+| ITRF_to_GRS80 | itrf_to_grs80 | Writes longitude/latitude/height only, GRS80 constants, y>=0 includes -0; read_file/geometry. |
+| GRS80_to_ITRF | grs80_to_itrf | Writes xyz only; geodetic-error/geometry. |
+| load_EOP | load_eop | Explicit caller-owned Vec<[f64;4]>, append without sort/finite filtering. Per-call format; fixed widths and numeric-prefix scans, failed-scan exit prefixes. |
+| get_EOP | Eop::get_eop | Process-private first-use samples, separate initialized flag, no RuntimeContext-owned cache. Initialized output slice + four checked indices; proxy writes then derivative/xp/yp/dut1. Strict leaps, 86400 divisor. get_obs_coord consumes query result. |
+| MeteorologyFunction_load | MeteorologyFunction::load | Canonical TabulatedFunction and site[256], fixed filename/header[256] knownness/tails; direct objects distinct from shared tables. |
+| MeteorologyFunction_getValue | MeteorologyFunction::get_value | Existing table binary search, diagnostics and endpoint behavior. |
+| MeteorologyFunction_getStartMJD | MeteorologyFunction::start | Existing table first sample boundary. |
+| MeteorologyFunction_getEndMJD | MeteorologyFunction::end | Existing table last sample boundary. |
+| initialize_meteorology_table | initialize_meteorology_table | Clear one vector, reusable local record, sorted existing glob helper, warning-dependent diagnostics; per-kind explicit call. |
+| initialize_meteorology_tables | Meteorology::initialize | zwd before sap; publish shared flag after success; explicit reinit replaces vectors. |
+| getMeteorologicalValue | Meteorology::get_value | Lazy initialize, first matching case-insensitive site and inclusive range, +0 on miss; return selection/provenance from same lookup. |
+| getZenithWetDelay | Meteorology::wet | Zero sentinel emits TROP1, stays zero; shared diagnostic history. |
+| getSurfaceAtmosphericPressure | Meteorology::pressure | Zero sentinel emits TROP2, 101.325 kPa; shared diagnostic history. |
+| NMF_hydrostatic | nmf_hydrostatic | Conversion-safe latitude, clamp/interpolation, hemisphere/season, source height formula and binary64 constants. |
+| NMF_wet | nmf_wet | Same latitude branches, original mixed b/c interpolation retained pending demonstrated correction evidence. |
+| compute_tropospheric_delays | compute_tropospheric_delays / borrowed single-observation body | T SourcePulsar, R SourceObservation; signed loops/backing; per-pulsar warned; reset before tests; zero zenith, STL_FBAT and COE order; SAT weather and clock-shifted UTC season; no other field mutation. Real clock/get/table helpers; form_bats consumes this body. |
+
+All old RuntimeContext EOP/weather fields and parsing disappear when callers are
+integrated. Observatory snapshot is derived from the one canonical record.
+ClockSession remains the single mutex owner with separate observatory/EOP/weather
+flags. Resource operations and lifecycle/diagnostic access do not inherit terminal
+clock calculation faults; clock operations keep their existing terminal boundary.
+Outer operations lock once; nested helpers borrow state. Provenance records actual
+loaded bytes, retained paths and selected tables, without a second lookup.
+Source exits are library errors with inspectable prefixes; invalid storage is a
+contextual boundary, not a native golden. Direct failed table objects retain the
+existing table-local fault. EOP query boundaries remain recoverable; at/after the
+last row there is no selected replacement slope. Source-invalid glob NOMATCH with
+nonzero warnings is a safe contextual error. No concurrency behavior is claimed.
+
+Current consumers frozen in build/freeze.json include runtime.rs, clkcorr.rs,
+form_bats.rs, get_obs_coord.rs, resource_tests.rs, clock_tests.rs and the two old
+terrestrial examples. Native callers outside current Rust scope (full preprocessing,
+TIM, polyco and plugins) are mapped in U, not claimed implemented. Literal-disabled
+observatory conversions/test loops, tropo tests and table linear search stay disabled.
+
+## Comparison projection frozen before implementation
+
+All 130 U cases, 1128 actions, 2256 events, including 24 exits, run in debug/release.
+U's value-initialized two pulsars/twelve observations are fixture inputs only;
+no production initializer defaults change. Every non-target field must retain its
+initialized input; fixed bytes and known prefixes/tails remain exact. EOP private
+cache is additionally checked through changed-root/file histories.
+
+Finite f64 bits including signed zero, nonfinite classes, nested scalar types,
+ordered events/field/case/action membership, diagnostic content/truncation and all
+resource state compare exactly. Binary128 SAT serialization is an explicit fixture
+representation projection from Rug128; the parsed value stays Rug128 in production.
+Only profile sizeof/longdouble ABI fields may differ; capacities, values and
+knownness may not. Library outcome source_exit maps to native status 1, success
+maps to 0; actual test-process status is separately recorded. Host source/build/
+case roots are replaced by the exact U declared placeholders; full raw bytes are
+retained. Fixed filename bytes are decoded/projected/re-encoded only at that exact
+root (their basename normally contains none). No warning or numeric scrubbing.
+Source path length affecting TKlog truncation must match U's source prefix length.
+
+No correction expectations are selected initially. A proved 0053 correction must
+have an adjacent pinned-source comment, independent/native-patch witness, separate
+explicit case/field expectations, original witness and affected integration gate.
+Any expression-specific mul_add requires compiled-source evidence and a bounded
+reproducer; blanket contraction/tolerance changes are prohibited. Rug128 and the
+four historical M2 diagnostics remain untouched.
+
+## Verification sequence
+
+Freeze identities and maps; observatory storage and geometry; EOP/table state;
+meteorology/driver/frontend; complete U comparison and adversarial controls;
+format/Clippy/unit and T/O/R, clock/glob/provenance, JPL, M1a/M1b, complete M2.
+All older harness output routing occurs in W-owned disposable staging with exact
+original hashes and recorded path-only diffs. Generated JSON, binaries and raw
+execution evidence stay ignored. Explicit-path Conventional Commits contain only
+sources/generators/authored contracts/reports. Final report distinguishes source
+agreement, implementation checks, corrections, native-invalid and untested gaps.
