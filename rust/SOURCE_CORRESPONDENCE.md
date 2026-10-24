@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I/L/O, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L/O/W/Y, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -28,12 +28,13 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/clock_glob.rs` | Pinned Darwin glob flags-zero byte grammar, dot entries/leading-dot rule, raw path spelling and full-string ordering; 0029 supplemental helper/index/observatory evidence |
 | `src/tabulated_function.rs` | `tabulatedfunction.C::TabulatedFunction_load/TabulatedFunction_getValue/TabulatedFunction_getStartX/TabulatedFunction_getEndX` in an owned table |
 | `src/eop.rs` | `eop.C::load_EOP/get_EOP` |
-| `src/ifteph.rs` | `ifteph.C::IFTE_init/IFTE_get_Vals/IFTEinterp` in owned storage; split-epoch responsibility from `tt2tdb.C::tt2tb` |
+| `src/ifteph.rs` | All 17 active `ifteph.C` routines: seven byte helpers, complete IFTE lifecycle/getters/wrappers and interpolation cache; Y contract maps every field and branch |
+| `src/read_fortran.rs` | All eight `read_fortran.h` routines; separate owned stream, filename mutation and host-qualified byte decoding; distinct from `read_fortran2.h` |
 | `src/read_ephemeris.rs` | Selected `readEphemeris.C::readEphemeris` call order and Rug128 scaling; safe JPL calls, timing error/nonfinite adapter |
 | `src/jpleph.rs` | All 12 implemented functions in `jpleph.c`, declared field meanings in `jpleph.h`, decoded `jpl_int.h` layout; full map in `../validation/jpl_port/PROJECTION.md` |
-| `src/stdio.rs` | Rust ownership glue for JPL's libc I/O; no standalone scientific counterpart, no JPL algorithm |
+| `src/stdio.rs` | Rust ownership glue for JPL, IFTE and Fortran-reader libc I/O; no standalone scientific algorithm |
 | `src/get_obs_coord.rs` | Selected `get_obsCoord.C::get_obsCoord_IAU2000B`; retained `sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for` routines `iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP` and their pinned closure |
-| `src/tt2tdb.rs` | `tt2tdb.C::tt2tb`, accepted IF99 SI/TCB branch |
+| `src/tt2tdb.rs` | All four `tt2tdb.C` routines; complete source driver plus shared observation body for both strict frontend time passes |
 | `src/tropo.rs` | All twelve active `tropo.C` routines: complete MeteorologyFunction wrappers, table lifecycle, meteorological getters, Niell helpers and full multi-pulsar driver; shared body and actual lookup provenance for the frontend |
 | `src/std_freq.rs` | `t2fit_stdFitFuncs.C::t2FitFunc_stdFreq/t2UpdateFunc_stdFreq` |
 | `src/tksvd.rs` | `TKsvd.C::TKbidiagonal/TKsingularValueDecomposition_lsq/TKbacksubstitution_svd/TKpythag`; `T2toolkit.C::TKsign_d/TKretMax_d` |
@@ -59,7 +60,9 @@ or new numerical dependency is substituted.
 header; there is no `longdouble.h`. The IFTE comment now distinguishes unchecked
 header reads in `ifteph.C::IFTE_init` from checked data seeks/short reads followed
 by exit in `IFTE_get_Vals` (F B06). Neither correction changes code or dispositions
-of the existing Rust parser/range/error adapters.
+of the then-existing Rust parser/range/error adapters. Y now replaces the IFTE
+immutable image and its broad header/grid guards with the complete lifecycle
+and operation-local boundaries in `TIME_EPHEMERIS_REPORT.md`.
 
 ## Retained dependencies
 
@@ -71,29 +74,35 @@ No numerical dependency or alternate JPL implementation was added.
 
 ## Unsafe audit
 
-There are twelve production unsafe sites: five in `stdio.rs`, two existing
-SOFA sites, and five in `clock_text.rs` (declarations plus four typed calls).
+There are fifteen production unsafe sites: seven blocks/declarations plus one
+exclusive `Send` implementation in `stdio.rs`, two existing SOFA sites, and five
+in `clock_text.rs` (declarations plus four typed calls).
 Parameter storage/initialization/copy, JPL and clock/table algorithms, graph traversal and synchronization
 remain safe Rust. Each site
-has adjacent necessity and concrete invariants. No unsafe function or Send/Sync
-implementation is present.
+has adjacent necessity and concrete invariants. No unsafe function or `Sync`
+implementation is present. Y adds only the documented stream `Send` boundary.
 
 | Site | Necessity | Invariants |
 | --- | --- | --- |
 | `clock_text.rs` foreign declarations and pair/header/number-prefix calls | Complete host sscanf grammar, prefix and binary32 conversion | Owned NUL input, private literal formats, initialized correctly typed outputs, bounded 63-byte strings, completed-conversion reads only; no pointers escape |
 | `clock_text.rs` formatting call | Fixed source printf spelling/truncation | One f64 argument, static enum-selected formats, initialized 512-byte bounded buffer; no pointers escape |
-| `stdio.rs` foreign declarations | C stdio buffering is observable in H | Opaque FILE, bounded calls, no retained caller buffers |
+| `stdio.rs` foreign declarations | C stdio buffering is observable in H/V | Opaque FILE, bounded calls, no retained caller buffers |
 | `stdio.rs` fdopen | Consume the already opened file without path reopen | File owns live fd until success; static NUL mode; failure drops File; success relinquishes fd exactly once |
 | `stdio.rs` fread | Complete-item counts and partial-element writes | Checked size product fits initialized exclusive byte slice; no pointer escapes; live exclusive stream |
 | `stdio.rs` fseek | Source seek/buffer transitions | Exclusive stream borrow, source-width offset/origin, no concurrent cache/position access |
+| `stdio.rs` fgetc | Fortran-reader EOF bytes and libc buffering | Exclusive live owner, no escaped pointer or retained caller buffer |
+| `stdio.rs` ftell/feof/ferror | Non-consuming V observations and incomplete FB read detection | Same live owner borrowed exclusively for all three calls |
+| `stdio.rs` Send | Process mutex requires movable owned streams | Supported POSIX profile, no escaped FILE or surviving explicit lock, exclusive methods, single Drop; no Sync |
 | `stdio.rs` fclose | Matching destruction of libc buffer and fd | Non-cloneable stream, one Drop, all calls ended, no escaped pointer |
 | `get_obs_coord.rs` extern block | Retained SOFA ABI | By-reference binary64 scalars and contiguous column-major arrays |
 | `get_obs_coord.rs` call block | SOFA rotations | Aligned initialized arrays, exclusive outputs, disjoint cross-product slices, no retained pointers, automatic Fortran locals |
 
 The test-only stdio observer duplicates a File descriptor only for metadata,
 without reads/seeks. It adds no unsafe site and is absent from production builds.
-The production stream is neither Clone nor Send/Sync. These are bounded ownership
-checks on the declared host, not concurrency stress or other-platform validation.
+The production stream is neither Clone nor Sync. Y tests an actual ownership
+handoff, read, EOF/status observation and close on another thread. These are
+bounded ownership checks on the declared POSIX host, not concurrency stress or
+other-platform validation.
 
 ## JPL boundary dispositions
 
@@ -141,8 +150,9 @@ The complete 22-routine, field/knownness, branch, caller and lifetime map is in
 `../validation/terrestrial_resources_port/CONTRACT.md`, incorporating U's original
 frozen map by identity. `TERRESTRIAL_RESOURCES_REPORT.md` records the executed
 coverage and exact comparison dispositions. Canonical ownership is
-`ClockSession::{observatories,eop,meteorology}`; `RuntimeContext` retains IF99/JPL
-and derived observatory/provenance snapshots. `form_bats` queries the common EOP
+`ClockSession::{observatories,eop,meteorology}`. Y additionally owns IFTE, the
+Fortran reader and FB cache there; `RuntimeContext` retains JPL and derived
+observatory/provenance snapshots. `form_bats` queries the common EOP
 cache and calls the same `tropo::compute_observation` body used by the full source
 driver. `get_obs_coord` consumes those four EOP outputs. No second EOP parser,
 weather cache or weather-only calculation remains.
@@ -153,3 +163,27 @@ specific `mul_add` sites reproduce compiled GCC16 O2 operations, documented in
 W's CORRECTIONS.md and bounded assembly/witness evidence. Rug128, all numerical
 budgets and M2 mode ordering are unchanged. The existing SOFA and libc unsafe
 blocks are byte-identical; the added integer scanner and resource code are safe.
+
+
+## Assignment Y time-ephemeris transfer
+
+`../validation/time_ephemeris_port/CONTRACT.md` maps all 29 routines, complete
+source fields, branches, callers, byte layouts and ownership dispositions from
+accepted V. `TIME_EPHEMERIS_REPORT.md` binds those contracts to actual executions.
+`ClockSession::{ifte,fortran,fb}` are the single authoritative time-resource
+state. `with_resources` takes one process lock without inheriting an unrelated
+terminal clock fault. Nested functions receive mutable borrows. IFTE and Fortran
+streams remain separate; direct interpolation has caller-owned cache state.
+`RuntimeContext` hashes/rewinds/transfers one opened file into the same Stream
+owner and exports only already-consumed resource metadata. Both `form_bats`
+passes call `tt2tdb::frontend`, which uses the full driver's observation body.
+
+The only numerical bug corrections are IFTE's paired pc[1]/twot reset, FB's
+actual-content-plus-record key with successful candidate publication, and the
+current pulsar's supplied CALCEPH correction. The original irec-update omission,
+retained tails, source obsTermDot formula, selector/loop behavior and once-per-call
+deltaT retention remain. `tempo2_util::fortran_mod` now evaluates the canonical
+Rug128 source expression with a checked native i32 quotient and Rug divisor;
+its residual caller handles the same error contract. `fortran_nlong` and solver
+mode order are unchanged. Expression-local FMA sites match compiled GCC16 O2
+witnesses, including dotproduct's existing consumers; no precision mode is added.

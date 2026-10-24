@@ -230,10 +230,10 @@ explicit external test inputs, not bundled in the crate.
 
 The verifier also runs the resource unit tests and public resource/CLI checks
 in release mode. Under Assignment I, JPL's `step_days=1e-300` conversion is
-rejected at use; IF99 retains its constructor guard. Both leave CLI stdout empty
+rejected at use. Y likewise rejects an IFTE conversion only when it is used. Both leave CLI stdout empty
 and permit valid processing afterward. JPL's canonical cache-before-read and
 partial-read behavior are now tested against H, including stale retry success;
-IF99 grids retain checked index/offset arithmetic. Release terrestrial exports
+IFTE retains checked native conversion, seek and coefficient access boundaries. Release terrestrial exports
 must be byte-identical to debug exports.
 
 Assignment I evidence is separate in `verification/jpl/`; see `JPL_REPORT.md`.
@@ -398,3 +398,14 @@ clock/glob/provenance, JPL and M1/M2 checks into ignored
 pre-edit freeze must already exist; ordinary verification does not record new
 expectations. Central retains acceptance; M2's four historical mode-order
 diagnostics remain unresolved.
+
+
+## Complete time-ephemeris lifecycle (Y; acceptance pending)
+
+The 29 IFTE, tt2tdb and read_fortran.h routines share canonical process ownership
+and one observation calculation with the existing strict frontend. See
+[TIME_EPHEMERIS_REPORT.md](TIME_EPHEMERIS_REPORT.md) for the three authorized
+corrections, exact V comparison projection, reproduction commands and remaining
+M2/0049 limitations. General PAR/TIM acceptance and CALCEPH library execution
+remain outside this transfer. Generated Y evidence is local and ignored under
+`../validation/time_ephemeris_port/`.

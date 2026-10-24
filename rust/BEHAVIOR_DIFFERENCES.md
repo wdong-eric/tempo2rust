@@ -2,8 +2,8 @@
 
 Assignment E preserves defined TEMPO2 results, including deterministic bugs.
 The pinned source is `fda6ad4a9753ad7dc5d291406f2f310a9161423f`. Numerical
-representation follows the already adopted Rug128 contract. Fixes are deferred
-until the overall transfer is complete; central review owns dispositions.
+representation follows the already adopted Rug128 contract. The original E policy deferred fixes; decisions 0053/0058 authorize the
+demonstrated W/Y corrections below. Central review owns acceptance.
 
 | Behavior / source | Reference evidence | Rust behavior and adjacent explanation | Disposition |
 |---|---|---|---|
@@ -66,8 +66,9 @@ untested malformed branches remain in `JPL_REPORT.md`; central owns acceptance.
 F B06 documentation correction: `ifteph.C::IFTE_init` does not check its header
 read counts. `IFTE_get_Vals` checks data seek/read outcomes and exits on a short
 coefficient read; upper dates must not be described as unchecked data reads.
-The Rust range/record guards and owned storage remain existing adapter departures.
-Only their source-description comment changed in this review follow-up.
+At that historical F follow-up only the source-description comment changed.
+Y now removes the broad IFTE range/grid/image adapter and preserves the full
+source lifecycle, with checked external-operation boundaries below.
 
 ## Assignment L clock/table dispositions (decision 0023 and user contraction approval)
 
@@ -147,3 +148,23 @@ linked-value arithmetic and full copyPSR remain deferred; M2 remains unaccepted.
 These checks establish source correspondence on the declared Darwin arm64 host,
 not complete physical-model validation, concurrency behavior, or a general
 PAR/TIM/site frontend. See W's report for native-invalid and unrun gaps.
+
+
+## Y time-ephemeris dispositions (0058/0061)
+
+| Original source behavior | Current disposition |
+| --- | --- |
+| IFTE init resets pc[1] but retains twot | Reset both to zero; retain other arrays/counters as mapped. Independently corrected native histories and rational zero-argument polynomial regression. |
+| FB cache keys only by record across newly opened files | Actual consumed file SHA-256 plus record; changed content starts cold, unchanged bytes retain warm nr==1 history. Publish only a valid candidate. Same-path edits, identical-byte replacement and failure/recovery tested. |
+| CALCEPH reads pulsar zero while evaluating another pulsar | Read the current observation; two-pulsar native witnesses and independent single/multiple equivalence. Supplied values only. |
+| Source leaks/released FILE pointers and source exits | Unique RAII owners; failed readers release safely, null/released invalid operations return contextual errors. Four terminal native events explicitly project released ownership; original raw state remains available. |
+| Partial IFTE header/constants, incomplete Fortran record int, incomplete FB data | Stop before consuming uninitialized/invalid source state. Byte-oriented fgetc EOF retains the recorded host all-ones classes. No fabricated native golden. |
+| IFTE version/grid/count restrictions in old subset | Remove broad restrictions. Preserve zero/one/two coefficients, backed beyond-end dates, valid negative-step cache skip and source kind selection. Check actual conversions, seek arithmetic and storage accesses. |
+| IFTE missing irec update; repeated obsTerm scaling | Preserve. No new record cache or derivative-formula correction. Dead second obsTerm assignment has no observable result. |
+| Remainder implemented as percent | Evaluate a-(int)(a/p)*p at Rug128, checked i32 quotient, Rug divisor. Defined signed-zero/nonfinite outcomes retained; four 0049 conversion-boundary differences remain unresolved. |
+| GCC O2 binary64 expression contraction | Explicit local mul_add only with compiled source and bounded witnesses for recurrence, derivative, reverse sum, record origin and dotproduct. No tolerance or production precision changes. |
+
+Full original/corrected field deltas, source-invalid cases and lifecycle projection
+are recorded in Y's contract and report. Historical V outputs/runners and all
+accepted regression evidence remain unchanged. M2 remains unaccepted with its
+same four raw-order diagnostics.
