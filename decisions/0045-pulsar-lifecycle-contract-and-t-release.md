@@ -1,5 +1,7 @@
 # Pulsar state, lifecycle and Assignment T
 
+**Routing update: decision 0050 supersedes this release's permission to modify the live accepted R runner.** Restore its accepted bytes and keep output isolation inside T-owned harness/staging. All other lifecycle requirements remain in force.
+
 Central decision, 24 October 2026. **Release Assignment T as the next sole Rust owner**, after O/R storage acceptance (0036/0041) and corrected S reference acceptance (0044). T transfers the complete pulsar state and the bounded lifecycle/copy/matrix operations below, then integrates the existing consumers. Central retains scientific design and milestone acceptance.
 
 ## Scope, source and ownership

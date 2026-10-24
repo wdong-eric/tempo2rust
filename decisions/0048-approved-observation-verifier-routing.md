@@ -1,5 +1,7 @@
 # Approved observation-verifier output routing
 
+**Superseded by decision 0050.** A subsequently retrieved direct user instruction requires restoration of the accepted runner. The hash-transition exception below is historical and must not be used to pass preservation checks.
+
 Central decision, 24 October 2026. Clarify the concurrent ownership in decisions 0045–0047. T's already authorized routing change to R's runner is compatible with U/V's preservation gate. This decision approves one exact file transition; it does not remove that runner from protected membership or permit scientific changes.
 
 ## Reviewed transition
