@@ -10,6 +10,18 @@ Observation/matrix/payload pointers map to typed context handles and offsets. Pa
 
 All outputs stay under T. Existing oracle files are read-only; ordinary comparison never records them. Execution receipts must bind actual sources, inputs, runners and executable bytes and reject stale evidence.
 
+Under decision 0050, the accepted R runner retains SHA-256
+`7d6424654a666d3852255bd9264ba0fbb88ba3c6e57f7bf717da4087a6b10529`.
+T's `regressions.py` copies R's top-level harness files to its ignored
+`routing/observation_storage_port/` directory. Only the copied run.py's ROOT and
+OUT path assignments change; all comparison, probe, fixture, membership and
+expectation bytes remain identical. Reversing those two substitutions must
+recover the original bytes. Original and executed staged identities, the exact
+unified diff, and before/after preservation checks are retained under `routing/`.
+R's unchanged verifier then dispatches O and the established regression chain.
+The completed run using the superseded 0048 routing remains under `prior_0048/`;
+the original pre-production freeze is unchanged.
+
 Diagnostics retain their channel, message order and action boundary. Comparison
 projects only source directory spelling and the five native address/layout
 messages at TKmatrix.C lines 184/192/194/203/208 to explicit logical descriptions.

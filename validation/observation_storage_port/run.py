@@ -4,7 +4,7 @@ import argparse,copy,gzip,hashlib,importlib.util,json,os,platform,secrets,subpro
 from fractions import Fraction
 from pathlib import Path
 sys.dont_write_bytecode=True
-HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];RUST=ROOT/'rust';OUT=Path(os.environ.get('TEMPO2_OBSERVATION_VERIFICATION_ROOT', RUST/'verification/observation_storage'))
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];RUST=ROOT/'rust';OUT=RUST/'verification/observation_storage'
 ENV=dict(os.environ,CARGO_HOME=str(RUST/'.cargo-home'),GMP_MPFR_SYS_CACHE=str(RUST/'target/gmp-cache'),LC_ALL='C')
 FIELDS=json.loads((HERE/'fields.json').read_text())['fields']
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
