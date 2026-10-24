@@ -1,4 +1,5 @@
-//! Selected observatory.C lookup, initialization, file/alias parsing and geometry.
+//! observatory.C: all eight active routines at fda6ad4. Fixed source records
+//! retain initialized prefixes/tails; snapshots and indices never borrow across growth.
 //! The alias vector intentionally accumulates across lines; lookup/warnings have
 //! process lifetime independently of the clock index (decision 0023).
 use crate::runtime::Resource;
@@ -6,6 +7,7 @@ use crate::{
     TimingError,
     clock_diagnostics::{Diagnostics, boundary, terminal},
     clock_text::{self, c_bytes},
+    observation::{format_string, read_string, write_string},
     tabulated_function::{chunks, os_error},
 };
 use sha2::{Digest, Sha256};
@@ -15,15 +17,15 @@ use std::{
     path::{Path, PathBuf},
 };
 
-#[derive(Clone)]
+#[derive(Clone, Debug, Default)]
 pub(crate) struct Observatory {
     pub xyz: [f64; 3],
     pub latitude: f64,
     pub longitude: f64,
     pub height: f64,
-    pub code: Vec<u8>,
-    pub name: Vec<u8>,
-    pub clock: Vec<u8>,
+    pub code: [Option<u8>; 16],
+    pub name: [Option<u8>; 32],
+    pub clock: [Option<u8>; 16],
 }
 #[derive(Default)]
 pub(crate) struct ObservatoryDatabase {
@@ -33,7 +35,7 @@ pub(crate) struct ObservatoryDatabase {
     pub resources: Vec<(PathBuf, Resource)>,
 }
 pub(crate) struct AliasList {
-    pub code: Vec<u8>,
+    pub code: [Option<u8>; 100],
     pub aliases: Vec<Vec<u8>>,
     pub warned: bool,
 }
@@ -54,7 +56,11 @@ pub(crate) fn resource(
     }
 }
 impl ObservatoryDatabase {
-    fn read_file(&mut self, path: &Path, diagnostics: &mut Diagnostics) -> Result<(), TimingError> {
+    pub fn read_file(
+        &mut self,
+        path: &Path,
+        diagnostics: &mut Diagnostics,
+    ) -> Result<(), TimingError> {
         diagnostics.version("observatory.C", "observatory()");
         let data = fs::read(path).map_err(|e| {
             diagnostics.stderr(
@@ -74,7 +80,7 @@ impl ObservatoryDatabase {
             resource(path, &data, "observatory definitions", None),
         ));
         let mut xyz: [Option<f64>; 3] = [None; 3];
-        let mut strings: [Option<Vec<u8>>; 3] = [None, None, None];
+        let mut record = Observatory::default();
         for (line_number, line) in chunks(&data).enumerate() {
             if line.first() == Some(&b'#') {
                 continue;
@@ -95,7 +101,12 @@ impl ObservatoryDatabase {
                     if token.len() >= [32, 16, 16][i] {
                         return Err(boundary("observatory_string_storage"));
                     }
-                    strings[i] = Some(token.to_vec());
+                    let storage: &mut [Option<u8>] = match i {
+                        0 => &mut record.name,
+                        1 => &mut record.code,
+                        _ => &mut record.clock,
+                    };
+                    write_string(storage, token, "observatory_string")?;
                     nread += 1;
                 }
             }
@@ -109,16 +120,13 @@ impl ObservatoryDatabase {
                     xyz[1].ok_or_else(|| boundary("observatory_unwritten_coordinate"))?,
                     z,
                 ];
-                let latitude = fang(x)?;
-                let longitude = -fang(y)?;
-                let flattening = 1.0 / 298.257222101;
-                let esq = flattening * (2.0 - flattening);
-                let n = 6378137.0 / (1.0 - esq * latitude.sin() * latitude.sin()).sqrt();
-                let coordinates = [
-                    (n + z) * latitude.cos() * longitude.cos(),
-                    (n + z) * latitude.cos() * longitude.sin(),
-                    (n * (1.0 - esq) + z) * latitude.sin(),
-                ];
+                let latitude = fang(1, x)?;
+                let longitude = -fang(1, y)?;
+                record.latitude = latitude;
+                record.longitude = longitude;
+                record.height = z;
+                grs80_to_itrf(&mut record);
+                let coordinates = record.xyz;
                 diagnostics.stdout(&[format!("\n\nERROR: The observatory coordinates for line {} in ",line_number+1).as_bytes(),path.as_os_str().as_bytes(),b"\n appear to be in TEMPO geodetic format. Tempo2 requires cartesian geocentric\n coordinates w.r.t the ITRF.\n ASSUMING your coordinates are geodetic in the ITRF realisation of the GRS80\n reference ellipsoid (unlikely to be precisely true), then the geocentric\n coordinates should be specified as follows:\n",format!(" {:.2} {:.2} {:.2}\n",coordinates[0],coordinates[1],coordinates[2]).as_bytes()].concat());
                 return Err(terminal(path, "observatory_geodetic"));
             }
@@ -135,17 +143,13 @@ impl ObservatoryDatabase {
                 );
                 return Err(terminal(path, "observatory_row"));
             }
-            let code = strings[1].as_ref().unwrap().clone();
             if nread == 5 {
-                let name = [b"UTC(".as_slice(), &code, b")"].concat();
-                strings[2] = Some(name[..name.len().min(15)].to_vec());
+                let name = [b"UTC(".as_slice(), &record.code()?, b")"].concat();
+                format_string(&mut record.clock, &name);
             }
-            self.observatories.push(geometry(
-                xyz.map(Option::unwrap),
-                code,
-                strings[0].as_ref().unwrap().clone(),
-                strings[2].as_ref().unwrap().clone(),
-            ));
+            record.xyz = xyz.map(Option::unwrap);
+            itrf_to_grs80(&mut record);
+            self.observatories.push(record.clone());
         }
         diagnostics.log(
             b'd',
@@ -159,7 +163,7 @@ impl ObservatoryDatabase {
         );
         Ok(())
     }
-    fn read_aliases(
+    pub fn read_aliases(
         &mut self,
         path: &Path,
         diagnostics: &mut Diagnostics,
@@ -193,6 +197,7 @@ impl ObservatoryDatabase {
             resource(path, &data, "observatory aliases", None),
         ));
         let mut aliases = Vec::new();
+        let mut code_storage = [None; 100];
         for line in chunks(&data) {
             if line.first() == Some(&b'#') {
                 continue;
@@ -211,8 +216,9 @@ impl ObservatoryDatabase {
                     }
                     aliases.push(word.to_vec());
                 }
+                write_string(&mut code_storage, code, "alias_code")?;
                 self.aliases.push(AliasList {
-                    code: code.to_vec(),
+                    code: code_storage,
                     aliases: aliases.clone(),
                     warned: false,
                 });
@@ -226,9 +232,6 @@ impl ObservatoryDatabase {
         alias: Option<&[u8]>,
         diagnostics: &mut Diagnostics,
     ) -> Result<(), TimingError> {
-        if self.initialized {
-            return Ok(());
-        }
         diagnostics.log(b'd', "observatory.C", 205, b"In initObservatories");
         let root = root.ok_or_else(|| boundary("observatory_environment_storage"))?;
         let directory = [c_bytes(root.as_os_str().as_bytes()), b"/observatory/"].concat();
@@ -305,21 +308,24 @@ impl ObservatoryDatabase {
         diagnostics.log(b'd', "observatory.C", 241, b"Leaving initObservatories");
         Ok(())
     }
-    pub fn get(
+    pub fn lookup_alias(
         &mut self,
         code: &[u8],
+        output: &mut [Option<u8>],
         root: Option<&Path>,
         alias: Option<&[u8]>,
         diagnostics: &mut Diagnostics,
-    ) -> Result<Observatory, TimingError> {
+    ) -> Result<(), TimingError> {
         let code = c_bytes(code);
-        self.initialize(root, alias, diagnostics)?;
-        let mut resolved = code;
-        if let Some(list) = self
+        if !self.initialized {
+            self.initialize(root, alias, diagnostics)?;
+        }
+        let resolved = if let Some(list) = self
             .aliases
             .iter_mut()
             .find(|l| l.aliases.iter().any(|a| a.eq_ignore_ascii_case(code)))
         {
+            let resolved = read_string(&list.code, "alias_code")?;
             if !list.warned {
                 diagnostics.log(
                     b'w',
@@ -329,74 +335,142 @@ impl ObservatoryDatabase {
                         b"Assuming site '".as_slice(),
                         code,
                         b"' means '",
-                        &list.code,
+                        &resolved,
                         b"'",
                     ]
                     .concat(),
                 );
                 list.warned = true;
             }
-            resolved = &list.code;
+            resolved
+        } else {
+            code.to_vec()
+        };
+        // A no-match in-place source call performs no write. Copying its identical
+        // known prefix through NUL is observationally identical, including tails.
+        write_string(output, &resolved, "observatory_alias_output")
+    }
+    pub fn index(
+        &mut self,
+        code: &[u8],
+        root: Option<&Path>,
+        alias: Option<&[u8]>,
+        diagnostics: &mut Diagnostics,
+    ) -> Result<usize, TimingError> {
+        let mut output = [None; 1024];
+        self.lookup_alias(code, &mut output, root, alias, diagnostics)?;
+        let resolved = read_string(&output, "observatory_alias_output")?;
+        for (i, o) in self.observatories.iter().enumerate() {
+            if o.code()?.eq_ignore_ascii_case(&resolved)
+                || o.name()?.eq_ignore_ascii_case(&resolved)
+            {
+                return Ok(i);
+            }
         }
-        if resolved.len() >= 1024 {
-            return Err(boundary("observatory_lookup_storage"));
-        }
-        if let Some(obs) = self.observatories.iter().find(|o| {
-            o.code.eq_ignore_ascii_case(resolved) || o.name.eq_ignore_ascii_case(resolved)
-        }) {
-            return Ok(obs.clone());
-        }
-        diagnostics.stderr(&[b"Observatory code '".as_slice(), code, b"' not found!\n"].concat());
+        diagnostics.stderr(
+            &[
+                b"Observatory code '".as_slice(),
+                c_bytes(code),
+                b"' not found!\n",
+            ]
+            .concat(),
+        );
         Err(terminal(
             root.unwrap_or(Path::new("")),
             "observatory_not_found",
         ))
     }
+    pub fn get(
+        &mut self,
+        code: &[u8],
+        root: Option<&Path>,
+        alias: Option<&[u8]>,
+        diagnostics: &mut Diagnostics,
+    ) -> Result<Observatory, TimingError> {
+        let index = self.index(code, root, alias, diagnostics)?;
+        Ok(self.observatories[index].clone())
+    }
 }
-fn fang(f: f64) -> Result<f64, TimingError> {
+impl Observatory {
+    pub fn code(&self) -> Result<Vec<u8>, TimingError> {
+        read_string(&self.code, "observatory_code")
+    }
+    pub fn name(&self) -> Result<Vec<u8>, TimingError> {
+        read_string(&self.name, "observatory_name")
+    }
+    pub fn clock(&self) -> Result<Vec<u8>, TimingError> {
+        read_string(&self.clock, "observatory_clock")
+    }
+}
+
+pub(crate) fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
+    // observatory.C:373-375: GCC16 -O2 contracts the component subtractions.
+    // W arithmetic evidence retains assembly and fused/unfused witnesses.
     let a = f / 1.0e4;
     if !a.is_finite() || a.trunc() < i32::MIN as f64 || a.trunc() > i32::MAX as f64 {
         return Err(boundary("observatory_angle_integer"));
     }
     let ia = a as i32;
-    let b = (f - ia as f64 * 1.0e4) / 1.0e2;
+    let b = (-(ia as f64)).mul_add(1.0e4, f) / 1.0e2;
     if !b.is_finite() || b.trunc() < i32::MIN as f64 || b.trunc() > i32::MAX as f64 {
         return Err(boundary("observatory_angle_integer"));
     }
     let ib = b as i32;
-    let g = f - ia as f64 * 1.0e4 - ib as f64 * 1.0e2;
-    Ok((ia as f64 + (ib as f64 + g / 6.0e1) / 6.0e1) / 36.0e1 * std::f64::consts::PI * 2.0)
+    let g = (-(ib as f64)).mul_add(1.0e2, (-(ia as f64)).mul_add(1.0e4, f));
+    let mut angle = (ia as f64 + (ib as f64 + g / 6.0e1) / 6.0e1) / 36.0e1;
+    if mode > 2 {
+        angle *= 15.0;
+    }
+    if mode == 1 || mode == 3 {
+        angle = angle * std::f64::consts::PI * 2.0;
+    }
+    Ok(angle)
 }
-fn geometry(xyz: [f64; 3], code: Vec<u8>, name: Vec<u8>, clock: Vec<u8>) -> Observatory {
-    // ITRF_to_GRS80, including its operation order and GRS80 constants.
-    let [x, y, z] = xyz;
+pub(crate) fn itrf_to_grs80(obs: &mut Observatory) {
+    // observatory.C:396,403,405,408-415: explicit mul_add matches only
+    // contractions present in U's GCC16 -O2 body (W arithmetic evidence).
+    let [x, y, z] = obs.xyz;
     let a = 6378137.0;
     let flattening = 1.0 / 298.257222101;
-    let p = (x * x + y * y) / (a * a);
+    let p = (x.mul_add(x, y * y)) / (a * a);
     let esq = flattening * (2.0 - flattening);
     let q = (1.0 - esq) / (a * a) * z * z;
     let r = (p + q - esq * esq) / 6.0;
     let s = esq * esq * p * q / (4.0 * r * r * r);
     let t = (1.0 + s + (s * (2.0 + s)).sqrt()).powf(1.0 / 3.0);
     let u = r * (1.0 + t + 1.0 / t);
-    let v = (u * u + esq * esq * q).sqrt();
+    let v = (u.mul_add(u, esq * esq * q)).sqrt();
     let w = esq * (u + v - q) / (2.0 * v);
-    let k = (u + v + w * w).sqrt() - w;
-    let d = k * (x * x + y * y).sqrt() / (k + esq);
-    let height = (k + esq - 1.0) / k * (d * d + z * z).sqrt();
-    let latitude = 2.0 * z.atan2(d + (d * d + z * z).sqrt());
+    let k = (w.mul_add(w, u + v)).sqrt() - w;
+    let d = k * (x.mul_add(x, y * y)).sqrt() / (k + esq);
+    let height = (k + esq - 1.0) / k * (d.mul_add(d, z * z)).sqrt();
+    let latitude = 2.0 * z.atan2(d + (d.mul_add(d, z * z)).sqrt());
     let longitude = if y >= 0.0 {
-        0.5 * std::f64::consts::PI - 2.0 * x.atan2((x * x + y * y).sqrt() + y)
+        (-2.0f64).mul_add(
+            x.atan2((x.mul_add(x, y * y)).sqrt() + y),
+            0.5 * std::f64::consts::PI,
+        )
     } else {
-        -0.5 * std::f64::consts::PI + 2.0 * x.atan2((x * x + y * y).sqrt() - y)
+        2.0f64.mul_add(
+            x.atan2((x.mul_add(x, y * y)).sqrt() - y),
+            -0.5 * std::f64::consts::PI,
+        )
     };
-    Observatory {
-        xyz,
-        code,
-        name,
-        clock,
-        height,
-        latitude,
-        longitude,
-    }
+    obs.height = height;
+    obs.latitude = latitude;
+    obs.longitude = longitude;
+}
+pub(crate) fn grs80_to_itrf(obs: &mut Observatory) {
+    let flattening = 1.0 / 298.257222101;
+    let esq = flattening * (2.0 - flattening);
+    // observatory.C:423,426: source-compiled subtract/add contractions.
+    let n = 6378137.0
+        / (-(esq * obs.latitude.sin()))
+            .mul_add(obs.latitude.sin(), 1.0)
+            .sqrt();
+    obs.xyz = [
+        (n + obs.height) * obs.latitude.cos() * obs.longitude.cos(),
+        (n + obs.height) * obs.latitude.cos() * obs.longitude.sin(),
+        n.mul_add(1.0 - esq, obs.height) * obs.latitude.sin(),
+    ];
 }

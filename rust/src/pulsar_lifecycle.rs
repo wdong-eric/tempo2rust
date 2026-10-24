@@ -207,6 +207,40 @@ impl PulsarContext {
             .get_mut(view.offset..)
             .ok_or_else(|| fail("observation_access", "offset", "capacity"))
     }
+    /// Scoped split borrow for physical drivers; the owner remains in this context.
+    pub(crate) fn pulsar_observations_mut(
+        &mut self,
+        index: usize,
+    ) -> Result<(&SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
+        use crate::clock_diagnostics::boundary;
+        if self.boundary.is_some() {
+            return Err(boundary("pulsar_context_fault"));
+        }
+        let p = self
+            .pulsars
+            .get(index)
+            .ok_or_else(|| boundary("pulsar_storage"))?;
+        // Signed empty loops need no observation owner or initialized pointer.
+        if p.nobs.is_some_and(|n| n <= 0) {
+            return Ok((p, &mut []));
+        }
+        let view = p
+            .obsn
+            .flatten()
+            .ok_or_else(|| boundary("pulsar_observation_owner"))?;
+        if view.owner.context != self.identity {
+            return Err(boundary("pulsar_foreign_observation_owner"));
+        }
+        let rows = self
+            .observations
+            .get_mut(view.owner.index)
+            .and_then(Option::as_mut)
+            .ok_or_else(|| boundary("pulsar_released_observation_owner"))?;
+        let rows = rows
+            .get_mut(view.offset..)
+            .ok_or_else(|| boundary("pulsar_observation_offset"))?;
+        Ok((p, rows))
+    }
     pub fn malloc_blas(
         &mut self,
         rows: usize,

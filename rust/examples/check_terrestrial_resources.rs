@@ -98,7 +98,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         fs::write(&path, &saved)?;
         // Same host process, new valid context after constructor rejection.
         let restored = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
-        assert_eq!(expected_result, serde_json::to_value(&restored)?);
+        // W: source displayMsg keys persist. Numerical/resource output is stable;
+        // a repeated evaluation need not repeat its first-use weather diagnostics.
+        let mut repeated = serde_json::to_value(&restored)?;
+        let mut first = expected_result.clone();
+        first["warnings"] = json!([]);
+        repeated["warnings"] = json!([]);
+        assert_eq!(first, repeated);
         let restored_cli = run_cli()?;
         assert!(restored_cli.status.success());
         assert_eq!(baseline_cli.stdout, restored_cli.stdout);
@@ -110,11 +116,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         );
     }
     let mut checks = Vec::new();
-    for name in [
-        "ephemeris/DE405.1950.2050",
-        "ephemeris/TIMEEPH_short.te405",
-        "earth/eopc04_IAU2000.62-now",
-    ] {
+    for name in ["ephemeris/DE405.1950.2050", "ephemeris/TIMEEPH_short.te405"] {
         let path = runtime_dir.join(name);
         let saved = fs::read(&path)?;
         fs::remove_file(&path)?;
@@ -145,7 +147,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         checks.push(json!({"resource":name,"missing_error":missing,"malformed_error":malformed,"recovery":"PASS"}));
     }
     // Loaded process resources survive file removal/replacement and new contexts.
-    for name in ["observatory/observatories.dat", "clock/utc2tai.clk"] {
+    for name in [
+        "observatory/observatories.dat",
+        "clock/utc2tai.clk",
+        "earth/eopc04_IAU2000.62-now",
+    ] {
         let path = runtime_dir.join(name);
         let saved = fs::read(&path)?;
         fs::remove_file(&path)?;
@@ -198,48 +204,88 @@ fn main() -> Result<(), Box<dyn Error>> {
     let zwd_data = fs::read(&zwd)?;
     fs::remove_file(&sap)?;
     fs::remove_file(&zwd)?;
-    let missing_weather = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
+    // W: weather and EOP now have source process lifetimes. A new context
+    // retains the actual original tables and provenance; fresh CLI processes
+    // exercise the changed-file branches without pretending to reset a cache.
+    let retained = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
     assert_eq!(
         expected,
-        serde_json::to_value(&missing_weather.timing.observations)?
+        serde_json::to_value(&retained.timing.observations)?
     );
+    assert_eq!(
+        expected_result["corrections"],
+        serde_json::to_value(&retained)?["corrections"]
+    );
+    let absent_cli = run_cli()?;
+    assert!(absent_cli.status.success());
+    let missing_weather: serde_json::Value = serde_json::from_slice(&absent_cli.stdout)?;
+    assert_eq!(expected, missing_weather["observations"]);
     assert!(
-        missing_weather
-            .corrections
+        missing_weather["corrections"]
+            .as_array()
+            .unwrap()
             .iter()
-            .all(|c| c.weather.pressure.reason == "no weather table for site")
+            .all(|c| c["weather"]["pressure"]["reason"] == "no weather table for site")
     );
-    // Valid zero rows use the same source fallback but must report the true reason.
     fs::write(&sap, "# PKS\n49000 0\n57000 0\n")?;
     fs::write(&zwd, "# PKS\n49000 0\n57000 0\n")?;
-    let zero_weather = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
-    assert_eq!(
-        expected,
-        serde_json::to_value(&zero_weather.timing.observations)?
-    );
+    let zero_cli = run_cli()?;
+    assert!(zero_cli.status.success());
+    let zero_weather: serde_json::Value = serde_json::from_slice(&zero_cli.stdout)?;
+    assert_eq!(expected, zero_weather["observations"]);
     assert!(
-        zero_weather
-            .corrections
+        zero_weather["corrections"]
+            .as_array()
+            .unwrap()
             .iter()
-            .all(|c| c.weather.pressure.reason == "zero table value"
-                && c.weather.zenith_wet_delay.reason == "zero table value")
+            .all(|c| c["weather"]["pressure"]["reason"] == "zero table value"
+                && c["weather"]["zenith_wet_delay"]["reason"] == "zero table value")
     );
     fs::write(&sap, "# PKS\n49000 90\n57000 110\n")?;
     fs::write(&zwd, "# PKS\n49000 1e-9\n57000 3e-9\n")?;
-    let measured = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
-    assert!(measured.warnings.is_empty());
+    let measured_cli = run_cli()?;
+    assert!(measured_cli.status.success());
+    let measured: serde_json::Value = serde_json::from_slice(&measured_cli.stdout)?;
+    assert!(
+        measured["warnings"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|w| !w.as_str().unwrap().contains("TROP"))
+    );
     assert_eq!(
-        measured.corrections[0]
-            .weather
-            .pressure
-            .effective_value
-            .as_float(),
-        &92.5
+        measured["corrections"][0]["weather"]["pressure"]["effective_value"]
+            .as_str()
+            .unwrap()
+            .parse::<f64>()?,
+        92.5
     );
     assert_ne!(
-        measured.corrections[0].troposphere_s,
-        baseline.corrections[0].troposphere_s
+        measured["corrections"][0]["troposphere_s"],
+        expected_result["corrections"][0]["troposphere_s"]
     );
+    let cached = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
+    assert_eq!(
+        expected_result["corrections"],
+        serde_json::to_value(&cached)?["corrections"]
+    );
+    for name in [
+        "earth/eopc04_IAU2000.62-now",
+        "atmosphere/pks.sap",
+        "atmosphere/pks.zwd",
+    ] {
+        let actual = cached
+            .resources
+            .iter()
+            .find(|r| r.path == source.join(name).to_string_lossy())
+            .unwrap();
+        let original = baseline
+            .resources
+            .iter()
+            .find(|r| r.path == actual.path)
+            .unwrap();
+        assert_eq!(actual.sha256, original.sha256);
+    }
     fs::write(&sap, &sap_data)?;
     fs::write(&zwd, &zwd_data)?;
     // Failure after one complete TOA must not publish a prefix or mutate input.

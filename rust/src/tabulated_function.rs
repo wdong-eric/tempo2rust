@@ -14,10 +14,11 @@ use std::{
     path::{Path, PathBuf},
 };
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub(crate) struct TabulatedFunction {
     pub path: PathBuf,
     pub name: Vec<u8>,
+    pub name_storage: Vec<u8>, // source-known fileName prefix and retained tail
     pub header: Vec<u8>,
     pub header_storage: Vec<u8>, // initialized prefix; may lack NUL at a boundary
     pub samples: Vec<[f64; 2]>,
@@ -78,6 +79,7 @@ impl TabulatedFunction {
         };
         self.finish(result)
     }
+    #[cfg(test)]
     pub fn from_bytes(
         path: &Path,
         data: &[u8],
@@ -128,7 +130,10 @@ impl TabulatedFunction {
             self.header = c_bytes(&self.header_storage).to_vec();
             return Err(boundary("table_header_storage"));
         }
-        self.header_storage = [header, &[0]].concat();
+        self.header_storage
+            .resize(self.header_storage.len().max(header.len() + 1), 0);
+        self.header_storage[..header.len()].copy_from_slice(header);
+        self.header_storage[header.len()] = 0;
         self.header = c_bytes(header).to_vec();
         if self.header.first() != Some(&b'#') {
             diagnostics.stderr(
@@ -189,6 +194,10 @@ impl TabulatedFunction {
         if name.len() >= 256 {
             return Err(boundary("table_filename_storage"));
         }
+        self.name_storage
+            .resize(self.name_storage.len().max(name.len() + 1), 0);
+        self.name_storage[..name.len()].copy_from_slice(name);
+        self.name_storage[name.len()] = 0;
         self.name = name.to_vec();
         if self.samples.is_empty() {
             diagnostics.stderr(
@@ -229,9 +238,6 @@ impl TabulatedFunction {
                 .map(|s| s[0])
                 .ok_or_else(|| boundary("table_sample_storage")),
         )
-    }
-    pub fn covers(&self, x: f64) -> Result<bool, TimingError> {
-        Ok(self.start()? <= x && self.end()? >= x)
     }
     pub fn get_value(&self, x: f64, diagnostics: &mut Diagnostics) -> Result<f64, TimingError> {
         self.check()?;

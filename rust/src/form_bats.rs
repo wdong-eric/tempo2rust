@@ -100,6 +100,7 @@ pub fn form_bats_all(
     let mut corrections = Vec::new();
     let mut bats = Vec::new();
     let mut warnings = Vec::new();
+    let mut tropo_warned = false;
     for (obs, original) in input
         .source_observations()
         .iter()
@@ -166,13 +167,24 @@ pub fn form_bats_all(
                     Ok((steps, total))
                 })?;
             let utc = sat.clone() + clock_utc / 86400.0f64;
-            let site = crate::get_obs_coord::get_obs_coord(
-                &runtime.observatory,
-                &tt,
-                &utc,
-                &runtime.eop,
-                &mut warnings,
-            )?;
+            let eop = crate::clkcorr::with_resources(&runtime.root, |session| {
+                session.eop.initialize(
+                    Some(&runtime.root),
+                    b"earth/eopc04_IAU2000.62-now",
+                    &mut session.diagnostics,
+                )?;
+                let mut values = [0.0; 4];
+                session.eop.get_eop(
+                    utc.to_f64(),
+                    &mut values,
+                    [0, 1, 2, 3],
+                    2,
+                    &mut session.diagnostics,
+                )?;
+                session.export_terrestrial_resources(&runtime.root, &mut runtime.resources);
+                Ok(values)
+            })?;
+            let site = crate::get_obs_coord::get_obs_coord(&runtime.observatory, &tt, &utc, eop)?;
             let time_correction = crate::tt2tdb::tt2tb(
                 &runtime.ifte,
                 &tt,
@@ -187,29 +199,39 @@ pub fn form_bats_all(
                 earth_ssb,
                 planets_earth,
             } = crate::read_ephemeris::read_ephemeris(&mut runtime.jpl, jd)?;
-            let weather = Weather {
-                pressure: crate::tropo::get_meteorological_value(
-                    &runtime.surface_pressure_tables,
-                    &runtime.observatory.code,
-                    sat.to_f64(),
-                    true,
-                    &mut warnings,
-                )?,
-                zenith_wet_delay: crate::tropo::get_meteorological_value(
-                    &runtime.zenith_wet_delay_tables,
-                    &runtime.observatory.code,
-                    sat.to_f64(),
-                    false,
-                    &mut warnings,
-                )?,
-            };
-            let tropospheric_delay = crate::tropo::compute_tropospheric_delay(
-                &runtime.observatory,
-                site.zenith,
-                pos_pulsar,
-                utc.to_f64(),
-                &weather,
-            );
+            // The established PKS frontend selects propagation corrections for
+            // every supplied TOA; initialiseOne leaves this observation cell unwritten.
+            clock_observation.delayCorr = Some(1);
+            clock_observation.zenith = site.zenith.map(Some);
+            let weather = crate::clkcorr::with_resources(&runtime.root, |session| {
+                let weather = crate::tropo::compute_observation(
+                    session,
+                    &crate::tropo::TropospherePulsar {
+                        source: input.source_pulsar(),
+                        position: Some(pos_pulsar),
+                        warnings: Some(1),
+                    },
+                    &mut clock_observation,
+                    corrections.len(),
+                    &mut tropo_warned,
+                )?
+                .ok_or_else(|| {
+                    crate::clock_diagnostics::boundary("PKS_troposphere_not_calculated")
+                })?;
+                session.export_resources(&runtime.root, &mut runtime.resources);
+                warnings.extend(
+                    session
+                        .diagnostics
+                        .events
+                        .drain(..)
+                        .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
+                );
+                Ok(weather)
+            })?;
+            let tropospheric_delay = *crate::observation::read(
+                &clock_observation.troposphericDelay,
+                "troposphericDelay",
+            )?;
             let observatory_ssb = std::array::from_fn(|i| earth_ssb[i] + site.observatory_earth[i]);
             let observatory_sun =
                 std::array::from_fn(|i| -sun_ssb[i] + earth_ssb[i] + site.observatory_earth[i]);

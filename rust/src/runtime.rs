@@ -3,10 +3,7 @@
 //! follows tropo.C::initialize_meteorology_tables. Orchestrates Rust counterparts
 //! of clkcorr.C::getClockCorrections, eop.C::load_EOP, ifteph.C::IFTE_init and
 //! jpleph.c::jpl_init_ephemeris; resource hashing/ownership are Rust-only glue.
-use crate::{
-    TimingError, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris,
-    tabulated_function::TabulatedFunction,
-};
+use crate::{TimingError, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::{
@@ -53,42 +50,7 @@ pub(crate) fn read_resource(
     Ok(data)
 }
 
-pub(crate) fn paths_with_extension(
-    dir: &Path,
-    extension: &str,
-    optional: bool,
-) -> Result<Vec<PathBuf>, TimingError> {
-    let entries = match fs::read_dir(dir) {
-        Ok(v) => v,
-        Err(e) if optional && e.kind() == std::io::ErrorKind::NotFound => return Ok(Vec::new()),
-        Err(e) => {
-            return Err(TimingError::new(
-                dir,
-                None,
-                "resource directory",
-                e.to_string(),
-            ));
-        }
-    };
-    let mut paths = Vec::new();
-    for entry in entries {
-        let path = entry
-            .map_err(|e| TimingError::new(dir, None, "directory entry", e.to_string()))?
-            .path();
-        if path.extension().is_some_and(|s| s == extension) {
-            paths.push(path);
-        }
-    }
-    paths.sort();
-    Ok(paths)
-}
-
 pub(crate) use crate::observatory::Observatory;
-
-pub(crate) struct MeteorologyFunction {
-    pub site: Vec<u8>,
-    pub table: TabulatedFunction,
-}
 
 /// Owned resources for the declared PKS / DE405 / IF99 / TT(TAI) path.
 /// Construct separately from `load`; barycentric evaluation never needs a runtime.
@@ -98,16 +60,13 @@ pub struct RuntimeContext {
     pub(crate) observatory: Observatory,
     pub(crate) ifte: IfteEphemeris,
     pub(crate) jpl: JplEphemeris,
-    pub(crate) eop: crate::eop::Eop,
-    pub(crate) surface_pressure_tables: Vec<MeteorologyFunction>,
-    pub(crate) zenith_wet_delay_tables: Vec<MeteorologyFunction>,
 }
 impl RuntimeContext {
     pub fn new(root: &Path) -> Result<Self, TimingError> {
         let root = fs::canonicalize(root)
             .map_err(|e| TimingError::new(root, None, "runtime root", e.to_string()))?;
         let mut resources = Vec::new();
-        let observatory = crate::clkcorr::with_session(&root, |session| {
+        let observatory = crate::clkcorr::with_resources(&root, |session| {
             let observatory = session.observatories.get(
                 b"PKS",
                 session.root.as_deref(),
@@ -162,42 +121,26 @@ impl RuntimeContext {
         let jpl = JplEphemeris::open(&path, file)?;
         resources.last_mut().unwrap().coverage_mjd =
             Some([jpl.start_jd - 2400000.5, jpl.end_jd - 2400000.5]);
-        let path = root.join("earth/eopc04_IAU2000.62-now");
-        let data = read_resource(&root, &path, "Earth orientation", &mut resources)?;
-        let text = std::str::from_utf8(&data)
-            .map_err(|e| TimingError::new(&path, None, "EOP", e.to_string()))?;
-        let eop = crate::eop::Eop::load_eop(&path, text)?;
-        resources.last_mut().unwrap().coverage_mjd = Some(eop.coverage());
-        let mut surface_pressure_tables = Vec::new();
-        let mut zenith_wet_delay_tables = Vec::new();
-        for (extension, tables) in [
-            ("sap", &mut surface_pressure_tables),
-            ("zwd", &mut zenith_wet_delay_tables),
-        ] {
-            for path in paths_with_extension(&root.join("atmosphere"), extension, true)? {
-                let data = read_resource(&root, &path, "meteorology table", &mut resources)?;
-                let table = crate::clkcorr::with_session(&root, |session| {
-                    TabulatedFunction::from_bytes(&path, &data, &mut session.diagnostics)
-                })?;
-                resources.last_mut().unwrap().coverage_mjd = Some([table.start()?, table.end()?]);
-                let site = crate::clock_text::tokens(&table.header[1..])
-                    .next()
-                    .ok_or_else(|| {
-                        TimingError::new(&path, Some(1), "meteorology", "missing site name")
-                    })?
-                    .to_vec();
-                tables.push(MeteorologyFunction { site, table });
+        crate::clkcorr::with_resources(&root, |session| {
+            session.eop.initialize(
+                Some(&root),
+                b"earth/eopc04_IAU2000.62-now",
+                &mut session.diagnostics,
+            )?;
+            if !session.meteorology.initialized {
+                session
+                    .meteorology
+                    .initialize(Some(&root), 0, &mut session.diagnostics)?;
             }
-        }
+            session.export_terrestrial_resources(&root, &mut resources);
+            Ok(())
+        })?;
         Ok(Self {
             root,
             resources,
             observatory,
             ifte,
             jpl,
-            eop,
-            surface_pressure_tables,
-            zenith_wet_delay_tables,
         })
     }
     pub fn resources(&self) -> &[Resource] {

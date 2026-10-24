@@ -99,3 +99,29 @@ pub(crate) fn format_number(x: f64, style: NumberFormat) -> Vec<u8> {
     }
     c_bytes(&out).to_vec()
 }
+
+/// `%d%n` grammar without native integer-overflow behavior. The scanner advances
+/// through the decimal prefix only; conversion overflow is an explicit boundary.
+pub(crate) fn integer_prefix(bytes: &[u8]) -> Result<Option<(i32, usize)>, crate::TimingError> {
+    let bytes = c_bytes(bytes);
+    let mut end = 0;
+    while end < bytes.len() && whitespace(bytes[end]) {
+        end += 1;
+    }
+    let start = end;
+    if end < bytes.len() && matches!(bytes[end], b'+' | b'-') {
+        end += 1;
+    }
+    let digits = end;
+    while end < bytes.len() && bytes[end].is_ascii_digit() {
+        end += 1;
+    }
+    if end == digits {
+        return Ok(None);
+    }
+    let text = std::str::from_utf8(&bytes[start..end]).unwrap();
+    let value = text
+        .parse()
+        .map_err(|_| crate::clock_diagnostics::boundary("scan_integer_range"))?;
+    Ok(Some((value, end)))
+}

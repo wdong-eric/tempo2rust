@@ -1,7 +1,9 @@
 //! Synthetic trust-boundary/recovery checks; numerical fixture checks are separate.
 use crate::{
-    eop::Eop, ifteph::IfteEphemeris, runtime::MeteorologyFunction,
-    tabulated_function::TabulatedFunction, tropo::get_meteorological_value,
+    eop::Eop,
+    ifteph::IfteEphemeris,
+    tabulated_function::TabulatedFunction,
+    tropo::{Meteorology, MeteorologyFunction},
 };
 use std::path::Path;
 
@@ -45,64 +47,87 @@ fn table_steps_endpoints_and_source_rows() {
 #[test]
 fn meteorology_valid_zero_missing_and_outside_coverage() {
     let table = |text| MeteorologyFunction {
-        site: b"PKS".to_vec(),
+        site: b"PKS\0".to_vec(),
         table: table(Path::new("pks.synthetic"), text),
     };
     let pressure = vec![table("# PKS\n53000 100\n53001 102\n")];
     let wet = vec![table("# PKS\n53000 1e-9\n53001 3e-9\n")];
-    let mut warnings = Vec::new();
-    let p = get_meteorological_value(&pressure, b"pks", 53000.5, true, &mut warnings).unwrap();
-    let w = get_meteorological_value(&wet, b"pks", 53000.5, false, &mut warnings).unwrap();
-    assert_eq!(p.effective_value.0, 101.0);
-    assert!((w.effective_value.0.to_f64() - 2e-9).abs() < 1e-24);
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    let mut met = Meteorology {
+        initialized: true,
+        pressure,
+        wet,
+    };
+    let p = met
+        .pressure(None, b"pks", 53000.5, -1, &mut diagnostics)
+        .unwrap();
+    let w = met
+        .wet(None, b"pks", 53000.5, -1, &mut diagnostics)
+        .unwrap();
+    assert_eq!(p.value, 101.0);
+    assert!((w.value - 2e-9).abs() < 1e-24);
     assert_eq!(p.reason, "table interpolation");
-    assert!(warnings.is_empty());
-    let zero = [table("# PKS\n53000 0\n53001 0\n")];
+    assert!(diagnostics.events.is_empty());
     for (tables, mjd, reason) in [
-        (&zero[..], 53000.5, "zero table value"),
-        (&[][..], 53000.5, "no weather table for site"),
-        (&pressure[..], 50000.0, "epoch outside weather coverage"),
+        (
+            vec![table("# PKS\n53000 0\n53001 0\n")],
+            53000.5,
+            "zero table value",
+        ),
+        (vec![], 53000.5, "no weather table for site"),
+        (
+            vec![table("# PKS\n53000 100\n53001 102\n")],
+            50000.0,
+            "epoch outside weather coverage",
+        ),
     ] {
-        let p = get_meteorological_value(tables, b"pks", mjd, true, &mut warnings).unwrap();
-        let w = get_meteorological_value(tables, b"pks", mjd, false, &mut warnings).unwrap();
-        assert_eq!(p.effective_value.0, 101.325);
-        assert_eq!(w.effective_value.0, 0);
+        met.pressure = tables.clone();
+        met.wet = tables;
+        let p = met
+            .pressure(None, b"pks", mjd, -1, &mut diagnostics)
+            .unwrap();
+        let w = met.wet(None, b"pks", mjd, -1, &mut diagnostics).unwrap();
+        assert_eq!(p.value, 101.325);
+        assert_eq!(w.value, 0.0);
         assert_eq!(p.reason, reason);
         assert_eq!(w.reason, reason);
     }
-    assert_eq!(
-        warnings.iter().filter(|w| w.starts_with("TROP1")).count(),
-        3
-    );
-    assert_eq!(
-        warnings.iter().filter(|w| w.starts_with("TROP2")).count(),
-        3
-    );
+    assert_eq!(diagnostics.events.len(), 6);
 }
 
 #[test]
 fn eop_upper_boundary_recovers_and_leap_is_not_interpolated() {
-    let p = Path::new("synthetic.eop");
-    let header = "FORMAT(3(I4),I7,2(F11.6),2(F12.7),2(F11.6),2(F11.6),2(F11.7),2F12.6)\n";
-    let eop = Eop::load_eop(
-        p,
-        &format!(
-            "{header}2000 1 1 50000 1 2 -0.4\n2000 1 2 50001 3 4 0.59\n2000 1 3 50002 5 6 0.58\n"
-        ),
-    )
-    .unwrap();
-    let mut warnings = Vec::new();
-    let before = eop.get_eop(50000.5, &mut warnings).unwrap();
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    let eop = Eop {
+        initialized: true,
+        resource: None,
+        samples: vec![
+            [50000.0, 1.0, 2.0, -0.4],
+            [50001.0, 3.0, 4.0, 0.59],
+            [50002.0, 5.0, 6.0, 0.58],
+        ],
+    };
+    let mut before = [0.0; 4];
+    eop.get_eop(50000.5, &mut before, [0, 1, 2, 3], 0, &mut diagnostics)
+        .unwrap();
     assert!((before[2] + 0.405).abs() < 1e-15);
     assert!((before[3] + 0.01 / 86400.0).abs() < 1e-18);
     for date in [50002.0, 51000.0] {
-        assert!(eop.get_eop(date, &mut warnings).is_err());
+        let mut output = [0.0; 4];
+        assert!(
+            eop.get_eop(date, &mut output, [0, 1, 2, 3], 2, &mut diagnostics)
+                .is_err()
+        );
+        assert_eq!(output, [5.0, 6.0, 0.58, 0.0]);
     }
-    assert_eq!(before, eop.get_eop(50000.5, &mut warnings).unwrap());
-    assert_eq!(eop.get_eop(40000.0, &mut warnings).unwrap()[2], -0.4);
-    assert_eq!(warnings.len(), 1);
-    assert!(Eop::load_eop(p, "bad").is_err());
-    assert!(Eop::load_eop(p, &format!("{header}2000 1 1 50000 NaN 0 0")).is_err());
+    let mut after = [0.0; 4];
+    eop.get_eop(50000.5, &mut after, [0, 1, 2, 3], 0, &mut diagnostics)
+        .unwrap();
+    assert_eq!(before, after);
+    eop.get_eop(40000.0, &mut after, [0, 1, 2, 3], 0, &mut diagnostics)
+        .unwrap();
+    assert_eq!(after[2], -0.4);
+    assert_eq!(diagnostics.warnings, 1);
 }
 
 fn put_f(bytes: &mut [u8], at: usize, x: f64, big: bool) {

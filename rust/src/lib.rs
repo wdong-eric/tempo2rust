@@ -350,3 +350,6 @@ impl Serialize for TimingInput {
         out.end()
     }
 }
+
+#[cfg(test)]
+mod terrestrial_tests;

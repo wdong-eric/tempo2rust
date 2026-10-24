@@ -1,7 +1,7 @@
 //! TEMPO2 get_obsCoord.C::get_obsCoord_IAU2000B, selected PKS geometry.
 //! Retained SOFA: sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for routines
 //! iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP and their pinned dependency closure.
-use crate::{TimingError, eop::Eop, runtime::Observatory};
+use crate::{TimingError, runtime::Observatory};
 use rug::Float;
 // Necessity: retain the accepted SOFA Fortran implementation through its C ABI.
 // Safety contract: by-reference f64 scalars and contiguous column-major arrays
@@ -32,10 +32,9 @@ pub(crate) fn get_obs_coord(
     obs: &Observatory,
     tt: &Float,
     utc: &Float,
-    eop: &Eop,
-    warnings: &mut Vec<String>,
+    eop: [f64; 4],
 ) -> Result<SiteGeometry, TimingError> {
-    let [xp, yp, dut1, dut1dot] = eop.get_eop(utc.to_f64(), warnings)?;
+    let [xp, yp, dut1, dut1dot] = eop;
     let tt_jd = tt.clone() + 2400000.5f64;
     let tt1 = tt_jd.clone().trunc().to_f64();
     let tt2 = (tt_jd - tt1).to_f64();

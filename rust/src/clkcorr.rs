@@ -88,6 +88,8 @@ pub(crate) struct ClockSession {
     pub alias: Option<Vec<u8>>,
     pub diagnostics: Diagnostics,
     pub observatories: ObservatoryDatabase,
+    pub eop: crate::eop::Eop,
+    pub meteorology: crate::tropo::Meteorology,
     pub queries: Vec<TableQuery>,
     pub fault: Option<TimingError>,
 }
@@ -105,13 +107,26 @@ pub(crate) fn with_session<T>(
     session.alias = std::env::var_os("TEMPO2_ALIAS").map(|v| v.as_bytes().to_vec());
     session.run(operation)
 }
+/// Resource operations share ownership/diagnostics but not a clock terminal fault.
+pub(crate) fn with_resources<T>(
+    root: &Path,
+    operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
+) -> Result<T, TimingError> {
+    let mut session = SESSION
+        .lock()
+        .map_err(|_| boundary("clock_session_poisoned"))?;
+    session.root = Some(root.into());
+    session.alias = std::env::var_os("TEMPO2_ALIAS").map(|v| v.as_bytes().to_vec());
+    operation(&mut session)
+}
+#[cfg(test)]
 pub(crate) fn with_diagnostics<T>(
     operation: impl FnOnce(&mut Diagnostics) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
-    session.run(|s| operation(&mut s.diagnostics))
+    operation(&mut session.diagnostics)
 }
 /// Lifecycle logging uses the same sink, but is independent of a terminal clock
 /// calculation. Native allocation/initialization logs do not reenter that work.
@@ -790,15 +805,14 @@ impl ClockSession {
         if !name.is_empty() {
             return Ok(name.to_vec());
         }
-        Ok(self
-            .observatories
+        self.observatories
             .get(
                 &read_string(&obs.telID, "telID")?,
                 self.root.as_deref(),
                 self.alias.as_deref(),
                 &mut self.diagnostics,
             )?
-            .clock)
+            .clock()
     }
     pub fn get_clock_corrections(
         &mut self,
@@ -950,8 +964,43 @@ impl ClockSession {
             }
         }
     }
-    pub fn export_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
+    pub fn export_terrestrial_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
         self.export_observatory_resources(root, resources);
+        let mut records: Vec<Resource> = self.eop.resource.iter().cloned().collect();
+        for f in self
+            .meteorology
+            .wet
+            .iter()
+            .chain(&self.meteorology.pressure)
+        {
+            records.push(Resource {
+                path: f.table.path.to_string_lossy().into_owned(),
+                sha256: f.table.sha256.clone(),
+                size_bytes: f.table.size_bytes,
+                role: "meteorology table".into(),
+                coverage_mjd: f
+                    .table
+                    .samples
+                    .first()
+                    .zip(f.table.samples.last())
+                    .map(|(a, b)| [a[0], b[0]]),
+            });
+        }
+        for mut r in records {
+            r.path = Path::new(&r.path)
+                .strip_prefix(root)
+                .unwrap_or(Path::new(&r.path))
+                .to_string_lossy()
+                .into_owned();
+            if let Some(old) = resources.iter_mut().find(|old| old.path == r.path) {
+                *old = r;
+            } else {
+                resources.push(r);
+            }
+        }
+    }
+    pub fn export_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
+        self.export_terrestrial_resources(root, resources);
         for f in &self.functions {
             let mut r = f.indexed.clone();
             r.path = f
