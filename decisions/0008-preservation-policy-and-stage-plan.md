@@ -1,7 +1,5 @@
 # Preservation policy and continuing stage plan
 
-**Current-policy notice (24 October 2026):** [Decision 0053](0053-small-upstream-bug-fixes-during-transfer.md), based on the user's later instruction, supersedes this document's blanket prohibition on fixing demonstrated bugs during transfer. The original decision below is retained as history. Its source correspondence, unsafe, coverage and central-acceptance requirements remain applicable; independently decided numerical gates are unchanged.
-
 Central decision, 23 October 2026, implementing the user's active goal. **Preserve TEMPO2 behavior during the transfer, including known bugs. Defer their correction until the overall transfer is finished.** This supersedes earlier permission to fix a newly demonstrated TEMPO2 bug while porting. Central design and milestone acceptance remain in this chat; separate implementation chats deliver evidence for review.
 
 ## Required fidelity
