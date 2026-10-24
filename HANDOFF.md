@@ -182,6 +182,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment X: TEMPO2 observer coordinates | `01a16c44-a1ca-7e43-a83a-1cdce98d44e8` | Accepted at `02234cd` by decision 0059; ownership closed |
 | Assignment Y: Rust time ephemerides | `01a16c81-884a-70b0-9791-627bb0b21c0c` | Dispatched from `5920aff` under 0058/0061; sole Rust owner, plus `validation/time_ephemeris_port/` |
 | Assignment Z: TEMPO2 planetary ephemeris | `01a16c74-090a-70a3-a4a8-29ecb51fe5de` | Dispatched from `7946aee` under 0060; owns only `validation/planetary_ephemeris/` |
+| Assignment AB: TEMPO2 propagation reference | `01a16c97-34ca-70f0-a77c-d251fa5c9f3e` | Dispatched from `b8d6263` under 0063; owns only `validation/propagation/` |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
 
@@ -192,6 +193,8 @@ Starting an assignment means opening an implementation chat in this workspace an
 **Z dispatched 24 October 2026:** The independent native planetary-ephemeris reference chat started from `7946aee` under 0060. Its active turn is confirmed and W received the separate ownership boundary. X is closed; W remains sole Rust owner while its final verification/report is completed. Y remains prepared until central acceptance of W.
 
 **Y dispatched 24 October 2026:** The separate Rust time-ephemeris chat started from `5920aff` after W acceptance at `bd290cc`. Its active turn is confirmed. Y owns `rust/` and `validation/time_ephemeris_port/`; Z received the independent ownership boundary. The released 0058/0061 contract and current bug/validation policies apply. Central retains design and milestone acceptance.
+
+**AB dispatched 24 October 2026:** The independent native propagation/dispersion reference chat started from `b8d6263` under 0063. Its active turn is confirmed; Y and Z received the ownership boundary. AB owns only `validation/propagation/`, Y remains the sole Rust writer, and AA remains prepared until Y acceptance. Current bug and generated-evidence policies apply; central retains design and milestone acceptance.
 
 ## Shared working design
 
