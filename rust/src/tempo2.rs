@@ -587,18 +587,18 @@ impl ParameterCell {
 /// Clone clones the entire owner; it is deliberately different from copyParam.
 #[derive(Clone, Debug)]
 pub struct SourceParameter {
-    pub(crate) a_size: i32,
+    pub(crate) a_size: Option<i32>,
     pub(crate) cells: Vec<ParameterCell>,
     pub(crate) link_from: [Option<i32>; 5],
     pub(crate) link_to: [Option<i32>; 5],
-    pub(crate) n_link_to: i32,
-    pub(crate) n_link_from: i32,
+    pub(crate) n_link_to: Option<i32>,
+    pub(crate) n_link_from: Option<i32>,
     pub(crate) boundary: Option<ParameterBoundary>,
 }
 impl SourceParameter {
     pub(crate) fn allocated(capacity: usize, label_bytes: usize) -> Self {
         Self {
-            a_size: capacity as i32,
+            a_size: Some(capacity as i32),
             cells: (0..capacity)
                 .map(|_| ParameterCell {
                     label: vec![0; label_bytes],
@@ -613,12 +613,12 @@ impl SourceParameter {
                 .collect(),
             link_from: [None; 5],
             link_to: [None; 5],
-            n_link_to: 0,
-            n_link_from: 0,
+            n_link_to: Some(0),
+            n_link_from: Some(0),
             boundary: None,
         }
     }
-    pub fn logical_size(&self) -> i32 {
+    pub fn logical_size(&self) -> Option<i32> {
         self.a_size
     }
     pub fn backing_size(&self) -> usize {
@@ -630,10 +630,10 @@ impl SourceParameter {
     pub fn link_to(&self) -> &[Option<i32>; 5] {
         &self.link_to
     }
-    pub fn n_link_from(&self) -> i32 {
+    pub fn n_link_from(&self) -> Option<i32> {
         self.n_link_from
     }
-    pub fn n_link_to(&self) -> i32 {
+    pub fn n_link_to(&self) -> Option<i32> {
         self.n_link_to
     }
     pub fn boundary(&self) -> Option<&ParameterBoundary> {
@@ -662,6 +662,21 @@ pub struct ParameterStore {
     pub(crate) slots: Vec<SourceParameter>,
 }
 impl ParameterStore {
+    pub(crate) fn unwritten() -> Self {
+        Self {
+            slots: (0..MAX_PARAMS)
+                .map(|_| SourceParameter {
+                    a_size: None,
+                    cells: Vec::new(),
+                    link_from: [None; 5],
+                    link_to: [None; 5],
+                    n_link_to: None,
+                    n_link_from: None,
+                    boundary: None,
+                })
+                .collect(),
+        }
+    }
     pub fn slots(&self) -> &[SourceParameter] {
         &self.slots
     }

@@ -30,7 +30,8 @@ fn pulse_integer(value: &Float) -> Option<i64> {
 /// All input observations are eligible; the first one's signed fractional phase
 /// sets the reference. No fit, tracking, sorting, cuts or mean subtraction occurs.
 pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
-    for i in 0..psr.observations.len() {
+    psr.require_tcb()?;
+    for i in 0..psr.source_observations().len() {
         if psr.observation_site(i)? != b"@" {
             return Err(TimingError::new(
                 &psr.tim.path,
@@ -41,7 +42,7 @@ pub fn form_residuals(psr: &TimingInput) -> Result<TimingResult, TimingError> {
         }
     }
     let epochs: Vec<_> = psr
-        .observations
+        .source_observations()
         .iter()
         .map(|o| crate::observation::read(&o.sat, "sat").map(|v| Scalar(v.clone())))
         .collect::<Result<_, _>>()?;
@@ -78,7 +79,7 @@ pub(crate) fn form_residuals_at(
         )
     })?;
     let ff0 = f0.clone() - nf0;
-    let mut phase_terms = Vec::with_capacity(psr.observations.len());
+    let mut phase_terms = Vec::with_capacity(psr.source_observations().len());
     for (original, epoch) in psr.observation_metadata.iter().zip(epochs) {
         let error = |message| {
             TimingError::new(
@@ -126,7 +127,7 @@ pub(crate) fn form_residuals_at(
     let phas1 = fortran_mod(phase_terms[0].1.clone(), 1.0f64);
     let mut observations = Vec::with_capacity(phase_terms.len());
     for (((o, original), epoch), (phaseint, mut phase5)) in psr
-        .observations
+        .source_observations()
         .iter()
         .zip(&psr.observation_metadata)
         .zip(epochs)

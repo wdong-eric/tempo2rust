@@ -140,9 +140,9 @@ fn kcase(actions: &[Value]) -> Vec<Value> {
 }
 fn seeded(seed: i32, count: i32) -> SourceParameter {
     let mut p = SourceParameter::allocated(4, 64);
-    p.a_size = count;
-    p.n_link_to = 1;
-    p.n_link_from = 2;
+    p.a_size = Some(count);
+    p.n_link_to = Some(1);
+    p.n_link_from = Some(2);
     for i in 0..5 {
         p.link_to[i] = Some(seed + i as i32);
         p.link_from[i] = Some(seed + 10 + i as i32);
@@ -255,7 +255,7 @@ fn boundaries() -> Vec<Value> {
         let error = copy_param(&src, &mut dst).unwrap_err();
         let after = state(&dst);
         assert_eq!(error.cell, 1);
-        assert_eq!(dst.a_size, 4);
+        assert_eq!(dst.a_size, Some(4));
         assert_eq!(state(&src), sb);
         assert_eq!(after["cells"][0], sb["cells"][0]);
         assert_eq!(dst.cell(0).unwrap_err(), error);
@@ -303,8 +303,8 @@ fn canonical_store_drives_evaluation_and_snapshots_are_detached() {
     crate::std_freq::update_std_freq(&mut input, 0, 1e-6, 0.75);
     assert_ne!(
         before,
-        input
-            .parameter_store
+        input.source.pulsars[0]
+            .param
             .parameter(param_f)
             .cell(0)
             .unwrap()

@@ -6,7 +6,7 @@ use crate::{
     clkcorr::{self, ClockSession},
     observation::{read_string, write_string},
     tempo2::SourceObservation,
-    toa2utc::{ClockPulsar, toa2utc},
+    toa2utc::{ClockPulsarView, toa2utc},
 };
 use fields::{seeded, state};
 use rug::Float;
@@ -132,15 +132,16 @@ fn boundaries() -> Vec<Value> {
     assert_eq!(e.field, "clock_correction_storage");
     out.push(json!({"case":"correction_capacity","after":state(&o),"error":e.field}));
     // With no pulsar jumps, obsNjump is irrelevant even when unwritten.
-    let p = ClockPulsar {
-        nobs: 1,
+    let p = crate::pulsar::SourcePulsar {
+        nobs: Some(1),
+        nJumps: Some(0),
         ..Default::default()
     };
     let mut obs = [vec![SourceObservation {
         clockCorr: Some(2),
         ..Default::default()
     }]];
-    toa2utc(&mut session, &[p], &mut obs, 1).unwrap();
+    toa2utc(&mut session, &[ClockPulsarView::source(&p)], &mut obs, 1).unwrap();
     out.push(json!({"case":"disabled_clock_no_jumps","after":state(&obs[0][0])}));
     // strncpy writes scalar and byte prefix before an unwritten source byte.
     for mode in [
@@ -152,14 +153,14 @@ fn boundaries() -> Vec<Value> {
         "negative_jumps",
     ] {
         let mut session = ClockSession::default();
-        let mut p = ClockPulsar {
-            nobs: 1,
-            njumps: 1,
+        let mut p = crate::pulsar::SourcePulsar {
+            nobs: Some(1),
+            nJumps: Some(1),
             ..Default::default()
         };
-        p.jump_sat[0] = 1;
-        p.jump_value[1] = 2.5;
-        p.jump_string[1] = b"x".to_vec();
+        p.jumpSAT[0] = Some(1);
+        p.jumpVal[1] = Some(2.5);
+        crate::observation::write_string(&mut p.jumpStr[1], b"x", "jumpStr").unwrap();
         let mut o = SourceObservation {
             clockCorr: Some(0),
             obsNjump: Some(1),
@@ -183,7 +184,7 @@ fn boundaries() -> Vec<Value> {
         }
         let before = state(&o);
         let mut obs = [vec![o]];
-        let result = session.run(|s| toa2utc(s, &[p], &mut obs, 1));
+        let result = session.run(|s| toa2utc(s, &[ClockPulsarView::source(&p)], &mut obs, 1));
         let o = &obs[0][0];
         let error = result.err().map(|e| {
             let again = session.run(|_| Ok(())).unwrap_err();
@@ -286,9 +287,9 @@ fn canonical_fields_drive_evaluation_fit_and_detached_json() {
     snapshot[0].frequency_mhz = 77.0;
     snapshot[0].original.site = "pks".into();
     assert_eq!(saved, serde_json::to_value(&input).unwrap());
-    *input.observations[1].sat.as_mut().unwrap() += Float::with_val(128, 1) >> 20;
-    input.observations[0].freq = Some(999.25);
-    input.observations[0].toaErr = Some(12.5);
+    *input.source_observations_mut()[1].sat.as_mut().unwrap() += Float::with_val(128, 1) >> 20;
+    input.source_observations_mut()[0].freq = Some(999.25);
+    input.source_observations_mut()[0].toaErr = Some(12.5);
     let after = crate::evaluate_barycentric(&input).unwrap();
     assert_ne!(
         before.observations[1].residual_s,
@@ -296,7 +297,11 @@ fn canonical_fields_drive_evaluation_fit_and_detached_json() {
     );
     assert_eq!(
         after.observations[1].sat_mjd.0,
-        input.observations[1].sat.as_ref().unwrap().clone()
+        input.source_observations_mut()[1]
+            .sat
+            .as_ref()
+            .unwrap()
+            .clone()
     );
     let fit = crate::fit_barycentric(&input, &Default::default()).unwrap();
     assert_eq!(fit.cycles[0].sigma_s[0].0.to_f64(), 12.5 * 1e-6);
@@ -310,11 +315,16 @@ fn canonical_fields_drive_evaluation_fit_and_detached_json() {
         current.as_object().unwrap().keys().collect::<Vec<_>>(),
         saved.as_object().unwrap().keys().collect::<Vec<_>>()
     );
-    assert!(input.observations[0].bat.is_none());
-    assert!(input.observations[0].residual.is_none());
+    assert!(input.source_observations_mut()[0].bat.is_none());
+    assert!(input.source_observations_mut()[0].residual.is_none());
     input.observation_metadata[0].site = "pks".into();
     assert!(crate::evaluate_barycentric(&input).is_ok());
-    write_string(&mut input.observations[0].telID, b"pks", "telID").unwrap();
+    write_string(
+        &mut input.source_observations_mut()[0].telID,
+        b"pks",
+        "telID",
+    )
+    .unwrap();
     assert!(crate::evaluate_barycentric(&input).is_err());
     assert_eq!(input.observation_site(0).unwrap(), b"pks");
 }
@@ -325,8 +335,9 @@ fn canonical_frequency_sat_and_site_drive_terrestrial_evaluation() {
     let mut input = crate::load(&fixtures.join("test1.par"), &fixtures.join("test2.tim")).unwrap();
     let mut runtime = crate::RuntimeContext::new(&root.join("../tempo2/T2runtime")).unwrap();
     let before = crate::evaluate_terrestrial(&input, &mut runtime).unwrap();
-    input.observations[0].freq = Some(input.observations[0].freq.unwrap() * 2.0);
-    *input.observations[0].sat.as_mut().unwrap() += Float::with_val(128, 1) >> 20;
+    input.source_observations_mut()[0].freq =
+        Some(input.source_observations_mut()[0].freq.unwrap() * 2.0);
+    *input.source_observations_mut()[0].sat.as_mut().unwrap() += Float::with_val(128, 1) >> 20;
     input.observation_metadata[0].site = "@".into();
     let after = crate::evaluate_terrestrial(&input, &mut runtime).unwrap();
     assert!(
@@ -339,11 +350,23 @@ fn canonical_frequency_sat_and_site_drive_terrestrial_evaluation() {
     );
     assert_eq!(
         after.timing.observations[0].sat_mjd.0,
-        input.observations[0].sat.as_ref().unwrap().clone()
+        input.source_observations_mut()[0]
+            .sat
+            .as_ref()
+            .unwrap()
+            .clone()
     );
-    assert!(input.observations[0].nclock_correction.is_none());
-    assert!(input.observations[0].correctionsTT[0].correction.is_none());
-    write_string(&mut input.observations[0].telID, b"@", "telID").unwrap();
+    assert!(
+        input.source_observations_mut()[0]
+            .nclock_correction
+            .is_none()
+    );
+    assert!(
+        input.source_observations_mut()[0].correctionsTT[0]
+            .correction
+            .is_none()
+    );
+    write_string(&mut input.source_observations_mut()[0].telID, b"@", "telID").unwrap();
     assert!(crate::evaluate_terrestrial(&input, &mut runtime).is_err());
 }
 #[test]

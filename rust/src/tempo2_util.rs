@@ -64,7 +64,12 @@ pub fn copy_param(
         if let Some(error) = &source.boundary {
             return Err(error.clone());
         }
-        for index in 0..source.a_size {
+        let count = source.a_size.ok_or(ParameterBoundary {
+            cell: 0,
+            field: "aSize",
+            kind: "unwritten_value",
+        })?;
+        for index in 0..count {
             let i = index as usize;
             let error = |field, kind| ParameterBoundary {
                 cell: i,

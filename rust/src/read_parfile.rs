@@ -36,6 +36,14 @@ impl Default for FitControls {
     }
 }
 
+/// Presentation metadata retained after canonical source construction.
+#[derive(Clone, Debug)]
+pub(crate) struct FitControlMetadata {
+    pub mode_defaulted: bool,
+    pub nits_defaulted: bool,
+    pub declarations: Vec<ParameterLine>,
+}
+
 /// Validated PAR contents used to assemble the owned TimingInput.
 pub(crate) struct ParFile {
     pub param: crate::tempo2::ParameterStore,

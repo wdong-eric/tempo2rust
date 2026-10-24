@@ -9,33 +9,38 @@ use crate::{
     tempo2::SourceObservation,
 };
 
-pub(crate) struct ClockPulsar {
-    pub nobs: i32,
-    pub njumps: i32,
-    pub from: Vec<u8>,
-    pub to: Vec<u8>,
-    pub no_warnings: i32,
-    pub jump_value: Vec<f64>,
-    pub jump_sat: Vec<i8>,
-    pub jump_string: Vec<Vec<u8>>,
+/// Borrows canonical source fields. Overrides are the existing bounded single-TOA caller.
+pub(crate) struct ClockPulsarView<'a> {
+    pub source: &'a crate::pulsar::SourcePulsar,
+    pub nobs: Option<i32>,
+    pub no_warnings: Option<i32>,
+    pub target: Option<&'a [u8]>,
+    pub no_sat_jumps: bool,
 }
-impl Default for ClockPulsar {
-    fn default() -> Self {
+impl<'a> ClockPulsarView<'a> {
+    #[cfg(test)]
+    pub fn source(source: &'a crate::pulsar::SourcePulsar) -> Self {
         Self {
-            nobs: 0,
-            njumps: 0,
-            from: Vec::new(),
-            to: Vec::new(),
-            no_warnings: 0,
-            jump_value: vec![0.0; 2000],
-            jump_sat: vec![0; 2000],
-            jump_string: vec![Vec::new(); 2000],
+            source,
+            nobs: None,
+            no_warnings: None,
+            target: None,
+            no_sat_jumps: false,
+        }
+    }
+    pub fn single_observation(source: &'a crate::pulsar::SourcePulsar) -> Self {
+        Self {
+            source,
+            nobs: Some(1),
+            no_warnings: Some(1),
+            target: Some(b"TT(TAI)"),
+            no_sat_jumps: true,
         }
     }
 }
 pub(crate) fn toa2utc(
     session: &mut ClockSession,
-    pulsars: &[ClockPulsar],
+    pulsars: &[ClockPulsarView<'_>],
     observations: &mut [Vec<SourceObservation>],
     npsr: i32,
 ) -> Result<(), TimingError> {
@@ -44,21 +49,39 @@ pub(crate) fn toa2utc(
         let psr = pulsars
             .get(p as usize)
             .ok_or_else(|| boundary("clock_pulsar_storage"))?;
-        for i in 0..psr.nobs {
+        let nobs = psr
+            .nobs
+            .or(psr.source.nobs)
+            .ok_or_else(|| boundary("observation_unwritten_nobs"))?;
+        for i in 0..nobs {
             let obs = observations
                 .get_mut(p as usize)
                 .and_then(|v| v.get_mut(i as usize))
                 .ok_or_else(|| boundary("clock_observation_storage"))?;
             if *read(&obs.clockCorr, "clockCorr")? != 0 && *read(&obs.clockCorr, "clockCorr")? != 2
             {
-                session.get_clock_corrections(
-                    obs,
-                    Some(&psr.from),
-                    Some(&psr.to),
-                    psr.no_warnings,
+                let warnings = psr
+                    .no_warnings
+                    .or(psr.source.noWarnings)
+                    .ok_or_else(|| boundary("observation_unwritten_noWarnings"))?;
+                // getClockCorrections resets this before inspecting either string.
+                obs.nclock_correction = Some(0);
+                let from = crate::observation::read_string(
+                    &psr.source.clockFromOverride[..],
+                    "clockFromOverride",
                 )?;
+                let to = match psr.target {
+                    Some(value) => value.to_vec(),
+                    None => crate::observation::read_string(&psr.source.clock[..], "clock")?,
+                };
+                session.get_clock_corrections(obs, Some(&from), Some(&to), warnings)?;
             }
-            for k in 1..=psr.njumps {
+            let njumps = if psr.no_sat_jumps {
+                0
+            } else {
+                *read(&psr.source.nJumps, "nJumps")?
+            };
+            for k in 1..=njumps {
                 for l in 0..*read(&obs.obsNjump, "obsNjump")? {
                     let l = l as usize;
                     if *read(
@@ -67,11 +90,13 @@ pub(crate) fn toa2utc(
                             .ok_or_else(|| boundary("clock_jump_storage"))?,
                         &format!("jump[{l}]"),
                     )? == k
-                        && *psr
-                            .jump_sat
-                            .get(l)
-                            .ok_or_else(|| boundary("clock_jump_storage"))?
-                            == 1
+                        && *read(
+                            psr.source
+                                .jumpSAT
+                                .get(l)
+                                .ok_or_else(|| boundary("clock_jump_storage"))?,
+                            &format!("jumpSAT[{l}]"),
+                        )? == 1
                     {
                         obs.nclock_correction = Some(
                             read(&obs.nclock_correction, "nclock_correction")?
@@ -108,18 +133,23 @@ pub(crate) fn toa2utc(
                                 terminated |= byte == 0;
                             } // strncpy padding, byte 31 untouched
                         }
-                        obs.correctionsTT[0].correction = Some(
-                            *psr.jump_value
+                        obs.correctionsTT[0].correction = Some(*read(
+                            psr.source
+                                .jumpVal
                                 .get(k as usize)
                                 .ok_or_else(|| boundary("clock_jump_storage"))?,
-                        );
-                        let label = psr
-                            .jump_string
-                            .get(k as usize)
-                            .ok_or_else(|| boundary("clock_jump_storage"))?;
+                            &format!("jumpVal[{k}]"),
+                        )?);
+                        let label = crate::observation::read_string(
+                            psr.source
+                                .jumpStr
+                                .get(k as usize)
+                                .ok_or_else(|| boundary("clock_jump_storage"))?,
+                            &format!("jumpStr[{k}]"),
+                        )?;
                         format_string(
                             &mut obs.correctionsTT[0].corrects_to[..31],
-                            &[b"SATJMP ".as_slice(), c_bytes(label)].concat(),
+                            &[b"SATJMP ".as_slice(), c_bytes(&label)].concat(),
                         );
                     }
                 }

@@ -177,7 +177,7 @@ fn t2_fit(
     let mut model = input.clone();
     // The frontend leaves source err initialized; callbacks update those same cells.
     let mut offset_error = None;
-    let controls = &input.fit_controls;
+    let controls = input.fit_controls();
     let rescale = controls.mode == 0 || options.rescale_err_chisq;
     let mut cycles = Vec::new();
     let mut nonfinite = false;
@@ -192,7 +192,7 @@ fn t2_fit(
             .collect();
         let data: Vec<_> = prefit.centered_s.iter().map(|v| v.0.to_f64()).collect();
         let sigma: Vec<_> = input
-            .observations
+            .source_observations()
             .iter()
             .map(|o| crate::observation::read(&o.toaErr, "toaErr").map(|v| *v * 1e-6))
             .collect::<Result<_, _>>()?;

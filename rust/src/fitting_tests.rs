@@ -157,11 +157,11 @@ fn source_failure_boundaries_and_nonfinite_transport() {
         evidence.push(json!({"case":name,"error":error.to_string(),"caller_unchanged":true,"valid_recovery_equal":true}));
         // MODE 0 ignores even a zero measurement uncertainty, exactly as source whitening does.
         let mut unweighted = input.clone();
-        unweighted.fit_controls.mode = 0;
+        unweighted.source.pulsars[0].fitMode = Some(0);
         assert!(crate::fit_barycentric(&unweighted, &options).is_ok());
     }
     let mut too_few = good.clone();
-    too_few.observations.truncate(1);
+    too_few.source.pulsars[0].nobs = Some(1);
     assert!(
         crate::fit_barycentric(&too_few, &options)
             .unwrap_err()
@@ -282,7 +282,7 @@ fn terrestrial_fit_failure_recovers_with_the_same_runtime() {
         serde_json::to_value(crate::fit_terrestrial(&valid, &mut runtime, &options).unwrap())
             .unwrap();
     let mut invalid = valid.clone();
-    invalid.observations[0].toaErr = Some(0.0);
+    invalid.source_observations_mut()[0].toaErr = Some(0.0);
     let before = serde_json::to_vec(&invalid).unwrap();
     let error = crate::fit_terrestrial(&invalid, &mut runtime, &options).unwrap_err();
     assert!(error.message.contains("source boundary"), "{error}");

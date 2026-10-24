@@ -1,5 +1,5 @@
-//! Parameter-only initialise.C::allocateMemory / initialiseOne / destroyMemory.
-//! All other pulsar/observation/covariance initialization is deferred.
+//! initialise.C parameter capacities and ordered label/default writes.
+//! pulsar_lifecycle.rs owns full initialization, replacement and destruction order.
 // GPL-3.0-or-later; TEMPO2 contributors. Source pin in O's projection.
 use crate::PRECISION_BITS;
 use crate::tempo2::{
@@ -8,7 +8,8 @@ use crate::tempo2::{
 };
 use rug::Float;
 
-/// realloc is unused by the source; Rust replacement drops the previous owner.
+/// Fresh O backing. The full lifecycle returns prior buffers on replacement;
+/// realloc is ignored by source, including negative caller values.
 pub(crate) fn allocate_memory(_realloc: i32) -> ParameterStore {
     let slots = (0..MAX_PARAMS)
         .map(|i| {
@@ -118,6 +119,16 @@ fn write_label(destination: &mut [u8], value: &[u8]) {
 
 pub(crate) fn initialise_parameters() -> ParameterStore {
     let mut psr = allocate_memory(0);
+    let mut dm_series_type = None;
+    label_parameters(&mut psr, &mut dm_series_type);
+    psr
+}
+
+/// dm_series_type is written at its original position between FD and DM labels.
+pub(crate) fn label_parameters(
+    psr: &mut ParameterStore,
+    dm_series_type: &mut Option<crate::pulsar::SeriesType>,
+) {
     let mut temp: String;
 
     for j in 0..psr.slots[param_f as usize].cells.len() {
@@ -171,6 +182,7 @@ pub(crate) fn initialise_parameters() -> ParameterStore {
         );
     }
 
+    *dm_series_type = Some(crate::pulsar::SeriesType::series_undefined);
     for k in 0..psr.slots[param_dm as usize].cells.len() {
         if k > 0 {
             temp = format!("DM{} (cm^-3 pc yr^-{})", k, k);
@@ -1486,6 +1498,4 @@ pub(crate) fn initialise_parameters() -> ParameterStore {
             temp.as_bytes(),
         );
     }
-
-    psr
 }

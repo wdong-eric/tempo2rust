@@ -29,6 +29,10 @@ mod observation_storage_tests;
 mod observatory;
 #[cfg(test)]
 mod parameter_storage_tests;
+pub mod pulsar;
+pub mod pulsar_lifecycle;
+#[cfg(test)]
+mod pulsar_lifecycle_tests;
 mod read_ephemeris;
 mod read_parfile;
 mod read_timfile;
@@ -38,9 +42,11 @@ mod runtime;
 mod std_freq;
 mod stdio;
 mod t2fit;
+pub mod t2fit_nestlike;
 mod tabulated_function;
 pub mod tempo2;
 mod tempo2_util;
+pub mod tk_matrix;
 mod tkfit;
 mod tksvd;
 mod toa2utc;
@@ -169,19 +175,48 @@ pub(crate) struct ParameterMetadata {
 pub struct TimingInput {
     pub(crate) par: SourceFile,
     pub(crate) tim: SourceFile,
-    pub(crate) parameter_store: tempo2::ParameterStore,
+    pub(crate) source: pulsar_lifecycle::PulsarContext,
     pub(crate) parameter_metadata: BTreeMap<String, ParameterMetadata>,
     pub(crate) text_parameters: BTreeMap<String, ParameterLine>,
-    pub(crate) observations: Vec<tempo2::SourceObservation>,
     pub(crate) observation_metadata: Vec<OriginalObservation>,
     pub(crate) conventions: Conventions,
     // Kept out of the existing fixed-evaluation JSON contract. Fits expose controls explicitly.
-    pub(crate) fit_controls: FitControls,
+    pub(crate) fit_metadata: read_parfile::FitControlMetadata,
 }
 
 impl TimingInput {
-    pub fn fit_controls(&self) -> &FitControls {
-        &self.fit_controls
+    /// Detached controls snapshot. Source mode/nits are authoritative;
+    /// declarations and default provenance remain immutable frontend metadata.
+    pub fn fit_controls(&self) -> FitControls {
+        FitControls {
+            mode: self.source_pulsar().fitMode.expect("validated mode") as u8,
+            nits: self.source_pulsar().nits.expect("validated NITS") as usize,
+            mode_defaulted: self.fit_metadata.mode_defaulted,
+            nits_defaulted: self.fit_metadata.nits_defaulted,
+            declarations: self.fit_metadata.declarations.clone(),
+        }
+    }
+    pub fn source_pulsar(&self) -> &pulsar::SourcePulsar {
+        &self.source.pulsars[0]
+    }
+    pub(crate) fn require_tcb(&self) -> Result<(), TimingError> {
+        if self.source_pulsar().units == Some(1) {
+            Ok(())
+        } else {
+            Err(TimingError::new(
+                &self.par.path,
+                None,
+                "UNITS",
+                "canonical source units are outside the supported TCB profile",
+            ))
+        }
+    }
+    #[cfg(test)]
+    pub(crate) fn source_observations_mut(&mut self) -> &mut [tempo2::SourceObservation] {
+        let view = self.source.pulsars[0].obsn.unwrap().unwrap();
+        self.source
+            .observations_mut(view)
+            .expect("validated observation owner")
     }
     pub fn par_source(&self) -> &SourceFile {
         &self.par
@@ -211,16 +246,16 @@ impl TimingInput {
     /// Source storage from the bounded frontend bridge: prefit fields remain
     /// unwritten; supplied uncertainty is frontend metadata, not source err.
     pub fn parameter_store(&self) -> &tempo2::ParameterStore {
-        &self.parameter_store
+        &self.source.pulsars[0].param
     }
     pub(crate) fn parameter_cell(&self, key: &str) -> &tempo2::ParameterCell {
         let (label, i) = read_parfile::numeric_location(key);
         // Only the validated frontend and fit callbacks can mutate this owner.
-        &self.parameter_store.slots[label as usize].cells[i]
+        &self.source.pulsars[0].param.slots[label as usize].cells[i]
     }
     pub(crate) fn parameter_cell_mut(&mut self, key: &str) -> &mut tempo2::ParameterCell {
         let (label, i) = read_parfile::numeric_location(key);
-        &mut self.parameter_store.slots[label as usize].cells[i]
+        &mut self.source.pulsars[0].param.slots[label as usize].cells[i]
     }
     pub fn text_parameters(&self) -> &BTreeMap<String, ParameterLine> {
         &self.text_parameters
@@ -228,7 +263,7 @@ impl TimingInput {
     /// Detached compatibility snapshot. Numeric values come from source storage;
     /// original text remains provenance. Mutating the snapshot does not change input.
     pub fn observations(&self) -> Vec<Observation> {
-        self.observations
+        self.source_observations()
             .iter()
             .zip(&self.observation_metadata)
             .map(|(o, original)| Observation {
@@ -242,12 +277,16 @@ impl TimingInput {
     /// Complete read-only source records. The bounded frontend writes only sat,
     /// freq, toaErr, fname and telID; remaining cells/bytes are explicitly unwritten.
     pub fn source_observations(&self) -> &[tempo2::SourceObservation] {
-        &self.observations
+        let p = self.source_pulsar();
+        &self
+            .source
+            .observations(p.obsn.unwrap().unwrap())
+            .expect("validated observation owner")[..p.nobs.unwrap() as usize]
     }
     /// Current source site, independent of historical token provenance.
     pub fn observation_site(&self, index: usize) -> Result<Vec<u8>, TimingError> {
         let o = self
-            .observations
+            .source_observations()
             .get(index)
             .ok_or_else(|| crate::clock_diagnostics::boundary("clock_observation_storage"))?;
         observation::read_string(&o.telID, "telID")

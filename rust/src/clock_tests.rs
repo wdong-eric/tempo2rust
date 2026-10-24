@@ -8,7 +8,7 @@ use crate::{
     observation::{format_string, read_string},
     tabulated_function::TabulatedFunction,
     tempo2::SourceObservation,
-    toa2utc::{ClockPulsar, toa2utc},
+    toa2utc::{ClockPulsarView, toa2utc},
 };
 use rug::Float;
 use serde_json::{Value, json};
@@ -84,7 +84,7 @@ fn probe() {
     session.diagnostics.source_directory =
         std::env::var("CLOCK_SOURCE_LOCATION").unwrap().into_bytes();
     let mut observations = vec![vec![caller(); 3]; 2];
-    let mut pulsars = vec![ClockPulsar::default(), ClockPulsar::default()];
+    let mut pulsars = [pulsar_caller(), pulsar_caller()];
     let mut table = TabulatedFunction::default();
     let mut events = Vec::new();
     let (mut stdout, mut stderr) = (Vec::new(), Vec::new());
@@ -133,12 +133,12 @@ fn probe() {
                     let ok=if op=="helper_fill"{s.fill_corrections(o,index(2),a[4].as_bytes(),a[3].as_bytes(),&mut total)?}else{s.accumulate_correction(o,index(2),a[4].as_bytes(),a[3].as_bytes(),&mut total)?};
                     result=json!({"ok":ok,"value":number(total),"before":obs_state(&before,None),"after":obs_state(o,Some(&before))});
                 },
-                "pulsar"=>{let p=&mut pulsars[index(1)];p.nobs=integer(2);p.njumps=integer(3);p.from=a[4].as_bytes().to_vec();p.to=a[5].as_bytes().to_vec();p.no_warnings=integer(6);},
-                "jump"=>{let p=&mut pulsars[index(1)];let i=index(2);p.jump_value[i]=numeric(&a[3]);p.jump_sat[i]=integer(4) as i8;p.jump_string[i]=a[5].as_bytes().to_vec();},
+                "pulsar"=>{let p=&mut pulsars[index(1)];p.nobs=Some(integer(2));p.nJumps=Some(integer(3));crate::observation::write_string(&mut p.clockFromOverride[..],a[4].as_bytes(),"clockFromOverride")?;crate::observation::write_string(&mut p.clock[..],a[5].as_bytes(),"clock")?;p.noWarnings=Some(integer(6));},
+                "jump"=>{let p=&mut pulsars[index(1)];let i=index(2);p.jumpVal[i]=Some(numeric(&a[3]));p.jumpSAT[i]=Some(integer(4) as u8);crate::observation::write_string(&mut p.jumpStr[i],a[5].as_bytes(),"jumpStr")?;},
                 "members"=>{let o=&mut observations[index(1)/3][index(1)%3];o.obsNjump=Some((a.len()-2) as i32);for(i,x)in a[2..].iter().enumerate(){*o.jump.get_mut(i).ok_or_else(||boundary("clock_jump_storage"))?=Some(x.parse().unwrap());}},
                 "toa"=>{
-                    let before=observations.clone();toa2utc(s,&pulsars,&mut observations,integer(1))?;let mut rows=Vec::new();
-                    for p in 0..index(1){for i in 0..pulsars[p].nobs as usize{rows.push(json!({"index":p*3+i,"before":obs_state(&before[p][i],None),"after":obs_state(&observations[p][i],Some(&before[p][i]))}));}}
+                    let before=observations.clone();toa2utc(s,&pulsars.iter().map(ClockPulsarView::source).collect::<Vec<_>>(),&mut observations,integer(1))?;let mut rows=Vec::new();
+                    for p in 0..index(1){for i in 0..pulsars[p].nobs.unwrap() as usize{rows.push(json!({"index":p*3+i,"before":obs_state(&before[p][i],None),"after":obs_state(&observations[p][i],Some(&before[p][i]))}));}}
                     result["observations"]=json!(rows);
                 },
                 "copy"=>{fs::copy(&a[1],&a[2]).unwrap();},"replace"=>{fs::rename(&a[1],&a[2]).unwrap();},"remove"=>{fs::remove_file(&a[1]).unwrap();},
@@ -301,4 +301,22 @@ fn process_provenance() {
     assert_eq!(records[0].path, path.to_string_lossy());
     assert_eq!(records[0].sha256, loaded);
     fs::write(std::env::var("CLOCK_PROVENANCE_OUTPUT").unwrap(),serde_json::to_vec_pretty(&json!({"identity_before_index":true,"indexed_sha256":indexed,"sample_sha256":loaded,"after_removal_changed_root":records,"value_s":7,"index_count":1,"status":"PASS"})).unwrap()).unwrap();
+}
+
+// Explicit direct-clock fixture seeds; these are not initialiseOne defaults.
+fn pulsar_caller() -> crate::pulsar::SourcePulsar {
+    let mut p = crate::pulsar::SourcePulsar {
+        nobs: Some(0),
+        nJumps: Some(0),
+        noWarnings: Some(0),
+        ..Default::default()
+    };
+    p.clockFromOverride[0] = Some(0);
+    p.clock[0] = Some(0);
+    p.jumpVal.fill(Some(0.0));
+    p.jumpSAT.fill(Some(0));
+    for s in &mut *p.jumpStr {
+        s[0] = Some(0);
+    }
+    p
 }

@@ -49,7 +49,8 @@ pub fn form_bats_all(
     input: &TimingInput,
     runtime: &mut RuntimeContext,
 ) -> Result<TerrestrialResult, TimingError> {
-    for i in 0..input.observations.len() {
+    input.require_tcb()?;
+    for i in 0..input.source_observations().len() {
         if !input.observation_site(i)?.eq_ignore_ascii_case(b"pks") {
             return Err(TimingError::new(
                 &input.tim.path,
@@ -70,10 +71,13 @@ pub fn form_bats_all(
         }
     }
     for (key, expected) in [("CLK", "TT(TAI)"), ("EPHEM", "DE405")] {
-        if input
-            .text_parameters
-            .get(key)
-            .is_none_or(|p| p.tokens[0] != expected)
+        let field = if key == "CLK" {
+            &input.source_pulsar().clock[..]
+        } else {
+            &input.source_pulsar().ephemeris[..]
+        };
+        if !input.text_parameters.contains_key(key)
+            || crate::observation::read_string(field, key)? != expected.as_bytes()
         {
             return Err(TimingError::new(
                 &input.par.path,
@@ -96,7 +100,11 @@ pub fn form_bats_all(
     let mut corrections = Vec::new();
     let mut bats = Vec::new();
     let mut warnings = Vec::new();
-    for (obs, original) in input.observations.iter().zip(&input.observation_metadata) {
+    for (obs, original) in input
+        .source_observations()
+        .iter()
+        .zip(&input.observation_metadata)
+    {
         let calculated = (|| {
             let sat = crate::observation::read(&obs.sat, "sat")?;
             let mut clock_observation = obs.clone();
@@ -105,12 +113,8 @@ pub fn form_bats_all(
                 session.queries.clear();
                 // The selected timing input has no SAT jumps; direct source-field
                 // tests exercise toa2utc's jump branch without extending PAR input.
-                let pulsar = crate::toa2utc::ClockPulsar {
-                    nobs: 1,
-                    to: b"TT(TAI)".to_vec(),
-                    no_warnings: 1,
-                    ..Default::default()
-                };
+                let pulsar =
+                    crate::toa2utc::ClockPulsarView::single_observation(input.source_pulsar());
                 let mut observations = [vec![clock_observation.clone()]];
                 crate::toa2utc::toa2utc(session, &[pulsar], &mut observations, 1)?;
                 clock_observation = observations[0].remove(0);
