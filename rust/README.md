@@ -253,7 +253,14 @@ Use `fit_barycentric(&input, &FitOptions::default())`, or
 `rescale_err_chisq` (default true). PAR `MODE`/`WEIGHT` 0 or 1 and positive
 source-range integer `NITS` control execution; defaults are 0 and 1. The last
 MODE/WEIGHT declaration wins, and every original declaration is retained in
-`input.fit_controls()`. There are no competing CLI mode/iteration overrides.
+`input.fit_controls()`. This returns a detached owned snapshot derived from the
+canonical source `fitMode` and `nits`; its declarations and default provenance
+remain frontend metadata. There are no competing CLI mode/iteration overrides.
+`input.source_pulsar()` provides read-only inspection of all 349 source fields;
+`parameter_store()` and `source_observations()` refer to that same owned context.
+Clone `TimingInput` for an independent owner graph. The full 10000 by 10000 source
+covariance uses copy-on-write between independent clones; no active-fit-size
+substitution is made.
 Fixed-evaluation JSON for previously supported inputs remains unchanged.
 
 The fit always includes ZERO, then supplied F0–F3 with local flag 1 in source
