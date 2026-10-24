@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 24 October 2026 for permission to fix small demonstrated source bugs during transfer, U acceptance and T/V review. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 24 October 2026 for T/U/V acceptance, W implementation and X reference release. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, preserving established behavior except for documented, tested corrections of demonstrated bugs under decision 0053, with central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -104,6 +104,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0056](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0056-terrestrial-resources-rust-contract-and-w-release.md) releases W as the next sole Rust owner after T acceptance. W transfers all 22 observatory/EOP/meteorology/troposphere routines from U's accepted reference, integrates canonical resource state into existing consumers, and follows 0053 for documented small fixes.
 
+[Decision 0057](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0057-observer-coordinate-reference-stage.md) releases X for independent native observer-coordinate, pulsar-vector and UT1 evidence across nine routines. X owns only `validation/observer_coordinates/`; W remains the sole Rust owner. Current bug policy 0053 and generated-output policy 0039 apply.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
@@ -133,7 +135,9 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 | [V Time ephemeris reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/22-time-ephemeris-reference.md) | Delivered native evidence read-only; ownership closed | Accepted at `f179ce5` by decision 0054 | `REPORT.md`, complete source/caller/format/lifetime maps and exact native IFTE/FB90/conversion histories |
 | [W Terrestrial resources Rust transfer](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/23-terrestrial-resources-rust.md) | `rust/` and new `validation/terrestrial_resources_port/`; sole Rust owner | Released by decision 0056 after T acceptance | `rust/TERRESTRIAL_RESOURCES_REPORT.md`, complete 22-routine transfer, integrated resource state and direct/regression evidence |
 
-A through V have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O/R/T's bounded Rust transfers and K/M/N/P/Q/S/U/V's bounded references are accepted with their ownership windows closed. T's whole-pulsar storage/lifecycle and current-consumer integration are accepted under 0055. W is the next sole Rust owner under 0056, transferring the full accepted U resource scope. U's terrestrial-resource reference is accepted at `051d2ea` under decision 0051 and its ownership is closed. V's time-ephemeris reference is accepted at `f179ce5` under decision 0054 and its ownership is closed. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
+| [X Observer-coordinate reference](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/24-observer-coordinate-reference.md) | `validation/observer_coordinates/` only | Released by decision 0057; independent of W | `REPORT.md`, complete nine-routine/source/state maps, native histories and verification |
+
+A through V have delivered their assigned evidence or implementation. E's M2 gate remains unresolved. I/L/O/R/T's bounded Rust transfers and K/M/N/P/Q/S/U/V's bounded references are accepted with their ownership windows closed. T's whole-pulsar storage/lifecycle and current-consumer integration are accepted under 0055. W is the next sole Rust owner under 0056, transferring the full accepted U resource scope. X independently prepares observer-coordinate reference evidence under 0057. U's terrestrial-resource reference is accepted at `051d2ea` under decision 0051 and its ownership is closed. V's time-ephemeris reference is accepted at `f179ce5` under decision 0054 and its ownership is closed. I restored the source's deterministic cache-before-read behavior under decision 0008; historical M1b acceptance remains scoped to its recorded revision. Accepted reference, verification and precision evidence remain read-only inputs; report needed changes rather than silently changing comparison evidence.
 
 Starting an assignment means opening an implementation chat in this workspace and giving it the appropriate brief. This document does not create or message chats automatically.
 
