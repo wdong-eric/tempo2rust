@@ -3,7 +3,7 @@
 //! follows tropo.C::initialize_meteorology_tables. Orchestrates Rust counterparts
 //! of clkcorr.C::getClockCorrections, eop.C::load_EOP, ifteph.C::IFTE_init and
 //! jpleph.c::jpl_init_ephemeris; resource hashing/ownership are Rust-only glue.
-use crate::{TimingError, ifteph::IfteEphemeris, read_ephemeris::JplEphemeris};
+use crate::{TimingError, read_ephemeris::JplEphemeris};
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 use std::{
@@ -20,34 +20,19 @@ pub struct Resource {
     pub coverage_mjd: Option<[f64; 2]>,
 }
 
-pub(crate) fn read_resource(
-    root: &Path,
-    path: &Path,
-    role: &str,
-    resources: &mut Vec<Resource>,
-) -> Result<Vec<u8>, TimingError> {
-    // The source resource loaders exit() on I/O errors; returning a contextual
-    // Result keeps the host alive and prevents publication of a partial result.
-    let data =
-        fs::read(path).map_err(|e| TimingError::new(path, None, "resource", e.to_string()))?;
-    let relative = path
-        .strip_prefix(root)
-        .unwrap_or(path)
-        .to_string_lossy()
-        .into_owned();
-    let resource = Resource {
-        path: relative,
-        sha256: format!("{:x}", Sha256::digest(&data)),
-        size_bytes: data.len(),
-        role: role.into(),
-        coverage_mjd: None,
+/// Hash and consume the same opened object, as in the established JPL boundary.
+/// This records observed bytes; concurrent external writers are not a snapshot.
+pub(crate) fn open_resource(path: &Path, role: &str) -> Result<(fs::File, Resource), TimingError> {
+    use std::io::{Read, Seek, SeekFrom};
+    let error = |e: std::io::Error| {
+        TimingError::new(path, None, role, crate::tabulated_function::os_error(&e))
     };
-    if let Some(old) = resources.iter_mut().find(|r| r.path == resource.path) {
-        *old = resource;
-    } else {
-        resources.push(resource);
-    }
-    Ok(data)
+    let mut file = fs::File::open(path).map_err(error)?;
+    let mut data = Vec::new();
+    file.read_to_end(&mut data).map_err(error)?;
+    file.seek(SeekFrom::Start(0)).map_err(error)?;
+    let record = crate::observatory::resource(path, &data, role, None);
+    Ok((file, record))
 }
 
 pub(crate) use crate::observatory::Observatory;
@@ -58,7 +43,6 @@ pub struct RuntimeContext {
     pub(crate) root: PathBuf,
     pub(crate) resources: Vec<Resource>,
     pub(crate) observatory: Observatory,
-    pub(crate) ifte: IfteEphemeris,
     pub(crate) jpl: JplEphemeris,
 }
 impl RuntimeContext {
@@ -89,13 +73,12 @@ impl RuntimeContext {
                 "invalid GRS80 geometry",
             ));
         }
-        let path = root.join("ephemeris/TIMEEPH_short.te405");
-        let ifte = IfteEphemeris::init(
-            &path,
-            &read_resource(&root, &path, "IF99 time ephemeris", &mut resources)?,
-        )?;
-        resources.last_mut().unwrap().coverage_mjd =
-            Some([ifte.start_jd - 2400000.5, ifte.end_jd - 2400000.5]);
+        crate::clkcorr::with_resources(&root, |session| {
+            crate::tt2tdb::init_ifte(session)?;
+            session.export_time_resources(&root, &mut resources);
+            session.ifte.close_file();
+            Ok(())
+        })?;
         let path = root.join("ephemeris/DE405.1950.2050");
         // Provenance and parsing consume one opened object. The digest records
         // bytes observed by this pass, not a snapshot guarantee against writers.
@@ -139,7 +122,6 @@ impl RuntimeContext {
             root,
             resources,
             observatory,
-            ifte,
             jpl,
         })
     }

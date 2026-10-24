@@ -169,64 +169,106 @@ fn ifte_image(big: bool) -> Vec<u8> {
 
 #[test]
 fn ifte_endianness_derivative_boundaries_and_recovery() {
+    let path = std::env::temp_dir().join(format!("ifte-boundaries-{}", std::process::id()));
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    let mut ifte = IfteEphemeris::default();
     for big in [false, true] {
         let bytes = ifte_image(big);
-        let path = Path::new("synthetic.ifte");
-        let ifte = IfteEphemeris::init(path, &bytes).unwrap();
-        assert_eq!(
-            ifte.get_values(2450000.0, 8.5, false).unwrap(),
-            vec![0.75, 0.03125]
-        );
-        assert_eq!(
-            ifte.get_values(2450000.0, 8.5, true).unwrap(),
-            vec![0.75, 1.75, 2.75, 0.03125, 0.03125, 0.03125]
-        );
-        assert_eq!(
-            ifte.get_values(2450032.0, 0.5, false).unwrap(),
-            vec![1.5, 0.03125]
-        );
-        for jd in [2449999.0, 2450033.0] {
-            assert!(ifte.get_values(jd, 0.5, false).is_err());
-        }
-        assert_eq!(
-            ifte.get_values(2450000.0, 8.5, false).unwrap(),
-            vec![0.75, 0.03125]
-        );
-        assert!(IfteEphemeris::init(path, &bytes[..315]).is_err());
-        assert!(IfteEphemeris::init(path, &bytes[..bytes.len() - 1]).is_err());
-        let mut bad = bytes.clone();
-        put_i(&mut bad, 296, 19, big);
-        assert!(IfteEphemeris::init(path, &bad).is_err());
-        let mut bad = bytes.clone();
-        put_f(&mut bad, 42 * 16 + 16, f64::NAN, big);
+        std::fs::write(&path, &bytes).unwrap();
+        ifte.init(&path, &mut diagnostics).unwrap();
+        let mut scalar = [0.0; 2];
+        let mut vector = [0.0; 6];
+        ifte.get_values(2450000.0, 8.5, 1, &mut scalar, &mut diagnostics)
+            .unwrap();
+        assert_eq!(scalar, [0.75, 0.03125]);
+        ifte.get_values(2450000.0, 8.5, 2, &mut vector, &mut diagnostics)
+            .unwrap();
+        assert_eq!(vector, [0.75, 1.75, 2.75, 0.03125, 0.03125, 0.03125]);
+        ifte.get_values(2450032.0, 0.5, 1, &mut scalar, &mut diagnostics)
+            .unwrap();
+        assert_eq!(scalar, [1.5, 0.03125]);
         assert!(
-            IfteEphemeris::init(path, &bad)
-                .unwrap()
-                .get_values(2450000.0, 8.5, false)
+            ifte.get_values(2449999.0, 0.5, 1, &mut scalar, &mut diagnostics)
                 .is_err()
         );
+        assert!(
+            ifte.get_values(2450033.0, 0.5, 1, &mut scalar, &mut diagnostics)
+                .is_err()
+        );
+        assert!(ifte.stream.is_none());
+        ifte.init(&path, &mut diagnostics).unwrap();
+        ifte.get_values(2450000.0, 8.5, 1, &mut scalar, &mut diagnostics)
+            .unwrap();
+        assert_eq!(scalar, [0.75, 0.03125]);
+        std::fs::write(&path, &bytes[..315]).unwrap();
+        assert!(ifte.init(&path, &mut diagnostics).is_err());
+        assert!(ifte.stream.is_none());
+        // Header-grid equality and finite coefficients were restrictions of the
+        // removed immutable frontend subset, not IFTE source requirements.
+        let mut data = bytes.clone();
+        put_f(&mut data, 42 * 16 + 16, f64::NAN, big);
+        std::fs::write(&path, &data).unwrap();
+        ifte.init(&path, &mut diagnostics).unwrap();
+        ifte.get_values(2450000.0, 8.5, 1, &mut scalar, &mut diagnostics)
+            .unwrap();
+        assert!(scalar[0].is_nan());
     }
+    ifte.close_file();
+    std::fs::remove_file(path).unwrap();
 }
 
 #[test]
-fn ifte_record_grid_rejects_impossible_steps_and_recovers() {
-    let path = Path::new("synthetic.ifte");
+fn ifte_record_conversion_bounds_and_recovery() {
+    let path = std::env::temp_dir().join(format!("ifte-record-bounds-{}", std::process::id()));
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    let mut ifte = IfteEphemeris::default();
     for big in [false, true] {
         let bytes = ifte_image(big);
-        for step in [1e-300, 1e-320, 16.0, 31.0, 64.0] {
-            let mut malformed = bytes.clone();
-            put_f(&mut malformed, 280, step, big);
-            let error = IfteEphemeris::init(path, &malformed)
-                .err()
-                .expect("impossible record grid accepted");
-            assert_eq!(error.path, path);
-            assert_eq!(error.field, "IF99");
-            assert!(error.message.contains("record grid"));
-            let restored = IfteEphemeris::init(path, &bytes).unwrap();
+        for step in [1e-300, 1e-320] {
+            let mut data = bytes.clone();
+            put_f(&mut data, 280, step, big);
+            std::fs::write(&path, &data).unwrap();
+            ifte.init(&path, &mut diagnostics).unwrap();
+            let mut result = [0.0; 2];
             assert_eq!(
-                restored.get_values(2450032.0, 0.5, false).unwrap(),
-                vec![1.5, 0.03125]
+                ifte.get_values(2450001.0, 0.5, 1, &mut result, &mut diagnostics)
+                    .unwrap_err()
+                    .field,
+                "IFTE_record_int"
             );
+            std::fs::write(&path, &bytes).unwrap();
+            ifte.init(&path, &mut diagnostics).unwrap();
+            ifte.get_values(2450032.0, 0.5, 1, &mut result, &mut diagnostics)
+                .unwrap();
+            assert_eq!(result, [1.5, 0.03125]);
         }
     }
+    ifte.close_file();
+    std::fs::remove_file(path).unwrap();
+}
+
+#[test]
+fn ifte_reinitialization_resets_argument_without_clearing_retained_cells() {
+    let path = std::env::temp_dir().join(format!("ifte-reset-{}", std::process::id()));
+    let mut image = ifte_image(true);
+    put_f(&mut image, 42 * 16 + 4 * 8, 0.25, true);
+    put_f(&mut image, 42 * 16 + 5 * 8, 0.125, true);
+    std::fs::write(&path, &image).unwrap();
+    let mut d = crate::clock_diagnostics::Diagnostics::default();
+    let mut f = IfteEphemeris::default();
+    f.init(&path, &mut d).unwrap();
+    let mut out = [0.0; 2];
+    f.get_values(2450000.5, 8.0, 1, &mut out, &mut d).unwrap();
+    assert_eq!(f.iinfo.twot, -1.0);
+    let pc = f.iinfo.pc;
+    let vc = f.iinfo.vc;
+    f.init(&path, &mut d).unwrap();
+    assert_eq!(f.iinfo.twot, 0.0);
+    assert_eq!(f.iinfo.pc[2..], pc[2..]);
+    assert_eq!(f.iinfo.vc[2..], vc[2..]);
+    f.get_values(2450000.5, 16.0, 1, &mut out, &mut d).unwrap();
+    // Independent cubic at x=0: c0-c2; (c1-3*c3)*2/32.
+    assert_eq!(out, [0.75, 0.0078125]);
+    f.close_file();
+    std::fs::remove_file(path).unwrap();
 }

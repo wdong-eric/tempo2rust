@@ -67,11 +67,12 @@ fn main() -> Result<(), Box<dyn Error>> {
                 .to_string_lossy()
     }));
     // Decision 0005 reproducers use disposable copies of the exact pinned files.
-    // JPL rejects the undefined conversion at use; IF99 retains its constructor guard.
+    // Both readers reject undefined record conversion at use. IFTE no longer
+    // imposes the old immutable-image header-grid restriction (0058).
     let mut grid_checks = Vec::new();
     for (name, offset, field) in [
         ("ephemeris/DE405.1950.2050", 2668, "JPL"),
-        ("ephemeris/TIMEEPH_short.te405", 280, "IF99"),
+        ("ephemeris/TIMEEPH_short.te405", 280, "IFTE_record_int"),
     ] {
         let path = runtime_dir.join(name);
         let saved = fs::read(&path)?;
@@ -85,18 +86,18 @@ fn main() -> Result<(), Box<dyn Error>> {
         };
         assert_eq!(error.path, path);
         assert_eq!(error.field, field);
-        assert!(error.message.contains(if field == "JPL" {
-            "record_conversion"
+        if field == "JPL" {
+            assert!(error.message.contains("record_conversion"));
         } else {
-            "record grid"
-        }));
+            assert!(error.message.contains("invalid or unwritten storage"));
+        }
         let failed_cli = run_cli()?;
         assert_eq!(failed_cli.status.code(), Some(1));
         assert!(failed_cli.stdout.is_empty());
         let stderr = String::from_utf8(failed_cli.stderr)?;
         assert!(stderr.contains(&error.to_string()));
         fs::write(&path, &saved)?;
-        // Same host process, new valid context after constructor rejection.
+        // Same host process, new valid context after the external-file error.
         let restored = evaluate_terrestrial(&input, &mut RuntimeContext::new(&runtime_dir)?)?;
         // W: source displayMsg keys persist. Numerical/resource output is stable;
         // a repeated evaluation need not repeat its first-use weather diagnostics.

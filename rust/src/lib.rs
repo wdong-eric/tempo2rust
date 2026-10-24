@@ -34,6 +34,7 @@ pub mod pulsar_lifecycle;
 #[cfg(test)]
 mod pulsar_lifecycle_tests;
 mod read_ephemeris;
+mod read_fortran;
 mod read_parfile;
 mod read_timfile;
 #[cfg(test)]
@@ -353,3 +354,6 @@ impl Serialize for TimingInput {
 
 #[cfg(test)]
 mod terrestrial_tests;
+
+#[cfg(test)]
+mod time_ephemeris_tests;

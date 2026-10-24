@@ -1,4 +1,4 @@
-//! Owned libc stream for jpleph.c's fread/fseek semantics; no JPL algorithm.
+//! Owned libc stream for JPL, IFTE and read_fortran source I/O semantics.
 //! Rust File ownership replaces fopen; buffering and partial items remain libc's.
 use std::{
     ffi::{c_char, c_int, c_long, c_void},
@@ -16,6 +16,10 @@ unsafe extern "C" {
     fn fread(ptr: *mut c_void, size: usize, count: usize, stream: *mut c_void) -> usize;
     fn fseek(stream: *mut c_void, offset: c_long, whence: c_int) -> c_int;
     fn fclose(stream: *mut c_void) -> c_int;
+    fn fgetc(stream: *mut c_void) -> c_int;
+    fn ftell(stream: *mut c_void) -> c_long;
+    fn feof(stream: *mut c_void) -> c_int;
+    fn ferror(stream: *mut c_void) -> c_int;
 }
 
 pub(crate) struct Stream {
@@ -24,7 +28,34 @@ pub(crate) struct Stream {
     pub metadata_file: File,
 }
 
+// Necessity: ClockSession's process mutex owns IFTE and Fortran streams. On
+// this supported POSIX profile, ownership can move between threads: FILE never
+// escapes, every operation takes &mut self, no explicit stream lock survives a
+// call, and Drop closes once. POSIX stdio locks each operation. This is Send,
+// not Sync; shared unsynchronized stream access remains impossible. The handoff
+// test below actually reads and drops the moved owner on a second thread.
+unsafe impl Send for Stream {}
+
 impl Stream {
+    pub fn getc(&mut self) -> i32 {
+        // Necessity: read_fortran.h uses fgetc, including its EOF and buffering.
+        // The exclusive live owner has no escaped FILE or retained buffer.
+        unsafe { fgetc(self.raw.as_ptr()) }
+    }
+
+    pub fn status(&mut self) -> (c_long, i32, i32) {
+        // Necessity: observe source ftell/feof/ferror without consuming bytes;
+        // FB also uses EOF/error to reject genuinely incomplete external reads.
+        // All three calls borrow the same live owner exclusively.
+        unsafe {
+            (
+                ftell(self.raw.as_ptr()),
+                feof(self.raw.as_ptr()),
+                ferror(self.raw.as_ptr()),
+            )
+        }
+    }
+
     pub fn from_file(file: File) -> io::Result<Self> {
         #[cfg(test)]
         let mode = if OBSERVER.with(|o| o.borrow().fail_fdopen) {
@@ -92,7 +123,7 @@ impl Drop for Stream {
         // Necessity: match fdopen with fclose, releasing libc's buffer and fd.
         // This non-cloneable owner relinquished File only after fdopen success;
         // Drop runs once, after all exclusive calls end. No pointer escapes and
-        // no Send/Sync impl permits concurrent stream/cache access.
+        // Send transfers ownership only; no Sync or shared access is provided.
         unsafe {
             fclose(self.raw.as_ptr());
         }
@@ -134,6 +165,31 @@ pub(crate) fn observe(kind: usize, size: usize, count: usize) -> bool {
 mod tests {
     use super::*;
     use std::{fs, io::Write, os::unix::fs::MetadataExt};
+
+    #[test]
+    #[ignore = "run alone so another test cannot reuse the inspected fd"]
+    fn ownership_handoff_read_and_close() {
+        let path = std::env::temp_dir().join(format!("time-stdio-handoff-{}", std::process::id()));
+        fs::write(&path, b"handoff").unwrap();
+        let file = File::open(&path).unwrap();
+        let fd = file.as_raw_fd();
+        let stream = Stream::from_file(file).unwrap();
+        std::thread::spawn(move || {
+            let mut stream = stream;
+            let mut data = [0; 7];
+            assert_eq!(stream.read(&mut data, 1, 7).unwrap(), 7);
+            assert_eq!(&data, b"handoff");
+            assert_eq!(stream.getc(), -1);
+            assert_eq!(stream.status(), (7, 1, 0));
+            drop(stream);
+            // Check on the owning thread immediately after Drop; no opens occur
+            // between release and fstat via /dev/fd in this isolated test.
+            assert!(fs::metadata(format!("/dev/fd/{fd}")).is_err());
+        })
+        .join()
+        .unwrap();
+        fs::remove_file(path).unwrap();
+    }
 
     #[test]
     #[ignore = "run alone by the JPL verifier so another test cannot reuse the inspected fd"]

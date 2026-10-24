@@ -90,6 +90,9 @@ pub(crate) struct ClockSession {
     pub observatories: ObservatoryDatabase,
     pub eop: crate::eop::Eop,
     pub meteorology: crate::tropo::Meteorology,
+    pub ifte: crate::ifteph::IfteEphemeris,
+    pub fortran: crate::read_fortran::FortranReader,
+    pub fb: crate::tt2tdb::FbCache,
     pub queries: Vec<TableQuery>,
     pub fault: Option<TimingError>,
 }
@@ -987,6 +990,24 @@ impl ClockSession {
             });
         }
         for mut r in records {
+            r.path = Path::new(&r.path)
+                .strip_prefix(root)
+                .unwrap_or(Path::new(&r.path))
+                .to_string_lossy()
+                .into_owned();
+            if let Some(old) = resources.iter_mut().find(|old| old.path == r.path) {
+                *old = r;
+            } else {
+                resources.push(r);
+            }
+        }
+    }
+    pub fn export_time_resources(&self, root: &Path, resources: &mut Vec<Resource>) {
+        for record in [self.ifte.resource.as_ref(), self.fortran.resource.as_ref()]
+            .into_iter()
+            .flatten()
+        {
+            let mut r = record.clone();
             r.path = Path::new(&r.path)
                 .strip_prefix(root)
                 .unwrap_or(Path::new(&r.path))

@@ -5,7 +5,10 @@ use crate::longdouble::normalized_decimal;
 use rug::Float;
 
 pub(crate) fn dot_product(a: [f64; 3], b: [f64; 3]) -> f64 {
-    a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+    // tempo2Util.C::dotproduct at fda6ad4: GCC16 O2 contracts in this
+    // operand order (second product rounded first). Y arithmetic.py records
+    // actual assembly and 100 bounded native/Rust expression comparisons.
+    a[2].mul_add(b[2], a[0].mul_add(b[0], a[1] * b[1]))
 }
 
 pub(crate) fn parse_binary64(token: &str) -> Result<f64, String> {
@@ -39,9 +42,14 @@ pub(crate) fn turn_deg(turn: f64) -> f64 {
     turn * 360.0
 }
 
-pub(crate) fn fortran_mod(a: Float, p: f64) -> Float {
-    // Rug % retains the source's signed, truncating-quotient remainder semantics.
-    a % p
+pub(crate) fn fortran_mod(a: Float, p: &Float) -> Result<Float, crate::TimingError> {
+    // tempo2Util.C::fortran_mod:186-191 (fda6ad4): a-(int)(a/p)*p.
+    // The former % helper differed for signed zero, infinite divisors and
+    // rounded quotients (0049). Preserve the expression at Rug128 and reject
+    // undefined native i32 conversions; 113/128-bit boundary differences remain.
+    let quotient = Float::with_val(crate::PRECISION_BITS, &a / p);
+    let n = crate::ifteph::extended_i32(&quotient, "fortran_mod_quotient_int")?;
+    Ok(a - Float::with_val(crate::PRECISION_BITS, p * n))
 }
 
 pub(crate) fn fortran_nlong(x: &Float) -> Float {

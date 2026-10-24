@@ -142,8 +142,19 @@ pub fn form_bats_all(
             // refined ephemeris. Legacy repeat calls can inherit previous vectors;
             // owned evaluation starts with zero vectors so prior input/failure
             // cannot affect a new result (same-context recovery regression).
+            clock_observation.earth_ssb = [Some(0.0); 6];
+            clock_observation.observatory_earth[..3].fill(Some(0.0));
+            clock_observation.siteVel = [Some(0.0); 3];
             let initial_time_correction =
-                crate::tt2tdb::tt2tb(&runtime.ifte, &tt, [0.0; 3], [0.0; 3], [0.0; 3])?;
+                crate::clkcorr::with_resources(&runtime.root, |session| {
+                    let result = crate::tt2tdb::frontend(
+                        session,
+                        input.source_pulsar(),
+                        &mut clock_observation,
+                    )?;
+                    session.export_time_resources(&runtime.root, &mut runtime.resources);
+                    Ok(result)
+                })?;
             let jd = (tt.clone()
                 + initial_time_correction.correction_tt_teph / 86400.0f64
                 + 2400000.5f64)
@@ -185,13 +196,19 @@ pub fn form_bats_all(
                 Ok(values)
             })?;
             let site = crate::get_obs_coord::get_obs_coord(&runtime.observatory, &tt, &utc, eop)?;
-            let time_correction = crate::tt2tdb::tt2tb(
-                &runtime.ifte,
-                &tt,
-                [earth_initial[3], earth_initial[4], earth_initial[5]],
-                site.observatory_earth,
-                site.site_velocity,
-            )?;
+            clock_observation.earth_ssb = earth_initial.map(Some);
+            clock_observation.observatory_earth[..3]
+                .copy_from_slice(&site.observatory_earth.map(Some));
+            clock_observation.siteVel = site.site_velocity.map(Some);
+            let time_correction = crate::clkcorr::with_resources(&runtime.root, |session| {
+                let result = crate::tt2tdb::frontend(
+                    session,
+                    input.source_pulsar(),
+                    &mut clock_observation,
+                )?;
+                session.export_time_resources(&runtime.root, &mut runtime.resources);
+                Ok(result)
+            })?;
             let jd = (tt + time_correction.correction_tt_teph.clone() / 86400.0f64 + 2400000.5f64)
                 .to_f64();
             let crate::read_ephemeris::EphemerisState {

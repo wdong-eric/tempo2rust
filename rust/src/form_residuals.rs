@@ -123,8 +123,11 @@ pub(crate) fn form_residuals_at(
         }
         phase_terms.push((phaseint, phase5));
     }
-    // Rug % uses a truncating quotient, matching the adopted fortran_mod semantics.
-    let phas1 = fortran_mod(phase_terms[0].1.clone(), 1.0f64);
+    // Source remainder with its checked native-int quotient boundary.
+    let phas1 = fortran_mod(
+        phase_terms[0].1.clone(),
+        &Float::with_val(PRECISION_BITS, 1),
+    )?;
     let mut observations = Vec::with_capacity(phase_terms.len());
     for (((o, original), epoch), (phaseint, mut phase5)) in psr
         .source_observations()
