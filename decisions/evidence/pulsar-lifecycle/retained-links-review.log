@@ -1,0 +1,6 @@
+ordinary allocate_1 exactly matches delivered projection
+ordinary seeded_reinitialise exactly matches delivered projection
+reset_retained_links allocate_1 exactly matches delivered projection
+reset_retained_links seeded_reinitialise exactly matches delivered projection
+CONFIRMED: zeroing retained link arrays is invisible to the delivered exact state comparison
+OUTPUT /private/tmp/tempo2-pulsar-links-central-7wqy7144

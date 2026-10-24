@@ -74,6 +74,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0041](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0041-observation-storage-acceptance.md) accepts R's full observation-storage foundation and canonical consumer integration at `04918d5`. Central freshly replayed both profiles, all 39 controls and five focused tests per profile, and checked the full regression/source evidence. R's ownership window is closed. Q and S have delivered references awaiting central review; no subsequent Rust owner is released.
 
+[Decision 0042](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0042-pulsar-lifecycle-export-correction.md) returns two exporter corrections to S: retained parameter link arrays are incorrectly hidden after repeated allocation/initialization, and the first seeded extra-covariance backing is omitted. Central demonstrated that a defined reset-link mutation passes the current exact comparison. S remains unaccepted and owns its reference correction; no production Rust stage is released.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
