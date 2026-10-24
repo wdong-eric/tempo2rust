@@ -159,8 +159,11 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment T: Rust pulsar state and lifecycle | `01a16bca-89a0-7cd0-a371-9555df226d7d` | Accepted at `6c8cf68` by decision 0055; ownership closed |
 | Assignment U: TEMPO2 terrestrial resource reference | `01a16bd2-a746-7871-9dfb-52a76ae73c64` | Accepted at `051d2ea` under decision 0051; ownership closed |
 | Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Accepted at `f179ce5` by decision 0054; ownership closed |
+| Assignment W: Rust terrestrial resources | `01a16c39-0b79-75f2-9014-0b8dffc5c63c` | Dispatched from `17fc107` under decision 0056; sole Rust owner; owns `rust/` and `validation/terrestrial_resources_port/` |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
+
+**W dispatched 24 October 2026:** The separate implementation chat started from contract commit `17fc107` in the local `rustify-tempo2` project after T acceptance. It inherits 0053's documented small-bug-fix permission and 0039's generated-output rule. Central retains shared design and milestone acceptance.
 
 ## Shared working design
 
