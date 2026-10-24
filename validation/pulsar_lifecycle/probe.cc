@@ -67,16 +67,17 @@ template<class T,size_t N> typename std::enable_if<std::is_pointer<T>::value,voi
  key(p);fprintf(out,"\"pointer_count\":%zu,\"symbols\":[",N);size_t at=0;bool sep=false;
  while(at<N){size_t end=at+1;while(end<N && x[end]==x[at])end++;if(sep)fputc(',',out);sep=true;fprintf(out,"[%zu,%s]",end-at,q(tag(x[at])).c_str());at=end;}fputs("]}",out);
 }
-static void params(const std::string&p,const pulsar&x,bool full){
+// Allocation replaces prefit backing but retains already seeded embedded link arrays.
+static void params(const std::string&p,const pulsar&x,bool linksKnown,bool prefitKnown){
  for(int i=0;i<MAX_PARAMS;i++){const parameter& a=x.param[i];std::string n=p+"["+std::to_string(i)+"]";
  dump(n+".aSize",a.aSize);dump(n+".nLinkTo",a.nLinkTo);dump(n+".nLinkFrom",a.nLinkFrom);
- if(full){dump(n+".linkTo",a.linkTo);dump(n+".linkFrom",a.linkFrom);}else{unwritten(n+".linkTo");unwritten(n+".linkFrom");}
+ if(linksKnown){dump(n+".linkTo",a.linkTo);dump(n+".linkFrom",a.linkFrom);}else{unwritten(n+".linkTo");unwritten(n+".linkFrom");}
  #define PTR(f) dump(n+"." #f,a.f)
  PTR(val);PTR(err);PTR(prefit);PTR(prefitErr);PTR(fitFlag);PTR(paramSet);PTR(label);PTR(shortlabel);
  #undef PTR
  #define DATA(f) bytes(n+"." #f ".data",a.f,a.aSize,sizeof *a.f)
  DATA(val);DATA(err);DATA(fitFlag);DATA(paramSet);
- if(full){DATA(prefit);DATA(prefitErr);}else{unwritten(n+".prefit.data");unwritten(n+".prefitErr.data");}
+ if(prefitKnown){DATA(prefit);DATA(prefitErr);}else{unwritten(n+".prefit.data");unwritten(n+".prefitErr.data");}
  #undef DATA
  for(int j=0;j<a.aSize;j++){std::string b="["+std::to_string(j)+"]";dump(n+".label"+b,a.label[j]);dump(n+".shortlabel"+b,a.shortlabel[j]);bytes(n+".label"+b+".data",a.label[j],100,1);bytes(n+".shortlabel"+b+".data",a.shortlabel[j],100,1);}
  }
@@ -93,7 +94,7 @@ static void matrix(const std::string&p,double**m){size_t r=get_blas_rows(m),c=ge
  std::vector<size_t> offsets;for(size_t i=0;i<r;i++)offsets.push_back(m[i]-m[0]);bytes(p+".row_offsets",offsets.data(),r,sizeof(size_t));bytes(p+".cells",m[0],r*c,sizeof(double));}
 static void begin(const std::string&phase){fflush(stdout);fprintf(out,"{\"phase\":%s,\"stdout_position\":%ld,\"state\":[",q(phase).c_str(),ftell(stdout));comma=false;}
 static void end(){fputs("]}\n",out);fflush(out);}
-static void state(const std::string&phase,const pulsar&x,bool full){begin(phase);if(full)dump("p",x);else natural("p",x);matrix("p.covar.data",x.covar);if(full)for(int i=0;i<MAX_OBSN;i++)dump("p.obsn.data["+std::to_string(i)+"]",x.obsn[i]);else unwritten("p.obsn.data");end();}
+static void state(const std::string&phase,const pulsar&x,bool full){begin(phase);if(full)dump("p",x);else natural("p",x);matrix("p.covar.data",x.covar);if(full && x.ToAextraCovar)matrix("p.ToAextraCovar.data",x.ToAextraCovar);if(full)for(int i=0;i<MAX_OBSN;i++)dump("p.obsn.data["+std::to_string(i)+"]",x.obsn[i]);else unwritten("p.obsn.data");end();}
 static void seedParams(pulsar&x,int v){for(int i=0;i<MAX_PARAMS;i++){parameter&a=x.param[i];seed(a.nLinkTo,v);seed(a.nLinkFrom,v);seed(a.linkTo,v);seed(a.linkFrom,v);
  for(int j=0;j<a.aSize;j++){seed(a.val[j],v);seed(a.err[j],v);seed(a.prefit[j],v);seed(a.prefitErr[j],v);seed(a.fitFlag[j],v);seed(a.paramSet[j],v);std::fill(a.label[j],a.label[j]+100,char('A'+v%20));std::fill(a.shortlabel[j],a.shortlabel[j]+100,char('A'+v%20));sprintf(a.label[j],"label-%d",v);sprintf(a.shortlabel[j],"s%d",v);}}}
 static void seedOwner(pulsar&x,int v,const std::string&p){seed(x,v);allocateMemory(&x,0);seedParams(x,v);x.obsn=static_cast<observation*>(malloc(sizeof(observation)*MAX_OBSN));for(int i=0;i<MAX_OBSN;i++)seed(x.obsn[i],v+i);x.covar=malloc_blas(2,3);for(int i=0;i<6;i++)x.covar[0][i]=v+0.25;
@@ -110,7 +111,7 @@ int main(int argc,char**argv){assert(argc>=4);out=fopen(argv[1],"wb");assert(out
   if(op=="wrapper")initialise(p,arg(2));else initialiseOne(p,arg(2),arg(1));for(int i=0;i<count;i++){registerOwner(p[i],"owner"+std::to_string(i));state("initialised_"+std::to_string(i),p[i],false);}
   for(int i=0;i<count;i++)destroyOne(p+i);delete[]p;begin("destroy_returned");end();
  }else if(op=="allocate"){
-  pulsar*p=new pulsar;begin("before_allocate");text("p","unwritten");end();allocateMemory(p,arg(1));registerParams(*p,"first");begin("allocated");params("p.param",*p,false);end();seedParams(*p,11);pulsar*old=new pulsar;std::copy(p->param,p->param+MAX_PARAMS,old->param);begin("caller_seeded");params("p.param",*p,true);end();allocateMemory(p,-arg(1));registerParams(*p,"second");begin("reallocated");params("p.param",*p,false);params("old.param",*old,true);end();destroyMemory(p);destroyMemory(old);delete p;delete old;begin("destroy_returned");end();
+  pulsar*p=new pulsar;begin("before_allocate");text("p","unwritten");end();allocateMemory(p,arg(1));registerParams(*p,"first");begin("allocated");params("p.param",*p,false,false);end();seedParams(*p,11);pulsar*old=new pulsar;std::copy(p->param,p->param+MAX_PARAMS,old->param);begin("caller_seeded");params("p.param",*p,true,true);end();allocateMemory(p,-arg(1));registerParams(*p,"second");begin("reallocated");params("p.param",*p,true,false);params("old.param",*old,true,true);end();destroyMemory(p);destroyMemory(old);delete p;delete old;begin("destroy_returned");end();
  }else if(op=="repeat"){
   pulsar*p=new pulsar;seedOwner(*p,11,"first");state("caller_seeded",*p,true);pulsar*old=new pulsar(*p);initialiseOne(p,arg(1),arg(2));registerOwner(*p,"second");begin("reinitialised");retainedAfterInit("p",*p);matrix("p.covar.data",p->covar);unwritten("p.obsn.data");dump("old",*old);matrix("old.covar.data",old->covar);extras("old",*old);for(int i=0;i<MAX_OBSN;i++)dump("old.obsn.data["+std::to_string(i)+"]",old->obsn[i]);end();
   seedParams(*p,22);for(int i=0;i<MAX_OBSN;i++)seed(p->obsn[i],22+i);state("second_caller_seeded",*p,true);pulsar*old2=new pulsar(*p);initialiseOne(p,arg(2),arg(1));registerOwner(*p,"third");begin("initialised_again");retainedAfterInit("p",*p);matrix("p.covar.data",p->covar);unwritten("p.obsn.data");dump("old2",*old2);matrix("old2.covar.data",old2->covar);for(int i=0;i<MAX_OBSN;i++)dump("old2.obsn.data["+std::to_string(i)+"]",old2->obsn[i]);end();

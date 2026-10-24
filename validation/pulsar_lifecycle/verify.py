@@ -7,6 +7,7 @@ from pathlib import Path
 import shutil
 from profile import HERE,BUILD,compile_probe,save,sha,runners
 from fixtures import cases
+from correction import check_lifetimes
 from run import regenerate,execute,compare,identity_gate,execution_identity,reference,validate,protected
 
 MUTATIONS=[
@@ -20,6 +21,10 @@ MUTATIONS=[
  ('destination_fd_count','tempo2Util.C','i<=p[p2].nfdJumps','i<=p[p1].nfdJumps','copy_partial'),
  ('omitted_fd_count_copy','tempo2Util.C','p[p2].dm_series_type = p[p1].dm_series_type;','p[p2].dm_series_type = p[p1].dm_series_type; p[p2].nfdJumps = p[p1].nfdJumps;','copy_partial'),
  ('zero_covariance','TKmatrix.C','memory+=2; // the first two bytes are for the dimensions.','memory[2]=1; memory+=2; // the first two bytes are for the dimensions.','matrix_2_3'),
+ ('reset_linkTo_allocate','initialise.C','psr->param[i].nLinkTo   = 0;','psr->param[i].nLinkTo   = 0; for (int s_link=0;s_link<5;s_link++) psr->param[i].linkTo[s_link]=0;','allocate_1'),
+ ('reset_linkTo_initialise','initialise.C','psr->param[i].nLinkTo   = 0;','psr->param[i].nLinkTo   = 0; for (int s_link=0;s_link<5;s_link++) psr->param[i].linkTo[s_link]=0;','seeded_reinitialise'),
+ ('reset_linkFrom_allocate','initialise.C','psr->param[i].nLinkTo   = 0;','psr->param[i].nLinkTo   = 0; for (int s_link=0;s_link<5;s_link++) psr->param[i].linkFrom[s_link]=0;','allocate_1'),
+ ('reset_linkFrom_initialise','initialise.C','psr->param[i].nLinkTo   = 0;','psr->param[i].nLinkTo   = 0; for (int s_link=0;s_link<5;s_link++) psr->param[i].linkFrom[s_link]=0;','seeded_reinitialise'),
 ]
 
 def rejected(fn):
@@ -67,6 +72,15 @@ def main():
       ('changed_run_count',lambda x:x['events'][2]['state'][0]['runs'][0].__setitem__(0,2)),
     ]:
         x=copy.deepcopy(r);edit(x);control(name,lambda x=x:compare(r,x))
+    retained=reference('allocate_1');check_lifetimes(retained)
+    for link in ['linkTo','linkFrom']:
+        altered=copy.deepcopy(retained)
+        event=next(e for e in altered['events'] if e['phase']=='reallocated')
+        field=next(f for f in event['state'] if f['path']=='p.param[0].'+link)
+        path=field['path'];field.clear();field.update(path=path,state='unwritten')
+        control('known_to_unwritten_'+link,lambda:compare(retained,altered))
+    del retained,altered
+    lifetime_records=sum(check_lifetimes(reference(c['id'])) for c in cs)
     copycase=reference('copy_shared');x=copy.deepcopy(copycase)
     f=next(f for f in x['events'][1]['state'] if f['path']=='destination.obsn');f['symbol']='foreign@0'
     control('alias_owner',lambda:compare(copycase,x));del copycase,x
@@ -91,6 +105,17 @@ def main():
         # Values and states, independently of source hashes, diagnostic filenames and byte offsets.
         a=[e['state'] for e in expected['events']];b=[e['state'] for e in result['events']]
         witness=rejected(lambda:compare(a,b,'state'))
+        if name.startswith('reset_link'):
+            link=name.split('_')[1]
+            phases=['reallocated'] if case=='allocate_1' else ['reinitialised','initialised_again']
+            for phase in phases:
+                expected_fields=next(e['state'] for e in expected['events'] if e['phase']==phase)
+                actual_fields=next(e['state'] for e in result['events'] if e['phase']==phase)
+                path='p.param[0].'+link
+                before=next(f for f in expected_fields if f['path']==path)
+                after=next(f for f in actual_fields if f['path']==path)
+                rejected(lambda:compare(before,after,phase+'.'+path))
+
         dest=HERE/'mutations';dest.mkdir(exist_ok=True)
         (dest/(name+'.json.gz')).write_bytes(gzip.compress(json.dumps(result,separators=(',',':')).encode(),mtime=0))
         # Retain raw mutant streams as well as the complete comparison projection.
@@ -98,6 +123,6 @@ def main():
         mutants.append(dict(name=name,case=case,mutation=[file,old,new],witness=witness,profile=mp,execution=execution_identity(mx,mp)))
         print('mutation rejected:',name,witness[:180],flush=True)
     raw_records=sum(raw_check(c) for c in cs);protected()
-    save(HERE/'verification.json',dict(status='PASS',controls=controls,mutants=mutants,raw_validated_records=raw_records,ordinary_execution=execution_identity(exe,p),scope='All compiled mutations are defined for their declared initialized bounded witnesses. No native undefined trial.'))
+    save(HERE/'verification.json',dict(status='PASS',controls=controls,mutants=mutants,retained_link_records_checked=lifetime_records,raw_validated_records=raw_records,ordinary_execution=execution_identity(exe,p),scope='All compiled mutations are defined for their declared initialized bounded witnesses. No native undefined trial.'))
     print('PASS',len(controls),'controls and',len(mutants),'compiled mutations')
 if __name__=='__main__':main()

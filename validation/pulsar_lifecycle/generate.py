@@ -17,21 +17,21 @@ def generate():
         out.append('}')
         out.append(f'void dump(const std::string& p,const {kind}& x){{')
         for r in fields:
-            if kind=='pulsar' and r['name']=='param':out.append(' params(p+".param",x,true);')
+            if kind=='pulsar' and r['name']=='param':out.append(' params(p+".param",x,true,true);')
             else:out.append(f' dump(p+".{r["name"]}",x.{r["name"]});')
         if kind=='pulsar':out.append(' constraintPayloads(p,x);')
         out.append('}')
     out.append('void natural(const std::string& p,const pulsar& x){')
     for r in types['pulsar']:
         n=r['name'];state=r['natural_state']
-        if n=='param':out.append(' params(p+".param",x,false);')
+        if n=='param':out.append(' params(p+".param",x,false,false);')
         elif state.startswith('unwritten'):out.append(f' unwritten(p+".{n}");')
         elif state.startswith('source writes string'):out.append(f' prefix(p+".{n}",x.{n},sizeof x.{n});')
         else:out.append(f' dump(p+".{n}",x.{n});')
     out.append('}')
     out.append('void retainedAfterInit(const std::string& p,const pulsar& x){')
     for r in types['pulsar']:
-        if r['name']=='param':out.append(' params(p+".param",x,false);')
+        if r['name']=='param':out.append(' params(p+".param",x,true,false);')
         else:out.append(f' dump(p+".{r["name"]}",x.{r["name"]});')
     out.append('}')
     return '\n'.join(out)+'\n'

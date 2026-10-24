@@ -17,7 +17,7 @@ FILES = ['TKlongdouble.C','tempo2Util.C','TKlog.C','TKlog.h','tempo2.h',
          'initialise.C','TKmatrix.C','TKmatrix.h','T2accel.h','t2fit_nestlike.h','TKfit.h','tempo2Util.h','TKlongdouble.float128.h','TKlongdouble.ld.h','global.C']
 UNITS = ['TKlongdouble.C','tempo2Util.C','TKlog.C','initialise.C','TKmatrix.C','global_data.C']
 ENV = {**os.environ, 'LC_ALL':'C', 'LANG':'C'}
-RUNNERS = ['profile.py','fixtures.py','run.py','verify.py','coverage.py','inventory.py','generate.py','evidence.py','probe.cc','inventory.json','cases.json','generated.h']
+RUNNERS = ['profile.py','fixtures.py','run.py','verify.py','coverage.py','inventory.py','generate.py','evidence.py','correction.py','probe.cc','inventory.json','cases.json','generated.h']
 
 
 def sha(b):return hashlib.sha256(b).hexdigest()
