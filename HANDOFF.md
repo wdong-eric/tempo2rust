@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-Prepared 19 October 2026; updated 24 October 2026 for T/U/V/X acceptance, W implementation and Y contract preparation. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
+Prepared 19 October 2026; updated 24 October 2026 for T/U/V/X acceptance, W implementation, Y contract preparation and Z reference dispatch. This workspace is modernizing TEMPO2's core in Rust while preserving its established scientific calculations. The central design chat owns shared design decisions, scientific conventions, scope changes, and milestone acceptance. Separate implementation chats own the bounded assignments below.
 
 The active objective is to transfer the TEMPO2 core in staged implementation chats, preserving established behavior except for documented, tested corrections of demonstrated bugs under decision 0053, with central acceptance. Existing isolated-pulsar milestones are intermediate coverage, not the full completion target. Kalman extensions, plugin binary compatibility, and a new scientific timing framework are outside the initial milestones.
 
@@ -174,12 +174,15 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment V: TEMPO2 time ephemeris reference | `01a16bdb-8e82-71a0-b823-67399b391ae0` | Accepted at `f179ce5` by decision 0054; ownership closed |
 | Assignment W: Rust terrestrial resources | `01a16c39-0b79-75f2-9014-0b8dffc5c63c` | Dispatched from `17fc107` under decision 0056; sole Rust owner; owns `rust/` and `validation/terrestrial_resources_port/` |
 | Assignment X: TEMPO2 observer coordinates | `01a16c44-a1ca-7e43-a83a-1cdce98d44e8` | Accepted at `02234cd` by decision 0059; ownership closed |
+| Assignment Z: TEMPO2 planetary ephemeris | `01a16c74-090a-70a3-a4a8-29ecb51fe5de` | Dispatched from `7946aee` under 0060; owns only `validation/planetary_ephemeris/` |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
 
 **W dispatched 24 October 2026:** The separate implementation chat started from contract commit `17fc107` in the local `rustify-tempo2` project after T acceptance. It inherits 0053's documented small-bug-fix permission and 0039's generated-output rule. Central retains shared design and milestone acceptance.
 
 **X dispatched 24 October 2026:** The independent native observer-coordinate reference chat started from `64cab7f` under 0057. Its active turn is confirmed; W received the separate ownership boundary. Generated evidence remains local under 0039, and current bug policy 0053 applies.
+
+**Z dispatched 24 October 2026:** The independent native planetary-ephemeris reference chat started from `7946aee` under 0060. Its active turn is confirmed and W received the separate ownership boundary. X is closed; W remains sole Rust owner while its final verification/report is completed. Y remains prepared until central acceptance of W.
 
 ## Shared working design
 
