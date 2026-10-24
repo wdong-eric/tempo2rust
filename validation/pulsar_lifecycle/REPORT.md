@@ -1,8 +1,26 @@
 # Assignment S: pulsar lifecycle reference
 
-Delivered for central review on 24 October 2026 under decision 0038. The native reference covers the complete **349-field pulsar map, seven nested types, 95 observation fields and twelve primary routines**. Fresh exact replay passed **30 cases / 133 ordered events / 5,329,658 field records**. Twenty-eight cases return normally; two zero-dimension allocations terminate with SIGABRT at the source assert. All **23 integrity controls and ten defined compiled mutations** pass. A separate O0/gcov build matches all 30 ordinary projections exactly and enters all twelve routines.
+Delivered for central review on 24 October 2026 under decision 0038 and exporter correction 0042. The native reference covers the complete **349-field pulsar map, seven nested types, 95 observation fields and twelve primary routines**. Fresh exact replay passed **30 cases / 133 ordered events / 5,329,662 field records**. Twenty-eight cases return normally; two zero-dimension allocations terminate with SIGABRT at the source assert. All **25 integrity controls and 14 defined compiled mutation/witness runs** pass. A separate O0/gcov build matches all 30 ordinary projections exactly and enters all twelve routines.
 
 This is bounded native reference evidence, not a Rust transfer, physical validation or milestone acceptance. R/P/Q, Rust, accepted evidence and central documents were not edited. Both independent repositories remain clean. No A2 engine or patched native function supplies ordinary results. Central retains ownership/API, callback ABI, numerical and acceptance decisions; M2 remains unresolved.
+
+## Decision 0042 correction
+
+Corrected harness, generator, lifetime contract and sensitivity checks: `6cc0fd0`. The subsequent documentation commit contains this report.
+
+The original delivery `16737d2` remains preserved in `build/pre0042/`: all 132 source/evidence files, with manifest SHA-256 `14115f05255c62f6935f8d7405f3b92903be686024b1c5683860be0b4b6fe985`. All required correction checks have passed: fresh replay, 25 controls, 14 compiled witnesses, exact O0 coverage comparison, raw/delta validation and the baseline audit. The corrected exporter tracks embedded-link knownness independently of newly allocated prefit-buffer knownness. Natural first allocation still exports unseeded links as unwritten. Repeated allocation retains and exports seeded links, resets link counts, and leaves fresh prefit backing unwritten.
+
+The exact baseline audit in local `correction.json` confirms only these projection changes across all 30 cases:
+
+| Case and event | Changed projection |
+| --- | --- |
+| `allocate_-3`, `allocate_0`, `allocate_1`, `allocate_5`: `reallocated` | Both `p.param[0..1999].linkTo/linkFrom` arrays now contain five caller-seeded 11 values each, replacing their erroneous unwritten markers: 16,000 records. |
+| `seeded_reinitialise`: `reinitialised`, `initialised_again` | The same 4,000 current-owner link records at each event contain the retained seeds 11 and 22 respectively: 8,000 records. |
+| `seeded_reinitialise`: first `caller_seeded` | Four added `p.ToAextraCovar.data` records: rows 1, columns 2, row offset 0, cells 11 and 12. Its existing pointer remains `first.extraCovar`. |
+
+All other projected state, field order, streams and statuses remain unchanged, including saved-owner values, reset link counts and unwritten new prefit buffers. No native source, fixture, inventory, protection membership, scientific convention or tolerance changed. The historical map and case catalog were not regenerated during this correction.
+
+The correction commands are `generate.py`, `run.py --record`, `verify.py`, `coverage.py`, `evidence.py` and `correction.py`, each beneath `validation/pulsar_lifecycle/`, using Python 3. The deliberate recording followed preservation of the original bundle. `correction.py` verifies the original manifest and all preserved file hashes before comparing; its audit requires that local baseline. Generated evidence and the preserved baseline remain ignored under 0039. Central acceptance is still pending.
 
 ## Reproduce
 
@@ -13,6 +31,8 @@ From the project root, with the pinned local source/reference repositories, acce
 python3 validation/pulsar_lifecycle/verify.py
 python3 validation/pulsar_lifecycle/coverage.py
 python3 validation/pulsar_lifecycle/evidence.py
+# For auditing this correction against the preserved local 16737d2 bundle:
+python3 validation/pulsar_lifecycle/correction.py
 ```
 
 To regenerate the local bundle from the source pins and committed scripts:
@@ -33,13 +53,13 @@ Per the user's later instruction, generated JSON/gzip, raw dumps, profiles, rece
 
 ## Source, caller and lifetime map
 
-`inventory.py` mechanically reads the pinned header, cross-checks all pulsar/observation names against accepted M, and emits `inventory.json`: field types/extents, natural-write classifications and source anchors, copy/retention anchors, nested declarations, enums/constants/callback signatures, twelve function bodies and every selected branch site. `CONTRACT.md` and `fixtures.py` fix the caller and ownership rules. The pre-experiment freeze is `a70db26`; `ba07fe5` corrects classification of `char *constraint_special[]` as a pointer array before any native execution. Executed harness/scripts are committed at `428a050`; the subsequent documentation commit contains this report.
+`inventory.py` mechanically reads the pinned header, cross-checks all pulsar/observation names against accepted M, and emits `inventory.json`: field types/extents, natural-write classifications and source anchors, copy/retention anchors, nested declarations, enums/constants/callback signatures, twelve function bodies and every selected branch site. `CONTRACT.md` and `fixtures.py` fix the caller and ownership rules. The pre-experiment freeze is `a70db26`; `ba07fe5` corrects classification of `char *constraint_special[]` as a pointer array before any native execution. The original harness/scripts are `428a050` and original report `16737d2`; the corrected harness is `6cc0fd0`.
 
 Natural initialization has **219 entirely unwritten top-level members**, 116 complete scalar/array writes, eleven string-prefix writes, and the three special allocation-bearing members `param`, `covar`, `obsn`. Unwritten members are reported without reading storage. Source writes within a member and allocator writes to its backing are distinct:
 
 | State | Natural initialization and copy behavior |
 | --- | --- |
-| `parameter[2000]` | Actual allocation gives 9,616 cells. aSize/link counts, val/err/fit/set and complete calloc label buffers are written. Link arrays and prefit/prefitErr backing remain unwritten. copyPSR retains all parameter state. Both IPERHARM labels and retained label suffix bytes are exported. |
+| `parameter[2000]` | Actual allocation gives 9,616 cells. aSize/link counts, val/err/fit/set and complete calloc label buffers are written. Link arrays and prefit/prefitErr backing remain unwritten on first allocation. Repeated allocation retains seeded embedded links while replacing prefit backing. copyPSR retains all parameter state. Both IPERHARM labels and retained label suffix bytes are exported. |
 | `observation`, including nested clock corrections | Initializer malloc backing is unwritten. Seeded copies export every field of every record, including unused backing. Only the nobs prefix is assigned; tzrobs is retained. |
 | Strings | Natural writes are exported only through their terminating NUL; suffixes are marked unwritten. Retention callers initialize every byte, so strcpy's destination suffix retention is fully observed. |
 | `FitInfo`, `FitOutput`, `storePrecision`, TZR, constraints | Unwritten/retained unless an initializer anchor says otherwise. Seeded snapshots cover every nested member. Callback fixtures have valid typed function identities and are never called. Opaque payloads have declared fixture owners/bytes. |
@@ -68,23 +88,25 @@ Host: macOS 26.7 arm64, C locale, Homebrew GCC 16.2.0. Selected longdouble is me
 | --- | --- |
 | Canonical TEMPO2 | `fda6ad4a9753ad7dc5d291406f2f310a9161423f` |
 | Independent A2 checkout, config only | `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572` |
-| Ordinary O2 executable | `6922529daf9e3660687a1c9bab44adf7eddee672724025f2022ffd3318d42eff` |
-| Separate O0/gcov executable | `7de4d5e7bd0a5426cddc9a54872920e01bcf9e5bf66bff6bf92c2daad824aa08` |
-| Native harness | `b7e69ae438a2957f0114d87c154a72546e14ae462bf2d4e7e0ef56d8f904de1b` |
+| Ordinary O2 executable | `6f329224db4ada324bf880e6bb29efc56eb97ad842c8c431f57893142159b636` |
+| Separate O0/gcov executable | `6177ff60180c55ec5c89fed668459a75e5f47eb3efe44a7f0c2552a7fda10e22` |
+| Native harness | `bf49dcfd4db98a111fcebc7b3c0cdff55a60cda52c6798cd30aeb111fdf11ae9` |
 | Frozen inventory | `b71beaeb418345784444dd572834776a6fa4a6d1c275c3b725d6f6ef0346c321` |
-| Ordinary profile | `ae1ae27fbd79f0dc11e75818ff9ab8fed8a573a716320c9e0817fea90806d657` |
-| Observation index | `d57ce24d54eda485eda64cf707b819f437f08c29162297f803b29fd8a7c73ddf` |
-| Fresh replay receipt | `b2e2532e3e7316069913bd3ababc4737b99b63763f637997d3ec352866daef8e` |
-| Controls/mutations receipt | `4107ac74f0e7053d675be3661cc557f756ebb7f6e660dad2e917f57f9a1add2f` |
-| Coverage receipt | `e53e858c475d50c7c79fd1e27cba52610e387a9cdf193417934f1706f85c5718` |
+| Ordinary profile | `981fd991fea59853b89b9076167156cb82db0608ebc949dc35f8baba098310f2` |
+| Observation index | `f0ba2cb0e983422af428dc6c809ac0e2053343fa12415d1b7b90f8ac93aef80c` |
+| Fresh replay receipt | `354b54e04def937492c492135c9435512ea0149c32d071298956e17bada251c9` |
+| Controls/mutations receipt | `7135ed42e0c7fbae9534914f22e74aea4365d1619cbed07f8635518a0d292f4e` |
+| Coverage receipt | `acf6197e53a1574b60882cc7ea8484d67053d9c5dba4cc7c0ac81af3b7194807` |
+| Correction audit receipt | `53ca08fe9c42b6bb088aa1046e54421fa51846e49e2485097775801daa633ad2` |
+| Raw/delta receipt | `acf0f611c8eb929829673322e416cbb575854edb1ee8164bc772c2769508f8ee` |
 
 The local profiles retain commands, executable/link-map digests, raw and normalized preprocessing, macros, compiler and cc1plus hashes, runtime library identities, 246 included source/header dependencies and every runner/exporter hash. Every launch checks actual executable, current runner/header/source/compiler/backend/runtime bytes before and after execution. A failed normal attempt removes its preceding success receipt. System libSystem/shared-cache, loader and kernel are identified by the OS/link boundary, not separately hashed; this is not a hermetic build.
 
 ## Controls, measured coverage and gaps
 
-The 23 controls cover missing/extra/reordered events/fields, status/stream/value/run-length changes, alias identity, compiler/backend/source/config/header/preprocessing/runtime/macro/runner identity, same-path executable replacement, stale success receipt, no-output replacement with old case files present, and stale nonce. Ten disposable mutants are rejected by actual state differences independently of their changed identities: nits initialization, omitted-control write, string suffix copying, matrix columns, row stride, reverse observation assignment, exclusive ordinary jump bound, source FD bound, copying omitted nfdJumps and nonzero calloc element replacement. All witnesses remain initialized and within capacity; canonical source is unchanged.
+The 25 controls cover missing/extra/reordered events/fields, status/stream/value/run-length changes, alias identity, compiler/backend/source/config/header/preprocessing/runtime/macro/runner identity, same-path executable replacement, stale success receipt, no-output replacement with old case files present, stale nonce, and replacing either retained link array with an unwritten marker. Fourteen disposable compiled witnesses (twelve distinct source edits) are rejected by actual state differences independently of their changed identities: nits initialization, omitted-control write, string suffix copying, matrix columns, row stride, reverse observation assignment, exclusive ordinary jump bound, source FD bound, copying omitted nfdJumps, nonzero calloc element replacement, and separate clearing of retained linkTo/linkFrom. Each new link reset is run against both allocate_1 and seeded_reinitialise, with explicit differences required at reallocated or both reinitialization events. All witnesses remain initialized and within capacity; canonical source is unchanged.
 
-Gcov measures **702/711 executable selected lines and 236/256 branches**, including compiler-generated edges. Call counts are: initialise 4; initialiseOne 12; allocateMemory 37; destroyOne 29; destroyMemory 37; copyPSR 9; malloc_blas/free_blas 51 each; both accessors 105 each; malloc_uinv/free_uinv 1 each. Aborting processes do not flush counters, so these are accumulated coverage counts, not all process calls.
+Gcov measures **702/711 executable selected lines and 236/256 branches**, including compiler-generated edges. Call counts are: initialise 4; initialiseOne 12; allocateMemory 37; destroyOne 29; destroyMemory 37; copyPSR 9; malloc_blas/free_blas 51 each; both accessors 106 each; malloc_uinv/free_uinv 1 each. Aborting processes do not flush counters, so these are accumulated coverage counts, not all process calls.
 
 Every unhit selected line/branch has the following disposition; exact indices remain in local coverage.json:
 
