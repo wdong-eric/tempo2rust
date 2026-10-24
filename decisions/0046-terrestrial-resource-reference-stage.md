@@ -75,3 +75,7 @@ Deliver `validation/terrestrial_resources/REPORT.md`, complete source/branch/cal
 Protect all accepted reference/evidence files and both independent repositories. T's active `rust/` and `validation/pulsar_lifecycle_port/`, plus central documents, are concurrent work outside U's immutable membership. Read accepted Git revisions when fixed Rust context is useful; do not freeze T's evolving files as immutable oracle inputs.
 
 No Rust edits, new numerical representation/tolerance, source bug fixes or milestone acceptance are delegated. IFTE/TT-to-TDB, general observatory coordinate transforms, ephemeris/astrometry, geometric/Shapiro/BAT assembly, other propagation models, arbitrary I/O faults, other platforms and concurrency remain subsequent work. Report a concrete out-of-contract finding to central while continuing independent cases.
+
+## Dispatch
+
+Created **Assignment U: TEMPO2 terrestrial resource reference**, chat `01a16bd2-a746-7871-9dfb-52a76ae73c64`, in the local `rustify-tempo2` project from release commit `43001af`. An immediate snapshot confirms an active reference turn. T received U's separate ownership boundary and remains sole Rust owner. Both chats retain policy 0039 and central design/acceptance authority. This records dispatch, not accepted evidence.
