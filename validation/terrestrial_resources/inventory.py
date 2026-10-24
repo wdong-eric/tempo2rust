@@ -64,7 +64,7 @@ def source_map():
 def protected_paths():
     paths = []
     for directory in (ROOT/'validation').iterdir():
-        if not directory.is_dir() or directory.name in ('terrestrial_resources','pulsar_lifecycle_port'): continue
+        if not directory.is_dir() or directory.name in ('terrestrial_resources','pulsar_lifecycle_port','time_ephemeris'): continue
         if directory.name == 'reference':
             tracked = subprocess.check_output(['git','-C',str(directory),'ls-files'],text=True).splitlines()
             paths.extend(directory/p for p in tracked)
@@ -82,13 +82,31 @@ def freeze():
         status=subprocess.check_output(['git','-C',str(ROOT/n),'status','--porcelain'],text=True)) for n in ('tempo2','validation/reference')})
     print('Frozen 22 routines, raw branch/caller/type map and protected accepted evidence')
 
+class PreservationDrift(AssertionError):
+    def __init__(self, changes):
+        self.changes=changes
+        super().__init__('protected evidence changed: '+', '.join(changes))
+
 def check():
     base = HERE/'outputs/frozen'
     assert source_map() == json.loads((base/'source_map.json').read_text())
+    changes={}
     for p,h in json.loads((base/'protected.json').read_text()).items():
-        assert sha((ROOT/p).read_bytes()) == h, 'protected evidence changed: '+p
+        actual=sha((ROOT/p).read_bytes())
+        if actual!=h:changes[p]=dict(frozen=h,actual=actual)
     for n,v in json.loads((base/'repositories.json').read_text()).items():
         assert subprocess.check_output(['git','-C',str(ROOT/n),'rev-parse','HEAD'],text=True).strip() == v['head']
         assert subprocess.check_output(['git','-C',str(ROOT/n),'status','--porcelain'],text=True) == v['status'] == ''
+    if changes:raise PreservationDrift(changes)
+
+def preservation_status():
+    """Keep a failing ownership gate while allowing independent native work.
+
+    Source-map and independent-repository failures still abort immediately.
+    No mismatched member is removed, rewritten or silently rebaselined.
+    """
+    try:check()
+    except PreservationDrift as e:return e.changes
+    return {}
 
 if __name__ == '__main__': freeze()

@@ -66,6 +66,10 @@ backing; negative/zero counts intentionally visit no elements.
 
 No nominal success is fabricated for an invalid prefix. Each terminating case
 runs in its own process; a subsequent fresh success is not source recovery.
+An ordinary caller `atexit` observer records the live global vectors and
+caller-owned EOP/direct meteorology objects after a source exit, before their
+destruction. It does not replace exit, reset native state or read native local
+stack temporaries. Unreturned local scanner state remains source-inspected.
 
 ## Exact comparison and preservation
 
@@ -84,7 +88,7 @@ must show behavioral differences independent of identity. Coverage runs compare
 with ordinary results and report any differences without adding a tolerance.
 
 `outputs/frozen/protected.json` excludes U, T's rust/ and
-validation/pulsar_lifecycle_port/, central documents and volatile build caches.
+validation/pulsar_lifecycle_port/, V's validation/time_ephemeris/, central documents and volatile build caches.
 It includes accepted source/projection/local evidence files; both independent
 repositories retain their original HEAD and clean status. Sources/fixtures/
 contracts/reports alone are committed using explicit owned paths.
