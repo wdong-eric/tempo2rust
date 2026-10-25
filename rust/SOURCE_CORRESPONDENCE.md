@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I/L/O/W/Y/AA/AC, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L/O/W/Y/AA/AC/AD, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -17,7 +17,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/tempo2.rs` | `tempo2.h::label`, `param_label`, parameter capacities and all `parameter` fields; owned array storage, signed integers, independent logical/backing extents and unwritten state; no C ABI equivalence |
 | `src/initialise.rs` | Parameter allocation/zero initialization in `initialise.C::allocateMemory`, source-order labels in `initialiseOne`, ownership replacement/destruction for `destroyMemory`; remaining pulsar/observation/covariance responsibilities deferred |
 | `src/tempo2_util.rs` | `tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/fortran_nlong/copyParam`; strict `parse_binary64` is Rust glue |
-| `src/form_residuals.rs` | `formResiduals.C::formResiduals`, `tempo2Util.C::fortran_mod/fortran_nlong`; split spin phase, first-input reference and checked counts. The `@` entry supplies zero-delay `formBats.C::formBats` and `secularMotion.C::secularMotion` branches |
+| `src/form_residuals.rs` | Bounded immutable-input adapter to `residual_source`; supplies its declared five-column TIM controls and projects the historical result. The `@` entry supplies zero-delay BAT/BBAT epochs; no duplicate phase kernel remains |
 | `src/form_bats.rs` | Bounded frontend adapter to the canonical general PAR/preprocessing/global pipeline; projects the existing terrestrial schema and invokes the existing bounded residual evaluator. No duplicate delay engine remains |
 | `src/runtime.rs` | Rust-owned resource/context glue; `observatory.C::getObservatory/ITRF_to_GRS80`, `tropo.C::initialize_meteorology_tables`; orchestrates `clkcorr.C::getClockCorrections`, `eop.C::load_EOP`, `ifteph.C::IFTE_init`, `jpleph.c::jpl_init_ephemeris` counterparts |
 | `src/clkcorr.rs` | `clkcorr.C::getClockCorrections/getCorrection/getClockCorrectionSequenceInternal`; all four public operations, explicit chains and all selected helpers/constructors; process session, directed routes, lazy tables and source fallbacks |
@@ -247,3 +247,23 @@ The source header maps `powl` to `powq`; chromatic power therefore uses Rug128
 before its source binary64 assignment. `inspect_native_numerics.py` records the
 actual accepted object hashes/instructions and header macro. No precision mode,
 new numerical dependency, or new source threshold was introduced.
+
+
+## AD complete fixed-parameter timing
+
+The detailed routine, precision, lifecycle and correction map is in
+[TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md).
+
+| Rust module(s) | Source responsibility |
+| --- | --- |
+| `binary/{bt,btj,btx,dd,ddk,dds,ddgr,ddh,mss,ell1,ell1h,ell1k,t2,t2_pta}` | All 42 bodies in the fourteen corresponding binary source files; source-specific helpers remain separate |
+| `binary/mod.rs` | Source binary dispatch and the two `t2fit_stdFitFuncs.C` binary callbacks; source exits and checked conversion glue |
+| `residual_source.rs` | Entire `formResiduals.C::formResiduals`, including reference/tracking/TZR, phase contributions, noise and averaging calls |
+| `averaging.rs` | `averageResiduals` and `averageDMResiduals`; one shared implementation with explicit source DM differences, owned arrays and recoverable file I/O |
+| `gw_ecc.rs` | `GWsim.C::{eccRes,Rs,dadt,dedt,dtdt,Fe}` only; source RK4/state/coalescence closure |
+| `timing.rs`, `main.rs` | Shared BAT/residual orchestration and Rust-only public projections, parameter mutation/provenance transport and CLI |
+| `observation.rs`, `bats.rs` | Original expanded TIM row identity carried by canonical whole-record copies/sorting; provenance only |
+| `clock_text.rs` | Three added fixed binary64 output formats and safe Rug `%Lg` six-digit spelling; existing bounded typed libc formatting is reused |
+
+AD adds no unsafe Rust block, native numerical dependency, alternate backend or
+precision switch. Retained FFI and process resource lifetimes are unchanged.

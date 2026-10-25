@@ -216,3 +216,34 @@ same four raw-order diagnostics.
 `INPUT_TO_BAT_REPORT.md` records exact comparison scopes and all unresolved checks.
 Passing public examples is engineering evidence for those combinations, not general
 scientific acceptance or resolution of M2, 0049, DDH or P compatibility gaps.
+
+
+## AD fixed-parameter timing dispositions (0053, 0070, 0075)
+
+[TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md) records the full correction
+ledger and separately identified native proofs. Corrections remove DDK's dead
+uninitialized read; bound T2 companion access; scope ELL1H/T2 intermediates; use
+ELL1's ORBIFUNC count; select the current pulsar for phase reference, shapelets
+and averaging; exclude spare/TZR rows from active noise means; omit unused
+`newmean`; and initialize omitted `AverageDMResiduals` / `nWhite_dm` defaults.
+Original G classifications and original AB evidence are unchanged.
+
+Step IFUNC/ORBIFUNC requests without a source assignment, missing consumed noise
+signals, invalid integer conversions/overflow and unknown delay models return
+contextual errors. No guessed extrapolation, zero noise or finite substitution
+is supplied. Ordinary averaging retains prior fields on rows without its flag
+and fails if it actually reads unwritten storage; DM averaging preserves the
+source's warning/early return and retains prior fields. Both own their temporary
+arrays, including the formerly leaked `AverageFreq`. File errors return `Err`.
+
+ELL1H NHARM mode selection, BT EDOT / ELL1k EPSDOT delay oddities, source update
+coordinates and defined nonfinite values remain unchanged. Tracking/coalescence
+locals retain their source outer-loop lifetimes. Source failures preserve writes
+already completed; neither rollback nor arbitrary same-context retry is promised.
+The binary fit wrapper's unknown model has no defined native return; Rust uses
+the explicit unknown-model error path rather than fabricating a coefficient.
+
+M2's four exact raw-order failures, the four 0049 boundaries and original DDH
+1 ns gate remain open. P's 154 records remain open; 0077 diagnoses the precision
+cause but authorizes no gate or production precision change. This delivery does
+not accept the overall migration.

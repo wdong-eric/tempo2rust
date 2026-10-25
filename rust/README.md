@@ -1,11 +1,62 @@
 # TEMPO2 Rust timing core
 
-One Rust library and JSON CLI now provide general ordered PAR/TIM input, source
-preprocessing and input-to-BAT/BBAT evaluation. The existing residual and ZERO/F0–F3
-fit commands retain their isolated-pulsar and declared `@`/PKS input scopes.
-The general BAT implementation is delivered for central review; milestone acceptance
-and successor release are separate decisions. See [INPUT_TO_BAT_REPORT.md](INPUT_TO_BAT_REPORT.md)
-for execution evidence and unresolved numerical gates.
+One Rust library and JSON CLI provide general ordered PAR/TIM input, source
+preprocessing, BAT/BBAT and fixed-parameter timing through all fourteen binary
+families. The existing bounded residual and ZERO/F0–F3 fit commands retain their
+input scopes through adapters to the shared timing routines. General fitting is
+not part of this delivery. See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md)
+for execution evidence, source corrections and unresolved acceptance gates.
+
+## General fixed-parameter timing
+
+```sh
+rust/target/release/tempo2-rust timing \
+  --par validation/binary/fixtures/dd_baseline.par \
+  --tim validation/binary/fixtures/barycentric.tim \
+  --runtime validation/reference/build/source/T2runtime --no-mean
+```
+
+Run from the repository root after building the crate. Repeat ordered `--par` /
+`--tim` pairs for multiple pulsars. The default removes the source arithmetic
+residual mean; `--no-mean` keeps it. Neither choice fits parameters or changes
+phase/count fields merely to match the residual mean. Preprocessing arguments
+follow `--`, as for `bats`.
+
+```rust,no_run
+use std::path::Path;
+use tempo2_rust::{bats::{self, InputPair}, timing, RuntimeContext, TimingError};
+fn fixed_timing() -> Result<(), TimingError> {
+    let root = Path::new("T2runtime");
+    let mut input = bats::load_pairs(&[InputPair {
+        par: "model.par".into(), tim: "arrival.tim".into(),
+    }], root)?;
+    bats::preprocess(&mut input, &[], root)?;
+    let mut runtime = RuntimeContext::from_root(root)?;
+    let result = timing::evaluate(&mut input, &mut runtime, true)?;
+    assert!(result.remove_mean);
+    Ok(())
+}
+```
+
+`timing::evaluate` runs BAT preparation and full residual evaluation on the same
+canonical context. `timing::form_residuals` operates directly on prepared BAT
+state. `binary::{model, fit_function, update}` expose source delay/derivative and
+update callbacks; `model` selector -1 requests delay and preserves DD's extended
+return, while `fit_function` performs the source binary64 narrowing.
+
+JSON includes AC provenance plus PET, binary delay, phase/nphase, exact pulse
+numbers as decimal strings, residual/residualtn, original expanded TIM row index,
+applicable averaged fields and parameter mutations. TZR is a separate record;
+inapplicable averages are null. Signed nonfinite classes remain explicit. Errors
+publish no success JSON and retain completed canonical writes; use fresh input
+for recovery after a partially completed pipeline.
+
+Stored noise signals must come from the caller's actual noise calculation/data.
+The eccentric GW routine consumes a previously produced residual. The executable
+[library example](examples/timing_lifecycle.rs) demonstrates these lifetimes and
+explicit state switches. `AVERAGERES` writes source-format `avg.dat` in the working
+directory; file failures are recoverable errors. The direct averaging functions
+share the same routines. See [the runnable matrix](../validation/timing_models/EXAMPLES.md).
 
 ## General input to BAT
 
