@@ -159,6 +159,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0072](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0072-specialized-par-telescope-bounds.md) clarifies seven Q telescope-table observations that accessed entry 1000 in 500-element arrays. Original artifacts remain intact; invalid and subsequent native state are withheld as Rust oracles. AC verifies the safe prefixes and true capacity boundary in owned staging and reports expected Rust rejections separately from complete case matches. This adds no reference stage or numerical-policy change.
 
+[Decision 0073](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0073-shared-parameter-continuous-rounding.md) supplies the previously unset Rust comparison contract for two diagnosed continuous K expressions: threshold scaling and linked KIN at STIG 0.5. Source-derived rounding bounds preserve Rug128, exact discrete state, the native self-replay gate and all existing milestone thresholds. AC continues functional implementation; these are reported as qualified numerical comparisons, not exact native matches.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
