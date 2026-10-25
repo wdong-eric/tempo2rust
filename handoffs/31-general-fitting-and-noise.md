@@ -1,6 +1,6 @@
 # Assignment AE: general fitting and noise
 
-**Prepared only. Under decision 0074, wait for a reviewed AD implementation handover, ownership closure and an explicit AE release naming the baseline revision and its acceptance status.** AC currently owns Rust, and AD remains prepared. This is a functional implementation assignment under decision 0071, not a new reference-only stage.
+**Prepared only. Under decision 0074, wait for a reviewed AD implementation handover, ownership closure and an explicit AE release naming the baseline revision and its acceptance status.** AD owns Rust under decision 0075; AC ownership is closed. This is a functional implementation assignment under decision 0071, not a new reference-only stage.
 
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, `decisions/0071-general-fitting-and-noise-prepared-contract.md`, 0074 handover/acceptance rule, 0065 priorities, 0053 small-bug policy, 0039 generated-output policy, 0050 evidence preservation, 0007/0012/0015 fitting contracts and central's AD baseline release. Preserve the original 0008 document and apply its later amendments.
 
