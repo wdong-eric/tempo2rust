@@ -3,13 +3,13 @@
 One Rust library and JSON CLI provide general ordered PAR/TIM input, source
 preprocessing, BAT/BBAT and fixed-parameter timing through all fourteen binary
 families. The existing bounded residual and ZERO/F0–F3 fit commands retain their
-input scopes through adapters to the shared timing routines. General fitting is
-being extended through `timing --fit`; its current implementation and remaining
-scope are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
+input scopes through adapters to the shared timing routines. General local/global fitting is
+available through `timing --fit`; delivered APIs, verification and open numerical
+gates are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
 See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md) for the preceding fixed
 timing delivery and its unresolved acceptance gates.
 
-## General fitting (AE work in progress)
+## General fitting
 
 ```sh
 rust/target/debug/tempo2-rust timing --fit \
@@ -29,8 +29,10 @@ Call `general_fitting::fit` on a preprocessed `BatInput` for the complete cycle,
 or `general_fitting::t2_fit` / `do_fit_all` on prepared canonical BAT/residual
 state. The `tempo2-general-fit-v1` result records rows, local/global coordinates,
 matrices, constraints and targets, raw solver outputs, physical updates and
-noise projections. Covariance stays in source fit coordinates. These interfaces
-do not imply that AE's full source scope or numerical acceptance is complete.
+noise projections. Covariance stays in source fit coordinates.
+[GENERAL_FITTING_API.md](GENERAL_FITTING_API.md) maps the standalone solver,
+constraint, covariance, spectrum and bootstrap APIs. Numerical acceptance
+remains pending on the report's explicit failed gates.
 
 ## General fixed-parameter timing
 

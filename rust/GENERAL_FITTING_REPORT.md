@@ -1,226 +1,127 @@
-# AE general fitting implementation checkpoint
+# AE general fitting implementation delivery
 
-AE remains active under 0079. **This is not the completed handover or numerical
-acceptance report.** The remaining implementation and validation inventory below
-is still required before central's 0074/0082 review. Updated 26 October 2026.
-Implementation checkpoints are `8a16880` and `f75eb13`; subsequent work below
-remains in progress.
+Updated 26 October 2026. This is the implementation delivery for central's
+0074 handover and 0082 assessment. **Numerical/scientific acceptance remains
+pending.** Central must review this delivery and close AE ownership before
+releasing a successor; this report does neither.
 
-## Executable capability
+Source pin: `fda6ad4a9753ad7dc5d291406f2f310a9161423f`. AD implementation baseline:
+`a8e5178778f7eeb3a0fc65f8934a64a03f94208d`; AD report:
+`0f44180a021655074c387e2c03012d0c4253276e`; AE release: `ae03c87`.
+AE implementation commits: `8a16880`, `f75eb13`, `1209f31`, and `ddff7f82cfe05bc152e55ddbdb33f9bfc4d06bc9`.
+The evidence index and tested executable identities are recorded below. The
+canonical TEMPO2 checkout, reference archive and accepted runners are unchanged.
 
-`timing --fit` now reaches canonical local/global fitting through real PAR/TIM
-loading, preprocessing, BATs and residuals. `general_fitting::fit` performs NITS;
-`t2_fit` and `do_fit_all` operate on prepared canonical state. The bounded spin
-adapter shares the generalized SVD and spin updates. General output remains
-`tempo2-general-fit-v1`; see `validation/general_fitting/CONTRACT.md` and
-`EXAMPLES.md`.
+## Delivered capability and public interfaces
 
-Implemented components include source column/row selection, binary and remaining
-callback families, constraints and targets, typed constraint payload ownership,
-H/B/W robust fitting, covariance model grammar and lower-triangular whitening,
-TN bases/projections, polynomial fitting helpers, and standalone DM/CM weights
-and automatic grids. Standalone bootstrap/RNG, automatic covariance estimation,
-spectrum/FFT dependencies, single-pulsar legacy adapters and independently optional
-solver outputs are now implemented. Their presence is not evidence of complete
-branch coverage.
+`timing --fit` executes the canonical PAR/TIM, preprocessing, BAT/residual and
+NITS fitting lifecycle for independent and shared-global pulsars. The library
+exports `general_fitting::{fit,t2_fit,do_fit_all}`, separate preparation,
+design/constraint-row, update and prefit/postfit operations, and inspectable
+`tempo2-general-fit-v1` results. Local/global ordering, row identities,
+constraint targets, solver outputs, physical before/after/postfit state,
+noise arrays and recomputed timing are exposed. The bounded fit adapters share
+the same state, timing and SVD routines.
 
-## Current evidence
+The completed routine/header inventory is
+[GENERAL_FITTING_API.md](GENERAL_FITTING_API.md); module, ownership and unsafe
+mapping is [GENERAL_FITTING_SOURCE_MAP.md](GENERAL_FITTING_SOURCE_MAP.md).
+These cover the released fitting callbacks, constraints and automatic DM/CM
+operations, robust/legacy/optional-output solvers, public SVD and matrix helpers,
+covariance grammar/kernels/whitening, automatic covariance and required spectral
+closure, seeded bootstrap and state recovery. Standalone source bodies remain
+callable even where default source dispatch does not select them. Explicit
+source exits and undefined-memory boundaries remain errors.
 
-The latest component campaign passes in debug and release: three DM/CM grid
-cases, 42 solver/output/robust cases, ten kernel cases, 27 covariance-selector
-cases, five spectral-session scenarios, the four-fit bootstrap plus 3,000 RNG
-values, automatic covariance, seven legacy fits, 59 standalone callback fields
-and six natural diagnostic-file cases. Numerical failures remain separate from
-file checks. Receipts are under `build/component-campaign/` and each component's
-profile directory. The extended solver observer also checks unscaled errors,
-error multipliers and linearized residuals; all 42 cases pass both profiles.
+No new unsafe operation, FFI declaration, numerical dependency, precision mode
+or alternate solver is introduced. Rug128 and source binary64/binary32
+boundaries remain fixed. Typed constraint ownership survives context cloning
+and destruction of the original. Recovery preserves the source's completed
+mutations; it is not a general transactional rollback promise.
 
-The 58 public family recipes have matching debug/release outcomes: 43 pass,
-six ELL1H cases have 19 whitened-data failures, four single-pulsar GW cases fail
-in their near-null systems, and five stop at explicit source boundaries. Three
-boundaries are the known unconstrained interpolation quotient overflow; two
-are first-residual reads of unwritten SWGPSignal when TNsubtractSWGP=1. Separate
-SWGP cases without that subtraction pass, including the mean transfer into
-NE_SW. DM/CM polynomial transfer cases also pass. New postfit_value/error fields
-record canonical state after these transfers, separately from immediate callback
-updates. Comparator controls reject 49 mutants.
+## Executed verification
 
-The affected compatibility runner uses accepted comparators with output paths
-redirected into AE staging. M1a/M1b, resources and AC lifecycle pass both
-profiles. All 92 selected AD comparisons pass (23 cases, both mean conventions,
-both profiles). M2 retains exactly four historical raw-order failures across the
-two profiles. Receipt: `build/regressions/receipt.json`.
+Unless noted, every row below was executed in both debug and release. Receipt
+paths are relative to `validation/general_fitting/`. A successful runner exit
+is not a numerical pass when its receipt contains failed comparisons.
 
-Release DDH checks reproduce debug outcomes: the versioned historical GPS table
-passes all 284 pre/postfit 1 ns ideal checks, while current/historical fidelity
-reports retain 388/422 failures. Identical-input solver replay still has only
-two raw-mode failures per DDH input owner. The new error-multiplier observable
-adds one chromatic-log failure per input owner (difference about 3.08e-10,
-relative gate 5e-14); it is not hidden by the passing chi-square gate. Exact
-same-engine replay still passes. Receipts: `build/ddh/release.json` and
-`build/pipeline-solvers/release.json`.
+| Campaign | Observed result | Evidence |
+| --- | --- | --- |
+| Public workflows | 14 cases: 12 pass; red has six raw-mode failures; chromatic-log has 17 failures | `build/public/{debug,release}/receipt.json` |
+| Family workflows | 58 cases: 43 pass, ten numerical nonpasses, five explicit boundaries | `build/families/{debug,release}/receipt.json` |
+| Shared solver and robust/output contract | All 42 cases pass, including independently optional outputs, H/B/W/fallback histories and files | `build/solver-contract/{debug,release}/receipt.json` |
+| Standalone SVD | 69 quantities pass: decomposition, bidiagonalization, extended RHS, dropped mode, norm/maximum, signed ties and NaN-first semantics | `build/svd-api/{debug,release}/receipt.json` |
+| Scalar/telescope callbacks | 1,240 derivative/update/error fields pass; FDDI, GLEP and clock-offset expected source exits verified by diagnostic; GWECC null callback checked | `build/callback-grid/{debug,release}/receipt.json` |
+| Standalone callbacks | 88 fields pass, including DM/CM covariance callbacks and cutoff-QP | `build/standalone-callbacks/{debug,release}/receipt.json` |
+| Constraint payload parsing | Five natural prefix/hex/trailing-text parameter and solar payload cases pass | `build/constraint-payloads/{debug,release}/receipt.json` |
+| Public preparation and recovery | Three exact same-engine preparation/apply/postfit cases; five failure/recovery pairs; two automatic-covariance failure histories followed by valid fresh-context/file equality | `build/api-lifecycle/{debug,release}/receipt.json` |
+| DM/CM components | Three automatic-grid/matrix-weight cases pass | `build/components/{debug,release}/receipt.json` |
+| Covariance kernels/selectors | Ten kernel/mask cases and 27 grammar/selector/file/recovery cases pass | `build/kernels/{debug,release}.json`, `build/covariance-models/{debug,release}.json` |
+| Spectral session | Five scenarios with eight ordered calls pass | `build/spectral-session/{debug,release}.json` |
+| Automatic covariance | All exported controls, covariance samples, lower factor and four exact files pass | `build/automatic/{debug,release}/receipt.json` |
+| Bootstrap | Four-fit baseline and 3,000 RNG values pass; 0/1/4,096 fits and guarded over-capacity boundary pass; one/two-pulsar partial-copy/output histories pass | `build/bootstrap{,-capacity,-history}/{debug,release}/receipt.json` |
+| Legacy fitting | Seven natural single/global/DCM cases pass | `build/legacy/{debug,release}/receipt.json` |
+| Public diagnostic files | Six cases pass exact bytes; numerical results remain separately classified | `build/public-files/{debug,release}/receipt.json` |
+| Comparator negative controls | 52 spin, 66 robust-H and 58 covariance mutations rejected (176 total) | `build/comparator-controls/{spin,robust-H,covariance}/receipt.json` |
+| Affected regressions | M1a/M1b, resource and AC lifecycle checks pass; 92 selected AD comparisons pass; exactly four inherited M2 failures remain | `build/regressions/run-pj8g3xgs/receipt.json` |
+| Rust checks | Formatting and all-target Clippy with warnings denied pass; debug library: 68 pass, 34 explicitly ignored; runtime constraint snapshot passes separately in both profiles | Commands below |
 
+The earlier component campaign is retained at `build/component-campaign/` and
+belongs to the tested source/binary identities in its receipts. The final pass
+reran public/family, solver, standalone callback, bootstrap, automatic covariance,
+DDH, API/recovery and affected regression checks after their respective changes.
+Unchanged kernel/spectrum/legacy numerical bodies were not repeatedly rerun.
+No historical receipt is retroactively attributed to a newer binary.
 
-The twelve initial release public workflows checked spin fitting, independent
-pulsars, shared globals with unequal rows/local columns, a nonzero parameter
-prior, covariance weighting, H/B/W, and red/DM/chromatic/band noise. Eleven pass
-the exported quantities; red has the six raw singular-value failures below.
-Debug produced the same physical results; its initial independent-pulsar
-comparison incorrectly compared raw sigma with MODE-0 effective unit weights.
-The comparator now distinguishes these fields. The current release run of all 14 cases reproduces the six red raw-mode
-failures and 16 chromatic-log noise-error failures; the other 12 pass. Further
-API edits will require their affected checks.
+Final Rust checks used `CARGO_HOME="$PWD/rust/.cargo-home"` and
+`--manifest-path rust/Cargo.toml`: `cargo fmt --check`,
+`cargo clippy --locked --offline --all-targets -- -D warnings`,
+`cargo test --locked --offline --lib`, and the explicitly ignored
+`canonical_constraint_callbacks_survive_context_snapshot` test in debug/release.
+The 34 ignored library tests are not claimed as a full historical corpus pass.
 
-The comparator enforces the frozen scaled gates, native raw mode order, rank,
-selected rows, local/global output coordinates, constraints/targets, increments,
-raw covariance, reported errors, spin updates, chi-square, noise arrays and
-recomputed residual/phase/BBAT. It explicitly lists unchecked quantities:
-physical unit mappings not yet exported, general-workflow kernel/Cholesky exports, full
-robust schema integration and truth recovery. Standalone robust histories and
-selected optional files now have separate native comparisons below. Passing these cases is not full
-AE acceptance or a truth-recovery result.
+The public comparator checks exact shapes, membership, numeric classes/signs,
+effective MODE/ROBUST/NITS/rescale controls, row/column identity, raw mode
+order/rank, matrix/constraint quantities, full covariance/lower factors, increments/errors/covariance,
+unscaled errors, error multiplier, linearized residuals and ordered robust
+histories. It checks physical values in source callback units and separates
+raw updates from postfit transfers. Frozen gates are in `CONTRACT.md`; kernel
+samples and optional files use their separate native checks. Synthetic truth
+recovery is not claimed. Central's earlier four false-pass findings are closed
+by its receipt SHA-256
+`537b699c2dedba3c0b2903981bd8c39f5843533cddaee6a0e3cd9678c94e8f63`;
+final schema/coverage review remains central's responsibility.
 
-The direct `fitting_components` example loads/times a real DMMODEL PAR/TIM pair.
-Native comparisons pass for matrix-derived weights, automatic DM/CM grids, and
-fixed-CM grid behavior in debug. The standalone interpolation callback exposed
-a nested diagnostics mutex acquisition; the new callbacks now pass their
-existing diagnostics borrow into the shared interpolation basis.
+Selected maxima across passing public/family cases (both profiles), expressed
+in their checked units: pre/post residual difference `6.4947e-17 s`, phase
+`9.1073e-15 turn`, column-scaled fitted/physical update difference
+`1.9468e-13 s`, and linearized residual difference `1.3566e-15 s`.
+These are observed differences, not new acceptance budgets.
 
-Focused Rust checks now pass 68 library tests (34 explicitly ignored). The
-runtime-dependent constraint snapshot test was separately run and passed. It
-exercises parameter-prior and TN callbacks after cloning the canonical context
-and dropping the original. Clippy passed after the covariance implementation;
-both profiles and complete affected regressions remain pending.
+## Open AE numerical ledger
 
-Bootstrap's debug example loads a real PAR/TIM pair with IBOOT 2 and performs
-four resampled fits. Native comparisons pass for sample membership, fitted F0
-history, final errors and exact `testout.tim` bytes. The RNG matches all 3,000
-binary64 values checked across seeds -999, -1 and +1. Original bootstrap stack
-failure and corrected heap ownership are recorded separately; broader capacity,
-copy and state-history evidence is still required.
+Central owns numerical-policy disposition; until ownership transfer, AE owns
+correction of demonstrated translation/integration defects. These observations
+are separate from the inherited P/M2/0049 ledger. No failure is classified as
+expected success, no mode is sorted and no tolerance is widened.
 
-The debug automatic-covariance example passes all exported controls, covariance
-samples and Cholesky entries, plus exact bytes of `comp.dat`, `compchol.dat`,
-`cholSpec.dat` and `automatic.dcf`. The first run had 180 covariance-file lines
-differing in final printed digits despite passing numerical gates. The archive's
-FFT disassembly showed four contracted operations; explicit Rust `mul_add`
-matched every binary64 output for both directions at sizes 2, 8, 128 and 1024,
-and closed the file discrepancy. The pre-correction outputs remain under
-`build/automatic/pre-fft-contraction/`; current receipts are `build/fft/debug.json`
-and `build/automatic/debug/receipt.json`. The supplied `.cov` branch of automatic
-estimation reads uninitialized source model values and remains an explicit error
-boundary, with no invented oracle.
+| Input/check, each profile | Observed result and localization | Affected scope |
+| --- | --- | --- |
+| Public `red`, cycles 1/2 | Six raw singular-mode mismatches (indices 4/5/6); rank nine, all modes retained; physical fitting/timing gates pass | Exact source SVD ordering; separate from historical M2 |
+| `chromatic-log-noise` | 16 reconstructed chromatic-noise error failures at 1 ps plus one error-multiplier failure; identical binary64 solver inputs reproduce it | Ill-conditioned chromatic logarithmic basis; singular-value ratio about 1.05e26; no general precision-cause claim |
+| ELL1H A1/EPS1/EPS2/TASC/H3/PB | 5/2/4/3/3/2 whitened-data failures (19 total); matrix, physical-update and timing checks pass | Six naturally timed single-coordinate family cases |
+| Single-pulsar quadrupole/GW single/memory polarizations/cosmic string | 770/750/448/468 failures with near-null systems | Redundant single-pulsar geometry; separate supported global geometries pass |
+| DDH paired run | 401 current-clock and 433 historical-clock fidelity failures; historical 1 ns ideal gate passes | Current-source fidelity remains open under 0087; detail below |
 
-The comparator now rejects 37 focused mutations and checks exported native
-MODE/ROBUST/NITS/rescale controls, declared shapes, exact membership, numeric
-classes/signs, spin update metadata and fit-coordinate updates. Central's separate
-recheck closes its four identified false passes only; final schema and quantity
-coverage review remains required. Fresh debug spin, independent, prior and DM-log
-cases pass; chromatic-log has the separate findings below.
+The three unconstrained IFUNC linear/step/quadrupolar-interpolation cases produce
+offsets around `2.5e12 s` and hit the inherited 0049 integer-quotient boundary
+in `fortran_mod`. Two `TNsubtractSWGP=1` cases attempt to read source-unwritten
+SWGPSignal during the first residual calculation, before prefit initializes it.
+These are the five family execution boundaries, not five numerical passes.
+Constrained interpolation and SWGP without that first-pass subtraction pass;
+SWGP mean transfer into NE_SW and DM/chromatic polynomial transfers are checked.
 
-The shared-input solver contract now passes 42 debug cases: all eight optional
-parameter/error/covariance combinations with present/absent data and rescaling
-on/off, robust H/B/W and unsupported-code fallback histories, and optional output
-files. Native masks and files are exact; each scale/final solve records matrices,
-data, residuals, scales, phi/dphi, raw modes and fitted outputs. General CLI
-`--fit-diagnostics DIR` now emits the source mask-7 files in an existing directory;
-its API also exposes the mask and debug correlation matrix. Natural spin, global,
-robust-H and red file checks pass byte-for-byte (red's six numerical raw-order
-findings remain). DM/chromatic files pass with explicitly supplied DM1/DM2. Without
-those supplied values, their source metadata callback reads unwritten prefit
-storage; Rust returns an explicit boundary instead of inventing zeros. This is a
-new optional-output limitation, not a failure of the default numerical fit.
-
-`check_source_boundaries.py` establishes two safe original/corrected witnesses.
-On naturally loaded 16-row timing state with MAX_OBSN=20, the original automatic
-covariance buffers reserve 80 bytes and the eleventh double would overflow;
-corrected buffers reserve 160 bytes and all 16 rows fit. Instrumentation stops
-before the invalid write. The constant-only TN projection likewise reaches the
-solver with zero of 16 white-data entries initialized; instrumentation stops
-before the invalid read. The corrected unused-solve omission preserves the
-fitted-F0 neighbor exactly and restores writeResiduals=7.
-
-The legacy global adapter now assembles the source global-first columns and
-pulsar-local blocks. A focused native witness proves three original defects:
-zero constraints trigger a zero-row allocation assertion; later pulsars use
-pulsar-zero constraint labels; and ZERO-first constraint rows are written into
-global-first coordinates. The corrected mapping uses the current pulsar's label
-and explicitly remaps the existing legacy enumerator. Seven natural debug cases
-pass for single, deprecated DCM/sigma and global wrappers, with diagonal and full
-lower-triangular weighting. This retains the legacy sigma-multiplication convention.
-
-The owned `SpectralFitSession` now implements T2fitSpectra's repeated-call/redo
-state and supplied/automatic corner, exponent, count, amplitude and beta choices.
-Five native debug scenarios pass, including eight ordered calls. The observer
-omits one diagnostic-only printf that otherwise reads uninitialized temporary
-values when amplitude is supplied; those undefined bytes are not an oracle.
-Standalone routine stdout presentation remains incomplete.
-
-The direct covariance helper comparison now passes ten debug cases: nine kernel
-families plus exact MJD masking, including boundary equality and the source's
-endpoint extension. It checks daily samples, covariance/interpolation with a
-zero constraint row, Cholesky/inverse, in-place decomposition, whitening and
-diagonal determinant. The native witness first stops all four PSD entry paths
-before reading the unwritten imaginary FFT DC element. The corrected reference
-initializes only that omitted element, matching Rust's existing zeroed storage.
-Receipts are `build/kernels/debug.json`; release remains pending. A caller audit
-also corrected the automatic helper's shape arguments
-after the shared kernel API began rejecting unknown shapes.
-
-Twenty-seven natural covariance-selector cases now pass numerical and exact debug
-file checks: all grammar kernel families, both legacy forms, direct/embedded DCF,
-ECM, PSRJ, nested INCLUDE with PSR/MJD/CLEAR/END, numeric prefixes/hexadecimal
-source numbers, ignored trailing text, and failed
-calls followed by valid recovery on the same canonical context. Their receipt is
-`build/covariance-models/debug.json`. The debug `newDCF`, `chol.covarMatrix` and
-`chol.L` files exposed native contractions in interpolation, diagonal addition,
-Matern 2.5 and red/pink PSD synthesis; recorded GCC16 arm64 disassembly and explicit
-`mul_add` close those byte differences. Earlier files are preserved under
-`before-contraction-debug/`. This also corrected an implementation dispatch bug:
-the source `MODEL DM` structure-function kernel does not receive the extra
-frequency scaling reserved for named `T2...DM` kernels. Automatic covariance was
-rerun after the kernel-shape correction and still passed numerical/file checks.
-
-## New numerical ledger, separate from inherited M2
-
-### Public family and physical-update coverage
-
-`check_families.py` now defines 52 authored cases from unchanged AC/AD model
-fixtures, explicit fit flags and generated cadence files. Inputs still pass
-through the real readers, preprocessing and timing. Initial observations are
-preserved under `build/families/initial-debug/`; per-case current identities and
-comparisons live under `build/families/debug/`. The suite is not yet a complete
-debug/release campaign.
-
-Passing debug cases now include event amplitudes, seven glitch coordinates,
-jumps/FDJUMPs/FD, sinc interpolation, automatic interpolation constraints,
-waves including the corrected WAVE_SCALE=1 storage path, shapelets, global
-single-source/quadrupole/memory/cosmic-string GW fits, DM/DM1/CM/CM1/DMX/CHROMX,
-solar-wind scalar/sinusoidal/interpolated fits, RAJ/DECJ, group noise,
-ECORR/SECORR and a red spectral variant. Physical updates now compare the
-source-defined fields, with source unit gains and exact unwritten-versus-defined
-membership. Binary64 physical storage is round-tripped before decimal comparison,
-so different shortest decimal spellings are not mistaken for different values.
-
-The six ELL1H cases have 19 whitened-data failures in the initial debug runs;
-their matrices, physical updates and timing pass. These are separate from DDH,
-red raw order and chromatic-log errors. Seven redundant one-pulsar configurations
-remain failures/boundaries: unconstrained linear/step IFUNC, both quadrupolar
-interpolation polarizations, quadrupole, single-source GW, two-polarization memory
-and cosmic strings. The IFUNC/quad interpolation fits produce offsets around
-1e12 seconds and reach the existing source integer-conversion boundary. The
-single-pulsar GW matrices retain near-null modes; their numerical failures are
-preserved. Separate source-supported constrained interpolation and two-position
-global GW neighbors pass. Neither the original cases nor any gate was removed.
-
-The new source map is `GENERAL_FITTING_SOURCE_MAP.md`. Final full routine/API,
-schema and diagnostic-presentation audits remain outstanding.
-
-Case `red`, pulsar 0, cycles 1 and 2, has rank 9 in both engines with every mode
-retained. The raw indices 4, 5 and 6 are permuted. No modes are sorted, no gate is
-relaxed and no alternate precision mode is introduced. Fit increments,
-covariance, reported errors, physical spin updates, chi-square, noise projections
-and final timing checks pass their stated gates in this case.
+### Raw red modes
 
 | Cycle | Raw index | Native value | Rust value |
 | --- | --- | --- | --- |
@@ -231,89 +132,62 @@ and final timing checks pass their stated gates in this case.
 | 2 | 5 | `64628148.0039334707175258568050910579` | `64615519.18737585020845599598349834618584` |
 | 2 | 6 | `64615519.1873758502084559959835035022` | `1582228.848105043197470185272598140818129` |
 
-Selected release red-case maxima (absolute differences, not acceptance budgets):
+The earlier checkpoint's raw values and original failed artifacts remain in
+version control and `build/before-api-observer-completion/`. Current per-case
+identities and comparisons are under `build/public/{debug,release}/red/`.
 
-- `postfit.residual`: `9.77805383323903252612E-26`.
-- `postfit.phase`: `8.484236E-25`.
-- `matrix`: `2.500E-30`.
-- `white_matrix`: `5.000E-29`.
-- `covariance`: `2.77555756156289135103250E-17`.
-- `physical_spin`: `2.0521581312953236007201022632342592640742490196896E-25`.
+### Shared-input localization
 
-Recorded red-case executable hashes:
+`check_pipeline_solvers.py` replays both native-owned and Rust-owned inputs
+through both standalone solvers. Same-engine reproduction is exact as binary64.
+DDH retains only two raw-mode failures (indices 13/14) for each clock/input owner;
+physical solver gates pass on shared input. The other DDH fitting discrepancies
+are therefore sensitive to differing pipeline inputs, without establishing a
+universal precision explanation.
 
-- Rust: `df22c211a96f07ad780a165118ff557e98cc9b240e673a297228e3c6275b6994`.
-- Native: `6f1ec139751cd525e87704ee3a3544ce7f84c25c747f3c7b19c8661e7cfa627f`.
-- Comparison: `7416c5555137e3e079344ff83e2d3c9783386a7da3afc2e0acb1d63512cb2e3d`.
-
-Exact per-case identities and all values are under ignored
-`validation/general_fitting/build/public/{debug,release}/CASE/`. These hashes
-identify the tested binaries; later edits are not retroactively covered.
-
-**Recommendation:** retain these six checks as a new open raw-order ledger under
-0074 while finishing AE's independent scope. Central's 0082 checkpoint should
-keep them distinct from the four historical M2 checks. No new precision diagnosis
-or numerical-policy change is needed to continue implementation.
-
-### Chromatic logarithmic noise
-
-The debug `chromatic-log-noise` case has 16 reconstructed-noise error differences above the
-1 ps gate. Its design matrix, whitened matrix/data and constraints are identical
-binary64 inputs in both engines. The standalone shared-input solver reproduces
-the native chi-square `23584532.5236933045089244842529296875` versus Rust
-`23584532.52370450273156166076660156250000`. Raw singular extremes are
-23551.616110315696 and 2.465271177816473e30 (ratio about 1.05e26). This localizes
-the discrepancy to the ill-conditioned solver, without proving a precision cause
-or changing Rug128. Preserve it separately from the red raw-order ledger. The
-reproducible `check_pipeline_solvers.py` now confirms identical binary64 inputs,
-exact same-engine pipeline reproduction and passing shared-solver gates for
-both input owners. Those passing solver budgets do not close the downstream
-16 noise-error failures. The receipt is `build/pipeline-solvers/debug.json`;
-the earlier files remain `build/chrom-log-solver-{input.txt,native.txt,rust.json}`.
+Chromatic-log inputs are identical between pipelines. Its native chi-square is
+`23584532.5236933045089244842529296875`; Rust is
+`23584532.5237045027315616607666015625`. The error multiplier differs by about
+`3.08e-10`, above its `6.49e-11` gate, for either input owner. The passing
+chi-square budget does not excuse that failure or the 16 downstream noise-error
+failures. Receipts: `build/pipeline-solvers/{debug,release}.json`.
 
 ### DDH paired checks under 0087
 
-`check_ddh.py` executes the original test3 PAR/TIM inputs through simple
-preprocessing, first-TOA phase reference, no mean removal and one direct t2Fit
-cycle. It uses the current runtime and a separate overlay adding only the
-historical GPS table (SHA-256 `30727fdfaaec0f1775543804210d057ffe62076594bb8884d8f8ccafafb676be`).
-All 284 native prefit residuals reproduce central's corresponding exports. Input
-bytes/order and within-engine SAT/frequency/uncertainty metadata are unchanged;
-pulse counts and nphase agree exactly between engines. The SAT comparison uses
-0007's existing 1 ps epoch gate. An initial comparator mistakenly required exact
-decimal SAT equality between native113 and Rug128; its failed receipts are retained
-as `comparison-before-sat-gate-fix.json`, not reclassified numerical failures.
+The original test3 PAR/TIM bytes, order, simple preprocessing, first-TOA phase
+reference and removeMean=0 are preserved. The separate historical runtime overlay
+adds only GPS revision `0759584ebf8315bbbe6a6d0b41c08ebbcfe527f2`, SHA-256
+`30727fdfaaec0f1775543804210d057ffe62076594bb8884d8f8ccafafb676be`.
+All 284 native prefit residuals reproduce central's corresponding exports.
+Within-engine SAT/frequency/uncertainty and original metadata are unchanged;
+pulse counts/nphase agree exactly. Cross-engine SAT uses the existing 1 ps gate.
 
-| Clock resources | Rust max prefit residual | Rust max postfit residual | 1 ns ideal result |
+| Clock resources | Rust max prefit | Rust max postfit | Unchanged 1 ns ideal result, both profiles |
 | --- | --- | --- | --- |
 | Current | 4.598955163858 ns | 6.510126901421 ns | 120 prefit and 197 postfit failures, same membership as native |
-| Historical GPS only | 0.465895042335 ns | 0.416568355665 ns | All 284 observations pass both checks |
+| Historical GPS only | 0.465895042335 ns | 0.416568355665 ns | All 284 observations pass prefit and postfit |
 
-The historical ideal requirement passes in debug. **The paired fidelity
-requirement remains open.** Current-clock fitting has 388 failed checks:
-223 whitened-data entries, 155 covariance entries, four increments plus their
-four duplicated update records, and two raw singular indices. Historical fitting
-has 422: 283 whitened-data entries, 128 covariance entries, the same eight
-increment/update records, two raw singular indices and chi-square. These are new
-AE observations, separate from inherited M2 and the red/chromatic ledgers.
-Timing itself passes: current max native/Rust residual differences are 0.028422 ps
-prefit and 0.049258 ps postfit; historical maxima are 0.028422 ps and 0.100663 ps.
-No gate, clock default, DDH formula or precision was changed.
-
-The two independent pipelines have small binary64 input differences. Replaying
-each pipeline's inputs through both standalone solvers reproduces each original
-engine's parameters/errors/covariance/chi-square exactly as binary64. All shared
-solver gates then pass except raw indices 13 and 14, which remain permuted.
-Thus the physical fitting differences arise from differing pipeline inputs;
-the separate raw-order issue survives identical inputs. This bounded localization
-does not assert a general precision cause or numerical acceptance. Receipts are
-`build/ddh/debug.json` and `build/pipeline-solvers/debug.json`; the current release
-replay and newly added multiplier failure are recorded above.
+Current/historical native maxima are respectively
+`4.598955163860 / 6.510121115575 ns` and
+`0.465895042333 / 0.416555983776 ns` (prefit/postfit).
+Native/Rust timing differences remain below the frozen gates: current pre/post
+maxima `0.028422 / 0.049258 ps`; historical postfit `0.100663 ps`.
+The final fidelity counts are 401/433 per profile. Current clocks have 223
+whitened-data, 155 covariance, eight increment/update, two raw-mode, four
+unscaled-error, one multiplier and eight physical-value failures. Historical
+clocks have 283 whitened-data, 128 covariance, eight increment/update, two
+raw-mode, two unscaled-error, one multiplier, one chi-square and eight
+physical-value failures. PB, T0, OM and OMDOT fail at both immediate and
+postfit stages. New observations are counted explicitly; earlier
+388/422 and 393/425 snapshots remain preserved, not overwritten as passes.
+No DDH formula, production clock default, precision or gate changed.
+Receipts: `build/ddh/{debug,release}.json`.
 
 ## Focused source corrections
 
-Each correction preserves separate original/corrected native observations in
-AE-owned staging. The canonical source and accepted reference archive are unchanged.
+Each correction has adjacent source/cause/fix comments and separate original/
+corrected native evidence in AE staging. Undefined source memory is stopped
+before use and is not assigned a fabricated numerical oracle.
 
 | Source defect | Witness / correction |
 | --- | --- |
@@ -326,75 +200,101 @@ AE-owned staging. The canonical source and accepted reference archive are unchan
 | IFUNC covariance uses ifuncN as a column | Safe padded-row witness in `check_callbacks.py`: original sentinel 99/99 becomes weights 3/4. |
 | DM/chromatic logarithmic priors repeat sine | `check_fitinfo.py`: original 57/57 and 55/55 become 57/58 and 55/56; harmonic neighbors unchanged. |
 | IFUNC expanded rows read another configured constraint label | `check_fitinfo.py` includes a real second parameter constraint and checks repeated IFUNC labels. |
-| Bootstrap places a 125 MiB result array on the stack | `check_bootstrap_stack.py` records a 131,104,480-byte original frame, failure before entry under the 8,372,224-byte stack limit, and a corrected 32,480-byte frame completing four natural IBOOT=2 fits. Broader capacity/history coverage remains pending. |
+| Bootstrap places a 125 MiB result array on the stack | `check_bootstrap_stack.py` records a 131,104,480-byte original frame, failure before entry under the 8,372,224-byte stack limit, and a corrected 32,480-byte frame completing four natural IBOOT=2 fits. Capacity and one/two-pulsar histories now pass both profiles. |
 | copyPSR reads reserved jump/FDJUMP slot zero | `check_copy.py` leaves reserved destination slots untouched and preserves active-slot values. Rust copies active one-based slots. |
-| copyParam evaluates unused unwritten prefit cells | Rust clones initialized/unwritten ownership; native correction copies representation bytes. Focused initialized/unwritten Rust neighbor passes; complete affected lifecycle regression comparison remains required. |
+| copyParam evaluates unused unwritten prefit cells | Rust clones initialized/unwritten ownership; native correction copies representation bytes. Focused initialized/unwritten Rust neighbor and affected lifecycle regressions pass. |
 | Constant-only TN projection consumes unwritten white data | `check_source_boundaries.py` observes zero initialized entries and stops before the solve; corrected omission leaves the fitted neighbor unchanged. |
 | Automatic covariance allocates double buffers with sizeof(float) | `check_source_boundaries.py` stops before original write 10 beyond 80 bytes; the corrected 160-byte buffer admits all 16 natural rows. |
 | Three covariance-spectrum builders leave imaginary FFT DC unwritten | `check_kernels.py` guards all four PSD entry paths before the invalid read; corrected native sets only p_i[0]=0, matching the real PSD and existing Rust storage. |
 | Quadrupole expansion omits three column labels | `check_fitinfo.py` seeds defined sentinel labels, observes three missing assignments, and checks all four corrected labels. The natural original workflow assertion is preserved. |
 | Cosmic-string derivative consumes unwritten pre-event prefactor | `check_gw_boundary.py` stops before the original invalid read; the corrected zero agrees with the residual model and six defined neighboring epochs are unchanged. |
 | WAVE_SCALE=1 update selects the wrong coefficient array | `check_callbacks.py` initializes both arrays to distinct values: original changes the unused DM array; corrected changes the parsed/timed WAVE array. WAVE_SCALE=0/2 neighbors are unchanged; the corrected public fit passes. |
+| Legacy global constraints use the wrong pulsar/layout | `check_legacy_layout.py`: zero-row allocation, pulsar-zero labels and ZERO-first rows fail in the original; corrected current-pulsar/global-first mapping passes seven natural legacy cases. |
+| Solar IFUNC sigma/sinusoid expansion labels only the first row | `check_fitinfo.py`: source-zeroed labels `[65,0]` / `[66,0]` become `[65,65]` / `[66,66]`. Assign each expanded row its configured constraint label; five natural payload grammar cases pass both profiles. |
 
 Source numerical conventions such as Welsch's expression, diagonal/full detL,
-source IFUNC covariance's use of lower L, and band/group error accumulation are
-retained. GCC16 arm64 fused arithmetic in TN polynomial projection is explicitly
-represented; the unfused native diagnostic reproduced the earlier Rust matrix
-and localized a 24 ps downstream discrepancy. `check_contraction.py` now records
-14 native contracted instructions versus zero with `-ffp-contract=off`. The
-counterfactual changes 41 first-cycle red matrix entries and postfit residuals
-by up to 23.622976 ps. Current Rust has only the existing six raw-mode failures
-against the contracted native run, versus 310 against the counterfactual.
-Unprojected DM/chromatic neighbors pass both. Receipt: `build/contraction/debug.json`.
+IFUNC covariance's lower-L use and band/group error accumulation are retained.
+GCC16 arm64 contraction is explicit only where native evidence establishes it.
+`check_contraction.py` records 14 contracted instructions versus zero with
+`-ffp-contract=off`; the counterfactual changes 41 red matrix entries and postfit
+residuals by up to 23.622976 ps. Current Rust has six raw-order failures against
+the contracted run versus 310 against the counterfactual. Unprojected DM/chromatic
+neighbors are unchanged. FFT contraction closes earlier exact-file differences;
+original files remain under `build/automatic/pre-fft-contraction/`.
 
-## Remaining required work
+Observer corrections are distinct from scientific fixes: MODE-0 effective
+weights were initially compared to raw sigma; a switch fallthrough gave several
+physical coordinates GLF2's unit gain; and DDH/position unit maps were initially
+absent. Current comparators use the appropriate fields and source mappings.
+An initial exact-decimal SAT test was corrected to 0007's existing epoch gate.
+An earlier regression rerun reused a lifecycle scratch path and hit
+`AlreadyExists`; each run now gets a fresh staging directory. These harness
+failures and their outputs remain retained.
 
-1. Complete remaining optional covariance/output paths; extend the passing legacy,
-   pointer/file/robust checks to remaining boundary paths and integrate their
-   schema checks.
-2. Complete bootstrap capacity/copy/failure histories and retained release comparisons;
-   preserve the passing debug RNG, resampling and writeTim observations.
-3. Complete automatic covariance helper/public API coverage and spectrum failure
-   and context histories; complete failure/recovery evidence.
-4. Finish callback/constraint/noise family and history coverage: binary/astrometry,
-   events/jumps/interpolation, solar wind, group noise, ECORR/SECORR, shapelets,
-   spectral variants, automatic constraints, full covariance selectors/masking,
-   nonfinite/error/recovery and optional output files.
-5. Complete remaining bootstrap capacity/copy histories and investigate further
-   demonstrated local defects under 0053 without using undefined native memory
-   as a numerical oracle. Stack, sorting and TN-contraction builders now exist.
-6. Independent identical-input solver checks for the new workflows, complete
-   observable/schema checks, debug/release public/component runs, affected
-   AC/AD/M1/M2 regressions, formatting/Clippy, and final source/unsafe maps.
-7. Rewrite this checkpoint as the final report with exact delivered commit and
-   evidence identities, complete remaining source inventory and 0082 assessment.
+## Assessment, inherited gates and coverage limits
 
-Inherited open gates remain P 154 including SIMUL 32; the four historical M2 raw
-mode-order checks; four 0049 utility boundaries; and original DDH 1 ns ideal-fixture
-gate. Central decision 0087 now localizes the DDH native failure to GPS-clock
-resource version: current clocks retain the 4.598955 ns maximum; the single-file
-historical clock overlay gives 0.465895 ns and passes the full unchanged native
-ideal test. This is central native evidence, not an AE Rust run. The user adopted
-the paired acceptance rule in 0087: Rust must match current-clock native behavior
-under existing gates and pass the unchanged 1 ns pre/post-fit ideal check with
-the versioned historical GPS table. Debug passes the historical ideal check;
-current-clock fitting fidelity remains unresolved as detailed
-above. Current
-production clocks and the original failed native observation remain unchanged.
-Enabled native acceleration
-is assigned to AI under 0081; baseline SVD/fallback behavior remains AE's task.
-Decision 0084 records the user's selected full Rust core/toolkit APIs plus
-standalone predictor C compatibility. General core/toolkit C-structure ABI
-compatibility is outside that guarantee. AE's scientific and Rust API scope is
-unchanged; typed payload ownership makes no native ABI-layout claim.
+AE now supplies the callable general-fitting foundation required by 0071.
+The implementation can be reviewed for handover under 0074 independently of
+unresolved numerical acceptance. New red/chromatic/ELL1H/GW/DDH observations
+remain named, reproducible and distinct from inherited findings. The final
+observer exposes more failed quantities; that is additional measurement, not a
+change to the scientific contract. No new implementation choice currently
+requires changing the accepted solver, precision, interface or dependency order.
+Central should review the ledger and schema, then decide whether to close AE
+ownership and release the next functional stage under 0082.
 
-## Qualified profile and later platform work
+Inherited obligations remain P's 154 records (including 32 SIMUL), the four
+historical M2 raw-order comparisons, and four 0049 utility quotient/rounding
+boundaries. No repeat 113-bit diagnosis was performed. DDH's historical ideal
+portion now passes; its required current-clock fidelity remains open. None of
+these findings is removed by implementation handover.
 
-Current AE native observations use macOS arm64 and GCC/G++ 16 with the pinned
-reference archive. Timing `longdouble` is `__float128`; ordinary C/C++ `long double`
-on this host has binary64 precision. Rust retains Rug128 for timing operations
-and explicit source binary64/binary32 boundaries. The FFT and TN polynomial
-contractions are observed compiler arithmetic on this profile, not assumed
-portable properties. Decision 0086 selects macOS arm64 and Linux x86_64 for the
-first release; actual Linux toolchain/native execution belongs to later platform
-qualification and is not claimed by this AE checkpoint.
+Coverage is finite. The telescope polynomial and mode -1 grid uses PKS and checks
+the non-STL zero selector, not a nonzero STL ephemeris path. Existing E/G/AD
+binary evidence is reused; the new general family suite does not exhaust every
+binary parameter combination. Public preparation replay is a wiring/ownership
+check, not an independent numerical oracle. Source FDDI/GLEP/clock fitting exits,
+GWECC's null callback, the abandoned legacy passN path, automatic covariance's
+supplied-model uninitialized branch and optional DM/chromatic metadata with
+unwritten prefit coefficients stay explicit. Supplying those coefficients makes
+the defined optional-file path testable; no zero defaults are invented.
+
+Enabled LAPACK/BLAS builds belong to AI under 0081. Full text output, plugin/host
+integration, unrelated standalone toolkit/spectrum/GW functions and prediction
+remain later assignments; their inventory is in `GENERAL_FITTING_API.md`.
+Decision 0084 guarantees full Rust core/toolkit APIs plus standalone predictor C
+compatibility, not native core C-struct layout. Those future interfaces are not
+claimed by this delivery.
+
+Native observations use macOS arm64 with GCC/G++ 16 and A2's pinned archive;
+`longdouble` is `__float128`, while ordinary host `long double` is binary64.
+Rust retains Rug128. Decision 0086 includes Linux x86_64 in the first release,
+but Linux, accelerated builds, performance and full release/concurrency
+qualification remain later work. No claim of whole-migration or scientific
+acceptance is made here.
+
+## Evidence identity
+
+Implementation revision: `ddff7f82cfe05bc152e55ddbdb33f9bfc4d06bc9`.
+Index: `validation/general_fitting/build/delivery/index-ddff7f82cfe0.json`.
+SHA-256: `971f96f9ca9c8aafb519756235343d8bb369ec24a8842edf4f174797cfe6a7c9`.
+It contains 61 receipts, 710 comparison/identity/raw export files, 245 authored
+source files and 32 available executable/archive identities. Generate a new
+snapshot after a future committed revision with:
+
+```sh
+python3 validation/general_fitting/write_evidence_index.py \
+  --regressions validation/general_fitting/build/regressions/run-pj8g3xgs
+```
+
+The latest native observer link adds DDH/proper-motion physical unit maps;
+DDH was rerun with it. Other campaign receipts retain their actual earlier
+observer/executable hashes. Those new maps do not change the earlier cases'
+observed numerical bodies or the Rust implementation.
+
+Authored builders and fixtures are committed. Generated JSON/TSV, binaries,
+source snapshots and large outputs remain ignored under 0039/0050. The index
+hashes receipts and their retained comparison/identity files, plus authored
+source and available executables; each run's own receipt identifies its tested
+binary. `validation/general_fitting/EXAMPLES.md` provides reproduction entry
+points. Earlier snapshots remain separately preserved.

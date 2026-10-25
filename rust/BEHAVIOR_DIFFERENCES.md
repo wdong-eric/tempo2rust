@@ -275,6 +275,13 @@ remain contextual errors. A failed one-pulsar degenerate GW fit does not authori
 mode sorting, rank changes or a different solver. Independent well-defined global
 GW and automatically constrained interpolation cases are retained alongside it.
 
-AE is not complete or accepted. Optional-output presentation, complete standalone
-API/branch coverage, release and affected regressions remain subject to the active
-report inventory. No broad C-structure ABI or Linux qualification is claimed.
+Solar IFUNC sigma/sinusoidal constraints also omitted the label after the first
+expanded row. The source clears FitInfo first, so later labels were defined zero;
+the corrected native/Rust paths assign the configured label to every row.
+The constraint parser now uses the existing source scanner for hexadecimal,
+numeric-prefix and ignored trailing text, preserving source sscanf behavior.
+
+The routine/API inventory and current debug/release evidence are recorded in
+`GENERAL_FITTING_API.md` and the report. Scientific acceptance remains open,
+including newly checked solver observables. General core C-structure ABI,
+enabled native acceleration and Linux qualification are not claimed.
