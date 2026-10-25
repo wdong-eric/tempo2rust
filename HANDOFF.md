@@ -157,6 +157,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0071](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0071-general-fitting-and-noise-prepared-contract.md) prepares AE after AD: general local/global fitting, remaining derivatives/updates, covariance/constraints, robust and timing-noise lifecycle, and scoped standalone fitting APIs. It extends the general timing workflow with an explicit fit request, retains bounded adapters and reuses existing references. AD acceptance/closure and an explicit release are required; M2 and full fitting gates remain open.
 
+[Decision 0072](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0072-specialized-par-telescope-bounds.md) clarifies seven Q telescope-table observations that accessed entry 1000 in 500-element arrays. Original artifacts remain intact; invalid and subsequent native state are withheld as Rust oracles. AC verifies the safe prefixes and true capacity boundary in owned staging and reports expected Rust rejections separately from complete case matches. This adds no reference stage or numerical-policy change.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
