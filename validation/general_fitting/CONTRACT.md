@@ -95,6 +95,14 @@ extended decimal precision:
 | Standalone callback derivatives | source residual seconds per fit coordinate; separate column maximum | 5e-14 times reference column scale, structural zero exact |
 | Standalone glitch update on identical supplied increments | stored GLF0 (Hz) / GLF2 (Hz/s^2), each value/error separately | relative 5e-14, structural zero exact; no shared scale between different units |
 
+The scalar callback grid applies the same standalone update rule to each
+source-stored coordinate: compare the change from its loaded value and its
+reported error separately at relative 5e-14, with exact zero/class/sign. It uses
+identical supplied increments, not fitted parameters from different pipelines.
+The DM/CM covariance-row callbacks and cutoff-QP helper use the standalone
+callback column rule. TKfindMax_Ld uses the standalone SVD helper rule; signed
+ties and unordered comparisons retain the first source value.
+
 Ill-conditioned or precision-boundary failures are reported, not accommodated by
 changing these gates. An unchecked field is not accepted. Original and corrected
 native observations are separate and never overwrite accepted evidence.
@@ -121,3 +129,22 @@ relative `1e-10` error gate, multiplier uses relative `5e-14`, and linearized
 residuals use `1e-12 s`. Structural zeros and numeric classes/signs remain exact.
 Public result shape requires all unscaled errors and one linearized residual per
 selected observation; standalone observations validate the shared implementation.
+
+Standalone TKsvd exports raw U/V, singular modes, bidiagonal U/V/diagonal/
+superdiagonal/norm, back-substitution solutions and TKpythag. Matrices and
+bidiagonal quantities use `5e-14` times their reference column maximum; raw
+singular values retain the existing relative `1e-10` gate per raw mode, and
+solutions use `1e-10` times their reference vector maximum; TKpythag uses relative
+`5e-14`. Source zeros and signs are exact.
+The extended RHS includes values near 1e-400 to exercise the native longdouble
+contract without a binary64 narrowing; dropping a mode is an explicit zero of
+its raw singular value, with no reordering.
+
+Bootstrap history observes both copied and retained fields. Before/after membership,
+flags, filenames and same-engine source-copy relations are exact. Across engines,
+SAT/BAT/BBAT use the existing 1 ps epoch gate; frequency and uncertainties use
+relative 5e-14. Terrestrial position vectors use 1e-12 light-seconds and velocity
+components use 1e-15 in units of c. The source copies only vector components 0..2;
+components 3..5, BBAT and flags remain at their destination. No normalization or
+restoration is added. Native guards stop before iteration 4096 writes outside
+MAX_ITER; this boundary is distinct from a completed fit.

@@ -80,7 +80,7 @@ mod tempo2_util;
 pub mod timing;
 pub mod tk_matrix;
 pub mod tkfit;
-mod tksvd;
+pub mod tksvd;
 mod toa2utc;
 mod tropo;
 mod tt2tdb;

@@ -4,7 +4,7 @@ Only output destinations are redirected into AE staging. Original runners,
 fixtures, reference artifacts and membership definitions remain read-only.
 """
 from pathlib import Path
-import hashlib, importlib.util, json, sys
+import hashlib, importlib.util, json, sys, tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
@@ -14,7 +14,9 @@ sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
 def run():
+    global OUT
     OUT.mkdir(parents=True, exist_ok=True)
+    OUT = Path(tempfile.mkdtemp(prefix="run-", dir=OUT))
     sys.path.insert(0, str(AD))
     path = AD / "check_compatibility.py"
     spec = importlib.util.spec_from_file_location("ae_accepted_compatibility", path)
@@ -45,6 +47,7 @@ def run():
         "timing_comparator_sha256": sha(path), "output_redirect": [token, "work=AE_OUT/f'{profile}/{name}-mean{mean}'"],
         "compatibility_exit": compatibility_exit, "records": records,
     }, indent=2) + "\n")
+    print("Regression receipt:", OUT / "receipt.json")
 
 
 if __name__ == "__main__":

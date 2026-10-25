@@ -22,6 +22,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     timing::evaluate(&mut input, &mut runtime, true)?;
     let n = input.context.pulsars()[0].nobs.ok_or("unwritten nobs")? as usize;
     let mut result = serde_json::Map::new();
+    use tempo2_rust::constraints::{self, ConstraintSpecial};
+    for (name, special) in [
+        (
+            "dm_covariance",
+            ConstraintSpecial::DmCovarianceRow(vec![3., 4., 5.]),
+        ),
+        (
+            "cm_covariance",
+            ConstraintSpecial::CmCovarianceRow(vec![6., 7., 8.]),
+        ),
+    ] {
+        let mut values = vec![];
+        for label in [param_dmmodel, param_ifunc] {
+            for k in 0..6 {
+                values.push(FitNumber::from(constraints::derivative(
+                    &mut input.context,
+                    0,
+                    tempo2_rust::pulsar::Constraint::constraint_ifunc_cov,
+                    label,
+                    0,
+                    k,
+                    Some(&special),
+                )?));
+            }
+        }
+        result.insert(name.into(), serde_json::to_value(values)?);
+    }
+    let mut qp = vec![];
+    for frequency in [0., 0.01, 0.1, 0.5, 1.] {
+        qp.push(FitNumber::from(constraints::qp_term_cutoff(
+            frequency, -3., 0.5, 0.1, 2., 0.001,
+        )?));
+    }
+    result.insert("qp_cutoff".into(), serde_json::to_value(qp)?);
     for (name, label) in [
         ("ifunc", param_ifunc),
         ("plus", param_quad_ifunc_p),

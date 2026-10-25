@@ -615,6 +615,130 @@ fn physical(p: &SourcePulsar, c: &Column) -> (Option<Number>, Option<Number>) {
         .unwrap_or((None, None))
 }
 
+/// t2Fit_fillGlobalFitInfo: source-pulsar-zero jump and parameter coordinates.
+pub fn global_fit_columns(
+    pulsar: &SourcePulsar,
+    options: &FitOptions,
+) -> Result<Vec<Column>, TimingError> {
+    let mut globals = vec![];
+    for k in 1..=count(*read(&pulsar.nJumps, "nJumps")?, "nJumps")? {
+        if pulsar.fitJump[k] == Some(2) {
+            globals.push(Column::new(-1, param_JUMP, k));
+        }
+    }
+    globals.extend(parameter_columns(pulsar, -1, 2, options)?);
+    Ok(globals)
+}
+
+/// Install source local fit columns followed by supplied global columns.
+/// Rows come from get_fit_data on this canonical timed pulsar. Constraint
+/// payloads are installed separately by fill_constraint_info.
+pub fn fill_fit_columns(
+    context: &mut PulsarContext,
+    i: usize,
+    rows: &[FitRow],
+    globals: &[Column],
+    options: &FitOptions,
+) -> Result<Vec<Column>, TimingError> {
+    crate::t2fit_nestlike::prepare_parameters(&mut context.pulsars[i], true)?;
+    let mut columns = vec![Column::new(i as i32, param_ZERO, 0)];
+    let (p, obs) = context.pulsar_observations_mut(i)?;
+    columns.extend(
+        crate::t2fit_nestlike::jitter_epochs(p, obs, rows)?
+            .into_iter()
+            .map(|k| Column::new(i as i32, param_jitter, k)),
+    );
+    for (label, n) in [
+        (param_JUMP, *read(&context.pulsars[i].nJumps, "nJumps")?),
+        (
+            param_FDJUMP,
+            *read(&context.pulsars[i].nfdJumps, "nfdJumps")?,
+        ),
+    ] {
+        for k in 1..=count(n, "jump count")? {
+            let p = &context.pulsars[i];
+            let selected = if label == param_JUMP {
+                p.fitJump[k]
+            } else {
+                p.fitfdJump[k]
+            };
+            if selected != Some(1) {
+                continue;
+            }
+            for row in rows {
+                if crate::fit_callbacks::derivative(
+                    context,
+                    i,
+                    row.x_days.0.to_f64(),
+                    row.observation,
+                    label,
+                    k,
+                )? != 0.0
+                {
+                    columns.push(Column::new(i as i32, label, k));
+                    break;
+                }
+            }
+        }
+    }
+    columns.extend(parameter_columns(
+        &context.pulsars[i],
+        i as i32,
+        1,
+        options,
+    )?);
+    columns.extend(globals.iter().cloned());
+    crate::t2fit_nestlike::prepare_parameters(&mut context.pulsars[i], false)?;
+    install_info(&mut context.pulsars[i], &columns)?;
+    Ok(columns)
+}
+
+/// Install owned source constraint payloads and return their rows/targets.
+pub fn fill_constraint_info(
+    context: &mut PulsarContext,
+    i: usize,
+    columns: &[Column],
+) -> Result<crate::constraints::ConstraintRows, TimingError> {
+    let constraints = crate::constraints::build(context, i, columns)?;
+    if constraints.matrix.len() > MAX_FIT {
+        return Err(boundary("constraint MAX_FIT capacity"));
+    }
+    context.pulsars[i].fitinfo.nConstraints = Some(constraints.matrix.len() as u32);
+    for j in 0..constraints.matrix.len() {
+        let special = constraints.special[j]
+            .clone()
+            .map(|s| context.allocate_fit_constraint(s))
+            .transpose()
+            .map_err(|e| boundary(&e.to_string()))?;
+        let f = &mut context.pulsars[i].fitinfo;
+        f.constraintIndex[j] = Some(constraints.labels[j]);
+        f.constraintCounters[j] = Some(constraints.counters[j]);
+        f.constraintValue[j] = Some(constraints.targets[j]);
+        f.constraintSpecial[j] = Some(special);
+        f.constraintDerivs[j] = Some(Some(Callback {
+            identity: constraints.labels[j] as u64 + 1,
+            callable: callback_constraint,
+        }));
+    }
+    Ok(constraints)
+}
+
+/// t2fit_prefit for one active pulsar, clearing the eight fitted-noise accumulators.
+pub fn prefit(context: &mut PulsarContext, i: usize) -> Result<(), TimingError> {
+    let (p, obs) = context.pulsar_observations_mut(i)?;
+    for o in obs.iter_mut().take(count(*read(&p.nobs, "nobs")?, "nobs")?) {
+        o.TNRedSignal = Some(0.0);
+        o.TNRedErr = Some(0.0);
+        o.TNDMSignal = Some(0.0);
+        o.TNDMErr = Some(0.0);
+        o.TNChromSignal = Some(0.0);
+        o.TNChromErr = Some(0.0);
+        o.SWGPSignal = Some(0.0);
+        o.SWGPErr = Some(0.0);
+    }
+    Ok(())
+}
+
 struct Prepared {
     rows: Vec<FitRow>,
     columns: Vec<Column>,
@@ -656,27 +780,12 @@ pub fn t2_fit(
             crate::constraints::auto_constraints(&mut context.pulsars[i], i)?;
         }
     }
-    let mut globals = vec![];
-    for k in 1..=count(*read(&context.pulsars[0].nJumps, "nJumps")?, "nJumps")? {
-        if context.pulsars[0].fitJump[k] == Some(2) {
-            globals.push(Column::new(-1, param_JUMP, k));
-        }
-    }
-    globals.extend(parameter_columns(&context.pulsars[0], -1, 2, options)?);
+    let globals = global_fit_columns(&context.pulsars[0], options)?;
     let ng = globals.len();
     let mut prepared = vec![];
     for i in 0..context.pulsars.len() {
-        let (p, obs) = context.pulsar_observations_mut(i)?;
-        for o in obs.iter_mut().take(count(*read(&p.nobs, "nobs")?, "nobs")?) {
-            o.TNRedSignal = Some(0.0);
-            o.TNRedErr = Some(0.0);
-            o.TNDMSignal = Some(0.0);
-            o.TNDMErr = Some(0.0);
-            o.TNChromSignal = Some(0.0);
-            o.TNChromErr = Some(0.0);
-            o.SWGPSignal = Some(0.0);
-            o.SWGPErr = Some(0.0);
-        }
+        prefit(context, i)?;
+        let p = &mut context.pulsars[i];
         p.rescaleErrChisq = Some(i32::from(options.rescale_err_chisq));
         // t2fit.C captured row indices before sortToAs, pairing data with the wrong
         // observations on unordered direct input. Sort before capturing any rows.
@@ -686,56 +795,7 @@ pub fn t2_fit(
             context.pulsars[i].fitMode = Some(1);
         }
         let rows = get_fit_data(context, i)?;
-        crate::t2fit_nestlike::prepare_parameters(&mut context.pulsars[i], true)?;
-        let mut columns = vec![Column::new(i as i32, param_ZERO, 0)];
-        let (p, obs) = context.pulsar_observations_mut(i)?;
-        columns.extend(
-            crate::t2fit_nestlike::jitter_epochs(p, obs, &rows)?
-                .into_iter()
-                .map(|k| Column::new(i as i32, param_jitter, k)),
-        );
-        for (label, n) in [
-            (param_JUMP, *read(&context.pulsars[i].nJumps, "nJumps")?),
-            (
-                param_FDJUMP,
-                *read(&context.pulsars[i].nfdJumps, "nfdJumps")?,
-            ),
-        ] {
-            for k in 1..=count(n, "jump count")? {
-                let p = &context.pulsars[i];
-                let selected = if label == param_JUMP {
-                    p.fitJump[k]
-                } else {
-                    p.fitfdJump[k]
-                };
-                if selected != Some(1) {
-                    continue;
-                }
-                for row in &rows {
-                    if crate::fit_callbacks::derivative(
-                        context,
-                        i,
-                        row.x_days.0.to_f64(),
-                        row.observation,
-                        label,
-                        k,
-                    )? != 0.0
-                    {
-                        columns.push(Column::new(i as i32, label, k));
-                        break;
-                    }
-                }
-            }
-        }
-        columns.extend(parameter_columns(
-            &context.pulsars[i],
-            i as i32,
-            1,
-            options,
-        )?);
-        columns.extend(globals.clone());
-        crate::t2fit_nestlike::prepare_parameters(&mut context.pulsars[i], false)?;
-        install_info(&mut context.pulsars[i], &columns)?;
+        let columns = fill_fit_columns(context, i, &rows, &globals, options)?;
         if let Some(io) = &options.diagnostics
             && io.write_residuals & 2 != 0
         {
@@ -749,47 +809,14 @@ pub fn t2_fit(
         }
         let mut matrix = vec![];
         for row in &rows {
-            let mut values = vec![];
-            for col in &columns {
-                let v = crate::fit_callbacks::derivative(
-                    context,
-                    i,
-                    row.x_days.0.to_f64(),
-                    row.observation,
-                    col.label(),
-                    col.subindex,
-                )?;
-                if v.is_nan() {
-                    return Err(boundary(&format!(
-                        "NaN design matrix {i} {} {}",
-                        row.observation, col.parameter
-                    )));
-                }
-                values.push(v);
-            }
-            matrix.push(values);
+            matrix.push(design_matrix_row(
+                context,
+                i,
+                row.x_days.0.to_f64(),
+                row.observation,
+            )?);
         }
-        let constraints = crate::constraints::build(context, i, &columns)?;
-        if constraints.matrix.len() > MAX_FIT {
-            return Err(boundary("constraint MAX_FIT capacity"));
-        }
-        context.pulsars[i].fitinfo.nConstraints = Some(constraints.matrix.len() as u32);
-        for j in 0..constraints.matrix.len() {
-            let special = constraints.special[j]
-                .clone()
-                .map(|s| context.allocate_fit_constraint(s))
-                .transpose()
-                .map_err(|e| boundary(&e.to_string()))?;
-            let f = &mut context.pulsars[i].fitinfo;
-            f.constraintIndex[j] = Some(constraints.labels[j]);
-            f.constraintCounters[j] = Some(constraints.counters[j]);
-            f.constraintValue[j] = Some(constraints.targets[j]);
-            f.constraintSpecial[j] = Some(special);
-            f.constraintDerivs[j] = Some(Some(Callback {
-                identity: constraints.labels[j] as u64 + 1,
-                callable: callback_constraint,
-            }));
-        }
+        let constraints = fill_constraint_info(context, i, &columns)?;
         let data: Vec<_> = rows.iter().map(|r| r.residual_s.0.to_f64()).collect();
         let mode = *read(&context.pulsars[i].fitMode, "fitMode")?;
         let sigma: Vec<_> = rows
@@ -1087,6 +1114,59 @@ pub fn do_fit_all(
     options: &FitOptions,
 ) -> Result<Vec<FitSystem>, TimingError> {
     t2_fit(context, options)
+}
+
+/// t2Fit_buildDesignMatrix for the installed canonical FitInfo callbacks.
+pub fn design_matrix_row(
+    context: &mut PulsarContext,
+    index: usize,
+    x_days: f64,
+    observation: usize,
+) -> Result<Vec<f64>, TimingError> {
+    let n = *read(&context.pulsars[index].fitinfo.nParams, "fit nParams")? as usize;
+    let mut row = Vec::new();
+    for j in 0..n {
+        let info = &context.pulsars[index].fitinfo;
+        let label = *read(&info.paramIndex[j], "fit parameter")?;
+        let k = *read(&info.paramCounters[j], "fit parameter counter")?;
+        let callback = info.paramDerivs[j]
+            .flatten()
+            .ok_or_else(|| boundary("null fit derivative"))?;
+        let value =
+            (callback.callable)(context, index as i32, x_days, observation as i32, label, k)?;
+        if value.is_nan() {
+            return Err(boundary(&format!(
+                "NaN design matrix {index} {observation} {}",
+                PARAMETER_NAMES[label as usize]
+            )));
+        }
+        row.push(value);
+    }
+    Ok(row)
+}
+
+/// t2Fit_updateParameters on the installed local-then-global FitInfo order.
+/// Postfit noise projection is an explicit separate operation.
+pub fn update_parameters(
+    context: &mut PulsarContext,
+    index: usize,
+    values: &[f64],
+    errors: &[f64],
+) -> Result<(), TimingError> {
+    let n = *read(&context.pulsars[index].fitinfo.nParams, "fit nParams")? as usize;
+    if values.len() != n || errors.len() != n {
+        return Err(boundary("fit update dimensions"));
+    }
+    for j in 0..n {
+        let info = &context.pulsars[index].fitinfo;
+        let label = *read(&info.paramIndex[j], "fit parameter")?;
+        let k = *read(&info.paramCounters[j], "fit parameter counter")?;
+        let callback = info.updateFunctions[j]
+            .flatten()
+            .ok_or_else(|| boundary("null fit update"))?;
+        (callback.callable)(context, index as i32, label, k, values[j], errors[j])?;
+    }
+    Ok(())
 }
 /// t2Fit_getParamMatrixRow; -1 output owners apply to every pulsar.
 pub fn get_param_matrix_row(info: &FitInfo, pulsar: i32, label: Label, k: i32) -> Option<usize> {

@@ -8,6 +8,11 @@ use serde::{Serialize, Serializer};
 /// Fit diagnostic decimal transport. Unlike input Scalar, source results can be nonfinite.
 #[derive(Clone, Debug)]
 pub struct FitNumber(pub(crate) Float);
+impl From<crate::Scalar> for FitNumber {
+    fn from(value: crate::Scalar) -> Self {
+        Self(value.0)
+    }
+}
 impl From<f64> for FitNumber {
     fn from(value: f64) -> Self {
         let mut number = ld(value);
@@ -202,13 +207,8 @@ pub fn least_squares_outputs(
             .map(|row| row.iter().map(|v| ld(*v)).collect())
             .collect(),
     )?;
-    let singular_values = svd.w.iter().cloned().map(FitNumber).collect();
-    let mut wmax = svd.w[0].clone();
-    for w in &svd.w {
-        if w > &wmax {
-            wmax = w.clone();
-        }
-    }
+    let singular_values: Vec<_> = svd.w.iter().cloned().map(FitNumber).collect();
+    let wmax = find_max(&singular_values)?.0;
     let cutoff = ld(tolerance) * &wmax;
     for w in &mut svd.w {
         if *w < cutoff {
@@ -406,6 +406,20 @@ pub fn least_squares_outputs(
         robust_history: vec![],
         diagnostic_files,
     })
+}
+
+/// TKfindMax_Ld: retain the first value on ties and unordered comparisons.
+pub fn find_max(values: &[FitNumber]) -> Result<FitNumber, String> {
+    let mut result = values
+        .first()
+        .ok_or("TKfindMax_Ld requires a value")?
+        .clone();
+    for value in values {
+        if value.0 > result.0 {
+            result = value.clone();
+        }
+    }
+    Ok(result)
 }
 
 /// TKfitPoly: powers begin at one and multiply in ascending order.

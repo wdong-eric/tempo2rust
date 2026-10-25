@@ -10,7 +10,8 @@ BUILD=HERE/'build/standalone-callbacks';AD=ROOT/'validation/timing_models/fixtur
 def run(profile):
     BUILD.mkdir(parents=True,exist_ok=True)
     inputs=[AD/(name+'.par')for name in ['glitches','ifunc-sinc','quad-interpolation','gw-burst']]
-    par=BUILD/'combined.par';par.write_text(inputs[0].read_text()+''.join(p.read_text().split('UNITS TCB\n',1)[1]for p in inputs[1:]))
+    inputs.append(HERE/'inputs/dm-grid.par')
+    par=BUILD/'combined.par';par.write_text(inputs[0].read_text()+''.join(p.read_text().split('UNITS TCB\n',1)[1]for p in inputs[1:-1])+'DMMODEL'+inputs[-1].read_text().split('DMMODEL',1)[1])
     tim=AD/'glitches.tim';runtime=ROOT/'validation/reference/build/source/T2runtime'
     identity=json.loads((HERE/'build/native/identity.json').read_text())
     native=BUILD/'native';cmd=identity['commands'][-1].copy();cmd[cmd.index(str(HERE/'native_fit.cc'))]=str(HERE/'standalone_callbacks_probe.cc');cmd[cmd.index('-o')+1]=str(native)

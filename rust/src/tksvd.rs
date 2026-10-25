@@ -303,12 +303,16 @@ pub(crate) fn tk_singular_value_decomposition(mut a: Vec<Vec<Float>>) -> Result<
 }
 
 pub(crate) fn tk_backsubstitution_svd(svd: &Svd, b: &[f64]) -> Vec<Float> {
+    backsubstitution(svd, &b.iter().map(|v| ld(*v)).collect::<Vec<_>>())
+}
+
+fn backsubstitution(svd: &Svd, b: &[Float]) -> Vec<Float> {
     let nf = svd.w.len();
     let mut utb = vec![ld(0.0); nf];
     for i in 0..nf {
         if svd.w[i] != 0 {
             for (j, value) in b.iter().enumerate() {
-                utb[i] += svd.u[j][i].clone() * *value;
+                utb[i] += svd.u[j][i].clone() * value;
             }
             utb[i] /= &svd.w[i];
         }
@@ -322,4 +326,116 @@ pub(crate) fn tk_backsubstitution_svd(svd: &Svd, b: &[f64]) -> Vec<Float> {
             x
         })
         .collect()
+}
+
+/// Owned TKsingularValueDecomposition_lsq output, in raw source mode order.
+/// Set a singular value to zero to omit that mode during back substitution;
+/// this low-level operation does not apply the TKfit cutoff automatically.
+#[derive(Clone, Debug, serde::Serialize)]
+pub struct Decomposition {
+    pub u: Vec<Vec<crate::FitNumber>>,
+    pub v: Vec<Vec<crate::FitNumber>>,
+    pub singular_values: Vec<crate::FitNumber>,
+}
+
+impl Decomposition {
+    /// TKbacksubstitution_svd with an extended-precision right-hand side.
+    pub fn back_substitute(
+        &self,
+        data: &[crate::FitNumber],
+    ) -> Result<Vec<crate::FitNumber>, String> {
+        let nf = self.singular_values.len();
+        if nf == 0
+            || self.u.len() != data.len()
+            || self.v.len() != nf
+            || self.u.iter().chain(&self.v).any(|row| row.len() != nf)
+        {
+            return Err("inconsistent SVD back-substitution dimensions".into());
+        }
+        let raw = Svd {
+            u: self
+                .u
+                .iter()
+                .map(|row| row.iter().map(|v| v.0.clone()).collect())
+                .collect(),
+            v: self
+                .v
+                .iter()
+                .map(|row| row.iter().map(|v| v.0.clone()).collect())
+                .collect(),
+            w: self.singular_values.iter().map(|v| v.0.clone()).collect(),
+        };
+        Ok(
+            backsubstitution(&raw, &data.iter().map(|v| v.0.clone()).collect::<Vec<_>>())
+                .into_iter()
+                .map(crate::FitNumber)
+                .collect(),
+        )
+    }
+}
+
+fn input_matrix(matrix: Vec<Vec<crate::FitNumber>>) -> Result<Vec<Vec<Float>>, String> {
+    let nf = matrix.first().ok_or("empty SVD matrix")?.len();
+    if nf == 0 || matrix.len() < nf || matrix.iter().any(|row| row.len() != nf) {
+        return Err("SVD requires a rectangular matrix with rows >= columns > 0".into());
+    }
+    Ok(matrix
+        .into_iter()
+        .map(|row| row.into_iter().map(|v| v.0).collect())
+        .collect())
+}
+
+/// TKsingularValueDecomposition_lsq on canonical Rug128 values. Source sign,
+/// iteration order and numerical boundaries are shared with all fitting routes.
+pub fn decompose(matrix: Vec<Vec<crate::FitNumber>>) -> Result<Decomposition, String> {
+    let raw = tk_singular_value_decomposition(input_matrix(matrix)?)?;
+    Ok(Decomposition {
+        u: raw
+            .u
+            .into_iter()
+            .map(|row| row.into_iter().map(crate::FitNumber).collect())
+            .collect(),
+        v: raw
+            .v
+            .into_iter()
+            .map(|row| row.into_iter().map(crate::FitNumber).collect())
+            .collect(),
+        singular_values: raw.w.into_iter().map(crate::FitNumber).collect(),
+    })
+}
+
+/// TKbidiagonal output before diagonalization. `u` is the source's overwritten
+/// input matrix; its separate `u` pointer argument is unused in the pinned body.
+#[derive(Clone, Debug, serde::Serialize)]
+pub struct Bidiagonal {
+    pub u: Vec<Vec<crate::FitNumber>>,
+    pub v: Vec<Vec<crate::FitNumber>>,
+    pub diagonal: Vec<crate::FitNumber>,
+    pub superdiagonal: Vec<crate::FitNumber>,
+    pub norm: crate::FitNumber,
+}
+
+pub fn bidiagonal(matrix: Vec<Vec<crate::FitNumber>>) -> Result<Bidiagonal, String> {
+    let mut u = input_matrix(matrix)?;
+    let nf = u[0].len();
+    let mut v = vec![vec![ld(0.0); nf]; nf];
+    let mut w = vec![ld(0.0); nf];
+    let mut rv1 = vec![ld(0.0); nf];
+    let norm = tk_bidiagonal(&mut u, &mut v, &mut w, &mut rv1);
+    Ok(Bidiagonal {
+        u: u.into_iter()
+            .map(|row| row.into_iter().map(crate::FitNumber).collect())
+            .collect(),
+        v: v.into_iter()
+            .map(|row| row.into_iter().map(crate::FitNumber).collect())
+            .collect(),
+        diagonal: w.into_iter().map(crate::FitNumber).collect(),
+        superdiagonal: rv1.into_iter().map(crate::FitNumber).collect(),
+        norm: crate::FitNumber(norm),
+    })
+}
+
+/// TKpythag, retaining the source's overflow-resistant expression order.
+pub fn pythag(a: &crate::FitNumber, b: &crate::FitNumber) -> crate::FitNumber {
+    crate::FitNumber(tk_pythag(&a.0, &b.0))
 }

@@ -5,10 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 void matrixDMConstraintWeights(pulsar*);
-int ae_solver_owner=-2;
-void ae_svd(int,int,int,const longdouble*,double){}
-void ae_update(pulsar*,int,int,int,const char*){}
-void ae_prepared(int,pulsar*,const double*,const double*,const double*,const int*,int,double**,double**,double*,double**){}
+#include "native_observer_stubs.h"
 int main(int argc,char**argv){
  if(argc<5)return 2;
  MAX_PSR=1;MAX_OBSN=512;auto*p=new pulsar[1];initialise(p,1);

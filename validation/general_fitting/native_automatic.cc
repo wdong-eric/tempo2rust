@@ -5,10 +5,7 @@
 #include <cstring>
 static FILE*out;
 static int factors=0;
-int ae_solver_owner=-2;
-void ae_svd(int,int,int,const longdouble*,double){}
-void ae_update(pulsar*,int,int,int,const char*){}
-void ae_prepared(int,pulsar*,const double*,const double*,const double*,const int*,int,double**,double**,double*,double**){}
+#include "native_observer_stubs.h"
 void ae_factors(double**l,double*c,int n,int nd){
  ++factors;for(int i=0;i<=nd;i++)fprintf(out,"C %d %d %.17g\n",factors,i,c[i]);
  for(int i=0;i<n;i++)for(int j=0;j<n;j++)fprintf(out,"L %d %d %d %.17g\n",factors,i,j,l[i][j]);

@@ -59,6 +59,11 @@ def corrected(name,source):
   source=source[:start]+block+source[end:]
   source=source.replace('        const unsigned int psr_ndata = t2Fit_getFitData','        if(haveCovar)sortToAs(psr+ipsr);\n        const unsigned int psr_ndata = t2Fit_getFitData')
   source=source.replace('OUT.constraintIndex[OUT.nConstraints]=psr->constraints[ii];','OUT.constraintIndex[OUT.nConstraints]=psr->constraints[i];')
+  # Solar IFUNC expands one configured constraint into multiple rows but only
+  # assigns the first label. The sentinel witness in check_fitinfo proves it.
+  token='                    OUT.constraintDerivs[OUT.nConstraints] = constraint_ne_sw_ifunc_function;'
+  assert source.count(token)==2
+  source=source.replace(token,'                    OUT.constraintIndex[OUT.nConstraints] = psr->constraints[i];\n'+token)
   for field,label in [('TNChrom','chrom'),('TNDM','dm')]:
    start=source.index('for (int i=0;i<psr->'+field+'_log_freqs;++i)')
    stop=source.index('\n            }',start)

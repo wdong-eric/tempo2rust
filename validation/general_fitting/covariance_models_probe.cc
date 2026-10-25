@@ -6,10 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-int ae_solver_owner=-2;
-void ae_svd(int,int,int,const longdouble*,double){}
-void ae_prepared(int,pulsar*,const double*,const double*,const double*,const int*,int,double**,double**,double*,double**){}
-void ae_update(pulsar*,int,int,int,const char*){}
+#include "native_observer_stubs.h"
 static FILE*out;
 void dump(const char*name,double**m,int n){for(int i=0;i<n;i++)for(int j=0;j<n;j++)fprintf(out,"VALUE %s %d %d %.17g\n",name,i,j,m[i][j]);}
 void ae_covariance(double**m,int n){dump("covariance",m,n);}

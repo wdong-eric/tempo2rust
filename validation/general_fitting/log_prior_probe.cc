@@ -37,4 +37,12 @@ int main(){
  for(int i=0;i<4;i++)q->paramIndex[i]=param_ZERO;
  t2fit_fillOneParameterFitInfo(p,param_quad_om,0,*q);
  for(unsigned i=0;i<q->nParams;i++)printf("QUADLABEL %u %d %d\n",i,q->paramIndex[i],param_quad_om);
+ p->nconstraints=1;p->ne_sw_ifuncN=2;
+ p->ne_sw_ifuncT[0]=58000;p->ne_sw_ifuncT[1]=58100;p->ne_sw_ifuncV[0]=p->ne_sw_ifuncV[1]=0;
+ for(auto constraint:{constraint_ne_sw_ifunc_sin,constraint_ne_sw_ifunc_sigma}){
+  p->constraints[0]=constraint;p->constraint_special[0]=strdup(constraint==constraint_ne_sw_ifunc_sin?"1 .25 58000 365 .5":".5");
+  for(int i=0;i<2;i++)p->fitinfo.constraintIndex[i]=constraint_param;
+  t2Fit_fillFitInfo(p,p->fitinfo,*g,x,ip,0);
+  for(unsigned i=0;i<p->fitinfo.nConstraints;i++)printf("SOLARLABEL %d %u %d %d\n",constraint,i,p->fitinfo.constraintIndex[i],constraint);
+ }
 }

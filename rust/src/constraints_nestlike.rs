@@ -29,14 +29,13 @@ use crate::{
     tempo2::Label::*,
 };
 /// constraints_nestlike.C::qp_term_cutoff (pinned source line 7).
-pub(crate) fn qp_term_cutoff(
+pub fn qp_term_cutoff(
     mut freq_days: f64,
     mut logP: f64,
     mut f0: f64,
     mut sig: f64,
     mut lam: f64,
     mut df: f64,
-    d: &mut Diagnostics,
 ) -> Result<f64, TimingError> {
     let mut A: f64 = (10.0f64).powf(logP);
     let mut sigf0: f64 = (f0 * sig).max((0.5f64 * df));
@@ -213,7 +212,6 @@ pub(crate) fn constraints_nestlike_red(
                             *read(&psr.TN_QpSig, "psr[p].TN_QpSig")?,
                             *read(&psr.TN_QpLam, "psr[p].TN_QpLam")?,
                             df,
-                            d,
                         )?);
                     rho = (rho + qp);
                 }

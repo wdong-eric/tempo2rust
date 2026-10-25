@@ -9,6 +9,8 @@ BUILD = HERE / "build/comparator-controls"
 
 
 def check(native, candidate):
+    global BUILD
+    BUILD = BUILD / candidate.parent.name
     BUILD.mkdir(parents=True, exist_ok=True)
     baseline = json.loads(candidate.read_text())
     assert not compare(native, candidate, BUILD / "baseline.json")["failures"]
@@ -20,7 +22,7 @@ def check(native, candidate):
         c["postfit"]["pulsars"] = []
     mutants["empty_workflow"] = x
     x = deepcopy(baseline);x["cycles"] = [deepcopy(x["cycles"][0])] * len(x["cycles"])
-    mutants["duplicated_first_cycle"] = x
+    if len(baseline["cycles"]) > 1: mutants["duplicated_first_cycle"] = x
     x = deepcopy(baseline)
     for c in x["cycles"]: c["systems"][0]["noise"] = []
     mutants["missing_noise"] = x
@@ -69,6 +71,37 @@ def check(native, candidate):
                 for replacement in (None, "1e100"):
                     x = deepcopy(baseline);x["cycles"][0]["systems"][0]["updates"][j][field] = replacement
                     mutants[f"postfit_{j}_{field}_{replacement}"] = x
+    for key in ["errors_unscaled", "error_multiplier", "linearized_s"]:
+        x = deepcopy(baseline);solver = x["cycles"][0]["systems"][0]["solver"]
+        if isinstance(solver[key], list): solver[key][0] = "1e100"
+        else: solver[key] = "1e100"
+        mutants["changed_" + key] = x
+    if baseline["cycles"][0]["systems"][0]["solver"]["robust_history"]:
+        for action in ["missing", "extra"]:
+            x = deepcopy(baseline);history = x["cycles"][0]["systems"][0]["solver"]["robust_history"]
+            if action == "missing": history.pop()
+            else: history.append(deepcopy(history[-1]))
+            mutants[action + "_robust_step"] = x
+        for key in ["scale", "next_scale", "white_data", "white_matrix", "residual"]:
+            x = deepcopy(baseline);step = x["cycles"][0]["systems"][0]["solver"]["robust_history"][0]
+            if key == "white_matrix": step[key][0][0] = "1e100"
+            elif isinstance(step[key], list): step[key][0] = "1e100"
+            else: step[key] = "1e100"
+            mutants["robust_" + key] = x
+        for key in ["errors_unscaled", "error_multiplier", "linearized_s", "singular_values", "increments", "errors", "covariance", "chi_square"]:
+            x = deepcopy(baseline);solver = x["cycles"][0]["systems"][0]["solver"]["robust_history"][0]["solver"]
+            if key == "covariance": solver[key][0][0] = "1e100"
+            elif isinstance(solver[key], list): solver[key][0] = "1e100"
+            else: solver[key] = "1e100"
+            mutants["robust_solver_" + key] = x
+    if baseline["cycles"][0]["systems"][0]["whitening"][0]["lower"] is not None:
+        for key in ["covariance", "lower"]:
+            for action in ["missing", "extra", "changed"]:
+                x = deepcopy(baseline);matrix = x["cycles"][0]["systems"][0]["whitening"][0][key]
+                if action == "missing": matrix.pop()
+                elif action == "extra": matrix.append(deepcopy(matrix[-1]))
+                else: matrix[0][0] = "1e100"
+                mutants[action + "_input_" + key] = x
     records = []
     for name, x in mutants.items():
         path = BUILD / (name + ".json");path.write_text(json.dumps(x) + "\n")

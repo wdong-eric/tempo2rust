@@ -8,10 +8,7 @@
 #include <map>
 static std::map<void*,size_t> extent;
 void subtractTNPoly(pulsar*,int,label);
-int ae_solver_owner=-2;
-void ae_svd(int,int,int,const longdouble*,double){}
-void ae_update(pulsar*,int,int,int,const char*){}
-void ae_prepared(int,pulsar*,const double*,const double*,const double*,const int*,int,double**,double**,double*,double**){}
+#include "native_observer_stubs.h"
 void* ae_allocate(size_t bytes) {void*p=malloc(bytes);extent[p]=bytes;return p;}
 void ae_check_extent(double*p,int i) {
  auto found=extent.find(p);

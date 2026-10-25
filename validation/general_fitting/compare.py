@@ -106,13 +106,30 @@ def checked_shape(ref, result):
                 for key in ("fit_mode", "robust", "nits", "rescale_err_chisq"):
                     if (it, "prepared", p, -1, key) in ref:
                         fields[key] = literal(int(at("prepared", p, -1, key)))
+                full = ref.get((it, "prepared", p, -1, "full_covariance"))
+                if full is not None:
+                    size = int(at("prepared", p, -1, "ndata"))
+                    for key in ("covariance", "lower"):
+                        fields[key] = (size, (size, "number")) if full else literal(None)
                 control_specs.append(fields)
+            solver_fields = {"singular_values": (nf, "number"), "retained": (nf, bool), "rank": int, "dof": int, "increments": (nf, "number"), "errors": (nf, "number"), "errors_unscaled": (nf, "number"), "error_multiplier": "number", "linearized_s": (n, "number"), "covariance": (nf, (nf, "number")), "chi_square": "number"}
+            owner = -1 if global_fit else p0
+            if (it, "solver_details", owner, -1, "solves") in ref:
+                history_specs = []
+                for h in sorted({int(k[1].split('.')[1]) for k in ref if k[0] == it and k[1].startswith('robust.') and k[2] == owner}):
+                    final = bool(at("robust." + str(h), owner, -1, "final"))
+                    history_specs.append({"iteration": literal(h), "phase": literal("final" if final else "scale"),
+                        "scale": "number", "next_scale": literal(None) if final else "number",
+                        "phi": literal(None) if h == 0 and not final else "number", "dphi": literal(None) if h == 0 and not final else "number",
+                        "white_data": (n, "number"), "white_matrix": (n, (nf, "number")), "residual": (n, "number"),
+                        "solver": {**solver_fields, "robust_history": literal([])}})
+                solver_fields["robust_history"] = (len(history_specs), history_specs)
             system_specs.append({
                 "columns": (nf, col_specs), "rows": (n, row_specs),
                 "data": (n, "number"), "white_data": (n, "number"),
                 "matrix": (n, (nf, "number")), "white_matrix": (n, (nf, "number")),
                 "constraints": (nc, (nf, "number")), "constraint_targets": (nc, "number"), "constraint_rows": (nc, constraint_specs),
-                "solver": {"singular_values": (nf, "number"), "retained": (nf, bool), "rank": int, "dof": int, "increments": (nf, "number"), "errors": (nf, "number"), "errors_unscaled": (nf, "number"), "error_multiplier": "number", "linearized_s": (n, "number"), "covariance": (nf, (nf, "number")), "chi_square": "number"},
+                "solver": solver_fields,
                 "whitening": (len(group), control_specs),
                 "noise": (len(noise_members), noise_specs), "updates": (len(update_specs), update_specs),
             })
@@ -263,12 +280,63 @@ def compare(native, candidate, destination):
                     scale_cov = (at(it, "fit", first, j, "covariance." + str(j)) * at(it, "fit", first, k, "covariance." + str(k))).sqrt()
                     check([it, owner, j, k, "covariance"], sol["covariance"][j][k], at(it, "fit", first, j, "covariance." + str(k)), D("1e-10") * scale_cov, "covariance")
             check([it, owner, "rank"], sol["rank"], rank, ZERO, "identity")
+            if (it, "solver_details", owner, -1, "solves") in ref:
+                def solver_details(actual, stage, identity, multiplier):
+                    expected = at(it, multiplier, owner, -1, "multiplier")
+                    check(identity + ["error_multiplier"], actual["error_multiplier"], expected, D("5e-14") * abs(expected), "error_multiplier", structural=True)
+                    for j, value in enumerate(actual["errors_unscaled"]):
+                        expected = at(it, stage, owner, j, "unscaled_error")
+                        check(identity + [j, "unscaled_error"], value, expected, D("1e-10") * abs(expected), "errors_unscaled", structural=True)
+                    for j, value in enumerate(actual["linearized_s"]):
+                        check(identity + [j, "linearized"], value, at(it, stage, owner, j, "linearized"), D("1e-12"), "linearized_residual", structural=True)
+                last = "solve." + str(int(at(it, "solver_details", owner, -1, "solves")))
+                solver_details(sol, last, [it, owner], "solver_details")
+                for h, actual in enumerate(sol["robust_history"]):
+                    stage = "robust." + str(h)
+                    inner = actual["solver"]
+                    inner_stage = "solve." + str(h + 1)
+                    identity = [it, owner, "robust", h]
+                    solver_details(inner, inner_stage, identity, inner_stage)
+                    for key in ("scale", "next_scale", "phi", "dphi"):
+                        if actual[key] is not None:
+                            expected = at(it, stage, owner, -1, key)
+                            check(identity + [key], actual[key], expected, D("5e-14") * max(D(1), abs(expected)), "robust." + key, structural=True)
+                    for key in ("white_data", "residual"):
+                        scale = max(abs(at(it, stage, owner, i, key)) for i in range(len(actual[key])))
+                        for i, value in enumerate(actual[key]):
+                            check(identity + [key, i], value, at(it, stage, owner, i, key), D("5e-14") * scale, "robust." + key, structural=True)
+                    raw = [at(it, inner_stage, owner, j, "raw") for j in range(np)]
+                    mask = [v != 0 and not v < D.from_float(1e-27) * max(raw) for v in raw]
+                    check(identity + ["rank"], inner["rank"], sum(mask), ZERO, "identity")
+                    check(identity + ["dof"], inner["dof"], sol["dof"], ZERO, "identity")
+                    expected = at(it, inner_stage, owner, -1, "chi")
+                    check(identity + ["chi"], inner["chi_square"], expected, D("1e-6") * abs(expected) + D("1e-12" if mode == 1 else "1e-24"), "robust.chi")
+                    for j, scale in enumerate(scales["matrix"]):
+                        check(identity + [j, "retained"], int(inner["retained"][j]), int(mask[j]), ZERO, "identity")
+                        check(identity + [j, "raw"], inner["singular_values"][j], raw[j], D("1e-10") * abs(raw[j]), "robust.raw", structural=True)
+                        column_scale = max(abs(at(it, stage, owner, i, "matrix." + str(j))) for i in range(len(actual["white_matrix"])))
+                        for i, row in enumerate(actual["white_matrix"]):
+                            check(identity + [i, j, "matrix"], row[j], at(it, stage, owner, i, "matrix." + str(j)), D("5e-14") * column_scale, "robust.matrix", structural=True)
+                        for field, key, relative in (("increments", "increment", D("1e-11")), ("errors", "error", D("1e-6"))):
+                            expected = at(it, stage, owner, j, key)
+                            check(identity + [j, key], decimal(inner[field][j]) * scale, expected * scale, D("1e-11") + relative * abs(expected * scale), "robust." + field, structural=key == "error" and expected == 0)
+                        for k in range(np):
+                            norm = (at(it, stage, owner, j, "covariance." + str(j)) * at(it, stage, owner, k, "covariance." + str(k))).sqrt()
+                            check(identity + [j, k, "covariance"], inner["covariance"][j][k], at(it, stage, owner, j, "covariance." + str(k)), D("1e-10") * norm, "robust.covariance")
             for w in system["whitening"]:
                 p = w["pulsar"]
                 for j, sigma in enumerate(w["sigma"]):
                     check([it, p, j, "effective_sigma"], D.from_float(float(sigma)), D.from_float(float(at(it, "prepared", p, j, "sigma"))), ZERO, "effective_sigma")
                 want = at(it, "fit", p, -1, "detL")
                 check([it, p, "detL"], w["log_determinant"], want, D("5e-14") * max(D(1), abs(want)), "log_determinant")
+                if ref.get((it, "prepared", p, -1, "full_covariance")) == 1:
+                    n = len(w["sigma"])
+                    for j in range(n):
+                        lower_scale = max(abs(at(it, "whitening", p, i, "lower." + str(j))) for i in range(n))
+                        for i in range(n):
+                            norm = (at(it, "whitening", p, i, "covariance." + str(i)) * at(it, "whitening", p, j, "covariance." + str(j))).sqrt()
+                            check([it, p, i, j, "input_covariance"], w["covariance"][i][j], at(it, "whitening", p, i, "covariance." + str(j)), D("5e-14") * norm, "input_covariance", structural=True)
+                            check([it, p, i, j, "lower"], w["lower"][i][j], at(it, "whitening", p, i, "lower." + str(j)), D("5e-14") * lower_scale, "cholesky", structural=True)
             for row in system["noise"]:
                 p, i = row["pulsar"], row["observation"]
                 for field in ("red", "red_error", "dm", "dm_error", "chrom", "chrom_error", "solar_wind", "solar_wind_error"):
@@ -327,6 +395,9 @@ def compare(native, candidate, destination):
                     error = at(it, "postfit_update", p, l, "error." + str(k))
                     check([it, p, k, "postfit_error"], decimal(update["postfit_error"]) * scale, error * scale, D("1e-11") + D("1e-6") * abs(error * scale), "physical_spin_postfit_error", structural=True)
     receipt = {"native": str(native), "candidate": str(candidate), "stats": stats, "failures": failures,
-               "unchecked": ["physical unit maps: " + ", ".join(sorted(unchecked_physical)), "covariance kernel and Cholesky factors", "robust intermediate scale/weight history", "solver unscaled errors, multiplier and linearized residuals", "controls not exported by this native harness revision", "optional files", "truth recovery"]}
+               "unchecked": (["physical unit maps: " + ", ".join(sorted(unchecked_physical))] if unchecked_physical else [])
+               + ([] if any(k[1] == "solver_details" for k in ref) else ["robust history and solver unscaled errors/multiplier/linearized residuals: legacy native trace"])
+               + ([] if any(k[4] == "full_covariance" for k in ref) else ["covariance/Cholesky: legacy native trace"])
+               + ["sampled covariance kernels (standalone checks)", "controls not exported by this native harness revision", "optional files (separate file checks)", "truth recovery"]}
     Path(destination).write_text(json.dumps(receipt, indent=2) + "\n")
     return receipt

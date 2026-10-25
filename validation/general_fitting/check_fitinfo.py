@@ -22,8 +22,10 @@ for kind,source in [('original',original),('corrected',fixed)]:
  rows=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('PRIOR ')]
  labels=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('IFUNCLABEL ')]
  quad=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('QUADLABEL ')]
+ solar=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('SOLARLABEL ')]
+ assert [r[2]==r[3]for r in solar]==([True]*4 if kind=='corrected' else [True,False,True,False])
  assert [r[1]==r[2]for r in quad]==([True]*4 if kind=='corrected' else [True,False,False,False])
- records[kind]={'rows':rows,'ifunc_labels':labels,'quadrupole_labels':quad,'exe_sha256':sha(exe),'output_sha256':sha(BUILD/(kind+'.log'))}
+ records[kind]={'rows':rows,'ifunc_labels':labels,'quadrupole_labels':quad,'solar_labels':solar,'exe_sha256':sha(exe),'output_sha256':sha(BUILD/(kind+'.log'))}
  assert all(row[-1]==1 for row in rows)
 assert records['original']['rows'][:4]==records['corrected']['rows'][:4]
 old=[r[2] for r in records['original']['rows'] if r[0]==1 and r[3]==1]

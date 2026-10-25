@@ -11,7 +11,7 @@ BUILD = HERE / "build/bootstrap"
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
-def run(profile):
+def build():
     BUILD.mkdir(parents=True, exist_ok=True)
     identity = json.loads((HERE / "build/native/identity.json").read_text())
     source = subprocess.check_output(["git", "-C", str(ROOT / "tempo2"), "show", identity["pin"] + ":bootstrap.C"]).decode()
@@ -33,6 +33,11 @@ def run(profile):
     cmd.insert(cmd.index(str(ROOT / "validation/reference/build/libtempo2-reference.a")), str(BUILD / "tempo2Util.o"))
     native = BUILD / "native";cmd[cmd.index("-o") + 1] = str(native)
     subprocess.run(cmd, check=True, capture_output=True);commands.append(cmd)
+    return native, commands, identity, src
+
+
+def run(profile):
+    native, commands, identity, src = build()
     rust = ROOT / "rust/target" / profile / "examples/fitting_bootstrap"
     out = BUILD / profile;out.mkdir(exist_ok=True)
     records = []

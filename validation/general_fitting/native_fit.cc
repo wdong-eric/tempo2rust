@@ -7,9 +7,37 @@
 #include <cstring>
 #include <vector>
 #include <array>
+#include <map>
+#include <string>
+#include "TKmatrix.h"
 static FILE* out;static int cycle;
 int ae_solver_owner=-2;
 static void value(const char* phase,int p,int row,const char* key,longdouble v){char text[128];quadmath_snprintf(text,sizeof text,"%.36Qg",v);fprintf(out,"%d\t%s\t%d\t%d\t%s\t%s\n",cycle,phase,p,row,key,text);}
+static std::map<std::pair<int,int>,int> solves;
+static std::vector<std::vector<double>> covariance;
+void ae_covariance(int n,double**m){covariance.assign(n,std::vector<double>(n));for(int i=0;i<n;i++)for(int j=0;j<n;j++)covariance[i][j]=m[i][j];}
+void ae_solver_svd(int n,const longdouble*w){
+ if(ae_solver_owner==-2)return;
+ int s=++solves[{cycle,ae_solver_owner}];std::string stage="solve."+std::to_string(s);
+ value("solver_details",ae_solver_owner,-1,"solves",s);
+ for(int j=0;j<n;j++)value(stage.c_str(),ae_solver_owner,j,"raw",w[j]);
+}
+void ae_solver_multiplier(double m){if(ae_solver_owner!=-2)value("solver_details",ae_solver_owner,-1,"multiplier",m);}
+void ae_solver_details(int n,int np,int nc,const double*e,bool errors,bool rescale,double chi,const double*p,bool params,const double*y,double**a){
+ if(ae_solver_owner==-2)return;
+ std::string stage="solve."+std::to_string(solves[{cycle,ae_solver_owner}]);
+ double multiplier=rescale?sqrt(chi/(n+nc-np)):1.0;
+ ae_solver_multiplier(multiplier);value(stage.c_str(),ae_solver_owner,-1,"multiplier",multiplier);value(stage.c_str(),ae_solver_owner,-1,"chi",chi);
+ if(errors)for(int j=0;j<np;j++)value(stage.c_str(),ae_solver_owner,j,"unscaled_error",e[j]);
+ if(params)for(int i=0;i<n;i++){double sum=0;for(int j=0;j<np;j++)sum+=a[i][j]*p[j];value(stage.c_str(),ae_solver_owner,i,"linearized",y[i]-sum);}
+}
+void ae_robust_step(int count,int final,double sigma,double next,double phi,double dphi,double*y,double**m,double*r,double*p,double*e,double**c,int n,int nf){
+ if(ae_solver_owner==-2)return;
+ std::string stage="robust."+std::to_string(count);
+ value(stage.c_str(),ae_solver_owner,-1,"final",final);value(stage.c_str(),ae_solver_owner,-1,"scale",sigma);value(stage.c_str(),ae_solver_owner,-1,"next_scale",next);value(stage.c_str(),ae_solver_owner,-1,"phi",phi);value(stage.c_str(),ae_solver_owner,-1,"dphi",dphi);
+ for(int i=0;i<n;i++){value(stage.c_str(),ae_solver_owner,i,"white_data",y[i]);value(stage.c_str(),ae_solver_owner,i,"residual",r[i]);for(int j=0;j<nf;j++){std::string key="matrix."+std::to_string(j);value(stage.c_str(),ae_solver_owner,i,key.c_str(),m[i][j]);}}
+ for(int j=0;j<nf;j++){value(stage.c_str(),ae_solver_owner,j,"increment",p[j]);value(stage.c_str(),ae_solver_owner,j,"error",e[j]);for(int k=0;k<nf;k++){std::string key="covariance."+std::to_string(k);value(stage.c_str(),ae_solver_owner,j,key.c_str(),c[j][k]);}}
+}
 void ae_update(pulsar* ps,int p,int label,int k,const char* stage){
  // Observe only initialized storage. First-cycle waveform/shapelet errors and
  // the prefit ZERO offset have no native assignment and are not numeric oracles.
@@ -54,7 +82,12 @@ void ae_update(pulsar* ps,int p,int label,int k,const char* stage){
    switch(label){
     case param_raj:case param_decj:case param_px:case param_dshk:
     case param_dm:case param_cm:case param_fd:case param_fddc:case param_dmx:case param_chromx:
-    case param_dm_sin1yr:case param_dm_cos1yr:case param_ne_sw:case param_ne_sw_sin:
+    case param_dm_sin1yr:case param_dm_cos1yr:case param_ne_sw:case param_ne_sw_sin:gain=1;break;
+    case param_pmra:gain=180.0/M_PI*60.0*60.0*1000.0*SECDAY*365.25/24.0/3600.0*cos(s.param[param_decj].val[0]);break;
+    case param_pmdec:gain=180.0/M_PI*60.0*60.0*1000.0*SECDAY*365.25/24.0/3600.0;break;
+    case param_pmra2:gain=180.0/M_PI*60.0*60.0*1000.0*powl(SECDAY*365.25/24.0/3600.0,2.0)*cos(s.param[param_decj].val[0]);break;
+    case param_pmdec2:gain=180.0/M_PI*60.0*60.0*1000.0*powl(SECDAY*365.25/24.0/3600.0,2.0);break;
+    case param_pmrv:gain=10.0*360.0*60.0*60.0/(2.0*M_PI);break;
     case param_glf2:gain=1e-27;break;
     case param_glep:case param_glph:case param_glf0:case param_glf1:
     case param_glf0d:case param_glf0d2:case param_glf0d3:case param_gltd:case param_gltd2:case param_gltd3:
@@ -66,6 +99,16 @@ void ae_update(pulsar* ps,int p,int label,int k,const char* stage){
    if(strcmp(s.binaryModel,"ELL1H")==0){
     switch(label){case param_pb:gain=1/86400.;break;
      case param_a1:case param_eps1:case param_eps2:case param_tasc:case param_h3:case param_h4:case param_stig:gain=1;break;
+     default:break;}
+   }
+   // DDHmodel.C::updateDDH stores PB in days and OM in degrees; the other
+   // supported coordinates are additive in their fitted units.
+   if(strcmp(s.binaryModel,"DDH")==0){
+    switch(label){case param_pb:gain=1/SECDAY;break;
+     case param_om:gain=180.0/M_PI;break;
+     case param_a1:case param_ecc:case param_t0:case param_sini:case param_m2:
+     case param_gamma:case param_h3:case param_stig:case param_pbdot:
+     case param_a1dot:case param_omdot:gain=1;break;
      default:break;}
    }
  }
@@ -83,7 +126,12 @@ void ae_svd(int n,int np,int nc,const longdouble* w,double tol){
  value("svd",ae_solver_owner,-1,"ndata",n);value("svd",ae_solver_owner,-1,"nparams",np);value("svd",ae_solver_owner,-1,"nconstraints",nc);
  for(int i=0;i<np;i++){value("svd",ae_solver_owner,i,"raw",w[i]);value("svd",ae_solver_owner,i,"retained",w[i]!=0 && !(w[i]<tol*max));}
 }
-void ae_prepared(int p,pulsar* ps,const double* x,const double* y,const double* e,const int* ip,int n,double** m,double** w,double* wy,double** c){
+void ae_prepared(int p,pulsar* ps,const double* x,const double* y,const double* e,const int* ip,int n,double** m,double** w,double* wy,double** c,double** lower){
+ bool full=get_blas_rows(lower)>1;value("prepared",p,-1,"full_covariance",full);
+ if(full){if(covariance.size()!=size_t(n))abort();for(int i=0;i<n;i++)for(int j=0;j<n;j++){
+  std::string key="covariance."+std::to_string(j);value("whitening",p,i,key.c_str(),covariance[i][j]);
+  key="lower."+std::to_string(j);value("whitening",p,i,key.c_str(),i>=j?lower[i][j]:0);
+ }}covariance.clear();
  value("prepared",p,-1,"fit_mode",ps->fitMode);value("prepared",p,-1,"robust",ps->robust);value("prepared",p,-1,"nits",ps->nits);value("prepared",p,-1,"rescale_err_chisq",ps->rescaleErrChisq);
  auto& f=ps->fitinfo;value("prepared",p,-1,"ndata",n);value("prepared",p,-1,"nparams",f.nParams);value("prepared",p,-1,"nconstraints",f.nConstraints);
  for(int i=0;i<n;i++){value("prepared",p,i,"index",ip[i]);value("prepared",p,i,"x",x[i]);value("prepared",p,i,"y",y[i]);value("prepared",p,i,"sigma",e[i]);value("prepared",p,i,"raw_sigma",ps->obsn[ip[i]].toaErr*1e-6);value("prepared",p,i,"white_y",wy[i]);for(unsigned j=0;j<f.nParams;j++){char key[64];snprintf(key,sizeof key,"matrix.%u",j);value("prepared",p,i,key,m[i][j]);snprintf(key,sizeof key,"white_matrix.%u",j);value("prepared",p,i,key,w[i][j]);}}

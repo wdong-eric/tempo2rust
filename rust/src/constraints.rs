@@ -529,6 +529,8 @@ pub fn legacy_constraint(
     }
     Ok(())
 }
+pub use crate::constraints_nestlike::qp_term_cutoff;
+
 #[derive(Debug)]
 pub struct ConstraintRows {
     pub labels: Vec<i32>,
@@ -548,6 +550,8 @@ pub enum ConstraintSpecial {
     },
     Error(f64),
     CovarianceRow(Vec<f64>),
+    DmCovarianceRow(Vec<f64>),
+    CmCovarianceRow(Vec<f64>),
 }
 /// Installed constraint callback, using the same typed payload as row assembly.
 #[allow(clippy::too_many_arguments)]
@@ -586,6 +590,24 @@ pub fn derivative(
                     .ok_or_else(|| boundary("IFUNC constraint column"))
             } else {
                 Ok(0.0)
+            };
+        }
+        Some(ConstraintSpecial::DmCovarianceRow(row))
+        | Some(ConstraintSpecial::CmCovarianceRow(row)) => {
+            if label != param_dmmodel {
+                return Ok(0.0);
+            }
+            let ndm = *read(&context.pulsars()[p].dmoffsDMnum, "dmoffsDMnum")? as usize;
+            let column = match special {
+                Some(ConstraintSpecial::DmCovarianceRow(_)) => (k < ndm).then_some(k),
+                _ => k.checked_sub(ndm),
+            };
+            return match column {
+                Some(k) => row
+                    .get(k)
+                    .copied()
+                    .ok_or_else(|| boundary("DM/CM covariance column")),
+                None => Ok(0.0),
             };
         }
         None => {}
@@ -659,28 +681,29 @@ pub fn build(
             )?;
             let text =
                 std::str::from_utf8(&bytes).map_err(|_| boundary("constraint text encoding"))?;
-            let t: Vec<_> = text.split_whitespace().collect();
+            let mut scanner = crate::source_text::SourceText::new(
+                std::path::Path::new("<constraint payload>"),
+                text.as_bytes().to_vec(),
+            );
             if c == constraint_param {
-                if t.len() != 3 {
-                    return Err(boundary("parameter constraint needs name value error"));
-                }
+                let name = scanner.required_token("constraint parameter")?;
+                let prior = scanner.required_token("constraint value")?;
+                let mut error = scanner.double("constraint error")?;
                 let mut found = None;
                 for (l, slot) in p.param.slots.iter().enumerate().take(param_LAST as usize) {
                     for (k, cell) in slot.cells.iter().enumerate() {
-                        if crate::clock_text::c_bytes(&cell.shortlabel)
-                            .eq_ignore_ascii_case(t[0].as_bytes())
+                        if crate::clock_text::c_bytes(&cell.shortlabel).eq_ignore_ascii_case(&name)
                         {
                             found = Some((l, k));
                         }
                     }
                 }
                 let (l, k) = found.ok_or_else(|| boundary("unknown constrained parameter"))?;
-                let mut error: f64 = t[2].parse().map_err(|_| boundary("constraint error"))?;
                 let val = if l == param_raj as usize || l == param_decj as usize {
                     let v = if l == param_raj as usize {
-                        crate::source_par::hms_turn(&mut t[1].as_bytes().to_vec())
+                        crate::source_par::hms_turn(&mut prior.clone())
                     } else {
-                        crate::source_par::dms_turn(t[1].as_bytes())?
+                        crate::source_par::dms_turn(&prior)?
                     };
                     error *= if l == param_raj as usize {
                         PI / 12.0 / 3600.0
@@ -689,7 +712,7 @@ pub fn build(
                     };
                     crate::tksvd::ld(crate::tempo2_util::turn_deg(v) * PI / 180.0)
                 } else {
-                    crate::source_text::extended(t[1].as_bytes())?
+                    crate::source_text::extended(&prior)?
                 };
                 let mut value = (val - &p.param.slots[l].cells[k].val).to_f64();
                 let (mut factor, mut sign) = (1.0, 1.0);
@@ -754,22 +777,14 @@ pub fn build(
                     }
                 }
             } else if matches!(c, constraint_ne_sw_ifunc_sigma | constraint_ne_sw_ifunc_sin) {
-                let v = t
-                    .iter()
-                    .map(|s| {
-                        s.parse::<f64>()
-                            .map_err(|_| boundary("SW constraint number"))
-                    })
+                let count = if c == constraint_ne_sw_ifunc_sigma {
+                    1
+                } else {
+                    5
+                };
+                let v = (0..count)
+                    .map(|_| scanner.double("SW constraint number"))
                     .collect::<Result<Vec<_>, _>>()?;
-                if v.len()
-                    != if c == constraint_ne_sw_ifunc_sigma {
-                        1
-                    } else {
-                        5
-                    }
-                {
-                    return Err(boundary("SW constraint arguments"));
-                }
                 for k in 0..*read(&p.ne_sw_ifuncN, "ne_sw_ifuncN")? as usize {
                     let error = *v.last().unwrap();
                     let mut r = vec![0.0; columns.len()];
@@ -789,6 +804,8 @@ pub fn build(
                             - *read(&p.ne_sw_ifuncV[k], "ne_sw_ifuncV")?)
                             / error
                     };
+                    // t2fit.C omitted labels after the first solar IFUNC row.
+                    // Every expanded row belongs to this configured constraint.
                     out.labels.push(c as i32);
                     out.counters.push(k as i32);
                     out.matrix.push(r);

@@ -14,31 +14,36 @@ PIN = 'fda6ad4a9753ad7dc5d291406f2f310a9161423f'
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
+def observed(name, text):
+    if name == 'TKfit.C':
+        token = 'TKsingularValueDecomposition_lsq(augmented_DM,ndata+nconstraints,nparams,v,w,u);'
+        assert text.count(token) == 1
+        text = text.replace(token, token + '\nextern void ae_solver_svd(int,const longdouble*);ae_solver_svd(nparams,w);')
+        token = '    if(computeErrors && rescale_errors){'
+        assert text.count(token) == 1
+        text = text.replace(token, '''    extern void ae_solver_details(int,int,int,const double*,bool,bool,double,const double*,bool,const double*,double**);
+    ae_solver_details(ndata,nparams,nconstraints,e,computeErrors,rescale_errors,chisq,outP,computeParam,data,designMatrix);
+''' + token)
+    else:
+        text = 'extern void ae_robust_step(int,int,double,double,double,double,double*,double**,double*,double*,double*,double**,int,int);\n' + text
+        token = 'sigma = median_abs_deviation/0.6745;'
+        assert text.count(token) == 1
+        text = text.replace(token, token + '\nae_robust_step(count,0,sigma_old,sigma,count?sum_phi_sq:0,count?sum_dphi:0,modified_data,Mw,resid,outP,e,cvm,ndata,nparams);')
+        token = '    double robust_chisq ='
+        assert text.count(token) == 1
+        text = text.replace(token, '    ae_robust_step(count,1,sigma,0,sum_phi_sq,sum_dphi,modified_data,Mw,resid,outP,e,Ocvm,ndata,nparams);\n' + token)
+        token = '    if (rescale_errors)ecorrect = robust_chisq / nfree;'
+        assert text.count(token) == 1
+        text = text.replace(token, token + '\n    extern void ae_solver_multiplier(double);ae_solver_multiplier(sqrt(ecorrect));')
+    return text
+
+
 def build():
     BUILD.mkdir(parents=True, exist_ok=True)
     commands = [];objects = []
     for name in ['TKfit.C', 'TKrobust.C']:
         text = corrected(name, subprocess.check_output(['git', '-C', str(ROOT / 'tempo2'), 'show', PIN + ':' + name]).decode())
-        if name == 'TKfit.C':
-            token = 'TKsingularValueDecomposition_lsq(augmented_DM,ndata+nconstraints,nparams,v,w,u);'
-            assert text.count(token) == 1
-            text = text.replace(token, token + '\nextern void ae_solver_svd(int,const longdouble*);ae_solver_svd(nparams,w);')
-            token = '    if(computeErrors && rescale_errors){'
-            assert text.count(token) == 1
-            text = text.replace(token, '''    extern void ae_solver_details(int,int,int,const double*,bool,bool,double,const double*,bool,const double*,double**);
-    ae_solver_details(ndata,nparams,nconstraints,e,computeErrors,rescale_errors,chisq,outP,computeParam,data,designMatrix);
-''' + token)
-        else:
-            text = 'extern void ae_robust_step(int,int,double,double,double,double,double*,double**,double*,double*,double*,double**,int,int);\n' + text
-            token = 'sigma = median_abs_deviation/0.6745;'
-            assert text.count(token) == 1
-            text = text.replace(token, token + '\nae_robust_step(count,0,sigma_old,sigma,count?sum_phi_sq:0,count?sum_dphi:0,modified_data,Mw,resid,outP,e,cvm,ndata,nparams);')
-            token = '    double robust_chisq ='
-            assert text.count(token) == 1
-            text = text.replace(token, '    ae_robust_step(count,1,sigma,0,sum_phi_sq,sum_dphi,modified_data,Mw,resid,outP,e,Ocvm,ndata,nparams);\n' + token)
-            token = '    if (rescale_errors)ecorrect = robust_chisq / nfree;'
-            assert text.count(token) == 1
-            text = text.replace(token, token + '\n    extern void ae_solver_multiplier(double);ae_solver_multiplier(sqrt(ecorrect));')
+        text = observed(name, text)
         src = BUILD / name;src.write_text(text);obj = src.with_suffix('.o');objects.append(obj)
         cmd = ['/opt/homebrew/bin/g++-16', '-O2', '-std=gnu++11', '-DHAVE_CONFIG_H', '-I' + str(REF / 'source'), '-c', str(src), '-o', str(obj)]
         subprocess.run(cmd, capture_output=True, check=True);commands.append(cmd)
