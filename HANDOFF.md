@@ -220,6 +220,7 @@ Starting an assignment means opening an implementation chat in this workspace an
 | Assignment Z: TEMPO2 planetary ephemeris | `01a16c74-090a-70a3-a4a8-29ecb51fe5de` | Accepted at `d517acf` by 0064; ownership closed |
 | Assignment AA: Rust observer coordinates | `01a17180-88f2-72a3-a6c3-609640aacd7b` | Accepted at `ea97972` by 0069; ownership closed |
 | Assignment AB: TEMPO2 propagation reference | `01a16c97-34ca-70f0-a77c-d251fa5c9f3e` | Accepted at `cb2c41f` by 0067; ownership closed |
+| Assignment AC: General input-to-BAT | `01a171a0-b915-7f12-bc44-dd1fa97ca3dd` | Dispatched from `a094a7b` under 0068/0069; sole Rust writer, plus `validation/input_to_bat/` |
 
 **Dispatched 24 October 2026:** T started from `d350727` after R/S ownership closure. The implementation chat is active and explicitly inherits the generated-output policy. Central retains design decisions and milestone acceptance. U started from `43001af` for independent terrestrial-resource reference work; its active status and separate ownership have been confirmed and relayed to T. V started from `8e56df0` for independent time-ephemeris reference work; its active status is confirmed and T/U received its ownership boundary.
 
@@ -356,3 +357,5 @@ Implement Assignment D in /Users/Eric.Dong/Downloads/tempo2rust. D is released b
 E/F/G/H dispatch prompts remain historical in their handoffs. I follows its [JPL transfer prompt](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/09-jpl-rust.md) under decision 0017; J follows its [clock/table reference prompt](/Users/Eric.Dong/Downloads/tempo2rust/handoffs/10-clock-table-reference.md) under decision 0018. Preserve E's unresolved M2 gate, all accepted reference evidence and the central acceptance boundary.
 
 **AA dispatched 25 October 2026:** The separate observer-coordinate implementation chat started from `4498cf1` after Y acceptance at `21dc956`. Its active turn is confirmed. AA owns `rust/` and `validation/observer_coordinates_port/`; central continues AB review and the following planetary/propagation plus input/frontend plan. Functional priority 0065, small-bug policy 0053, generated-output policy 0039 and accepted-evidence preservation remain binding. Central retains design and milestone acceptance.
+
+**AC dispatched 25 October 2026:** The separate general input-to-BAT implementation chat started from `a094a7b` after AA acceptance at `ea97972`. Its active turn is confirmed. AC owns `rust/` and `validation/input_to_bat/` and delivers the functional public workflow under 0068/0069. AA ownership is closed; central retains design and milestone acceptance. Existing native references, accepted runners/evidence, numerical gates and policies 0053/0039/0050/0065 remain binding.
