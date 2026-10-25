@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I/L/O/W/Y/AA, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L/O/W/Y/AA/AC, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -18,7 +18,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/initialise.rs` | Parameter allocation/zero initialization in `initialise.C::allocateMemory`, source-order labels in `initialiseOne`, ownership replacement/destruction for `destroyMemory`; remaining pulsar/observation/covariance responsibilities deferred |
 | `src/tempo2_util.rs` | `tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/fortran_nlong/copyParam`; strict `parse_binary64` is Rust glue |
 | `src/form_residuals.rs` | `formResiduals.C::formResiduals`, `tempo2Util.C::fortran_mod/fortran_nlong`; split spin phase, first-input reference and checked counts. The `@` entry supplies zero-delay `formBats.C::formBats` and `secularMotion.C::secularMotion` branches |
-| `src/form_bats.rs` | Selected `global.C::formBatsAll`, `calculate_bclt.C::calculate_bclt`, `formBats.C::formBats`; fused `shapiro_delay.C::shapiro_delay`, `dm_delays.C::dm_delays` constant-DM/spherical-wind path, the shared `vector_pulsar::position` fixed-direction body, and zero `secularMotion.C::secularMotion`. Also calls the Rust `formResiduals.C::formResiduals` counterpart |
+| `src/form_bats.rs` | Bounded frontend adapter to the canonical general PAR/preprocessing/global pipeline; projects the existing terrestrial schema and invokes the existing bounded residual evaluator. No duplicate delay engine remains |
 | `src/runtime.rs` | Rust-owned resource/context glue; `observatory.C::getObservatory/ITRF_to_GRS80`, `tropo.C::initialize_meteorology_tables`; orchestrates `clkcorr.C::getClockCorrections`, `eop.C::load_EOP`, `ifteph.C::IFTE_init`, `jpleph.c::jpl_init_ephemeris` counterparts |
 | `src/clkcorr.rs` | `clkcorr.C::getClockCorrections/getCorrection/getClockCorrectionSequenceInternal`; all four public operations, explicit chains and all selected helpers/constructors; process session, directed routes, lazy tables and source fallbacks |
 | `src/toa2utc.rs` | Active `toa2utc.C::toa2utc`, bypass and exact SAT jump mutation |
@@ -30,7 +30,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/eop.rs` | `eop.C::load_EOP/get_EOP` |
 | `src/ifteph.rs` | All 17 active `ifteph.C` routines: seven byte helpers, complete IFTE lifecycle/getters/wrappers and interpolation cache; Y contract maps every field and branch |
 | `src/read_fortran.rs` | All eight `read_fortran.h` routines; separate owned stream, filename mutation and host-qualified byte decoding; distinct from `read_fortran2.h` |
-| `src/read_ephemeris.rs` | Selected `readEphemeris.C::readEphemeris` call order and Rug128 scaling; safe JPL calls, timing error/nonfinite adapter |
+| `src/read_ephemeris.rs` | All three `readEphemeris.C` routines: complete native-JPL driver, random2 and gasdev; process random state, selective bodies, retained tails, perturbations and offsets |
 | `src/jpleph.rs` | All 12 implemented functions in `jpleph.c`, declared field meanings in `jpleph.h`, decoded `jpl_int.h` layout; full map in `../validation/jpl_port/PROJECTION.md` |
 | `src/stdio.rs` | Rust ownership glue for JPL, IFTE and Fortran-reader libc I/O; no standalone scientific algorithm |
 | `src/get_obs_coord.rs` | All six `get_obsCoord.C` routines: full `get_obsCoord` driver, shared `get_obsCoord_IAU2000B`, `lmst`, `get_precessionMatrix`, `ang`, corrected `remove_white`; unchanged retained SOFA ABI and 36-routine closure |
@@ -76,9 +76,11 @@ No numerical dependency or alternate JPL implementation was added.
 
 ## Unsafe audit
 
-There are fifteen production unsafe sites: seven blocks/declarations plus one
-exclusive `Send` implementation in `stdio.rs`, two existing SOFA sites, and five
-in `clock_text.rs` (declarations plus four typed calls).
+There are 23 production unsafe sites: eight in `stdio.rs` including its exclusive
+`Send` implementation, two existing SOFA sites, eight in `clock_text.rs`, three
+in `sort_toas.rs`, and two in `clock_diagnostics.rs`. AC adds typed binary32
+scanning, extended-token endpoint scanning and coordinate formatting, host qsort
+with a private comparator, and process CPU-time diagnostics.
 Parameter storage/initialization/copy, JPL and clock/table algorithms, graph traversal and synchronization
 remain safe Rust. Each site
 has adjacent necessity and concrete invariants. No unsafe function or `Sync`
@@ -87,7 +89,10 @@ implementation is present. Y adds only the documented stream `Send` boundary.
 | Site | Necessity | Invariants |
 | --- | --- | --- |
 | `clock_text.rs` foreign declarations and pair/header/number-prefix calls | Complete host sscanf grammar, prefix and binary32 conversion | Owned NUL input, private literal formats, initialized correctly typed outputs, bounded 63-byte strings, completed-conversion reads only; no pointers escape |
-| `clock_text.rs` formatting call | Fixed source printf spelling/truncation | One f64 argument, static enum-selected formats, initialized 512-byte bounded buffer; no pointers escape |
+| `clock_text.rs` numeric and coordinate formatting calls | Fixed source printf spelling/truncation | Static formats, exactly typed promoted scalar arguments, initialized bounded buffers; no pointers escape |
+| `clock_text.rs` strtod endpoint call | Source numeric-token prefix grammar for extended parsing | Owned NUL input; only the same-allocation end offset is consumed; the binary64 result is discarded |
+| `sort_toas.rs` declaration, comparator and qsort call | Preserve the supported host equal-key permutation | Exclusive unpinned whole-element slice; initialized SATs checked before entry; callback references stay local and cannot unwind; no retained pointers |
+| `clock_diagnostics.rs` declaration and clock call | Source process CPU-time log field | No pointer arguments; host-qualified clock_t and CLOCKS_PER_SEC; elapsed time is diagnostic, not a scientific result |
 | `stdio.rs` foreign declarations | C stdio buffering is observable in H/V | Opaque FILE, bounded calls, no retained caller buffers |
 | `stdio.rs` fdopen | Consume the already opened file without path reopen | File owns live fd until success; static NUL mode; failure drops File; success relinquishes fd exactly once |
 | `stdio.rs` fread | Complete-item counts and partial-element writes | Checked size product fits initialized exclusive byte slice; no pointer escapes; live exclusive stream |
@@ -206,3 +211,39 @@ comes from the real alias path and geodetic cells remain cached. Canonical
 borrows, retaining revocable owner/view checks. UT1 arrays belong to the same
 outer process owner, independently of clock/EOP/IFTE caches. No new unsafe block,
 backend, native dependency, internal authoritative clone or SOFA layer was added.
+
+
+## Assignment AC general input-to-BAT transfer
+
+The concrete interfaces, result schema and retained-state contract are in
+`INPUT_TO_BAT_CONTRACT.md`; verification and unresolved checks are in
+`INPUT_TO_BAT_REPORT.md`. Historical per-assignment descriptions above record
+those deliveries. AC replaces the selected planetary/delay bodies and connects
+one canonical source calculation to both general and bounded frontends.
+
+| Rust module(s) | Source responsibility |
+| --- | --- |
+| `bats`, `main`, `runtime` | Owned ordered PAR/TIM/provenance wrapper, complete-result projection, explicit runtime, general BAT CLI; Rust glue rather than upstream CLI/ABI equivalence |
+| `source_par`, `source_par_dispatch` | Complete `readParfile.C` dispatch, simple/full/global readers, defaults, checkAllSet, scalar/coordinate/value helpers; existing registry and canonical parameter storage |
+| `source_text`, `clock_text` | Byte/cursor/scanning support; native-width grammar and fixed formatting, without a second scientific store |
+| `source_tim`, `sort_toas`, `read_jbo_bat`, `read_fortran2` | N's nineteen TIM reader/writer/order/JBO/Fortran2 entries; the Fortran2 stream remains independent of the time-ephemeris stream |
+| `preprocess`, `selection`, `units`, `update_epoch` | P's fifteen preprocessing/selection/white-noise/units/epoch entries; inactive binary epoch update remains inactive; external plugin ABI explicitly unavailable |
+| `read_ephemeris`, `source_state` | Z's driver/random2/gasdev and distinct process lifetimes; random state is not reset per pulsar or evaluation |
+| `propagation`, `refphs`, `solar_wind`, `ifunc`, `shapelet` | AB's 25 propagation/reference/interpolation/shapelet/precision entries, including source-written observation copies and direct helper APIs |
+| `global` | Five `global.C` drivers, one outer session lock, source call order and narrower updateBatsAll |
+| `calceph` | No-HAVE_CALCEPH failure entries and convertUnits; enabled CALCEPH is not implemented |
+| `tempo2_util` | Source link evaluation shared by parsers, preprocessing and propagation; session-aware internal entry avoids recursive locking |
+| `pulsar_lifecycle`, `observation` | Canonical owned observation allocation, copies and field knownness; fresh-storage corrections only where documented |
+
+Source INFO, DMMODEL warning mask, mutable ecliptic obliquity, random state and
+processing globals belong to the locked process session. Source-unwritten fields
+remain explicit; no fixture sentinel becomes a production default. Resource
+provenance is obtained from consumed owners. The general input wrapper owns original
+bytes and paths, while the canonical context alone owns scientific state.
+
+Three additional expression-local FMA patterns reproduce compiled GCC16 O2:
+planet offsets, Shapiro direction normalization, and dispersion/solar expressions.
+The source header maps `powl` to `powq`; chromatic power therefore uses Rug128
+before its source binary64 assignment. `inspect_native_numerics.py` records the
+actual accepted object hashes/instructions and header macro. No precision mode,
+new numerical dependency, or new source threshold was introduced.

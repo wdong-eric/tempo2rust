@@ -194,3 +194,25 @@ same four raw-order diagnostics.
   X histories and retained native object/assembly evidence. Rug128 and the four
   0049 precision-boundary findings are unchanged. Full public PAR/TIM/model
   integration remains separate; M2 still has its four raw-order findings.
+
+
+## AC general input-to-BAT dispositions (0068, 0072–0074)
+
+| Source behavior | Current disposition and evidence |
+| --- | --- |
+| No `-setdm` passes an unwritten ndm | Initialize the empty table count to zero; corrected-native default/empty/nonempty public examples |
+| Fresh storage consumed before a source producer | Initialize only genuinely unwritten prefit uncertainty, empty chromatic/solar tables, bypass clock/time values, rough site velocity, inactive planet operands, first-pass shapelet BAT and unlinked DMMODEL warning target; retain defined caller values. Adjacent source/cause comments and staged native initialization patches document each correction |
+| Disabled troposphere writes pulsar zero; refphs cleanup tests pulsar zero | Use the current pulsar for those two operations. Preserve original AB records: three original histories differ, while three separately corrected native histories pass |
+| JBO word diagnostics access declared double storage through int pointers | Read/swap bytes without aliasing. Five separately corrected native histories preserve all scientific state and change only three histories' word diagnostics |
+| Q TEL third-token index 1000 against capacity 500 | Withhold invalid/later native state under 0072. Compare safe prefixes and seven bounded native neighbors; Rust rejects 501 and 1000 explicitly |
+| K extended continuous arithmetic | Only the named 0073 scaling/KIN fields use its 4u113/8u113 bounds; 17 qualified records remain distinguished from exact matches. Production precision stays 128 bits |
+| P SIMUL strict 60-second comparison | Eight histories differ in deletion state under 128 versus native 113 bits; original checks still fail. 0074's precision diagnosis is retained; no threshold or precision adjustment |
+| Other P unit/epoch/linked arithmetic | 122 continuous state records differ in the full corpus; no P allowance exists. Detailed input/action/field/numerical evidence remains open for central disposition |
+| Native NaN payloads duplicated in raw P fields | Normalize only typed NaN payload locations while retaining class/sign, all neighboring bytes, infinity signs, signed zeros and record membership under 0074 |
+| Native exit, invalid storage and unavailable backend | Retain defined writes/diagnostics before contextual errors; no partial success JSON. Missing/corrupt JPL and unavailable CALCEPH recovery use fresh input contexts with the same runtime |
+| Failure after reference-row insertion | Preserve the mutated prefix; do not promise rollback or retry of that same context. Completed repeat calls and fresh-context recovery are tested |
+| Full residual/binary/fit, enabled CALCEPH, external plugins, portability | Explicitly outside AC; parsing parameters does not implement those later models or close their migration obligations |
+
+`INPUT_TO_BAT_REPORT.md` records exact comparison scopes and all unresolved checks.
+Passing public examples is engineering evidence for those combinations, not general
+scientific acceptance or resolution of M2, 0049, DDH or P compatibility gaps.

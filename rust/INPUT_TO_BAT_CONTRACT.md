@@ -2,12 +2,31 @@
 
 Source: TEMPO2 `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 Baseline: AA `ea9797236fae0f0dd29a32e5d3050e33eaf2fefe`, production `99cf714`.
-Authority: decisions 0068/0069 and handoff 29. This is an implementation plan,
-not an acceptance claim.
+Authority: decisions 0068/0069, 0072–0074 and handoff 29. The interfaces below
+are implemented. Implementation handover and milestone acceptance remain central decisions.
+
+## Record chronology and current implementation status
+
+The proposed API and integration plan were first committed as
+`rust/INPUT_TO_BAT_CONTRACT.md` in `4114aec`. The contract remains here, as confirmed by central after review. At that review,
+initial source PAR/TIM
+parsers and preprocessing primitives already existed as uncommitted implementation;
+no public BAT evaluator or CLI consumer had been implemented. This records the
+actual documentation chronology, not a retrospective claim that every parser edit
+followed a frozen contract.
+
+The concrete implemented loader is `bats::load_pairs(&[InputPair], &Path) ->
+Result<BatInput, TimingError>`. `BatInput` owns the canonical `PulsarContext`, ordered
+pairs, and a vector of `ConsumedInput { path: PathBuf, role: String, sha256: String,
+bytes: Vec<u8> }`. `source_par::read_parfiles` and `source_tim::read_timfiles` populate
+that context directly. The remaining signatures and version-1 output below are now implemented. The
+“Concrete projection before public consumers” section recorded the actual output
+shape before connecting the public evaluator and CLI. Execution results and open
+gates are recorded in `INPUT_TO_BAT_REPORT.md`.
 
 ## Public boundary
 
-The `bats` module will expose these operations (all fallible operations return
+The `bats` module exposes these operations (all fallible operations return
 `Result<_, TimingError>`):
 
 ```rust,ignore
@@ -95,3 +114,55 @@ binary/fitting, plugin ABI and release/platform qualification remain later work.
 Generated evidence stays ignored under owned `validation/input_to_bat/build/`;
 accepted runners, evidence and independent repositories are read-only. Commits
 stage explicit authored owned paths only.
+
+## Concrete projection before public consumers
+
+The implemented `load_pairs` and `preprocess` signatures above are retained.
+`form_bats_all` and `update_bats_all` are defined in `global` and re-exported by
+`bats`. `RuntimeContext::from_root` constructs the general runtime; source drivers
+open PAR-selected resources during evaluation. `RuntimeContext::new` remains the
+existing bounded frontend constructor. Its evaluator delegates to the shared
+canonical input-to-BAT driver.
+
+`BatResult` projects canonical state using these concrete records:
+
+- `schema_version: 1`, `status: "complete"`, `engine`, `runtime_root`, `inputs`,
+  `resources`, `diagnostics`, and `pulsars`.
+- Lossless strings are `{bytes: [u8...], text: string|null}`; `text` is present only
+  for valid UTF-8. Inputs contain lossless paths, role, SHA-256 and consumed bytes.
+- Numerical values are round-trip decimal strings, or `{class: "nan"|"-nan"|
+  "+infinity"|"-infinity"}`. A null optional component denotes source-unwritten
+  retained state; it is never a fabricated zero correction.
+- Pulsars contain name, integer source unit/time/frame selectors with descriptive
+  labels, the source sorted latch, main observations, and separate reference state.
+- Each observation includes canonical index, lossless filename/site/flags,
+  deleted/clock/delay selectors, SAT/BAT/BBAT MJD, observing frequency with MHz
+  units, source freqSSB with its actual branch-dependent Hz/MHz unit, uncertainty
+  in microseconds, clock steps, and named corrections with seconds/day units.
+
+Main MJD outputs must be written; absent mandatory output is an error. A complete
+result means the calculation finished, not that source-native nonfinite outputs
+are finite or astronomically validated. Diagnostics contain captured source bytes
+and source channel, drained after the completed evaluation. No CLI writes success
+JSON before projection and serialization have both succeeded.
+
+
+## Retained process state and error recovery
+
+The canonical context owns pulsars, observations and constraint payloads. Source
+process globals, diagnostic suppression/version state, and resource tables live
+in the existing locked process session. Drivers serialize access to that session.
+`RuntimeContext` provenance is the union of resources consumed through that runtime,
+including earlier successful calls; use a new runtime for a standalone inventory.
+Input provenance records each file consumption in source order.
+
+An error preserves writes already performed, matching the source prefix. A failed
+`form_bats_all` may therefore leave an appended reference row in that caller's
+context. Recovery examples create a fresh input context and reuse the same runtime;
+they do not claim rollback or that retrying a partially mutated context is idempotent.
+`update_bats_all` intentionally reuses clocks and ephemerides and does not create or
+clean a reference row. It requires previously prepared canonical observations.
+
+The `status: "complete"` output means the requested calculation and projection
+completed. It does not declare milestone acceptance or compatibility of every
+numerical boundary. See the report's explicit unresolved-check ledger.

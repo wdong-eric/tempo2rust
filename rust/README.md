@@ -1,9 +1,58 @@
 # TEMPO2 Rust timing core
 
-One library and JSON CLI for fixed-parameter residuals and ZERO/F0–F3 fitting of one isolated pulsar,
-using TCB barycentric `@` TOAs or the declared PKS terrestrial path and F0
-through F3. M1a and M1b are accepted. M2 evidence is in `M2_REPORT.md`; milestone
-acceptance belongs to the central planning chat.
+One Rust library and JSON CLI now provide general ordered PAR/TIM input, source
+preprocessing and input-to-BAT/BBAT evaluation. The existing residual and ZERO/F0–F3
+fit commands retain their isolated-pulsar and declared `@`/PKS input scopes.
+The general BAT implementation is delivered for central review; milestone acceptance
+and successor release are separate decisions. See [INPUT_TO_BAT_REPORT.md](INPUT_TO_BAT_REPORT.md)
+for execution evidence and unresolved numerical gates.
+
+## General input to BAT
+
+```sh
+cd /Users/Eric.Dong/Downloads/tempo2rust
+export CARGO_HOME="$PWD/rust/.cargo-home"
+export GMP_MPFR_SYS_CACHE="$PWD/rust/target/gmp-cache"
+cargo run --manifest-path rust/Cargo.toml --locked --offline --release -- bats \
+  --par validation/input_to_bat/fixtures/ordinary.par \
+  --tim validation/input_to_bat/fixtures/ordinary.tim \
+  --par validation/input_to_bat/fixtures/ecliptic.par \
+  --tim validation/input_to_bat/fixtures/ordinary.tim \
+  --runtime validation/reference/build/source/T2runtime
+```
+
+Each nth `--par` pairs with the nth `--tim`. Arguments after `--` are source
+preprocessing arguments, for example `-- -epoch 55001`. The runtime directory
+supplies the selected planetary ephemeris, clocks, observatories, EOP and time
+resources. CALCEPH and external selection-plugin requests return explicit
+unavailable-boundary errors. The CLI emits one complete JSON result or exits with
+an error on stderr; it does not emit success JSON before the calculation finishes.
+
+```rust,no_run
+use std::path::Path;
+use tempo2_rust::{RuntimeContext, TimingError, bats::{self, InputPair}};
+fn barycentric_times() -> Result<(), TimingError> {
+    let root = Path::new("T2runtime");
+    let mut runtime = RuntimeContext::from_root(root)?;
+    let mut input = bats::load_pairs(&[InputPair {
+        par: "model.par".into(), tim: "arrival.tim".into(),
+    }], root)?;
+    bats::preprocess(&mut input, &[], root)?;
+    let result = bats::evaluate(&mut input, &mut runtime)?;
+    assert_eq!(result.schema_version, 1);
+    Ok(())
+}
+```
+
+The result preserves ordered pulsar/observation identity, byte strings, flags,
+deletion state, SAT/BAT/BBAT, physical correction components, units and consumed-file
+hashes. Extended scalars use round-trip strings; source nonfinite classes are
+explicit. Main observations and the reference observation have separate membership.
+The source-level readers and helpers are independently callable. See
+[INPUT_TO_BAT_CONTRACT.md](INPUT_TO_BAT_CONTRACT.md) for ownership, retained process
+state, narrower `update_bats_all` behavior, and error-prefix semantics.
+
+The sections below document the existing bounded residual/fit interfaces.
 
 ## Run
 
