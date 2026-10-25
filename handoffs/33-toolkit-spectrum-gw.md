@@ -1,6 +1,6 @@
 # Assignment AG: toolkit, spectrum and GW APIs
 
-**Prepared only; not released.** Follow decision 0078 after AF's implementation handover, ownership closure and an explicit central release under 0074. AD currently owns Rust; AE and AF remain prepared. Read HANDOFF.md, decisions 0078/0074/0065/0053/0039/0050, the released AD/AE/AF reports and the actual baseline named by central. Preserve original 0008 and its later amendments.
+**Prepared only; not released.** Follow decision 0078 after AF's implementation handover, ownership closure and an explicit central release under 0074. AE currently owns Rust under 0079; AD is closed and AF remains prepared. Read HANDOFF.md, decisions 0078/0074/0065/0053/0039/0050, the released AD/AE/AF reports and the actual baseline named by central. Preserve original 0008 and its later amendments.
 
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Once released, own `rust/` and new `validation/analysis_tools/` as sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted reference evidence. Central retains design and acceptance.
 

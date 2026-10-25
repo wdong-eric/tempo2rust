@@ -1,6 +1,6 @@
 # Assignment AF: predictor generation and evaluation
 
-**Prepared only; not released.** Follow decision 0076 after AE's implementation handover, ownership closure and an explicit central release under 0074. AD currently owns Rust under 0075. A successor handover does not imply that inherited numerical gates are accepted.
+**Prepared only; not released.** Follow decision 0076 after AE's implementation handover, ownership closure and an explicit central release under 0074. AE currently owns Rust under 0079; AD ownership is closed. A successor handover does not imply that inherited numerical gates are accepted.
 
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0076/0074/0065/0053/0039/0050, the released AD/AE reports and the baseline named by central. Preserve original 0008 and apply its later amendments. Once released, own `rust/` and new `validation/predictors/` as sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central documents, canonical TEMPO2 and accepted reference artifacts.
 

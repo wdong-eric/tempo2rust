@@ -1,10 +1,10 @@
 # Assignment AE: general fitting and noise
 
-**Prepared only. Under decision 0074, wait for a reviewed AD implementation handover, ownership closure and an explicit AE release naming the baseline revision and its acceptance status.** AD owns Rust under decision 0075; AC ownership is closed. This is a functional implementation assignment under decision 0071, not a new reference-only stage.
+**Released by decision 0079 on AD production `a8e5178` / report `0f44180`.** AD implementation handover is approved and its ownership is closed under 0074; inherited numerical acceptance remains pending. AE is the sole Rust writer. This is the functional implementation assignment under 0071.
 
-Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, `decisions/0071-general-fitting-and-noise-prepared-contract.md`, 0074 handover/acceptance rule, 0065 priorities, 0053 small-bug policy, 0039 generated-output policy, 0050 evidence preservation, 0007/0012/0015 fitting contracts and central's AD baseline release. Preserve the original 0008 document and apply its later amendments.
+Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, `decisions/0071-general-fitting-and-noise-prepared-contract.md`, 0074 handover/acceptance rule, 0065 priorities, 0053 small-bug policy, 0039 generated-output policy, 0050 evidence preservation, 0007/0012/0015 fitting contracts and 0079's AD baseline release. Read `rust/TIMING_MODELS_REPORT.md` and retain its open ledger, including 0077's P diagnosis. Preserve the original 0008 document and apply its later amendments.
 
-After release, own `rust/` and new `validation/general_fitting/` as the sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central documents and all accepted reference/verification artifacts. Central retains design and milestone acceptance.
+Own `rust/` and new `validation/general_fitting/` as the sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central documents and all accepted reference/verification artifacts. Central retains design and milestone acceptance.
 
 Deliver general local/global fitting from real PAR/TIM/covariance inputs through the released AC/AD canonical pipeline. Extend `timing` with the explicit `--fit` workflow specified in 0071, retaining the existing bounded fit adapters and schemas. Include the remaining source derivative/update families, fit-info/selection and iteration lifecycle, whitening/covariance, constraints/priors, robust and timing-noise processing, legacy wrappers and the scoped standalone fitting APIs. Do not silently insert bootstrap/automatic covariance into a source route that does not call them. Optional native backend and plugin ABI boundaries retain the explicit dispositions in 0071.
 
@@ -19,6 +19,6 @@ Proceed in coherent internal stages:
 
 Focused source questions already identified in 0071 include nonzero constraint targets in the SVD branch, robust wrapper forwarding, covariance sort/mapping order, constraint/derivative lookup, TN polynomial-cache invalidation and scoped initialization/allocation faults. Establish each cause before correcting it; continue independent implementation while a broader scientific decision needs central disposition.
 
-## Dispatch prompt after release
+## Dispatch prompt
 
 Implement Assignment AE under decisions/0071-general-fitting-and-noise-prepared-contract.md, decisions/0074-implementation-handover-and-acceptance.md and handoffs/31-general-fitting-and-noise.md from the AD implementation revision named by central's release. Own rust/ and validation/general_fitting/ as sole Rust writer. Deliver the general public timing --fit workflow, complete built-in local/global fitting and its derivative/update, covariance, constraint, robust and timing-noise lifecycle, plus the scoped standalone APIs. Use the released canonical input/timing engine and numerical boundaries. Reuse existing reference evidence, apply policy 0053 to demonstrated small bugs, preserve original/corrected identities and exact numerical gates, minimize and explain unsafe, commit authored paths only, and return rust/GENERAL_FITTING_REPORT.md for central review.
