@@ -18,7 +18,6 @@ pub(crate) struct ClockPulsarView<'a> {
     pub no_sat_jumps: bool,
 }
 impl<'a> ClockPulsarView<'a> {
-    #[cfg(test)]
     pub fn source(source: &'a crate::pulsar::SourcePulsar) -> Self {
         Self {
             source,
@@ -41,7 +40,7 @@ impl<'a> ClockPulsarView<'a> {
 pub(crate) fn toa2utc(
     session: &mut ClockSession,
     pulsars: &[ClockPulsarView<'_>],
-    observations: &mut [Vec<SourceObservation>],
+    observations: &mut [impl AsMut<[SourceObservation]>],
     npsr: i32,
 ) -> Result<(), TimingError> {
     session.diagnostics.version("toa2utc.C", "toa2utc__1()");
@@ -56,7 +55,7 @@ pub(crate) fn toa2utc(
         for i in 0..nobs {
             let obs = observations
                 .get_mut(p as usize)
-                .and_then(|v| v.get_mut(i as usize))
+                .and_then(|v| v.as_mut().get_mut(i as usize))
                 .ok_or_else(|| boundary("clock_observation_storage"))?;
             if *read(&obs.clockCorr, "clockCorr")? != 0 && *read(&obs.clockCorr, "clockCorr")? != 2
             {

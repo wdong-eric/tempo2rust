@@ -48,6 +48,7 @@ pub(crate) fn resource(
     coverage: Option<[f64; 2]>,
 ) -> Resource {
     Resource {
+        source_path: path.into(),
         path: path.to_string_lossy().into_owned(),
         sha256: format!("{:x}", Sha256::digest(data)),
         size_bytes: data.len(),

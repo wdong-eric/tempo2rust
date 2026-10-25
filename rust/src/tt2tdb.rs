@@ -274,13 +274,6 @@ pub(crate) fn compute_observation(
     Ok(())
 }
 
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "complete driver; strict frontend calls its shared scientific body"
-    )
-)]
 pub(crate) fn tt2tb(
     session: &mut ClockSession,
     context: &mut PulsarContext,
@@ -303,26 +296,4 @@ pub(crate) fn tt2tb(
     })();
     session.ifte.close_file();
     result
-}
-
-pub(crate) struct TimeCorrection {
-    pub correction_tt_teph: Float,
-    pub correction_tt_tb: Float,
-    pub einstein_rate: f64,
-}
-/// Existing strict adapter: canonical fields and the same scientific body as tt2tb.
-pub(crate) fn frontend(
-    session: &mut ClockSession,
-    psr: &SourcePulsar,
-    obs: &mut SourceObservation,
-) -> Result<TimeCorrection, TimingError> {
-    init_ifte(session)?;
-    let result = compute_observation(session, psr, obs, &mut 0.0);
-    session.ifte.close_file();
-    result?;
-    Ok(TimeCorrection {
-        correction_tt_teph: read(&obs.correctionTT_Teph, "correctionTT_Teph")?.clone(),
-        correction_tt_tb: read(&obs.correctionTT_TB, "correctionTT_TB")?.clone(),
-        einstein_rate: *read(&obs.einsteinRate, "einsteinRate")?,
-    })
 }

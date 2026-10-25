@@ -13,6 +13,8 @@ use std::{
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Resource {
+    #[serde(skip)]
+    pub source_path: PathBuf,
     pub path: String,
     pub sha256: String,
     pub size_bytes: usize,
@@ -42,9 +44,18 @@ pub(crate) use crate::observatory::Observatory;
 pub struct RuntimeContext {
     pub(crate) root: PathBuf,
     pub(crate) resources: Vec<Resource>,
-    pub(crate) jpl: JplEphemeris,
 }
 impl RuntimeContext {
+    /// General source runtime: resources are selected and opened by their real drivers.
+    pub fn from_root(root: &Path) -> Result<Self, TimingError> {
+        let root = fs::canonicalize(root)
+            .map_err(|e| TimingError::new(root, None, "runtime root", e.to_string()))?;
+        Ok(Self {
+            root,
+            resources: Vec::new(),
+        })
+    }
+
     pub fn new(root: &Path) -> Result<Self, TimingError> {
         let root = fs::canonicalize(root)
             .map_err(|e| TimingError::new(root, None, "runtime root", e.to_string()))?;
@@ -90,6 +101,7 @@ impl RuntimeContext {
         file.seek(SeekFrom::Start(0))
             .map_err(|e| TimingError::new(&path, None, "JPL", e.to_string()))?;
         resources.push(Resource {
+            source_path: path.clone(),
             path: path
                 .strip_prefix(&root)
                 .unwrap()
@@ -100,7 +112,7 @@ impl RuntimeContext {
             role: "DE405 planetary ephemeris".into(),
             coverage_mjd: None,
         });
-        let jpl = JplEphemeris::open(&path, file)?;
+        let jpl = JplEphemeris::open(&path, file, 1)?;
         resources.last_mut().unwrap().coverage_mjd =
             Some([jpl.start_jd - 2400000.5, jpl.end_jd - 2400000.5]);
         crate::clkcorr::with_resources(&root, |session| {
@@ -117,11 +129,7 @@ impl RuntimeContext {
             session.export_terrestrial_resources(&root, &mut resources);
             Ok(())
         })?;
-        Ok(Self {
-            root,
-            resources,
-            jpl,
-        })
+        Ok(Self { root, resources })
     }
     pub fn resources(&self) -> &[Resource] {
         &self.resources

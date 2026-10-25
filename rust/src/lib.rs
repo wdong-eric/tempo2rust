@@ -6,6 +6,8 @@
 //! Timing and selected spin fitting for isolated-pulsar TCB `@` and PKS profiles.
 //! See README.md for accepted input syntax and scientific conventions.
 
+pub mod bats;
+pub mod calceph;
 mod clkcorr;
 mod clock_diagnostics;
 mod clock_glob;
@@ -18,7 +20,9 @@ mod fitting_tests;
 mod form_bats;
 mod form_residuals;
 mod get_obs_coord;
+pub mod global;
 mod ifteph;
+pub mod ifunc;
 mod initialise;
 mod input;
 mod jpleph;
@@ -29,17 +33,38 @@ mod observation_storage_tests;
 mod observatory;
 #[cfg(test)]
 mod parameter_storage_tests;
+pub mod preprocess;
+pub mod propagation;
+#[cfg(test)]
+mod propagation_helper_tests;
 pub mod pulsar;
 pub mod pulsar_lifecycle;
 #[cfg(test)]
 mod pulsar_lifecycle_tests;
-mod read_ephemeris;
+pub mod read_ephemeris;
 mod read_fortran;
+pub mod read_fortran2;
+pub mod read_jbo_bat;
 mod read_parfile;
 mod read_timfile;
+pub mod refphs;
 #[cfg(test)]
 mod resource_tests;
 mod runtime;
+pub mod selection;
+pub mod shapelet;
+pub mod solar_wind;
+pub mod sort_toas;
+pub mod source_par;
+#[cfg(test)]
+mod source_par_corpus_tests;
+#[cfg(test)]
+mod source_par_tests;
+mod source_state;
+pub mod source_text;
+pub mod source_tim;
+#[cfg(test)]
+mod source_tim_tests;
 mod std_freq;
 mod stdio;
 mod t2fit;
@@ -54,6 +79,8 @@ mod tksvd;
 mod toa2utc;
 mod tropo;
 mod tt2tdb;
+pub mod units;
+pub mod update_epoch;
 mod vector_pulsar;
 
 pub use clkcorr::{ClockStep, take_clock_diagnostics};
@@ -65,7 +92,7 @@ pub use longdouble::{PRECISION_BITS, Scalar};
 pub use read_parfile::FitControls;
 pub use runtime::{Resource, RuntimeContext};
 pub use t2fit::{FitCycle, FitOptions, FitResult, FitTiming, fit_barycentric, fit_terrestrial};
-pub use tempo2_util::copy_param;
+pub use tempo2_util::{copy_param, get_parameter_value};
 pub use tkfit::{FitNumber, LeastSquares};
 pub use tropo::{Weather, WeatherValue};
 
@@ -362,3 +389,12 @@ mod time_ephemeris_tests;
 
 #[cfg(test)]
 mod observer_coordinates_tests;
+
+#[cfg(test)]
+mod corpus_wire;
+#[cfg(test)]
+mod preprocessing_corpus_tests;
+#[cfg(test)]
+mod propagation_corpus_tests;
+#[cfg(test)]
+mod source_tim_corpus_tests;

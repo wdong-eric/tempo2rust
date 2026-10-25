@@ -26,8 +26,13 @@ static INIT_ERROR: AtomicI32 = AtomicI32::new(-9);
 pub(crate) fn jpl_init_error_code() -> i32 {
     INIT_ERROR.load(Ordering::SeqCst)
 }
-fn init_error(code: i32) {
+pub(crate) fn init_error(code: i32) {
     INIT_ERROR.store(code, Ordering::SeqCst);
+}
+
+#[cfg(test)]
+pub(crate) fn reset_init_status_for_test() {
+    init_error(-9);
 }
 
 pub(crate) fn swap_32_bit_val(bytes: &mut [u8; 4]) {

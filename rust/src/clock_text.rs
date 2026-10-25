@@ -7,6 +7,28 @@ use std::ffi::{c_char, c_double, c_int};
 unsafe extern "C" {
     fn sscanf(input: *const c_char, format: *const c_char, ...) -> c_int;
     fn snprintf(output: *mut c_char, size: usize, format: *const c_char, ...) -> c_int;
+    fn strtod(input: *const c_char, end: *mut *mut c_char) -> c_double;
+}
+
+pub(crate) fn float_prefix(bytes: &[u8]) -> Option<(f32, usize)> {
+    let input = terminated(bytes);
+    let (mut x, mut count) = (0.0f32, 0i32);
+    // Owned terminated input and exactly typed, initialized %f/%n destinations.
+    let n = unsafe { sscanf(input.as_ptr().cast(), c"%f%n".as_ptr(), &mut x, &mut count) };
+    (n == 1).then_some((x, count as usize))
+}
+
+/// strtoflt128 and strtod share prefix grammar; only the end pointer is used.
+pub(crate) fn extended_prefix_len(bytes: &[u8]) -> usize {
+    let input = terminated(bytes);
+    let start = input.as_ptr().cast::<c_char>();
+    let mut end = std::ptr::null_mut();
+    // libc points end into this owned NUL-terminated allocation, including the
+    // start on failed conversion. No pointer survives the call or escapes.
+    unsafe {
+        strtod(start, &mut end);
+        end.offset_from(start) as usize
+    }
 }
 
 pub(crate) fn c_bytes(bytes: &[u8]) -> &[u8] {
@@ -74,16 +96,38 @@ pub(crate) fn header(bytes: &[u8]) -> Option<(Vec<u8>, Vec<u8>, f32)> {
 #[derive(Clone, Copy)]
 pub(crate) enum NumberFormat {
     One,
+    Two,
     Four,
     Six,
     GeneralThree,
+    GeneralSix,
+    GeneralTen,
+    GeneralFive,
+    Five,
+    Eight,
+    Twelve,
+    Fourteen,
+    ScientificThree,
+    WidthEightThree,
+    WidthSevenTwo,
 }
 pub(crate) fn format_number(x: f64, style: NumberFormat) -> Vec<u8> {
     let format = match style {
         NumberFormat::One => c"%.1f",
+        NumberFormat::Two => c"%.2f",
         NumberFormat::Four => c"%.4lf",
         NumberFormat::Six => c"%lf",
         NumberFormat::GeneralThree => c"%.3g",
+        NumberFormat::GeneralSix => c"%g",
+        NumberFormat::GeneralTen => c"%.10g",
+        NumberFormat::GeneralFive => c"%.5g",
+        NumberFormat::Five => c"%.5f",
+        NumberFormat::Eight => c"%.8f",
+        NumberFormat::Twelve => c"%.12f",
+        NumberFormat::Fourteen => c"%.14f",
+        NumberFormat::ScientificThree => c"%.3e",
+        NumberFormat::WidthEightThree => c"%8.3f",
+        NumberFormat::WidthSevenTwo => c"%7.2f",
     };
     let mut out = [0u8; 512];
     // Fixed formats preserve C spelling/rounding (including signed zero). A
@@ -124,4 +168,33 @@ pub(crate) fn integer_prefix(bytes: &[u8]) -> Result<Option<(i32, usize)>, crate
         .parse()
         .map_err(|_| crate::clock_diagnostics::boundary("scan_integer_range"))?;
     Ok(Some((value, end)))
+}
+
+pub(crate) fn format_coordinate(a: i32, b: i32, sec: f64, sign: Option<u8>) -> Vec<u8> {
+    let mut out = [0u8; 128];
+    // Fixed source format and exact promoted variadic argument types. The two
+    // signed i32 fields and one binary64 field fit the bounded owned buffer.
+    unsafe {
+        if let Some(sign) = sign {
+            snprintf(
+                out.as_mut_ptr().cast(),
+                out.len(),
+                c"%c%02d:%02d:%08.5f".as_ptr(),
+                sign as c_int,
+                a as c_int,
+                b as c_int,
+                sec as c_double,
+            );
+        } else {
+            snprintf(
+                out.as_mut_ptr().cast(),
+                out.len(),
+                c" %02d:%02d:%010.7f".as_ptr(),
+                a as c_int,
+                b as c_int,
+                sec as c_double,
+            );
+        }
+    }
+    c_bytes(&out).to_vec()
 }

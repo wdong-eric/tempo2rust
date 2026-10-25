@@ -80,6 +80,7 @@ pub(crate) struct TableQuery {
 }
 #[derive(Default)]
 pub(crate) struct ClockSession {
+    pub source: crate::source_state::SourceState,
     pub initialized: bool,
     pub functions: Vec<ClockCorrectionFunction>,
     pub sequences: Vec<ClockSequence>,
@@ -92,21 +93,25 @@ pub(crate) struct ClockSession {
     pub meteorology: crate::tropo::Meteorology,
     pub ifte: crate::ifteph::IfteEphemeris,
     pub fortran: crate::read_fortran::FortranReader,
+    pub fortran2: crate::read_fortran::FortranReader,
     pub fb: crate::tt2tdb::FbCache,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "released legacy UT1 driver awaits general orchestration"
-        )
-    )]
     pub ut1: crate::tai2ut1::Ut1,
     pub queries: Vec<TableQuery>,
     pub fault: Option<TimingError>,
 }
 static SESSION: LazyLock<Mutex<ClockSession>> =
     LazyLock::new(|| Mutex::new(ClockSession::default()));
-/// Hold one lock at the outer operation; inner lookup/diagnostics never relock.
+/// Source operations that do not choose a runtime root share the process owner.
+pub(crate) fn with_process<T>(
+    operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
+) -> Result<T, TimingError> {
+    let mut session = SESSION
+        .lock()
+        .map_err(|_| boundary("clock_session_poisoned"))?;
+    operation(&mut session)
+}
+/// Test entry for the process clock terminal-state contract.
+#[cfg(test)]
 pub(crate) fn with_session<T>(
     root: &Path,
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
@@ -601,13 +606,6 @@ impl ClockSession {
         }
         self.cache_sequence(result.indices, from, to).map(Some)
     }
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "selected source explicit-chain API; PAR chain syntax remains deferred"
-        )
-    )]
     fn find_function_index_from_token(&self, token: &[u8]) -> Option<usize> {
         self.functions
             .iter()
@@ -618,13 +616,6 @@ impl ClockSession {
                     .position(|f| f.name == basename_from_path(token))
             })
     }
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "selected source explicit-chain API; PAR chain syntax remains deferred"
-        )
-    )]
     pub fn define_sequence(
         &mut self,
         files: Option<&[u8]>,
@@ -985,6 +976,7 @@ impl ClockSession {
             .chain(&self.meteorology.pressure)
         {
             records.push(Resource {
+                source_path: f.table.path.clone(),
                 path: f.table.path.to_string_lossy().into_owned(),
                 sha256: f.table.sha256.clone(),
                 size_bytes: f.table.size_bytes,

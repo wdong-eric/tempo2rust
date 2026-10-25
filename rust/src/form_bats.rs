@@ -1,12 +1,8 @@
-// Adopted PKS subset of global.C::formBatsAll, calculate_bclt.C::calculate_bclt
-// and formBats.C::formBats. Fused terms follow shapiro_delay.C::shapiro_delay,
-// dm_delays.C::dm_delays (constant DM/spherical wind), vectorPulsar.C::vectorPulsar
-// (fixed direction) and secularMotion.C::secularMotion (zero correction only).
-// This owned entry also calls formResiduals.C::formResiduals through the Rust kernel;
-// its scope is broader than the source formBatsAll call, not whole-file coverage.
+//! Bounded PKS adapter over the shared full input-to-BAT routines. Keeps the
+//! established residual/fit guards and JSON projection; no timing formulas live here.
 use crate::{
     PRECISION_BITS, RuntimeContext, Scalar, TimingError, TimingInput, TimingResult,
-    clkcorr::ClockStep, runtime::Resource, tempo2_util::dot_product, tropo::Weather,
+    clkcorr::ClockStep, runtime::Resource, tropo::Weather,
 };
 use rug::Float;
 use serde::Serialize;
@@ -87,82 +83,77 @@ pub fn form_bats_all(
             ));
         }
     }
-    let alpha = input.parameter_cell("RAJ").val.to_f64();
-    let delta = input.parameter_cell("DECJ").val.to_f64();
-    let pos_pulsar = crate::vector_pulsar::position(alpha, delta);
-    let norm = dot_product(pos_pulsar, pos_pulsar).sqrt();
-    let pulsar_direction = pos_pulsar.map(|x| x / norm);
-    let dm = input.parameter_cell("DM").val.to_f64();
+    let mut source = input.source.clone();
+    {
+        use std::os::unix::ffi::OsStrExt;
+        let (p, rows) = source.pulsar_observations_mut(0)?;
+        crate::observation::write_string(
+            &mut p.JPL_EPHEMERIS[..],
+            runtime
+                .root
+                .join("ephemeris/DE405.1950.2050")
+                .as_os_str()
+                .as_bytes(),
+            "JPL_EPHEMERIS",
+        )?;
+        // The bounded loader intentionally exposes only five TIM columns. Supply
+        // its already-declared no-flags/no-offset terrestrial caller controls.
+        for o in rows {
+            o.seed_clock_caller();
+            o.delayCorr = Some(1);
+            o.deleted = Some(0);
+            o.nFlags = Some(0);
+            o.phaseOffset = Some(0.0);
+            o.origErr = o.toaErr;
+            o.efac = Some(1.0);
+            o.equad = Some(0.0);
+            o.obsNjump = Some(0);
+            o.obsNfdjump = Some(0);
+        }
+    }
+    crate::preprocess::pre_process_simple(&mut source, 0, &runtime.root)?;
+    crate::global::form_bats_all(&mut source, runtime)?;
+    let (p, rows) = source.pulsar_observations_mut(0)?;
     let mut corrections = Vec::new();
     let mut bats = Vec::new();
     let mut warnings = Vec::new();
     let mut tropo_warned = false;
-    for (obs, original) in input
-        .source_observations()
-        .iter()
-        .zip(&input.observation_metadata)
-    {
+    for (obs, original) in rows.iter().zip(&input.observation_metadata) {
         let calculated = (|| {
-            let sat = crate::observation::read(&obs.sat, "sat")?;
-            let mut clock_observation = obs.clone();
-            clock_observation.seed_clock_caller();
-            let (clock_steps, clock_tt) = crate::clkcorr::with_session(&runtime.root, |session| {
-                session.queries.clear();
-                // The selected timing input has no SAT jumps; direct source-field
-                // tests exercise toa2utc's jump branch without extending PAR input.
-                let pulsar =
-                    crate::toa2utc::ClockPulsarView::single_observation(input.source_pulsar());
-                let mut observations = [vec![clock_observation.clone()]];
-                crate::toa2utc::toa2utc(session, &[pulsar], &mut observations, 1)?;
-                clock_observation = observations[0].remove(0);
-                let total = crate::clkcorr::get_correction_tt(&clock_observation)?;
-                let steps = session.steps(
-                    &runtime.root,
-                    *crate::observation::read(
-                        &clock_observation.nclock_correction,
-                        "nclock_correction",
-                    )? as usize,
-                )?;
-                session.export_resources(&runtime.root, &mut runtime.resources);
-                warnings.extend(
-                    session
-                        .diagnostics
-                        .events
-                        .drain(..)
-                        .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
-                );
-                Ok((steps, total))
-            })?;
-            let tt = sat.clone() + clock_tt / 86400.0f64;
-            // global.C: rough TT->TB, first ephemeris, site, refined TT->TB,
-            // refined ephemeris. Legacy repeat calls can inherit previous vectors;
-            // owned evaluation starts with zero vectors so prior input/failure
-            // cannot affect a new result (same-context recovery regression).
-            clock_observation.earth_ssb = [Some(0.0); 6];
-            clock_observation.observatory_earth[..3].fill(Some(0.0));
-            clock_observation.siteVel = [Some(0.0); 3];
-            let initial_time_correction =
+            use crate::observation::read;
+            // The historical JSON includes table-selection metadata absent from
+            // the source observation record. Query the shared clock/weather
+            // routines on a detached row; numerical results below come solely
+            // from the full canonical driver above.
+            let (clock_steps, clock_utc_steps, weather) =
                 crate::clkcorr::with_resources(&runtime.root, |session| {
-                    let result = crate::tt2tdb::frontend(
-                        session,
-                        input.source_pulsar(),
-                        &mut clock_observation,
-                    )?;
-                    session.export_time_resources(&runtime.root, &mut runtime.resources);
-                    Ok(result)
-                })?;
-            let jd = (tt.clone()
-                + initial_time_correction.correction_tt_teph / 86400.0f64
-                + 2400000.5f64)
-                .to_f64();
-            let earth_initial =
-                crate::read_ephemeris::read_ephemeris(&mut runtime.jpl, jd)?.earth_ssb;
-            let (clock_utc_steps, clock_utc) =
-                crate::clkcorr::with_session(&runtime.root, |session| {
+                    let mut presentation = obs.clone();
                     session.queries.clear();
-                    let total =
-                        session.get_correction(&clock_observation, None, Some(b"UTC"), 1)?;
-                    let steps = session.steps(&runtime.root, session.queries.len())?;
+                    let view = crate::toa2utc::ClockPulsarView::single_observation(p);
+                    let mut rows = [vec![presentation.clone()]];
+                    crate::toa2utc::toa2utc(session, &[view], &mut rows, 1)?;
+                    presentation = rows[0].remove(0);
+                    let clock_steps = session.steps(
+                        &runtime.root,
+                        *read(&presentation.nclock_correction, "nclock_correction")? as usize,
+                    )?;
+                    session.queries.clear();
+                    session.get_correction(&presentation, None, Some(b"UTC"), 1)?;
+                    let clock_utc_steps = session.steps(&runtime.root, session.queries.len())?;
+                    let weather = crate::tropo::compute_observation(
+                        session,
+                        &crate::tropo::TropospherePulsar {
+                            source: p,
+                            position: None,
+                            warnings: Some(1),
+                        },
+                        &mut presentation,
+                        corrections.len(),
+                        &mut tropo_warned,
+                    )?
+                    .ok_or_else(|| {
+                        crate::clock_diagnostics::boundary("PKS_troposphere_not_calculated")
+                    })?;
                     session.export_resources(&runtime.root, &mut runtime.resources);
                     warnings.extend(
                         session
@@ -171,157 +162,25 @@ pub fn form_bats_all(
                             .drain(..)
                             .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
                     );
-                    Ok((steps, total))
+                    Ok((clock_steps, clock_utc_steps, weather))
                 })?;
-            let utc = sat.clone() + clock_utc / 86400.0f64;
-            let site = crate::clkcorr::with_resources(&runtime.root, |session| {
-                let index = session.observatories.index(
-                    b"PKS",
-                    session.root.as_deref(),
-                    session.alias.as_deref(),
-                    &mut session.diagnostics,
-                )?;
-                let obs = &session.observatories.observatories[index];
-                let trs = obs.xyz;
-                let zen = crate::get_obs_coord::zenith_trs(obs);
-                let site = crate::get_obs_coord::iau2000b(
-                    session,
-                    trs,
-                    zen,
-                    &tt,
-                    &utc,
-                    b"earth/eopc04_IAU2000.62-now",
-                )?;
-                session.export_terrestrial_resources(&runtime.root, &mut runtime.resources);
-                Ok(site)
-            })?;
-            clock_observation.earth_ssb = earth_initial.map(Some);
-            clock_observation.observatory_earth[..3]
-                .copy_from_slice(&site.observatory_earth.map(Some));
-            clock_observation.siteVel = site.site_velocity.map(Some);
-            let time_correction = crate::clkcorr::with_resources(&runtime.root, |session| {
-                let result = crate::tt2tdb::frontend(
-                    session,
-                    input.source_pulsar(),
-                    &mut clock_observation,
-                )?;
-                session.export_time_resources(&runtime.root, &mut runtime.resources);
-                Ok(result)
-            })?;
-            let jd = (tt + time_correction.correction_tt_teph.clone() / 86400.0f64 + 2400000.5f64)
-                .to_f64();
-            let crate::read_ephemeris::EphemerisState {
-                sun_ssb,
-                earth_ssb,
-                planets_earth,
-            } = crate::read_ephemeris::read_ephemeris(&mut runtime.jpl, jd)?;
-            // The established PKS frontend selects propagation corrections for
-            // every supplied TOA; initialiseOne leaves this observation cell unwritten.
-            clock_observation.delayCorr = Some(1);
-            clock_observation.zenith = site.zenith.map(Some);
-            let weather = crate::clkcorr::with_resources(&runtime.root, |session| {
-                let weather = crate::tropo::compute_observation(
-                    session,
-                    &crate::tropo::TropospherePulsar {
-                        source: input.source_pulsar(),
-                        position: Some(pos_pulsar),
-                        warnings: Some(1),
-                    },
-                    &mut clock_observation,
-                    corrections.len(),
-                    &mut tropo_warned,
-                )?
-                .ok_or_else(|| {
-                    crate::clock_diagnostics::boundary("PKS_troposphere_not_calculated")
-                })?;
-                session.export_resources(&runtime.root, &mut runtime.resources);
-                warnings.extend(
-                    session
-                        .diagnostics
-                        .events
-                        .drain(..)
-                        .map(|(_, b)| String::from_utf8_lossy(&b).into_owned()),
-                );
-                Ok(weather)
-            })?;
-            let tropospheric_delay = *crate::observation::read(
-                &clock_observation.troposphericDelay,
-                "troposphericDelay",
-            )?;
-            let observatory_ssb = std::array::from_fn(|i| earth_ssb[i] + site.observatory_earth[i]);
-            let observatory_sun =
-                std::array::from_fn(|i| -sun_ssb[i] + earth_ssb[i] + site.observatory_earth[i]);
-            let observatory_velocity_ssb =
-                std::array::from_fn(|i| earth_ssb[i + 3] + site.site_velocity[i]);
-            let mut dt_ssb = 0.0f64;
-            let mut shapiro = [0.0; 6];
-            let mut roemer = 0.0;
-            let mut dispersion = 0.0;
-            let mut solar_dispersion = 0.0;
-            let mut freq_ssb = 0.0;
-            for iteration in 0..100 {
-                let dt_ssb_old = dt_ssb;
-                // No supplied PM, parallax or acceleration terms in this profile.
-                roemer = dot_product(pos_pulsar, observatory_ssb);
-                let sun_distance = dot_product(observatory_sun, observatory_sun).sqrt();
-                let cos_theta_sun = dot_product(pulsar_direction, observatory_sun) / sun_distance;
-                shapiro[0] = -2.0
-                    * 4.925490947e-6
-                    * (sun_distance / 499.00478364 * (1.0 + cos_theta_sun)).ln();
-                for (i, gravitational_time) in
-                    [1.2061e-11, 4.70255e-9, 1.40797e-9, 2.14539e-10, 2.54488e-10]
-                        .into_iter()
-                        .enumerate()
-                {
-                    let observatory_planet =
-                        std::array::from_fn(|j| -planets_earth[i][j] + site.observatory_earth[j]);
-                    let radius = dot_product(observatory_planet, observatory_planet).sqrt();
-                    let cos_theta = dot_product(pulsar_direction, observatory_planet) / radius;
-                    shapiro[i + 1] = -2.0
-                        * gravitational_time
-                        * (radius / 499.00478364 * (1.0 + cos_theta)).ln();
-                }
-                freq_ssb = *crate::observation::read(&obs.freq, "freq")?
-                    * 1.0e6
-                    * (1.0 - dot_product(pulsar_direction, observatory_velocity_ssb));
-                if freq_ssb > 0.0 && time_correction.einstein_rate != 0.0 {
-                    freq_ssb /= time_correction.einstein_rate;
-                }
-                if freq_ssb <= 1.0 {
-                    dispersion = 0.0;
-                    solar_dispersion = 0.0;
-                } else {
-                    dispersion = dm / 2.41e-4 / 1.0e-12 / freq_ssb / freq_ssb;
-                    let spherical = 1.0e6 * 1.49598e11 * 1.49598e11 / 299792458.0 / 7.436e6
-                        * cos_theta_sun.acos()
-                        / sun_distance
-                        / (1.0 - cos_theta_sun * cos_theta_sun).sqrt()
-                        / freq_ssb
-                        / freq_ssb;
-                    solar_dispersion = 4.0 * spherical;
-                }
-                // Source iteration uses Sun+Jupiter only, though final BAT uses all.
-                dt_ssb = roemer - (dispersion + solar_dispersion) - (shapiro[0] + shapiro[2]);
-                if (dt_ssb - dt_ssb_old).abs() <= 1.0e-10 {
-                    break;
-                }
-                if iteration == 99 {
-                    warnings.push("calculate_bclt: dt_SSB reached 100 iterations".into());
-                }
-            }
-            // calculate_bclt can carry nonfinite corrections into a nominal
-            // result. Reject them at this boundary instead of publishing NaN;
-            // the resource-recovery example exercises overflowing DM and reuse.
-            if [
-                roemer,
-                dispersion,
-                solar_dispersion,
-                tropospheric_delay,
-                freq_ssb,
-            ]
-            .iter()
-            .chain(&shapiro)
-            .any(|v| !v.is_finite())
+            let shapiro = [
+                *read(&obs.shapiroDelaySun, "shapiroDelaySun")?,
+                *read(&obs.shapiroDelayVenus, "shapiroDelayVenus")?,
+                *read(&obs.shapiroDelayJupiter, "shapiroDelayJupiter")?,
+                *read(&obs.shapiroDelaySaturn, "shapiroDelaySaturn")?,
+                *read(&obs.shapiroDelayUranus, "shapiroDelayUranus")?,
+                *read(&obs.shapiroDelayNeptune, "shapiroDelayNeptune")?,
+            ];
+            let dispersion = *read(&obs.tdis1, "tdis1")?;
+            let solar = *read(&obs.tdis2, "tdis2")?;
+            let tropo = *read(&obs.troposphericDelay, "troposphericDelay")?;
+            let freq = *read(&obs.freqSSB, "freqSSB")?;
+            if [dispersion, solar, tropo, freq]
+                .iter()
+                .chain(&shapiro)
+                .any(|v| !v.is_finite())
+                || !read(&obs.roemer, "roemer")?.is_finite()
             {
                 return Err(TimingError::new(
                     &input.tim.path,
@@ -330,40 +189,38 @@ pub fn form_bats_all(
                     "nonfinite correction",
                 ));
             }
-            let shapiro_total =
-                shapiro[0] + (shapiro[1] + shapiro[2] + shapiro[3] + shapiro[4] + shapiro[5]);
-            let propagation = (time_correction.correction_tt_tb.clone() - tropospheric_delay
-                + roemer
-                - shapiro_total
-                - dispersion
-                - solar_dispersion)
-                / 86400.0f64;
-            let bat_corr = Float::with_val(PRECISION_BITS, clock_tt / 86400.0f64) + &propagation;
-            let bat = (sat.clone() + clock_tt / 86400.0f64) + propagation;
-            let scalar = |x| Scalar(Float::with_val(PRECISION_BITS, x));
-            let correction = Corrections {
-                index: original.index,
-                clock_steps,
-                clock_tt_s: scalar(clock_tt),
-                clock_utc_steps,
-                tt_tb_s: Scalar(time_correction.correction_tt_tb),
-                tt_teph_s: Scalar(time_correction.correction_tt_teph),
-                earth_ssb_light_s: [
-                    scalar(earth_ssb[0]),
-                    scalar(earth_ssb[1]),
-                    scalar(earth_ssb[2]),
-                ],
-                observatory_earth_light_s: site.observatory_earth.map(scalar),
-                roemer_s: scalar(roemer),
-                shapiro_s: shapiro.map(scalar),
-                dispersion_s: scalar(dispersion),
-                solar_dispersion_s: scalar(solar_dispersion),
-                troposphere_s: scalar(tropospheric_delay),
-                frequency_ssb_hz: scalar(freq_ssb),
-                bat_correction_day: Scalar(bat_corr),
-                weather,
-            };
-            Ok((correction, Scalar(bat)))
+            let scalar = |v| Scalar(Float::with_val(PRECISION_BITS, v));
+            let earth = [
+                *read(&obs.earth_ssb[0], "earth_ssb")?,
+                *read(&obs.earth_ssb[1], "earth_ssb")?,
+                *read(&obs.earth_ssb[2], "earth_ssb")?,
+            ];
+            let site = [
+                *read(&obs.observatory_earth[0], "observatory_earth")?,
+                *read(&obs.observatory_earth[1], "observatory_earth")?,
+                *read(&obs.observatory_earth[2], "observatory_earth")?,
+            ];
+            Ok((
+                Corrections {
+                    index: original.index,
+                    clock_steps,
+                    clock_tt_s: scalar(crate::clkcorr::get_correction_tt(obs)?),
+                    clock_utc_steps,
+                    tt_tb_s: Scalar(read(&obs.correctionTT_TB, "correctionTT_TB")?.clone()),
+                    tt_teph_s: Scalar(read(&obs.correctionTT_Teph, "correctionTT_Teph")?.clone()),
+                    earth_ssb_light_s: earth.map(scalar),
+                    observatory_earth_light_s: site.map(scalar),
+                    roemer_s: Scalar(read(&obs.roemer, "roemer")?.clone()),
+                    shapiro_s: shapiro.map(scalar),
+                    dispersion_s: scalar(dispersion),
+                    solar_dispersion_s: scalar(solar),
+                    troposphere_s: scalar(tropo),
+                    frequency_ssb_hz: scalar(freq),
+                    bat_correction_day: Scalar(read(&obs.batCorr, "batCorr")?.clone()),
+                    weather,
+                },
+                Scalar(read(&obs.bat, "bat")?.clone()),
+            ))
         })()
         .map_err(|mut error: TimingError| {
             error.message = format!(

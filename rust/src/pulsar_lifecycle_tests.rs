@@ -968,7 +968,10 @@ fn canonical_controls_strings_profiles_and_detached_snapshots() {
     input.source.pulsars[0].fitMode = Some(1);
     assert_eq!(input.fit_controls().nits, 2);
     assert_eq!(input.fit_controls().mode, 1);
-    assert!(input.source_pulsar().ne_sw_ifuncN.is_none());
+    // AC's documented fresh-table corrections replace these two uninitialized
+    // counts; other source-unwritten fields retain their accepted dispositions.
+    assert_eq!(input.source_pulsar().ne_sw_ifuncN, Some(0));
+    assert_eq!(input.source_pulsar().nchromx, Some(0));
     assert_eq!(
         crate::observation::read_string(&input.source_pulsar().name[..], "name").unwrap(),
         input.text_parameters()["PSRJ"].tokens[0].as_bytes()

@@ -176,6 +176,15 @@ impl PulsarContext {
             Ok(ObservationView { owner, offset: 0 })
         })
     }
+    /// Adopt reader-created canonical rows without copying their owned fields.
+    pub(crate) fn adopt_observations(&mut self, rows: Vec<SourceObservation>) -> ObservationView {
+        let owner = ObservationOwner {
+            context: self.identity,
+            index: self.observations.len(),
+        };
+        self.observations.push(Some(rows));
+        ObservationView { owner, offset: 0 }
+    }
     pub fn observations(
         &self,
         view: ObservationView,
@@ -212,6 +221,25 @@ impl PulsarContext {
         &mut self,
         index: usize,
     ) -> Result<(&mut SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
+        if self.boundary.is_some() {
+            return Err(crate::clock_diagnostics::boundary("pulsar_context_fault"));
+        }
+        // Physical drivers have signed empty loops and need no backing owner.
+        if self
+            .pulsars
+            .get(index)
+            .is_some_and(|p| p.nobs.is_some_and(|n| n <= 0))
+        {
+            return Ok((&mut self.pulsars[index], &mut []));
+        }
+        self.pulsar_observation_backing_mut(index)
+    }
+    /// Access allocated backing, including the reader's unused slot at nobs.
+    /// writeTim reads observation zero's EFAC/EQUAD even with no active rows.
+    pub(crate) fn pulsar_observation_backing_mut(
+        &mut self,
+        index: usize,
+    ) -> Result<(&mut SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
         use crate::clock_diagnostics::boundary;
         if self.boundary.is_some() {
             return Err(boundary("pulsar_context_fault"));
@@ -220,10 +248,6 @@ impl PulsarContext {
             .pulsars
             .get_mut(index)
             .ok_or_else(|| boundary("pulsar_storage"))?;
-        // Signed empty loops need no observation owner or initialized pointer.
-        if p.nobs.is_some_and(|n| n <= 0) {
-            return Ok((p, &mut []));
-        }
         let view = p
             .obsn
             .flatten()
@@ -240,6 +264,68 @@ impl PulsarContext {
             .get_mut(view.offset..)
             .ok_or_else(|| boundary("pulsar_observation_offset"))?;
         Ok((p, rows))
+    }
+    pub(crate) fn pulsars_observations_mut(
+        &mut self,
+        index: usize,
+    ) -> Result<(&[SourcePulsar], &mut [SourceObservation]), crate::TimingError> {
+        use crate::clock_diagnostics::boundary;
+        if self.boundary.is_some() {
+            return Err(boundary("pulsar_context_fault"));
+        }
+        let p = self
+            .pulsars
+            .get(index)
+            .ok_or_else(|| boundary("pulsar_storage"))?;
+        // Signed empty loops need no observation owner or initialized pointer.
+        if p.nobs.is_some_and(|n| n <= 0) {
+            return Ok((&self.pulsars, &mut []));
+        }
+        let view = p
+            .obsn
+            .flatten()
+            .ok_or_else(|| boundary("pulsar_observation_owner"))?;
+        if view.owner.context != self.identity {
+            return Err(boundary("pulsar_foreign_observation_owner"));
+        }
+        let rows = self
+            .observations
+            .get_mut(view.owner.index)
+            .and_then(Option::as_mut)
+            .ok_or_else(|| boundary("pulsar_released_observation_owner"))?;
+        let rows = rows
+            .get_mut(view.offset..)
+            .ok_or_else(|| boundary("pulsar_observation_offset"))?;
+        Ok((&self.pulsars, rows))
+    }
+    /// Grow owned backing for streaming input/reference rows without replacing its owner.
+    pub(crate) fn ensure_observation_capacity(
+        &mut self,
+        index: usize,
+        capacity: usize,
+    ) -> Result<(), crate::TimingError> {
+        use crate::clock_diagnostics::boundary;
+        if let Some(view) = self.pulsars[index].obsn.flatten() {
+            if view.owner.context != self.identity {
+                return Err(boundary("pulsar_foreign_observation_owner"));
+            }
+            let rows = self
+                .observations
+                .get_mut(view.owner.index)
+                .and_then(Option::as_mut)
+                .ok_or_else(|| boundary("pulsar_released_observation_owner"))?;
+            let end = view
+                .offset
+                .checked_add(capacity)
+                .ok_or_else(|| boundary("observation_capacity_overflow"))?;
+            if rows.len() < end {
+                rows.resize_with(end, SourceObservation::default);
+            }
+        } else {
+            let view = self.adopt_observations(vec![SourceObservation::default(); capacity]);
+            self.pulsars[index].obsn = Some(Some(view));
+        }
+        Ok(())
     }
     pub fn malloc_blas(
         &mut self,
@@ -511,6 +597,11 @@ fn initialise_fields(p: &mut SourcePulsar, no_warnings: i32) {
     p.units = Some(1);
     p.setUnits = Some(0);
     p.ne_sw = Some(4.0);
+    // initialise.C::initialiseOne:118-125 (fda6ad4) omits ne_sw_ifuncN,
+    // but dm_delays.C:320 reads it on the ordinary spherical-wind path.
+    // A2's demonstrated correction establishes the empty interpolation count;
+    // initialize this field only, preserving all unrelated unwritten storage.
+    p.ne_sw_ifuncN = Some(0);
     p.nWhite = Some(0);
     p.nQuad = Some(0);
     p.ifuncN = Some(0);
@@ -556,6 +647,11 @@ fn initialise_fields(p: &mut SourcePulsar, no_warnings: i32) {
     p.nfdJumps = Some(0);
     p.nToffset = Some(0);
     p.ndmx = Some(0);
+    // initialise.C:165 initializes ndmx but omits its chromatic counterpart.
+    // readParfile.C:983 reads nchromx before its first assignment, and
+    // dm_delays.C:282 reads it for ordinary CM without any CHROMX entries.
+    // An empty newly initialized chromatic-range table has zero entries.
+    p.nchromx = Some(0);
     p.nconstraints = Some(0);
     p.constraint_efactor = Some(1e15);
     p.auto_constraints = Some(0);

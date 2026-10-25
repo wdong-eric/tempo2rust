@@ -68,13 +68,6 @@ impl FortranReader {
             .ok_or_else(|| boundary("Fortran_stream_lifetime"))?
             .getc() as i8)
     }
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "complete read_fortran.h interface beyond the current FB caller"
-        )
-    )]
     pub fn read_character(&mut self, len: i32, out: &mut [u8]) -> Result<(), TimingError> {
         for i in 0..len {
             *out.get_mut(i as usize)
@@ -98,26 +91,12 @@ impl FortranReader {
     pub fn read_int(&mut self) -> Result<i32, TimingError> {
         Ok(i32::from_ne_bytes(self.bytes()?))
     }
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "complete read_fortran.h interface beyond the current FB caller"
-        )
-    )]
     pub fn read_float(&mut self) -> Result<f32, TimingError> {
         Ok(f32::from_ne_bytes(self.bytes()?))
     }
     pub fn read_double(&mut self) -> Result<f64, TimingError> {
         Ok(f64::from_ne_bytes(self.bytes()?))
     }
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "complete read_fortran.h interface beyond the current FB caller"
-        )
-    )]
     pub fn read_record_int(&mut self) -> Result<i32, TimingError> {
         let mut bytes = [0; 4];
         let stream = self

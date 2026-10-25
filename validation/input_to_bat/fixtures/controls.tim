@@ -1,0 +1,11 @@
+FORMAT 1
+EFAC 1.5
+EQUAD 0.3
+TIME 0.000002
+late 1400 55003.5 1 pks -backend ac -to 0.000001
+early 820 55000.125 2 gbt -backend ac
+INCLUDE included.tim
+EFAC 1
+EQUAD 0
+TIME -0.000002
+bary 1400 55002.375 1 @ -backend bypass

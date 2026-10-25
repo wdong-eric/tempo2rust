@@ -134,3 +134,62 @@ pub fn copy_param(
     }
     result
 }
+
+/// Linked parameters are evaluated in caller order, without recursive resolution.
+pub fn get_parameter_value(
+    p: &crate::pulsar::SourcePulsar,
+    label: usize,
+    index: usize,
+) -> Result<Float, crate::TimingError> {
+    crate::clkcorr::with_process(|s| get_parameter_value_inner(p, label, index, &mut s.diagnostics))
+}
+pub(crate) fn get_parameter_value_inner(
+    p: &crate::pulsar::SourcePulsar,
+    label: usize,
+    index: usize,
+    diagnostics: &mut crate::clock_diagnostics::Diagnostics,
+) -> Result<Float, crate::TimingError> {
+    use crate::{PRECISION_BITS, observation::read, preprocess::value, tempo2::Label::*};
+    let par = &p.param.slots[label];
+    if *read(&par.n_link_to, "nLinkTo")? > 0 {
+        if par.n_link_to.unwrap() > 1 {
+            diagnostics.stdout(b"Sorry, can currently only link two parameters together\n");
+            return Err(crate::clock_diagnostics::boundary(
+                "multiple_parameter_links",
+            ));
+        }
+        let target = *read(&par.link_to[0], "linkTo")?;
+        if label == param_daop as usize && target == param_pbdot as i32 {
+            #[allow(clippy::excessive_precision)] // Pinned binary64 source constant.
+            let a = value(p, param_pmra, 0) * 1.53628185004416045e-16f64;
+            #[allow(clippy::excessive_precision)] // Pinned binary64 source constant.
+            let b = value(p, param_pmdec, 0) * 1.53628185004416045e-16f64;
+            return Ok((value(p, param_pbdot, 0) * 299792458.0f64
+                / (value(p, param_pb, 0) * 86400.0f64 * (a.square() + b.square())))
+                / 3.08568025e16f64);
+        }
+        if label == param_kin as usize && target == param_stig as i32 {
+            let s = value(p, param_stig, 0);
+            return Ok(
+                (s.clone() * 2.0f64 / (Float::with_val(PRECISION_BITS, 1) + s.square())).asin()
+                    * 180.0f64
+                    / std::f64::consts::PI,
+            );
+        }
+        if label == param_sini as usize && target == param_kin as i32 {
+            return Ok((value(p, param_kin, 0) / 180.0f64 * std::f64::consts::PI).sin());
+        }
+        if label == param_dshk as usize && target == param_px as i32 {
+            return Ok(Float::with_val(PRECISION_BITS, 1) / value(p, param_px, 0));
+        }
+        if label == param_dmmodel as usize && target == param_dm as i32 {
+            return Ok(value(p, param_dm, 0));
+        }
+    }
+    Ok(par
+        .cells
+        .get(index)
+        .ok_or_else(|| crate::clock_diagnostics::boundary("parameter_cell_index"))?
+        .val
+        .clone())
+}

@@ -15,20 +15,13 @@ pub(crate) fn position(alpha: f64, delta: f64) -> [f64; 3] {
 }
 
 /// tempo2Util.C::equ2ecl/ecl2equ: double input, extended rotation, double writes.
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
-pub(crate) fn rotate(x: &mut [f64; 3], to_equatorial: bool) {
+pub(crate) fn rotate(x: &mut [f64; 3], to_equatorial: bool, obliquity: f64) {
     // LD_PI is the M_PIq decimal literal in the accepted compiler macro map.
     let pi = Float::with_val(
         PRECISION_BITS,
         Float::parse("3.141592653589793238462643383279502884").unwrap(),
     );
-    let angle = (pi / 648000.0f64) * 84381.4059f64;
+    let angle = (pi / 648000.0f64) * obliquity;
     let ce = angle.clone().cos();
     let se = angle.sin();
     let y = Float::with_val(PRECISION_BITS, x[1]);
@@ -48,13 +41,6 @@ pub(crate) fn rotate(x: &mut [f64; 3], to_equatorial: bool) {
     .to_f64();
 }
 
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 pub(crate) fn vector_pulsar(
     session: &mut ClockSession,
     context: &mut PulsarContext,
@@ -86,7 +72,7 @@ pub(crate) fn vector_pulsar(
         *psr.posPulsarEquatorial = pos.map(Some);
         if *read(&psr.eclCoord, "eclCoord")? != 0 {
             let mut equ = pos;
-            rotate(&mut equ, true);
+            rotate(&mut equ, true, session.source.ecliptic_obliquity);
             *psr.posPulsarEquatorial = equ.map(Some);
         }
         for (ra, dec, acceleration) in [

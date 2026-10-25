@@ -136,7 +136,7 @@ pub(crate) fn iau2000b(
     not(test),
     expect(
         dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
+        reason = "direct source helper retained for complete observer API"
     )
 )]
 pub(crate) fn remove_white(bytes: &mut [u8]) -> Result<(), TimingError> {
@@ -165,13 +165,6 @@ pub(crate) fn remove_white(bytes: &mut [u8]) -> Result<(), TimingError> {
     Ok(())
 }
 
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 pub(crate) fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
     let n = crate::ifteph::native_i32(mjd, "lmst_mjd_integer")?;
     let fmjd = mjd - n as f64;
@@ -210,7 +203,7 @@ pub(crate) fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
     not(test),
     expect(
         dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
+        reason = "direct source helper retained for complete observer API"
     )
 )]
 pub(crate) fn ang(i: i32, f: f64) -> Result<f64, TimingError> {
@@ -227,13 +220,6 @@ pub(crate) fn ang(i: i32, f: f64) -> Result<f64, TimingError> {
     }
     Ok(angle)
 }
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 pub(crate) fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
     let t = (mjd - 51544.5) / 36525.0;
     let seconds_per_rad = 3600.0 * 180.0 / std::f64::consts::PI;
@@ -280,13 +266,6 @@ pub(crate) fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]
 }
 
 /// Full source driver; rows and pulsar remain owned by the same scoped context.
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 pub(crate) fn driver(
     s: &mut ClockSession,
     c: &mut PulsarContext,
@@ -310,13 +289,6 @@ pub(crate) fn driver(
     Ok(())
 }
 
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 fn compute_observation(
     s: &mut ClockSession,
     p: &mut SourcePulsar,
@@ -487,14 +459,22 @@ fn compute_observation(
             let file = read_string(&p.eopc04_file[..], "eopc04_file")?;
             let mut site = iau2000b(s, trs, zen, &tt, &utc, &file)?;
             if *read(&p.eclCoord, "eclCoord")? == 1 {
-                crate::vector_pulsar::rotate(&mut site.observatory_earth, false);
-                crate::vector_pulsar::rotate(&mut site.site_velocity, false);
+                crate::vector_pulsar::rotate(
+                    &mut site.observatory_earth,
+                    false,
+                    s.source.ecliptic_obliquity,
+                );
+                crate::vector_pulsar::rotate(
+                    &mut site.site_velocity,
+                    false,
+                    s.source.ecliptic_obliquity,
+                );
             }
             site
         } else {
             // Source zeroes zenith before reading nutations or UT1.
             o.zenith.fill(Some(0.0));
-            legacy(obs, p, o)?
+            legacy(obs, s.source.ecliptic_obliquity, p, o)?
         };
         o.observatory_earth[..3].copy_from_slice(&site.observatory_earth.map(Some));
         o.siteVel = site.site_velocity.map(Some);
@@ -502,15 +482,9 @@ fn compute_observation(
     }
     Ok(())
 }
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 fn legacy(
     obs: &Observatory,
+    obliquity: f64,
     p: &SourcePulsar,
     o: &SourceObservation,
 ) -> Result<SiteGeometry, TimingError> {
@@ -543,7 +517,7 @@ fn legacy(
     });
     let ecliptic = *read(&p.eclCoord, "eclCoord")? == 1;
     if ecliptic {
-        crate::vector_pulsar::rotate(&mut pos, false);
+        crate::vector_pulsar::rotate(&mut pos, false, obliquity);
     }
     let speed = 2.0 * PI * coord0 / (86400.0 / 1.00273);
     let sitera = if speed > 1.0e-10 {
@@ -553,7 +527,7 @@ fn legacy(
     };
     let mut vel = [-sitera.sin() * speed, sitera.cos() * speed, 0.0];
     if ecliptic {
-        crate::vector_pulsar::rotate(&mut vel, false);
+        crate::vector_pulsar::rotate(&mut vel, false, obliquity);
     }
     Ok(SiteGeometry {
         observatory_earth: pos,

@@ -1,12 +1,18 @@
 //! tempo2Util.C::displayMsg, selected TKlog.C/h and global.C::CVSdisplayVersion.
 //! Byte events are a library presentation adapter; state belongs to the process session.
 use crate::{TimingError, clock_text::c_bytes};
+#[cfg(target_os = "macos")]
+type ClockTicks = std::ffi::c_ulong;
+#[cfg(not(target_os = "macos"))]
+type ClockTicks = std::ffi::c_long;
 
 #[derive(Default)]
 pub(crate) struct Diagnostics {
     pub debug: bool,
     pub quiet: bool,
     pub display_version: bool,
+    pub tcheck: i32,
+    pub timer_clock: ClockTicks,
     pub source_directory: Vec<u8>,
     pub events: Vec<(bool, Vec<u8>)>, // false stdout, true stderr
     pub warnings: u32,
@@ -18,6 +24,33 @@ pub(crate) struct Diagnostics {
     versions: Vec<(&'static str, &'static str)>,
 }
 impl Diagnostics {
+    pub fn timing(&mut self, file: &str, line: usize, body: &[u8]) {
+        if self.tcheck == 0 {
+            return;
+        }
+        unsafe extern "C" {
+            fn clock() -> ClockTicks;
+        }
+        // POSIX clock() has no pointer arguments and returns process CPU ticks;
+        // CLOCKS_PER_SEC is 1,000,000 on the supported POSIX hosts. TKlog.h uses
+        // float division, then promotes that result for the printf conversion.
+        let seconds = unsafe { clock() }.wrapping_sub(self.timer_clock) as f32 / 1_000_000.0f32;
+        self.log(
+            b't',
+            file,
+            line,
+            &[
+                b"T=".as_slice(),
+                &crate::clock_text::format_number(
+                    seconds as f64,
+                    crate::clock_text::NumberFormat::Two,
+                ),
+                b" s: ",
+                body,
+            ]
+            .concat(),
+        );
+    }
     pub fn stdout(&mut self, bytes: &[u8]) {
         self.events.push((false, c_bytes(bytes).to_vec()));
     }

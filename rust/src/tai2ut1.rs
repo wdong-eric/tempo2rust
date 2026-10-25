@@ -14,13 +14,6 @@ use std::{
     path::{Path, PathBuf},
 };
 
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "legacy UT1 state is consumed by the released canonical driver"
-    )
-)]
 pub(crate) struct Ut1 {
     pub read: bool,
     pub mjd1: f64,
@@ -51,13 +44,6 @@ impl Default for Ut1 {
         }
     }
 }
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "legacy UT1 state is consumed by the released canonical driver"
-    )
-)]
 impl Ut1 {
     pub fn red(
         &mut self,
@@ -212,13 +198,6 @@ impl Ut1 {
         Ok(-ut1)
     }
 }
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "released canonical driver/helper; general input orchestration remains separate"
-    )
-)]
 pub(crate) fn tai2ut1(
     s: &mut ClockSession,
     c: &mut PulsarContext,
