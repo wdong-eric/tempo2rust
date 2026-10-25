@@ -20,11 +20,19 @@ separate from standalone callback availability. Dynamic native plugins are an
 explicit unsupported host ABI boundary.
 
 FitOptions carries `covariance: Option<String>`, `rescale_err_chisq: bool`,
-`force_always_fit_for_glitches: bool`, and `acceleration: i32`. Covariance paths
+`force_always_fit_for_glitches: bool`, `acceleration: i32`, and optional owned `tkfit::FitDiagnostics`
+(`directory`, source `write_residuals` bit mask, `debug`). Covariance paths
 resolve against the actual working directory; included paths and consumed bytes
 are recorded. CLI mappings are `--covariance`, `--norescale`,
 `--force-always-fit-for-glitches`, `--acceleration`. Without enabled acceleration,
-the source fallback uses SVD and reports the fallback. MODE/WEIGHT, ROBUST and
+the source fallback uses SVD and reports the fallback. `--fit-diagnostics DIR`
+selects source writeResiduals=7 in an existing output directory. The direct Rust
+API exposes other bit combinations and debug covariance output. Files preserve
+source names, text formats and overwrite order; I/O failures return an error.
+Robust results include the ordered scale/final solve history. The first solve
+writes prefit/design files; later solves retain only bit 4, and the final files
+reflect the final weighted solve before the source robust covariance overwrite.
+No process-global diagnostic mask is modified. MODE/WEIGHT, ROBUST and
 NITS remain PAR-owned. `timing --fit --no-mean` is an error.
 
 The new `tempo2-general-fit-v1` result contains supplied controls, per-cycle
@@ -60,6 +68,7 @@ extended decimal precision:
 | Robust scale and weights | source normalized residual and dimensionless weight; max magnitude | 5e-14 times scale; exact branch/iteration membership |
 | Seeded bootstrap RNG | source binary64 | exact bits and seed history |
 | Standalone spectral density | source declared density units; maximum reference magnitude | 5e-14 times scale, structural zero exact |
+| DM/CM normalized grid weights | dimensionless, derived from source covariance errors | relative 1e-10, zero exact; grid membership/epochs exact binary64 |
 
 Ill-conditioned or precision-boundary failures are reported, not accommodated by
 changing these gates. An unchecked field is not accepted. Original and corrected

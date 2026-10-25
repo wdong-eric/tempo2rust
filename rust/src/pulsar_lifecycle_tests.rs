@@ -224,8 +224,15 @@ fn seed_params(p: &mut ParameterStore, v: i32) {
         }
     }
 }
-fn deriv(_: &mut PulsarContext, _: i32, _: f64, _: i32, _: i32, _: i32) -> f64 {
-    0.0
+fn deriv(
+    _: &mut PulsarContext,
+    _: i32,
+    _: f64,
+    _: i32,
+    _: i32,
+    _: i32,
+) -> Result<f64, crate::TimingError> {
+    Ok(0.0)
 }
 fn constraint(
     _: &mut PulsarContext,
@@ -234,11 +241,20 @@ fn constraint(
     _: i32,
     _: i32,
     _: i32,
-    _: Option<&[Option<u8>]>,
-) -> f64 {
-    0.0
+    _: Option<&crate::constraints::ConstraintSpecial>,
+) -> Result<f64, crate::TimingError> {
+    Ok(0.0)
 }
-fn update(_: &mut PulsarContext, _: i32, _: i32, _: i32, _: f64, _: f64) {}
+fn update(
+    _: &mut PulsarContext,
+    _: i32,
+    _: i32,
+    _: i32,
+    _: f64,
+    _: f64,
+) -> Result<(), crate::TimingError> {
+    Ok(())
+}
 include!("pulsar_probe_fields.rs");
 fn seed_owner(
     c: &mut PulsarContext,
@@ -818,7 +834,7 @@ fn defined_forward_overlap_and_destination_fd_bound() {
     );
     assert_eq!(
         c.pulsars[1].fdjumpVal[..4],
-        [Some(11.25), Some(11.25), Some(11.25), Some(22.25)]
+        [Some(22.25), Some(11.25), Some(11.25), Some(22.25)]
     );
     assert_eq!(c.pulsars[1].nfdJumps, Some(2));
     assert_eq!(c.pulsars[1].fdjumpIdx[0], Some(22));

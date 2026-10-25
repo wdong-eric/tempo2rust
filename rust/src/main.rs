@@ -13,7 +13,7 @@ use tempo2_rust::{
     fit_terrestrial, load,
 };
 
-const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
+const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean | --fit [--covariance SELECTOR] [--norescale] [--force-always-fit-for-glitches] [--acceleration N] [--fit-diagnostics DIR]] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<OsString> = env::args_os().skip(1).collect();
@@ -88,8 +88,25 @@ fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::E
     use std::os::unix::ffi::OsStrExt;
     let (mut pars, mut tims, mut root, mut preprocess) = (vec![], vec![], None, vec![]);
     let mut remove_mean = true;
+    let mut fit = false;
+    let mut fit_options = tempo2_rust::general_fitting::FitOptions::default();
     let mut i = 0;
     while i < args.len() {
+        if timing && args[i] == "--fit" {
+            fit = true;
+            i += 1;
+            continue;
+        }
+        if timing && args[i] == "--norescale" {
+            fit_options.rescale_err_chisq = false;
+            i += 1;
+            continue;
+        }
+        if timing && args[i] == "--force-always-fit-for-glitches" {
+            fit_options.force_always_fit_for_glitches = true;
+            i += 1;
+            continue;
+        }
         if timing && args[i] == "--no-mean" {
             remove_mean = false;
             i += 1;
@@ -103,7 +120,21 @@ fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::E
             break;
         }
         let v = args.get(i + 1).ok_or(USAGE)?;
-        if args[i] == "--par" {
+        if timing && args[i] == "--covariance" {
+            fit_options.covariance = Some(
+                v.to_str()
+                    .ok_or("covariance selector must be UTF-8")?
+                    .to_owned(),
+            );
+        } else if timing && args[i] == "--acceleration" {
+            fit_options.acceleration = v.to_str().ok_or("acceleration must be integer")?.parse()?;
+        } else if timing && args[i] == "--fit-diagnostics" {
+            fit_options.diagnostics = Some(tempo2_rust::tkfit::FitDiagnostics {
+                directory: PathBuf::from(v),
+                write_residuals: 7,
+                debug: false,
+            });
+        } else if args[i] == "--par" {
             pars.push(PathBuf::from(v));
         } else if args[i] == "--tim" {
             tims.push(PathBuf::from(v));
@@ -117,6 +148,18 @@ fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::E
     if pars.is_empty() || pars.len() != tims.len() {
         return Err("bats requires matching nonempty ordered PAR/TIM lists".into());
     }
+    if fit && !remove_mean {
+        return Err("timing --fit requires mean removal; --no-mean is incompatible".into());
+    }
+    if !fit
+        && (fit_options.covariance.is_some()
+            || !fit_options.rescale_err_chisq
+            || fit_options.force_always_fit_for_glitches
+            || fit_options.acceleration != 0
+            || fit_options.diagnostics.is_some())
+    {
+        return Err("fit controls require --fit".into());
+    }
     let root = root.ok_or("bats requires --runtime PATH")?;
     let pairs = pars
         .into_iter()
@@ -126,7 +169,13 @@ fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::E
     let mut runtime = RuntimeContext::from_root(&root)?;
     let mut input = tempo2_rust::bats::load_pairs(&pairs, &root)?;
     tempo2_rust::bats::preprocess(&mut input, &preprocess, &root)?;
-    let mut bytes = if timing {
+    let mut bytes = if fit {
+        serde_json::to_vec_pretty(&tempo2_rust::general_fitting::fit(
+            &mut input,
+            &mut runtime,
+            &fit_options,
+        )?)?
+    } else if timing {
         serde_json::to_vec_pretty(&tempo2_rust::timing::evaluate(
             &mut input,
             &mut runtime,

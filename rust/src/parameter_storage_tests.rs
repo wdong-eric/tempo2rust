@@ -234,8 +234,6 @@ fn boundaries() -> Vec<Value> {
         "shortlabel_nul",
         "label_capacity",
         "shortlabel_capacity",
-        "prefit",
-        "prefitErr",
     ] {
         let mut src = seeded(10, 3);
         let mut dst = seeded(70, 4);
@@ -246,8 +244,6 @@ fn boundaries() -> Vec<Value> {
             "shortlabel_nul" => src.cells[1].shortlabel = vec![b'z'; 3],
             "label_capacity" => dst.cells[1].label = vec![b'q'; 2],
             "shortlabel_capacity" => dst.cells[1].shortlabel = vec![b'q'; 2],
-            "prefit" => src.cells[1].prefit = None,
-            "prefitErr" => src.cells[1].prefit_err = None,
             _ => unreachable!(),
         }
         let sb = state(&src);

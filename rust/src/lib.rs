@@ -79,7 +79,7 @@ pub mod tempo2;
 mod tempo2_util;
 pub mod timing;
 pub mod tk_matrix;
-mod tkfit;
+pub mod tkfit;
 mod tksvd;
 mod toa2utc;
 mod tropo;
@@ -288,6 +288,7 @@ impl TimingInput {
         // Only the validated frontend and fit callbacks can mutate this owner.
         &self.source.pulsars[0].param.slots[label as usize].cells[i]
     }
+    #[cfg(test)]
     pub(crate) fn parameter_cell_mut(&mut self, key: &str) -> &mut tempo2::ParameterCell {
         let (label, i) = read_parfile::numeric_location(key);
         &mut self.source.pulsars[0].param.slots[label as usize].cells[i]
@@ -403,3 +404,33 @@ mod preprocessing_corpus_tests;
 mod propagation_corpus_tests;
 #[cfg(test)]
 mod source_tim_corpus_tests;
+
+mod t2fit_dmmodel;
+mod t2fit_dmother;
+mod t2fit_fitwaves;
+mod t2fit_glitch;
+mod t2fit_ifunc;
+mod t2fit_position;
+mod t2fit_solarwind;
+#[allow(non_snake_case)]
+mod t2fit_stdFitFuncs;
+
+pub mod bootstrap;
+pub mod cholesky_automatic;
+pub mod cholesky_routines;
+pub mod cholesky_spectrum;
+pub mod legacy_fitting;
+pub mod tkrobust;
+
+pub mod fit_callbacks;
+pub mod general_fitting;
+
+pub mod cholesky;
+
+mod constraint_functions;
+mod constraints_nestlike;
+mod t2fit_gw;
+
+pub mod constraints;
+#[cfg(test)]
+mod general_fitting_tests;

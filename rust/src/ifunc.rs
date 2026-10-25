@@ -49,41 +49,46 @@ pub(crate) fn interpolate(
     Err(boundary("ifunc_unbracketed_time"))
 }
 pub fn ifunc_basis(mjd: &[f64], t: f64, n: i32, k: i32) -> Result<f64, TimingError> {
+    crate::clkcorr::with_process(|s| basis(mjd, t, n, k, &mut s.diagnostics))
+}
+pub(crate) fn basis(
+    mjd: &[f64],
+    t: f64,
+    n: i32,
+    k: i32,
+    d: &mut crate::clock_diagnostics::Diagnostics,
+) -> Result<f64, TimingError> {
     if k >= n {
-        crate::clkcorr::lifecycle_diagnostics(|d| {
-            d.stderr(b"Assertion failed: (k<N), function ifunc, file ifunc.C, line 8.\n")
-        })?;
+        d.stderr(b"Assertion failed: (k<N), function ifunc, file ifunc.C, line 8.\n");
         return Err(boundary("ifunc_basis_storage"));
     }
     if n <= 0 || n as usize > crate::pulsar::MAX_IFUNC {
         return Err(boundary("ifunc_basis_storage"));
     }
-    crate::clkcorr::lifecycle_diagnostics(|d| {
-        let g = |v| {
-            String::from_utf8(crate::clock_text::format_number(
-                v,
-                crate::clock_text::NumberFormat::GeneralSix,
-            ))
-            .unwrap()
-        };
-        d.log(
-            b'd',
-            "ifunc.C",
-            7,
-            format!(
-                "ifunc {} => {} : {} {n} {k}",
-                g(mjd[0]),
-                g(mjd[n as usize - 1]),
-                g(t)
-            )
-            .as_bytes(),
-        );
-    })?;
+    let g = |v| {
+        String::from_utf8(crate::clock_text::format_number(
+            v,
+            crate::clock_text::NumberFormat::GeneralSix,
+        ))
+        .unwrap()
+    };
+    d.log(
+        b'd',
+        "ifunc.C",
+        7,
+        format!(
+            "ifunc {} => {} : {} {n} {k}",
+            g(mjd[0]),
+            g(mjd[n as usize - 1]),
+            g(t)
+        )
+        .as_bytes(),
+    );
     let mut y = vec![0.0; n as usize];
     if k >= 0 {
         y[k as usize] = 1.0;
     }
-    ifunc(mjd, &y, t, n)
+    interpolate(mjd, &y, t, n, d)
 }
 pub fn sinfunc(t: &[f64], bat: f64, k: usize) -> Result<f64, TimingError> {
     let dt = bat - *t.get(k).ok_or_else(|| boundary("sinfunc_index"))?;

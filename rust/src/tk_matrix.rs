@@ -65,3 +65,56 @@ impl BlasMatrix {
         Ok(&self.cells[row * self.cols..(row + 1) * self.cols])
     }
 }
+
+/// TKforwardSubVec: binary64 row-order forward substitution.
+pub fn forward_sub_vec(l: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String> {
+    let n = b.len();
+    if l.len() != n || l.iter().any(|r| r.len() != n) {
+        return Err("forward substitution dimensions".into());
+    }
+    let mut x = vec![0.0; n];
+    for i in 0..n {
+        let mut s = 0.0;
+        for j in 0..i {
+            s += l[i][j] * x[j];
+        }
+        x[i] = (b[i] - s) / l[i][i];
+    }
+    Ok(x)
+}
+/// TKforwardSub: columns outside rows, preserving the source summation order.
+pub fn forward_sub(l: &[Vec<f64>], m: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String> {
+    let n = m.len();
+    let np = m.first().ok_or("empty forward substitution")?.len();
+    if l.len() != n || l.iter().any(|r| r.len() != n) || m.iter().any(|r| r.len() != np) {
+        return Err("forward substitution dimensions".into());
+    }
+    let mut x = vec![vec![0.0; np]; n];
+    for p in 0..np {
+        for i in 0..n {
+            let mut s = 0.0;
+            for j in 0..i {
+                s += l[i][j] * x[j][p];
+            }
+            x[i][p] = (m[i][p] - s) / l[i][i];
+        }
+    }
+    Ok(x)
+}
+/// TKmultMatrix: k/i/j accumulation order (nonaccelerated source branch).
+pub fn mult_matrix(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String> {
+    let n = b.len();
+    let p = b.first().ok_or("empty matrix product")?.len();
+    if a.iter().any(|r| r.len() != n) || b.iter().any(|r| r.len() != p) {
+        return Err("matrix product dimensions".into());
+    }
+    let mut out = vec![vec![0.0; p]; a.len()];
+    for k in 0..n {
+        for i in 0..a.len() {
+            for j in 0..p {
+                out[i][j] += a[i][k] * b[k][j];
+            }
+        }
+    }
+    Ok(out)
+}

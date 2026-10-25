@@ -63,13 +63,19 @@ pub struct PayloadView {
 }
 static NEXT_CONTEXT: AtomicU64 = AtomicU64::new(1);
 
+#[derive(Clone, Debug)]
+enum Payload {
+    Bytes(Vec<Option<u8>>),
+    FitConstraint(crate::constraints::ConstraintSpecial),
+}
+
 #[derive(Debug)]
 pub struct PulsarContext {
     pub(crate) pulsars: Vec<SourcePulsar>,
     identity: u64,
     observations: Vec<Option<Vec<SourceObservation>>>,
     matrices: Vec<Option<BlasMatrix>>,
-    payloads: Vec<Option<Vec<Option<u8>>>>,
+    payloads: Vec<Option<Payload>>,
     boundary: Option<LifecycleBoundary>,
     /// Logical release observations, not native allocator instrumentation.
     pub(crate) releases: Vec<String>,
@@ -412,25 +418,52 @@ impl PulsarContext {
         &mut self,
         bytes: Vec<Option<u8>>,
     ) -> Result<PayloadView, LifecycleBoundary> {
+        self.allocate_owned_payload(Payload::Bytes(bytes))
+    }
+    pub fn allocate_fit_constraint(
+        &mut self,
+        data: crate::constraints::ConstraintSpecial,
+    ) -> Result<PayloadView, LifecycleBoundary> {
+        self.allocate_owned_payload(Payload::FitConstraint(data))
+    }
+    fn allocate_owned_payload(&mut self, data: Payload) -> Result<PayloadView, LifecycleBoundary> {
         self.run(|s| {
             let owner = PayloadOwner {
                 context: s.identity,
                 index: s.payloads.len(),
             };
-            s.payloads.push(Some(bytes));
+            s.payloads.push(Some(data));
             Ok(PayloadView { owner, offset: 0 })
         })
     }
     pub fn payload(&self, view: PayloadView) -> Result<&[Option<u8>], LifecycleBoundary> {
+        let Payload::Bytes(bytes) = self.payload_storage(view)? else {
+            return Err(fail("payload_access", "owner", "not_bytes"));
+        };
+        bytes
+            .get(view.offset..)
+            .ok_or_else(|| fail("payload_access", "offset", "capacity"))
+    }
+    pub fn fit_constraint(
+        &self,
+        view: PayloadView,
+    ) -> Result<&crate::constraints::ConstraintSpecial, LifecycleBoundary> {
+        if view.offset != 0 {
+            return Err(fail("fit_constraint_access", "offset", "interior_owner"));
+        }
+        let Payload::FitConstraint(data) = self.payload_storage(view)? else {
+            return Err(fail("fit_constraint_access", "owner", "not_fit_constraint"));
+        };
+        Ok(data)
+    }
+    fn payload_storage(&self, view: PayloadView) -> Result<&Payload, LifecycleBoundary> {
         if view.owner.context != self.identity {
             return Err(fail("payload_access", "owner", "foreign_owner"));
         }
         self.payloads
             .get(view.owner.index)
             .and_then(Option::as_ref)
-            .ok_or_else(|| fail("payload_access", "owner", "released_owner"))?
-            .get(view.offset..)
-            .ok_or_else(|| fail("payload_access", "offset", "capacity"))
+            .ok_or_else(|| fail("payload_access", "owner", "released_owner"))
     }
     pub fn free_observations(&mut self, view: ObservationView) -> Result<(), LifecycleBoundary> {
         self.run(|s| {
@@ -483,7 +516,7 @@ impl PulsarContext {
             if view.offset != 0 {
                 return Err(fail("free_payload", "offset", "interior_owner"));
             }
-            s.payload(view)?;
+            s.payload_storage(view)?;
             s.payloads[view.owner.index] = None;
             s.releases.push(format!("payload:{}", view.owner.index));
             Ok(())
@@ -868,7 +901,10 @@ impl PulsarContext {
             }
             copy!(eclCoord);
             copy!(nJumps);
-            for i in 0..=read(&s.pulsars[destination].nJumps, OP, "nJumps")? {
+            // copyPSR reads reserved slot zero, whose flags/string are unwritten
+            // after normal PAR loading. Active jumps are one-based (AE bootstrap
+            // witness); leave that unused destination slot untouched.
+            for i in 1..=read(&s.pulsars[destination].nJumps, OP, "nJumps")? {
                 let i = i as usize;
                 copy!(jumpVal, i);
                 copy!(fitJump, i);
@@ -876,7 +912,7 @@ impl PulsarContext {
                 string!(jumpStr, i);
             }
             // Native defect retained: no nfdJumps assignment; destination sets the bound.
-            for i in 0..=read(&s.pulsars[destination].nfdJumps, OP, "nfdJumps")? {
+            for i in 1..=read(&s.pulsars[destination].nfdJumps, OP, "nfdJumps")? {
                 let i = i as usize;
                 copy!(fdjumpVal, i);
                 copy!(fitfdJump, i);

@@ -113,18 +113,12 @@ pub fn copy_param(
             dst.err = src.err.clone();
             dst.fit_flag = src.fit_flag;
             dst.param_set = src.param_set;
-            dst.prefit = Some(
-                src.prefit
-                    .as_ref()
-                    .ok_or_else(|| error("prefit", "unwritten_value"))?
-                    .clone(),
-            );
-            dst.prefit_err = Some(
-                src.prefit_err
-                    .as_ref()
-                    .ok_or_else(|| error("prefitErr", "unwritten_value"))?
-                    .clone(),
-            );
+            // copyParam reads every prefit cell, including unset higher-order
+            // cells left uninitialized by readParfile. AE bootstrap exposes it.
+            // The corrected native copy uses memcpy for these two buffers;
+            // retain knownness here without interpreting unwritten numbers.
+            dst.prefit = src.prefit.clone();
+            dst.prefit_err = src.prefit_err.clone();
         }
         destination.a_size = source.a_size;
         Ok(())

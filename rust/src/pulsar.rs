@@ -117,8 +117,14 @@ pub struct Callback<F> {
     pub identity: u64,
     pub callable: F,
 }
-pub type ParamDerivFunc =
-    fn(&mut crate::pulsar_lifecycle::PulsarContext, i32, f64, i32, i32, i32) -> f64;
+pub type ParamDerivFunc = fn(
+    &mut crate::pulsar_lifecycle::PulsarContext,
+    i32,
+    f64,
+    i32,
+    i32,
+    i32,
+) -> Result<f64, crate::TimingError>;
 pub type ConstraintDerivFunc = fn(
     &mut crate::pulsar_lifecycle::PulsarContext,
     i32,
@@ -126,9 +132,16 @@ pub type ConstraintDerivFunc = fn(
     i32,
     i32,
     i32,
-    Option<&[Option<u8>]>,
-) -> f64;
-pub type ParamUpdateFunc = fn(&mut crate::pulsar_lifecycle::PulsarContext, i32, i32, i32, f64, f64);
+    Option<&crate::constraints::ConstraintSpecial>,
+) -> Result<f64, crate::TimingError>;
+pub type ParamUpdateFunc = fn(
+    &mut crate::pulsar_lifecycle::PulsarContext,
+    i32,
+    i32,
+    i32,
+    f64,
+    f64,
+) -> Result<(), crate::TimingError>;
 #[derive(Clone, Debug)]
 pub struct StorePrecision {
     pub minPrec: Option<Float>,

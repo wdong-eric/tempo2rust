@@ -4,8 +4,33 @@ One Rust library and JSON CLI provide general ordered PAR/TIM input, source
 preprocessing, BAT/BBAT and fixed-parameter timing through all fourteen binary
 families. The existing bounded residual and ZERO/F0–F3 fit commands retain their
 input scopes through adapters to the shared timing routines. General fitting is
-not part of this delivery. See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md)
-for execution evidence, source corrections and unresolved acceptance gates.
+being extended through `timing --fit`; its current implementation and remaining
+scope are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
+See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md) for the preceding fixed
+timing delivery and its unresolved acceptance gates.
+
+## General fitting (AE work in progress)
+
+```sh
+rust/target/debug/tempo2-rust timing --fit \
+  --par validation/general_fitting/inputs/global0.par --tim validation/fitting/inputs/bary.tim \
+  --par validation/general_fitting/inputs/global1.par --tim validation/fitting/inputs/bary.tim \
+  --runtime validation/reference/build/source/T2runtime
+```
+
+The general route uses canonical PAR/TIM parsing and preprocessing, then exactly
+NITS cycles of BAT/residual evaluation, fitting and recomputation. PAR files own
+MODE/WEIGHT, ROBUST and NITS. `--covariance MODEL`, `--norescale`,
+`--force-always-fit-for-glitches` and `--acceleration INTEGER` map to
+`general_fitting::FitOptions`; the baseline uses the source SVD. `--no-mean`
+cannot be combined with `--fit`.
+
+Call `general_fitting::fit` on a preprocessed `BatInput` for the complete cycle,
+or `general_fitting::t2_fit` / `do_fit_all` on prepared canonical BAT/residual
+state. The `tempo2-general-fit-v1` result records rows, local/global coordinates,
+matrices, constraints and targets, raw solver outputs, physical updates and
+noise projections. Covariance stays in source fit coordinates. These interfaces
+do not imply that AE's full source scope or numerical acceptance is complete.
 
 ## General fixed-parameter timing
 

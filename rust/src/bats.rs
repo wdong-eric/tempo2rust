@@ -128,7 +128,11 @@ impl Number {
         }
     }
     pub(crate) fn double(v: f64) -> Self {
-        if v.is_finite() {
+        if v.is_nan() {
+            Self::Nonfinite {
+                class: if v.is_sign_negative() { "-nan" } else { "nan" },
+            }
+        } else if v.is_finite() {
             Self::Finite(v.to_string())
         } else {
             Self::extended(&rug::Float::with_val(crate::PRECISION_BITS, v))

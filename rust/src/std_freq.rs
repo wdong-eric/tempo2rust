@@ -16,20 +16,37 @@ pub(crate) fn std_freq(x: f64, f0: f64, k: usize) -> f64 {
 }
 
 pub(crate) fn update_std_freq(psr: &mut TimingInput, k: usize, val: f64, error: f64) {
-    let f0 = psr.parameter_cell("F0").val.clone();
-    let value = &mut psr.parameter_cell_mut(SPIN[k]).val;
+    update_spin(&mut psr.source.pulsars[0].param, k, val, error);
+}
+
+/// Canonical t2UpdateFunc_stdFreq arithmetic shared by bounded and general fits.
+pub(crate) fn update_spin(
+    params: &mut crate::tempo2::ParameterStore,
+    k: usize,
+    val: f64,
+    error: f64,
+) {
+    let cells = &mut params.slots[crate::tempo2::Label::param_f as usize].cells;
+    let f0 = cells[0].val.clone();
     if k == 0 {
-        *value *= ld(1.0) - ld(val) / &f0;
-        // Preserve the source predicate: NaN leaves the existing physical error unchanged.
+        cells[k].val *= ld(1.0) - ld(val) / &f0;
         if error >= 0.0 {
-            psr.parameter_cell_mut(SPIN[k]).err = ld(error);
+            cells[k].err = ld(error);
         }
     } else {
-        let scale = [1.0, 1.0, 1.0e9, 1.0e18][k];
+        let scale = if k == 2 {
+            1e9
+        } else if k > 2 && k < 10 {
+            1e18
+        } else if k > 9 {
+            1e23
+        } else {
+            1.0
+        };
         let divisor = (24.0f64 * 3600.0).powf((k + 1) as f64);
-        *value -= f0.clone() * (val / divisor) / scale;
+        cells[k].val -= f0.clone() * (val / divisor) / scale;
         if error >= 0.0 {
-            psr.parameter_cell_mut(SPIN[k]).err = ld(error / divisor) / scale * &f0;
+            cells[k].err = ld(error / divisor) / scale * &f0;
         }
     }
 }
