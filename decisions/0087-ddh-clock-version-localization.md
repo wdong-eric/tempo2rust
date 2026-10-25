@@ -2,7 +2,7 @@
 
 Central review, 26 October 2026. **The observed pre-fit failure of the original DDH ideal fixture is explained by its GPS-clock resource version.** With the same A2 executable, original PAR/TIM inputs and current runtime, all 284 recorded residuals regenerate exactly and 120 exceed the original 1 ns threshold. Adding only the GPS-to-UTC table from the Git revision that last updated the fixture makes every residual satisfy that same threshold. The unchanged full upstream `checkIdeal` test then passes both before and after fitting.
 
-**Acceptance disposition is pending the user's answer.** Central has proposed retaining current production clocks and the original failed observation, then requiring current-clock Rust/native agreement and the unchanged 1 ns ideal check with explicitly versioned historical clocks. This record accepts the bounded causal evidence; it does not yet adopt that replacement acceptance rule, accept Rust DDH behavior or release another writer. AE remains active; independent functional work continues under 0065/0074.
+**The user adopted the versioned-fixture acceptance rule on 26 October 2026:** "Adopt versioned fixture checks (Recommended)." Retain current production clocks and the original failed observation, and require both current-clock Rust/native agreement and the unchanged 1 ns ideal check with explicitly versioned historical clocks. This decision accepts the bounded causal evidence and the paired acceptance rule. Required Rust verification and central DDH acceptance remain pending; no additional writer is released. AE remains active; independent functional work continues under 0065/0074.
 
 ## Controlled experiment
 
@@ -25,17 +25,19 @@ The fixture's last update is `0759584ebf8315bbbe6a6d0b41c08ebbcfe527f2` (11 Nove
 
 A separate control executes G's already rebuilt but source-unchanged `tests/testEndToEnd.C::testEndToEnd.checkIdeal`, with its original `TEST_DELTA=1e-9l` and verified original compile-time PAR/TIM files. With current clocks it returns 1 at the same pre-fit `1.13759e-9 s` assertion. With the one-file historical overlay it returns 0; the test reaches `t2Fit` (20 parameters, 284 data rows) and both pre-fit and post-fit assertions pass. No source test, tolerance or input was edited. The full-test executable's identity matches G's recorded evidence.
 
-This localizes this fixture failure to a calibration-version mismatch; it does not show that the current GPS tables are scientifically wrong, validate the DDH physical model generally, establish Linux behavior or accept the Rust port. Keep current production/resource selection behavior. The old blanket description "cause unknown" is superseded for this particular observed failure, while its final acceptance treatment remains pending.
+This localizes this fixture failure to a calibration-version mismatch; it does not show that the current GPS tables are scientifically wrong, validate the DDH physical model generally, establish Linux behavior or accept the Rust port. Keep current production/resource selection behavior. The old blanket description "cause unknown" is superseded for this particular observed failure. The paired requirements below now govern its acceptance; the native evidence alone does not satisfy the required Rust verification.
 
-## Proposed acceptance rule, not yet adopted
+## Adopted acceptance rule
 
-Central recommends the following paired requirements, subject to the user's pending answer:
+The paired checks and their evidence safeguards are mandatory under the user's approval:
 
 1. Preserve the original current-clock failure and its exact identities as a historical/native-behavior record. Verify Rust against the current-clock native path using the existing quantity-specific port gates, exact input/order/pulse/state checks and matching preprocessing/reference conventions.
 2. Keep `abs(residual) < 1e-9 s` before and after fitting for an explicitly versioned ideal fixture: unchanged original PAR/TIM inputs, the single historical GPS table identified below, and otherwise the pinned runtime. Verify the full native and Rust workflows; this review supplies native evidence only.
 3. Label resource versions and the two purposes explicitly. Do not make the old table a production default, overwrite accepted original outputs, regenerate TOAs to hide a discrepancy, relax 1 ns, or report the current-clock original assertion as passed.
 
-If adopted, these requirements supersede the unexplained-DDH acceptance placeholder inherited by 0079/0086 while preserving an actual ideal-accuracy check and current-source fidelity. They would still need the required Rust/integrated verification and central acceptance. If the user keeps the original gate pending, it remains a failing gate with the cause now documented. The P, M2 and 0049 ledgers are unrelated and unchanged.
+These requirements supersede the unexplained-DDH acceptance placeholder inherited by 0079/0086 while preserving an actual ideal-accuracy check and current-source fidelity. The original current-clock native 1 ns assertion remains a recorded failure, rather than an assertion that Rust must make pass. DDH acceptance now requires evidence for both current-clock agreement and the versioned ideal check; the P, M2 and 0049 ledgers are unrelated and unchanged.
+
+AE owns the paired native/Rust fitting verification within `validation/general_fitting/` and reports the exact input/resource/executable identities, preprocessing/reference conventions, before/after-fit results and any remaining differences in `rust/GENERAL_FITTING_REPORT.md`. Reuse the preserved native evidence where its identity and path match, and keep generated exports/results ignored under 0039. Independent functional work and implementation handover remain governed by 0065/0074; this decision does not require another reference-only assignment. AL rechecks the approved contract against the qualified release on both selected platforms under 0086. Central retains milestone acceptance.
 
 ## Reproduction and evidence
 
