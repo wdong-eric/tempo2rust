@@ -1,0 +1,5 @@
+FORMAT 1
+parkes 1400 55000.125 1 pks -backend ac
+gbt 820 55001.25 2 gbt -backend ac
+barycentric 1400 55002.375 1 @
+INCLUDE included.tim
