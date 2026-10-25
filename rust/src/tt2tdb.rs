@@ -76,6 +76,9 @@ pub(crate) fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64,
         for _ in 0..5 {
             reader.read_double()?;
         }
+        // tt2tdb.C::FB_deltaT:238-246 (fda6ad4) ignores EOF, even in these
+        // unused header doubles. Reject fabricated EOF bytes (0065), including
+        // nr==1 calls that would otherwise return a plausible zero correction.
         reader.require_complete()?;
         let tdt = mjd.clone() + 2400000.5f64;
         let day = extended_i32(&tdt, "FB_JD_int")?;
@@ -106,6 +109,10 @@ pub(crate) fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64,
                         reader.read_double()?;
                 }
             }
+            // tt2tdb.C::FB_deltaT:270-273 plus read_fortran.h:127-147
+            // (fda6ad4) can turn partial coefficients plus EOF 0xff bytes into
+            // finite values. Require the attempted reads, not a global length:
+            // nr==1 and signed count no-ops legitimately consume no coefficients.
             reader.require_complete()?;
         }
         let offset = nr

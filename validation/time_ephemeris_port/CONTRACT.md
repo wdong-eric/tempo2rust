@@ -284,3 +284,43 @@ and controls finish. A new invocation removes the selected profile's stale
 success/control pointers before argument validation or compilation; prior direct
 receipts retain separate history identities. Earlier failed development logs
 remain diagnostic evidence, never final-source passing receipts.
+
+
+## 0065 addendum: FB EOF correction classification (25 October 2026)
+
+This supersedes the frozen V map's blanket placement of malformed/truncated FB
+headers among native-invalid cases; the historical map itself remains verbatim.
+At pin fda6ad4, `read_fortran.h::read_double:127-147` assigns every byte using
+fgetc, including EOF narrowed to 0xff on the measured host. The unchecked
+`tt2tdb.C::FB_deltaT:238-246,270-273` reads therefore do not generically consume
+uninitialized state. Where the remaining conversions/accesses are defined,
+EOF substitution can yield a defined but wrong +0, NaN or finite correction.
+Other malformed headers can still cause invalid later arithmetic/accesses and
+require their own classification. Incomplete IFTE header/constants and
+`read_record_int:149-154` reads remain separate uninitialized-state boundaries.
+
+Decision 0065 explicitly retains `FB_incomplete_record` as an intentional
+small-bug correction under 0053. Complete header reads are required even for
+ignored doubles; coefficient completeness is required only for reads actually
+attempted. There is no global file-length restriction. Complete-header nr==1,
+nonpositive coefficient counts and direct Fortran primitive EOF behavior remain
+unchanged, as do failed-candidate publication and subsequent recovery.
+
+The read-only central witness at
+`decisions/evidence/time-ephemeris-port/build/fb-eof-5efkysgi/` has receipt SHA-256
+`e27d38ba34da5395e7e8aedf86827ee13b6e47d5983091fee871e28f9094cccc`.
+For `fixtures.fb(ncf=1)`, it records:
+
+| Bytes / MJD | Original native output | Rust disposition |
+| --- | --- | --- |
+| 72 / 50000 | 0x1p-10 | Same value |
+| 24 / 49996 | +0 | FB_incomplete_record |
+| 64 / 50000 | NaN | FB_incomplete_record |
+| 65 / 50000 | 0x1.fffffffffffffp+0 | FB_incomplete_record |
+
+The new focused regression covers these four cases and the valid no-read
+neighbors. The existing cache publication/recovery regression is retained.
+Follow-up verification runs the affected Rust tests and primitive EOF histories
+in debug/release, formatting and Clippy, recorded separately from the full-suite
+receipts at their original revisions. No broad native corpus is regenerated and
+no old result is relabeled as a run of the follow-up sources.

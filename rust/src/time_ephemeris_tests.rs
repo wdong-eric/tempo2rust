@@ -615,6 +615,47 @@ fn fb_fixture(value: f64) -> Vec<u8> {
     b
 }
 #[test]
+fn fb_incomplete_reads_reject_fabricated_eof_corrections() {
+    // 0065's original-native witness: these prefixes return 2^-10, +0,
+    // NaN and 0x1.fffffffffffffp+0, respectively. EOF assigns 0xff bytes;
+    // incomplete FB reads are a bug correction, not uninitialized storage.
+    let root = std::env::temp_dir().join(format!("fb-eof-{}", std::process::id()));
+    fs::create_dir_all(root.join("ephemeris")).unwrap();
+    let path = root.join("ephemeris/TDB.1950.2050");
+    let bytes = fb_fixture(1.0 / 1024.0);
+    for (length, mjd) in [(72, "50000"), (24, "49996"), (64, "50000"), (65, "50000")] {
+        fs::write(&path, &bytes[..length]).unwrap();
+        let mut s = ClockSession {
+            root: Some(root.clone()),
+            ..Default::default()
+        };
+        let result = crate::tt2tdb::fb_delta_t(&mut s, &parse(mjd));
+        if length == 72 {
+            assert_eq!(result.unwrap(), 1.0 / 1024.0);
+        } else {
+            assert_eq!(result.unwrap_err().field, "FB_incomplete_record");
+            assert!(s.fb.content.is_none());
+            assert_eq!(s.fb.tdbnrl, -1);
+        }
+        assert!(s.fortran.stream.is_none());
+    }
+    // A complete header is sufficient when the requested loops read no
+    // coefficients. Preserve cold nr==1 and zero/negative count behavior.
+    for (count, mjd) in [(1i32, "49996"), (0, "50000"), (-1, "50000")] {
+        let mut header = bytes[..64].to_vec();
+        header[20..24].copy_from_slice(&count.to_be_bytes());
+        fs::write(&path, header).unwrap();
+        let mut s = ClockSession {
+            root: Some(root.clone()),
+            ..Default::default()
+        };
+        let value = crate::tt2tdb::fb_delta_t(&mut s, &parse(mjd)).unwrap();
+        assert_eq!(value.to_bits(), 0.0f64.to_bits());
+        assert!(s.fortran.stream.is_none());
+    }
+    fs::remove_dir_all(root).unwrap();
+}
+#[test]
 fn fb_content_identity_retention_and_failure_publication() {
     let root = std::env::temp_dir().join(format!("fb-content-{}", std::process::id()));
     fs::create_dir_all(root.join("ephemeris")).unwrap();

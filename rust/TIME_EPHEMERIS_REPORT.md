@@ -3,7 +3,10 @@
 Delivery for central review under 0058/0061; acceptance remains central-owned.
 The production implementation is commit `11165d1`. Verification generators
 and the example error assertion are committed in `5343b1d`; this report and
-current correspondence/behavior maps complete the authored delivery. The release base is `5920affdcb2de05df7b2101c6f53455e9ff31d1a`, after
+current correspondence/behavior maps complete the authored delivery. The
+25 October 0065 follow-up below corrects the FB EOF classification and adds
+focused evidence; it does not relabel the initial full-suite results.
+The release base is `5920affdcb2de05df7b2101c6f53455e9ff31d1a`, after
 accepted W `bd290cc` (production `eb2a589`). Native TEMPO2 remains
 `fda6ad4a9753ad7dc5d291406f2f310a9161423f`; A2 remains
 `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572`. V is accepted `f179ce5`, authored
@@ -71,7 +74,10 @@ raw observations remain in the corrected-native artifacts. Saved old streams in
 the probe are genuine caller ownership transfers and are closed explicitly.
 
 Incomplete IFTE headers/constants and native incomplete record-int reads have no
-valid source numerical oracle; Rust reports contextual boundaries. Bytewise EOF
+valid source numerical oracle; Rust reports contextual boundaries. Incomplete
+FB reads are a different case: read_double assigns every byte, including host
+EOF 0xff, and can fabricate a defined finite correction. Rejecting these reads
+is an intentional bug correction under 0053/0065. Direct bytewise/numeric EOF
 continues to produce the recorded host all-ones classes. Actual conversion,
 seek-product and slice bounds replace the old version/grid/file-length/minimum
 coefficient restrictions. Backed beyond-end dates, small coefficient counts,
@@ -125,6 +131,8 @@ adapter is likewise distinguished from its unchanged SOFA call blocks.
 
 ## Reproduction and evidence ownership
 
+This section retains the initial full-suite reproduction recipe. Under 0065,
+the EOF follow-up uses the focused commands below, without rerunning this suite.
 All paths below are relative to the repository root. Generated artifacts remain
 ignored beneath `validation/time_ephemeris_port/{build,outputs,work,w}`. To
 reproduce on this host, retain the initial `build/freeze.json` and existing
@@ -175,10 +183,12 @@ excluded; AB was absent when the original membership was frozen. X is protected;
 AA remains unreleased. The two independent repositories retain their pinned
 HEADs and clean status. No historical receipt is relabeled as a final-source run.
 
-## Final execution results
+## Initial full-suite execution results (before the 0065 follow-up)
 
-All required checks completed with the final production sources and current
-example assertion. Rust is 1.97.1 (8bab26f4f), aarch64-apple-darwin; native is
+These checks cover production commit `11165d1`, the example assertion and
+verification generators delivered in `5343b1d`, and the exact source identities
+in their receipts. They are not fresh executions of the later follow-up.
+Rust is 1.97.1 (8bab26f4f), aarch64-apple-darwin; native is
 Homebrew GCC 16.2.0, `-O2 -std=gnu++11 -DHAVE_CONFIG_H`, binary128 profile.
 Actual command, input, source, header, runtime, compiler and executable hashes
 remain in each launch/build receipt. Final direct run directories are:
@@ -232,6 +242,81 @@ The delivery receipt also hashes the module/unsafe inventory, initial freeze,
 arithmetic proof, staging diffs and downstream gate receipts. Native-stage
 authored-source identities describe their actual earlier generator revisions;
 they are not relabeled as the later final comparator revision.
+
+## 0065 focused FB EOF follow-up (25 October 2026)
+
+Production behavior is unchanged. Comments at `FortranReader::require_complete`
+and both FB call sites now explain the pinned original defect: at fda6ad4,
+`read_fortran.h::read_double:127-147` assigns every fgetc byte, narrowing EOF to
+0xff on this host. `tt2tdb.C::FB_deltaT:238-246,270-273` does not check those reads.
+The resulting value can be defined but fabricated, including a plausible finite
+correction. The existing `FB_incomplete_record` rejection is retained as a
+small-bug correction under 0053/0065, separately from incomplete IFTE header and
+native record-int uninitialized storage. The ledger and contract addendum now
+make that distinction; the frozen historical V map remains verbatim.
+
+Central's read-only original-native witness uses `fixtures.fb(ncf=1)`:
+
+| File bytes / MJD | Original-native result | Current FB result |
+| --- | --- | --- |
+| 72 / 50000 | 0x1p-10 | 0x1p-10 |
+| 24 / 49996 | +0 | FB_incomplete_record |
+| 64 / 50000 | NaN | FB_incomplete_record |
+| 65 / 50000 | 0x1.fffffffffffffp+0 | FB_incomplete_record |
+
+Its receipt is
+`decisions/evidence/time-ephemeris-port/build/fb-eof-5efkysgi/receipt.json`,
+SHA-256 `e27d38ba34da5395e7e8aedf86827ee13b6e47d5983091fee871e28f9094cccc`.
+This follow-up reads that evidence and does not rebuild its native corpus.
+
+`fb_incomplete_reads_reject_fabricated_eof_corrections` adds all four cases,
+checks failed cold-cache publication and released stream ownership, and tests
+three complete-header no-read neighbors: cold nr==1, count=0 and count=-1.
+The existing `fb_content_identity_retention_and_failure_publication` test remains
+unchanged and protects warm same-content nr==1, changed bytes, failed candidate
+publication and recovery. No global file-length restriction or primitive reader
+behavior is changed.
+
+Reproduce the affected unit checks from `rust/` using the existing Cargo/GMP
+paths:
+
+```sh
+export CARGO_HOME="$PWD/.cargo-home"
+export GMP_MPFR_SYS_CACHE="$PWD/target/gmp-cache"
+cargo test --locked --offline --lib time_ephemeris_tests::fb_ -- --test-threads=1
+cargo test --release --locked --offline --lib time_ephemeris_tests::fb_ -- --test-threads=1
+cargo fmt --check
+cargo clippy --locked --offline --all-targets -- -D warnings
+```
+
+The focused verification also invokes the existing Y probe for `fortran_big`,
+`fortran_little` and `fortran_partial`, comparing each fresh debug/release export
+with the already recorded native observation. This checks direct integer,
+float/double and character EOF behavior without replaying the broad V corpus.
+
+Both profiles passed the two focused FB tests (seven new input configurations
+plus the retained cache/recovery sequence) and all three primitive EOF histories.
+Formatting and all-targets Clippy with warnings denied also passed. This is a
+focused follow-up, not another full-suite execution or central acceptance.
+
+New evidence directory, relative to Y:
+`outputs/fb-eof-review/dc1372fcfe9b3d6d`.
+Its `receipt.json` SHA-256 is
+`d1abe756f062c66d2cdcc2ea1395445321ac57a8df84b5ab79a1e2e56037deb3`.
+The receipt records the actual source/compiler/test-binary identities, commands,
+fresh primitive inputs/outputs and their native-record hashes. `commands.json`
+SHA-256 is `c9950bbf5f981f71ba62a8fafa8b7b299a2917b14640bc1da659edd8a2c902a8`.
+
+Before rebuilding, the previous delivered debug and release test executables
+were copied into this directory as `debug-delivered-test-binary` and
+`release-delivered-test-binary`; their hashes exactly match the initial receipts.
+`before.json` maps their original paths to those retained copies. All
+94 protected central-evidence and prior-receipt files stayed byte-identical,
+including the original full-suite delivery, direct/control and regression
+receipts. Old receipts are preserved as evidence of their actual revisions;
+Cargo's rebuilt executable paths are identified only in the new focused receipt.
+No production expression, read boundary, numerical tolerance or EOF primitive
+implementation changed in this follow-up.
 
 ## Limits and open gates
 

@@ -136,6 +136,11 @@ impl FortranReader {
         Ok(i32::from_ne_bytes(bytes))
     }
     pub fn require_complete(&mut self) -> Result<(), TimingError> {
+        // Bug correction for tt2tdb.C::FB_deltaT:238-246,270-273 (fda6ad4):
+        // read_fortran.h::read_double:127-147 assigns every fgetc byte, with
+        // EOF narrowed to 0xff on this host. Unchecked reads can fabricate even
+        // a finite correction, not just NaN; reject them at the FB call sites.
+        // Direct byte/numeric readers retain their source EOF behavior.
         let (_, eof, error) = self
             .stream
             .as_mut()
