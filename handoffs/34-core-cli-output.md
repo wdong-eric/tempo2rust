@@ -1,0 +1,22 @@
+# Assignment AH: core command entry point and output APIs
+
+**Prepared only; not released.** Follow decision 0080 after AG implementation handover, ownership closure and explicit central release under 0074. AE currently owns Rust under 0079; AF and AG remain prepared. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0080/0074/0065/0053/0039/0050, the delivered predecessor reports and the exact baseline named at release.
+
+Once released, own `rust/` and new `validation/core_output/` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and all accepted evidence. Central retains shared scientific/design decisions and milestone acceptance. Preserve original 0008 and apply its later amendments.
+
+Deliver the complete native-style core CLI on the canonical engine, full source text/PAR/report/file output, direct output/helper APIs, logging/precision/enum responsibilities and generated-help integration in 0080. Existing explicit Rust JSON subcommands retain their contracts. Reuse the general fitting, predictor, toolkit, state, scanner and diagnostics implementations; output is stateful and must preserve source mutation/iteration order. Full ABI/backend/platform/release obligations remain separate and explicit.
+
+Proceed in dependency order:
+
+1. Freeze the concrete command/API and stream/destination contracts, runnable input examples, source/type/state/output map and per-field comparison budgets against the released baseline. Reuse the source inventory and earlier evidence.
+2. Complete shared formatter/logger/enum/help responsibilities needed by output. Keep source-defined no-ops, actual nonfinite behavior and precise numeric boundaries; extend canonical implementations rather than adding another engine.
+3. Implement all textOutput/helper and display routines, source state changes and file paths. Verify identical-state output, derived helpers, multi-pulsar ownership and fitted-PAR reload with focused native evidence.
+4. Integrate complete core argument/preprocessing/fitting/output and predictor routes. Preserve actual -pre, -writetim, NITS, alias/path and plugin-boundary semantics; add recoverable source-bug corrections only with demonstrated cause and adjacent explanation.
+5. Run representative end-to-end native/Rust workflows and complete scoped component/branch dispositions in debug/release, affected regressions, I/O recovery, formatting and Clippy. Keep inherited gates open rather than masking them in output comparisons.
+6. Commit explicit authored owned files with Conventional Commits and return `rust/CORE_OUTPUT_REPORT.md`, executable examples, source/unsafe/departure maps, actual identities and remaining scope. Generated artifacts stay in ignored build/ directories.
+
+No independent reference campaign precedes implementation. Add bounded probes for uncovered interfaces or concrete defects. Broader scientific or numerical choices return to central while independent work continues. Minimize unsafe and document each necessary boundary.
+
+## Dispatch prompt after release
+
+Implement Assignment AH under decisions/0080-core-cli-output-prepared-contract.md, decisions/0074-implementation-handover-and-acceptance.md and handoffs/34-core-cli-output.md from the baseline explicitly released by central. Own rust/ and validation/core_output/ as sole Rust writer. Deliver the full native-style core CLI, source text/PAR/file output and logging/precision/enum/helper APIs on the canonical engine. Preserve TEMPO2's actual state/iteration, numeric, naming and file conventions; apply 0053 to demonstrated small bugs, keep original/corrected evidence and all inherited gates, explain necessary unsafe, commit authored paths only and return rust/CORE_OUTPUT_REPORT.md for central review.
