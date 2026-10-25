@@ -211,14 +211,14 @@ impl PulsarContext {
     pub(crate) fn pulsar_observations_mut(
         &mut self,
         index: usize,
-    ) -> Result<(&SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
+    ) -> Result<(&mut SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
         use crate::clock_diagnostics::boundary;
         if self.boundary.is_some() {
             return Err(boundary("pulsar_context_fault"));
         }
         let p = self
             .pulsars
-            .get(index)
+            .get_mut(index)
             .ok_or_else(|| boundary("pulsar_storage"))?;
         // Signed empty loops need no observation owner or initialized pointer.
         if p.nobs.is_some_and(|n| n <= 0) {

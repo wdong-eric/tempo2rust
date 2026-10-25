@@ -93,6 +93,14 @@ pub(crate) struct ClockSession {
     pub ifte: crate::ifteph::IfteEphemeris,
     pub fortran: crate::read_fortran::FortranReader,
     pub fb: crate::tt2tdb::FbCache,
+    #[cfg_attr(
+        not(test),
+        expect(
+            dead_code,
+            reason = "released legacy UT1 driver awaits general orchestration"
+        )
+    )]
+    pub ut1: crate::tai2ut1::Ut1,
     pub queries: Vec<TableQuery>,
     pub fault: Option<TimingError>,
 }

@@ -45,6 +45,7 @@ mod stdio;
 mod t2fit;
 pub mod t2fit_nestlike;
 mod tabulated_function;
+mod tai2ut1;
 pub mod tempo2;
 mod tempo2_util;
 pub mod tk_matrix;
@@ -53,6 +54,7 @@ mod tksvd;
 mod toa2utc;
 mod tropo;
 mod tt2tdb;
+mod vector_pulsar;
 
 pub use clkcorr::{ClockStep, take_clock_diagnostics};
 pub use clock_diagnostics::ClockDiagnostic;
@@ -357,3 +359,6 @@ mod terrestrial_tests;
 
 #[cfg(test)]
 mod time_ephemeris_tests;
+
+#[cfg(test)]
+mod observer_coordinates_tests;

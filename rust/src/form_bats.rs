@@ -89,11 +89,7 @@ pub fn form_bats_all(
     }
     let alpha = input.parameter_cell("RAJ").val.to_f64();
     let delta = input.parameter_cell("DECJ").val.to_f64();
-    let pos_pulsar = [
-        alpha.cos() * delta.cos(),
-        alpha.sin() * delta.cos(),
-        delta.sin(),
-    ];
+    let pos_pulsar = crate::vector_pulsar::position(alpha, delta);
     let norm = dot_product(pos_pulsar, pos_pulsar).sqrt();
     let pulsar_direction = pos_pulsar.map(|x| x / norm);
     let dm = input.parameter_cell("DM").val.to_f64();
@@ -178,24 +174,27 @@ pub fn form_bats_all(
                     Ok((steps, total))
                 })?;
             let utc = sat.clone() + clock_utc / 86400.0f64;
-            let eop = crate::clkcorr::with_resources(&runtime.root, |session| {
-                session.eop.initialize(
-                    Some(&runtime.root),
-                    b"earth/eopc04_IAU2000.62-now",
+            let site = crate::clkcorr::with_resources(&runtime.root, |session| {
+                let index = session.observatories.index(
+                    b"PKS",
+                    session.root.as_deref(),
+                    session.alias.as_deref(),
                     &mut session.diagnostics,
                 )?;
-                let mut values = [0.0; 4];
-                session.eop.get_eop(
-                    utc.to_f64(),
-                    &mut values,
-                    [0, 1, 2, 3],
-                    2,
-                    &mut session.diagnostics,
+                let obs = &session.observatories.observatories[index];
+                let trs = obs.xyz;
+                let zen = crate::get_obs_coord::zenith_trs(obs);
+                let site = crate::get_obs_coord::iau2000b(
+                    session,
+                    trs,
+                    zen,
+                    &tt,
+                    &utc,
+                    b"earth/eopc04_IAU2000.62-now",
                 )?;
                 session.export_terrestrial_resources(&runtime.root, &mut runtime.resources);
-                Ok(values)
+                Ok(site)
             })?;
-            let site = crate::get_obs_coord::get_obs_coord(&runtime.observatory, &tt, &utc, eop)?;
             clock_observation.earth_ssb = earth_initial.map(Some);
             clock_observation.observatory_earth[..3]
                 .copy_from_slice(&site.observatory_earth.map(Some));

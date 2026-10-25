@@ -42,7 +42,6 @@ pub(crate) use crate::observatory::Observatory;
 pub struct RuntimeContext {
     pub(crate) root: PathBuf,
     pub(crate) resources: Vec<Resource>,
-    pub(crate) observatory: Observatory,
     pub(crate) jpl: JplEphemeris,
 }
 impl RuntimeContext {
@@ -121,7 +120,6 @@ impl RuntimeContext {
         Ok(Self {
             root,
             resources,
-            observatory,
             jpl,
         })
     }
