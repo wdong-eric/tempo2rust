@@ -169,3 +169,28 @@ Full original/corrected field deltas, source-invalid cases and lifecycle project
 are recorded in Y's contract and report. Historical V outputs/runners and all
 accepted regression evidence remain unchanged. M2 remains unaccepted with its
 same four raw-order diagnostics.
+
+
+## AA observer-coordinate dispositions (0062/0066)
+
+- All 133 original X histories retain exact ordered types/state, finite bits,
+  nonfinite classes, signed zero, raw diagnostics and original six exit prefixes.
+  Complete UT1 private arrays agree with X's separately audited observer.
+- `get_obsCoord.C::remove_white:464,469,474` at fda6ad4 shifts potentially
+  overlapping suffixes with `strcpy`. Rust moves the same initialized suffix/NUL
+  with `copy_within`. Nineteen complete buffers match the central corrected
+  memmove experiment; its seven original no-shift neighbors remain exact.
+  Original overlapping calls are not executed or given fabricated native values.
+- UT1 missing-file/row-limit source exits retain the written prefix and return a
+  contextual error. An unsuccessful load remains unavailable for further UT1
+  use, without a global resource fault. Empty/inconsistent backing, undefined
+  integer conversions, unwritten input and missing string terminators stop before
+  the source-invalid operation. The terminal per-table state is a safe continuation
+  contract beyond a native exit; no successful native golden is invented.
+- IMAG mutates the shared observatory xyz and retains cached geodetic values.
+  Existing frontend runtimes now read that live record. Source satellite flag
+  units, missing-X-epoch asymmetry, offset selectors and ecliptic selectors stay.
+- Local `mul_add` sites reproduce the actual GCC16 O2 contractions with 18 bounded
+  X histories and retained native object/assembly evidence. Rug128 and the four
+  0049 precision-boundary findings are unchanged. Full public PAR/TIM/model
+  integration remains separate; M2 still has its four raw-order findings.

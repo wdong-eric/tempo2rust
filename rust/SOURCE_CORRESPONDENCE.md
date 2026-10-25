@@ -1,6 +1,6 @@
 # Production correspondence and unsafe boundaries
 
-Assignments E/I/L/O/W/Y, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
+Assignments E/I/L/O/W/Y/AA, TEMPO2 pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 All production Rust modules name their source files and relevant routines near
 the top, or explicitly identify Rust-only glue. This maps selected responsibilities,
 not complete source files or full feature coverage. The header review uses F's
@@ -18,7 +18,7 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/initialise.rs` | Parameter allocation/zero initialization in `initialise.C::allocateMemory`, source-order labels in `initialiseOne`, ownership replacement/destruction for `destroyMemory`; remaining pulsar/observation/covariance responsibilities deferred |
 | `src/tempo2_util.rs` | `tempo2Util.C::dotproduct/hms_turn/dms_turn/turn_deg/fortran_mod/fortran_nlong/copyParam`; strict `parse_binary64` is Rust glue |
 | `src/form_residuals.rs` | `formResiduals.C::formResiduals`, `tempo2Util.C::fortran_mod/fortran_nlong`; split spin phase, first-input reference and checked counts. The `@` entry supplies zero-delay `formBats.C::formBats` and `secularMotion.C::secularMotion` branches |
-| `src/form_bats.rs` | Selected `global.C::formBatsAll`, `calculate_bclt.C::calculate_bclt`, `formBats.C::formBats`; fused `shapiro_delay.C::shapiro_delay`, `dm_delays.C::dm_delays` constant-DM/spherical-wind path, `vectorPulsar.C::vectorPulsar` fixed direction, and zero `secularMotion.C::secularMotion`. Also calls the Rust `formResiduals.C::formResiduals` counterpart |
+| `src/form_bats.rs` | Selected `global.C::formBatsAll`, `calculate_bclt.C::calculate_bclt`, `formBats.C::formBats`; fused `shapiro_delay.C::shapiro_delay`, `dm_delays.C::dm_delays` constant-DM/spherical-wind path, the shared `vector_pulsar::position` fixed-direction body, and zero `secularMotion.C::secularMotion`. Also calls the Rust `formResiduals.C::formResiduals` counterpart |
 | `src/runtime.rs` | Rust-owned resource/context glue; `observatory.C::getObservatory/ITRF_to_GRS80`, `tropo.C::initialize_meteorology_tables`; orchestrates `clkcorr.C::getClockCorrections`, `eop.C::load_EOP`, `ifteph.C::IFTE_init`, `jpleph.c::jpl_init_ephemeris` counterparts |
 | `src/clkcorr.rs` | `clkcorr.C::getClockCorrections/getCorrection/getClockCorrectionSequenceInternal`; all four public operations, explicit chains and all selected helpers/constructors; process session, directed routes, lazy tables and source fallbacks |
 | `src/toa2utc.rs` | Active `toa2utc.C::toa2utc`, bypass and exact SAT jump mutation |
@@ -33,7 +33,9 @@ pinned declarations. Test modules, examples and Python tools are verification gl
 | `src/read_ephemeris.rs` | Selected `readEphemeris.C::readEphemeris` call order and Rug128 scaling; safe JPL calls, timing error/nonfinite adapter |
 | `src/jpleph.rs` | All 12 implemented functions in `jpleph.c`, declared field meanings in `jpleph.h`, decoded `jpl_int.h` layout; full map in `../validation/jpl_port/PROJECTION.md` |
 | `src/stdio.rs` | Rust ownership glue for JPL, IFTE and Fortran-reader libc I/O; no standalone scientific algorithm |
-| `src/get_obs_coord.rs` | Selected `get_obsCoord.C::get_obsCoord_IAU2000B`; retained `sofa/{pom00,rxp,sxp,pxp,c2t00b,trxpv,trxp}.for` routines `iau_POM00/RXP/SXP/PXP/C2T00B/TRXPV/TRXP` and their pinned closure |
+| `src/get_obs_coord.rs` | All six `get_obsCoord.C` routines: full `get_obsCoord` driver, shared `get_obsCoord_IAU2000B`, `lmst`, `get_precessionMatrix`, `ang`, corrected `remove_white`; unchanged retained SOFA ABI and 36-routine closure |
+| `src/vector_pulsar.rs` | Full `vectorPulsar.C::vectorPulsar`, shared fixed-position arithmetic, and `tempo2Util.C::equ2ecl/ecl2equ` extended frame rotations |
+| `src/tai2ut1.rs` | Full `tai2ut1.C::tai2ut1/ut1red`; separate process UT1 table, source scanner prefixes/interpolation and contextual boundaries |
 | `src/tt2tdb.rs` | All four `tt2tdb.C` routines; complete source driver plus shared observation body for both strict frontend time passes |
 | `src/tropo.rs` | All twelve active `tropo.C` routines: complete MeteorologyFunction wrappers, table lifecycle, meteorological getters, Niell helpers and full multi-pulsar driver; shared body and actual lookup provenance for the frontend |
 | `src/std_freq.rs` | `t2fit_stdFitFuncs.C::t2FitFunc_stdFreq/t2UpdateFunc_stdFreq` |
@@ -151,10 +153,11 @@ The complete 22-routine, field/knownness, branch, caller and lifetime map is in
 frozen map by identity. `TERRESTRIAL_RESOURCES_REPORT.md` records the executed
 coverage and exact comparison dispositions. Canonical ownership is
 `ClockSession::{observatories,eop,meteorology}`. Y additionally owns IFTE, the
-Fortran reader and FB cache there; `RuntimeContext` retains JPL and derived
-observatory/provenance snapshots. `form_bats` queries the common EOP
-cache and calls the same `tropo::compute_observation` body used by the full source
-driver. `get_obs_coord` consumes those four EOP outputs. No second EOP parser,
+Fortran reader and FB cache there; AA adds the separate UT1 table.
+`RuntimeContext` retains JPL and provenance; AA removes its stored observatory
+clone so frontend calculations use live canonical xyz after IMAG mutation.
+`form_bats` and the full observer driver call the same IAU/EOP boundary, and
+share `tropo::compute_observation` with the full troposphere driver. No second EOP parser,
 weather cache or weather-only calculation remains.
 
 `NMF_wet` corrects the pinned mixed b/c upper coefficient under 0053. Adjacent
@@ -187,3 +190,19 @@ Rug128 source expression with a checked native i32 quotient and Rug divisor;
 its residual caller handles the same error contract. `fortran_nlong` and solver
 mode order are unchanged. Expression-local FMA sites match compiled GCC16 O2
 witnesses, including dotproduct's existing consumers; no precision mode is added.
+
+
+## Assignment AA observer-coordinate transfer
+
+The pre-edit nine-routine/caller/field/branch/lifetime map is frozen against X and
+actual accepted Y in `../validation/observer_coordinates_port/build/freeze.json`;
+its authored contract and report identify every destination and comparison rule.
+`OBSERVER_COORDINATES_REPORT.md` distinguishes the complete internal source driver
+from the unchanged public input grammar and identifies actual execution receipts.
+
+IMAG mutates `ClockSession::observatories.observatories[index].xyz`; the index
+comes from the real alias path and geodetic cells remain cached. Canonical
+`PulsarContext::pulsar_observations_mut` now returns disjoint mutable pulsar/row
+borrows, retaining revocable owner/view checks. UT1 arrays belong to the same
+outer process owner, independently of clock/EOP/IFTE caches. No new unsafe block,
+backend, native dependency, internal authoritative clone or SOFA layer was added.

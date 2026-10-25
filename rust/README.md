@@ -80,7 +80,7 @@ routine map and exact before/after naming-pass verification.
 The terrestrial implementation follows the same convention:
 `form_bats::form_bats_all` (re-exported as `evaluate_terrestrial`),
 `get_clock_corrections`, `get_correction`, `get_sequence`, `toa2utc`, `load_eop`,
-`get_eop`, `read_ephemeris`, `get_obs_coord` and `compute_tropospheric_delays`
+`get_eop`, `read_ephemeris`, `get_obs_coord::iau2000b` and `compute_tropospheric_delays`
 (with a shared single-observation body for the bounded frontend).
 `tt2tdb.rs` matches the original filename and retains its routine name `tt2tb`.
 The shared `dot_product` lives in `tempo2_util`, matching `tempo2Util.C`.
@@ -409,3 +409,12 @@ corrections, exact V comparison projection, reproduction commands and remaining
 M2/0049 limitations. General PAR/TIM acceptance and CALCEPH library execution
 remain outside this transfer. Generated Y evidence is local and ignored under
 `../validation/time_ephemeris_port/`.
+
+
+AA adds the complete internal observer-coordinate, vector and legacy UT1 driver
+on canonical state. Run `python3 ../validation/observer_coordinates_port/examples.py`
+from this crate for terrestrial, satellite and vector/UT1 examples (or add
+`--profile release`). These explicitly initialized examples exercise source
+routines; they do not expand the public PAR/TIM grammar. See
+[OBSERVER_COORDINATES_REPORT.md](OBSERVER_COORDINATES_REPORT.md) for coverage,
+shared frontend behavior, exact evidence identities and remaining integration.
