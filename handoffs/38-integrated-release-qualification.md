@@ -1,0 +1,22 @@
+# Assignment AL: integrated release qualification
+
+**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. AE currently owns Rust. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+
+Once released, own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
+
+Deliver a runnable, reproducibly built/installed release candidate for the user's selected macOS arm64 and Linux x86_64 profiles, with full Rust core/toolkit APIs and standalone predictor C compatibility. The full scientific/function inventory and all numerical gates remain binding. Actual target execution is required. Do not redefine completion around the current passing subset or replace canonical installations/publish products during qualification.
+
+Proceed in dependency order:
+
+1. Freeze the actual predecessor, source/feature/interface/platform/toolchain/resource matrix and requirement-to-evidence plan. Reuse previous stage maps and immutable results.
+2. Complete clean-source/private-prefix packaging and external consumers, accurate metadata/notices, runtime discovery and actual native/provider load paths. Resolve demonstrated portability/build issues at their source.
+3. Build and execute matched native/Rust profiles on macOS arm64 and Linux x86_64, measuring native numeric types and predictor ABI/layout/calling conventions rather than assuming the local profile is portable.
+4. Complete the current source/body/public-capability/correspondence/unsafe/departure map and repair concrete gaps within the approved contract. Cover all original core responsibility rows and approved retained dependencies; do not rewrite the historical inventory.
+5. Run integrated public/direct/external-client scientific and operational checks, the full applicable candidate suite, affected concurrency/performance verification, formatting, Clippy and package-content checks. Recheck every named inherited/new numerical gate and preserve pass/failure distinctions.
+6. Commit explicit authored owned paths with Conventional Commits and return `rust/RELEASE_QUALIFICATION_REPORT.md`, executable recipes, exact identities, requirement-by-requirement evidence and the complete unresolved ledger for central's 0082 reassessment and final audit.
+
+Keep generated products and large evidence ignored. An unavailable target is unfinished qualification; continue independent work and identify the exact missing execution capability. Consequential new scientific/public/platform choices go to central with alternatives and a recommendation. A runnable candidate with open gates is not full migration acceptance.
+
+## Dispatch prompt after release
+
+Implement Assignment AL under decisions/0086-release-platforms-and-integrated-qualification.md and handoffs/38-integrated-release-qualification.md from the baseline explicitly released by central. Own rust/, validation/release/ and the named qualification workflow if needed. Deliver clean installed full Rust core/toolkit and predictor C consumers on the user's selected macOS arm64 and Linux x86_64 profiles, complete source/interface/unsafe/departure coverage, full applicable integrated verification and exact inherited/new numerical-gate evidence. Preserve scientific conventions and Rug128, apply 0053 only to demonstrated small bugs, keep generated artifacts ignored, and return committed authored work plus rust/RELEASE_QUALIFICATION_REPORT.md for central acceptance.
