@@ -36,17 +36,27 @@ pub(crate) struct SiteGeometry {
     pub site_velocity: [f64; 3],
     pub zenith: [f64; 3],
 }
-fn iau_rotation(
+pub(crate) fn iau2000b(
+    s: &mut ClockSession,
     trs: [f64; 3],
     zenith_terrestrial: [f64; 3],
     tt: &Float,
     utc: &Float,
-    eop: [f64; 4],
+    file: &[u8],
 ) -> Result<SiteGeometry, TimingError> {
-    let [xp, yp, dut1, dut1dot] = eop;
     let tt_jd = tt.clone() + 2400000.5f64;
     let tt1 = crate::ifteph::extended_i32(&tt_jd, "IAU_TT_JD_int")? as f64;
     let tt2 = (tt_jd - tt1).to_f64();
+    // Source splits TT before EOP. This is the single validated IAU boundary
+    // shared by the complete driver and the strict frontend.
+    s.diagnostics
+        .version("get_obsCoord.C", "get_obsCoord_IAU2000B()");
+    s.eop
+        .initialize(s.root.as_deref(), file, &mut s.diagnostics)?;
+    let mut eop = [0.0; 4];
+    s.eop
+        .get_eop(utc.to_f64(), &mut eop, [0, 1, 2, 3], 2, &mut s.diagnostics)?;
+    let [xp, yp, dut1, dut1dot] = eop;
     let ut1_jd = utc.clone() + (dut1 / 86400.0f64) + 2400000.5f64;
     let ut1 = crate::ifteph::extended_i32(&ut1_jd, "IAU_UT1_JD_int")? as f64;
     let ut2 = (ut1_jd - ut1).to_f64();
@@ -557,23 +567,4 @@ pub(crate) fn zenith_trs(obs: &Observatory) -> [f64; 3] {
         obs.height * obs.longitude.sin() * obs.latitude.cos(),
         obs.height * obs.latitude.sin(),
     ]
-}
-pub(crate) fn iau2000b(
-    s: &mut ClockSession,
-    trs: [f64; 3],
-    zen: [f64; 3],
-    tt: &Float,
-    utc: &Float,
-    file: &[u8],
-) -> Result<SiteGeometry, TimingError> {
-    // Source splits TT before loading EOP; reject only its undefined native cast.
-    crate::ifteph::extended_i32(&(tt.clone() + 2400000.5f64), "IAU_TT_JD_int")?;
-    s.diagnostics
-        .version("get_obsCoord.C", "get_obsCoord_IAU2000B()");
-    s.eop
-        .initialize(s.root.as_deref(), file, &mut s.diagnostics)?;
-    let mut eop = [0.0; 4];
-    s.eop
-        .get_eop(utc.to_f64(), &mut eop, [0, 1, 2, 3], 2, &mut s.diagnostics)?;
-    iau_rotation(trs, zen, tt, utc, eop)
 }

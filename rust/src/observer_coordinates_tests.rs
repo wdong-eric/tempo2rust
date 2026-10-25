@@ -782,3 +782,78 @@ fn ut1_failure_is_local_and_prefix_is_retained() {
     assert_eq!(p.context.pulsars[0].correctTroposphere, Some(0));
     fs::remove_dir_all(root).unwrap();
 }
+
+#[test]
+#[ignore = "isolated process: real accepted runtime and process-wide resource history"]
+fn existing_frontend_observes_imag_alias_mutation() {
+    *crate::clkcorr::test_session() = ClockSession::default();
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let input = crate::load(
+        &root.join("tests/terrestrial/fixtures/test1.par"),
+        &root.join("tests/terrestrial/fixtures/test2.tim"),
+    )
+    .unwrap();
+    let runtime_root = root.join("../tempo2/T2runtime");
+    let mut existing = crate::RuntimeContext::new(&runtime_root).unwrap();
+    let before = crate::evaluate_terrestrial(&input, &mut existing).unwrap();
+    let mut probe = Probe::new();
+    probe.context.pulsars[0].nobs = Some(1);
+    probe.context.pulsars[0].t2cMethod = Some(1);
+    write_string(
+        &mut probe.context.pulsars[0].eopc04_file[..],
+        b"earth/eopc04_IAU2000.62-now",
+        "eop",
+    )
+    .unwrap();
+    let observation = probe.observation(0);
+    observation.sat = input.source_observations()[0].sat.clone();
+    observation.clockCorr = Some(2);
+    write_string(&mut observation.telID, b"IMAG", "tel").unwrap();
+    observation.nFlags = Some(1);
+    write_string(&mut observation.flagID[0], b"-telx", "flag").unwrap();
+    {
+        let mut session = crate::clkcorr::test_session();
+        let index = session
+            .observatories
+            .observatories
+            .iter()
+            .position(|o| o.code().unwrap().eq_ignore_ascii_case(b"PKS"))
+            .unwrap();
+        let old = session.observatories.observatories[index].clone();
+        write_string(
+            &mut observation.flagVal[0],
+            (old.xyz[0] + 10000.0).to_string().as_bytes(),
+            "value",
+        )
+        .unwrap();
+        // Explicit initialized alias fixture; the production index/driver resolves it.
+        let mut code = [None; 100];
+        write_string(&mut code, b"PKS", "alias code").unwrap();
+        session.observatories.aliases.insert(
+            0,
+            crate::observatory::AliasList {
+                code,
+                aliases: vec![b"IMAG".to_vec()],
+                warned: false,
+            },
+        );
+        crate::get_obs_coord::driver(&mut session, &mut probe.context, 1).unwrap();
+        let current = &session.observatories.observatories[index];
+        assert_eq!(current.xyz[0], old.xyz[0] + 10000.0);
+        assert_eq!(
+            [current.latitude, current.longitude, current.height],
+            [old.latitude, old.longitude, old.height]
+        );
+    }
+    let after = crate::evaluate_terrestrial(&input, &mut existing).unwrap();
+    let mut fresh = crate::RuntimeContext::new(&runtime_root).unwrap();
+    let fresh = crate::evaluate_terrestrial(&input, &mut fresh).unwrap();
+    assert_ne!(
+        before.corrections[0].observatory_earth_light_s,
+        after.corrections[0].observatory_earth_light_s
+    );
+    for (a, b) in after.corrections.iter().zip(&fresh.corrections) {
+        assert_eq!(a.observatory_earth_light_s, b.observatory_earth_light_s);
+    }
+    *crate::clkcorr::test_session() = ClockSession::default();
+}
