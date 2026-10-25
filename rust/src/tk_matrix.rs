@@ -118,3 +118,17 @@ pub fn mult_matrix(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, Stri
     }
     Ok(out)
 }
+
+/// TKmultMatrixVec (including its square wrapper): source column/row order.
+pub fn mult_matrix_vec(a: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String> {
+    if a.iter().any(|row| row.len() != b.len()) {
+        return Err("matrix vector product dimensions".into());
+    }
+    let mut out = vec![0.0; a.len()];
+    for (j, value) in b.iter().enumerate() {
+        for (i, row) in a.iter().enumerate() {
+            out[i] += row[j] * value;
+        }
+    }
+    Ok(out)
+}

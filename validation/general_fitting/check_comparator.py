@@ -36,6 +36,8 @@ def check(native, candidate):
         ("covariance_column", ["cycles", 0, "systems", 0, "solver", "covariance", 0]),
         ("update", ["cycles", 0, "systems", 0, "updates"]),
         ("whitening", ["cycles", 0, "systems", 0, "whitening"]),
+        ("unscaled_error", ["cycles", 0, "systems", 0, "solver", "errors_unscaled"]),
+        ("linearized_residual", ["cycles", 0, "systems", 0, "solver", "linearized_s"]),
     ]:
         for mutation in ("missing", "extra"):
             x = deepcopy(baseline);a = x
@@ -55,6 +57,18 @@ def check(native, candidate):
     mutants["missing_physical_value"] = x
     x = deepcopy(baseline);x["cycles"][0]["systems"][0]["updates"][1]["increment"] = "1e100"
     mutants["changed_update_increment"] = x
+    # New observers distinguish unwritten ZERO storage from a defined zero and
+    # check its physical result in addition to the duplicate fitted increment.
+    if "defined_value.0" in native.read_text():
+        for field, replacement in [("before_value", "0"), ("after_value", "1e100"), ("after_error", None)]:
+            x = deepcopy(baseline);x["cycles"][0]["systems"][0]["updates"][0][field] = replacement
+            mutants["zero_physical_" + field] = x
+    if "\tpostfit_update\t" in native.read_text():
+        for j in (0, 1):
+            for field in ("postfit_value", "postfit_error"):
+                for replacement in (None, "1e100"):
+                    x = deepcopy(baseline);x["cycles"][0]["systems"][0]["updates"][j][field] = replacement
+                    mutants[f"postfit_{j}_{field}_{replacement}"] = x
     records = []
     for name, x in mutants.items():
         path = BUILD / (name + ".json");path.write_text(json.dumps(x) + "\n")

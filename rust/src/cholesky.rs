@@ -552,15 +552,11 @@ impl ModelReader<'_> {
                                 let l = lines
                                     .next()
                                     .ok_or_else(|| boundary("short legacy covariance model"))?;
-                                v.push(
-                                    l.split_whitespace()
-                                        .nth(1)
-                                        .ok_or_else(|| {
-                                            boundary("legacy covariance model argument")
-                                        })?
-                                        .parse()
-                                        .map_err(|_| boundary("legacy covariance model number"))?,
-                                );
+                                v.extend(values(std::iter::once(
+                                    l.split_whitespace().nth(1).ok_or_else(|| {
+                                        boundary("legacy covariance model argument")
+                                    })?,
+                                ))?);
                             }
                             if kind == "1" {
                                 powerlaw_covariance(v[0], v[1], v[2], "", &[], nd)?

@@ -46,6 +46,7 @@ int main(int argc,char**argv){
  for(int i=0;i<6;i++)memcpy(copy[i],m[i],6*sizeof(double));cholesky_formL(lower,copy,6);dump("lower",lower,6);
  for(int i=0;i<6;i++)memcpy(copy[i],m[i],6*sizeof(double));cholesky_formLinv(inverse,copy,6);dump("inverse",inverse,6);
  T2getWhiteRes(x,y,e,6,lower,white);vec("white",white,6);
+ double reconstructed[6];TKmultMatrixVec(lower,white,6,6,reconstructed);vec("reconstructed",reconstructed,6);
  auto*ps=new pulsar();auto d=malloc_blas(1,6);getCholeskyDiagonals(d,ps,x,y,e,6,0,NULL);vec("sigma",d[0],6);printf("VALUE determinant -1 -1 %.17g\n",ps->detL);
  return 0;
 }

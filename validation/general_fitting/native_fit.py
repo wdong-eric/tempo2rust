@@ -9,7 +9,7 @@ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 def build():
  ad.BUILD=BUILD/'ad';ad.build()
  src=BUILD/'source';src.mkdir(parents=True,exist_ok=True);objects=[];commands=[];patch=''
- for name in ['TKfit.C','t2fit.C','t2fit_nestlike.C','t2fit_stdFitFuncs.C','t2fit_fitwaves.C','constraints_covar.C','choleskyRoutines.C']:
+ for name in ['TKfit.C','t2fit.C','t2fit_nestlike.C','t2fit_stdFitFuncs.C','t2fit_fitwaves.C','t2fit_gw.C','constraints_covar.C','choleskyRoutines.C']:
   old=ad.ac.blob(name).decode();new=corrected(name,old)
   if name=='TKfit.C':
    new=new.replace('        wmax = TKfindMax_Ld(w,nparams);','        extern void ae_svd(int,int,int,const longdouble*,double);\n        ae_svd(ndata,nparams,nconstraints,w,tol);\n        wmax = TKfindMax_Ld(w,nparams);')

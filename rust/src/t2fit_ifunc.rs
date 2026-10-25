@@ -45,7 +45,8 @@ pub(crate) fn t2FitFunc_sifunc(
             ret = crate::ifunc::sinfunc(
                 &psr.ifuncT
                     .iter()
-                    .take((2) as usize)
+                    // sinfunc reads the first two knots and the kth knot.
+                    .take((k as usize + 1).max(2))
                     .map(|v| read(v, "ifuncT").copied())
                     .collect::<Result<Vec<_>, _>>()?,
                 ((read(&rows[(ipos) as usize].bat, "psr[p].obsn[ipos].bat")?).clone()).to_f64(),
@@ -57,7 +58,7 @@ pub(crate) fn t2FitFunc_sifunc(
                 * crate::ifunc::sinfunc(
                     &psr.quad_ifuncT_p
                         .iter()
-                        .take((2) as usize)
+                        .take((k as usize + 1).max(2))
                         .map(|v| read(v, "quad_ifuncT_p").copied())
                         .collect::<Result<Vec<_>, _>>()?,
                     ((read(&rows[(ipos) as usize].bat, "psr[p].obsn[ipos].bat")?).clone()).to_f64(),
@@ -69,7 +70,7 @@ pub(crate) fn t2FitFunc_sifunc(
                 * crate::ifunc::sinfunc(
                     &psr.quad_ifuncT_c
                         .iter()
-                        .take((2) as usize)
+                        .take((k as usize + 1).max(2))
                         .map(|v| read(v, "quad_ifuncT_c").copied())
                         .collect::<Result<Vec<_>, _>>()?,
                     ((read(&rows[(ipos) as usize].bat, "psr[p].obsn[ipos].bat")?).clone()).to_f64(),

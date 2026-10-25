@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <vector>
 #include <cstring>
+extern void t2fit_fillOneParameterFitInfo(pulsar*,param_label,int,FitInfo&);
 int main(){
  MAX_PSR=1;MAX_OBSN=2;auto*p=new pulsar[1];initialise(p,1);
  p->param[param_start].val[0]=58000;p->param[param_finish].val[0]=58100;
@@ -31,4 +32,9 @@ int main(){
  p->ifuncN=2;p->ifuncT[0]=58000;p->ifuncT[1]=58100;p->ifuncV[0]=p->ifuncV[1]=0;
  t2Fit_fillFitInfo(p,p->fitinfo,*g,x,ip,0);
  for(unsigned j=0;j<p->fitinfo.nConstraints;j++)printf("IFUNCLABEL %u %d\n",j,p->fitinfo.constraintIndex[j]);
+ // Defined sentinels expose skipped writes without reading unwritten labels.
+ auto*q=new FitInfo{};p->nQuad=1;
+ for(int i=0;i<4;i++)q->paramIndex[i]=param_ZERO;
+ t2fit_fillOneParameterFitInfo(p,param_quad_om,0,*q);
+ for(unsigned i=0;i<q->nParams;i++)printf("QUADLABEL %u %d %d\n",i,q->paramIndex[i],param_quad_om);
 }

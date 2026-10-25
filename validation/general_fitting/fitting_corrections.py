@@ -10,6 +10,15 @@ def corrected(name,source):
   source=source.replace('dotproduct(psr->posPulsar,psr->obsn[ipos].planet_ssb[k])','dotproduct(psr[ipsr].posPulsar,psr[ipsr].obsn[ipos].planet_ssb[k])')
  elif name=='t2fit_fitwaves.C':
   source=source.replace('int k = kk % (psr[ipsr].nWhite*2);','int k = kk % ((label==param_wave_dm ? psr[ipsr].nWhite_dm : psr[ipsr].nWhite)*2);')
+  start=source.index('void t2UpdateFunc_fitwaves(')
+  source=source[:start]+source[start:].replace('label==param_wave_dm || waveScale==1 ||','label==param_wave_dm ||')
+ elif name=='t2fit_gw.C':
+  start=source.index('double t2FitFunc_gwcs_amp(');end=source.index('double t2FitFunc_quad_om(',start)
+  block=source[start:end]
+  token='if (psr[ipsr].obsn[ipos].sat < psr[ipsr].gwcs_epoch-width_day/2.0)\n\t  res=0;'
+  assert block.count(token)==1
+  block=block.replace(token,token.replace('res=0;','extra=0; // AE 0053: the final projection consumes extra, not res.'))
+  source=source[:start]+block+source[end:]
  elif name=='constraints_covar.C':
   source=source.replace('int idx=psr[ipsr].ifuncN;','int idx=k;')
  elif name=='bootstrap.C':
@@ -31,6 +40,12 @@ def corrected(name,source):
   source=source.replace('p2->prefitErr[i] = p1.prefitErr[i];','memcpy(p2->prefitErr+i,p1.prefitErr+i,sizeof(longdouble));')
  elif name=='t2fit.C':
   source=correct_legacy_global(source)
+  start=source.index('        case param_quad_om:',source.index('void t2fit_fillOneParameterFitInfo'))
+  end=source.index('        case param_gwsingle:',start)
+  block=source[start:end];token='                OUT.paramCounters[OUT.nParams]=i;'
+  assert block.count(token)==1
+  block=block.replace(token,'                OUT.paramIndex[OUT.nParams]=fit_param; // AE 0053: every expanded column needs its label.\n'+token)
+  source=source[:start]+block+source[end:]
   start=source.rindex('void subtractTNPoly(');end=source.index('void subtractSWGPMeanSW(',start)
   block=source[start:end]
   token='        paramDerivFunc fitfunc;'

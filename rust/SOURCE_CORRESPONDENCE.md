@@ -267,3 +267,11 @@ The detailed routine, precision, lifecycle and correction map is in
 
 AD adds no unsafe Rust block, native numerical dependency, alternate backend or
 precision switch. Retained FFI and process resource lifetimes are unchanged.
+
+## AE general fitting and noise (active)
+
+[GENERAL_FITTING_SOURCE_MAP.md](GENERAL_FITTING_SOURCE_MAP.md) records the current
+module/header routes, numerical boundaries, canonical ownership and outstanding
+API/branch audit. [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md) remains an
+implementation checkpoint, with separate inherited and new failed gates. The
+general and bounded adapters share the source SVD, timing and parameter state.

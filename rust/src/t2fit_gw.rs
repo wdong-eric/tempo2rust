@@ -400,7 +400,9 @@ pub(crate) fn t2FitFunc_gwcs_amp(
                 < (Float::with_val(PRECISION_BITS, *read(&psr.gwcs_epoch, "psr[p].gwcs_epoch")?)
                     - ((width_day).clone() / Float::with_val(PRECISION_BITS, 2.0f64))))
             {
-                res = (0i32) as f64;
+                // 0053: source writes res then overwrites it with unwritten extra.
+                // The pre-event shape is zero, as in formResiduals.C.
+                extra = Some(0.0);
             } else {
                 if ((read(&rows[(ipos) as usize].sat, "psr[p].obsn[ipos].sat")?).clone()
                     < Float::with_val(PRECISION_BITS, *read(&psr.gwcs_epoch, "psr[p].gwcs_epoch")?))

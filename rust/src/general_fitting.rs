@@ -69,6 +69,9 @@ pub struct PhysicalUpdate {
     pub before_error: Option<Number>,
     pub after_value: Option<Number>,
     pub after_error: Option<Number>,
+    /// Canonical state after TN polynomial/SWGP postfit transfers.
+    pub postfit_value: Option<Number>,
+    pub postfit_error: Option<Number>,
     pub increment: FitNumber,
     pub fit_error: FitNumber,
 }
@@ -382,6 +385,8 @@ fn parameter_columns(
                     count(*read(&p.ne_sw_ifuncN, "ne_sw_ifuncN")?, "ne_sw_ifuncN")?
                 }
                 param_gwsingle => 4,
+                // 0053: source omits labels after the first quadrupole column.
+                // The common expansion below assigns the label to every one.
                 param_quad_om => 4 * count(*read(&p.nQuad, "nQuad")?, "nQuad")?,
                 param_tel_dx | param_tel_dy | param_tel_dz => {
                     let n = count(
@@ -574,7 +579,6 @@ fn physical(p: &SourcePulsar, c: &Column) -> (Option<Number>, Option<Number>) {
         }
         param_wave_dm | param_wave_om => {
             let dm = c.label() == param_wave_dm
-                || p.waveScale == Some(1.0)
                 || (p.waveScale == Some(2.0) && k < (p.nWhite.unwrap_or(0) * 2) as usize);
             let j = if dm {
                 k
@@ -1004,6 +1008,8 @@ pub fn t2_fit(
                     before_error,
                     after_value,
                     after_error,
+                    postfit_value: None,
+                    postfit_error: None,
                     increment: solver.increments[out].clone(),
                     fit_error: solver.errors[out].clone(),
                 });
@@ -1040,6 +1046,10 @@ pub fn t2_fit(
     }
     let postfit_files = postfit(context, options.diagnostics.as_ref())?;
     for system in &mut systems {
+        for update in &mut system.updates {
+            (update.postfit_value, update.postfit_error) =
+                physical(&context.pulsars[update.pulsar], &update.column);
+        }
         system
             .diagnostic_files
             .extend(postfit_files.iter().cloned());

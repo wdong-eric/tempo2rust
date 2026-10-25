@@ -52,6 +52,12 @@ extended decimal or explicit nonfinite class; unwritten/inapplicable values are
 null, never manufactured zeros. Bounded fit adapters retain their v1 schemas and
 reuse the same solver/callback arithmetic.
 
+Each physical-update record additionally exposes `postfit_value` and
+`postfit_error` after the source TN polynomial/SWGP transfers. `after_value` and
+`after_error` remain the immediate callback result. This preserves the distinction
+between a fitted increment and the deterministic state used by the final timing
+evaluation. The same physical-coordinate gates apply to both snapshots.
+
 ## Prospective numerical comparisons
 
 All 0007, 0012 and 0071 gates remain unchanged. Matrices and whitening columns
@@ -59,6 +65,17 @@ use 5e-14 times the reference column maximum, exact structural zeros. Increments
 raw covariance, errors and chi-square retain the applicable identical-input or
 independent-pipeline 0007 gate. Timing is 1e-12 s; phase is 1e-10 turn; all row,
 column, mutation, count, mode/drop and class identities are exact.
+
+Physical updates use each source callback's units. For callbacks that add or
+subtract the fit value directly, divide the physical difference by unit gain 1
+and multiply by the reference design-column maximum. ELL1H PB has gain
+1/86400 (days per fitted second); its A1/EPS1/EPS2/TASC/H3/H4/STIG callbacks have
+gain 1. Spin retains its time-power/frequency conversion. Compare before/after
+values with 1e-11 s plus 1e-10 times the reference update's equivalent seconds;
+physical errors use 1e-11 s plus relative 1e-6, with structural zeros exact.
+These extend the existing spin checks without widening their budgets. Native
+observers explicitly identify unwritten first-cycle error/offset storage and do
+not evaluate it. Unsupported physical unit mappings remain listed as unchecked.
 
 New identical-input quantities, with arithmetic performed in the comparator at
 extended decimal precision:
@@ -75,6 +92,8 @@ extended decimal precision:
 | Seeded bootstrap RNG | source binary64 | exact bits and seed history |
 | Standalone spectral density | source declared density units; maximum reference magnitude | 5e-14 times scale, structural zero exact |
 | DM/CM normalized grid weights | dimensionless, derived from source covariance errors | relative 1e-10, zero exact; grid membership/epochs exact binary64 |
+| Standalone callback derivatives | source residual seconds per fit coordinate; separate column maximum | 5e-14 times reference column scale, structural zero exact |
+| Standalone glitch update on identical supplied increments | stored GLF0 (Hz) / GLF2 (Hz/s^2), each value/error separately | relative 5e-14, structural zero exact; no shared scale between different units |
 
 Ill-conditioned or precision-boundary failures are reported, not accommodated by
 changing these gates. An unchecked field is not accepted. Original and corrected
@@ -94,3 +113,11 @@ failures, four 0049 utility boundaries. DDH now follows 0087's approved paired
 current-clock fidelity and versioned historical-clock 1 ns pre/post-fit checks;
 the original current-clock native assertion failure remains a preserved record.
 Production remains Rug128; no sorted modes or compatibility precision switch.
+
+The identical-input solver observer exports errors before rescaling, the applied
+error multiplier (including the robust wrapper's override), and the source
+binary64 unweighted linearized residual. Unscaled errors use the existing
+relative `1e-10` error gate, multiplier uses relative `5e-14`, and linearized
+residuals use `1e-12 s`. Structural zeros and numeric classes/signs remain exact.
+Public result shape requires all unscaled errors and one linearized residual per
+selected observation; standalone observations validate the shared implementation.

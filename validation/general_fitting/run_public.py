@@ -28,18 +28,20 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def run(profile="debug", names=()):
-    build = HERE / "build/public" / profile
+def run(profile="debug", names=(), cases=CASES, directory="public"):
+    assert not set(names) - {name for name, _, _ in cases}, "unknown public case"
+    build = HERE / "build" / directory / profile
     build.mkdir(parents=True, exist_ok=True)
     rust = ROOT / "rust/target" / profile / "tempo2-rust"
     native = HERE / "build/native/fit"
     records = []
-    for name, pars, options in CASES:
+    for name, pars, options in cases:
         if names and name not in names:
             continue
         dest = build / name
         dest.mkdir(exist_ok=True)
-        tims = [FIT_INPUTS / "bary.tim"] * len(pars)
+        tims = [Path(p) for p in options.get("tims", [FIT_INPUTS / "bary.tim"] * len(pars))]
+        assert len(tims) == len(pars)
         env = {**os.environ, "TEMPO2": str(RUNTIME)}
         for key in ("AE_COVARIANCE", "AE_NORESCALE"):
             env.pop(key, None)
@@ -69,7 +71,10 @@ def run(profile="debug", names=()):
         (dest / "identity.json").write_text(json.dumps(record, indent=2) + "\n")
         records.append(record)
         print(name, record["failures"], flush=True)
-    (build / ("receipt-" + "-".join(names) + ".json" if names else "receipt.json")).write_text(json.dumps(records, indent=2) + "\n")
+    selection = "-".join(names)
+    if len(selection) > 120:
+        selection = "selected-" + hashlib.sha256(selection.encode()).hexdigest()[:16]
+    (build / ("receipt-" + selection + ".json" if names else "receipt.json")).write_text(json.dumps(records, indent=2) + "\n")
     return records
 
 

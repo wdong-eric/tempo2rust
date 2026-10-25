@@ -105,7 +105,9 @@ pub(crate) fn t2UpdateFunc_fitwaves(
     d: &mut Diagnostics,
 ) -> Result<(), TimingError> {
     let mut waveScale: i32 = source_i32(*read(&psr.waveScale, "psr[p].waveScale")?)?;
-    if (((label == (param_wave_dm as i32)) || (waveScale == 1i32))
+    // 0053: WAVE_SCALE=1 still loads/uses wave_cos and wave_sine. The source
+    // updater selected unwritten DM arrays and left the timed amplitudes fixed.
+    if ((label == (param_wave_dm as i32))
         || ((waveScale == 2i32) && (k < (*read(&psr.nWhite, "psr[p].nWhite")? * 2i32))))
     {
         {

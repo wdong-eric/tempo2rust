@@ -23,6 +23,11 @@ def build():
             token = 'TKsingularValueDecomposition_lsq(augmented_DM,ndata+nconstraints,nparams,v,w,u);'
             assert text.count(token) == 1
             text = text.replace(token, token + '\nextern void ae_solver_svd(int,const longdouble*);ae_solver_svd(nparams,w);')
+            token = '    if(computeErrors && rescale_errors){'
+            assert text.count(token) == 1
+            text = text.replace(token, '''    extern void ae_solver_details(int,int,int,const double*,bool,bool,double,const double*,bool,const double*,double**);
+    ae_solver_details(ndata,nparams,nconstraints,e,computeErrors,rescale_errors,chisq,outP,computeParam,data,designMatrix);
+''' + token)
         else:
             text = 'extern void ae_robust_step(int,int,double,double,double,double,double*,double**,double*,double*,double*,double**,int,int);\n' + text
             token = 'sigma = median_abs_deviation/0.6745;'
@@ -31,6 +36,9 @@ def build():
             token = '    double robust_chisq ='
             assert text.count(token) == 1
             text = text.replace(token, '    ae_robust_step(count,1,sigma,0,sum_phi_sq,sum_dphi,modified_data,Mw,resid,outP,e,Ocvm,ndata,nparams);\n' + token)
+            token = '    if (rescale_errors)ecorrect = robust_chisq / nfree;'
+            assert text.count(token) == 1
+            text = text.replace(token, token + '\n    extern void ae_solver_multiplier(double);ae_solver_multiplier(sqrt(ecorrect));')
         src = BUILD / name;src.write_text(text);obj = src.with_suffix('.o');objects.append(obj)
         cmd = ['/opt/homebrew/bin/g++-16', '-O2', '-std=gnu++11', '-DHAVE_CONFIG_H', '-I' + str(REF / 'source'), '-c', str(src), '-o', str(obj)]
         subprocess.run(cmd, capture_output=True, check=True);commands.append(cmd)
@@ -80,6 +88,14 @@ def compare(output, got, matrix, data, mask, has_data, mode=0):
         for i, row in enumerate(matrix):
             delta = sum(D(x) * e for x, e in zip(row, errors))
             if abs(delta) > D('1e-14'): failures.append({'quantity': f'joint_increment.{i}', 'difference': str(delta), 'gate': '1e-14'})
+    if ('M',) in final:
+        check('error_multiplier', got['error_multiplier'], final['M',], D('5e-14') * abs(D(final['M',])))
+        assert len(got['errors_unscaled']) == (len(scales) if mask & 2 else 0)
+        for j, value in enumerate(got['errors_unscaled']):
+            check(f'errors_unscaled.{j}', value, final['U', str(j)], D('1e-10') * abs(D(final['U', str(j)])))
+        assert len(got['linearized_s']) == (len(data) if mask & 1 and has_data else 0)
+        for j, value in enumerate(got['linearized_s']):
+            check(f'linearized.{j}', value, final['L', str(j)], D('1e-12'))
     check('chi', got['chi_square'], final['CHI',], D('1e-10') * abs(D(final['CHI',])) + D('1e-12' if mode==1 else '1e-24'))
     assert len(got['singular_values']) == len(modes[-1])
     for j, value in enumerate(modes[-1]): check(f'raw_mode.{j}', got['singular_values'][j], value, D('1e-10') * abs(D(value)))

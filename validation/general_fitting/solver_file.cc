@@ -5,6 +5,16 @@
 #include <cstdio>
 #include <cstdlib>
 static FILE* out;
+void ae_solver_multiplier(double value) {fprintf(out,"M %.17g\n",value);}
+void ae_solver_details(int n,int np,int nc,const double*e,bool errors,bool rescale,double chi,
+        const double*p,bool params,const double*y,double**a) {
+    ae_solver_multiplier(rescale?sqrt(chi/(n+nc-np)):1.0);
+    if(errors)for(int j=0;j<np;j++)fprintf(out,"U %d %.17g\n",j,e[j]);
+    if(params)for(int i=0;i<n;i++) {
+        double sum=0;for(int j=0;j<np;j++)sum+=a[i][j]*p[j];
+        fprintf(out,"L %d %.17g\n",i,y[i]-sum);
+    }
+}
 void ae_solver_svd(int n, const longdouble* w) {
     for(int i=0;i<n;i++) { char value[128]; quadmath_snprintf(value,sizeof value,"%.36Qg",w[i]);fprintf(out,"S %d %s\n",i,value); }
 }

@@ -93,7 +93,13 @@ def checked_shape(ref, result):
                 for j in range(int(at("prepared", p, -1, "nparams"))):
                     label, counter = int(at("column", p, j, "label")), int(at("column", p, j, "counter"))
                     owner = -1 if any(at("fit", p0, c, "owner") == -1 and at("fit", p0, c, "label") == label and at("fit", p0, c, "counter") == counter for c in range(nf)) else p
-                    update_specs.append({"pulsar": literal(p), "column": {"pulsar": literal(owner), "parameter": literal(PARAMETERS[label]), "parameter_index": literal(label), "subindex": literal(counter)}, **{key: "number" if PARAMETERS[label] == "param_f" else "nullable_number" for key in ("before_value", "before_error", "after_value", "after_error")}, "increment": "number", "fit_error": "number"})
+                    physical_specs = {}
+                    for when in ("before", "after", "postfit"):
+                        for field in ("value", "error"):
+                            flag = ref.get((it, when + "_update", p, label, "defined_" + field + "." + str(counter)))
+                            if when == "postfit" and flag is None: continue
+                            physical_specs[when + "_" + field] = (literal(None) if flag == 0 else "number") if flag is not None else ("number" if PARAMETERS[label] == "param_f" else "nullable_number")
+                    update_specs.append({"pulsar": literal(p), "column": {"pulsar": literal(owner), "parameter": literal(PARAMETERS[label]), "parameter_index": literal(label), "subindex": literal(counter)}, **physical_specs, "increment": "number", "fit_error": "number"})
             control_specs = []
             for p in group:
                 fields = {"pulsar": literal(p), "fit_mode": int, "sigma": (int(at("prepared", p, -1, "ndata")), "number"), "log_determinant": "number"}
@@ -106,7 +112,7 @@ def checked_shape(ref, result):
                 "data": (n, "number"), "white_data": (n, "number"),
                 "matrix": (n, (nf, "number")), "white_matrix": (n, (nf, "number")),
                 "constraints": (nc, (nf, "number")), "constraint_targets": (nc, "number"), "constraint_rows": (nc, constraint_specs),
-                "solver": {"singular_values": (nf, "number"), "retained": (nf, bool), "rank": int, "dof": int, "increments": (nf, "number"), "errors": (nf, "number"), "covariance": (nf, (nf, "number")), "chi_square": "number"},
+                "solver": {"singular_values": (nf, "number"), "retained": (nf, bool), "rank": int, "dof": int, "increments": (nf, "number"), "errors": (nf, "number"), "errors_unscaled": (nf, "number"), "error_multiplier": "number", "linearized_s": (n, "number"), "covariance": (nf, (nf, "number")), "chi_square": "number"},
                 "whitening": (len(group), control_specs),
                 "noise": (len(noise_members), noise_specs), "updates": (len(update_specs), update_specs),
             })
@@ -126,7 +132,7 @@ def compare(native, candidate, destination):
         cycle, stage, p, row, key, value = line.split("\t")
         ref[int(cycle), stage, int(p), int(row), key] = D(value)
     result = json.loads(Path(candidate).read_text())
-    failures, stats = [], {}
+    failures, stats, unchecked_physical = [], {}, set()
     shape_failures = checked_shape(ref, result)
     if shape_failures:
         receipt = {"native": str(native), "candidate": str(candidate), "stats": {}, "failures": shape_failures, "unchecked": ["numeric comparison not run after shape/membership failure"]}
@@ -277,6 +283,31 @@ def compare(native, candidate, destination):
                     relative = D("1e-11" if field == "increment" else "1e-6")
                     check([it, update["pulsar"], j, "update." + field], decimal(update[field]) * scale, expected * scale, D("1e-11") + relative * abs(expected * scale), "update." + field, structural=scale == 0 or (key == "error" and expected == 0))
                 if PARAMETERS[col["parameter_index"]] != "param_f":
+                    p, l, k = update["pulsar"], col["parameter_index"], col["subindex"]
+                    gain = ref.get((it, "after_update", p, l, "unit_gain." + str(k)), ZERO)
+                    if gain == 0:
+                        if any(update[f] is not None for f in ("before_value", "after_value", "before_error", "after_error")):
+                            unchecked_physical.add(PARAMETERS[l])
+                        continue
+                    # Convert physical-coordinate error back to source fit units,
+                    # then apply the existing column-weighted seconds budget.
+                    scale = scales["matrix"][j] / abs(gain)
+                    binary64 = ref.get((it, "after_update", p, l, "binary64_storage." + str(k)), ZERO) == 1
+                    coordinate = (lambda v: D.from_float(float(decimal(v)))) if binary64 else decimal
+                    before = ref.get((it, "before_update", p, l, "value." + str(k)))
+                    after = at(it, "after_update", p, l, "value." + str(k))
+                    before = coordinate(before) if before is not None else None
+                    after = coordinate(after)
+                    change = after - before if before is not None else after
+                    for when in ("before", "after", "postfit"):
+                        for field in ("value", "error"):
+                            if when == "postfit" and (it, "postfit_update", p, l, "defined_" + field + "." + str(k)) not in ref: continue
+                            got = update[when + "_" + field]
+                            if got is None: continue
+                            want = coordinate(at(it, when + "_update", p, l, field + "." + str(k)))
+                            physical_change = (want - before if before is not None else want) if when == "postfit" else change
+                            gate = D("1e-11") + (D("1e-10") * abs(physical_change * scale) if field == "value" else D("1e-6") * abs(want * scale))
+                            check([it, p, l, k, when + "_" + field], coordinate(got) * scale, want * scale, gate, "physical." + when + "_" + field, structural=field == "error")
                     continue
                 p, l, k = update["pulsar"], col["parameter_index"], col["subindex"]
                 f0 = at(it, "prefit", p, l, "value.0")
@@ -290,7 +321,12 @@ def compare(native, candidate, destination):
                 check([it, p, k, "physical_value"], decimal(update["after_value"]) * scale, after * scale, D("1e-11") + D("1e-10") * abs((after - before) * scale), "physical_spin")
                 error = at(it, "after_update", p, l, "error." + str(k))
                 check([it, p, k, "physical_error"], decimal(update["after_error"]) * scale, error * scale, D("1e-11") + D("1e-6") * abs(error * scale), "physical_spin_error", structural=True)
+                if (it, "postfit_update", p, l, "value." + str(k)) in ref:
+                    final = at(it, "postfit_update", p, l, "value." + str(k))
+                    check([it, p, k, "postfit_value"], decimal(update["postfit_value"]) * scale, final * scale, D("1e-11") + D("1e-10") * abs((final - before) * scale), "physical_spin_postfit")
+                    error = at(it, "postfit_update", p, l, "error." + str(k))
+                    check([it, p, k, "postfit_error"], decimal(update["postfit_error"]) * scale, error * scale, D("1e-11") + D("1e-6") * abs(error * scale), "physical_spin_postfit_error", structural=True)
     receipt = {"native": str(native), "candidate": str(candidate), "stats": stats, "failures": failures,
-               "unchecked": ["physical updates outside spin", "covariance kernel and Cholesky factors", "robust intermediate scale/weight history", "solver unscaled errors, multiplier and linearized residuals", "controls not exported by this native harness revision", "optional files", "truth recovery"]}
+               "unchecked": ["physical unit maps: " + ", ".join(sorted(unchecked_physical)), "covariance kernel and Cholesky factors", "robust intermediate scale/weight history", "solver unscaled errors, multiplier and linearized residuals", "controls not exported by this native harness revision", "optional files", "truth recovery"]}
     Path(destination).write_text(json.dumps(receipt, indent=2) + "\n")
     return receipt

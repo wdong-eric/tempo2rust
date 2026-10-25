@@ -21,7 +21,9 @@ for kind,source in [('original',original),('corrected',fixed)]:
  proc=subprocess.run([str(exe)],check=True,capture_output=True,timeout=30);(BUILD/(kind+'.log')).write_bytes(proc.stdout+proc.stderr)
  rows=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('PRIOR ')]
  labels=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('IFUNCLABEL ')]
- records[kind]={'rows':rows,'ifunc_labels':labels,'exe_sha256':sha(exe),'output_sha256':sha(BUILD/(kind+'.log'))}
+ quad=[list(map(int,line.split()[1:])) for line in proc.stdout.decode().splitlines() if line.startswith('QUADLABEL ')]
+ assert [r[1]==r[2]for r in quad]==([True]*4 if kind=='corrected' else [True,False,False,False])
+ records[kind]={'rows':rows,'ifunc_labels':labels,'quadrupole_labels':quad,'exe_sha256':sha(exe),'output_sha256':sha(BUILD/(kind+'.log'))}
  assert all(row[-1]==1 for row in rows)
 assert records['original']['rows'][:4]==records['corrected']['rows'][:4]
 old=[r[2] for r in records['original']['rows'] if r[0]==1 and r[3]==1]

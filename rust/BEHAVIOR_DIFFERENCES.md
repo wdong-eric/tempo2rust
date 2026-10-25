@@ -247,3 +247,34 @@ M2's four exact raw-order failures, the four 0049 boundaries and original DDH
 1 ns gate remain open. P's 154 records remain open; 0077 diagnoses the precision
 cause but authorizes no gate or production precision change. This delivery does
 not accept the overall migration.
+
+## AE general fitting dispositions (active, 0053/0071/0079)
+
+The correction table in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md)
+and authored `validation/general_fitting/check_*.py` witnesses retain original
+and corrected expectations. Current corrections address nonzero constraint RHS,
+robust argument forwarding, sort-before-row-capture, stale TN polynomial caches,
+current-pulsar planet callbacks, WAVDM harmonic count, IFUNC constraint indices/
+labels, logarithmic prior sine/cosine labels, legacy global layouts, bootstrap
+stack/copy defects, omitted automatic-covariance buffer capacity, imaginary FFT
+DC initialization, and constant-only TN's unwritten solver data.
+
+New family witnesses also establish three source defects: quadrupole expansion
+omits subsequent column labels; pre-event cosmic-string derivatives overwrite
+their zero result with an unwritten prefactor; and WAVE_SCALE=1 updates the DM
+array even though parsing and residual formation use the ordinary WAVE array.
+Corrections assign the missing labels, zero the consumed pre-event prefactor,
+and update the coefficients that residual formation actually consumes. Existing
+neighboring branches remain checked. Rust's two-knot sinc slice was an independent
+implementation bug and now includes the requested kth knot.
+
+Source mathematical conventions are retained: robust weighting/covariance rules,
+legacy sigma multiplication, full/diagonal determinant offsets, source constraint
+weights, raw SVD order and Rug128. Unwritten fields and invalid integer conversions
+remain contextual errors. A failed one-pulsar degenerate GW fit does not authorize
+mode sorting, rank changes or a different solver. Independent well-defined global
+GW and automatically constrained interpolation cases are retained alongside it.
+
+AE is not complete or accepted. Optional-output presentation, complete standalone
+API/branch coverage, release and affected regressions remain subject to the active
+report inventory. No broad C-structure ABI or Linux qualification is claimed.

@@ -876,3 +876,53 @@ pub fn gwb_amplitude(
         )
     })
 }
+
+/// Standalone t2UpdateFunc_stdGlitch, including its GLF2 factor of 1e-27.
+/// The default source dispatcher instead selects simpleMinus for glitches.
+pub fn std_glitch_update(
+    context: &mut PulsarContext,
+    p: usize,
+    label: Label,
+    k: usize,
+    value: f64,
+    error: f64,
+) -> Result<(), TimingError> {
+    crate::clkcorr::with_process(|s| {
+        let (psr, rows) = context.pulsar_observations_mut(p)?;
+        crate::t2fit_glitch::t2UpdateFunc_stdGlitch(
+            psr,
+            rows,
+            p as i32,
+            label as i32,
+            k as i32,
+            value,
+            error,
+            &mut s.diagnostics,
+        )
+    })
+}
+
+/// Standalone t2FitFunc_sifunc for IFUNC and either quadrupolar polarization.
+/// Default quadrupolar dispatch uses the linear callback regardless of this API.
+pub fn sinc_derivative(
+    context: &mut PulsarContext,
+    p: usize,
+    x: f64,
+    i: usize,
+    label: Label,
+    k: usize,
+) -> Result<f64, TimingError> {
+    crate::clkcorr::with_process(|s| {
+        let (psr, rows) = context.pulsar_observations_mut(p)?;
+        crate::t2fit_ifunc::t2FitFunc_sifunc(
+            psr,
+            rows,
+            p as i32,
+            x,
+            i as i32,
+            label as i32,
+            k as i32,
+            &mut s.diagnostics,
+        )
+    })
+}

@@ -18,8 +18,11 @@ def run(profile):
         path=BUILD/name;path.write_text(source);obj=BUILD/(name+'.o');objects.append(obj)
         cmd=identity['commands'][0].copy();cmd[cmd.index('-c')+1]=str(path);cmd[cmd.index('-o')+1]=str(obj)
         p=subprocess.run(cmd,capture_output=True);assert p.returncode==0,p.stderr.decode();commands.append(cmd)
-    assembly=BUILD/'cholesky-assembly.txt'
-    assembly.write_bytes(subprocess.check_output(['xcrun','llvm-objdump','--disassemble','--demangle',str(objects[0])]))
+    assemblies={}
+    for obj in objects:
+        assembly=BUILD/(obj.stem+'-assembly.txt')
+        assembly.write_bytes(subprocess.check_output(['xcrun','llvm-objdump','--disassemble','--demangle',str(obj)]))
+        assemblies[str(assembly)]=sha(assembly)
     native=BUILD/'native';cmd=identity['commands'][-1].copy();cmd[cmd.index(str(HERE/'native_fit.cc'))]=str(HERE/'covariance_models_probe.cc')
     cmd=[arg for arg in cmd if Path(arg).name not in {p.name for p in objects}]
     at=cmd.index(str(REF/'libtempo2-reference.a'));cmd[at:at]=list(map(str,objects));cmd[cmd.index('-o')+1]=str(native)
@@ -33,6 +36,7 @@ def run(profile):
     selector=inputs/'selection.model';selector.write_text('MODEL T2\nPSR OTHER\nMODEL Unknown\nEND\nPSR J0000-0000\nMJD 53950 54050 # source ignores this tail\nINCLUDE '+str(include)+'\nMODEL T2SqExp 2e-13 20\nCLEAR\nMODEL T2SqExp 1e-13 10\n')
     legacy1=inputs/'model1';legacy1.write_text('MODEL 1\nALPHA 4\nFC 3\nAMP 1e-27\n')
     legacy2=inputs/'model2';legacy2.write_text('MODEL 2\nALPHA 4\nBETA .5\nFC 3\nAMP 1e-27\n')
+    legacy_numbers=inputs/'legacy-numbers';legacy_numbers.write_text('MODEL 2\nALPHA 0x1p2 trailing\nBETA .5tail\nFC 3\nAMP 1e-27\n')
     cases={
         'power':'MODEL T2PowerLaw 4 1e-27 3', 'power-dm':'MODEL T2PowerLawDM 4 1e-21 3',
         'year':'MODEL T2YrPowerLaw 4 1e-27 3', 'year-dm':'MODEL T2YrPowerLawDM 4 1e-21 3',
@@ -43,7 +47,7 @@ def run(profile):
         'matern15':'MODEL T2Matern1.5 1e-12 30','matern15-dm':'MODEL T2Matern1.5DM 1e-6 30',
         'matern25':'MODEL T2Matern2.5 1e-12 30','matern25-dm':'MODEL T2Matern2.5DM 1e-6 30',
         'dm':'MODEL DM 4 2 1400','dmparam':'MODEL DMCovarParam 1.5 1e-12 30',
-        'selection':str(selector),'legacy1':str(legacy1),'legacy2':str(legacy2),
+        'selection':str(selector),'legacy1':str(legacy1),'legacy2':str(legacy2),'legacy-numbers':str(legacy_numbers),
         'dcf':str(dcf),'dcf-directive':'MODEL T2\nDCF '+str(dcf),
         'ecm':'MODEL T2\nECM '+str(ecm),'psrj':'PSRJ',
         'comment':'MODEL T2SqExp 1e-12 30 # source ignores this tail',
@@ -80,7 +84,7 @@ def run(profile):
             'files':files,'input_files':[{'path':i['path'],'sha256':i['sha256'],'role':i['role']}for i in got['inputs']],
             'native_sha256':sha(trace),'rust_sha256':sha(dirs['rust']/'stdout'),'recovery_errors':got['errors']})
     receipt={'profile':profile,'pin':identity['pin'],'base_identity_sha256':sha(HERE/'build/native/identity.json'),
-        'builder_sha256':sha(__file__),'probe_sha256':sha(HERE/'covariance_models_probe.cc'),'commands':commands,'assembly_sha256':sha(assembly),
+        'builder_sha256':sha(__file__),'probe_sha256':sha(HERE/'covariance_models_probe.cc'),'commands':commands,'assembly_sha256':assemblies,
         'native_executable_sha256':sha(native),'rust_executable_sha256':sha(rust),'inputs':{str(p):sha(p)for p in [par,tim,*inputs.iterdir()]},'records':records}
     (BUILD/(profile+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
     print('covariance model failures',sum(len(r['failures'])for r in records))

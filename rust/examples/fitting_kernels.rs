@@ -49,6 +49,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut decomposed = positive.clone();
     let diagonal = c::decompose(&mut decomposed)?;
     let white = cholesky_routines::white_residuals(&lower, &[0.1, 0.25, -0.25, 0.5, -0.5, 1.])?;
+    let reconstructed = tempo2_rust::tk_matrix::mult_matrix_vec(&lower, &white)?;
     let mut context = PulsarContext::unwritten(1);
     context.initialise(1, 8, 0)?;
     let sigma = c::diagonals(&mut context, 0, &[0.125, 0.25, 0.5, 1., 2., 4.]);
@@ -56,7 +57,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "{}",
         serde_json::json!({"kernel":numbers(&kernel), "covariance":matrix(&covariance),
         "positive":matrix(&positive), "lower":matrix(&lower), "inverse":matrix(&inverse),
-        "decomposed":matrix(&decomposed), "diagonal":numbers(&diagonal), "white":numbers(&white),
+        "decomposed":matrix(&decomposed), "diagonal":numbers(&diagonal), "white":numbers(&white), "reconstructed":numbers(&reconstructed),
         "sigma":numbers(&sigma), "determinant":FitNumber::from(context.pulsars()[0].detL.unwrap())})
     );
     Ok(())

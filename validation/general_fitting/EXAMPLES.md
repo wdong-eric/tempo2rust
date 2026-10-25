@@ -31,3 +31,15 @@ single-file historical GPS overlay and reports both 0087 checks separately;
 `check_pipeline_solvers.py` compares the resulting native and Rust solver inputs
 through both standalone solvers. These scripts preserve failed gates in their
 receipts; an exit of zero alone is not a numerical acceptance result.
+
+`fitting_standalone_callbacks RUNTIME PAR TIM` exercises sinc, GWB and standalone
+glitch updates. `check_standalone_callbacks.py` supplies a fully declared model.
+`check_families.py --profile debug` (or release) runs 58 natural PAR/TIM recipes;
+its receipt records failed gates and explicit execution boundaries. The physical
+update output separates immediate `after_value/error` from `postfit_value/error`
+after noise projection.
+
+`check_regressions.py` runs affected AC/AD/M1/M2 comparisons into AE-owned staging
+without modifying accepted runners. `check_order.py`, `check_bootstrap_stack.py`,
+`check_gw_boundary.py` and `check_contraction.py` retain focused source witnesses.
+A successful script exit does not turn failures listed in its receipt into passes.

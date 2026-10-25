@@ -9,6 +9,37 @@ fn close(a: f64, b: f64) {
     );
 }
 #[test]
+fn sinc_fit_callback_uses_the_requested_knot() {
+    let mut context = PulsarContext::unwritten(1);
+    context.initialise(1, 1, 0).unwrap();
+    context.pulsars[0].nobs = Some(1);
+    let (p, obs) = context.pulsar_observations_mut(0).unwrap();
+    p.ifuncN = Some(3);
+    p.param.slots[param_ifunc as usize].cells[0].val = ld(1.0);
+    for (i, value) in [53996.0, 54000.0, 54004.0].iter().enumerate() {
+        p.ifuncT[i] = Some(*value);
+    }
+    obs[0].bat = Some(ld(54004.0));
+    assert_eq!(
+        crate::fit_callbacks::derivative(&mut context, 0, 0.0, 0, param_ifunc, 2).unwrap(),
+        1.0
+    );
+}
+#[test]
+fn wave_scale_one_updates_the_loaded_coefficients() {
+    let mut context = PulsarContext::unwritten(1);
+    context.initialise(1, 1, 0).unwrap();
+    let p = &mut context.pulsars[0];
+    p.waveScale = Some(1.0);
+    p.nWhite = Some(1);
+    p.wave_cos[0] = Some(2.0);
+    crate::fit_callbacks::update(&mut context, 0, param_wave_om, 0, 0.5, 1.25).unwrap();
+    let p = &context.pulsars[0];
+    assert_eq!(p.wave_cos[0], Some(1.5));
+    assert_eq!(p.wave_cos_err[0], Some(1.25));
+    assert_eq!(p.wave_cos_dm[0], None);
+}
+#[test]
 fn nonzero_constraint_target_and_zero_neighbor() {
     let a = vec![vec![1.0]; 3];
     let y = vec![0.0; 3];

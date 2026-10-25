@@ -15,4 +15,11 @@ int main(){
  // The actual getCholeskyMatrix caller allocates only ifuncN entries.
  p[0].ifuncN=2;double row[3]={3,4,99};
  printf("IFUNC %.17g %.17g EXPECTED 3 4\n",constraints_covar_ifunc(p,0,constraint_ifunc_cov,param_ifunc,0,0,row),constraints_covar_ifunc(p,0,constraint_ifunc_cov,param_ifunc,0,1,row));
+ // WAVE_SCALE=1 changes the frequency scaling, not WAVE's coefficient storage.
+ // Both arrays are initialized here to witness the wrong mutation safely.
+ for(int scale=0;scale<3;scale++){
+  p[0].waveScale=scale;p[0].nWhite=1;p[0].wave_cos[0]=5;p[0].wave_cos_dm[0]=17;
+  t2UpdateFunc_fitwaves(p,0,param_wave_om,0,2,.1);
+  printf("%s %.17g %.17g EXPECTED %d %d\n",scale==1?"WAVEUPDATE":"NEIGHBOR_WAVEUPDATE",p[0].wave_cos[0],p[0].wave_cos_dm[0],scale==2?5:3,scale==2?15:17);
+ }
 }
