@@ -21,6 +21,9 @@ pub struct SourceClockCorrection {
 /// it neither reads unwritten cells nor implements the rest of copyPSR.
 #[derive(Clone, Debug)]
 pub struct SourceObservation {
+    /// Rust input provenance only; no TEMPO2 scientific field. Copies and sorting
+    /// retain this index in the expanded TIM input, independently of canonical order.
+    pub input_index: Option<usize>,
     pub sat: Option<Float>,
     pub origsat: Option<Float>,
     pub sat_day: Option<Float>,
@@ -120,6 +123,7 @@ pub struct SourceObservation {
 impl Default for SourceObservation {
     fn default() -> Self {
         Self {
+            input_index: None,
             sat: None,
             origsat: None,
             sat_day: None,
@@ -285,6 +289,7 @@ impl SourceObservation {
     /// refphs.C explicit memset, distinct from unwritten allocated observations.
     pub fn zeroed() -> Self {
         Self {
+            input_index: None,
             sat: Some(Float::with_val(crate::PRECISION_BITS, 0)),
             origsat: Some(Float::with_val(crate::PRECISION_BITS, 0)),
             sat_day: Some(Float::with_val(crate::PRECISION_BITS, 0)),

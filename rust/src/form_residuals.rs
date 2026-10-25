@@ -1,23 +1,15 @@
-// Selected spin/phase path of TEMPO2 formResiduals.C::formResiduals, using
-// tempo2Util.C::fortran_mod/fortran_nlong. The @ entry also supplies the zero-delay
-// formBats.C::formBats and secularMotion.C::secularMotion branches (SAT=BAT=BBAT).
+// Bounded immutable-input adapter over the complete formResiduals routine.
+// The @ entry supplies the declared zero-delay BAT=BBAT=SAT branch.
 // Checked integer conversions are Rust adapters. GPL-3.0-or-later.
 // Copyright (C) 2006-2009 George Hobbs, Russell Edwards and TEMPO2 contributors.
-use crate::tempo2_util::{fortran_mod, fortran_nlong};
+#[cfg(test)]
+use crate::tempo2_util::fortran_nlong;
 use crate::{
     EngineProvenance, PRECISION_BITS, Scalar, TimingError, TimingInput, TimingResult, ToaResult,
 };
 use rug::{Float, float::Round};
 
-fn source_i32(value: &Float) -> Option<i32> {
-    let integer = value.clone().trunc();
-    (i32::MIN..=i32::MAX)
-        .contains(&integer)
-        .then(|| integer.to_integer_round(Round::Zero)?.0.to_i32())
-        .flatten()
-}
-
-fn pulse_integer(value: &Float) -> Option<i64> {
+pub(crate) fn pulse_integer(value: &Float) -> Option<i64> {
     // Bound the Float before allocating an arbitrary-size Integer for untrusted input.
     let integer = value.clone().trunc();
     (i64::MIN..=i64::MAX)
@@ -54,117 +46,62 @@ pub(crate) fn form_residuals_at(
     psr: &TimingInput,
     epochs: &[Scalar],
 ) -> Result<TimingResult, TimingError> {
-    let f0 = &psr.parameter_cell("F0").val;
-    let pepoch = &psr.parameter_cell("PEPOCH").val;
-    let nf0 = source_i32(f0).ok_or_else(|| {
-        TimingError::new(
-            &psr.par.path,
-            psr.parameter_metadata["F0"]
-                .original
-                .as_ref()
-                .map(|p| p.line),
-            "F0",
-            "integer part exceeds the source i32 range",
-        )
-    })?;
-    let pepoch_day = source_i32(pepoch).ok_or_else(|| {
-        TimingError::new(
-            &psr.par.path,
-            psr.parameter_metadata["PEPOCH"]
-                .original
-                .as_ref()
-                .map(|p| p.line),
-            "PEPOCH",
-            "integer MJD exceeds the source i32 range",
-        )
-    })?;
-    let ff0 = f0.clone() - nf0;
-    let mut phase_terms = Vec::with_capacity(psr.source_observations().len());
-    for (original, epoch) in psr.observation_metadata.iter().zip(epochs) {
-        let error = |message| {
-            TimingError::new(
-                &psr.tim.path,
-                Some(original.line),
-                &format!("observation {} ({})", original.index, original.name),
-                message,
-            )
-        };
-        let bbat = &epoch.0;
-        let bbat_day =
-            source_i32(bbat).ok_or_else(|| error("integer MJD exceeds the source i32 range"))?;
-        let ntpd = bbat_day
-            .checked_sub(pepoch_day)
-            .ok_or_else(|| error("integer day difference exceeds the source i32 range"))?;
-        // Reject the source's undefined signed-int product instead of wrapping it.
-        let integral_product = nf0
-            .checked_mul(ntpd)
-            .ok_or_else(|| error("integer F0 * day difference exceeds the source i32 range"))?;
-        let phaseint = Float::with_val(PRECISION_BITS, f64::from(integral_product) * 86400.0);
-        let ftpd = (bbat.clone() - bbat_day) - (pepoch.clone() - pepoch_day);
-        let delta_t = (bbat.clone() - pepoch) * 86400i32;
-        // formResiduals.C:515-535, retaining every multiplication/addition boundary.
-        // Complete the third product explicitly: adding Rug's borrowed product would fuse it.
-        let phase2 = (Float::with_val(PRECISION_BITS, nf0) * &ftpd
-            + Float::with_val(PRECISION_BITS, ntpd) * &ff0
-            + Float::with_val(PRECISION_BITS, &ftpd * &ff0))
-            * 86400i32;
-        let mut arg = Float::with_val(PRECISION_BITS, &delta_t * &delta_t);
-        let mut phase3 =
-            (Float::with_val(PRECISION_BITS, 0.5) * &psr.parameter_cell("F1").val) * &arg;
-        for (key, divisor) in [("F2", 6i32), ("F3", 24i32)] {
-            arg *= &delta_t;
-            if psr.parameter_cell(key).param_set != 0 {
-                phase3 += (psr.parameter_cell(key).val.clone() / divisor) * &arg;
-            }
-        }
-        let phase5 = phase2 + phase3;
-        if !phase5.is_finite() {
-            return Err(error("nonfinite spin phase"));
-        }
-        phase_terms.push((phaseint, phase5));
+    use crate::observation::read;
+    let mut context = psr.source.clone();
+    let (_, rows) = context.pulsar_observations_mut(0)?;
+    for (o, epoch) in rows.iter_mut().zip(epochs) {
+        o.bat = Some(epoch.0.clone());
+        o.bbat = Some(epoch.0.clone());
+        // The strict five-column TIM contract excludes flags, deletion and jumps.
+        o.deleted = Some(0);
+        o.nFlags = Some(0);
+        o.phaseOffset = Some(0.0);
+        o.obsNjump = Some(0);
+        o.obsNfdjump = Some(0);
     }
-    // Source remainder with its checked native-int quotient boundary.
-    let phas1 = fortran_mod(
-        phase_terms[0].1.clone(),
-        &Float::with_val(PRECISION_BITS, 1),
-    )?;
-    let mut observations = Vec::with_capacity(phase_terms.len());
-    for (((o, original), epoch), (phaseint, mut phase5)) in psr
-        .source_observations()
+    let phases = crate::clkcorr::with_process(|state| {
+        crate::residual_source::form_residuals_inner(
+            &mut context,
+            0,
+            state.source.max_observations,
+            &mut state.diagnostics,
+        )
+    })?;
+    let (_, rows) = context.pulsar_observations_mut(0)?;
+    let observations = rows
         .iter()
+        .take(psr.source_observations().len())
         .zip(&psr.observation_metadata)
-        .zip(epochs)
-        .zip(phase_terms)
-    {
-        let error = |message| {
-            TimingError::new(
-                &psr.tim.path,
-                Some(original.line),
-                &format!("observation {} ({})", original.index, original.name),
-                message,
-            )
-        };
-        phase5 -= &phas1;
-        let nphase = fortran_nlong(&phase5);
-        let nphase_turn = pulse_integer(&nphase)
-            .ok_or_else(|| error("reduced pulse count outside signed 64-bit range"))?;
-        let pulse_n = pulse_integer(&(phaseint.clone() + &nphase))
-            .ok_or_else(|| error("full pulse count outside signed 64-bit range"))?;
-        let residual = (phase5.clone() - nphase) / f0;
-        if !residual.is_finite() {
-            return Err(error("nonfinite residual"));
-        }
-        observations.push(ToaResult {
-            index: original.index,
-            sat_mjd: Scalar(crate::observation::read(&o.sat, "sat")?.clone()),
-            bat_mjd: epoch.clone(),
-            bbat_mjd: epoch.clone(),
-            phase_turn: Scalar(phaseint + phase5),
-            nphase_turn,
-            pulse_number: pulse_n,
-            residual_s: Scalar(residual),
-        });
-    }
+        .map(|(o, original)| {
+            let error = |message| {
+                TimingError::new(
+                    &psr.tim.path,
+                    Some(original.line),
+                    &format!("observation {} ({})", original.index, original.name),
+                    message,
+                )
+            };
+            let phase = read(&o.phase, "phase")?;
+            let residual = read(&o.residual, "residual")?;
+            if !phase.is_finite() {
+                return Err(error("nonfinite spin phase"));
+            }
+            if !residual.is_finite() {
+                return Err(error("nonfinite residual"));
+            }
+            Ok(ToaResult {
+                index: original.index,
+                sat_mjd: Scalar(read(&o.sat, "sat")?.clone()),
+                bat_mjd: Scalar(read(&o.bat, "bat")?.clone()),
+                bbat_mjd: Scalar(read(&o.bbat, "bbat")?.clone()),
+                phase_turn: Scalar(phase.clone()),
+                nphase_turn: pulse_integer(read(&o.nphase, "nphase")?)
+                    .ok_or_else(|| error("reduced pulse count outside signed 64-bit range"))?,
+                pulse_number: *read(&o.pulseN, "pulseN")?,
+                residual_s: Scalar(residual.clone()),
+            })
+        })
+        .collect::<Result<Vec<_>, TimingError>>()?;
     Ok(TimingResult {
         schema_version: 1,
         status: "completed",
@@ -178,7 +115,7 @@ pub(crate) fn form_residuals_at(
             source_correspondence: "TEMPO2 fda6ad4a9753ad7dc5d291406f2f310a9161423f; accepted reference 7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572",
         },
         input: psr.clone(),
-        reference_phase_turn: Scalar(phas1),
+        reference_phase_turn: Scalar(phases[0].clone()),
         observations,
     })
 }

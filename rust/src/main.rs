@@ -13,7 +13,7 @@ use tempo2_rust::{
     fit_terrestrial, load,
 };
 
-const USAGE: &str = "Usage: tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
+const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<OsString> = env::args_os().skip(1).collect();
@@ -21,8 +21,8 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
         println!("{USAGE}");
         return Ok(());
     }
-    if args.first().is_some_and(|s| s == "bats") {
-        return run_bats(&args[1..]);
+    if args.first().is_some_and(|s| s == "bats" || s == "timing") {
+        return run_bats(&args[1..], args[0] == "timing");
     }
     if args.is_empty() || (args[0] != "residuals" && args[0] != "fit") {
         return Err(USAGE.into());
@@ -84,11 +84,17 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn run_bats(args: &[OsString]) -> Result<(), Box<dyn std::error::Error>> {
+fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::Error>> {
     use std::os::unix::ffi::OsStrExt;
     let (mut pars, mut tims, mut root, mut preprocess) = (vec![], vec![], None, vec![]);
+    let mut remove_mean = true;
     let mut i = 0;
     while i < args.len() {
+        if timing && args[i] == "--no-mean" {
+            remove_mean = false;
+            i += 1;
+            continue;
+        }
         if args[i] == "--" {
             preprocess = args[i + 1..]
                 .iter()
@@ -120,8 +126,15 @@ fn run_bats(args: &[OsString]) -> Result<(), Box<dyn std::error::Error>> {
     let mut runtime = RuntimeContext::from_root(&root)?;
     let mut input = tempo2_rust::bats::load_pairs(&pairs, &root)?;
     tempo2_rust::bats::preprocess(&mut input, &preprocess, &root)?;
-    let result = tempo2_rust::bats::evaluate(&mut input, &mut runtime)?;
-    let mut bytes = serde_json::to_vec_pretty(&result)?;
+    let mut bytes = if timing {
+        serde_json::to_vec_pretty(&tempo2_rust::timing::evaluate(
+            &mut input,
+            &mut runtime,
+            remove_mean,
+        )?)?
+    } else {
+        serde_json::to_vec_pretty(&tempo2_rust::bats::evaluate(&mut input, &mut runtime)?)?
+    };
     bytes.push(b'\n');
     io::stdout().lock().write_all(&bytes)?;
     Ok(())

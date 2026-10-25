@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 publish = false
 license = "GPL-3.0-or-later"
-description = "TEMPO2 source input-to-BAT core with bounded isolated residual and fit interfaces"
+description = "TEMPO2 source fixed-parameter timing core with general residuals and bounded fit interfaces"
 
 [dependencies]
 rug = { version = "=1.30.0", default-features = false, features = ["float", "integer", "std"] }

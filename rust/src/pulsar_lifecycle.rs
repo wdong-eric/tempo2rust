@@ -216,8 +216,10 @@ impl PulsarContext {
             .get_mut(view.offset..)
             .ok_or_else(|| fail("observation_access", "offset", "capacity"))
     }
-    /// Scoped split borrow for physical drivers; the owner remains in this context.
-    pub(crate) fn pulsar_observations_mut(
+    /// Borrow canonical pulsar and observation backing for direct source callers.
+    /// The returned slice includes any spare rows; only `0..nobs` are active.
+    /// Ownership remains in this context and is checked on subsequent access.
+    pub fn pulsar_observations_mut(
         &mut self,
         index: usize,
     ) -> Result<(&mut SourcePulsar, &mut [SourceObservation]), crate::TimingError> {
@@ -603,6 +605,9 @@ fn initialise_fields(p: &mut SourcePulsar, no_warnings: i32) {
     // initialize this field only, preserving all unrelated unwritten storage.
     p.ne_sw_ifuncN = Some(0);
     p.nWhite = Some(0);
+    // initialise.C:120 omits the parallel WAVDM count; readParfile.C:1126
+    // compares it before assigning the first coefficient. An empty series has zero terms.
+    p.nWhite_dm = Some(0);
     p.nQuad = Some(0);
     p.ifuncN = Some(0);
     p.orbifuncN = Some(0);
@@ -718,6 +723,10 @@ fn initialise_fields(p: &mut SourcePulsar, no_warnings: i32) {
     p.TN_QpSig = Some(0.0);
     p.TN_QpLam = Some(0.0);
     p.AverageResiduals = Some(0);
+    // initialise.C:236 omits AverageDMResiduals, read unconditionally by
+    // formResiduals.C:2467. Like AverageResiduals, this is an opt-in operation.
+    // 0053: initialize its disabled state; retain later explicit caller writes.
+    p.AverageDMResiduals = Some(0);
     p.useTNOrth = Some(0);
     p.nDMEvents = Some(0);
     p.nTNShapeletEvents = Some(0);

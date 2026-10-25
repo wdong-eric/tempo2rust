@@ -68,6 +68,13 @@ pub fn load_pairs(pairs: &[InputPair], runtime: &Path) -> Result<BatInput, Timin
         runtime,
         &mut inputs,
     )?;
+    for i in 0..context.pulsars.len() {
+        let (p, rows) = context.pulsar_observations_mut(i)?;
+        let n = *crate::observation::read(&p.nobs, "nobs")?;
+        for (index, row) in rows.iter_mut().take(n.max(0) as usize).enumerate() {
+            row.input_index = Some(index);
+        }
+    }
     Ok(BatInput {
         context,
         pairs: pairs.to_vec(),
@@ -96,14 +103,14 @@ impl ByteString {
         Self { bytes, text }
     }
 }
-#[derive(Debug, Serialize)]
+#[derive(Debug, PartialEq, Eq, Serialize)]
 #[serde(untagged)]
 pub enum Number {
     Finite(String),
     Nonfinite { class: &'static str },
 }
 impl Number {
-    fn extended(v: &rug::Float) -> Self {
+    pub(crate) fn extended(v: &rug::Float) -> Self {
         if v.is_nan() {
             Self::Nonfinite {
                 class: if v.is_sign_negative() { "-nan" } else { "nan" },
@@ -120,7 +127,7 @@ impl Number {
             Self::Finite(v.to_string_radix(10, None))
         }
     }
-    fn double(v: f64) -> Self {
+    pub(crate) fn double(v: f64) -> Self {
         if v.is_finite() {
             Self::Finite(v.to_string())
         } else {
@@ -314,9 +321,15 @@ pub fn evaluate(
     input: &mut BatInput,
     runtime: &mut crate::RuntimeContext,
 ) -> Result<BatResult, TimingError> {
+    form_bats_all(&mut input.context, runtime)?;
+    project(input, runtime)
+}
+pub(crate) fn project(
+    input: &BatInput,
+    runtime: &crate::RuntimeContext,
+) -> Result<BatResult, TimingError> {
     use crate::observation::{read, read_string};
     use std::os::unix::ffi::OsStrExt;
-    form_bats_all(&mut input.context, runtime)?;
     let mut pulsars = vec![];
     for p in &input.context.pulsars {
         let n = *read(&p.nobs, "nobs")? as usize;

@@ -6,7 +6,9 @@
 //! Timing and selected spin fitting for isolated-pulsar TCB `@` and PKS profiles.
 //! See README.md for accepted input syntax and scientific conventions.
 
+mod averaging;
 pub mod bats;
+pub mod binary;
 pub mod calceph;
 mod clkcorr;
 mod clock_diagnostics;
@@ -21,6 +23,7 @@ mod form_bats;
 mod form_residuals;
 mod get_obs_coord;
 pub mod global;
+mod gw_ecc;
 mod ifteph;
 pub mod ifunc;
 mod initialise;
@@ -48,6 +51,7 @@ pub mod read_jbo_bat;
 mod read_parfile;
 mod read_timfile;
 pub mod refphs;
+mod residual_source;
 #[cfg(test)]
 mod resource_tests;
 mod runtime;
@@ -73,6 +77,7 @@ mod tabulated_function;
 mod tai2ut1;
 pub mod tempo2;
 mod tempo2_util;
+pub mod timing;
 pub mod tk_matrix;
 mod tkfit;
 mod tksvd;

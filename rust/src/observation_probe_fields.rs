@@ -43,6 +43,7 @@ fn correction(seed: i32, id: usize, index: usize) -> SourceClockCorrection {
 }
 pub(super) fn seeded(seed: i32) -> SourceObservation {
     SourceObservation {
+        input_index: None,
         sat: Some(long(seed, 1, 0)),
         origsat: Some(long(seed, 2, 0)),
         sat_day: Some(long(seed, 3, 0)),

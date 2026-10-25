@@ -95,6 +95,9 @@ pub(crate) fn header(bytes: &[u8]) -> Option<(Vec<u8>, Vec<u8>, f32)> {
 }
 #[derive(Clone, Copy)]
 pub(crate) enum NumberFormat {
+    Three,
+    Nine,
+    ScientificSix,
     One,
     Two,
     Four,
@@ -113,6 +116,9 @@ pub(crate) enum NumberFormat {
 }
 pub(crate) fn format_number(x: f64, style: NumberFormat) -> Vec<u8> {
     let format = match style {
+        NumberFormat::Three => c"%.3lf",
+        NumberFormat::Nine => c"%.9lf",
+        NumberFormat::ScientificSix => c"%3e",
         NumberFormat::One => c"%.1f",
         NumberFormat::Two => c"%.2f",
         NumberFormat::Four => c"%.4lf",
@@ -197,4 +203,45 @@ pub(crate) fn format_coordinate(a: i32, b: i32, sec: f64, sign: Option<u8>) -> V
         }
     }
     c_bytes(&out).to_vec()
+}
+
+/// ld_printf's %Lg with default precision six: round the extended value before
+/// choosing fixed/scientific notation, preserving signed zeros and classes.
+pub(crate) fn extended_general_six(value: &rug::Float) -> Vec<u8> {
+    if !value.is_finite() || value.is_zero() {
+        return format_number(value.to_f64(), NumberFormat::GeneralSix);
+    }
+    let (negative, mut digits, exponent) = value.to_sign_string_exp(10, Some(6));
+    let exponent = exponent.expect("finite nonzero value has an exponent");
+    while digits.ends_with('0') {
+        digits.pop();
+    }
+    let mut text = if negative {
+        "-".to_owned()
+    } else {
+        String::new()
+    };
+    if !(-3..=6).contains(&exponent) {
+        text.push_str(&digits[..1]);
+        if digits.len() > 1 {
+            text.push('.');
+            text.push_str(&digits[1..]);
+        }
+        text.push_str(&format!("e{:+03}", exponent - 1));
+    } else if exponent <= 0 {
+        text.push_str("0.");
+        text.push_str(&"0".repeat((-exponent) as usize));
+        text.push_str(&digits);
+    } else {
+        let whole = exponent as usize;
+        if digits.len() <= whole {
+            text.push_str(&digits);
+            text.push_str(&"0".repeat(whole - digits.len()));
+        } else {
+            text.push_str(&digits[..whole]);
+            text.push('.');
+            text.push_str(&digits[whole..]);
+        }
+    }
+    text.into_bytes()
 }
