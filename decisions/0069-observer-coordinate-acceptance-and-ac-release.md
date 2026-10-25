@@ -1,0 +1,41 @@
+# Observer-coordinate Rust acceptance and general input-to-BAT release
+
+Central decision, 25 October 2026. **Accept Assignment AA at `ea9797236fae0f0dd29a32e5d3050e33eaf2fefe`, close its ownership, and release Assignment AC under the prepared contract 0068 and handoff 29.** AA's final production revision is `99cf714`; `ea97972` adds its report and delivery auditor. AC is the sole Rust writer and owns `rust/` plus new `validation/input_to_bat/`. Central retains design and milestone acceptance.
+
+## Accepted scope and limits
+
+AA transfers all nine released observer-coordinate, vector and legacy UT1 routines under 0062/0066. The canonical drivers share IAU/SOFA and position calculations with the existing frontend. UT1 owns its separate retained table within ClockSession. IMAG updates the shared observatory xyz; an already constructed RuntimeContext observes those updates while source geodetic fields remain cached. Mutable pulsar/observation borrows preserve owner checks and source-written prefixes/tails. The retained SOFA unsafe blocks and build remain unchanged.
+
+The three overlapping strcpy shifts in pinned get_obsCoord.C::remove_white:464,469,474 are corrected with the same suffix/NUL move under 0053. The adjacent source/cause/fix comment, nineteen complete corrected buffers and seven original no-shift neighbors support this correction. Original overlapping calls remain unexecuted. Contextual UT1 failure boundaries preserve written prefixes without publishing a failed load or poisoning unrelated resource owners. No scientific model, numerical backend, tolerance, source selector or satellite asymmetry was changed.
+
+Local mul_add expressions reproduce the measured GCC16 O2 contractions in the declared host profile; the initial eighteen differing histories, source comments, native objects and assembly remain recorded. Production extended arithmetic remains Rug128. The public frontend still supports its previous isolated F0–F3 `@`/PKS input subset. AA acceptance establishes a dependency for broader capability, not completion of general input handling or the entire timing model.
+
+## Central review and verification
+
+Central read the complete changed production bodies and integration diff, canonical probe, verification runners, correction/ownership tests and final report. The source branches, mixed-precision grouping, live shared geometry and single IAU boundary agree with 0062. No new acceptance blocker remains.
+
+The central auditor recomputed all **133 recorded histories / 3,468 observer events per profile**, including all six exit snapshots, from the preserved raw streams and launch challenges. The ordinary projection remains **3,462 events**. Types, complete private UT1 arrays, ordered state, binary64 bits/nonfinite classes, exported binary128 values, diagnostics, input hashes and actual source/compiler/executable identities agree with X. All 27 delivery artifacts were hash checked. Earlier controls/regressions retain their actual 716375f source identities; final histories and focused checks identify 99cf714. The report commit did not trigger another full replay.
+
+Central also executed six selected existing histories in fresh processes for each profile: IAU, legacy, satellite-offset, shared IMAG, IMAG failure prefix and combined TAI/UT1/legacy operation. Each profile additionally ran all nineteen corrected whitespace inputs, the three ownership/boundary tests and the isolated public frontend IMAG history. These seven probe histories produce **222 events per profile**, with one defined exit. All fresh checks pass. Only central-owned temporary inputs/outputs were used; no native reference campaign or accepted runner was rerun or modified.
+
+The delivered earlier checks include 35 controls, nineteen supporting checks, fifteen retained mutation witnesses, affected Y/W/T/R/O comparisons and M1/public recovery verification. Central verified their receipt identities and final follow-up logs rather than relabelling them as new executions. The current source repositories remain clean at TEMPO2 `fda6ad4a9753ad7dc5d291406f2f310a9161423f` and reference `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572`. AA reports all 40,923 protected files preserved; central did not repeat that entire preservation hash campaign under 0065. Original decision 0008 remains byte-identical.
+
+These are source-transfer and integration checks on the declared macOS arm64 profile. Unhit source CVS branches, broader concurrency, external resource writers, other platforms/locales and complete SOFA coverage remain outside this acceptance. M2 remains unaccepted with exactly the four existing raw SVD-order/singular-index failures. The four 0049 precision-boundary findings and the original DDH discrepancy remain open; none is waived here.
+
+## Evidence identities
+
+Report: `rust/OBSERVER_COORDINATES_REPORT.md`. Delivery receipt: `validation/observer_coordinates_port/build/delivery.json`, SHA-256 `87c49810d758791f7519ce4da3d05432bc43634036bf9292027b9de42df7dd2e`.
+
+Central auditor: `decisions/evidence/observer-coordinates-port/central-review.py`, SHA-256 `d30f8d160f2f15922706cd6f10f34752ebe997d406b2d4e50cc29052ccb8c5e4`. Its local bundle is `decisions/evidence/observer-coordinates-port/build/central-review-20261025/`; receipt SHA-256 `e950f1082d3b55a7e31fd521cebdeef9127a5cf6f63fde90806727f491ec2626`. All 162 original bundle files were moved and hash checked; the original `/tmp/tempo2-aa-central-review` path is a symlink preserving recorded launch paths. Relocation receipt SHA-256 `2963774a2df0bc960e5702dfcae8f7be306452e9c46e9046bdb7615d7a4c79be`. Generated evidence remains ignored and uncommitted under 0039.
+
+Final debug/direct receipt: `85f5a9887894943f0dcf936acc1a882724b34d94c8d5e002a997c729103c8925`; release/direct: `fa8a104fe00698225413cfe9d5f0032ab9f92198f7752f5ef7c20042e9e9c9e9`. Final focused follow-up: `1468c87cce55a208a81cacd32b827c8b9f7aa7837d3ab273f144a1a6cb5198e3`. Earlier broad regressions retain the separate identities and applicability listed in the report.
+
+## Assignment AC release
+
+AC now implements **one general input-to-BAT functional stage** under 0068 and `handoffs/29-general-input-to-bat.md`, starting from accepted AA `ea97972`. Deliver ordered general PAR/TIM loading and preprocessing, native-JPL planetary/observer/propagation calculations, full global.C orchestration, and public library/CLI SAT/BAT/BBAT output with actual units, frames, diagnostics and provenance. Reuse accepted K/Q/N/P/Z/AB maps and native evidence plus AA/W/Y implementations. Coherent internal commits lead to authored public end-to-end examples; another reference-only assignment or private seeded caller is not the final deliverable.
+
+The 0068 contract is unchanged. In particular, apply the documented no-setdm ndm initialization and A2 ne_sw_ifuncN correction, trace actual inactive planetary-array initializedness, and share mutable source ecliptic obliquity through preprocessing and rotations. Preserve defined original neighbors and original reference evidence; use narrow corrected-native experiments only where needed. Small demonstrated source bugs follow 0053 with adjacent source/cause/fix comments and focused regression. Unexplained scientific/numerical changes remain central decisions while independent work proceeds.
+
+AC preserves existing bounded residual/fit interfaces, uses one authoritative scientific implementation per routine, and keeps the no-CALCEPH error behavior explicit. Enabled CALCEPH, full residual/binary/fitting, remaining toolkit/GW/predictor APIs and release qualification remain later full-core obligations. Preserve all existing numerical gates and the 1e-12-second integration budget specified in 0068. No unrelated known failure becomes a prerequisite for independent functional implementation.
+
+AA's implementation window is closed. Its source/evidence remains an accepted input; no further AA work is requested. AC alone may edit its released Rust/harness scope. Accepted runners, membership and artifacts stay read-only under 0050. Conventional Commits use explicit authored paths; generated JSON/JSONL/compressed evidence stays local under 0039. Return `rust/INPUT_TO_BAT_REPORT.md` for central acceptance. Record the implementation chat and confirmed dispatch separately after creation.
