@@ -621,6 +621,7 @@ struct Prepared {
     constraints: crate::constraints::ConstraintRows,
     whitening: Whitening,
     inputs: Vec<crate::bats::ConsumedInput>,
+    covariance_files: Vec<std::path::PathBuf>,
 }
 /// t2Fit built-in driver on canonical, already timed state.
 pub fn t2_fit(
@@ -792,18 +793,23 @@ pub fn t2_fit(
             .map(|r| if mode == 0 { 1.0 } else { r.sigma_s.0.to_f64() })
             .collect();
         let mut inputs = constraints.inputs.clone();
+        let mut covariance_files = vec![];
         let (white_data, white_matrix, cm, lower) = if let Some(selector) = covariance {
             let x: Vec<_> = rows.iter().map(|r| r.x_days.0.to_f64()).collect();
             let indices: Vec<_> = rows.iter().map(|r| r.observation).collect();
-            let (cm, l) = crate::cholesky::get_cholesky_matrix(
+            let result = crate::cholesky::get_cholesky_matrix(
                 context,
                 i,
                 selector,
                 &indices,
                 &x,
                 &sigma,
+                0,
                 &mut inputs,
+                options.diagnostics.as_ref(),
             )?;
+            covariance_files = result.diagnostic_files;
+            let (cm, l) = (result.covariance, result.lower);
             (
                 crate::tk_matrix::forward_sub_vec(&l, &data).map_err(|e| boundary(&e))?,
                 crate::tk_matrix::forward_sub(&l, &matrix).map_err(|e| boundary(&e))?,
@@ -848,6 +854,7 @@ pub fn t2_fit(
             constraints,
             whitening,
             inputs,
+            covariance_files,
         });
     }
     let groups = if ng == 0 {
@@ -876,8 +883,10 @@ pub fn t2_fit(
         let mut constraint_targets = vec![];
         let mut whitening = vec![];
         let mut covariance_inputs = vec![];
+        let mut covariance_files = vec![];
         let mut constraint_rows = vec![];
         for p in group {
+            covariance_files.extend(p.covariance_files);
             let nl = p.columns.len() - ng;
             for (a, w) in p.matrix.into_iter().zip(p.white_matrix) {
                 let mut m = vec![0.0; ncols];
@@ -1002,6 +1011,7 @@ pub fn t2_fit(
             offset += nl;
         }
         let mut diagnostic_files = solver.diagnostic_files.clone();
+        diagnostic_files.extend(covariance_files);
         diagnostic_files.extend(update_files);
         if let Some(io) = &options.diagnostics
             && io.write_residuals & 2 != 0

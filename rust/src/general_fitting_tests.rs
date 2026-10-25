@@ -62,6 +62,82 @@ fn optional_solver_outputs_preserve_source_null_contract() {
 }
 
 #[test]
+fn legacy_global_constraints_follow_global_then_local_coordinates() {
+    use crate::{legacy_fitting, pulsar::Constraint::*};
+    fn basis(
+        _: &mut PulsarContext,
+        _: usize,
+        x: f64,
+        _: usize,
+        row: &mut [f64],
+    ) -> Result<(), crate::TimingError> {
+        crate::tkfit::polynomial_basis(x, row);
+        Ok(())
+    }
+    for mode in 0..3 {
+        let mut context = PulsarContext::unwritten(2);
+        context.initialise(2, 16, 0).unwrap();
+        for p in 0..2 {
+            context.pulsars[p].nobs = Some(6);
+            let (q, obs) = context.pulsar_observations_mut(p).unwrap();
+            q.robust = Some(0);
+            q.nconstraints = Some(if mode == 2 { 0 } else { 1 });
+            q.constraint_efactor = Some(1.0);
+            q.param.slots[param_pepoch as usize].cells[0].val = ld(54000.0);
+            let cell = &mut q.param.slots[param_ifunc as usize].cells[0];
+            cell.param_set = 1;
+            cell.fit_flag = if mode == 1 && p == 0 { 2 } else { 1 };
+            q.ifuncN = Some(2);
+            q.ifuncT[0] = Some(53999.0);
+            q.ifuncT[1] = Some(54005.0);
+            q.constraints[0] = Some(if p == 0 {
+                constraint_ifunc_0
+            } else {
+                constraint_ifunc_1
+            });
+            for (i, o) in obs[..6].iter_mut().enumerate() {
+                o.deleted = Some(0);
+                o.sat = Some(ld(54000.0 + i as f64));
+                o.toaErr = Some(1.0);
+            }
+        }
+        let x = vec![(0..6).map(|i| i as f64 / 4.0).collect::<Vec<_>>(); 2];
+        let y: Vec<_> = (0..2)
+            .map(|p| (0..6).map(|i| (i + 1) as f64 + 0.25 * p as f64).collect())
+            .collect();
+        let fit = legacy_fitting::global_pulsar(
+            &mut context,
+            &x,
+            &y,
+            &vec![(0..6).collect(); 2],
+            &[if mode == 1 { 1 } else { 3 }, 3],
+            if mode == 1 { 2 } else { 0 },
+            &vec![vec![vec![1.0; 6]]; 2],
+            basis,
+            1e-27,
+            false,
+            None,
+        )
+        .unwrap();
+        if mode == 2 {
+            assert!(fit.constraints.is_empty());
+        } else {
+            assert_eq!(fit.constraints[1], [0.0, 0.0, 0.0, 0.0, -0.5, 2.5]);
+            assert_eq!(
+                fit.constraints[0],
+                if mode == 1 {
+                    [0.5, 0.5, 0.0, 0.0, 0.0, 0.0]
+                } else {
+                    [0.0, 0.5, 0.5, 0.0, 0.0, 0.0]
+                }
+            );
+        }
+        assert_eq!(fit.design.matrix.len(), 12);
+        assert_eq!(fit.solver.dof, 12 + fit.constraints.len() - 6);
+    }
+}
+
+#[test]
 fn diagnostic_numeric_transport_preserves_sign_and_class() {
     use crate::tkfit::FitNumber;
     for (value, expected) in [
@@ -119,19 +195,21 @@ fn native_robust_outlier_witness() {
 fn one_point_covariance_takes_diagonal_branch() {
     let mut context = PulsarContext::unwritten(1);
     let mut inputs = vec![];
-    let (covariance, lower) = crate::cholesky::get_cholesky_matrix(
+    let result = crate::cholesky::get_cholesky_matrix(
         &mut context,
         0,
         "unused-one-point-model",
         &[0],
         &[0.0],
         &[2e-6],
+        0,
         &mut inputs,
+        None,
     )
     .unwrap();
     assert!(inputs.is_empty());
-    assert_eq!(covariance, vec![vec![4e-12]]);
-    assert_eq!(lower, vec![vec![2e-6]]);
+    assert_eq!(result.covariance, vec![vec![4e-12]]);
+    assert_eq!(result.lower, vec![vec![2e-6]]);
     assert_eq!(context.pulsars[0].detL, Some(2e-6_f64.ln()));
 }
 #[test]

@@ -29,6 +29,12 @@ the source fallback uses SVD and reports the fallback. `--fit-diagnostics DIR`
 selects source writeResiduals=7 in an existing output directory. The direct Rust
 API exposes other bit combinations and debug covariance output. Files preserve
 source names, text formats and overwrite order; I/O failures return an error.
+For correlated fits, debug output includes `newDCF` for the applicable synthesis
+kernel and `chol.covarMatrix`/`chol.L`; source overwrites during INCLUDE/multiple
+models are retained. `cholesky::read_model` exposes the same grammar on supplied
+coordinates. `get_cholesky_matrix` takes the trailing constraint count and optional
+`FitDiagnostics`, returning owned covariance/lower matrices and written-file paths.
+The diagonal helper retains its distinct determinant convention.
 Robust results include the ordered scale/final solve history. The first solve
 writes prefit/design files; later solves retain only bit 4, and the final files
 reflect the final weighted solve before the source robust covariance overwrite.
@@ -84,5 +90,7 @@ native observations are separate and never overwrite accepted evidence.
    formatting/Clippy, evidence identities and final report.
 
 Inherited open ledger: P 154 (including SIMUL 32), M2 four exact raw mode-order
-failures, four 0049 utility boundaries, original DDH 1 ns ideal-fixture gate.
+failures, four 0049 utility boundaries. DDH now follows 0087's approved paired
+current-clock fidelity and versioned historical-clock 1 ns pre/post-fit checks;
+the original current-clock native assertion failure remains a preserved record.
 Production remains Rug128; no sorted modes or compatibility precision switch.

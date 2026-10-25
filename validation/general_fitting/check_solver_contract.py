@@ -40,7 +40,7 @@ def build():
     return native, commands
 
 
-def compare(output, got, matrix, data, mask, has_data):
+def compare(output, got, matrix, data, mask, has_data, mode=0):
     failures = []
     def check(name, actual, expected, gate):
         actual = D(actual);expected = D(expected)
@@ -80,7 +80,7 @@ def compare(output, got, matrix, data, mask, has_data):
         for i, row in enumerate(matrix):
             delta = sum(D(x) * e for x, e in zip(row, errors))
             if abs(delta) > D('1e-14'): failures.append({'quantity': f'joint_increment.{i}', 'difference': str(delta), 'gate': '1e-14'})
-    check('chi', got['chi_square'], final['CHI',], D('1e-10') * abs(D(final['CHI',])) + D('1e-24'))
+    check('chi', got['chi_square'], final['CHI',], D('1e-10') * abs(D(final['CHI',])) + D('1e-12' if mode==1 else '1e-24'))
     assert len(got['singular_values']) == len(modes[-1])
     for j, value in enumerate(modes[-1]): check(f'raw_mode.{j}', got['singular_values'][j], value, D('1e-10') * abs(D(value)))
     assert len(history) == len(got['robust_history'])

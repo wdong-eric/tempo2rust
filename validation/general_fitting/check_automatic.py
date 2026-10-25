@@ -16,9 +16,8 @@ def run(profile):
     objects = [];commands = []
     for name in ["choleskyAutomatic.C", "choleskyRoutines.C"]:
         source = subprocess.check_output(["git", "-C", str(ROOT / "tempo2"), "show", identity["pin"] + ":" + name]).decode()
-        if name == "choleskyAutomatic.C":
-            source = corrected(name, source)
-        else:
+        source = corrected(name, source)
+        if name == "choleskyRoutines.C":
             token = "    cholesky_formL(cholesky_L,m,np);"
             source = source.replace(token, token + "\n    extern void ae_factors(double**,double*,int,int);ae_factors(cholesky_L,covarFunc,np,ndays);")
         path = BUILD / name;path.write_text(source)
@@ -27,6 +26,7 @@ def run(profile):
         subprocess.run(cmd, check=True, capture_output=True);commands.append(cmd)
     native = BUILD / "native"
     cmd = identity["commands"][-1].copy();cmd[cmd.index(str(HERE / "native_fit.cc"))] = str(HERE / "native_automatic.cc")
+    cmd = [arg for arg in cmd if Path(arg).name not in {p.name for p in objects}]
     at = cmd.index(str(ROOT / "validation/reference/build/libtempo2-reference.a"));cmd[at:at] = list(map(str, objects));cmd[cmd.index("-o") + 1] = str(native)
     subprocess.run(cmd, check=True, capture_output=True);commands.append(cmd)
     rust = ROOT / "rust/target" / profile / "examples/fitting_covariance"

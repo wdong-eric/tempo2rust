@@ -4,6 +4,9 @@ use crate::{
     tempo2::Label::param_pepoch,
 };
 
+/// T2getWhiteRes delegates directly to TKforwardSubVec; source x/errors are unused.
+pub use crate::tk_matrix::forward_sub_vec as white_residuals;
+
 pub struct Residuals {
     pub time_days: Vec<f64>,
     pub residual_s: Vec<f64>,
@@ -209,8 +212,127 @@ pub fn guess_spectrum(
     })
 }
 
-/// T2fitSpectra's numerical fit with already selected model controls. Interactive
-/// parameter selection has its own stateful adapter; this is the aval=1 path.
+/// Mutable model arguments of T2fitSpectra, with frequency in inverse years.
+#[derive(Clone, Debug)]
+pub struct SpectralModel {
+    pub alpha: f64,
+    pub corner_per_year: f64,
+    pub nfit: usize,
+    pub scale: f64,
+    pub variance: f64,
+    pub beta: f64,
+}
+
+/// Answers to source prompts. Only a branch that asks a question consumes its
+/// corresponding answer; missing answers are explicit input boundaries.
+#[derive(Default)]
+pub struct SpectralAnswers {
+    pub redo: Option<bool>,
+    pub corner_per_year: Option<f64>,
+    pub beta: Option<f64>,
+    pub alpha: Option<f64>,
+    pub nfit: Option<usize>,
+}
+
+/// The source static `time` belongs to this caller-owned fitting session.
+#[derive(Default)]
+pub struct SpectralFitSession {
+    started: bool,
+}
+impl SpectralFitSession {
+    /// T2fitSpectra, including repeated-call/redo and automatic selection. The
+    /// source ipw argument is unused. `automatic` is aval!=0. Prompt answers are
+    /// supplied explicitly so this library routine never reads process stdin.
+    #[allow(clippy::too_many_arguments)]
+    pub fn fit(
+        &mut self,
+        x: &[f64],
+        y: &[f64],
+        model: &mut SpectralModel,
+        automatic: bool,
+        corner: f64,
+        exponent: f64,
+        points: i32,
+        amplitude: f64,
+        use_beta: bool,
+        cutoff: f64,
+        answers: &SpectralAnswers,
+    ) -> Result<bool, TimingError> {
+        if x.is_empty() || x.len() != y.len() {
+            return Err(boundary("T2fitSpectra dimensions"));
+        }
+        if self.started
+            && !automatic
+            && (points != -1 || !*read(&answers.redo, "T2fitSpectra redo answer")?)
+        {
+            return Ok(false);
+        }
+        self.started = true;
+        if !automatic {
+            model.corner_per_year = match corner {
+                -1.0 => *read(&answers.corner_per_year, "T2fitSpectra corner answer")?,
+                -2.0 => x[0] * 365.25,
+                _ => corner,
+            };
+            if use_beta {
+                model.beta = *read(&answers.beta, "T2fitSpectra beta answer")?;
+            }
+            if exponent == 0.0 {
+                model.alpha = *read(&answers.alpha, "T2fitSpectra exponent answer")?;
+            } else if exponent != -2.0 {
+                model.alpha = exponent;
+            }
+            model.nfit = match points {
+                -1 => *read(&answers.nfit, "T2fitSpectra count answer")?,
+                -2 => y
+                    .iter()
+                    .position(|v| *v < cutoff)
+                    .map(|i| i + 1)
+                    .ok_or_else(|| boundary("T2fitSpectra Cannot fit Nfit"))?,
+                _ => {
+                    usize::try_from(points).map_err(|_| boundary("T2fitSpectra negative count"))?
+                }
+            };
+            if model.nfit > x.len() {
+                return Err(boundary("T2fitSpectra count exceeds spectrum"));
+            }
+            if exponent == -2.0 {
+                if model.nfit == 1 {
+                    let ratio = y[0] / cutoff;
+                    if ratio < 2.0 {
+                        model.alpha = 0.0;
+                        model.nfit = 6; // Source hard-coded white-spectrum branch.
+                    } else {
+                        if x.len() < 2 {
+                            return Err(boundary(
+                                "T2fitSpectra one-point slope reads second point",
+                            ));
+                        }
+                        model.alpha = (y[0].log10() - y[1].log10()) / (x[0].log10() - x[1].log10());
+                    }
+                } else {
+                    let lx: Vec<_> = x[..model.nfit].iter().map(|v| v.log10()).collect();
+                    let ly: Vec<_> = y[..model.nfit].iter().map(|v| v.log10()).collect();
+                    let line =
+                        crate::tkfit::fit_polynomial(&lx, &ly, 2).map_err(|e| boundary(&e))?;
+                    model.alpha = -line.increments[1].as_float().to_f64();
+                }
+            }
+        }
+        (model.scale, model.variance) = fit_spectrum(
+            x,
+            y,
+            model.alpha,
+            model.corner_per_year,
+            model.nfit,
+            amplitude,
+            use_beta.then_some(model.beta),
+        )?;
+        Ok(true)
+    }
+}
+
+/// T2fitSpectra's numerical fit with already selected model controls (aval=1).
 pub fn fit_spectrum(
     x: &[f64],
     y: &[f64],
@@ -267,8 +389,8 @@ pub fn calculate_cholesky(
         alpha,
         fc,
         amplitude,
-        if beta.is_some() { "beta" } else { "powerlaw" },
-        &[beta.unwrap_or(0.0)],
+        if beta.is_some() { "beta" } else { "" },
+        beta.as_slice(),
         span as usize,
     )?;
     let mut matrix = crate::cholesky::covar_function_to_matrix(&function, x, 0)?;

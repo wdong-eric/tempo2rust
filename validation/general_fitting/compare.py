@@ -66,7 +66,15 @@ def checked_shape(ref, result):
         for stage in ("prefit", "postfit"):
             phase_psrs = sorted({k[2] for k in ref if k[0] == it and k[1] == stage and k[4] == "residual"})
             assert phase_psrs == psrs, "native timing/fit pulsar membership disagrees"
-            phase_specs[stage] = {"pulsars": (len(psrs), [{"observations": (sum(k[0] == it and k[1] == stage and k[2] == p and k[4] == "residual" for k in ref), {"canonical_index": int, "residual_s": "number", "phase_turn": "number", "bbat_mjd": "number"})} for p in psrs])}
+            pulsar_specs=[]
+            for p in psrs:
+                observation={"canonical_index":int,"residual_s":"number","phase_turn":"number","bbat_mjd":"number"}
+                for key,field,spec in [("pulse_number","pulse_number",str),("nphase","nphase_turn","number"),("sat","sat_mjd","number"),("deleted","deleted",int)]:
+                    if (it,stage,p,0,key) in ref:observation[field]=spec
+                for key,unit in [("frequency","MHz"),("uncertainty","us")]:
+                    if (it,stage,p,0,key) in ref:observation[key]={"value":"number","unit":literal(unit)}
+                pulsar_specs.append({"observations":(sum(k[0]==it and k[1]==stage and k[2]==p and k[4]=="residual"for k in ref),observation)})
+            phase_specs[stage]={"pulsars":(len(psrs),pulsar_specs)}
         global_fit = any(k[0] == it and k[1] == "fit" and k[4] == "owner" and v == -1 for k, v in ref.items())
         groups = [psrs] if global_fit else [[p] for p in psrs]
         system_specs = []
@@ -103,7 +111,12 @@ def checked_shape(ref, result):
                 "noise": (len(noise_members), noise_specs), "updates": (len(update_specs), update_specs),
             })
         cycle_specs.append({"iteration": literal(it), **phase_specs, "systems": (len(groups), system_specs)})
-    validate([], result, {"schema_version": literal("tempo2-general-fit-v1"), "fit_performed": literal(True), "remove_mean": literal(True), "cycles": (len(cycles), cycle_specs)})
+    native_means=[v for k,v in ref.items() if k[1:]==("workflow",-1,-1,"remove_mean")]
+    assert all(v in [0,1]for v in native_means), "invalid native mean convention"
+    mean_controls=set(map(bool,native_means))
+    assert len(mean_controls)<=1, "native workflow mean conventions disagree"
+    remove_mean=next(iter(mean_controls),True)
+    validate([], result, {"schema_version": literal("tempo2-general-fit-v1"), "fit_performed": literal(True), "remove_mean": literal(remove_mean), "cycles": (len(cycles), cycle_specs)})
     return failures
 
 
@@ -155,6 +168,16 @@ def compare(native, candidate, destination):
                     check([it, stage, p, i, "canonical_index"], obs["canonical_index"], i, ZERO, "identity")
                     for key, field, gate in (("residual", "residual_s", D("1e-12")), ("phase", "phase_turn", D("1e-10")), ("bbat", "bbat_mjd", D("1e-12") / 86400)):
                         check([it, stage, p, i, key], obs[field], at(it, stage, p, i, key), gate, stage + "." + key)
+                    for key, field in (("pulse_number","pulse_number"),("nphase","nphase_turn"),("deleted","deleted")):
+                        if (it,stage,p,i,key) in ref:
+                            check([it,stage,p,i,key],obs[field],at(it,stage,p,i,key),ZERO,stage+".state")
+                    if (it,stage,p,i,"sat") in ref:
+                        # 0007 gives continuous SAT/BAT/BBAT the 1 ps epoch gate;
+                        # input bytes/order and within-engine SAT preservation are exact.
+                        check([it,stage,p,i,"sat"],obs['sat_mjd'],at(it,stage,p,i,'sat'),D('1e-12')/86400,stage+'.sat')
+                    for key in ("frequency","uncertainty"):
+                        if (it,stage,p,i,key) in ref:
+                            check([it,stage,p,i,key],D.from_float(float(obs[key]["value"])),D.from_float(float(at(it,stage,p,i,key))),ZERO,stage+".state")
         for system in cycle["systems"]:
             cols, rows = system["columns"], system["rows"]
             np = len(cols)

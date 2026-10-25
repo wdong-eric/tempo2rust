@@ -20,6 +20,14 @@ pub struct Design {
     pub white_data: Vec<f64>,
 }
 
+#[derive(Debug, Serialize)]
+pub struct GlobalFit {
+    pub design: Design,
+    #[serde(serialize_with = "crate::tkfit::serialize_matrix")]
+    pub constraints: Vec<Vec<f64>>,
+    pub solver: LeastSquares,
+}
+
 /// TKfit_getPulsarDesignMatrix. The caller supplies the legacy column ordering.
 #[allow(clippy::too_many_arguments)]
 pub fn design_matrix(
@@ -106,6 +114,116 @@ pub fn single_pulsar(
         None,
     )
     .map_err(|e| boundary(&e))
+}
+
+/// TKleastSquares_global_pulsar. Each callback row starts with the shared
+/// globals, followed by this pulsar's ZERO/local columns. `local_counts` excludes
+/// globals. Unlike t2Fit's local-first callback rows, this is the legacy layout.
+#[allow(clippy::too_many_arguments)]
+pub fn global_pulsar(
+    context: &mut PulsarContext,
+    x: &[Vec<f64>],
+    y: &[Vec<f64>],
+    observations: &[Vec<usize>],
+    local_counts: &[usize],
+    globals: usize,
+    lower: &[Vec<Vec<f64>>],
+    basis: Basis,
+    tolerance: f64,
+    rescale: bool,
+    diagnostics: Option<&crate::tkfit::FitDiagnostics>,
+) -> Result<GlobalFit, TimingError> {
+    let np = context.pulsars.len();
+    if np == 0
+        || [
+            x.len(),
+            y.len(),
+            observations.len(),
+            local_counts.len(),
+            lower.len(),
+        ]
+        .iter()
+        .any(|n| *n != np)
+    {
+        return Err(boundary("TKleastSquares_global_pulsar dimensions"));
+    }
+    let nrows: usize = x.iter().map(Vec::len).sum();
+    let ncols = globals + local_counts.iter().sum::<usize>();
+    let mut design = Design {
+        matrix: vec![vec![0.0; ncols]; nrows],
+        white_matrix: vec![vec![0.0; ncols]; nrows],
+        data: vec![0.0; nrows],
+        white_data: vec![0.0; nrows],
+    };
+    let mut constraints = vec![];
+    let (mut row_offset, mut local_offset) = (0, globals);
+    for p in 0..np {
+        let nf = local_counts[p];
+        let local = design_matrix(
+            context,
+            p,
+            &x[p],
+            &y[p],
+            &observations[p],
+            nf + globals,
+            &lower[p],
+            basis,
+        )?;
+        for i in 0..x[p].len() {
+            design.matrix[row_offset + i][..globals].copy_from_slice(&local.matrix[i][..globals]);
+            design.white_matrix[row_offset + i][..globals]
+                .copy_from_slice(&local.white_matrix[i][..globals]);
+            design.matrix[row_offset + i][local_offset..local_offset + nf]
+                .copy_from_slice(&local.matrix[i][globals..]);
+            design.white_matrix[row_offset + i][local_offset..local_offset + nf]
+                .copy_from_slice(&local.white_matrix[i][globals..]);
+            design.data[row_offset + i] = local.data[i];
+            design.white_data[row_offset + i] = local.white_data[i];
+        }
+        let nc = *read(&context.pulsars[p].nconstraints, "nconstraints")? as usize;
+        if nc > 0 {
+            if nf == 0 {
+                return Err(boundary("legacy constraints require local ZERO column"));
+            }
+            crate::constraints::compute_weights(&mut context.pulsars[p])?;
+        }
+        for i in 0..nc {
+            // Pinned t2fit.C uses psr[0]'s label and writes a ZERO-first row
+            // into a globals-first matrix at off_f. AE's legacy-layout witness
+            // demonstrates both mismatches. Remap the existing enumerator once.
+            let g = if p == 0 { globals } else { 0 };
+            let mut row = vec![0.0; nf + g];
+            let label = *read(&context.pulsars[p].constraints[i], "constraint")?;
+            crate::constraints::legacy_constraint(context, p, label, &mut row)?;
+            let mut combined = vec![0.0; ncols];
+            combined[..g].copy_from_slice(&row[1..g + 1]);
+            combined[local_offset] = row[0];
+            combined[local_offset + 1..local_offset + nf].copy_from_slice(&row[g + 1..]);
+            constraints.push(combined);
+        }
+        row_offset += x[p].len();
+        local_offset += nf;
+    }
+    // The source allocates a zero-row constraints matrix and asserts when there
+    // are no constraints. An empty owned matrix directly represents that case.
+    let solver = crate::tkrobust::robust_least_squares(
+        &design.data,
+        &design.white_data,
+        &design.matrix,
+        &design.white_matrix,
+        &constraints,
+        &vec![0.0; constraints.len()],
+        tolerance,
+        rescale,
+        *read(&context.pulsars[0].robust, "robust")?,
+        diagnostics,
+    )
+    .map_err(|e| boundary(&e))?;
+    Ok(GlobalFit {
+        design,
+        constraints,
+        solver,
+    })
 }
 
 /// TKleastSquares_svd_psr_dcm. `sig` is unused by the source adapter.

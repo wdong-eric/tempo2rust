@@ -33,7 +33,7 @@ for version in ['original','corrected']:
         cmd=identity['commands'][0].copy();cmd[cmd.index('-c')+1]=str(path);cmd[cmd.index('-o')+1]=str(obj)
         result=subprocess.run(cmd,capture_output=True);(directory/"compile.log").write_bytes(result.stdout+result.stderr);assert result.returncode==0,result.stderr.decode();commands.append(cmd)
     native=directory/'native';cmd=identity['commands'][-1].copy();cmd[cmd.index(str(HERE/'native_fit.cc'))]=str(HERE/'source_boundary_probe.cc')
-    cmd.remove(str(HERE/'build/native/t2fit.C.o'));at=cmd.index(str(ROOT/'validation/reference/build/libtempo2-reference.a'));cmd[at:at]=list(map(str,objects));cmd[cmd.index('-o')+1]=str(native)
+    cmd=[arg for arg in cmd if Path(arg).name not in {p.name for p in objects}];at=cmd.index(str(ROOT/'validation/reference/build/libtempo2-reference.a'));cmd[at:at]=list(map(str,objects));cmd[cmd.index('-o')+1]=str(native)
     result=subprocess.run(cmd,capture_output=True);(directory/"compile.log").write_bytes(result.stdout+result.stderr);assert result.returncode==0,result.stderr.decode();commands.append(cmd)
     for case in ['allocation','constant','fitted']:
         out=directory/case;out.mkdir(exist_ok=True)

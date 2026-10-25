@@ -4,11 +4,13 @@ use crate::{
     TimingError,
     bats::{ConsumedInput, consume},
     clock_diagnostics::boundary,
+    clock_text::{NumberFormat, format_number},
     observation::{read, read_string},
     pulsar_lifecycle::PulsarContext,
+    tkfit::FitDiagnostics,
     tksvd::ld,
 };
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 /// TKspectrum.C::TK_fft, including the source recurrence and forward normalization.
 pub fn fft(dir: i32, x: &mut [f64], y: &mut [f64]) -> Result<(), TimingError> {
@@ -67,13 +69,13 @@ pub fn fft(dir: i32, x: &mut [f64], y: &mut [f64]) -> Result<(), TimingError> {
     }
     Ok(())
 }
-/// T2cholDecomposition + cholesky_formL. Products narrow before extended sum.
-pub fn form_l(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
-    let n = matrix.len();
-    if n == 0 || matrix.iter().any(|r| r.len() != n) {
+/// T2cholDecomposition mutates the lower triangle and returns its diagonal.
+/// Products narrow to binary64 before the extended-precision subtraction.
+pub fn decompose(a: &mut [Vec<f64>]) -> Result<Vec<f64>, TimingError> {
+    let n = a.len();
+    if n == 0 || a.iter().any(|r| r.len() != n) {
         return Err(boundary("Cholesky dimensions"));
     }
-    let mut a = matrix.to_vec();
     let mut p = vec![0.0; n];
     for i in 0..n {
         for j in i..n {
@@ -93,6 +95,13 @@ pub fn form_l(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
             }
         }
     }
+    Ok(p)
+}
+/// cholesky_formL, sharing the source decomposition with its direct API.
+pub fn form_l(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
+    let n = matrix.len();
+    let mut a = matrix.to_vec();
+    let p = decompose(&mut a)?;
     let mut l = vec![vec![0.0; n]; n];
     for i in 0..n {
         l[i][..i].copy_from_slice(&a[i][..i]);
@@ -111,7 +120,8 @@ pub fn form_linv(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
         for j in i + 1..n {
             let mut sum = 0.0;
             for k in i..j {
-                sum -= l[j][k] * l[k][i];
+                // GCC16 arm64 cholesky_formLinv contracts this subtraction.
+                sum = (-l[j][k]).mul_add(l[k][i], sum);
             }
             l[j][i] = sum / p[j];
             out[j][i] = l[j][i];
@@ -147,7 +157,8 @@ pub fn covar_function_to_matrix(
             let b = c
                 .get(t1 + 1)
                 .ok_or_else(|| boundary("covariance lag+1 exceeds ndays"))?;
-            m[i][j] = a * (1.0 - t) + b * t;
+            // Archive cholesky_covarFunc2matrix fuses the first product/add.
+            m[i][j] = a.mul_add(1.0 - t, b * t);
         }
     }
     Ok(m)
@@ -176,6 +187,16 @@ pub fn powerlaw_covariance(
     extra: &[f64],
     ndays: usize,
 ) -> Result<Vec<f64>, TimingError> {
+    let arguments = match model {
+        "" => 0,
+        "beta" => 1,
+        "redpink" => 2,
+        "qp" => 4,
+        _ => return Err(boundary("unknown powerlaw covariance shape")),
+    };
+    if extra.len() != arguments {
+        return Err(boundary("powerlaw covariance shape arguments"));
+    }
     if !fc.is_finite() || fc <= 0.0 {
         return Err(boundary(
             "powerlaw corner makes source FFT length unbounded",
@@ -196,10 +217,16 @@ pub fn powerlaw_covariance(
                     / (1.0 + (freq.abs() / fc).powf(2.0)).powf(alpha / 2.0)
             }
             "redpink" => {
-                amp * (1.0 + (freq.abs() / fc).powf(2.0)).powf(-alpha / 2.0)
-                    + amp
-                        * (1.0 + (extra[1] / fc).powf(2.0)).powf(-alpha / 2.0)
-                        * (1.0 + (freq.abs() / extra[1]).powf(2.0)).powf(-extra[0] / 2.0)
+                let red = (1.0 + (freq.abs() / fc).powf(2.0)).powf(-alpha / 2.0);
+                let pink_amplitude = amp * (1.0 + (extra[1] / fc).powf(2.0)).powf(-alpha / 2.0);
+                let pink = (1.0 + (freq.abs() / extra[1]).powf(2.0)).powf(-extra[0] / 2.0);
+                // T2calculateCovarFunc_redpink has distinct DC/loop contractions
+                // in the matched GCC16 arm64 object; retain each operation order.
+                if freq == 0.0 {
+                    pink_amplitude.mul_add(pink, base)
+                } else {
+                    red.mul_add(amp, pink_amplitude * pink)
+                }
             }
             "qp" if freq != 0.0 => {
                 let f0 = extra[1];
@@ -214,6 +241,8 @@ pub fn powerlaw_covariance(
         }
     };
     let mut re = vec![0.0; n];
+    // choleskyRoutines.C omits imaginary DC initialization in three builders.
+    // AE 0053 initializes it to zero for the real PSD (native guarded witness).
     let mut im = vec![0.0; n];
     re[0] = spectrum(0.0);
     for i in 1..=n / 2 {
@@ -228,28 +257,174 @@ pub fn powerlaw_covariance(
         .collect())
 }
 fn values<'a>(tokens: impl Iterator<Item = &'a str>) -> Result<Vec<f64>, TimingError> {
-    tokens
-        .map(|s| s.parse().map_err(|_| boundary("invalid covariance number")))
+    let tokens: Vec<_> = tokens.collect();
+    let mut source = crate::source_text::SourceText::new(
+        Path::new("<covariance model>"),
+        tokens.join(" ").into_bytes(),
+    );
+    (0..tokens.len())
+        .map(|_| source.double("covariance number"))
         .collect()
 }
-fn dcf(
+/// cholesky_readFromCovarianceFunction. The first scale value is ignored by
+/// the source; required daily samples retain their declared input identity.
+pub fn read_covariance_function(
     selector: &str,
     x: &[f64],
     nc: usize,
     inputs: &mut Vec<ConsumedInput>,
 ) -> Result<Vec<Vec<f64>>, TimingError> {
-    let text = consume(Path::new(selector), "covariance function", inputs)?;
-    let v = values(
-        std::str::from_utf8(&text.bytes)
-            .map_err(|_| boundary("covariance text encoding"))?
-            .split_whitespace(),
-    )?;
+    if nc >= x.len() {
+        return Err(boundary("covariance function has no data rows"));
+    }
+    let mut text = consume(Path::new(selector), "covariance function", inputs)?;
     let ndays = days(&x[..x.len() - nc])?;
-    let c = v
-        .get(1..ndays + 2)
-        .ok_or_else(|| boundary("incorrect number of covariance days"))?;
-    covar_function_to_matrix(c, x, nc)
+    text.double("covariance scale")?;
+    let c = (0..=ndays)
+        .map(|_| text.double("covariance day"))
+        .collect::<Result<Vec<_>, _>>()?;
+    covar_function_to_matrix(&c, x, nc)
 }
+
+/// cholesky_ecm reads (np+nc)^2 row-major entries; later entries are ignored.
+pub fn read_extra_covariance(
+    path: &Path,
+    np: usize,
+    nc: usize,
+    inputs: &mut Vec<ConsumedInput>,
+) -> Result<Vec<Vec<f64>>, TimingError> {
+    let mut text = consume(path, "covariance matrix", inputs)?;
+    let n = np
+        .checked_add(nc)
+        .ok_or_else(|| boundary("ECM dimensions overflow"))?;
+    let count = n
+        .checked_mul(n)
+        .ok_or_else(|| boundary("ECM dimensions overflow"))?;
+    if n == 0 {
+        return Err(boundary("ECM empty matrix"));
+    }
+    let v = (0..count)
+        .map(|_| text.double("ECM element"))
+        .collect::<Result<Vec<_>, _>>()?;
+    Ok(v.chunks(n).map(|r| r.to_vec()).collect())
+}
+
+pub fn squared_exponential(amplitude: f64, sigma: f64, ndays: usize) -> Vec<f64> {
+    let k = 1.0 / (2.0 * sigma * sigma);
+    (0..=ndays)
+        .map(|i| {
+            let x = i as f64;
+            amplitude * (-x * x * k).exp()
+        })
+        .collect()
+}
+pub fn matern15(amplitude: f64, sigma: f64, ndays: usize) -> Vec<f64> {
+    let k = 3.0f64.sqrt() / sigma;
+    (0..=ndays)
+        .map(|i| {
+            let x = i as f64;
+            amplitude * (1.0 + k * x) * (-x * k).exp()
+        })
+        .collect()
+}
+pub fn matern25(amplitude: f64, sigma: f64, ndays: usize) -> Vec<f64> {
+    let k = 5.0f64.sqrt() / sigma;
+    let k2 = 5.0 / sigma / sigma / 3.0;
+    // cholesky_matern25_kernel contracts the quadratic term on GCC16 arm64.
+    (0..=ndays)
+        .map(|i| {
+            let x = i as f64;
+            amplitude * (k2 * x).mul_add(x, 1.0 + k * x) * (-x * k).exp()
+        })
+        .collect()
+}
+pub fn dm_covariance_parameters(alpha: f64, amplitude: f64, scale: f64, ndays: usize) -> Vec<f64> {
+    (0..=ndays)
+        .map(|i| amplitude * (-((i as f64 + 1e-10) / scale).powf(alpha)).exp())
+        .collect()
+}
+/// cholesky_dmModel ignores its source ref_freq argument. D_d is in us^2,
+/// the lag and observed span are days, and the resulting covariance is s^2.
+pub fn dm_covariance(
+    structure: f64,
+    lag_days: f64,
+    span_days: f64,
+    ndays: usize,
+) -> Result<Vec<f64>, TimingError> {
+    let fc = 1.0 / (span_days.ceil() / 365.25);
+    let amplitude = 0.0112
+        * (structure * 1e-12)
+        * (lag_days * 86400.0).powf(-5.0 / 3.0)
+        * (365.25f64 * 86400.0).powf(-1.0 / 3.0)
+        * fc.powf(-8.0 / 3.0);
+    powerlaw_covariance(8.0 / 3.0, fc, amplitude, "", &[], ndays)
+}
+
+/// getCholeskyDiagonals: stores sum(log(sigma)), without the full-L offset 1.
+pub fn diagonals(context: &mut PulsarContext, p: usize, sigma: &[f64]) -> Vec<f64> {
+    let mut det = 0.0;
+    for &v in sigma {
+        det += v.ln();
+    }
+    context.pulsars[p].detL = Some(det);
+    sigma.to_vec()
+}
+/// addCovar: strict MJD cases, with source endpoint extension outside the window.
+/// Without SAT coordinates (source ip==NULL), the complete data block is added.
+pub fn add_covariance(
+    m: &mut [Vec<f64>],
+    mm: &[Vec<f64>],
+    sat: Option<&[rug::Float]>,
+    nc: usize,
+    start: f64,
+    end: f64,
+) -> Result<(), TimingError> {
+    let size = m.len();
+    if nc > size
+        || mm.len() != size
+        || m.iter().chain(mm).any(|r| r.len() != size)
+        || sat.is_some_and(|s| s.len() < size - nc)
+    {
+        return Err(boundary("addCovar dimensions"));
+    }
+    let n = m.len() - nc;
+    if let Some(sat) = sat {
+        let istart = (0..n).find(|&i| sat[i] > start).unwrap_or(0);
+        let iend = (0..n).rev().find(|&i| sat[i] < end).unwrap_or(0);
+        for i in 0..n {
+            for j in 0..n {
+                // addCovar's nine strict cases: equality to a boundary adds nothing.
+                let remap = |k: usize| {
+                    if sat[k] > start && sat[k] < end {
+                        Some(k)
+                    } else if sat[k] < start {
+                        Some(istart)
+                    } else if sat[k] > end {
+                        Some(iend)
+                    } else {
+                        None
+                    }
+                };
+                if let (Some(a), Some(b)) = (remap(i), remap(j)) {
+                    m[i][j] +=
+                        if (sat[i] > end && sat[j] < start) || (sat[i] < start && sat[j] > end) {
+                            mm[istart][iend]
+                        } else {
+                            mm[a][b]
+                        };
+                }
+            }
+        }
+    } else {
+        for i in 0..n {
+            for j in 0..n {
+                m[i][j] += mm[i][j];
+            }
+        }
+    }
+    Ok(())
+}
+
 struct ModelReader<'a> {
     x: &'a [f64],
     sat: Option<&'a [rug::Float]>,
@@ -258,6 +433,8 @@ struct ModelReader<'a> {
     nc: usize,
     inputs: &'a mut Vec<ConsumedInput>,
     stack: Vec<String>,
+    diagnostics: Option<&'a FitDiagnostics>,
+    files: Vec<PathBuf>,
 }
 impl ModelReader<'_> {
     fn read(
@@ -280,7 +457,7 @@ impl ModelReader<'_> {
         let text =
             std::str::from_utf8(&content).map_err(|_| boundary("covariance text encoding"))?;
         if text.as_bytes().first().is_some_and(u8::is_ascii_digit) {
-            let cov = dcf(selector, self.x, self.nc, self.inputs)?;
+            let cov = read_covariance_function(selector, self.x, self.nc, self.inputs)?;
             m.clone_from_slice(&cov);
             self.stack.pop();
             return Ok(());
@@ -307,7 +484,7 @@ impl ModelReader<'_> {
                 continue;
             }
             if t[0] == "MJD" {
-                let v = values(t[1..].iter().copied())?;
+                let v = values(t[1..].iter().copied().take(2))?;
                 if v.len() != 2 {
                     return Err(boundary("MJD needs bounds"));
                 }
@@ -326,35 +503,35 @@ impl ModelReader<'_> {
                 continue;
             }
             let mut mm = match t[0] {
-                "DCF" => dcf(
+                "DCF" => read_covariance_function(
                     t.get(1).ok_or_else(|| boundary("DCF needs path"))?,
                     self.x,
                     self.nc,
                     self.inputs,
                 )?,
                 "ECM" => {
-                    let s = consume(
+                    // cholesky_readT2CholModel allocates np+1 rows, whereas ECM
+                    // reads np+nc. More than one constraint exceeds that storage.
+                    if self.nc > 1 {
+                        return Err(boundary("ECM source model allocation with constraints"));
+                    }
+                    let mut extra = read_extra_covariance(
                         Path::new(t.get(1).ok_or_else(|| boundary("ECM needs path"))?),
-                        "covariance matrix",
+                        self.x.len(),
+                        self.nc,
                         self.inputs,
                     )?;
-                    let v = values(
-                        std::str::from_utf8(&s.bytes)
-                            .map_err(|_| boundary("ECM text encoding"))?
-                            .split_whitespace(),
-                    )?;
-                    let n = self.x.len();
-                    if self.nc > 0 || v.len() < n * n {
-                        return Err(boundary("ECM source dimensions"));
+                    extra.truncate(self.x.len());
+                    for row in &mut extra {
+                        row.truncate(self.x.len());
                     }
-                    v[..n * n].chunks(n).map(|r| r.to_vec()).collect()
+                    extra
                 }
                 "MODEL" => {
                     let kind = *t.get(1).ok_or_else(|| boundary("MODEL needs type"))?;
                     if kind == "T2" {
                         continue;
                     }
-                    let mut v = values(t[2..].iter().copied())?;
                     let nd = days(self.x)?;
                     let required = match kind {
                         "1" => 0,
@@ -365,6 +542,7 @@ impl ModelReader<'_> {
                         "T2PowerLaw_RedPink" => 5,
                         _ => 3,
                     };
+                    let mut v = values(t[2..].iter().copied().take(required))?;
                     if v.len() < required {
                         return Err(boundary("missing covariance model arguments"));
                     }
@@ -390,38 +568,12 @@ impl ModelReader<'_> {
                                 powerlaw_covariance(v[0], v[2], v[3], "beta", &v[1..2], nd)?
                             }
                         }
-                        "T2SqExp" | "T2SqExpDM" => (0..=nd)
-                            .map(|i| {
-                                let x = i as f64;
-                                v[0] * (-x * x * (1.0 / (2.0 * v[1] * v[1]))).exp()
-                            })
-                            .collect(),
-                        "T2Matern1.5" | "T2Matern1.5DM" => (0..=nd)
-                            .map(|i| {
-                                let x = i as f64;
-                                let k = 3.0f64.sqrt() / v[1];
-                                v[0] * (1.0 + k * x) * (-x * k).exp()
-                            })
-                            .collect(),
-                        "T2Matern2.5" | "T2Matern2.5DM" => (0..=nd)
-                            .map(|i| {
-                                let x = i as f64;
-                                let k = 5.0f64.sqrt() / v[1];
-                                let k2 = 5.0 / v[1] / v[1] / 3.0;
-                                v[0] * (1.0 + k * x + k2 * x * x) * (-x * k).exp()
-                            })
-                            .collect(),
-                        "DMCovarParam" => (0..=nd)
-                            .map(|i| v[1] * (-((i as f64 + 1e-10) / v[2]).powf(v[0])).exp())
-                            .collect(),
+                        "T2SqExp" | "T2SqExpDM" => squared_exponential(v[0], v[1], nd),
+                        "T2Matern1.5" | "T2Matern1.5DM" => matern15(v[0], v[1], nd),
+                        "T2Matern2.5" | "T2Matern2.5DM" => matern25(v[0], v[1], nd),
+                        "DMCovarParam" => dm_covariance_parameters(v[0], v[1], v[2], nd),
                         "DM" => {
-                            let fc = 1.0 / ((self.x[self.x.len() - 1] - self.x[0]).ceil() / 365.25);
-                            let a = 0.0112
-                                * (v[0] * 1e-12)
-                                * (v[1] * 86400.0).powf(-5.0 / 3.0)
-                                * (365.25f64 * 86400.0).powf(-1.0 / 3.0)
-                                * fc.powf(-8.0 / 3.0);
-                            powerlaw_covariance(8.0 / 3.0, fc, a, "", &[], nd)?
+                            dm_covariance(v[0], v[1], self.x[self.x.len() - 1] - self.x[0], nd)?
                         }
                         "T2PowerLaw" | "T2PowerLawDM" => {
                             powerlaw_covariance(v[0], v[2], v[1], "", &[], nd)?
@@ -445,66 +597,116 @@ impl ModelReader<'_> {
                         }
                         _ => return Err(boundary(&format!("unknown covariance model {kind}"))),
                     };
+                    if kind != "DMCovarParam"
+                        && let Some(io) = self.diagnostics.filter(|d| d.debug)
+                    {
+                        let mut bytes = Vec::new();
+                        for &v in &c[..nd] {
+                            bytes.extend(format_number(v, NumberFormat::GeneralSix));
+                            bytes.push(b'\n');
+                        }
+                        self.files
+                            .push(io.write("newDCF", &bytes).map_err(|e| boundary(&e))?);
+                    }
                     let mut mm = covar_function_to_matrix(&c, self.x, self.nc)?;
-                    if kind.ends_with("DM") {
+                    if matches!(
+                        kind,
+                        "T2PowerLawDM"
+                            | "T2YrPowerLawDM"
+                            | "T2SqExpDM"
+                            | "T2Matern1.5DM"
+                            | "T2Matern2.5DM"
+                    ) {
                         let f = self
                             .freq
                             .ok_or_else(|| boundary("DM covariance needs observations"))?;
-                        for i in 0..mm.len() {
-                            for j in 0..mm.len() {
-                                mm[i][j] *= (1.0 / (2.41e-4 * f[i] * f[i]))
-                                    * (1.0 / (2.41e-4 * f[j] * f[j]));
-                            }
-                        }
+                        covariance_to_dm(&mut mm, f)?;
                     }
                     mm
                 }
                 _ => continue,
             };
-            let n = self.x.len() - self.nc;
-            if let Some(sat) = self.sat {
-                let istart = (0..n).find(|&i| sat[i] > start).unwrap_or(0);
-                let iend = (0..n).rev().find(|&i| sat[i] < end).unwrap_or(0);
-                for i in 0..n {
-                    for j in 0..n {
-                        // addCovar's nine strict cases: equality to a boundary adds nothing.
-                        let remap = |k: usize| {
-                            if sat[k] > start && sat[k] < end {
-                                Some(k)
-                            } else if sat[k] < start {
-                                Some(istart)
-                            } else if sat[k] > end {
-                                Some(iend)
-                            } else {
-                                None
-                            }
-                        };
-                        if let (Some(a), Some(b)) = (remap(i), remap(j)) {
-                            m[i][j] += if (sat[i] > end && sat[j] < start)
-                                || (sat[i] < start && sat[j] > end)
-                            {
-                                mm[istart][iend]
-                            } else {
-                                mm[a][b]
-                            };
-                        }
-                    }
-                }
-            } else {
-                for i in 0..n {
-                    for j in 0..n {
-                        m[i][j] += mm[i][j];
-                    }
-                }
-            }
+            add_covariance(m, &mm, self.sat, self.nc, start, end)?;
             mm.clear();
         }
         self.stack.pop();
         Ok(())
     }
 }
+
+/// cholesky_cov2dm uses observing frequencies in MHz, including each supplied row.
+pub fn covariance_to_dm(matrix: &mut [Vec<f64>], frequency_mhz: &[f64]) -> Result<(), TimingError> {
+    let n = matrix.len();
+    if frequency_mhz.len() != n || matrix.iter().any(|r| r.len() != n) {
+        return Err(boundary("DM covariance dimensions"));
+    }
+    for i in 0..n {
+        let g1 = 1.0 / (2.41e-4 * frequency_mhz[i] * frequency_mhz[i]);
+        for j in 0..n {
+            let g2 = 1.0 / (2.41e-4 * frequency_mhz[j] * frequency_mhz[j]);
+            matrix[i][j] *= g1 * g2;
+        }
+    }
+    Ok(())
+}
+
+/// cholesky_readT2CholModel and recursive INCLUDE. Paths are resolved in the
+/// caller's working directory; absent SAT disables the source MJD mask.
+#[allow(clippy::too_many_arguments, clippy::type_complexity)]
+pub fn read_model(
+    selector: &str,
+    x: &[f64],
+    sat: Option<&[rug::Float]>,
+    frequency_mhz: Option<&[f64]>,
+    name: &[u8],
+    nc: usize,
+    inputs: &mut Vec<ConsumedInput>,
+    diagnostics: Option<&FitDiagnostics>,
+) -> Result<(Vec<Vec<f64>>, Vec<PathBuf>), TimingError> {
+    if x.is_empty() || nc > x.len() || sat.is_some_and(|v| v.len() < x.len() - nc) {
+        return Err(boundary("covariance model dimensions"));
+    }
+    let mut m = vec![vec![0.0; x.len()]; x.len()];
+    let mut reader = ModelReader {
+        x,
+        sat,
+        freq: frequency_mhz,
+        name,
+        nc,
+        inputs,
+        stack: vec![],
+        diagnostics,
+        files: vec![],
+    };
+    reader.read(selector, &mut m, String::new(), 0.0, 99999.0)?;
+    Ok((m, reader.files))
+}
+
+pub struct CholeskyMatrix {
+    pub covariance: Vec<Vec<f64>>,
+    pub lower: Vec<Vec<f64>>,
+    pub diagnostic_files: Vec<PathBuf>,
+}
+
+fn write_matrix(
+    io: &FitDiagnostics,
+    name: &str,
+    m: &[Vec<f64>],
+    format: NumberFormat,
+) -> Result<PathBuf, TimingError> {
+    let mut bytes = Vec::new();
+    for (i, row) in m.iter().enumerate() {
+        for (j, &v) in row.iter().enumerate() {
+            bytes.extend(format!("{i} {j} ").as_bytes());
+            bytes.extend(format_number(v, format));
+            bytes.push(b'\n');
+        }
+        bytes.push(b'\n');
+    }
+    io.write(name, &bytes).map_err(|e| boundary(&e))
+}
 /// Covariance selector on selected canonical observations; returns C and lower L.
-#[allow(clippy::type_complexity)]
+#[allow(clippy::too_many_arguments)]
 pub fn get_cholesky_matrix(
     context: &mut PulsarContext,
     p: usize,
@@ -512,15 +714,21 @@ pub fn get_cholesky_matrix(
     indices: &[usize],
     x: &[f64],
     sigma: &[f64],
+    nc: usize,
     inputs: &mut Vec<ConsumedInput>,
-) -> Result<(Vec<Vec<f64>>, Vec<Vec<f64>>), TimingError> {
-    if x.is_empty() || x.len() != indices.len() || x.len() != sigma.len() {
+    diagnostics: Option<&FitDiagnostics>,
+) -> Result<CholeskyMatrix, TimingError> {
+    if x.is_empty() || nc > x.len() || x.len() - nc != indices.len() || x.len() != sigma.len() {
         return Err(boundary("getCholeskyMatrix dimensions"));
     }
     // A 1x1 allocation takes the source's diagonal branch before reading a model.
     if x.len() == 1 {
-        context.pulsars[p].detL = Some(sigma[0].ln());
-        return Ok((vec![vec![sigma[0] * sigma[0]]], vec![vec![sigma[0]]]));
+        let diagonal = diagonals(context, p, sigma);
+        return Ok(CholeskyMatrix {
+            covariance: vec![vec![sigma[0] * sigma[0]]],
+            lower: vec![diagonal],
+            diagnostic_files: vec![],
+        });
     }
     let (psr, rows) = context.pulsar_observations_mut(p)?;
     let sat = indices
@@ -532,26 +740,28 @@ pub fn get_cholesky_matrix(
         .map(|&i| read(&rows[i].freq, "freq").copied())
         .collect::<Result<Vec<_>, _>>()?;
     let name = read_string(&psr.name[..], "name")?;
-    let mut m = vec![vec![0.0; x.len()]; x.len()];
-    if selector == "PSRJ" {
-        m = dcf(
-            &format!("covarFunc.dat_{}", String::from_utf8_lossy(&name)),
-            x,
-            0,
-            inputs,
-        )?;
+    let (mut m, mut files) = if selector == "PSRJ" {
+        (
+            read_covariance_function(
+                &format!("covarFunc.dat_{}", String::from_utf8_lossy(&name)),
+                x,
+                nc,
+                inputs,
+            )?,
+            vec![],
+        )
     } else {
-        ModelReader {
+        read_model(
+            selector,
             x,
-            sat: Some(&sat),
-            freq: Some(&freq),
-            name: &name,
-            nc: 0,
+            Some(&sat),
+            Some(&freq),
+            &name,
+            nc,
             inputs,
-            stack: vec![],
-        }
-        .read(selector, &mut m, String::new(), 0.0, 99999.0)?;
-    }
+            diagnostics,
+        )?
+    };
     let extra = psr.ToAextraCovar.flatten();
     if let Some(owner) = extra {
         let e = context
@@ -563,18 +773,40 @@ pub fn get_cholesky_matrix(
             }
         }
     }
+    for i in x.len() - nc..x.len() {
+        for j in 0..x.len() {
+            m[i][j] = 0.0;
+            m[j][i] = 0.0;
+        }
+    }
     for i in 0..m.len() {
-        m[i][i] += sigma[i] * sigma[i];
+        // getCholeskyMatrix uses fmadd in the matched GCC16 arm64 profile.
+        m[i][i] = sigma[i].mul_add(sigma[i], m[i][i]);
+    }
+    if let Some(io) = diagnostics.filter(|d| d.debug) {
+        files.push(write_matrix(
+            io,
+            "chol.covarMatrix",
+            &m,
+            NumberFormat::GeneralTwentyEight,
+        )?);
     }
     // Nonaccelerated T2cholDecomposition exits on a nonpositive pivot, before
     // getCholeskyMatrix's accelerated formL return-code retry can be reached.
     let l = form_l(&m)?;
+    if let Some(io) = diagnostics.filter(|d| d.debug) {
+        files.push(write_matrix(io, "chol.L", &l, NumberFormat::GeneralSix)?);
+    }
     let mut det = 1.0;
     for i in 0..l.len() {
         det += l[i][i].ln();
     }
     context.pulsars[p].detL = Some(det);
-    Ok((m, l))
+    Ok(CholeskyMatrix {
+        covariance: m,
+        lower: l,
+        diagnostic_files: files,
+    })
 }
 
 /// getCholeskyMatrix called on IFUNC knot coordinates (source ip == NULL).
@@ -601,23 +833,14 @@ pub fn ifunc_cholesky(
     let name = read_string(&p.name[..], "name")?;
     let mut m = vec![vec![0.0; n]; n];
     if selector == "PSRJ" {
-        m = dcf(
+        m = read_covariance_function(
             &format!("covarFunc.dat_{}", String::from_utf8_lossy(&name)),
             &x,
             0,
             inputs,
         )?;
     } else {
-        ModelReader {
-            x: &x,
-            sat: None,
-            freq: None,
-            name: &name,
-            nc: 0,
-            inputs,
-            stack: vec![],
-        }
-        .read(selector, &mut m, String::new(), 0.0, 99999.0)?;
+        m = read_model(selector, &x, None, None, &name, 0, inputs, None)?.0;
     }
     if let Some(owner) = p.ToAextraCovar.flatten() {
         let extra = context
