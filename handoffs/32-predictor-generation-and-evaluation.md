@@ -6,6 +6,8 @@ Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0088
 
 Deliver the complete source-defined predictor functionality: PAR-only polyco/Chebyshev generation using synthesized TOAs and canonical BAT/uncentered residuals, both file formats and cross-reader exchange, phase/frequency evaluation, segment selection, frequency plans and all defined direct lifecycle/construction/test APIs. Use 0076's CLI routes and source responsibility map. Reuse existing parser, runtime, writer and numeric routines; no fabricated TIM input, automatic fit cycle, second scientific engine or independent reference-only stage. C ABI packaging and the remaining core inventory retain explicit later obligations.
 
+Early central review corrections are recorded in `handoffs/32a-predictor-review-corrections.md`: preserve native subnormal rounding and reject incomplete/corrupted constructed-model records. They stay inside this assignment and the frozen contract.
+
 Proceed in coherent stages:
 
 1. Freeze concrete canonical API, direct versus CLI caller conventions, authored public examples, source/type map and quantity-by-quantity comparison contract against the released baseline.
