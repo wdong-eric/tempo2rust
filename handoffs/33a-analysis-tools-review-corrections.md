@@ -19,6 +19,12 @@ Correct the typed projection/comparison so those fields retain source-width exac
 
 Authored replay: `decisions/evidence/analysis-tools/central-ag-comparator-review.py`. It accepts `--native`, `--rust` and `--comparator` paths and copies all inputs before execution. Defaults name the preliminary debug toolkit exports. If the corrected projection changes those fields' representation, adapt the focused mutation inputs to that representation and retain the original witness; a renamed field or tag must not merely bypass the four contract checks.
 
+## Focused corrected-observer replay
+
+AG changed the four min/max projection tags to `f64_exact` / `f32_exact` and added source-width bit comparisons, preserving the preceding sign/nonfinite handling. Central inspected both emitters and independently replayed comparator `056cc36e28439686f10439fd8ef6dd4a18abd2e30aff662aaaea5c376a58b907` against the original scientific values with only those four type tags updated. The 7,195-check unchanged control passes; each of the original four one-step mutations now produces exactly one failure. This verifies the corrected observer logic for the demonstrated defect.
+
+This bounded replay does not claim a fresh native/Rust executable run or final delivery. AG still returns the rebuilt public projection results and committed observer identities in its normal handover. Other finalization checks below remain subject to that return. Original failed evidence is retained. Corrected evidence is ignored under `decisions/evidence/analysis-tools/build/comparator-correction-20261026/`; receipt SHA-256 `771136979b0a9dfa4914767294d6f2cb8b82cb09f4c2e5b444d060f523e66356`, inner replay receipt `cd1e733f94ffa6782583f99f4f6ae09297e5e4dc23a8e63146e5634a0abb7ffc`. It preserves the inspected emitters, comparator, exact type-only changes and four rejection results. Original location: `/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-ag-comparator-correction-vktqh9t4`.
+
 ## Finalization checks observed during this review
 
 These are completion checks against the existing scope, rather than demonstrated production defects:
