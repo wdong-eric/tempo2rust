@@ -1,6 +1,6 @@
 # Assignment AI: enabled ephemeris and numerical backends
 
-**Prepared only; not released.** Follow decision 0081 after AH implementation handover, ownership closure and explicit central release under 0074. AE currently owns Rust under 0079; AF, AG and AH remain prepared. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0081/0074/0065/0053/0039/0050, predecessor reports and the exact released baseline.
+**Prepared only; not released.** Follow decision 0081 after AH implementation handover, ownership closure and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0081/0074/0065/0053/0039/0050, predecessor reports and the exact released baseline.
 
 Once released, own `rust/` and new `validation/native_backends/` as the sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and milestone acceptance. Preserve original 0008 and its later amendments.
 

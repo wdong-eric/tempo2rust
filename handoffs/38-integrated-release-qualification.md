@@ -1,6 +1,6 @@
 # Assignment AL: integrated release qualification
 
-**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. AG currently owns Rust under 0089; AE and AF ownership are closed. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
 
 Once released, own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
 

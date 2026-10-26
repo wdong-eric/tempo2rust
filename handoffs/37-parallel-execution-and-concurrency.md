@@ -1,6 +1,6 @@
 # Assignment AK: parallel observation execution and concurrency
 
-**Prepared only; not released.** Follow decision 0085 after AJ's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. AE currently owns Rust. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0085/0084/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Prepared only; not released.** Follow decision 0085 after AJ's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0085/0084/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
 
 Once released, own `rust/` and new `validation/parallel_execution/` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and acceptance. Preserve original 0008 and its amendments.
 

@@ -1,6 +1,6 @@
 # Assignment AJ: public Rust APIs and predictor C compatibility
 
-**Prepared only; not released.** Follow the user's interface choice and decision 0084 after AI's reviewed handover, ownership closure and explicit central release under 0074/0082. AE currently owns Rust. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0084/0082/0074/0065/0053/0039/0050 and the actual predecessor baseline/reports named at release.
+**Prepared only; not released.** Follow the user's interface choice and decision 0084 after AI's reviewed handover, ownership closure and explicit central release under 0074/0082. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0084/0082/0074/0065/0053/0039/0050 and the actual predecessor baseline/reports named at release.
 
 Once released, own `rust/` and new `validation/library_interfaces/` as the sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and milestone acceptance. Preserve original 0008 and its amendments.
 
