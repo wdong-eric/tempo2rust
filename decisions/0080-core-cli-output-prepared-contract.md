@@ -1,6 +1,6 @@
 # Core command entry point and output APIs: prepared Assignment AH
 
-Central design decision, 25 October 2026. **Prepare AH for native-style core CLI orchestration, source text/PAR output and the remaining logging/precision/enum interfaces, sequenced after AG. AH is not released.** AE currently owns Rust under 0079; AF and AG are prepared. AH requires a reviewed predecessor implementation baseline, ownership closure and explicit central release under 0074. Functional handover remains distinct from scientific acceptance.
+Central design decision, 25 October 2026; delivered API and accepted interface/platform references reconciled on 26 October. **Prepare AH for native-style core CLI orchestration, source text/PAR output and the remaining logging/precision/enum interfaces, sequenced after AG. AH is not released.** AG currently owns Rust under 0089; AE and AF ownership are closed. AH requires a reviewed predecessor implementation baseline, ownership closure and explicit central release under 0074. Functional handover remains distinct from scientific acceptance.
 
 After release AH owns `rust/` and new `validation/core_output/` as the sole implementation writer. Reuse the canonical input, timing, fitting, predictor and toolkit APIs delivered by earlier stages. Each complete source routine remains required even where one caller uses only a subset. This stage does not duplicate those scientific engines or add a new parameter/observation store. Policies 0053, 0039, 0050 and 0065 continue to govern small demonstrated source corrections, ignored generated outputs, evidence preservation and proportionate verification. Original 0008 remains intact.
 
@@ -19,6 +19,16 @@ Also integrate source `-polyco`, `-polyco_file` and `-pred` argument forms with 
 
 Expose safe public equivalents of the complete output/helper routines below, using canonical state and existing diagnostic/formatting infrastructure. Freeze their concrete mutable-state, stream and file-destination signatures against the released baseline. CLI file paths retain source working-directory conventions; library callers need an explicit owned I/O contract, without changing global working directory to implement it. Preserve completed source writes on failure unless a separately documented correction changes that behavior; do not imply a multi-file transaction.
 
+## Delivered integration points
+
+AE production `ddff7f8` / report `ecf41ed` and AF production `7420622` / report `7a94491` are reviewed implementation baselines under 0088/0089, with numerical acceptance still pending. AG's final baseline will be named at AH release. Read `rust/GENERAL_FITTING_API.md`, `rust/PREDICTOR_API.md` and their source maps; reuse the canonical library calls rather than calling the JSON executable or translating its output back into internal state.
+
+`general_fitting::fit` already owns a complete NITS loop with prefit and postfit evaluation. It does not provide the source main's interleaved output calls or `-pre` path. AH's main must use the existing BAT/residual evaluation and single `general_fitting::t2_fit` operation at the actual source points in `tempo2.C:512–624`, preserving one fit per outer iteration, prefit-slot updates, `displayParameters`, report mutations and warning state. `-pre` skips the postfit evaluation inside each outer iteration after that iteration's fit; it does not bypass the outer NITS loop. The stateful `textOutput` call occurs before the next outer iteration, so collecting all fits first and printing afterward is not equivalent. Keep the existing complete-fit JSON/library contract intact.
+
+For `-pred`, `-polyco` and `-polyco_file`, reuse AF's canonical PAR-only preparation (`predictor::load_par`, or the already initialized/preprocessed context at the matching core stage), `predictor::cli_defaults`, `ChebyRequest` / `cheby2d_int::{construct_set,test_set}`, `PolycoRequest` / `polyco::polyco` and `T2Predictor` file operations. Do not read/preprocess the same request twice. Preserve the native argument grammar rather than inheriting the JSON adapter's option grammar. Keep source CLI defaults separate from direct-library defaults, including Cheby odd-order adjustment, seconds-to-days type boundary/overlap, polyco true-DM choice and literal file-prefix behavior. Preserve source file-write/test order and the resulting context mutations. The existing `predictor_cli.rs` is a useful integration example, not an alternate scientific engine or an internal JSON protocol.
+
+AG's adopted weighted-spectrum warnings in 0090 are part of its public diagnostics contract. Any AH adapter that exposes those operations must retain the warnings and defined source weighting. This does not add a new spectral command to the pinned core grammar. Preserve the full inherited numerical ledger, including AF's seven raw polyco log10RMS failures; output formatting must not mask them or turn the displayed rounded values into engine acceptance.
+
 ## Source responsibilities
 
 | Source at the pin | Required responsibility |
@@ -35,7 +45,7 @@ Expose safe public equivalents of the complete output/helper routines below, usi
 
 Plugin programs and their binary compatibility remain outside this initial migration scope. The core path discovery, selector handling and wrapper dispositions still require explicit coverage. Recognize external plugin selections and report an unavailable integration when the installed Rust build cannot provide it; never silently substitute the built-in fitter or output handler. Do not claim that a discovery listing proves a loadable plugin ABI. Existing bounded source-disabled routes remain distinct from an enabled backend.
 
-Core/predictor/toolkit C ABI/header packaging and linked consumer qualification, enabled CALCEPH and optional accelerated backends, remaining SOFA dependency dispositions, clean installation, broader workflows, Linux and other platform checks, performance and concurrency remain explicit full-migration obligations. AH completion cannot remove those obligations or resolve inherited numerical failures by omission.
+The selected installed interface guarantee is full Rust core/toolkit APIs plus standalone predictor C compatibility under 0084; AJ qualifies its external consumers and C headers/ABI. Enabled CALCEPH and optional accelerated backends, the remaining SOFA dependency disposition, clean installation, broader workflows, actual macOS arm64 and Linux x86_64 qualification under 0086, performance and concurrency remain explicit full-migration obligations. AH completion cannot remove those obligations or resolve inherited numerical failures by omission.
 
 ## Source conventions that affect the result
 
