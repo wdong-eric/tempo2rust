@@ -12,11 +12,7 @@ pub(crate) fn ld(value: f64) -> Float {
 
 // TKsign_d(double,double): narrowing is intentional, and -0 compares >= 0.
 fn tk_sign_d(a: Float, b: &Float) -> Float {
-    ld(if b.to_f64() >= 0.0 {
-        a.to_f64().abs()
-    } else {
-        -a.to_f64().abs()
-    })
+    ld(crate::toolkit::sign_d(a.to_f64(), b.to_f64()))
 }
 
 fn tk_pythag(a: &Float, b: &Float) -> Float {

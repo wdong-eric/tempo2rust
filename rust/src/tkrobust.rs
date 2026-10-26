@@ -176,15 +176,8 @@ pub fn robust_least_squares(
             resid[i] = white_data[i] - sum;
         }
         last_covariance = fit.covariance.clone();
-        let mut abs: Vec<_> = resid.iter().map(|r| r.abs()).collect();
-        abs.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
-        let n = abs.len();
-        // T2toolkit.C::TKfindMedian_d: mean of the two middle entries for even n.
-        let median = if n % 2 == 1 {
-            abs[n / 2]
-        } else {
-            (abs[n / 2 - 1] + abs[n / 2]) / 2.0
-        };
+        let abs: Vec<_> = resid.iter().map(|r| r.abs()).collect();
+        let median = crate::toolkit::find_median_d(&abs).map_err(|e| e.to_string())?;
         old = sigma;
         sigma = median / 0.6745;
         history.push(Iteration {

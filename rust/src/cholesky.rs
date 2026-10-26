@@ -15,7 +15,7 @@ use std::path::{Path, PathBuf};
 /// TKspectrum.C::TK_fft, including the source recurrence and forward normalization.
 pub fn fft(dir: i32, x: &mut [f64], y: &mut [f64]) -> Result<(), TimingError> {
     let n = x.len();
-    if n < 2 || !n.is_power_of_two() || y.len() != n {
+    if n == 0 || !n.is_power_of_two() || y.len() != n {
         return Err(boundary("TK_fft dimensions"));
     }
     let m = ((n as f64).ln() / 2.0f64.ln() + 0.1) as usize;

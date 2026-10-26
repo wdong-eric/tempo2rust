@@ -38,7 +38,7 @@ pub fn design_matrix(
     observations: &[usize],
     nparams: usize,
     lower: &[Vec<f64>],
-    basis: Basis,
+    mut basis: impl FnMut(&mut PulsarContext, usize, f64, usize, &mut [f64]) -> Result<(), TimingError>,
 ) -> Result<Design, TimingError> {
     let n = x.len();
     if n == 0
@@ -86,7 +86,7 @@ pub fn single_pulsar(
     observations: &[usize],
     nparams: usize,
     lower: &[Vec<f64>],
-    basis: Basis,
+    basis: impl FnMut(&mut PulsarContext, usize, f64, usize, &mut [f64]) -> Result<(), TimingError>,
     tolerance: f64,
     rescale: bool,
 ) -> Result<LeastSquares, TimingError> {

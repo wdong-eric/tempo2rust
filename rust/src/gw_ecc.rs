@@ -39,10 +39,44 @@ pub(super) fn eccRes(
     mut prev_theta: &mut Option<f64>,
     d: &mut Diagnostics,
 ) -> Result<Float, TimingError> {
+    ecc_res_inner(
+        psr,
+        rows,
+        i,
+        coalesceFlag,
+        prev_p,
+        prev_e,
+        prev_a,
+        prev_epoch,
+        prev_theta,
+        d,
+        None,
+    )
+}
+
+/// Both source bodies are arithmetically identical through the residual; the
+/// energy variant adds its own f32 writes and diagnostic at the original sites.
+#[allow(clippy::needless_option_as_deref)]
+pub(super) fn ecc_res_inner(
+    psr: &mut SourcePulsar,
+    rows: &[SourceObservation],
+    i: i32,
+    coalesceFlag: &mut Option<i32>,
+    prev_p: &mut Option<f64>,
+    prev_e: &mut Option<f64>,
+    prev_a: &mut Option<f64>,
+    prev_epoch: &mut Option<f64>,
+    prev_theta: &mut Option<f64>,
+    d: &mut Diagnostics,
+    mut energy: Option<&mut f32>,
+) -> Result<Float, TimingError> {
     let mut pert: Float;
     if (*read(&*coalesceFlag, "*coalesceFlag")? == 1i32) {
         {
             pert = Float::with_val(PRECISION_BITS, 0.0f64);
+            if let Some(e) = energy.as_deref_mut() {
+                *e = 0.0;
+            }
             Ok((pert).clone())
         }
     } else {
@@ -205,6 +239,9 @@ pub(super) fn eccRes(
             if (*read(&*coalesceFlag, "*coalesceFlag")? == 1i32) {
                 {
                     pert = Float::with_val(PRECISION_BITS, 0.0f64);
+                    if let Some(e) = energy.as_deref_mut() {
+                        *e = 0.0;
+                    }
                 }
             } else {
                 {
@@ -275,12 +312,51 @@ pub(super) fn eccRes(
                         PRECISION_BITS,
                         (1e9f64 * ((rplus * gplus) + (rcross * gcross))),
                     );
+                    if let Some(e) = energy.as_deref_mut() {
+                        // GWsim.C:664: the prefactor rounds to float BEFORE the
+                        // double product, then the final assignment rounds again.
+                        // c^3/G has units kg/s; Ag/P^2 makes eOut kg/s^3 (W/m^2).
+                        // This is the source estimate, not a validated total energy.
+                        *e = ((c.powf(3.0) / (16.0 * std::f64::consts::PI * G)) as f32 as f64
+                            * ((Ag
+                                * std::f64::consts::PI.powf(3.0)
+                                * (1.0 + ec * theta.cos()).powf(2.0))
+                                / (prev_p.unwrap().powf(2.0) * (ec * ec - 1.0).powf(3.0)))
+                            * (-1536.0
+                                - 6184.0 * ec * ec
+                                - 1847.0 * ec.powf(4.0)
+                                - 96.0 * ec.powf(6.0)
+                                + 256.0 * (4.0 * theta).cos()
+                                + ec * (-4.0
+                                    * (1488.0 + 1689.0 * ec * ec + 116.0 * ec.powf(4.0))
+                                    * theta.cos()
+                                    + 2.0
+                                        * ec
+                                        * (-1270.0 - 243.0 * ec * ec + 48.0 * ec.powf(4.0))
+                                        * (2.0 * theta).cos()
+                                    + 4.0
+                                        * (32.0 + 267.0 * ec * ec + 76.0 * ec.powf(4.0))
+                                        * (3.0 * theta).cos()
+                                    + 2.0 * ec * (200.0 + 479.0 * ec * ec) * (4.0 * theta).cos()
+                                    + 4.0
+                                        * (176.0 + 87.0 * ec * ec + 40.0 * ec.powf(4.0))
+                                        * (5.0 * theta).cos()
+                                    + 14.0 * ec * (46.0 + 5.0 * ec * ec) * (6.0 * theta).cos()
+                                    + 220.0 * ec * ec * (7.0 * theta).cos()
+                                    + 25.0 * ec.powf(3.0) * (8.0 * theta).cos())))
+                            as f32;
+                    }
                 }
             }
             d.stdout(
                 &[
                     b"Have pert ".to_vec(),
                     crate::clock_text::extended_general_six(&((pert).clone())),
+                    if let Some(e) = energy.as_deref() {
+                        format!(" energy {:.6}", e).into_bytes()
+                    } else {
+                        vec![]
+                    },
                     b"\n".to_vec(),
                 ]
                 .concat(),
