@@ -187,6 +187,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0091](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0091-ag-handover-and-ah-release.md) approves AG implementation handover at `87099ca` / validation `cf4dfeb` / report `6fcf5aa`, closes its ownership and releases AH. Central rebuilt the committed release examples and passed all 21,520 public comparisons, twelve rejection controls and three behavioral tests. The 0082 checkpoint retains 0090 source weighting, actual Linux contraction qualification and the complete inherited numerical ledger.
 
+[Decision 0092](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0092-predictor-precision-and-phase-localization.md) records the controlled AF precision experiment: 2,247 generation comparisons at each of 128 and 113 bits retain the same seven raw log10RMS failures and identical fourteen diagnostic values. Observation-only traces narrow the largest phase differences to inherited Rømer/BAT and BT orbital-delay outputs. No complete arithmetic cause, new allowance, precision change or acceptance is asserted; AH continues and the full ledger remains open.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
