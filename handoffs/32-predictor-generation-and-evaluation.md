@@ -1,8 +1,8 @@
 # Assignment AF: predictor generation and evaluation
 
-**Prepared only; not released.** Follow decision 0076 after AE's implementation handover, ownership closure and an explicit central release under 0074. AE currently owns Rust under 0079; AD ownership is closed. A successor handover does not imply that inherited numerical gates are accepted.
+**Released by decision 0088 on AE production `ddff7f8` / report `ecf41ed`.** Central reviewed the implementation handover and completed the 0082 checkpoint. AE ownership is closed; AF is the sole Rust writer under 0074. Numerical/scientific acceptance remains pending, including the inherited and new AE ledger.
 
-Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0076/0074/0065/0053/0039/0050, the released AD/AE reports and the baseline named by central. Preserve original 0008 and apply its later amendments. Once released, own `rust/` and new `validation/predictors/` as sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central documents, canonical TEMPO2 and accepted reference artifacts.
+Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0088/0087/0086/0084/0082/0076/0074/0065/0053/0039/0050, the released AD/AE reports and the baseline named by central. Preserve original 0008 and apply its later amendments. Own `rust/` and new `validation/predictors/` as sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central documents, canonical TEMPO2 and accepted reference artifacts.
 
 Deliver the complete source-defined predictor functionality: PAR-only polyco/Chebyshev generation using synthesized TOAs and canonical BAT/uncentered residuals, both file formats and cross-reader exchange, phase/frequency evaluation, segment selection, frequency plans and all defined direct lifecycle/construction/test APIs. Use 0076's CLI routes and source responsibility map. Reuse existing parser, runtime, writer and numeric routines; no fabricated TIM input, automatic fit cycle, second scientific engine or independent reference-only stage. C ABI packaging and the remaining core inventory retain explicit later obligations.
 
@@ -14,7 +14,7 @@ Proceed in coherent stages:
 4. Deliver public generation/evaluation/plan routes and all scoped file products. Compare native/Rust components and independent full workflows, both cross-reader directions, repeated histories and approximation quality separately. Keep precision/format loss distinguishable from timing-engine or implementation errors.
 5. Run affected debug/release checks, regressions, formatting and Clippy; commit explicit authored owned paths with Conventional Commits. Return `rust/PREDICTOR_REPORT.md`, runnable examples, actual identities, maps and the complete unresolved ledger for central review. Keep generated outputs ignored.
 
-Rug128 timing values, native-long-double boundaries and existing numerical gates remain as specified in 0076 and earlier decisions. Do not widen gates, alter source algorithms, silently change precision or turn a source approximation envelope into acceptance of a Rust discrepancy. Central owns broader decisions; continue independent implementation while a localized decision is pending.
+Rug128 timing values, native-long-double boundaries and existing numerical gates remain as specified in 0076 and earlier decisions. Apply 0088's explicit platform clarification: macOS's measured ordinary-long-double binary64 boundary must not become an unqualified Linux f64 assumption; AJ/AL retain actual ABI/platform qualification. Do not widen gates, alter source algorithms, silently change precision or turn a source approximation envelope into acceptance of a Rust discrepancy. Central owns broader decisions; continue independent implementation while a localized decision is pending.
 
 ## Dispatch prompt after release
 

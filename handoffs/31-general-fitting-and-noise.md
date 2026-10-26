@@ -1,6 +1,6 @@
 # Assignment AE: general fitting and noise
 
-**Released by decision 0079 on AD production `a8e5178` / report `0f44180`.** AD implementation handover is approved and its ownership is closed under 0074; inherited numerical acceptance remains pending. AE is the sole Rust writer. This is the functional implementation assignment under 0071.
+**Delivered at production `ddff7f8` / report `ecf41ed`; implementation ownership closed by decision 0088.** Numerical/scientific acceptance remains pending. The instructions below record AE's released scope under 0071/0079; AF is now the sole Rust writer. Preserve AE's delivery evidence and unresolved ledger.
 
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, `decisions/0071-general-fitting-and-noise-prepared-contract.md`, 0074 handover/acceptance rule, 0065 priorities, 0053 small-bug policy, 0039 generated-output policy, 0050 evidence preservation, 0007/0012/0015 fitting contracts and 0079's AD baseline release. Read `rust/TIMING_MODELS_REPORT.md` and retain its open ledger, including 0077's P diagnosis. Preserve the original 0008 document and apply its later amendments.
 
