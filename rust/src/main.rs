@@ -13,13 +13,18 @@ use tempo2_rust::{
     fit_terrestrial, load,
 };
 
-const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean | --fit [--covariance SELECTOR] [--norescale] [--force-always-fit-for-glitches] [--acceleration N] [--fit-diagnostics DIR]] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]";
+const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean | --fit [--covariance SELECTOR] [--norescale] [--force-always-fit-for-glitches] [--acceleration N] [--fit-diagnostics DIR]] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]\n       tempo2-rust predictor {cheby|polyco|evaluate|plan} OPTIONS (see PREDICTOR_API.md)";
+
+mod predictor_cli;
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<OsString> = env::args_os().skip(1).collect();
     if args == ["--help"] || args == ["-h"] {
         println!("{USAGE}");
         return Ok(());
+    }
+    if args.first().is_some_and(|s| s == "predictor") {
+        return predictor_cli::run(&args[1..]);
     }
     if args.first().is_some_and(|s| s == "bats" || s == "timing") {
         return run_bats(&args[1..], args[0] == "timing");

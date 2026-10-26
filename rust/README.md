@@ -9,6 +9,15 @@ gates are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
 See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md) for the preceding fixed
 timing delivery and its unresolved acceptance gates.
 
+## Predictors
+
+`predictor cheby`, `predictor polyco`, `predictor evaluate` and `predictor plan`
+provide PAR-only generation, file exchange and runtime-free evaluation/plans.
+See [PREDICTOR_API.md](PREDICTOR_API.md) for runnable CLI/direct consumers,
+[PREDICTOR_SOURCE_MAP.md](PREDICTOR_SOURCE_MAP.md) for source correspondence and
+corrections, and [PREDICTOR_REPORT.md](PREDICTOR_REPORT.md) for evidence and open
+gates. Predictor construction uses the shared timing engine without a timing fit.
+
 ## General fitting
 
 ```sh

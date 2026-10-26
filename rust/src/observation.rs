@@ -391,3 +391,22 @@ impl SourceObservation {
         }
     }
 }
+
+impl SourceObservation {
+    /// Shared fresh-reader/generator scratch contract from the AC correction.
+    pub(crate) fn initialize_missing_clock_scratch(&mut self) {
+        // readTim leaves these fields uninitialized. The source skip-clock
+        // path does not assign them, but readEphemeris subsequently reads
+        // nclock_correction and correctionTT_Teph even for barycentric TOAs.
+        // Initialize only missing scratch state; defined retained values stay.
+        if self.nclock_correction.is_none() {
+            self.nclock_correction = Some(0);
+        }
+        if self.correctionTT_Teph.is_none() {
+            self.correctionTT_Teph = Some(Float::with_val(crate::PRECISION_BITS, 0));
+        }
+        if self.einsteinRate.is_none() {
+            self.einsteinRate = Some(0.0);
+        }
+    }
+}

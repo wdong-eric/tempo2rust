@@ -142,19 +142,7 @@ fn read_tim_inner(
             false
         };
         if valid && !eof {
-            // readTim leaves these fields uninitialized. The source skip-clock
-            // path does not assign them, but readEphemeris subsequently reads
-            // nclock_correction and correctionTT_Teph even for barycentric TOAs.
-            // Initialize only missing scratch state; defined retained values stay.
-            if o.nclock_correction.is_none() {
-                o.nclock_correction = Some(0);
-            }
-            if o.correctionTT_Teph.is_none() {
-                o.correctionTT_Teph = Some(Float::with_val(PRECISION_BITS, 0));
-            }
-            if o.einsteinRate.is_none() {
-                o.einsteinRate = Some(0.0);
-            }
+            o.initialize_missing_clock_scratch();
 
             let site = read_string(&o.telID, "telID")?;
             if site.starts_with(b"@") || site.eq_ignore_ascii_case(b"bat") {

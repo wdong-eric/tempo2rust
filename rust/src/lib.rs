@@ -434,3 +434,13 @@ mod t2fit_gw;
 pub mod constraints;
 #[cfg(test)]
 mod general_fitting_tests;
+
+pub mod cheby2d;
+pub mod cheby2d_int;
+pub mod polyco;
+pub mod predictor;
+pub mod predictor_number;
+#[cfg(test)]
+mod predictor_tests;
+pub mod t1polyco;
+pub mod tempo2pred;
