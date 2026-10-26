@@ -251,3 +251,23 @@ pub(crate) fn extended_general_six(value: &rug::Float) -> Vec<u8> {
     }
     text.into_bytes()
 }
+
+/// A single checked binary64 conversion. Callers must use source_format's parser.
+pub(crate) fn format_double(format: &str, x: f64) -> Result<Vec<u8>, crate::TimingError> {
+    let fmt = std::ffi::CString::new(format)
+        .map_err(|_| crate::clock_diagnostics::boundary("format_nul"))?;
+    // Only source_format calls this after validating one floating conversion,
+    // no stars and no other arguments. snprintf's count allocates exact backing;
+    // the promoted f64 and owned C strings remain valid for both calls.
+    let n = unsafe { snprintf(std::ptr::null_mut(), 0, fmt.as_ptr(), x) };
+    if n < 0 {
+        return Err(crate::clock_diagnostics::boundary("format_double"));
+    }
+    let mut out = vec![0u8; n as usize + 1];
+    // Same checked format/argument and exclusive buffer; size includes NUL.
+    unsafe {
+        snprintf(out.as_mut_ptr().cast(), out.len(), fmt.as_ptr(), x);
+    }
+    out.pop();
+    Ok(out)
+}

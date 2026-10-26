@@ -572,7 +572,7 @@ impl Probe {
             "iau" => {
                 let trs = std::array::from_fn(|i| n(i + 4));
                 let zen = std::array::from_fn(|i| n(i + 7));
-                let v = crate::get_obs_coord::iau2000b(
+                let (v, _) = crate::get_obs_coord::iau2000b(
                     &mut self.session,
                     trs,
                     zen,

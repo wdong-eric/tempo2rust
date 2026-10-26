@@ -1,6 +1,4 @@
-//! Rust-only CLI/JSON orchestration for tempo2.C::main; argument and output
-//! roles correspond to getInputs.C::getInputs and textOutput.C::textOutput.
-//! No standalone counterpart or complete upstream CLI/output contract is claimed.
+//! Native TEMPO2 command route and the existing explicit JSON adapters.
 use std::{
     env,
     ffi::OsString,
@@ -195,6 +193,59 @@ fn run_bats(args: &[OsString], timing: bool) -> Result<(), Box<dyn std::error::E
 }
 
 fn main() -> ExitCode {
+    let argv = env::args_os().collect::<Vec<_>>();
+    if !argv.get(1).is_some_and(|s| {
+        ["bats", "timing", "residuals", "fit", "predictor", "--help"]
+            .iter()
+            .any(|k| s == k)
+    }) {
+        let mut environment = tempo2_rust::core_cli::Environment::from_process();
+        // Snapshot local calendar text outside the library. Aliases can introduce
+        // -reminder, so inspecting only the original argv would miss the request.
+        if let Ok(result) = std::process::Command::new("date")
+            .arg("+%a %b %e %T %Y")
+            .output()
+            && result.status.success()
+        {
+            let mut bytes = result.stdout;
+            if bytes.last() == Some(&b'\n') {
+                bytes.pop();
+            }
+            environment.reminder_date = Some(bytes);
+        }
+        let directory = match env::current_dir() {
+            Ok(p) => p,
+            Err(e) => {
+                eprintln!("{e}");
+                return ExitCode::FAILURE;
+            }
+        };
+        let mut stdout = io::stdout().lock();
+        let mut stderr = io::stderr().lock();
+        let mut stdin = io::stdin().lock();
+        let mut output = tempo2_rust::core_output::OutputIo {
+            stdout: &mut stdout,
+            stderr: &mut stderr,
+            stdin: &mut stdin,
+            directory: &directory,
+        };
+        return match tempo2_rust::core_cli::run(&argv, &environment, &mut output) {
+            Ok(code) => ExitCode::from(code as u8),
+            Err(e) => {
+                let _ = writeln!(output.stderr, "tempo2-rust: {e}");
+                for event in tempo2_rust::take_clock_diagnostics() {
+                    let out = if event.source_stderr {
+                        &mut output.stderr
+                    } else {
+                        &mut output.stdout
+                    };
+                    let _ = out.write_all(&event.bytes);
+                }
+                ExitCode::FAILURE
+            }
+        };
+    }
+
     match run() {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {

@@ -135,7 +135,6 @@ pub(crate) fn with_resources<T>(
     session.alias = std::env::var_os("TEMPO2_ALIAS").map(|v| v.as_bytes().to_vec());
     operation(&mut session)
 }
-#[cfg(test)]
 pub(crate) fn with_diagnostics<T>(
     operation: impl FnOnce(&mut Diagnostics) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {

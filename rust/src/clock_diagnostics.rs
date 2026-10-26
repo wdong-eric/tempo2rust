@@ -7,7 +7,9 @@ type ClockTicks = std::ffi::c_ulong;
 type ClockTicks = std::ffi::c_long;
 
 #[derive(Default)]
-pub(crate) struct Diagnostics {
+pub struct Diagnostics {
+    /// Terminal state of configured LOG_OUTFILE, independently of destination.
+    pub log_outfile_is_terminal: bool,
     pub debug: bool,
     pub quiet: bool,
     pub display_version: bool,
@@ -69,7 +71,12 @@ impl Diagnostics {
         };
         if let Some(counter) = counter {
             if *counter < 30 {
-                stored.push(body[..body.len().min(359)].to_vec());
+                let value = body[..body.len().min(359)].to_vec();
+                if (*counter as usize) < stored.len() {
+                    stored[*counter as usize] = value;
+                } else {
+                    stored.push(value);
+                }
             }
             *counter = counter.wrapping_add(1);
         }
@@ -79,7 +86,7 @@ impl Diagnostics {
             format!(":{line}").as_bytes(),
         ]
         .concat();
-        let mut rendered = match kind {
+        let rendered = match kind {
             b'e' => [
                 b"\x1b[0m\x1b[1;31m[".as_slice(),
                 &location,
@@ -98,21 +105,80 @@ impl Diagnostics {
             .concat(),
             _ => [b"[".as_slice(), &location, b"] ", body, b"\n"].concat(),
         };
-        rendered.truncate(359); // vsnprintf before non-TTY ANSI removal
-        let mut in_code = false;
-        let mut stripped = Vec::new();
-        for b in rendered {
-            if b == 27 {
-                in_code = true;
-            }
-            if !in_code {
-                stripped.push(b);
-            }
-            if b == b'm' {
-                in_code = false;
+        self.check_log(false, &rendered);
+    }
+    /// TKlog.C::_TKchklog: truncate first, then strip ANSI only for redirected LOG_OUTFILE.
+    pub fn check_log(&mut self, stderr: bool, body: &[u8]) {
+        let body = &c_bytes(body)[..c_bytes(body).len().min(359)];
+        let mut bytes = Vec::new();
+        let mut code = false;
+        for &b in body {
+            if !self.log_outfile_is_terminal {
+                if b == 27 {
+                    code = true;
+                }
+                if !code {
+                    bytes.push(b);
+                }
+                if b == b'm' {
+                    code = false;
+                }
+            } else {
+                bytes.push(b);
             }
         }
-        self.stdout(&stripped);
+        self.events.push((stderr, bytes));
+    }
+    /// TKlog.C::logerr_check: warnings precede errors; reset counts, retain backing.
+    pub fn check(&mut self) -> i32 {
+        let count = self.errors;
+        self.errors = 0;
+        if self.warnings > 0 {
+            self.check_log(false, format!("\x1b[0m\x1b[0;35mNotice:\x1b[0m There were {} warnings. Summaries are shown below, check logs for full details.\n", self.warnings).as_bytes());
+            for i in 0..self.warnings.min(30) {
+                let body = [
+                    format!("\x1b[0m\x1b[1mWarning #{}:\x1b[0m ", i + 1).as_bytes(),
+                    &self.warning_log[i as usize],
+                    b"\n",
+                ]
+                .concat();
+                self.check_log(false, &body);
+            }
+            if self.warnings > 30 {
+                self.check_log(
+                    false,
+                    format!(
+                        "\x1b[0m\x1b[0;35m   ... plus {} warnings not shown\n\x1b[0m",
+                        self.warnings - 30
+                    )
+                    .as_bytes(),
+                );
+            }
+            self.warnings = 0;
+        }
+        if count > 0 {
+            self.check_log(false,format!("\n\n\x1b[0m\x1b[1;31mNotice:\x1b[0m There were {} errors! Summaries are shown below, check logs for full details.\n",count).as_bytes());
+            for i in 0..count.min(30) {
+                let body = [
+                    format!("\x1b[0m\x1b[1;31mError #{}\x1b[0m = \x1b[0m\x1b[1m", i + 1).as_bytes(),
+                    &self.error_log[i as usize],
+                    b"\x1b[0m\n",
+                ]
+                .concat();
+                self.check_log(false, &body);
+            }
+            if count > 30 {
+                self.check_log(
+                    false,
+                    format!(
+                        "\x1b[0m\x1b[1;31m  ... plus {} errors not shown\n\x1b[0m",
+                        count - 30
+                    )
+                    .as_bytes(),
+                );
+            }
+        }
+        count as i32
     }
     pub fn display(
         &mut self,
@@ -202,4 +268,13 @@ pub(crate) fn terminal(path: &std::path::Path, cause: &str) -> TimingError {
 pub struct ClockDiagnostic {
     pub source_stderr: bool,
     pub bytes: Vec<u8>,
+}
+
+/// TKlog/tempo2.C process CPU clock, shared by timing messages and final elapsed time.
+pub(crate) fn cpu_clock() -> ClockTicks {
+    unsafe extern "C" {
+        fn clock() -> ClockTicks;
+    }
+    // No arguments, pointers or ownership; POSIX clock_t matches the host typedef.
+    unsafe { clock() }
 }

@@ -162,6 +162,13 @@ fn simple1(
         }
     } else {
         let c = &mut p.param.slots[param_ephver as usize].cells[0];
+        // fda6ad4 preProcessSimple.C:102-108 activates EPHVER without its
+        // prefit value, which textOutput:209 consumes. Retain the defined
+        // previous value/error when introducing this defaulted record.
+        if c.prefit.is_none() {
+            c.prefit = Some(c.val.clone());
+            c.prefit_err = Some(c.err.clone());
+        }
         c.param_set = 1;
         c.val = Float::with_val(PRECISION_BITS, if tempo1 == 1 { 2 } else { 5 });
     }
@@ -170,6 +177,10 @@ fn simple1(
             .last()
             .ok_or_else(|| crate::clock_diagnostics::boundary("last_empty_observations"))?;
         let c = &mut p.param.slots[param_start as usize].cells[0];
+        if c.param_set == 0 && c.prefit.is_none() {
+            c.prefit = Some(c.val.clone());
+            c.prefit_err = Some(c.err.clone());
+        }
         c.val = read(&o.sat, "sat")?.clone() - last;
         c.fit_flag = 1;
         c.param_set = 1;

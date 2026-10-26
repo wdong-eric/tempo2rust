@@ -203,7 +203,6 @@ pub fn derivative(
             | param_band_red_cos
             | param_group_red_cos
     );
-    let mut ordinal = k;
     let mut projection = None;
     let freq = match label {
         param_red_sin | param_red_cos | param_red_dm_sin | param_red_dm_cos
@@ -242,23 +241,7 @@ pub fn derivative(
         }
         param_band_red_sin | param_band_red_cos | param_group_red_sin | param_group_red_cos => {
             let band = matches!(label, param_band_red_sin | param_band_red_cos);
-            let counts = if band {
-                &p.TNBandNoiseC[..]
-            } else {
-                &p.TNGroupNoiseC[..]
-            };
-            let mut group = 0;
-            while ordinal
-                >= *read(
-                    counts
-                        .get(group)
-                        .ok_or_else(|| boundary("noise coefficient capacity"))?,
-                    "noise count",
-                )? as usize
-            {
-                ordinal -= *read(&counts[group], "noise count")? as usize;
-                group += 1;
-            }
+            let (group, ordinal) = noise_group(p, label, k)?;
             if band {
                 let f = *read(&rows[i].freq, "freq")?;
                 if !(f > *read(&p.TNBandNoiseLF[group], "band low")?
@@ -389,6 +372,32 @@ pub fn update_metadata(
         bytes.push(b'\n');
     }
     io.write(file, &bytes).map(Some).map_err(|e| boundary(&e))
+}
+
+pub(crate) fn noise_group(
+    p: &SourcePulsar,
+    label: Label,
+    k: usize,
+) -> Result<(usize, usize), TimingError> {
+    let counts = if matches!(label, param_band_red_sin | param_band_red_cos) {
+        &p.TNBandNoiseC[..]
+    } else {
+        &p.TNGroupNoiseC[..]
+    };
+    let mut group = 0;
+    let mut ordinal = k;
+    while ordinal
+        >= *read(
+            counts
+                .get(group)
+                .ok_or_else(|| boundary("noise coefficient capacity"))?,
+            "noise count",
+        )? as usize
+    {
+        ordinal -= *read(&counts[group], "noise count")? as usize;
+        group += 1;
+    }
+    Ok((group, ordinal))
 }
 
 pub fn update(

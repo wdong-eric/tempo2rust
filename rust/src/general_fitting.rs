@@ -205,6 +205,20 @@ pub fn get_fit_data(context: &mut PulsarContext, index: usize) -> Result<Vec<Fit
     let finish_flag = if b.param_set == 1 { b.fit_flag } else { 0 };
     let cut_a = matches!(start_flag, 1 | 2);
     let cut_b = matches!(finish_flag, 1 | 2);
+    crate::clkcorr::with_diagnostics(|d| {
+        d.log(
+            b'm',
+            "t2fit.C",
+            850,
+            format!(
+                "ss/fs {} {}",
+                i32::from(start_flag == 1),
+                i32::from(finish_flag == 1)
+            )
+            .as_bytes(),
+        );
+        Ok(())
+    })?;
     let mut start = if cut_a { a.val.clone() } else { ld(1e10) };
     let mut finish = if cut_b { b.val.clone() } else { ld(0.0) };
     let n = count(*read(&p.nobs, "nobs")?, "nobs")?;
@@ -233,8 +247,27 @@ pub fn get_fit_data(context: &mut PulsarContext, index: usize) -> Result<Vec<Fit
             sigma_s: (*read(&o.toaErr, "toaErr")? * 1e-6).into(),
         });
     }
+    crate::clkcorr::with_diagnostics(|d| {
+        d.log(
+            b'm',
+            "t2fit.C",
+            879,
+            &crate::source_format::format(
+                "START=%.18lg FINISH = %.18lg",
+                &[start.to_f64().into(), finish.to_f64().into()],
+            )?,
+        );
+        Ok(())
+    })?;
     for (l, v) in [(param_start, start), (param_finish, finish)] {
         let c = &mut p.param.slots[l as usize].cells[0];
+        // fda6ad4 t2fit.C::t2Fit_getFitData:880-883 activates these cells but
+        // leaves prefit unwritten; textOutput:217 then reads it. Snapshot the
+        // defined prior value on first activation, preserving supplied PAR state.
+        if c.param_set == 0 && c.prefit.is_none() {
+            c.prefit = Some(c.val.clone());
+            c.prefit_err = Some(c.err.clone());
+        }
         c.val = v;
         c.param_set = 1;
     }
@@ -700,6 +733,11 @@ pub fn fill_constraint_info(
     columns: &[Column],
 ) -> Result<crate::constraints::ConstraintRows, TimingError> {
     let constraints = crate::constraints::build(context, i, columns)?;
+    if context.pulsars[i].nconstraints == Some(0) && !constraints.matrix.is_empty() {
+        // Noise-prior rows do not consume interpolation weights, but the source
+        // still updates them whenever the resulting constraint matrix is nonempty.
+        crate::constraints::compute_weights(&mut context.pulsars[i])?;
+    }
     if constraints.matrix.len() > MAX_FIT {
         return Err(boundary("constraint MAX_FIT capacity"));
     }
@@ -726,6 +764,9 @@ pub fn fill_constraint_info(
 /// t2fit_prefit for one active pulsar, clearing the eight fitted-noise accumulators.
 pub fn prefit(context: &mut PulsarContext, i: usize) -> Result<(), TimingError> {
     let (p, obs) = context.pulsar_observations_mut(i)?;
+    // fda6ad4 t2fit.C::t2fit_prefit omits the nonglobal count; textOutput:1214
+    // consumes it for quadrupole files. A new fit starts with zero global columns.
+    p.globalNfit = Some(0);
     for o in obs.iter_mut().take(count(*read(&p.nobs, "nobs")?, "nobs")?) {
         o.TNRedSignal = Some(0.0);
         o.TNRedErr = Some(0.0);
@@ -826,6 +867,10 @@ pub fn t2_fit(
         let mut inputs = constraints.inputs.clone();
         let mut covariance_files = vec![];
         let (white_data, white_matrix, cm, lower) = if let Some(selector) = covariance {
+            crate::clkcorr::with_diagnostics(|d| {
+                d.log(b'm', "t2fit.C", 169, b"Doing a FULL COVARIANCE MATRIX fit");
+                Ok(())
+            })?;
             let x: Vec<_> = rows.iter().map(|r| r.x_days.0.to_f64()).collect();
             let indices: Vec<_> = rows.iter().map(|r| r.observation).collect();
             let result = crate::cholesky::get_cholesky_matrix(
@@ -1327,6 +1372,23 @@ fn project_noise(
     let mut metadata = vec![];
     for (j, &k) in ks.iter().enumerate() {
         let v = fit.increments[j].0.to_f64();
+        crate::clkcorr::with_diagnostics(|d| {
+            d.log(
+                b'm',
+                "t2fit.C",
+                716,
+                &crate::source_format::format(
+                    "TNsubtractPoly -- Updating %s k=%d : %g +/- %g",
+                    &[
+                        PARAMETER_NAMES[label as usize].into(),
+                        (k as i32).into(),
+                        v.into(),
+                        fit.errors[j].0.to_f64().into(),
+                    ],
+                )?,
+            );
+            Ok(())
+        })?;
         use crate::clock_text::{NumberFormat, format_number};
         metadata.extend(
             [

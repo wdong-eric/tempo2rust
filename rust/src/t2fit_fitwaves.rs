@@ -117,7 +117,10 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                         b'm',
                         "t2fit_fitwaves.C",
                         37,
-                        format!("dm.COS({}) = {}", (k / 2i32), val).as_bytes(),
+                        &crate::source_format::format(
+                            "dm.COS(%d) = %.3e",
+                            &[(k / 2i32).into(), val.into()],
+                        )?,
                     );
                     psr.wave_cos_dm[(k / 2i32) as usize] = Some(
                         (*read(
@@ -133,7 +136,10 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                         b'm',
                         "t2fit_fitwaves.C",
                         41,
-                        format!("dm.SIN({}) = {}", (k / 2i32), val).as_bytes(),
+                        &crate::source_format::format(
+                            "dm.SIN(%d) = %.3e",
+                            &[(k / 2i32).into(), val.into()],
+                        )?,
                     );
                     psr.wave_sine_dm[(k / 2i32) as usize] = Some(
                         (*read(
@@ -154,7 +160,10 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                         b'm',
                         "t2fit_fitwaves.C",
                         49,
-                        format!("COS({}) = {}", (k / 2i32), val).as_bytes(),
+                        &crate::source_format::format(
+                            "COS(%d) = %.3e",
+                            &[(k / 2i32).into(), val.into()],
+                        )?,
                     );
                     psr.wave_cos[(k / 2i32) as usize] = Some(
                         (*read(&psr.wave_cos[(k / 2i32) as usize], "psr[p].wave_cos[k / 2]")?
@@ -168,7 +177,10 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                         b'm',
                         "t2fit_fitwaves.C",
                         53,
-                        format!("SIN({}) = {}", (k / 2i32), val).as_bytes(),
+                        &crate::source_format::format(
+                            "SIN(%d) = %.3e",
+                            &[(k / 2i32).into(), val.into()],
+                        )?,
                     );
                     psr.wave_sine[(k / 2i32) as usize] = Some(
                         (*read(

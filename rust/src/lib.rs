@@ -449,3 +449,14 @@ pub mod predictor_number;
 mod predictor_tests;
 pub mod t1polyco;
 pub mod tempo2pred;
+
+pub mod source_format;
+
+pub mod core_output;
+pub use clock_diagnostics::Diagnostics;
+
+mod display_parameters;
+
+pub mod core_cli;
+#[cfg(test)]
+mod core_output_tests;

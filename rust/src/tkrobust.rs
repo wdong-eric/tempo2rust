@@ -120,6 +120,11 @@ pub fn robust_least_squares(
             diagnostics,
         );
     }
+    crate::clkcorr::with_diagnostics(|d| {
+        d.log(b'm', "TKrobust.C", 25, b"Doing robust fit!");
+        Ok(())
+    })
+    .map_err(|e| e.to_string())?;
     if !matches!(kind, b'H' | b'B' | b'W') {
         crate::clkcorr::with_process(|s| {
             let _: () = s.diagnostics.log(

@@ -200,6 +200,16 @@ pub fn least_squares_outputs(
     if nf > augmented_n {
         return Err("TKfit source boundary: n < p returns without initializing fit outputs".into());
     }
+    crate::clkcorr::with_diagnostics(|d| {
+        d.log(
+            b'm',
+            "TKfit.C",
+            345,
+            format!("SVD nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
+        );
+        Ok(())
+    })
+    .map_err(|e| e.to_string())?;
     let mut svd = tk_singular_value_decomposition(
         white_matrix
             .iter()

@@ -43,7 +43,7 @@ pub(crate) fn iau2000b(
     tt: &Float,
     utc: &Float,
     file: &[u8],
-) -> Result<SiteGeometry, TimingError> {
+) -> Result<(SiteGeometry, f64), TimingError> {
     let tt_jd = tt.clone() + 2400000.5f64;
     let tt1 = crate::ifteph::extended_i32(&tt_jd, "IAU_TT_JD_int")? as f64;
     let tt2 = (tt_jd - tt1).to_f64();
@@ -128,7 +128,7 @@ pub(crate) fn iau2000b(
             result.site_velocity.as_mut_ptr(),
         );
     }
-    Ok(result)
+    Ok((result, dut1))
 }
 
 /// get_obsCoord.C::remove_white: preserve byte-level branch order and stale tails.
@@ -443,21 +443,34 @@ fn compute_observation(
             let trs = obs.xyz;
             let zen = zenith_trs(obs);
             let mut utc = read(&o.sat, "sat")?.clone();
+            let mut site_to_utc_s = 0.0;
             let clock = *read(&o.clockCorr, "clockCorr")?;
             if clock != 0 && clock != 2 {
                 let from = read_string(&p.clockFromOverride[..], "clockFromOverride")?;
-                utc += s.run(|s| {
+                site_to_utc_s = s.run(|s| {
                     s.get_correction(
                         o,
                         Some(&from),
                         Some(b"UTC"),
                         *read(&p.noWarnings, "noWarnings")?,
                     )
-                })? / 86400.0;
+                })?;
+                utc += site_to_utc_s / 86400.0;
             }
             let tt = read(&o.sat, "sat")?.clone() + crate::clkcorr::get_correction_tt(o)? / 86400.0;
             let file = read_string(&p.eopc04_file[..], "eopc04_file")?;
-            let mut site = iau2000b(s, trs, zen, &tt, &utc, &file)?;
+            let (mut site, ut1_minus_utc_s) = iau2000b(s, trs, zen, &tt, &utc, &file)?;
+            // fda6ad4 get_obsCoord.C:357-374 already uses this site->UTC
+            // correction and :75-76 the selected EOP UT1-UTC, but never writes
+            // tempo2.h:460's site->UT1 field consumed by displayParameters:98.
+            // Retain their binary64 sum in seconds. The bypass branches above
+            // actually apply zero clock correction; no new clock/EOP lookup or
+            // timing expression is introduced. AH's before/after row witness
+            // checks that BAT, residuals, geometry and clocks remain unchanged.
+            o.correctionUT1 = Some(Float::with_val(
+                crate::PRECISION_BITS,
+                site_to_utc_s + ut1_minus_utc_s,
+            ));
             if *read(&p.eclCoord, "eclCoord")? == 1 {
                 crate::vector_pulsar::rotate(
                     &mut site.observatory_earth,

@@ -11,6 +11,17 @@ use crate::{
     tksvd::ld,
 };
 use std::path::{Path, PathBuf};
+fn source_log(
+    line: usize,
+    fmt: &str,
+    args: &[crate::source_format::Argument],
+) -> Result<(), TimingError> {
+    let body = crate::source_format::format(fmt, args)?;
+    crate::clkcorr::with_diagnostics(|d| {
+        d.log(b'm', "cholesky.C", line, &body);
+        Ok(())
+    })
+}
 
 /// TKspectrum.C::TK_fft, including the source recurrence and forward normalization.
 pub fn fft(dir: i32, x: &mut [f64], y: &mut [f64]) -> Result<(), TimingError> {
@@ -274,6 +285,11 @@ pub fn read_covariance_function(
     nc: usize,
     inputs: &mut Vec<ConsumedInput>,
 ) -> Result<Vec<Vec<f64>>, TimingError> {
+    source_log(
+        384,
+        "Parsing '%s' as covariance function",
+        &[selector.into()],
+    )?;
     if nc >= x.len() {
         return Err(boundary("covariance function has no data rows"));
     }
@@ -530,6 +546,7 @@ impl ModelReader<'_> {
                 "MODEL" => {
                     let kind = *t.get(1).ok_or_else(|| boundary("MODEL needs type"))?;
                     if kind == "T2" {
+                        source_log(218, "Reading a Tempo2 MODEL file: '%s'", &[selector.into()])?;
                         continue;
                     }
                     let nd = days(self.x)?;
@@ -545,6 +562,33 @@ impl ModelReader<'_> {
                     let mut v = values(t[2..].iter().copied().take(required))?;
                     if v.len() < required {
                         return Err(boundary("missing covariance model arguments"));
+                    }
+                    let shape = match kind {
+                        "T2SqExp" | "T2SqExpDM" => Some((
+                            901,
+                            "Generate covar matrix from Square Exponential model (A=%lg sigma=%lf) (np=%d, nc=%d)",
+                        )),
+                        "T2Matern1.5" | "T2Matern1.5DM" => Some((
+                            845,
+                            "Generate covar matrix from Matern Kernel model (A=%lg sigma=%lf nu=1.5) (np=%d, nc=%d)",
+                        )),
+                        "T2Matern2.5" | "T2Matern2.5DM" => Some((
+                            871,
+                            "Generate covar matrix from Matern Kernel model (A=%lg sigma=%lf nu=2.5) (np=%d, nc=%d)",
+                        )),
+                        _ => None,
+                    };
+                    if let Some((line, fmt)) = shape {
+                        source_log(
+                            line,
+                            fmt,
+                            &[
+                                v[0].into(),
+                                v[1].into(),
+                                (self.x.len() as i32).into(),
+                                (self.nc as i32).into(),
+                            ],
+                        )?;
                     }
                     let c = match kind {
                         "1" | "2" => {
@@ -736,6 +780,11 @@ pub fn get_cholesky_matrix(
         .map(|&i| read(&rows[i].freq, "freq").copied())
         .collect::<Result<Vec<_>, _>>()?;
     let name = read_string(&psr.name[..], "name")?;
+    source_log(
+        80,
+        "Reading Cholesky model '%s' for pulsar %s",
+        &[selector.into(), name.clone().into()],
+    )?;
     let (mut m, mut files) = if selector == "PSRJ" {
         (
             read_covariance_function(
@@ -760,6 +809,7 @@ pub fn get_cholesky_matrix(
     };
     let extra = psr.ToAextraCovar.flatten();
     if let Some(owner) = extra {
+        source_log(100, "adding extra covar function to m", &[])?;
         let e = context
             .matrix(owner)
             .map_err(|e| boundary(&e.to_string()))?;
@@ -789,6 +839,11 @@ pub fn get_cholesky_matrix(
     }
     // Nonaccelerated T2cholDecomposition exits on a nonpositive pivot, before
     // getCholeskyMatrix's accelerated formL return-code retry can be reached.
+    source_log(
+        530,
+        "Doing Cholesky decomp and inverting matrix (SLOW method)",
+        &[],
+    )?;
     let l = form_l(&m)?;
     if let Some(io) = diagnostics.filter(|d| d.debug) {
         files.push(write_matrix(io, "chol.L", &l, NumberFormat::GeneralSix)?);

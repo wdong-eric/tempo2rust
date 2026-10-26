@@ -647,8 +647,12 @@ pub fn build(
     index: usize,
     columns: &[Column],
 ) -> Result<ConstraintRows, TimingError> {
-    compute_weights(&mut context.pulsars[index])?;
     let n = *read(&context.pulsars[index].nconstraints, "nconstraints")?;
+    // fda6ad4 t2fit.C:235-237 computes weights only for a nonempty constraint
+    // matrix. Unconditional preparation changed unconstrained DM/CM file weights.
+    if n > 0 {
+        compute_weights(&mut context.pulsars[index])?;
+    }
     let mut out = ConstraintRows {
         labels: vec![],
         counters: vec![],

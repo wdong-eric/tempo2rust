@@ -347,6 +347,66 @@ pub fn update(
     }
     if crate::t2fit_nestlike::is_noise(label) {
         let (psr, rows) = context.pulsar_observations_mut(p)?;
+        use crate::source_format::{Argument, format};
+        let name = crate::tempo2::PARAMETER_NAMES[label as usize];
+        let log = match label {
+            param_red_chrom_sin | param_red_chrom_cos => Some((
+                459,
+                format(
+                    "%d %s %d %lg %lg",
+                    &[
+                        (p as i32).into(),
+                        name.into(),
+                        (k as i32).into(),
+                        value.into(),
+                        error.into(),
+                    ],
+                )?,
+            )),
+            param_jitter => Some((
+                485,
+                format(
+                    "%d %s %.2f %lg %lg",
+                    &[
+                        (p as i32).into(),
+                        name.into(),
+                        read(&rows[k].bat, "bat")?.to_f64().into(),
+                        value.into(),
+                        error.into(),
+                    ],
+                )?,
+            )),
+            param_band_red_sin | param_band_red_cos | param_group_red_sin | param_group_red_cos => {
+                let (group, channel) = crate::t2fit_nestlike::noise_group(psr, label, k)?;
+                let line = if matches!(label, param_band_red_sin | param_band_red_cos) {
+                    604
+                } else {
+                    623
+                };
+                Some((
+                    line,
+                    format(
+                        "%d %s %d %d %d %lg %lg",
+                        &[
+                            Argument::from(p as i32),
+                            name.into(),
+                            (k as i32).into(),
+                            (group as i32).into(),
+                            (channel as i32).into(),
+                            value.into(),
+                            error.into(),
+                        ],
+                    )?,
+                ))
+            }
+            _ => None,
+        };
+        if let Some((line, body)) = log {
+            crate::clkcorr::with_diagnostics(|d| {
+                d.log(b'm', "t2fit_nestlike.C", line, &body);
+                Ok(())
+            })?;
+        }
         return crate::t2fit_nestlike::update(psr, rows, label, k, value, error);
     }
     crate::clkcorr::with_process(|s| {
