@@ -10,7 +10,7 @@ precision, dependency, parameter store, native timing wrapper or unsafe is plann
 * `toolkit`: source-named snake-case f32/f64 slice operations. Array lengths are
   explicit backing; source undefined empty reads return errors. Defined empty
   reductions retain NaN/zero. `ToolkitRng` owns 624 u32 words and index, exposes
-  init_genrand, genrand_int32, genrand_real1, ran_dev, gauss_dev, snapshot and draw
+  init_genrand, genrand_int32, genrand_real1, ran_dev, gauss_dev, state and draw
   count. Negative i64 seed resets then writes 1; i64::MIN is an explicit signed
   negation boundary. `set_seed_at(i64)` supplies the controlled-clock witness;
   `set_seed()` reads wall-clock seconds. No Gaussian caching. Existing bootstrap
@@ -18,7 +18,8 @@ precision, dependency, parameter store, native timing wrapper or unsafe is plann
   canonical process setting, not another toolkit capacity.
 * `spectrum`: `Options` maps all TKspectrum integer/scalar controls. `analyze`
   mutates x/y/errors, returns scalar, written arrays, reported count, diagnostic
-  table/status and warnings separately. Helpers retain source names and counts.
+  table/status and warnings separately. `reported_count_written` distinguishes
+  early exits from a source-written zero count. Helpers retain source names and counts.
   `cholesky_spectrum` remains the canonical Lomb/weighted/covariance implementation;
   its existing periodogram becomes a thin adapter to the full driver.
   `SpectralSession` owns GLOBAL_OMEGA and direct ordinary/IFUNC callbacks;
@@ -35,6 +36,8 @@ precision, dependency, parameter store, native timing wrapper or unsafe is plann
   methods accept Rug128 time seconds and distance metres. Generic matrix/dot,
   pulsar geometry, psrangle/sphharm/find_phi are public. Eccentric public owner
   wraps AD's canonical implementation plus its energy variant, preserving history.
+  `eccentric_residual` returns source nanoseconds; eOut is the source W/m^2 estimate
+  rounded to f32, not a validated total radiated energy.
 * `gw_file`: caller-owned Read+Seek/Write streams, explicit
   `LittleEndianI32Binary128` profile, tensor/general source prefixes only. Read
   updates caller source rows only after a complete scalar/record; error reports
@@ -43,7 +46,7 @@ precision, dependency, parameter store, native timing wrapper or unsafe is plann
   New imports return primary records with geometry/metadata absent.
 
 The user selected source positional uncertainties plus an explicit warning for
-weighted averaging/spline/Hann routes on 2026-10-26. No error propagation is
+weighted averaging/spline/Hann and first/second-differencing routes on 2026-10-26. No error propagation is
 invented. The direct x/y/error association bug is corrected locally under 0053.
 If the source would read beyond actual error backing (e.g. 4096 spline rows from
 fewer supplied errors), return an explicit backing error; do not fabricate errors.
@@ -54,8 +57,8 @@ From repository root (both debug and `--release`):
 
 ```
 cargo run --manifest-path rust/Cargo.toml --example toolkit -- --seed -12345 --draws 1300
-cargo run --manifest-path rust/Cargo.toml --example spectrum -- --par validation/general_fitting/inputs/robust-H.par --tim validation/general_fitting/inputs/multi-frequency.tim --runtime validation/reference/T2runtime --estimator 2 --output-kind 1 --prewhite 0 --weights -1 --mintau 0.01
-cargo run --manifest-path rust/Cargo.toml --example gw_simulation -- --par validation/general_fitting/inputs/robust-H.par --tim validation/general_fitting/inputs/multi-frequency.tim --runtime validation/reference/T2runtime --seed -12345 --count 4 --flo 1e-9 --fhi 1e-7 --amplitude 1e-15 --alpha -0.6666666666666666 --distance 3.08568e19 --output validation/analysis_tools/build/background
+cargo run --manifest-path rust/Cargo.toml --example spectrum -- --par validation/general_fitting/inputs/robust-H.par --tim validation/general_fitting/inputs/multi-frequency.tim --runtime validation/reference/build/source/T2runtime --estimator 2 --output-kind 1 --prewhite 0 --weights -1 --mintau 0.01
+cargo run --manifest-path rust/Cargo.toml --example gw_simulation -- --par validation/general_fitting/inputs/robust-H.par --tim validation/general_fitting/inputs/multi-frequency.tim --runtime validation/reference/build/source/T2runtime --seed -12345 --count 4 --flo 1e-9 --fhi 1e-7 --amplitude 1e-15 --alpha -0.6666666666666666 --distance 3.08568e19 --output validation/analysis_tools/build/background
 ```
 
 The final evidence records resolved runtime and fixture identities. Spectrum
@@ -67,3 +70,14 @@ GW uses (SAT-PEPOCH0)*86400 seconds, RAJ/DECJ radians, setups before sums, and
 never mutates timing TOAs. It executes tensor, all four general families,
 anisotropic and dipole routes, both frequency samplings, and writes/reads native
 backgrounds with multiple nonconsecutive realization IDs.
+
+Decision 0090: warnings occur only at reached estimator 4/5 dispatches, name
+all applied transforms, and state that original positional errors are retained
+without propagated uncertainty/covariance. Diagnostic/white-noise early returns
+consume no weights. Error backing is checked against the eventual consumed extent
+and associated sorted rows. A failed analysis permits subsequent valid processing.
+
+Prefix accessors borrow scalar values, preserving signed NaNs during file exchange.
+Files identify no platform/profile themselves: callers explicitly choose the qualified
+little-endian i32/binary128 profile and provide provenance. Imported geometry is
+absent until setup; existing nonserialized fields remain caller-owned and untouched.

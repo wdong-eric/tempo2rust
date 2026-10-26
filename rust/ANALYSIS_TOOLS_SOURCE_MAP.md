@@ -46,6 +46,7 @@ Raw pin fda6ad4a9753ad7dc5d291406f2f310a9161423f. This authored map freezes ever
 | TKspectrum.C:611 `TKsortit` | `spectrum` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
 | TKspectrum.C:650 `TKboxcar` | `spectrum` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
 | TKspectrum.C:677 `TKhann` | `spectrum` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
+| TKspectrum.C:707 `TKcmonot` | `spectrum::cmonot` | f64 slopes/derivatives; n=1 and n=2 source branches |
 | TKspectrum.C:848 `TKspline_interpolate` | `spectrum` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
 | TKspectrum.C:881 `TKlomb_d` | `cholesky_spectrum` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
 | TKspectrum.C:963 `TK_fft` | `cholesky::fft` | f64; TKfirstDifference f32 scratch; TK_weightLS Rug128 sums |
@@ -100,4 +101,47 @@ Source driver dispatch: spectrum estimator 1 DFT, 2 Lomb, 3 FFT, 4 weighted LS, 
 
 GW file prefix order: theta_g, phi_g, omega_g, phi_polar_g, phase_g, aplus_g, aplus_im_g, across_g, across_im_g; general appends ast_g, ast_im_g, asl_g, asl_im_g, avx_g, avx_im_g, avy_g, avy_im_g. Geometry and phi_bin/theta_bin/inc_bin/dist_bin are not serialized.
 
-Native ordinary long-double boundaries use AF PredictorNumber only where the source actually uses native long double. GW timing fields and weighted-LS sums use Rug128. Constants remain routine-specific, including tensor c=299792458 and general c=299792456.200. No unsafe boundary is planned.
+AG adds no native-long-double arithmetic boundary. GW timing fields and weighted-LS sums use Rug128; AE/AF owners remain canonical. Constants remain routine-specific, including tensor c=299792458 and general c=299792456.200. No unsafe boundary is planned.
+
+## Completed departures and qualified arithmetic
+
+All mapped bodies are reachable through public Rust modules. Ordinary associated
+sorts reuse toolkit; SVD sign and robust median now share it. Lomb, weighted Lomb,
+FFT, covariance solvers and AD eccentric evolution have one canonical owner.
+`calcSpectraErr[_complex]` are projections of `calculate[_with_diagnostics]`;
+`calcSpectra` has the same density projection. Removed declarations stay absent.
+
+* TKspectrum.C:113: sort associated errors with x/y. Original/reversed distinct-error
+  calls and corrected permutation invariance are in the `bugs` witness.
+* TKspectrum.C:91,165: allocate the actual fixed 4096-point scratch; no error padding.
+  Decision 0090 retains positional errors after transforms, with dispatch-specific
+  warnings and an explicit consumed-backing error.
+* TKspectrum.C:453: replace invalid 1xN inverse-sigma storage with diagonal sigma L
+  for the existing forward substitution. TK_weightLS:503 restores the two missing
+  cross terms in its two-column elimination; no alternative solver is introduced.
+* TKspectrum.C:1715: diagnostics receive current resy instead of global sigma-z data.
+  Defined ordinary whitened fits are unchanged; 0/17 global-data witnesses expose
+  the original diagnostic contamination.
+* TKrobust.C:149–152: optional e/Ocvm writes reached by t2spectrum NULL-output calls
+  are guarded in the native witness. Rust consumes canonical owned solver results.
+* Sigma-z: one-based n+1 backing fixes the 90000-cell overrun; invalid no-pivot mat20
+  returns its existing singular classification; unused uninitialized nread is
+  initialized in the native witness only. Invalid/nonadvancing paths error and
+  invalidate helper access until a successful read/calculate.
+* GWsim.C:1009: the linear vector family's `across_g==0.` typo becomes assignment.
+  Fully initialized sentinels 0/7 demonstrate the original inactive polarization
+  contamination. Exact zero denominator sets both real and imaginary responses;
+  original uninitialized imaginary access is not executed as a numerical oracle.
+* GW background readers: checked actual-id search and complete-record publication
+  replace unchecked reads/seeks and loop-index termination. Missing/truncated or
+  negative counts error with completed-prefix count and observable cursor.
+* The file codec borrows prefix scalars because Rug 1.30 Float::clone resets NaN
+  signs. Binary128 nearest-even rounding occurs only at serialization.
+
+GCC 16.2.0 arm64 `-O2` contracts the Lomb multiply/add pairs. Assembly retained at
+`validation/analysis_tools/build/debug/spectrum.s` identifies the pairs now expressed
+with f64::mul_add. This is the released macOS profile, not a second numerical mode.
+The FFT preserves AE's corresponding contraction. Native harness calculations use
+`-ffp-contract=off`; scientific source objects retain their original `-O2` profile.
+Linux native contraction/installed/performance/concurrency qualification remains AL/AJ.
+No unsafe block, FFI boundary, numerical dependency or alternate precision was added.

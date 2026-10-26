@@ -45,3 +45,12 @@ Executable SHA256 bd221cea9da840872aef2f0a65407c2697a020632f07a5bb6905a8b9e17db4
 Implementation order: toolkit/RNG, full spectrum and sessions/sigma-z, GW and
 file codec, public consumers/verification, final report. All inherited 0088/0089
 failures remain open, including seven AF raw log10RMS cells.
+
+0090 warning freeze: at a reached weighted dispatch after transforms, emit one
+`TKspectrum: {names} retains original positional errors without propagated uncertainty/covariance`
+warning. Names in source order are `averaging`, `spline interpolation`,
+`Hann smoothing`, `first differencing` or `second differencing`, joined by comma-space.
+Direct weighted calls and earlier diagnostic/white-noise returns have none.
+Only the reached weighted branch checks its consumed error backing. Native
+warning counts are measured from captured output, never encoded expected literals.
+Toolkit min/max are typed exact, including the f32 projections.
