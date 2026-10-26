@@ -20,3 +20,7 @@ No independent reference campaign precedes implementation. Add bounded probes fo
 ## Approved dispatch prompt
 
 Implement Assignment AH, released by decisions/0091-ag-handover-and-ah-release.md, under decisions/0080-core-cli-output-prepared-contract.md, decisions/0074-implementation-handover-and-acceptance.md and handoffs/34-core-cli-output.md from the baseline explicitly released by central. Own rust/ and validation/core_output/ as sole Rust writer. Deliver the full native-style core CLI, source text/PAR/file output and logging/precision/enum/helper APIs on the canonical engine. Preserve TEMPO2's actual state/iteration, numeric, naming and file conventions; apply 0053 to demonstrated small bugs, keep original/corrected evidence and all inherited gates, explain necessary unsafe, commit authored paths only and return rust/CORE_OUTPUT_REPORT.md for central review.
+
+## Dispatch record
+
+Dispatched 26 October 2026 to the separate implementation chat `01a17825-df3f-7512-ad13-e4b0d30ea842` (local), from central release `732fd0ea30de9b22f566065b26dd7642f536d7ea`. Its active turn and scoped acknowledgment are confirmed. AG ownership is closed; AH is the sole Rust writer. Central retains design and acceptance.
