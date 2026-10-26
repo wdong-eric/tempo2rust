@@ -189,6 +189,8 @@ The latest scope clarification is in [Estimate Rust Rewrite Effort](chatgpt-conv
 
 [Decision 0092](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0092-predictor-precision-and-phase-localization.md) records the controlled AF precision experiment: 2,247 generation comparisons at each of 128 and 113 bits retain the same seven raw log10RMS failures and identical fourteen diagnostic values. Observation-only traces narrow the largest phase differences to inherited Rømer/BAT and BT orbital-delay outputs. No complete arithmetic cause, new allowance, precision change or acceptance is asserted; AH continues and the full ledger remains open.
 
+[Decision 0093](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0093-qr-optional-output-correction.md) demonstrates the native QR optional-output defect using the actual local Accelerate provider: twelve original valid-data requests crash; the narrow allocation/RHS correction makes all sixteen corrected requests match their full-output controls. The correction is approved for AI under 0053, with selected-provider Rust integration still required. AI remains unreleased and AH retains sole Rust ownership.
+
 ## Assignments and execution order
 
 | Assignment | Owned directory | Start condition | Required report |
