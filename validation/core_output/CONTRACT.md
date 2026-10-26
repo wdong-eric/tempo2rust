@@ -38,3 +38,16 @@ missing files. Failure then valid processing and repeated stateful calls protect
 owned I/O and mutation semantics. All inherited numerical failures in 0091 remain
 open; no AH comparison accepts them. Native comparison is implementation evidence,
 not independent scientific validation or Linux qualification.
+
+AH modern-terrestrial UT1 diagnostic correction (27 October, before comparison):
+`correctionUT1` is seconds from the site TOA to UT1. Retain the binary64 clock
+correction actually applied when constructing UTC, add the selected EOP's
+binary64 UT1-UTC once in binary64, then promote the result to timing storage.
+For clockCorr 0/2 the source applies no site-to-UTC correction, so that addend
+is exactly zero. Compare the complete sum exactly, with no tolerance or zero
+floor. Original sentinel -12345 is instrumentation proving the missing write,
+not a source value. Before/after BAT, residuals, geometry and all other retained
+Rust observation fields must be byte-identical after removing only this named
+newly initialized diagnostic field. Barycentric/satellite paths do not gain a
+value without this producer. The existing EOP/clock source and timing gates stay
+unchanged; this is no new UTC/UT1 model or fallback.
