@@ -1,6 +1,6 @@
 # Assignment AI: enabled ephemeris and numerical backends
 
-**Prepared only; not released.** Follow decision 0081 after AH implementation handover, ownership closure and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0081/0074/0065/0053/0039/0050, predecessor reports and the exact released baseline.
+**Prepared only; not released.** Follow decision 0081 after AH implementation handover, ownership closure and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0091/0086/0084/0083/0081/0074/0066/0065/0053/0039/0050, predecessor reports and the exact released baseline.
 
 Once released, own `rust/` and new `validation/native_backends/` as the sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and milestone acceptance. Preserve original 0008 and its later amendments.
 
@@ -8,14 +8,14 @@ Deliver real CALCEPH ephemeris/time processing and enabled BLAS/LAPACK matrix, C
 
 Proceed in dependency order:
 
-1. Freeze the minimal build/provider/ABI configuration, actual canonical APIs, runnable inputs and new comparison quantities against the released predecessor. Record source configuration separately from runtime selection. Use matching providers for native and Rust evidence.
-2. Complete owned CALCEPH calls and integrate source parser/global/time/ephemeris paths. Preserve source units, type boundaries and pass order; exercise real data containing TT-TDB as well as position data and provider failure/recovery.
-3. Complete the five accelerated routines and connect shared matrix, whitening and fitting dispatch. Preserve layouts, mutations, optional outputs and QR-specific augmented-row chi-square/rescaling. Keep disabled fallback distinct from enabled failure.
-4. Demonstrate and correct any small source defects under 0053 using original/corrected witnesses and adjacent explanations. Keep inherited numerical-policy findings open and continue independent work.
+1. Reconcile 0081's delivered integration map against AH's committed handover. Freeze the minimal build/provider/ABI configuration, actual canonical APIs, runnable inputs and new comparison quantities against that released predecessor. Record source configuration separately from runtime selection. Use matching providers for native and Rust evidence.
+2. Complete owned CALCEPH calls and integrate source parser/global/time/ephemeris paths. Reuse Y's accepted current-pulsar correction and the existing single-lock driver/ordinary-long-double boundary. Preserve source units, type boundaries and pass order; exercise real data containing TT-TDB as well as position data and provider failure/recovery.
+3. Complete the five accelerated routines and connect shared matrix, whitening and fitting dispatch. Preserve layouts, mutations, optional outputs and QR-specific augmented-row chi-square/rescaling, including its distinct parameter-output-absent case. Keep SVD-only metadata truthful in QR results. Reuse the existing matrix and shared solver paths. Keep disabled fallback distinct from enabled failure.
+4. Demonstrate and correct any small source defects under 0053 using original/corrected witnesses and adjacent explanations. The central BLAS declaration-guard syntax witness is available in 0081; actual provider linking/execution is still required. Keep inherited numerical-policy findings open and continue independent work.
 5. Run affected debug/release direct and public workflows, profile/ABI/selector checks, failures followed by valid work, disabled regressions, formatting and Clippy. Reuse existing evidence rather than replaying unchanged historical suites.
 6. Commit explicit authored owned paths with Conventional Commits and return `rust/NATIVE_BACKENDS_REPORT.md`, executed recipes, source/type/unsafe/departure maps, identities and the open ledger. Keep generated evidence and dependency binaries ignored.
 
-This stage does not accept the full migration. OpenMP/concurrency/performance, remaining SOFA dependency disposition, C interfaces, installation/platform qualification and inherited numerical gates retain their explicit owners in the central plan.
+This stage does not accept the full migration. Source parallel execution/concurrency/performance, installed Rust core/toolkit and standalone predictor C compatibility, actual macOS arm64/Linux x86_64 qualification and inherited numerical gates retain their explicit owners. The retained 36-routine SOFA inventory is settled by 0083; release linkage/distribution remains required.
 
 ## Dispatch prompt after release
 
