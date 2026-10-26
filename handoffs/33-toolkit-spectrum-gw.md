@@ -1,10 +1,10 @@
 # Assignment AG: toolkit, spectrum and GW APIs
 
-**Prepared only; not released.** Follow decision 0078 after AF's implementation handover, ownership closure and an explicit central release under 0074. AE currently owns Rust under 0079; AD is closed and AF remains prepared. Read HANDOFF.md, decisions 0078/0074/0065/0053/0039/0050, the released AD/AE/AF reports and the actual baseline named by central. Preserve original 0008 and its later amendments.
+**Prepared only; not released.** Follow decision 0078 after AF's implementation handover, ownership closure and an explicit central release under 0074/0082. AF currently owns Rust under 0088; AE ownership is closed. Read HANDOFF.md, decisions 0088/0087/0086/0084/0082/0078/0074/0065/0053/0039/0050, the released AD/AE/AF reports and the actual baseline named by central. Preserve original 0008 and its later amendments.
 
 Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Once released, own `rust/` and new `validation/analysis_tools/` as sole Rust writer. You are not alone in the shared repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted reference evidence. Central retains design and acceptance.
 
-Deliver every defined source toolkit/statistics/RNG, spectrum/sigma-z and GW simulation API in 0078, together with runnable public toolkit, real-timing spectrum and seeded-GW/file-exchange examples. Reuse AE's fitting/toolkit/spectrum dependencies and AD's eccentric closure. Complete the remaining standalone responsibilities without a duplicate solver, RNG, FFT, parameter store or timing engine. Exported native ABI packaging and later core integration remain explicit obligations, not implicitly completed by Rust APIs.
+Deliver every defined source toolkit/statistics/RNG, spectrum/sigma-z and GW simulation API in 0078, together with runnable public toolkit, real-timing spectrum and seeded-GW/file-exchange examples. Reuse AE's fitting/toolkit/spectrum dependencies and AD's eccentric closure. Complete the remaining standalone responsibilities without a duplicate solver, RNG, FFT, parameter store or timing engine. The accepted interface guarantee in 0084 is full Rust core/toolkit APIs plus standalone predictor C compatibility. AJ qualifies those installed external consumers; AG retains the full scientific function scope through safe Rust APIs. Actual macOS arm64 and Linux x86_64 release qualification remains required under 0086.
 
 Proceed in coherent stages:
 
