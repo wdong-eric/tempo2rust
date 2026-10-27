@@ -13,7 +13,12 @@ if __name__=='__main__':
     excluded={'source','src','target','test-target','runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)
-        if not path.is_file() or path.is_symlink() or excluded.intersection(relative.parts):continue
+        if not path.is_file() or path.is_symlink():continue
+        # The unchanged AE runners write their numerical evidence inside the
+        # isolated candidate export. Retain those results, not its source tree.
+        fit_evidence=any('/candidate/source/validation/general_fitting/build/'+name+'/'
+                         in '/'+relative.as_posix() for name in ['public','families'])
+        if excluded.intersection(relative.parts) and not fit_evidence:continue
         if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
         if path.suffix not in {'.json','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'} and path.name not in {'stdout','stderr'}:continue
         target=a.out/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)

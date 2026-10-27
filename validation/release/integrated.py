@@ -59,6 +59,9 @@ def qualify(args):
         step('external-'+label,script('qualify_rust.py','--prefix',prefix,'--out',out/('external-'+label),
              '--source-root',candidate,'--runtime',a2/'runtime','--ephemeris',provider/'inpop17a.dat',
              '--release','--features',features),['install-'+label])
+    step('package-audit',script('audit.py','--candidate',candidate,
+         '--prefix',out/'install-default','--prefix',out/'install-combined','--out',out/'package-audit'),
+         ['install-default','install-combined'])
     for profile,features in [('disabled',''),('blas','blas'),('lapack','lapack'),('calceph','calceph'),
                              ('combined','calceph,lapack'),('qr-default','calceph,lapack,qr-default')]:
         core=out/('core-'+profile)
@@ -76,6 +79,8 @@ def qualify(args):
             step('contraction',script('contraction.py','--out',out/'contraction','--a2',a2,'--core',core,
                  '--rust-lomb',out/'test-target/release/examples/release_contraction','--rust-backend',rust),
                  ['native-combined','backend-build-combined'])
+    step('qr-default-independent',[*cargo,'--release','--test','native_backends','--features','qr-default'],
+         ['dependencies'])
     step('performance',script('performance.py','--out',out/'performance','--prefix',out/'install-default',
          '--a2',a2,'--core',out/'core-disabled','--predictor',out/'c-default/native-run/cheby.dat',
          '--runtime',a2/'runtime'),['native-disabled','c-default'])

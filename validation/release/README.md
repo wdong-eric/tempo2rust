@@ -46,6 +46,18 @@ failed and dependency-blocked stages and continues independent stages. A failure
 receipt is not converted to a successful scientific assertion. Pure builds,
 operational tests, numerical correspondence and central acceptance are distinct.
 
+The aggregate audits both private installs against the selected source export,
+including membership, source bytes, licenses and report documents. To run that
+check separately:
+
+```sh
+python3.13 validation/release/audit.py \
+  --candidate validation/release/build/macos-final/candidate/source \
+  --prefix validation/release/build/macos-final/install-default \
+  --prefix validation/release/build/macos-final/install-combined \
+  --out validation/release/build/package-audit
+```
+
 The historical P corpus can be replayed on its measured macOS profile explicitly:
 
 ```sh
@@ -107,7 +119,8 @@ Reviewed action references are checkout v4.2.2
 were checked at those revisions. Checkout persists no credentials; permissions
 are `contents: read`. Selected evidence uploads on failure, with **30-day**
 retention, identified by run ID and attempt. The collector retains hashes/logs/
-comparisons/patches/assembly; it excludes runtime datasets, libraries, binaries,
+comparisons/patches/assembly, including the fixed-output AE results under the
+isolated candidate export. It excludes runtime datasets, libraries, binaries,
 source trees and Cargo caches. Evidence retention is not release publication.
 Required acceptance evidence must be preserved separately before expiration.
 

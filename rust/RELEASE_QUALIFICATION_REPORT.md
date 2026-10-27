@@ -1,9 +1,10 @@
 # AL release qualification handover
 
 27 October 2026. **Incomplete qualification; no migration acceptance.** The
-macOS component campaigns below are executed. Linux is unrun. The manual
-workflow and portable recipes are prepared for the review required by 0097;
-no push, workflow dispatch, canonical installation replacement or release
+clean macOS aggregate at `ca49531f5eb0b21362f585887f7278c269d4f7be`
+completed all 58 stages: 52 passed, six retained scientific failures, none blocked.
+Linux is unrun. The manual workflow and portable recipes are prepared for the
+review required by 0097; no push, workflow dispatch, canonical installation replacement or release
 publication has occurred. Central retains numerical policy and acceptance.
 
 The production build/install change is `d10c855` on central release
@@ -42,28 +43,30 @@ The final aggregate-run section below distinguishes any later execution.
 
 ## Requirement-to-evidence ledger
 
-All paths below are relative to ignored `validation/release/build/`.
+All paths below are relative to ignored `validation/release/build/`. This table
+records the initial component campaigns; the final committed aggregate and its
+additional package/evidence checks are recorded below.
 
 | Requirement | Actual macOS result | Evidence | Linux |
 | --- | --- | --- | --- |
 | Fresh pinned reference/resources | Pass; no prior objects reused | `macos-a2-v2`, `macos-provider-v1` | Unrun |
 | Private install, core CLI, getPeriod, Rust source, static/shared C | Default/combined pass | `install-default-v1-build/install.json`, `install-combined-v1-build/install.json` | Unrun |
-| C11/C++17 × static/shared | All four combinations pass in each install; all64 symbols/layouts/storage/locale/pipe/recovery and rejection controls | `predictor-default-v1`, `predictor-combined-v1` | Unrun |
+| C11/C++17 × static/shared | All four combinations pass in each install; all 64 symbols/layouts/storage/locale/pipe/recovery and rejection controls | `predictor-default-v1`, `predictor-combined-v1` | Unrun |
 | Outside installed Rust consumers | 30 default and 66 combined client invocations pass, including concurrent complete workflows; 33 compiled source files each | `external-default-v1`, `external-combined-v1` | Unrun |
 | Full applicable default suite | Debug/release each 111 tests pass across targets; library 96 pass/36 ignored. Nine explicitly enabled runtime tests additionally pass per profile. fmt and all-target Clippy pass | `suite-v2` | Unrun |
 | Disabled, BLAS-only, LAPACK, CALCEPH-only, combined, QR-default | Frozen AI comparisons all pass; combined 59 cases/41,961 checks. Independent qr-default without LAPACK build/test also passes its declared disabled-provider behavior | `profiles-v1`, `paired-combined-v1` | Unrun |
 | Lomb/QR contraction | All default quantities pass; every Lomb bin retained. Native Lomb default differs from off and equals fast. 32 QR cases and variant assembly retained | `contraction-v1` | Unrun |
-| All14 binaries/fixed timing/lifecycle | 130 comparisons pass | `timing-v1` | Unrun |
-| General public/family fits | 72 cases execute; 2,483 inherited failures retained | `fits-v1` and its exported-candidate receipts | Unrun |
+| All 14 binaries/fixed timing/lifecycle | 130 comparisons pass | `timing-v1` | Unrun |
+| General public/family fits | 72 cases execute; 2,478 numerical failures and five execution boundaries retained | `fits-v1` and its exported-candidate receipts | Unrun |
 | M2 shared/public fitting | Two dependent-column raw-order diagnostics in each debug/release profile; four total remain failures | `m2-comparison-v2`, `m2-comparison-debug-v1` | Unrun |
 | P corpus | 154 inherited differences reproduced, including 32 SIMUL; immutable measured macOS corpus explicitly reused | `preprocessing-v2` | Native reconstruction pending |
-| 0049 utility boundaries | All16 identical native-parsed inputs executed; four discrete mismatches reproduced through current public Rug128 functions | `boundaries-v1` | Unrun |
+| 0049 utility boundaries | All 16 identical native-parsed inputs executed; four discrete mismatches reproduced through current public Rug128 functions | `boundaries-v1` | Unrun |
 | Predictor generation/exchange | 14 cases/37,310 checks; seven raw polyco RMS failures retained | `predictor-science-v2` | Unrun |
 | Core CLI/output | Same twelve failing groups; zero unexpected statuses/input changes | `output-v4` | Unrun |
-| DDH fidelity and ideal | 401/433 fidelity failures; separate historical strict1ns pre/post checks pass for both engines; original current-clock ideal failure retained | `ddh-v1` | Unrun |
+| DDH fidelity and ideal | 401/433 fidelity failures; separate historical strict 1 ns pre/post checks pass for both engines; original current-clock ideal failure retained | `ddh-v1` | Unrun |
 | C caller exclusivity | 12 complete workflows each in plain, ASan/UBSan and TSan pass | `c-concurrency-v2` | Unrun |
 | Affected serial performance | Three samples each of installed predictor and matched CLI workload measured; no threshold | `performance-v2` | Unrun; full AK worker campaign pending |
-| Current source/unsafe/departure closure | 93 responsibility rows, 155 unchanged Rust body files, all36 SOFA files verified; 63 unsafe lexical sites indexed | `source-audit-v3`, RELEASE_SOURCE_MAP | Full branch/corpus closure pending |
+| Current source/unsafe/departure closure | 93 responsibility rows, 155 unchanged Rust body files, all 36 SOFA files verified; 63 unsafe lexical sites indexed | `source-audit-v3`, RELEASE_SOURCE_MAP | Full branch/corpus closure pending |
 
 Ignored tests are not reported as passed. Many are driver protocols requiring
 named corpus/action files; the nine explicitly enabled tests cover timing,
@@ -72,7 +75,7 @@ recovery. Early driver corpora not replayed here remain inherited evidence.
 Broader observational validation and exhaustive scientific branch execution are
 not established by this matrix.
 
-The first default external runner printed 31 and combined67 client counts due
+The first default external runner printed 31 and combined 67 client counts due
 to counting lock generation as a client. Actual command inventories contain
 30/66; the successor counts client executions explicitly and records its lockfile.
 
@@ -89,7 +92,7 @@ No tolerances, mode order, warning conventions, precision, clock selection or
 scientific expressions were changed. The C ABI comparator now decodes native
 hex exactly. The AF successor decodes exact fields at measured native precision,
 keeps explicitly binary64 fields binary64, and computes metadata with native
-rounded operations. Its EPS remains2^-52 and all quantity/serialization bounds
+rounded operations. Its EPS remains 2^-52 and all quantity/serialization bounds
 remain frozen. Rejection tests distinguish x87 neighbors that Python float would
 collapse. Linux execution, not these controls, must establish Linux fidelity.
 
@@ -98,24 +101,26 @@ collapse. Linux execution, not these controls, must establish Linux fidelity.
 M0/M1a/M1b retain their scoped acceptance; M2 is unaccepted. None of these items
 is waived by an operational pass:
 
-* P:154 records including32 SIMUL. M2:four raw SVD-order diagnostics across the
-  two profiles. 0049:four discrete boundaries and three unconstrained
-  interpolation cases. The four boundaries were replayed; the three interpolation
-  cases remain inherited and unreplayed in this AL campaign.
-* AE:red six raw modes; chromatic-log sixteen errors and one multiplier;
+* P: 154 records including 32 SIMUL. M2: four raw SVD-order diagnostics across the
+  two profiles. 0049: four discrete boundaries and three unconstrained
+  interpolation cases. All were replayed: the three unconstrained family cases
+  retain their native-success/Rust-failure execution boundary. Constrained
+  interpolation passes; no boundary is counted as a numerical pass.
+* AE: red six raw modes; chromatic-log sixteen errors and one multiplier;
   ELL1H nineteen whitened-data differences; single-pulsar quadrupole/GW-single/
-  memory/cosmic-string770/750/448/468 failures.
-* DDH:401/433 current/historical fidelity and two shared-solve raw-order
-  differences. Two first-pass SWGP unwritten-state boundaries remain. AF:seven
+  memory/cosmic-string 770/750/448/468 failures.
+* DDH: 401/433 current/historical fidelity and two shared-solve raw-order
+  differences. Two first-pass SWGP unwritten-state boundaries remain. AF: seven
   raw polyco log10RMS failures. Historical ideal passes are a separate gate.
-* AH:`pre-list-bary-unwritten`, `pre-list-tempo1`, `pre-list-terrestrial`,
+* AH: `pre-list-bary-unwritten`, `pre-list-tempo1`, `pre-list-terrestrial`,
   `dm-grid`, `red-noise`, `ell1h-h4`, `waves`, `wave-dm-scale`, `global`,
   `cheby-odd-defaults`, `cheby-ecliptic-tdb`, `polyco-prefix`. Absent DDH derived
   inputs and all-deleted span boundaries remain.
 * Actual Linux execution, native-width/provider/contraction qualification,
   early-corpus reconstruction, complete body/branch evidence and broader
-  scientific/resource coverage remain unfinished. Final package documents
-  must be checked from the eventual selected release commit.
+  scientific/resource coverage remain unfinished. The selected `ca49531`
+  package documents were checked; any eventual release must bind its own final
+  document revision too.
 
 AK's closed diagnostic finding remains closed only within its complete-workflow
 contract. Outer workflow composition, shared process histories and C caller
@@ -125,13 +130,17 @@ entire Rust/MPFR/Fortran/provider stack.
 
 ## Performance and failed preparation attempts
 
-The new installed predictor fixture measures 20,000 calls per sample, with equal
-aggregate checksums; median native/Rust intervals are0.000185/0.195191 s. This
-is a different predictor fixture from AK and is not an improvement measurement.
-The matched serial global-fit CLI medians are0.0301/0.5543 s on this desktop
-host. Compilations and other checks overlapped some measurements; these are
-bounded regression observations, not controlled capacity or scaling claims.
-No optimization, precision concession or speed pass gate was introduced.
+The final aggregate's installed predictor fixture measures 20,000 calls per
+sample, with equal aggregate checksums; median native/Rust intervals are
+0.000186/0.193290 s. This is a different predictor fixture from AK and is not an
+improvement measurement. Matched serial global-fit CLI medians are
+0.03138/0.47651 s. All three samples and CPU/RSS records remain intact.
+
+Earlier component measurements overlapped compilation; the final aggregate
+placed these intervals after its backend builds. Neither run reserved this
+desktop host. These are bounded regression observations, not controlled capacity
+or scaling claims. No optimization, precision concession or speed gate was
+introduced.
 
 Retain AK's corrected original identities: `performance-v2/receipt.json`
 `c9169bfd16d6847bb92a88ca44960a63845dfca3b574dea09fc263a569c51418` and
@@ -149,17 +158,56 @@ harness issues, not new scientific-engine corrections or passed checks.
 
 ## Workflow and final aggregate run
 
-The reviewed recipe is [validation/release/README.md](../validation/release/README.md).
+The recipe is [validation/release/README.md](../validation/release/README.md).
 The workflow pins checkout `11bd71901bbe5b1630ceea73d27597364c9af683` and
 upload-artifact `ea165f8d65b6e75b540449e92b4886f43607fa02`, uses ubuntu-24.04
 x64, read-only permissions, explicit toolchain/provider selection, no cache and
 30-day selected evidence retention even on failure. Actual apt/image identities
 are recorded at execution; no immutable apt snapshot is claimed.
 
-The aggregate recipe has not yet been executed as one final committed run at
-this report revision. Its constituent macOS campaigns above are executed; Linux
-and outstanding corpus/worker obligations remain visible in its pending ledger.
-A workflow file or green infrastructure build is insufficient for AL completion.
+`integrated-v1` executed the committed recipe and clean candidate
+`ca49531f5eb0b21362f585887f7278c269d4f7be`, rebuilding A2, CALCEPH, all six native
+profiles, default/combined installs and external consumers. Public source/data
+inputs were supplied from hash-verified local copies; no prior project objects
+or installed products were reused. Cargo's dependency cache was reused. The
+aggregate exited **1**, with 52 passing stages, the six failure stages below,
+and no dependency-blocked stages:
+
+| Failing stage | Actual result |
+| --- | --- |
+| M2 release | Two dependent-column raw singular-order failures; separate debug replay retains the other two |
+| General fitting | 72 cases; 2,478 numerical failures plus three interpolation and two SWGP execution boundaries |
+| Utility boundaries | The same four discrete mismatches across 16 inputs |
+| DDH | 401 current-clock and 433 historical-clock fidelity failures; zero historical 1 ns ideal failures |
+| Predictors | Seven raw log10RMS failures across 14 cases / 37,310 checks |
+| Core output | The same twelve groups; 17 different files, three missing, zero extra, zero unexpected statuses or changed inputs |
+
+Both default debug/release suites again pass 111 tests plus nine explicitly
+enabled runtime tests per profile; ignored cases remain ignored. Formatting and
+all-target Clippy pass. Both installs pass C11/C++17 static/shared clients and
+plain/ASan/UBSan/TSan caller campaigns. Outside Cargo consumers compile 35 source
+files per install and execute 30 default / 66 combined invocations. The six
+backend profiles, Lomb/QR witnesses and 130 timing comparisons pass. The final
+predictor receipt binds the frozen exact-width comparator actually executed.
+
+After the aggregate, `final-checks-v1` verifies 2,463 source/package file checks
+with zero mismatches: each prefix contains 256 files, including 250 installed
+source/document files. This binds the report and source map present at `ca49531`;
+this completion note is a later document revision. Four independent qr-default
+without-LAPACK tests also pass. These two checks are now wired into the successor
+aggregate recipe; that expanded orchestration was not rerun in full.
+
+The corrected collector preserves 9,985 selected evidence files, including all
+502 AE fitting evidence files formerly excluded with the temporary source tree.
+Every selected file was rehashed against its manifest. The collector and audit
+are identified in `final-checks-v1`; generated evidence remains ignored. No
+scientific gate or production body changed during this final bookkeeping.
+
+The local candidate/workflow diff is ready for central review. Linux execution
+still requires the explicit publication/dispatch approval in 0097/0098. Early
+Linux corpus reconstruction, full AK native worker/performance execution and
+exhaustive body/branch evidence remain unfinished. A workflow file or green
+infrastructure build is insufficient for AL completion.
 
 ## Selected evidence identities
 
@@ -167,6 +215,16 @@ SHA-256 of each named receipt, under `validation/release/build/`:
 
 | Receipt | SHA-256 |
 | --- | --- |
+| `integrated-v1/receipt.json` | `cf103977c56cb6fc9d1f8cca4be2d823b14ef78a5a4e218bdee2ccaf54d43298` |
+| `integrated-v1/rust-suite/receipt.json` | `cf45570fd56f09f33a057a22b422a09b93531675abab83cdd165b369d3f3a1ec` |
+| `integrated-v1/provider-abi/receipt.json` | `4c8e89def1fe947ec5b10ec57fff4ff8be10f7b9213d206af3dff6db91c39ecb` |
+| `integrated-v1/source-audit/receipt.json` | `5ca64d44c783e00908c40136ba2f99dafb35a67f8d0d255aa13704c195748784` |
+| `integrated-v1/predictors/receipt.json` | `14faac136bef68cc68b39694c03afc5cba0406f9cfee97bfffd928436affa0f3` |
+| `integrated-v1/output/receipt.json` | `72569d8df1594c4ca9c68af954a2d9258c5fd4736acaf3536bc6e93b34f89d5d` |
+| `integrated-v1/performance/receipt.json` | `b5e0657a97e4d0ee9ec774ef5db3cd7cf1b3daee85c56480a3357e5135e8f371` |
+| `final-checks-v1/receipt.json` | `c15b56a9541eba43c2a36f3869ea6b68ccb0335f00bdebfbe4a231ad6a74a4f6` |
+| `final-checks-v1/package-audit/receipt.json` | `479f142d44bcd6c297e61ecbe3b9ffc3884d13ad3a910baba5004b2d172a5eae` |
+| `selected-evidence-v1/manifest.json` | `c86b797d5dafc13be00518911db36f0ccafe085aeebdd93cb538e0e5510d6807` |
 | `macos-a2-v2/receipt.json` | `896ae8eddb2ed20cf19437604ab5ef95aa77aab76b521d89edfe4c6486ff4f77` |
 | `macos-provider-v1/receipt.json` | `90ca2e9e10b450a5850e251d1c4eb4e30e726016cf64ade03a6fdf9f6d0de71f` |
 | `suite-v2/receipt.json` | `5cbcc8bed799e4764f8594725dfb957d407c01c26d0ba226a20b0c05e904eac9` |
