@@ -39,7 +39,7 @@ fn main() {
         ],
     );
     objects.push(predictor_object);
-    for key in ["CC", "CALCEPH_DIR", "TEMPO2_ACCELERATE"] {
+    for key in ["CC", "CALCEPH_DIR", "TEMPO2_ACCELERATE", "TEMPO2_OPENBLAS"] {
         println!("cargo:rerun-if-env-changed={key}");
     }
     let blas = env::var_os("CARGO_FEATURE_BLAS").is_some();
@@ -57,16 +57,28 @@ fn main() {
             object.to_str().unwrap().into(),
         ];
         if blas {
-            assert!(
-                env::var("CARGO_CFG_TARGET_OS").unwrap() == "macos"
-                    && env::var("TEMPO2_ACCELERATE").as_deref() == Ok("1"),
-                "blas/lapack currently require the explicitly selected, measured macOS LP64 provider: TEMPO2_ACCELERATE=1; other provider ABIs need qualification"
-            );
+            match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
+                "macos" => {
+                    assert!(
+                        env::var("TEMPO2_ACCELERATE").as_deref() == Ok("1"),
+                        "select the macOS LP64 provider with TEMPO2_ACCELERATE=1"
+                    );
+                    println!("cargo:rustc-link-lib=framework=Accelerate");
+                }
+                "linux" => {
+                    assert!(
+                        env::var("TEMPO2_OPENBLAS").as_deref() == Ok("1"),
+                        "select Linux OpenBLAS LP64 with TEMPO2_OPENBLAS=1; install its development headers and liblapacke-dev"
+                    );
+                    args.push("-DT2_OPENBLAS".into());
+                    println!("cargo:rustc-link-lib=openblas");
+                }
+                target => panic!("no qualified BLAS/LAPACK provider selection for {target}"),
+            }
             args.push("-DT2_BLAS".into());
             if env::var_os("CARGO_FEATURE_LAPACK").is_some() {
                 args.push("-DT2_LAPACK".into());
             }
-            println!("cargo:rustc-link-lib=framework=Accelerate");
         }
         if calceph {
             let prefix = env::var("CALCEPH_DIR").expect(
@@ -95,6 +107,9 @@ fn main() {
                 "-O2",
                 "-fno-second-underscore",
                 "-frecursive",
+                // Installed predictor shared libraries can pull in this closure
+                // from the Rust static archive; ELF requires PIC native objects.
+                "-fPIC",
                 "-c",
                 source.to_str().unwrap(),
                 "-o",
