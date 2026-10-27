@@ -59,3 +59,26 @@ Linux qualification or resolution of any inherited numerical gate. Those stay
 in AK's full delivery and AL's released-platform obligations. Central informed
 AK when the build/check processes ended so its benchmark samples could be kept
 separate.
+
+## Benchmark review during qualification
+
+Central reviewed AK's in-progress benchmark scripts before final delivery. The
+observed native `AK_EVALUATE` interval includes `ak_begin`/`ak_visit`/`ak_end`,
+which allocate/fill worker-observation storage and print summaries. The Rust raw
+path does not perform that instrumentation. The raw native process also writes
+a complete TSV after evaluation, while Rust writes null placeholders. Direct
+whole-process comparisons would therefore include different output work. This
+is a measurement-scope finding, not an observed numerical or production failure.
+
+Central sent AK a bounded correction: retain worker calibration separately, use
+an uninstrumented or explicitly calibrated timing profile, and match publication
+for whole-process comparisons or label those as different workloads while using
+matched evaluation intervals for the direct comparison. Distinguish observed
+worker counts in calibration from requested timing-run counts. Existing scientific
+and worker qualification remains applicable; refresh only affected benchmarks
+and a focused output-equivalence control. The final report must resolve this
+finding before central accepts its performance claims.
+
+The in-progress source snapshot is ignored under
+`build/benchmark-review-20261027/`; it is not a committed implementation baseline.
+Snapshot receipt SHA-256: `dbafc4a3450eb68ea13949202adee3730232156f610d7c4ebaf8d2b7d7b9fdaa`.
