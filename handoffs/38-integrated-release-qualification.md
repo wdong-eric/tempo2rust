@@ -1,6 +1,6 @@
 # Assignment AL: integrated release qualification
 
-**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0096/0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0097/0096/0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
 
 Once released, own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
 
@@ -8,7 +8,7 @@ Deliver a runnable, reproducibly built/installed release candidate for the user'
 
 Proceed in dependency order:
 
-1. Freeze the actual predecessor, source/feature/interface/platform/toolchain/resource matrix and requirement-to-evidence plan. Reuse previous stage maps and immutable results.
+1. Freeze the actual predecessor, source/feature/interface/platform/toolchain/resource matrix and requirement-to-evidence plan. Reuse previous stage maps and immutable results. Use the user-selected GitHub Actions route in 0097 for Linux: prepare the explicit runner profile, portable reference/resource bootstrap and small workflow calling owned scripts. Bring the exact candidate/workflow publication diff to central before a push or dispatch.
 2. Implement and qualify the Linux BLAS/LAPACK provider boundary: AI's delivered binding is macOS Accelerate LP64 and rejects other operating systems. Select and measure the actual Linux provider ABI, retain the canonical helper/scientific semantics, and execute matched native/Rust profiles; a generated build configuration alone does not satisfy this obligation. Complete clean-source/private-prefix packaging and external consumers, accurate metadata/notices, runtime discovery and actual native/provider load paths. Resolve demonstrated portability/build issues at their source.
 3. Build and execute matched native/Rust profiles on macOS arm64 and Linux x86_64, measuring native numeric types and predictor ABI/layout/calling conventions rather than assuming the local profile is portable. Include AG's source Lomb uniform/Nyquist and irregular-neighbor cases with actual compiler contraction settings, as recorded in handoff 33a and decision 0086; preserve every bin and its existing gate. Also measure AI's QR chi-square accumulation/contraction on each actual compiler/provider profile; its macOS arm64 FMADD witness is not a portable rounding assumption.
 4. Complete the current source/body/public-capability/correspondence/unsafe/departure map and repair concrete gaps within the approved contract. Cover all original core responsibility rows and approved retained dependencies; do not rewrite the historical inventory.
@@ -16,6 +16,20 @@ Proceed in dependency order:
 6. Commit explicit authored owned paths with Conventional Commits and return `rust/RELEASE_QUALIFICATION_REPORT.md`, executable recipes, exact identities, requirement-by-requirement evidence and the complete unresolved ledger for central's 0082 reassessment and final audit.
 
 Keep generated products and large evidence ignored. An unavailable target is unfinished qualification; continue independent work and identify the exact missing execution capability. Consequential new scientific/public/platform choices go to central with alternatives and a recommendation. A runnable candidate with open gates is not full migration acceptance.
+
+## Selected Linux execution route
+
+0097 records GitHub Actions preparation and its clean-checkout findings. A primary
+checkout omits the independent native source/reference repositories; provide the
+necessary authored bootstrap and pinned inputs without committing generated
+reference exports. Adapt platform commands in owned staging, preserve historical
+runners, and measure Linux numeric types before applying comparator profiles.
+In particular, the existing macOS binary64 conversion cannot establish exact
+Linux ordinary-long-double agreement. Preserve the frozen numerical policy.
+Keep selected CI evidence as artifacts with recorded identities and retention;
+retain failed-check diagnostics without converting failures into passes. Workflow
+creation or a successful build alone does not qualify the platform. AL remains
+unreleased and central retains milestone acceptance.
 
 ## Delivered interface baseline
 

@@ -1,0 +1,29 @@
+# Linux qualification through GitHub Actions
+
+Central decision, 27 October 2026. The user selected **GitHub Actions** as the preparation route for AL's required Linux x86_64 execution. This records the environment choice under 0086; it does not release AL, accept Linux, or authorize publishing the current unreviewed candidate. AK remains the sole Rust writer under 0096. AL still requires AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release.
+
+## Execution plan
+
+Prepare a manually dispatched workflow at `.github/workflows/tempo2-rust.yml`, owned by AL after release. Use the explicit `ubuntu-24.04` x64 runner label for the initial Linux profile. Record the actual runner image, OS, architecture, compiler/linker, Rust toolchain, lockfile, native providers, flags and loaded artifacts on execution: the label alone does not freeze the image or installed packages. GitHub documents a fresh VM for this standard runner in its [runner reference](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job).
+
+Keep the workflow small: checkout the reviewed candidate, provision the recorded dependencies, invoke authored repository build/qualification scripts, and retain selected evidence. Use exact reviewed action revisions and dependency identities in the delivered recipe. Establish a clean build before adding caches; a cache must not supply an undocumented scientific input or stale executable. The existing macOS qualification remains separately required.
+
+The public remote is `wdong-eric/tempo2rust`, with default branch `main`, as verified through read-only repository metadata. No workflow exists in the primary checkout at this preparation checkpoint. A manual `workflow_dispatch` workflow must be present on the default branch before it can be triggered; the run can then select another branch, as documented in GitHub's [manual-run guide](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow). Prepare the exact candidate, workflow, input provenance and publication diff for review before any push or dispatch. This decision makes no remote change.
+
+## Clean-checkout obligations
+
+Source inspection used committed AJ report revision `f4b73f87102858a9fc1a7204b91464b6e1c65b29` and the unchanged independent A2 reference `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572`. These are preparation observations, not executed Linux failures:
+
+- Primary `.gitignore` excludes both `tempo2/` and `validation/reference/`. The latter is an independent local repository without a configured remote. A primary checkout alone therefore supplies neither the pinned native source nor the A2 construction harness. AL must make the necessary authored reference construction available through a reviewed bootstrap with exact provenance, without copying historical generated JSON or rewriting the independent repository. Preserve A2's initializer correction, instrumentation distinction and resource identities.
+- A2 `build.py` uses absolute Homebrew GCC paths, a Darwin architecture label, `xcrun`, `otool` and Darwin dependency discovery. Prepare a portable successor recipe in AL's owned staging; preserve the accepted runner and historical outputs under 0050. Rebuild and measure the native 113-bit timing reference on Linux.
+- AJ `rust/build.rs` explicitly restricts BLAS/LAPACK to macOS Accelerate. AL must implement and qualify the actual Linux provider boundary already required by 0086, including the measured integer/Fortran/C ABI. Make CALCEPH and retained Fortran sources reproducible too, and verify actual shared-library dependencies and position-independent linkage.
+- AJ interface qualification uses Homebrew paths, Darwin linker/introspection commands and the measured 53-bit ordinary-long-double profile. Its comparator and AF's `validation/predictors/compare.py` contain binary64 conversions and a recorded binary64 epsilon. Linux qualification needs lossless parsing and exact checks for the types actually measured there. Preserve existing macOS results and frozen quantity gates; bring any necessary numerical-policy decision to central rather than silently substituting a new epsilon or weakening comparisons.
+- AJ's installer supplies predictor libraries, getPeriod and Rust sources. AL must also install and exercise the core CLI, separately compiled C11/C++ static/shared clients and external Cargo consumers from the actual candidate, with a separately identified runtime tree. No local cache, install prefix or arbitrary user data directory may be an undeclared prerequisite.
+
+## Evidence and completion
+
+Run the matched native/Rust scientific checks, installed-client checks and applicable integrated suite required by 0086/handoff 38. Preserve every inherited failure and the complete 0096 ledger. A green infrastructure or build-only job does not establish scientific qualification.
+
+Keep generated reports, JSON, traces, binaries and archives out of Git under 0039. Upload only selected run evidence with an explicit retention period; GitHub's [artifact action](https://github.com/actions/upload-artifact) stores those files separately from repository history. Retain failure diagnostics even when a qualification step fails, and preserve its failure outcome. Record candidate/input/resource hashes and the workflow run identity so expiring artifacts can be regenerated; preserve required acceptance evidence outside transient CI storage through the existing evidence process.
+
+This checkpoint changes planning documents only. No workflow has been installed, pushed or dispatched, and no Linux build, ABI test, numerical comparison or release qualification is claimed. AL's report must distinguish preparation, actual execution, implementation checks, numerical agreement and central acceptance.
