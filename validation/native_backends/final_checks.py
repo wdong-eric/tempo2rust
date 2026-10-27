@@ -1,9 +1,10 @@
 """Serial library regressions, real-provider recovery, formatting and Clippy."""
-import json, os, subprocess
+import json, os, subprocess, sys
+from pathlib import Path
 from check import ROOT, HERE, sha
 
 if __name__=='__main__':
-    out=HERE/'build/final-checks';out.mkdir(exist_ok=False)
+    out=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else HERE/'build/final-checks';out.mkdir(exist_ok=False)
     env={**os.environ,'CALCEPH_DIR':str(HERE/'build/provider'),'TEMPO2_ACCELERATE':'1','AI_EPHEMERIS':str(HERE/'build/inpop17a_TDB_m100_p100_tt.dat'),'AI_POSITION_ONLY':str(ROOT/'validation/reference/build/source/T2runtime/ephemeris/DE405.1950.2050')}
     commands=[]
     commands.append(('format',['cargo','fmt','--manifest-path','rust/Cargo.toml','--','--check']))

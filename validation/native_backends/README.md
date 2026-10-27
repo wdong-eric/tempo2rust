@@ -80,11 +80,17 @@ python3 validation/native_backends/cli_check.py \
   --par validation/native_backends/build/paired-combined-debug/inputs/calceph.par \
   --tim validation/native_backends/build/paired-combined-debug/inputs/pks.tim --lapack
 python3 validation/native_backends/qualify_profiles.py \
-  validation/native_backends/build/profiles-final-v2
-python3 validation/native_backends/final_checks.py
+  validation/native_backends/build/profiles-final-v3
+python3 validation/native_backends/final_checks.py validation/native_backends/build/final-checks-v3
 python3 validation/native_backends/boundary_check.py
 python3 validation/native_backends/audit_delivery.py
 ```
+
+The final executed profile command also passed `validation/native_backends/build/profiles-final-v2`
+as a third argument to reuse its hash-verified unchanged native executables and
+objects after the Rust diagnostic-order correction. Omitting that argument, as
+above, rebuilds them from the same recorded recipe. Every runtime comparison is
+fresh in the final directory.
 
 Each output directory must be fresh. `qualify_profiles.py` builds disabled,
 BLAS-only, LAPACK, CALCEPH-only, combined debug/release, disabled release, and combined

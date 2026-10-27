@@ -212,6 +212,59 @@ fn qr_real_rhs_optional_outputs_constraints_and_recovery() {
                 .is_err()
             );
             assert!(tkfit::tk_least_squares(&data, &data, &matrix, &matrix, false).is_ok());
+            let directory =
+                std::env::temp_dir().join(format!("tempo2-ai-qr-{}", std::process::id()));
+            std::fs::create_dir(&directory).unwrap();
+            std::fs::create_dir(directory.join("awhite.res")).unwrap();
+            let diagnostics = tkfit::FitDiagnostics {
+                directory: directory.clone(),
+                write_residuals: 2,
+                debug: false,
+            };
+            tempo2_rust::take_clock_diagnostics();
+            assert!(
+                tkfit::least_squares_outputs(
+                    Some(&data),
+                    Some(&data),
+                    &matrix,
+                    &matrix,
+                    &[],
+                    &[],
+                    1e-27,
+                    false,
+                    FitOutputs::ALL,
+                    Some(&diagnostics)
+                )
+                .is_err()
+            );
+            assert!(tempo2_rust::take_clock_diagnostics().iter().any(|event| {
+                event
+                    .bytes
+                    .windows(b"QR nparams=".len())
+                    .any(|s| s == b"QR nparams=")
+            }));
+            assert!(directory.join("adesign.matrix").is_file());
+            std::fs::remove_dir(directory.join("awhite.res")).unwrap();
+            assert!(
+                tkfit::least_squares_outputs(
+                    Some(&data),
+                    Some(&data),
+                    &matrix,
+                    &matrix,
+                    &[],
+                    &[],
+                    1e-27,
+                    false,
+                    FitOutputs::ALL,
+                    Some(&diagnostics)
+                )
+                .is_ok()
+            );
+            assert_eq!(
+                std::fs::read_to_string(directory.join("awhite.res")).unwrap(),
+                "0 1\n1 2\n2 4\n"
+            );
+            std::fs::remove_dir_all(directory).unwrap();
         }
     });
 }

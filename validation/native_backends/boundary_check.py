@@ -4,8 +4,8 @@ from pathlib import Path
 from check import HERE, RUNTIME, sha
 
 if __name__=='__main__':
-    base=HERE/'build/public-boundaries-final';base.mkdir(exist_ok=False)
-    profiles=HERE/'build/profiles-final-v2'
+    base=HERE/'build/public-boundaries-final-v3';base.mkdir(exist_ok=False)
+    profiles=HERE/'build/profiles-final-v3'
     valid=profiles/'disabled-debug/paired/inputs';calceph=HERE/'build/paired-combined-debug/inputs'
     missing=base/'missing.par';missing.write_text((calceph/'calceph.par').read_text().split('EPH_FILE ')[0]+'EPH_FILE /missing-ai-ephemeris\n')
     records=[];env={**os.environ,'TEMPO2':str(RUNTIME)}

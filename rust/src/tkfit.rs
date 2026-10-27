@@ -256,26 +256,6 @@ pub fn least_squares_outputs(
                 bytes.push(b'\n');
             }
             diagnostic_files.push(io.write("constraints.matrix", &bytes)?);
-            if solver == "QR" {
-                bytes.clear();
-                let mut rhs_bytes = vec![];
-                // fda6ad4 TKfit.C:289-308 checks only wFile then dereferences
-                // yFile. Fallible owned writes report either failed destination.
-                for (i, (row, y)) in white_matrix
-                    .iter()
-                    .chain(constraints)
-                    .zip(white_data.unwrap().iter().chain(targets))
-                    .enumerate()
-                {
-                    rhs_bytes.extend([format!("{i} ").as_bytes(), &g(*y), b"\n"].concat());
-                    for (j, v) in row.iter().enumerate() {
-                        bytes.extend([format!("{i} {j} ").as_bytes(), &g(*v), b"\n"].concat());
-                    }
-                    bytes.push(b'\n');
-                }
-                diagnostic_files.push(io.write("adesign.matrix", &bytes)?);
-                diagnostic_files.push(io.write("awhite.res", &rhs_bytes)?);
-            }
         }
     }
     let (
@@ -313,6 +293,25 @@ pub fn least_squares_outputs(
             Ok(())
         })
         .map_err(|e| e.to_string())?;
+        if let Some(io) = diagnostics
+            && io.write_residuals & 2 != 0
+        {
+            use crate::clock_text::{NumberFormat, format_number};
+            let g = |v| format_number(v, NumberFormat::GeneralSix);
+            let mut bytes = vec![];
+            let mut rhs_bytes = vec![];
+            // fda6ad4 TKfit.C:289-308 checks only wFile then dereferences
+            // yFile. Fallible owned writes report either failed destination.
+            for (i, (row, y)) in rows.iter().zip(rhs.iter()).enumerate() {
+                rhs_bytes.extend([format!("{i} ").as_bytes(), &g(*y), b"\n"].concat());
+                for (j, v) in row.iter().enumerate() {
+                    bytes.extend([format!("{i} {j} ").as_bytes(), &g(*v), b"\n"].concat());
+                }
+                bytes.push(b'\n');
+            }
+            diagnostic_files.push(io.write("adesign.matrix", &bytes)?);
+            diagnostic_files.push(io.write("awhite.res", &rhs_bytes)?);
+        }
         let chisq = crate::t2accel::accel_lsq_qr(
             &mut augmented,
             &mut rhs,

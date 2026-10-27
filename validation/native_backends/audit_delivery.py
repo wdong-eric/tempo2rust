@@ -7,7 +7,7 @@ def verify(mapping):
     for name,digest in mapping.items():assert sha(name)==digest,name
 
 if __name__=='__main__':
-    base=HERE/'build/profiles-final-v2';index={'profiles':{},'artifacts':{}}
+    base=HERE/'build/profiles-final-v3';index={'profiles':{},'artifacts':{}}
     top=json.loads((base/'receipt.json').read_text());assert all(r['exit']==0 for r in top['commands'])
     for folder in sorted(p for p in base.iterdir() if p.is_dir()):
         record={};native=json.loads((folder/'native/identity.json').read_text())
@@ -32,7 +32,7 @@ if __name__=='__main__':
             index['artifacts'][str(receipt)]=sha(receipt)
         index['artifacts'][str(folder/'native/identity.json')]=sha(folder/'native/identity.json')
         index['profiles'][folder.name]=record
-    for path in ['provider-identity.json','final-checks/receipt.json','public-boundaries-final/receipt.json']:
+    for path in ['provider-identity.json','final-checks-v3/receipt.json','public-boundaries-final-v3/receipt.json']:
         p=HERE/'build'/path;r=json.loads(p.read_text())
         if 'files' in r:verify(r['files'])
         if path.startswith('final-checks'):
@@ -40,7 +40,7 @@ if __name__=='__main__':
         index['artifacts'][str(p)]=sha(p)
     for p in [HERE/'build/comparator-controls-final.log',base/'receipt.json',HERE/'build/calceph-original-failed-position.tsv',HERE/'build/calceph-original-failed-position.stderr',HERE/'build/accel-assembly.txt']:
         index['artifacts'][str(p)]=sha(p)
-    index['implementation_commit']=subprocess.check_output(['git','rev-parse','4c04811'],cwd=ROOT,text=True).strip()
+    index['implementation_commits']=[subprocess.check_output(['git','rev-parse','4c04811'],cwd=ROOT,text=True).strip(),subprocess.check_output(['git','log','-1','--format=%H','--','rust/src/tkfit.rs'],cwd=ROOT,text=True).strip()]
     index['pins']={name:subprocess.check_output(['git','-C',str(ROOT/name),'rev-parse','HEAD'],text=True).strip() for name in ['tempo2','validation/reference']}
     index['authored']={str(p):sha(p) for p in HERE.iterdir() if p.is_file()}
     index['authored'].update({str(p):sha(p) for p in [ROOT/'rust/examples/native_backends.rs',ROOT/'rust/tests/native_backends.rs']})

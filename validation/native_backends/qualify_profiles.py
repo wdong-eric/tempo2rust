@@ -15,7 +15,16 @@ if __name__=='__main__':
     jobs=[]
     for profile,features,release in profiles:
         label=profile+('-release' if release else '-debug');out=base/label;out.mkdir()
-        native=build(out/'native',profile,provider)
+        if len(sys.argv)>2:
+            # A diagnostic-only Rust correction need not relink unchanged native
+            # bytes; retain the original command/object identities and verify them.
+            prior=Path(sys.argv[2]).resolve()/label/'native'
+            identity=json.loads((prior/'identity.json').read_text())
+            assert identity['profile']==profile
+            for name,digest in identity['executables'].items():assert sha(prior/name)==digest
+            for name,digest in identity['objects'].items():assert sha(name)==digest
+            native=out/'native';shutil.copytree(prior,native)
+        else:native=build(out/'native',profile,provider)
         args=['cargo','--offline','--manifest-path',str(ROOT/'rust/Cargo.toml')]
         extra=(['--features',features] if features else [])+(['--release'] if release else [])
         for action,targets in [('test',['--test','native_backends','--','--test-threads=1']),('build',['--example','native_backends','--bins'])]:
