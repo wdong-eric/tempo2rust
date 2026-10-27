@@ -22,6 +22,11 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def file_hashes(directory):
+    return {str(p.relative_to(directory)): sha(p)
+            for p in sorted(directory.rglob('*')) if p.is_file()}
+
+
 def compare(left, right, normalize=lambda data, kind: data, diff_dir=None):
     """Compare complete file membership and bytes, including ordered records."""
     lf = {str(p.relative_to(left)) for p in left.rglob('*') if p.is_file()}
@@ -48,6 +53,8 @@ def summary(comparisons, runs):
     counts = {
         'unexpected_status': sum(r['status'] != r['expected'] for r in runs),
         'changed_inputs': sum(r.get('inputs_unchanged') is False for r in runs),
+        'artifact_mismatches': sum(len(names) for r in runs
+                                   for names in r.get('artifact_check', {}).values()),
         'different_files': sum(len(c['different']) for c in comparisons.values()),
         'missing_files': sum(len(c['native_only']) for c in comparisons.values()),
         'extra_files': sum(len(c['rust_only']) for c in comparisons.values()),
@@ -55,6 +62,26 @@ def summary(comparisons, runs):
     counts['failed_cases'] = sum(any(c.values()) for c in comparisons.values())
     counts['exit_status'] = int(any(counts.values()))
     return counts
+
+
+def publish(manifest, path):
+    """Recheck completed run artifacts immediately before publishing their receipt."""
+    for record in manifest['runs']:
+        if 'directory' not in record:
+            continue  # The source/runtime identity entry is not an execution.
+        current = file_hashes(Path(record['directory']))
+        retained = record['files']
+        record['artifact_check'] = {
+            'missing': sorted(retained.keys() - current.keys()),
+            'extra': sorted(current.keys() - retained.keys()),
+            'changed': sorted(name for name in retained.keys() & current.keys()
+                              if retained[name] != current[name]),
+        }
+    counts = summary(manifest['comparison'], manifest['runs'])
+    manifest['summary'] = counts
+    path.write_text(json.dumps(manifest, indent=2) + '\n')
+    print('SUMMARY', counts, flush=True)
+    return counts['exit_status']
 
 
 def run(command, directory, env, expected=0, timeout=75):
@@ -70,9 +97,10 @@ def run(command, directory, env, expected=0, timeout=75):
         code, stdout, stderr = 'launch-error', b'', str(e).encode()
     (directory / 'stdout').write_bytes(stdout)
     (directory / 'stderr').write_bytes(stderr)
-    return {'command': list(map(str, command)), 'status': code, 'expected': expected,
+    return {'command': list(map(str, command)), 'directory': str(directory.resolve()),
+            'status': code, 'expected': expected,
             'inputs': inputs, 'inputs_unchanged': all(Path(p).is_file() and sha(Path(p)) == value for p, value in inputs.items()),
-            'files': {str(p.relative_to(directory)): sha(p) for p in directory.rglob('*') if p.is_file()}}
+            'files': file_hashes(directory)}
 
 
 def main():
@@ -168,7 +196,8 @@ def main():
     err = proc.communicate(timeout=10)[1]
     (terminal / 'stdout').write_bytes(buf)
     (terminal / 'stderr').write_bytes(err)
-    receipts.append({'kind': 'native', 'case': 'terminal', 'status': proc.returncode, 'expected': 0})
+    receipts.append({'kind': 'native', 'case': 'terminal', 'status': proc.returncode, 'expected': 0,
+                     'directory': str(terminal), 'files': file_hashes(terminal)})
 
     probe_dir = out / 'rust-probe'
     command = ['cargo', 'test', '--manifest-path', str(ROOT / 'rust/Cargo.toml')]
@@ -247,8 +276,8 @@ def main():
             execute(kind, name, [exe, '-npsr', '2', '-nobs', '10000', '-f', par, *options], out / name / kind)
         check(name, out / name / 'native', out / name / 'rust')
 
-    for flag in ['-version', '-h', '-H']:
-        execute('rust', flag, [rust, flag], out / 'controls' / flag, 1)
+    for name, flag in [('version', '-version'), ('help', '-h'), ('help-extra', '-H')]:
+        execute('rust', flag, [rust, flag], out / 'controls' / name, 1)
     for name, options in [('missing-f', ['-f']), ('fit-plugin', ['-fitfunc', 'absent']),
                           ('output-plugin', ['-output', 'absent']), ('graphics', ['-gr', 'absent'])]:
         command = [rust, *options] if name == 'missing-f' else [rust, '-f', ae / 'robust-H.par', tim, *options]
@@ -257,16 +286,13 @@ def main():
     source_after = {str(p.relative_to(ROOT)): sha(p) for p in rust_sources}
     receipts.append({'kind': 'identity', 'case': 'runtime-and-source-unchanged',
                      'status': int(runtime_before != runtime_after or source_before != source_after), 'expected': 0})
-    counts = summary(comparisons, receipts)
     manifest = {'contract_sha256': sha(HERE / 'CONTRACT.md'), 'checker_sha256': sha(Path(__file__)),
         'rust': sha(rust), 'native': sha(native / 'tempo2'), 'native_identity': sha(native / 'identity.json'),
-        'comparison': comparisons, 'runs': receipts, 'summary': counts,
+        'comparison': comparisons, 'runs': receipts,
         'runtime_before': runtime_before, 'runtime_after': runtime_after,
         'rust_sources_before': source_before, 'rust_sources_after': source_after,
         'note': 'All exact display/numerical failures count. No inherited gate is waived.'}
-    (out / 'receipt.json').write_text(json.dumps(manifest, indent=2) + '\n')
-    print('SUMMARY', counts, flush=True)
-    return counts['exit_status']
+    return publish(manifest, out / 'receipt.json')
 
 
 if __name__ == '__main__':

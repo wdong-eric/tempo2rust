@@ -8,6 +8,34 @@ import unittest
 from check import compare, run, summary
 
 class CheckerTests(unittest.TestCase):
+    def test_publication_rejects_overwritten_completed_run(self):
+        with tempfile.TemporaryDirectory(prefix='ah-publication-') as tmp:
+            root = Path(tmp)
+            for overwrite in [False, True]:
+                directory = root / ('overwritten' if overwrite else 'distinct')
+                directory.mkdir()
+                script = '''
+import sys
+from pathlib import Path
+from check import publish, run
+root = Path(sys.argv[1])
+first = root / 'first'
+second = first if sys.argv[2] == 'overwrite' else root / 'second'
+records = [run([sys.executable, '-c', "print('first help')"], first, None),
+           run([sys.executable, '-c', "print('extra help')"], second, None)]
+raise SystemExit(publish({'comparison': {}, 'runs': records}, root / 'receipt.json'))
+'''
+                result = subprocess.run([sys.executable, '-c', script, str(directory),
+                                         'overwrite' if overwrite else 'distinct'],
+                                        cwd=Path(__file__).parent, capture_output=True)
+                self.assertEqual(result.returncode, int(overwrite), result.stderr.decode())
+                receipt = json.loads((directory / 'receipt.json').read_text())
+                self.assertEqual(receipt['summary']['exit_status'], result.returncode)
+                self.assertEqual(receipt['summary']['artifact_mismatches'], int(overwrite))
+                self.assertEqual(receipt['summary']['unexpected_status'], 0)
+                self.assertEqual(receipt['runs'][0]['artifact_check']['changed'],
+                                 ['stdout'] if overwrite else [])
+
     def test_metadata_normalizer_never_touches_data_files(self):
         with tempfile.TemporaryDirectory(prefix='ah-data-') as tmp:
             a, b = Path(tmp) / 'a', Path(tmp) / 'b'

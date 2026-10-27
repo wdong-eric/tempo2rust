@@ -27,16 +27,31 @@ python3 witness_bugs.py --native build/native-replay --out build/bugs-replay
 The two `check.py` commands currently **exit 1** because their receipts retain
 real numerical/display mismatches and source-unwritten boundaries. A zero exit
 is not manufactured by excluding known failures. Exit failures, timeouts,
-launch failures, changed inputs, missing/extra files and byte mismatches all
+launch failures, changed inputs, missing/extra files, byte mismatches and changed
+retained run artifacts all
 contribute to failure. The receipt publishes each category/count and source,
 input, executable, native-builder, contract and runtime identities. No scientific
 numbers are normalized. Only log-prefix source locations and the final CPU-time
 line in stdout/stderr are normalized; data files are always exact.
 
+Every execution records its absolute output `directory` and completion-time
+`files` hashes, including the PTY control. Immediately before receipt publication,
+the checker recenses those directories and records each run's `artifact_check`
+(`missing`, `extra`, `changed`). Any difference increments `artifact_mismatches`
+and makes the checker exit 1, even if the processes and scientific comparisons
+passed. Completion-time hashes are retained rather than replaced with the later
+contents. Help controls use distinct `controls/help` and
+`controls/help-extra` directories, so `-h` and `-H` cannot alias on a filesystem
+that ignores filename case.
+
 `test_check.py` exercises actual checker subprocess exits for omitted/reordered
 records, units, flags, digits and missing files, plus actual unexpected process
 exit/timeout rejection, valid recovery and a guard that metadata normalization
 cannot erase data-file differences. It does not test a second comparator.
+The publication regression also executes two successful commands, deliberately
+overwrites the first completed run's stdout, and checks the production publisher's
+actual subprocess exit 1 and retained mismatch. Its distinct-directory control
+exits 0.
 
 `check.py` also executes the ignored Rust direct-API evidence test itself. That
 test checks a repeated report, a failing stdout followed by successful output
@@ -89,8 +104,14 @@ The parser preserves explicit C expression types/grouping in emitted Rust.
 The inventory accounts for six bodies and 375 branch/loop/case sites. It is a
 static correspondence ledger, not dynamic coverage or independent physics.
 
-Latest authoritative run names and exact identities are indexed in
-`../../rust/CORE_OUTPUT_REPORT.md`. Earlier `debug-v*`, `release-v*`, native-v1
-through native-v8 and snapshot attempts remain historical evidence. In
+Latest authoritative runs are `build/debug-help-corrected` and
+`build/release-help-corrected`, indexed with exact identities in
+`../../rust/CORE_OUTPUT_REPORT.md`. The earlier `debug-final` and `release-final`
+receipts and `delivery-identity.json` remain unchanged historical evidence:
+their `controls/-h` and `controls/-H` shared an output directory on this host,
+leaving one stale `-h/stdout` hash per profile. The fresh publication checks
+address that observer defect; the exact scientific comparison rules are unchanged.
+Earlier `debug-v*`, `release-v*`, native-v1 through native-v8 and snapshot attempts
+also remain historical evidence. In
 particular v1-v6 native builds used the superseded AF dependency selection and
 are not the delivery oracle.
