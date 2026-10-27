@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Select rerunnable evidence; omit source trees, caches, libraries and runtime data."""
+import argparse
+import json
+from pathlib import Path
+import shutil
+from common import sha
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--input',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
+    a=p.parse_args();a.out.mkdir(parents=True,exist_ok=False);files={}
+    excluded={'source','src','target','test-target','runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
+    for path in sorted(a.input.rglob('*')):
+        relative=path.relative_to(a.input)
+        if not path.is_file() or path.is_symlink() or excluded.intersection(relative.parts):continue
+        if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
+        if path.suffix not in {'.json','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'} and path.name not in {'stdout','stderr'}:continue
+        target=a.out/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
+        files[str(relative)]={'sha256':sha(target),'bytes':target.stat().st_size}
+    (a.out/'manifest.json').write_text(json.dumps({'source':str(a.input.resolve()),'files':files},indent=2)+'\n')
+    print(len(files),'evidence files; raw binaries, dependencies and runtime trees excluded')

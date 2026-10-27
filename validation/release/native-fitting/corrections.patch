@@ -1,0 +1,724 @@
+--- a/TKfit.C
++++ b/TKfit.C
+@@ -152,7 +152,7 @@
+         double* outP, double* e, double** cvm, char robust){
+     return TKrobustConstrainedLeastSquares(b,white_b,
+             designMatrix,white_designMatrix,NULL,
+-            n,nf,0,tol,rescale_errors,outP, e,cvm,0);
++            n,nf,0,tol,rescale_errors,outP, e,cvm,robust);
+ 
+ 
+ }
+@@ -272,7 +272,7 @@
+         // add the extra equations for constraints to the end of the least-squares problem.
+         logmsg("QR nparams=%d nconst=%d ndata=%d",nparams,nconstraints,ndata);
+         for (i=0;i<nconstraints;i++){
+-            augmented_white_data[i+ndata] = 0;
++            augmented_white_data[i+ndata] = constraint_vals ? constraint_vals[i] : 0;
+             for (j=0;j<nparams;j++) {
+                 augmented_DM[i+ndata][j] = constraintsMatrix[i][j];
+                 //if(i==j)logmsg("Cmatrix ic=%d ip=%d %lg",i,j,constraintsMatrix[i][j]);
+@@ -344,7 +344,7 @@
+         // add the extra equations for constraints to the end of the least-squares problem.
+         logmsg("SVD nparams=%d nconst=%d ndata=%d",nparams,nconstraints,ndata);
+         for (i=0;i<nconstraints;i++){
+-            augmented_white_data[i+ndata] = 0;
++            augmented_white_data[i+ndata] = constraint_vals ? constraint_vals[i] : 0;
+             for (j=0;j<nparams;j++) {
+                 augmented_DM[i+ndata][j] = constraintsMatrix[i][j];
+                 //if (constraintsMatrix[i][j] != 0){
+@@ -357,7 +357,10 @@
+         // note that this modifies svd_M
+         logdbg("Do SVD");
+         TKsingularValueDecomposition_lsq(augmented_DM,ndata+nconstraints,nparams,v,w,u);
+-
++extern void ae_solver_svd(int,const longdouble*);ae_solver_svd(nparams,w);
++
++        extern void ae_svd(int,int,int,const longdouble*,double);
++        ae_svd(ndata,nparams,nconstraints,w,tol);
+         wmax = TKfindMax_Ld(w,nparams);
+         longdouble sensible_wmax=powl(2.0,sizeof(longdouble)*8-17);
+         if (wmax > sensible_wmax){
+@@ -451,6 +454,8 @@
+ 
+ 
+ 
++    extern void ae_solver_details(int,int,int,const double*,bool,bool,double,const double*,bool,const double*,double**);
++    ae_solver_details(ndata,nparams,nconstraints,e,computeErrors,rescale_errors,chisq,outP,computeParam,data,designMatrix);
+     if(computeErrors && rescale_errors){
+         //	    printf("Error scaling = %g [chisq = %g] [n = %d] [nf = %d]\n",sqrt(chisq/(n-nf)),(double)chisq,n,nf);
+         // This is not the place for this message: this is the only thing one
+--- a/TKrobust.C
++++ b/TKrobust.C
+@@ -1,3 +1,4 @@
++extern void ae_robust_step(int,int,double,double,double,double,double*,double**,double*,double*,double*,double**,int,int);
+ #include <TKfit.h>
+ #include <TKrobust.h>
+ #include <TKlog.h>
+@@ -84,6 +85,7 @@
+ 
+         sigma_old = sigma;
+         sigma = median_abs_deviation/0.6745;
++ae_robust_step(count,0,sigma_old,sigma,count?sum_phi_sq:0,count?sum_dphi:0,modified_data,Mw,resid,outP,e,cvm,ndata,nparams);
+         logdbg("Sigma = %lg",sigma);
+         count += 1;
+         if (count > 16){
+@@ -120,6 +122,7 @@
+             ndata, nparams, nconstraints,
+             tol, rescale_errors, outP, e, Ocvm,0,constraint_vals);
+ 
++    ae_robust_step(count,1,sigma,0,sum_phi_sq,sum_dphi,modified_data,Mw,resid,outP,e,Ocvm,ndata,nparams);
+     double robust_chisq = sigma*sigma * ndata*ndata * sum_phi_sq / (sum_dphi*sum_dphi);
+ 
+     double nfree = ndata + nconstraints - nparams;
+@@ -128,6 +131,7 @@
+     // so we don't correct it here.
+     double ecorrect=1.0;
+     if (rescale_errors)ecorrect = robust_chisq / nfree;
++    extern void ae_solver_multiplier(double);ae_solver_multiplier(sqrt(ecorrect));
+     for (int i=0; i< nparams; ++i){
+         for (int j=0; j< nparams; ++j){
+             Ocvm[i][j] = cvm_ls[i][j];
+--- a/t2fit.C
++++ b/t2fit.C
+@@ -57,6 +57,9 @@
+ // Remove elements from SVD sigma matrix below this value.
+ #define T2_SVD_TOL 1e-27
+ 
++extern void ae_prepared(int,pulsar*,const double*,const double*,const double*,const int*,int,double**,double**,double*,double**,double**);
++extern int ae_solver_owner;
++extern void ae_update(pulsar*,int,int,int,const char*);
+ void t2Fit(pulsar *psr,unsigned int npsr, const char *covarFuncFile){
+ 
+     if (strcmp(psr[0].fitFunc,"default")!=0){
+@@ -127,6 +130,7 @@
+          *
+          * returns the number of data points.
+          */
++        if(haveCovar)sortToAs(psr+ipsr);
+         const unsigned int psr_ndata = t2Fit_getFitData(psr+ipsr,psr_x,psr_y,psr_e,psr_toaidx);
+         logdbg("psr_ndata = %d",psr_ndata);
+         assert(psr_ndata > 0u);
+@@ -266,6 +270,7 @@
+             }
+         }
+ 
++        ae_prepared(ipsr,psr+ipsr,psr_x,psr_y,psr_e,psr_toaidx,psr_ndata,designMatrix,white_designMatrix,psr_white_y,constraintsMatrix,cholesky_L);
+         free_blas(cholesky_L);
+         free(psr_e);
+         free(psr_toaidx);
+@@ -304,6 +309,7 @@
+              * The arguments here are explained in TKfit.C
+              *
+              */
++            ae_solver_owner=ipsr;
+             chisq = TKrobustDefConstrainedLeastSquares(psr_y,psr_white_y,
+                     designMatrix,white_designMatrix,constraintsMatrix,
+                     psr_ndata,nParams,nConstraints,
+@@ -463,6 +469,7 @@
+ 
+         bool rescale_by_chisq = (psr[0].fitMode==0 || (psr[0].fitMode==1 && psr[0].rescaleErrChisq==1));
+ 
++        ae_solver_owner=-1;
+         chisq = TKrobustDefConstrainedLeastSquares(y,white_y,
+                 designMatrix,white_designMatrix,constraintsMatrix,
+                 nobs,totalGlobalParams,totalGlobalConstraints,
+@@ -533,6 +540,7 @@
+ 
+     }
+ 
++    ae_solver_owner=-2;
+     t2fit_postfit(psr,npsr);
+ }
+ 
+@@ -625,6 +633,12 @@
+             }
+         }
+ 
++        // No fitted spin term initializes white_y; the constant is unused.
++        if (param==param_f && nParams==0) {
++            free(psr_x);free(psr_y);free(psr_e);free(white_y);free(psr_toaidx);
++            writeResiduals=_writeResiduals;
++            return;
++        }
+         paramDerivFunc fitfunc;
+         paramUpdateFunc updatefunc;
+         switch(param){
+@@ -922,7 +936,9 @@
+         // call the function allocated to this fit parameter
+         // void updateParameterFunction(pulsar* psr, int ipsr, param_label param, int subparamid, double param, double err);
+         paramUpdateFunc func = fitinfo->updateFunctions[ifit];
++        ae_update(psr,ipsr,param,fitinfo->paramCounters[ifit],"before_update");
+         func(psr,ipsr,param,fitinfo->paramCounters[ifit],val[ifit],error[ifit]);
++        ae_update(psr,ipsr,param,fitinfo->paramCounters[ifit],"after_update");
+     }
+ }
+ 
+@@ -972,7 +988,7 @@
+                     std::vector<double> etmp(psr->ifuncN,1e-5);
+                     getCholeskyMatrix(Binv,psr->constraint_special[i],psr, psr->ifuncT,psr->ifuncV,&etmp[0], psr->ifuncN,0,NULL);
+                     for (int ii=0; ii < psr->ifuncN; ++ii) {
+-                        OUT.constraintIndex[OUT.nConstraints]=psr->constraints[ii];
++                        OUT.constraintIndex[OUT.nConstraints]=psr->constraints[i];
+                         OUT.constraintCounters[OUT.nConstraints]=ii;
+                         OUT.constraintSpecial[OUT.nConstraints] = (void*)Binv[ii];
+                         OUT.constraintValue[OUT.nConstraints] = 0;
+@@ -1076,6 +1092,7 @@
+                     pval /= *err;
+                     OUT.constraintValue[OUT.nConstraints] = pval;
+                     OUT.constraintSpecial[OUT.nConstraints] = (void*)err;
++                    OUT.constraintIndex[OUT.nConstraints] = psr->constraints[i];
+                     OUT.constraintDerivs[OUT.nConstraints] = constraint_ne_sw_ifunc_function;
+                     OUT.constraintCounters[OUT.nConstraints]=ii;
+                     ++OUT.nConstraints;
+@@ -1089,6 +1106,7 @@
+                 for (int ii =0 ; ii < psr->ne_sw_ifuncN; ++ii) {
+                     OUT.constraintValue[OUT.nConstraints] = 0;
+                     OUT.constraintSpecial[OUT.nConstraints] = (void*)err;
++                    OUT.constraintIndex[OUT.nConstraints] = psr->constraints[i];
+                     OUT.constraintDerivs[OUT.nConstraints] = constraint_ne_sw_ifunc_function;
+                     OUT.constraintCounters[OUT.nConstraints]=ii;
+                     ++OUT.nConstraints;
+@@ -1247,7 +1265,7 @@
+                 OUT.constraintDerivs[OUT.nConstraints] = constraints_nestlike_red_chrom;
+                 OUT.constraintValue[OUT.nConstraints] = 0;
+                 ++OUT.nConstraints;
+-                OUT.constraintIndex[OUT.nConstraints]=constraint_red_chrom_sin;
++                OUT.constraintIndex[OUT.nConstraints]=constraint_red_chrom_cos;
+                 OUT.constraintCounters[OUT.nConstraints]=i + psr->TNChromC;
+                 OUT.constraintDerivs[OUT.nConstraints] = constraints_nestlike_red_chrom;
+                 OUT.constraintValue[OUT.nConstraints] = 0;
+@@ -1287,7 +1305,7 @@
+                 OUT.constraintDerivs[OUT.nConstraints] = constraints_nestlike_red_dm;
+                 OUT.constraintValue[OUT.nConstraints] = 0;
+                 ++OUT.nConstraints;
+-                OUT.constraintIndex[OUT.nConstraints]=constraint_red_dm_sin;
++                OUT.constraintIndex[OUT.nConstraints]=constraint_red_dm_cos;
+                 OUT.constraintCounters[OUT.nConstraints]=i + psr->TNDMC;
+                 OUT.constraintDerivs[OUT.nConstraints] = constraints_nestlike_red_dm;
+                 OUT.constraintValue[OUT.nConstraints] = 0;
+@@ -2023,6 +2041,7 @@
+             for (int i = 0; i < 4*psr->nQuad; ++i){
+                 OUT.paramDerivs[OUT.nParams]     =t2FitFunc_quad_om;
+                 OUT.updateFunctions[OUT.nParams] =t2UpdateFunc_quad_om;
++                OUT.paramIndex[OUT.nParams]=fit_param; // AE 0053: every expanded column needs its label.
+                 OUT.paramCounters[OUT.nParams]=i;
+                 ++OUT.nParams;
+             }
+@@ -2160,7 +2179,7 @@
+ 
+     white_designMatrix=malloc_blas(totalObs,totalFit);
+     designMatrix=malloc_blas(totalObs,totalFit);
+-    constraintsMatrix=malloc_blas(totalConstraints,totalFit);
++    constraintsMatrix=totalConstraints?malloc_blas(totalConstraints,totalFit):NULL;
+     b=(double*)calloc(totalObs,sizeof(double));
+     white_b=(double*)calloc(totalObs,sizeof(double));
+ 
+@@ -2193,7 +2212,15 @@
+             computeConstraintWeights(psr+ipsr);
+             logmsg("fill constraints matrix");
+             for (int ic=0; ic < psr[ipsr].nconstraints; ic++){
+-                CONSTRAINTfuncs(psr,ipsr,nf[ipsr],psr->constraints[ic],constraintsMatrix[ic+off_c]+off_f);
++                // CONSTRAINTfuncs is ZERO, then psr-zero globals, then locals.
++                 // The global design is globals, then each ZERO/local block.
++                 const int local_size=nf[ipsr]+(ipsr==0?nglobal:0);
++                 double *row=new double[local_size]();
++                 CONSTRAINTfuncs(psr,ipsr,local_size,psr[ipsr].constraints[ic],row);
++                 if(ipsr==0)for(int g=0;g<nglobal;g++)constraintsMatrix[ic+off_c][g]=row[g+1];
++                 constraintsMatrix[ic+off_c][nglobal+off_f]=row[0];
++                 for(int j=1;j<nf[ipsr];j++)constraintsMatrix[ic+off_c][nglobal+off_f+j]=row[j+(ipsr==0?nglobal:0)];
++                 delete[]row;
+             }
+         }
+ 
+@@ -2221,7 +2248,7 @@
+ 
+     free_blas(designMatrix); // free-TKleastSquares_svd_psr_dcm-designMatrix**
+     free_blas(white_designMatrix);  // free-TKleastSquares_svd_psr_dcm-white_designMatrix**
+-    free_blas(constraintsMatrix);  // free-TKleastSquares_svd_psr_dcm-white_designMatrix**
++    if(totalConstraints)free_blas(constraintsMatrix);  // free-TKleastSquares_svd_psr_dcm-white_designMatrix**
+     free(b);
+     free(white_b);
+ 
+--- a/t2fit_nestlike.C
++++ b/t2fit_nestlike.C
+@@ -113,7 +113,7 @@
+ }
+ 
+ double t2FitFunc_nestlike_red(pulsar *psr, int ipsr ,double x ,int ipos ,param_label label,int k) {
+-    static std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
++    std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
+     double maxtspan = psr[ipsr].param[param_finish].val[0] - psr[ipsr].param[param_start].val[0];
+     double RedFLow = pow(10., psr[ipsr].TNRedFLow);
+     double freq; 
+@@ -207,7 +207,7 @@
+     double trig = is_cos ? cos(2.0*M_PI*freq*x) : sin(2.0*M_PI*freq*x);
+ 
+     if (psr[ipsr].TNsubtractPoly&2) {
+-        static std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
++        std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
+         double pepoch = psr[ipsr].param[param_pepoch].val[0];
+         double a      = psr[ipsr].param[param_start].val[0] - pepoch;
+         double b      = psr[ipsr].param[param_finish].val[0] - pepoch;
+@@ -265,7 +265,7 @@
+     double trig = is_cos ? cos(2.0*M_PI*freq*x) : sin(2.0*M_PI*freq*x);
+ 
+     if (psr[ipsr].TNsubtractPoly&2) {
+-        static std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
++        std::map<std::tuple<int,int,param_label>, CoeffCache> cache;
+         double pepoch = psr[ipsr].param[param_pepoch].val[0];
+         double a      = psr[ipsr].param[param_start].val[0] - pepoch;
+         double b      = psr[ipsr].param[param_finish].val[0] - pepoch;
+--- a/t2fit_stdFitFuncs.C
++++ b/t2fit_stdFitFuncs.C
+@@ -193,7 +193,7 @@
+ 
+ double t2FitFunc_planet(pulsar *psr, int ipsr ,double x ,int ipos ,param_label label,int k){
+     assert(label==param_dmassplanet);
+-    return dotproduct(psr->posPulsar,psr->obsn[ipos].planet_ssb[k]);
++    return dotproduct(psr[ipsr].posPulsar,psr[ipsr].obsn[ipos].planet_ssb[k]);
+ }
+ 
+ double t2FitFunc_stdDm(pulsar *psr, int ipsr ,double x ,int ipos ,param_label label,int k){
+--- a/t2fit_fitwaves.C
++++ b/t2fit_fitwaves.C
+@@ -18,7 +18,7 @@
+         double freq = psr[ipsr].obsn[ipos].freqSSB/1.0e6;
+         afactor=1.0/(DM_CONST*freq*freq);
+     }
+-    int k = kk % (psr[ipsr].nWhite*2);
++    int k = kk % ((label==param_wave_dm ? psr[ipsr].nWhite_dm : psr[ipsr].nWhite)*2);
+ 
+     if (psr[ipsr].param[w_epoch_par].paramSet[0]){
+         Xoff = psr[ipsr].param[w_epoch_par].val[0] - psr[ipsr].param[param_pepoch].val[0];
+@@ -31,7 +31,7 @@
+ 
+ void t2UpdateFunc_fitwaves(pulsar *psr, int ipsr ,param_label label,int k, double val, double error){
+     int waveScale=psr[ipsr].waveScale;
+-    if (label==param_wave_dm || waveScale==1 || (waveScale==2 && k < psr[ipsr].nWhite*2)){
++    if (label==param_wave_dm || (waveScale==2 && k < psr[ipsr].nWhite*2)){
+         // it's a DM wave
+         if(k%2==0){
+             logmsg("dm.COS(%d) = %.3e", k/2, val);
+--- a/t2fit_gw.C
++++ b/t2fit_gw.C
+@@ -204,7 +204,7 @@
+ 	
+ 	
+ 	if (psr[ipsr].obsn[ipos].sat < psr[ipsr].gwcs_epoch-width_day/2.0)
+-	  res=0;
++	  extra=0; // AE 0053: the final projection consumes extra, not res.
+ 	else if (psr[ipsr].obsn[ipos].sat < psr[ipsr].gwcs_epoch)
+ 	  {
+ 	    extra =   (3.0/4.0*(pow(0.5*width,4.0/3.0)-pow(fabs(dt),4.0/3.0))-
+--- a/constraints_covar.C
++++ b/constraints_covar.C
+@@ -7,7 +7,7 @@
+ double constraints_covar_ifunc(pulsar *psr,int ipsr, int iconstraint,int iparam,int constraintk,int k,void* constraintSpecial){
+ 
+     if((label)iparam == param_ifunc){
+-        int idx=psr[ipsr].ifuncN;
++        int idx=k;
+         if (idx >= 0){
+             double* Binv_row = (double*)constraintSpecial;
+ //            logmsg("ipsr=%d iconstraint=%d iparam=%d constraintk=%d k=%d elem=%lg",ipsr,iconstraint,iparam,constraintk,idx, Binv_row[idx]);
+--- a/cholesky.C
++++ b/cholesky.C
+@@ -150,6 +150,7 @@
+ 
+     logdbg("Form cholesky_L from cholesky matrix 'm'");
+ 
++    extern void ae_covariance(int,double**);ae_covariance(np,m);
+     int ret = cholesky_formL(cholesky_L,m,np);
+     if (ret!=0) {
+         logwarn("Error with formL... adding 0.0001%% to diagonal (%.1lg + %.1lg)",m[0][0],m[0][0]*0.000001);
+--- a/choleskyRoutines.C
++++ b/choleskyRoutines.C
+@@ -524,6 +524,7 @@
+ 
+     p_r=(double*)malloc(sizeof(double)*npts);
+     p_i=(double*)malloc(sizeof(double)*npts);
++    p_i[0]=0; // AE 0053: initialize the omitted imaginary DC sample.
+ 
+     logmsg("Generating powerlaw model covariance function. nday=%d npts=%d",ndays,npts);
+ 
+@@ -606,6 +607,7 @@
+ 
+     p_r=(double*)malloc(sizeof(double)*npts);
+     p_i=(double*)malloc(sizeof(double)*npts);
++    p_i[0]=0; // AE 0053: initialize the omitted imaginary DC sample.
+ 
+     logmsg("Generating powerlaw model covariance function. nday=%d npts=%d",ndays,npts);
+ 
+@@ -674,6 +676,7 @@
+ 
+     p_r=(double*)malloc(sizeof(double)*npts);
+     p_i=(double*)malloc(sizeof(double)*npts);
++    p_i[0]=0; // AE 0053: initialize the omitted imaginary DC sample.
+ 
+     logmsg("Generating powerlaw model covariance function. nday=%d npts=%d",ndays,npts);
+ 
+--- a/DDKmodel.C
++++ b/DDKmodel.C
+@@ -264,7 +264,7 @@
+ 
+     /* px contribution from aopx  */
+     /*  'dtdpx' - partial derivative with respect to parallax */
+-    dtdpx = dtdpx - daopx_dpx;
++    /* AD: dead read of uninitialized dtdpx; no return consumes it. */
+ 
+     /*       contributions to proper motion on x and omega  */
+     /*       dmurp_di=-asi*orbi_dot*onemecu*sin(omega+u)*tt0 */
+--- a/ELL1Hmodel.C
++++ b/ELL1Hmodel.C
+@@ -201,9 +201,11 @@
+     //omega = atan2( e1, e2 );
+     //lgf = log( 1.0 + stig * stig - 2.0 * stig * sin( TrueAnom + omega ) );
+     double lsc, fs;
++if (mode == 1 || param == param_stig) {
+     fs = 1.0 + stig * stig - 2.0 * stig * sin( TrueAnom );
+     lgf = log( fs );
+     lsc = lgf + 2.0 * stig * sin( TrueAnom ) - stig * stig * cos( 2.0 * TrueAnom );
++}
+ 
+     if( mode == 0 ){
+         // mode 0: only h3 is known. 
+@@ -239,8 +241,8 @@
+     Cx       = sin(phase);
+     Ceps1    = -0.5*x*cos(2*phase);
+     Ceps2    =  0.5*x*sin(2*phase);
+-    Cm2      = -2*dlogbr;
+-    Csi      = 2*m2*sin(phase)/brace; 
++if (param == param_m2) { Cm2      = -2*dlogbr; }
++if (param == param_sini) { Csi      = 2*m2*sin(phase)/brace; }
+     if( param == param_pb ){
+         return -Csigma*an*SECDAY*tt0/(pb*SECDAY); /* Pb    */
+ 
+--- a/ELL1model.C
++++ b/ELL1model.C
+@@ -187,7 +187,7 @@
+         {
+             int k;
+             double ival;
+-            for (k=0;k<psr[p].ifuncN-1;k++)
++            for (k=0;k<psr[p].orbifuncN-1;k++)
+             {
+                 if ((double)psr[p].obsn[ipos].sat >= psr[p].orbifuncT[k])
+                 {
+--- a/T2model.C
++++ b/T2model.C
+@@ -172,7 +172,7 @@
+          * the total system mass has been determined then the values 
+          * of dr,dth,er, eth, sini, gamma and pbdot can be calculated
+          */
+-        if (psr[p].param[param_mtot].paramSet[com]==1)
++        if ((com < psr[p].param[param_mtot].aSize && psr[p].param[param_mtot].paramSet[com]==1))
+         {
+             calcGR(mtot,m2,x,ecc,an,afac,(double)psr[p].param[param_f].val[0],
+                     &dr,&dth,&er,&eth,&xk,&si,&gamma,&pbdot,&a0,&b0);
+@@ -182,9 +182,9 @@
+         derivePostKeplerian(mtot,m2,dr,dth,ecc,&m1,&er,&eth);
+         /* Obtain delta T */
+         ct  = psr[p].obsn[ipos].bbat - outer_delay / SECDAY;
+-        if (psr[p].param[param_t0].paramSet[com]==1)        
++        if ((com < psr[p].param[param_t0].aSize && psr[p].param[param_t0].paramSet[com]==1))        
+             tt0 = (ct-t0)*SECDAY;
+-        else if( psr[p].param[param_tasc].paramSet[com]==1) 
++        else if( (com < psr[p].param[param_tasc].aSize && psr[p].param[param_tasc].paramSet[com]==1)) 
+             tt0 = (ct-t0asc)*SECDAY;
+         else {
+             printf("ERROR [T2] T0 or TASC needs to be set in the parameter file\n");
+@@ -216,7 +216,7 @@
+         /* Obtain phase of orbit */
+         phase=2.0*M_PI*(orbits-norbits);
+         //      ld_printf("Orbit phase = %.15Lf %.15g\n",psr[p].obsn[ipos].bbat,phase);
+-        if (psr[p].param[param_ecc].paramSet[com]==1)
++        if ((com < psr[p].param[param_ecc].aSize && psr[p].param[param_ecc].paramSet[com]==1))
+         {
+             //          logdbg("going to compute U");
+             /* Compute eccentric anomaly u by iterating Kepler's equation */	 
+@@ -240,10 +240,10 @@
+             //          logdbg("going to Kopeikin");
+             /* Update parameters due to proper motion - Kopeikin 1996 */
+             /* And annual-orbital and orbital parallax - Kopeikin 1995 */
+-            if (psr[p].param[param_kin].paramSet[com]==1 && 
+-                    psr[p].param[param_kom].paramSet[com]==1 &&
+-                    (psr[p].param[param_pmra].paramSet[com]==1 || 
+-                     psr[p].param[param_pmdec].paramSet[com]==1))
++            if ((com < psr[p].param[param_kin].aSize && psr[p].param[param_kin].paramSet[com]==1) && 
++                    (com < psr[p].param[param_kom].aSize && psr[p].param[param_kom].paramSet[com]==1) &&
++                    ((com < psr[p].param[param_pmra].aSize && psr[p].param[param_pmra].paramSet[com]==1) || 
++                     (com < psr[p].param[param_pmdec].aSize && psr[p].param[param_pmdec].paramSet[com]==1)))
+             {
+                 //              logdbg("going to do KopeikinTerms");
+                 KopeikinTerms(&psr[p],ipos,ki,pmra,sin_omega,pmdec,cos_omega,tt0,
+@@ -272,7 +272,7 @@
+             }
+ 
+ 
+-            if (psr[p].param[param_shapmax].paramSet[com]==1)  /* DDS model */
++            if ((com < psr[p].param[param_shapmax].aSize && psr[p].param[param_shapmax].paramSet[com]==1))  /* DDS model */
+             {
+                 sdds  = 1.0 - exp(-1.0*shapmax);
+                 brace = onemecu-sdds*(sw*cume+sqr1me2*cw*su);
+@@ -296,17 +296,17 @@
+             ds=-2*m2*dlogbr;        /* Equation 26 */
+ 
+         }
+-        else if (psr[p].param[param_eps1].paramSet[com]==1)  /* ELL1 model */
++        else if ((com < psr[p].param[param_eps1].aSize && psr[p].param[param_eps1].paramSet[com]==1))  /* ELL1 model */
+         {
+             dre  = x*(sin(phase)-0.5*(eps1*cos(2.0*phase)-eps2*sin(2.0*phase)));
+             drep = x*cos(phase);
+             drepp=-x*sin(phase);
+             //          logdbg("going to Kopeikin");
+             /* Update parameters due to proper motion - Kopeikin 1996 */
+-            if (psr[p].param[param_kin].paramSet[com]==1 && 
+-                    psr[p].param[param_kom].paramSet[com]==1 &&
+-                    (psr[p].param[param_pmra].paramSet[com]==1 || 
+-                     psr[p].param[param_pmdec].paramSet[com]==1))
++            if ((com < psr[p].param[param_kin].aSize && psr[p].param[param_kin].paramSet[com]==1) && 
++                    (com < psr[p].param[param_kom].aSize && psr[p].param[param_kom].paramSet[com]==1) &&
++                    ((com < psr[p].param[param_pmra].aSize && psr[p].param[param_pmra].paramSet[com]==1) || 
++                     (com < psr[p].param[param_pmdec].aSize && psr[p].param[param_pmdec].paramSet[com]==1)))
+             {
+                 S = (sin(phase)-0.5*(eps1*cos(2.0*phase)-eps2*sin(2.0*phase)));
+                 C = cos(phase)+0.5*(eps2*cos(2.0*phase)+eps1*sin(2.0*phase));
+@@ -414,9 +414,11 @@
+                 omega = atan2( eps1, eps2 );
+                 //lgf = log( 1.0 + stig * stig - 2.0 * stig * sin( TrueAnom + omega ) );
+ 
++if (mode == 1 || param == param_stig) {
+                 fs = 1.0 + stig * stig - 2.0 * stig * sin( TrueAnom );
+                 lgf = log( fs );
+                 lsc = lgf + 2.0 * stig * sin( TrueAnom ) - stig * stig * cos( 2.0 * TrueAnom );
++}
+ 
+                 if( mode == 0 ){
+                     // mode 0: only h3 is known. 
+@@ -472,7 +474,7 @@
+               T2model(psr,p,ipos,param_t0,com_inner) / SECDAY;
+           }
+ 
+-            if (psr[p].param[param_ecc].paramSet[com]==1)
++            if ((com < psr[p].param[param_ecc].aSize && psr[p].param[param_ecc].paramSet[com]==1))
+             {
+                 csigma=x*(-sw*su+sqr1me2*cw*cu)/onemecu;      /* Equation 62a */
+                 ce=su*csigma-x*sw-ecc*x*cw*su/sqr1me2;        /* Equation 62c */
+@@ -481,7 +483,7 @@
+                 cgamma=su;                                    /* Equation 62g */
+                 //cdth=-ecc*ecc*x*cw*su/sqr1me2;                /* Equation 62i */
+                 cm2=-2*dlogbr;                                /* Equation 62j */
+-                if (psr[p].param[param_shapmax].paramSet[com]==1)
++                if ((com < psr[p].param[param_shapmax].aSize && psr[p].param[param_shapmax].paramSet[com]==1))
+                     cshapmax = 2*m2*(sw*cume+sqr1me2*cw*su)/brace * (1.0-sdds);
+                 else if (psr[p].param[param_sini].nLinkTo>0){
+                     csi= 2*m2*(sw*cume+sqr1me2*cw*su)*cos(ki)/brace;
+@@ -489,7 +491,7 @@
+                 else
+                     csi=2*m2*(sw*cume+sqr1me2*cw*su)/brace;     /* Equation 62k */
+             }
+-            else if (psr[p].param[param_eps1].paramSet[com]==1) /* ELL1 model */
++            else if ((com < psr[p].param[param_eps1].aSize && psr[p].param[param_eps1].paramSet[com]==1)) /* ELL1 model */
+             {
+                 csigma = x*cos(phase);
+                 cx     = sin(phase);
+@@ -566,7 +568,7 @@
+             else if (param==param_kin){
+                 ckin = C/sin(ki)*(DK043+DK044+DK023+DK024)-
+                     S/sin(ki)*(DK013+DK014+DK033+DK034);
+-                if( psr[p].param[param_ecc].paramSet[com]== 1 )
++                if( (com < psr[p].param[param_ecc].aSize && psr[p].param[param_ecc].paramSet[com]==1) )
+                     ckin += dpara/AULTSC/2.0*pow( x, 2.0 ) * cos( ki ) *
+                         pow( sin( ki ), -3.0 ) * 
+                         ( pow( ecc, 2.0 ) * ( 3.0 - cos( 2.0 * u ) ) + 
+@@ -633,7 +635,7 @@
+ 
+ longdouble getParameter(pulsar *psr,int p,int k)
+ {  
+-    if (k > psr->param[p].aSize) return 0.0;
++    if (k >= psr->param[p].aSize) return 0.0;
+     //  if (psr->param[p].paramSet[k]==1) return(double)psr->param[p].val[k];
+ 
+ 
+--- a/formResiduals.C
++++ b/formResiduals.C
+@@ -797,10 +797,10 @@
+                 // We only want to do ones with a spectral index equal to zero here
+                 if (psr[p].TNShapeletEvFScale[iTNShape] == 0.0) {
+                     // I think that the red shape is a time term...
+-                    phaseShape -= evaluateShapelet(psr->TNShapeletEvN[iTNShape],
+-                            psr->TNShapeletEvPos[iTNShape],
+-                            psr->TNShapeletEvWidth[iTNShape],
+-                            psr->TNShapeletEvCoef[iTNShape],
++                    phaseShape -= evaluateShapelet(psr[p].TNShapeletEvN[iTNShape],
++                            psr[p].TNShapeletEvPos[iTNShape],
++                            psr[p].TNShapeletEvWidth[iTNShape],
++                            psr[p].TNShapeletEvCoef[iTNShape],
+                             (double)psr[p].obsn[i].bat)*psr[p].param[param_f].val[0];
+                 }
+             }
+@@ -2173,14 +2173,14 @@
+         longdouble finish = 0;
+ 
+         // if we are fixing start/finish then use the specified values.
+-        if (startSet||bat_startSet) start = psr->param[param_start].val[0];
+-        if (finishSet||bat_finishSet) finish = psr->param[param_finish].val[0];
++        if (startSet||bat_startSet) start = psr[p].param[param_start].val[0];
++        if (finishSet||bat_finishSet) finish = psr[p].param[param_finish].val[0];
+ 
+ 
+         for (i=0;i<psr[p].nobs;i++)
+         {
+             /* MJK 2021 - update to use same logic for start/finish as t2Fit */
+-            observation *o = psr[0].obsn+i;
++            observation *o = psr[p].obsn+i;
+             // skip deleted points
+             if (o->deleted) continue;
+ 
+@@ -2385,12 +2385,6 @@
+ 
+ 
+ 
+-        double newmean = 0;
+-        for (i=0;i<psr[p].nobs;i++){
+-            newmean+=((double)psr[p].obsn[i].residual-psr[p].obsn[i].TNRedSignal);
+-        }
+-        newmean = newmean/psr[p].nobs;
+-
+         // deal with the REFPHS option before we look at red noise etc.
+         if(psr[p].refphs==REFPHS_TZR){
+             // remove our TZR observation and store it in tzrobs for later use.
+@@ -2407,7 +2401,7 @@
+ 
+         if ((psr[p].TNsubtractDM ==1) || ( psr[p].TNsubtractRed ==1) || (psr[p].TNsubtractChrom ==1) || (psr[p].TNsubtractSWGP ==1))
+         {
+-            for(i=0;i<=psr[p].nobs; i++)
++            for(i=0;i<psr[p].nobs; i++)
+             {
+                 psr[p].obsn[i].residualtn = psr[p].obsn[i].residual;
+ 
+@@ -2447,7 +2441,7 @@
+             if (removeMean ==1)
+             {
+                 tnmean /= (long double) ntnmean;
+-                for(i=0;i<=psr[p].nobs;i++)
++                for(i=0;i<psr[p].nobs;i++)
+                 {
+                     psr[p].obsn[i].residualtn -= tnmean;
+                 }        
+@@ -2460,12 +2454,12 @@
+         if(psr[p].AverageResiduals == 1){
+           
+ 	  
+-	  averageResiduals(psr, 1);
++	  averageResiduals(&psr[p], 1);
+ 	    
+ 	}
+ 	
+         if(psr[p].AverageDMResiduals == 1){
+-            averageDMResiduals(psr,1);
++            averageDMResiduals(&psr[p],1);
+ 
+         }
+         
+--- a/initialise.C
++++ b/initialise.C
+@@ -66,6 +66,14 @@
+ 
+     //  if (psr->obsn == NULL)
+     psr->obsn = (observation *)malloc(sizeof(observation)*MAX_OBSN);
++    if (psr->obsn) for (int ac=0;ac<MAX_OBSN;ac++) {
++        observation& o=psr->obsn[ac];
++        o.nclock_correction=0; o.correctionTT_Teph=0; o.einsteinRate=0;
++        o.shklovskii=0; o.bat=0; // AC: DM shapelet first-pass SAT sentinel.
++        for(int j=0;j<3;j++)o.siteVel[j]=0;
++        for(int k=0;k<9;k++)for(int j=0;j<6;j++){o.planet_ssb[k][j]=0;o.planet_ssb_tmr[k][j]=0;}
++    }
++
+ 
+     if (psr->obsn == NULL)
+         fail = 1;
+@@ -116,8 +124,9 @@
+     psr->bootStrap = 0;
+     psr->units = SI_UNITS;
+     psr->setUnits = 0;
++    psr->ne_sw_ifuncN = 0;
+     psr->ne_sw  = NE_SW_DEFAULT; 
+-    psr->nWhite = 0;  /* No whitening by default */
++    psr->nWhite = 0; psr->nWhite_dm = 0;  /* No whitening by default */
+     psr->nQuad  = 0;  /* No quadrupolar function */
+     psr->ifuncN = 0;  /* No interpolation functions by default */
+     psr->orbifuncN = 0;  /* No interpolation functions by default */
+@@ -163,6 +172,7 @@
+      psr->nfdJumps=0;
+     psr->nToffset = 0;
+     psr->ndmx = 0;
++    psr->nchromx = 0; // AC: empty chromatic-range table; readParfile:983, dm_delays:282.
+     psr->nconstraints = 0;
+     psr->constraint_efactor = 1e15;
+     psr->auto_constraints = 0;
+@@ -234,8 +244,10 @@
+     psr->TN_QpSig=0;
+     psr->TN_QpLam=0;
+     psr->AverageResiduals=0;
++    psr->AverageDMResiduals=0; // AD: omitted opt-in default.
+     psr->useTNOrth = 0;
+     psr->nDMEvents=0;
++    psr->param[param_dmmodel].linkTo[0]=-1; // AC: fresh unlinked DMMODEL warning.
+     psr->nTNShapeletEvents=0;
+     psr->sorted=0;
+     psr->detL=0;
+@@ -824,7 +836,7 @@
+         psr->param[i].val       = (longdouble *)malloc(psr->param[i].aSize*sizeof(longdouble));
+         psr->param[i].err       = (longdouble *)malloc(psr->param[i].aSize*sizeof(longdouble));
+         psr->param[i].prefit    = (longdouble *)malloc(psr->param[i].aSize*sizeof(longdouble));
+-        psr->param[i].prefitErr = (longdouble *)malloc(psr->param[i].aSize*sizeof(longdouble));
++        psr->param[i].prefitErr = (longdouble *)calloc(psr->param[i].aSize,sizeof(longdouble)); // AC: fresh omitted uncertainty.
+         psr->param[i].fitFlag   = (int *)malloc(psr->param[i].aSize*sizeof(int));
+         psr->param[i].paramSet  = (int *)malloc(psr->param[i].aSize*sizeof(int));
+         psr->param[i].label     = (char **)malloc(psr->param[i].aSize*sizeof(char *));
+--- a/calculate_bclt.C
++++ b/calculate_bclt.C
+@@ -73,7 +73,7 @@
+ 
+ 
+             double rca[3];
+-            if (psr[p].correctTroposphere==0) psr[0].obsn[i].troposphericDelay=0;
++            if (psr[p].correctTroposphere==0) psr[p].obsn[i].troposphericDelay=0;
+ 
+             logdbg("In tdis2 calculate_bclt with observation %d %d",i,psr[p].obsn[i].delayCorr);
+ 
+--- a/preProcess.C
++++ b/preProcess.C
+@@ -45,7 +45,7 @@
+     char setStr[MAX_FITSET][100];
+     float dmvals[10000];
+     float startdmmjd = 0;
+-    int ndm;
++    int ndm=0; // AC: no -setdm means an empty DM table.
+     longdouble setVal[MAX_FITSET];
+     FILE *fdmin;
+     char newEpoch[100]="NONE";
+--- a/refphs.C
++++ b/refphs.C
+@@ -47,7 +47,7 @@
+ void refphs_clean(pulsar* psr, int npsr){
+     for (int p =0; p < npsr; ++p){
+         logdbg("Deleting extra observation to store TZR parameters for reference phase");
+-        if(psr->refphs==REFPHS_TZR){
++        if(psr[p].refphs==REFPHS_TZR){
+             // remove our TZR observation and store it in tzrobs for later use.
+             memcpy(&(psr[p].tzrobs),&(psr[p].obsn[psr[p].nobs-1]),sizeof(observation));
+             psr[p].nobs--;
+--- a/tropo.C
++++ b/tropo.C
+@@ -203,7 +203,7 @@
+     {
+         a = frac*as[ilat2] + (1.0-frac)*as[ilat1];
+         b = frac*bs[ilat2] + (1.0-frac)*bs[ilat1];
+-        c = frac*bs[ilat2] + (1.0-frac)*cs[ilat1];
++        c = frac*cs[ilat2] + (1.0-frac)*cs[ilat1];
+     }
+ 
+     return (1.0+a/(1.0+b/(1.0+c))) /

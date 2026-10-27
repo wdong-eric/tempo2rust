@@ -19,6 +19,13 @@ the default; fitting reductions remain sequential and source process state is
 shared. Measurements and qualification limits are recorded in
 [PARALLEL_EXECUTION_REPORT.md](PARALLEL_EXECUTION_REPORT.md).
 
+Current private-prefix installation includes `bin/tempo2-rust`,
+`bin/getPeriod-rust`, predictor static/shared libraries, headers, complete Rust
+sources, lockfile, retained native sources and notices. Runtime data is supplied
+separately. See [the release recipes](../validation/release/README.md) and
+[the qualification report](RELEASE_QUALIFICATION_REPORT.md) for the actual tested
+candidate, open scientific gates and unrun Linux requirements.
+
 ## Predictors
 
 `predictor cheby`, `predictor polyco`, `predictor evaluate` and `predictor plan`

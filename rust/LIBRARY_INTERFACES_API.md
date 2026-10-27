@@ -18,6 +18,7 @@ This contract implements 0084/0095; it accepts no numerical gate.
   No opaque handles are hidden in the source fields. The native shim owns only
   C allocations, scanning/formatting, dispatch and ABI marshalling. Arithmetic,
   polynomial construction/derivative/evaluation/selection and plans use Rust.
+* `bin/tempo2-rust`: installed core CLI with a separately supplied runtime tree.
 * `bin/getPeriod-rust`: source binary64 atof MJD, fixed 1400 MHz, binary64
   frequency/reciprocal, exact printf format; initialized owner and checked input.
   Canonical TEMPO2 installations are never replaced.

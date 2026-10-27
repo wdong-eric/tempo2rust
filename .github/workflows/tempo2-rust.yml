@@ -1,0 +1,60 @@
+name: TEMPO2 Rust qualification
+on:
+  workflow_dispatch:
+    inputs:
+      candidate:
+        description: Reviewed full 40-character candidate commit SHA
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  linux-x86_64:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      FC: gfortran-13
+      NATIVE_CC: gcc-13
+      NATIVE_CXX: g++-13
+      CC: clang
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      TEMPO2_OPENBLAS: '1'
+      REVIEWED_CANDIDATE: ${{ inputs.candidate }}
+    steps:
+      - name: Checkout reviewed candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.candidate }}
+          persist-credentials: false
+      - name: Verify identity and provision recorded tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$REVIEWED_CANDIDATE" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$REVIEWED_CANDIDATE"
+          mkdir -p validation/release/build/host
+          uname -a > validation/release/build/host/uname.txt
+          cp /etc/os-release validation/release/build/host/os-release.txt
+          printf '%s\n' "$ImageOS" "$ImageVersion" "$RUNNER_ARCH" > validation/release/build/host/runner.txt
+          sudo apt-get update
+          sudo apt-get install -y gcc-13 g++-13 gfortran-13 clang cmake python3 libopenblas-pthread-dev liblapacke-dev locales
+          sudo locale-gen de_DE.UTF-8 fr_FR.UTF-8
+          dpkg-query -W > validation/release/build/host/packages.txt
+          rustup toolchain install 1.97.1 --profile minimal --component rustfmt,clippy
+          rustup default 1.97.1
+          rustc -Vv > validation/release/build/host/rust.txt
+          cargo -V > validation/release/build/host/cargo.txt
+      - name: Execute clean native and installed candidate matrix
+        run: python3 validation/release/integrated.py --out validation/release/build/linux --revision "$REVIEWED_CANDIDATE"
+      - name: Collect evidence including failures
+        if: always()
+        run: python3 validation/release/collect_evidence.py --input validation/release/build --out validation/release/evidence
+      - name: Retain selected evidence for 30 days
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: tempo2-linux-${{ github.run_id }}-${{ github.run_attempt }}
+          path: validation/release/evidence
+          retention-days: 30
+          if-no-files-found: error

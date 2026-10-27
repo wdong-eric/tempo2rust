@@ -10,10 +10,12 @@ TEMPO2_ACCELERATE=1 cargo build --offline --manifest-path rust/Cargo.toml \
 ```
 
 `CALCEPH_DIR` must contain `include/calceph.h` and `lib/libcalceph.a`. The
-implemented BLAS/LAPACK binding selects macOS Accelerate's legacy LP64 ABI:
-32-bit integers, binary64 cells, synchronous pointer arguments. Set
-`TEMPO2_ACCELERATE=1`; other operating systems/providers fail at build time
-instead of guessing an ABI. This limitation is separate from CALCEPH's C API.
+BLAS/LAPACK binding selects macOS Accelerate's legacy LP64 ABI with
+`TEMPO2_ACCELERATE=1`, or Linux OpenBLAS LP64 with `TEMPO2_OPENBLAS=1`.
+Linux requires `cblas.h`, `lapack.h`, and OpenBLAS development libraries; the
+header macros supply the Fortran character-length arguments. Both integer
+types must be four bytes. Selection is explicit. Linux execution is pending;
+see [RELEASE_QUALIFICATION_REPORT.md](RELEASE_QUALIFICATION_REPORT.md).
 The measured provider and reproduction commands are in
 [`../validation/native_backends/README.md`](../validation/native_backends/README.md).
 The retained SOFA dependency and FC selection are unchanged.

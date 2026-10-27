@@ -1,0 +1,2 @@
+# Exact upstream patch context includes historical whitespace; preserve its bytes.
+*.patch -whitespace

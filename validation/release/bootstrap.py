@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Portable clean native A2 build and explicit runtime; no historical output writes."""
 import argparse
+import sys
+if sys.version_info < (3, 12):
+    raise SystemExit("Python 3.12 or newer is required for safe archive extraction")
 import difflib
 import os
 from pathlib import Path

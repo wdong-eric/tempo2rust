@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Pinned PIC CALCEPH and scientific input bootstrap; dependencies stay in build/."""
 import argparse
+import sys
+if sys.version_info < (3, 12):
+    raise SystemExit("Python 3.12 or newer is required for safe archive extraction")
 from pathlib import Path
 import shutil
 import tarfile
