@@ -2,7 +2,7 @@
 
 Central preparation, 26 October 2026. **AK implements the pinned core's optional observation-parallel capability and qualifies the delivered library's concurrency boundaries, with representative performance measurements.** This advances the OpenMP/operational responsibility retained in 0065/0081/0083/0084. It does not replace serial scientific behavior, introduce parallel fitting algorithms or accept unresolved numerical gates.
 
-**Prepared after AJ; not released.** AE remains the sole Rust writer. AK requires AJ's reviewed committed baseline, ownership closure, the 0082 checkpoint and an explicit release under 0074. Once released it owns `rust/` and new `validation/parallel_execution/`. Central owns shared design, numerical policy and acceptance. Preserve 0008, its amendments, accepted evidence and other chats' changes. Apply 0053 to demonstrated small source bugs and 0039 to generated products.
+**Prepared after AJ; not released.** As of 27 October, AJ is the sole Rust writer under 0095; AI implementation handover is approved and its ownership is closed. AK requires AJ's reviewed committed baseline, ownership closure, the 0082 checkpoint and an explicit release under 0074. Once released it owns `rust/` and new `validation/parallel_execution/`. Central owns shared design, numerical policy and acceptance. Preserve 0008, its amendments, accepted evidence and other chats' changes. Apply 0053 to demonstrated small source bugs and 0039 to generated products.
 
 ## Source boundary and executable deliverable
 
@@ -70,3 +70,31 @@ Central read the raw pinned sources below and recorded the OpenMP sites in all 1
 | `Makefile.am` | `172ec480482f0261f0a845e9aface382c1a441f4e80d53132574bf8ff912bd7a` |
 | `configure.ac` | `1be741a57a7cfd2001da6f98327ff7b6a34e5657be6e13db72de912960dd8aa9` |
 | `autoconf.boot/ax_openmp.m4` | `2d1e61ed0ee747cb9a637aa55425dc0e72a396584f520d4797f930145b75c4be` |
+
+## 27 October preparation against the delivered AI baseline
+
+Central inspected twelve committed Rust files at AI delivery `20e368fe6e7d3e05565ae7f0132f4498dfa9069e`; those exact bytes are snapshotted with this preparation. AJ's ongoing interface edits are not frozen or accepted by it. Reconcile this map with the completed AJ handover before releasing AK.
+
+| Delivered boundary | Consequence for AK |
+| --- | --- |
+| `clkcorr::with_process`, `with_resources`, `with_diagnostics` and `lifecycle_diagnostics` lock one process `ClockSession` | Internal observation work must use the already scoped owner/effects rather than reenter these public wrappers from workers while the parent holds the session. |
+| `global::form_bats_all` and `update_bats_all` hold the session through their internal timing chain | Preserve the actual outer lifetime and source pulsar order when extracting the observation work; do not split the public timing operation into uncoordinated worker acquisitions. |
+| `propagation::calculate` uses immutable source pulsars plus mutable observation rows, session diagnostics, `source.very_fast`, DMMODEL suppression and resource records | Reuse one observation calculation with disjoint row ownership. Shared-effect publication needs its own explicit order and failure boundary; a clone of each entire session/pulsar would change process history and add avoidable work. |
+| `solar_wind::model` reads the selected session root, appends resource provenance and emits diagnostics | Include these actual effects in the observation contract; pure geometric cases alone do not establish SWM=1 concurrency. |
+| `take_clock_diagnostics` drains all pending process events under a separate acquisition; `bats` collects diagnostics after the timing driver returns | Per-driver mutual exclusion does not prove that a complete concurrent operation collects its own diagnostics. Preserve the original AH failure and test workflow/collection ownership, counters and controls together. This source observation is not itself a reproduction of that failure. |
+| AI `t2accel::with_acceleration` scopes a thread-local selection, while fitting and the native CLI establish their own outer scopes | A newly spawned thread does not inherit the caller's selection automatically. Keep selection explicit wherever a worker-reachable call uses it, distinguish native provider internal threading, and avoid changing algorithm selection accidentally during concurrency work. |
+| AI CALCEPH public wrappers acquire the process session once; global timing uses borrowed-session calls and separate owned descriptors per pulsar/pass | Retain descriptor ownership and error cleanup. Do not use raw-handle sharing, recursive locking or a broad unsafe Send/Sync implementation to add concurrency. Actual concurrent provider behavior still needs verification. |
+
+The future predictor C boundary remains AJ work. Its exported source data and caller-owned structures have the exclusivity/alias/lifetime contracts in 0084; no current native worker probe establishes that ABI's concurrency. Production Rug128, source process-lifetime semantics and all 0095 numerical gates remain unchanged.
+
+### Executed native worker witness
+
+Central compiled the actual pinned `calculate_bclt.C` in disposable source, with one observation-entry callback recording the worker ID in that observation's own slot. The callback changes no source scientific expression; original and instrumented source, the exact patch, copied A2 headers, the pinned A2 archive identity and all compiler/link commands are retained. The control compiles without the OpenMP source macro/compiler flag; the enabled object uses both `-DHAVE_OPENMP` and `-fopenmp`, linked with GCC's OpenMP runtime. No canonical or accepted reference file was changed.
+
+One initialized pulsar has 259 distinct observations with `delayCorr=0`, disabled troposphere and fully supplied position/velocity/epoch/frequency fields. Debug/version/timing diagnostics are disabled. Each observation is visited once. The serial control observes worker 0 even with four requested threads; enabled runs observe exactly one, two and four worker IDs at the corresponding requests. GCC 16.2 reports `_OPENMP=202111` for the enabled translation unit and zero for the control. Six recorded output quantities per observation agree byte for byte with the serial control: **4,662 exact comparisons, zero differences**. The common output SHA-256 is `97b3c1c6c2b3abe68711ac79c85b0435133035ecd0d4a4bd15ac131b89459ae4`.
+
+This proves actual worker participation in the pinned loop on this host for that supplied bypass state. It does not qualify full timing corrections, unequal pulsar populations, shared warning/version/resource paths, failure publication, race/deadlock freedom, Rust parallelism, performance or Linux. The source Makefile flag-wiring concern above remains an inference: Autoconf/Automake tools are unavailable in the inspected standard/local tool paths, and no generated Makefile command was exercised. The explicit object build must not be described as proof that the original Makefile enables OpenMP.
+
+Authored recipe: `decisions/evidence/parallel-execution/central-worker-preparation.py`, executed as `/tmp/tempo2-central-openmp-preparation.py`. It creates a new temporary directory, records exact inputs/outputs and asserts actual workers and equality. Original directory: `/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-central-openmp-7a6wagv1`. The 94 copied evidence files remain ignored under `decisions/evidence/parallel-execution/build/worker-preparation-20261027/`; copied receipts keep their original paths. Receipt SHA-256: `10be1c1f325d0f7d5706d72541ed51f9b0b03c37ba299dc392aac5e2ac957b37`; preservation SHA-256: `df805920181b8c1b1f6883837aef2e47486399473ea2cd8327ef529260a23a9b`; executed script SHA-256: `65f9e5221a5695515a46fb21edb1c83e09e859f9eee40ddfe910e4bb5df673c6`.
+
+This adds bounded preparation and actual host capability evidence. AJ retains sole Rust ownership; AK remains unreleased and still owes its complete source/parallel/concurrency/performance deliverable and 0082 checkpoint.

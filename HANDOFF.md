@@ -35,6 +35,8 @@ Released implementation: AJ covers installed full Rust core/toolkit APIs, standa
 
 AJ preparation under 0084 now includes a bounded native fixed-storage/declared-count and partial-read witness: 82 checks over 90 evaluation rows, five frequency-only neighbors and nine supplied-object reader calls. It clarifies how the C adapter must preserve existing source behavior without forcing the owned Rust model's vector-length invariant onto every C operation. This bounded native evidence is now part of AJ's released contract; it does not itself qualify the Rust C ABI. AI ownership is closed by 0095.
 
+AK preparation under 0085 now includes a committed-AI state/lock/backend map and an executed native observation-loop witness: one/two/four actual workers and 4,662 exact serial/parallel comparisons for a defined 259-observation bypass case. This establishes bounded host worker capability; shared diagnostics/resources, full timing, Rust parallelism, original Makefile wiring, performance and Linux remain unqualified. AJ retains sole ownership; AK remains prepared and unreleased.
+
 ## Major-stage checkpoints
 
 [Decision 0082](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0082-major-stage-checkpoints.md) implements the user's updated goal. Before each major successor release, central pauses to reassess the delivered capability, remaining full scope, next dependency and newly discovered consequential issues. If a new choice is needed, ask the user with a recommendation and explanation before taking the dependent action; continue independent work. Record the checkpoint in the handover decision. Known unresolved gates and settled choices do not require repeated questions without new evidence.

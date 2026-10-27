@@ -1,6 +1,6 @@
 # Assignment AK: parallel observation execution and concurrency
 
-**Prepared only; not released.** Follow decision 0085 after AJ's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0085/0084/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Prepared only; not released.** Follow decision 0085 after AJ's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0095/0094/0085/0084/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
 
 Once released, own `rust/` and new `validation/parallel_execution/` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and acceptance. Preserve original 0008 and its amendments.
 
@@ -16,6 +16,10 @@ Proceed in dependency order:
 6. Commit explicit authored owned paths with Conventional Commits and return `rust/PARALLEL_EXECUTION_REPORT.md`, checked concurrency guarantees, measured limitations and the complete source/unsafe/departure/open-gate ledger for central's 0082 checkpoint.
 
 Keep generated evidence ignored. A real parallel workload and measured results are required; multiple spawned threads, a mutex or a build flag alone are not evidence of parallel capability or complete safety. Escalate consequential new public/scientific choices to central with alternatives and a recommendation; continue independent work.
+
+## Delivered-backend preparation
+
+Read the 27 October supplement in 0085, pinned to AI delivery `20e368f`, then reconcile it with the actual AJ handover. It maps the process session, complete timing chain, destructive diagnostic collection, DMMODEL/SWM resource effects, thread-local acceleration and CALCEPH descriptor/session ownership. A bounded native probe executes the actual `calculate_bclt` loop with one/two/four workers and passes 4,662 exact serial/parallel comparisons for 259 defined `delayCorr=0` observations. Reuse that concrete worker-observation recipe where helpful; it does not replace the full corrected timing/shared-state/failure/performance cases required here. Original Makefile OpenMP wiring, Rust parallel execution and concurrency remain unqualified. The complete 0095 ledger remains open. AJ is still the sole writer; this preparation grants no early ownership.
 
 ## Concrete predecessor diagnostic finding
 
