@@ -12,6 +12,11 @@ if __name__=='__main__':
     for folder in sorted(p for p in base.iterdir() if p.is_dir()):
         record={};native=json.loads((folder/'native/identity.json').read_text())
         verify(native['objects']);verify({str(folder/'native'/p):h for p,h in native['executables'].items()})
+        assert sha(folder/'native/source/config.h')==native['config']
+        assert sha(folder/'native/patch.diff')==native['patch']
+        assert sha(ROOT/'validation/reference/build/libtempo2-reference.a')==native['archive']
+        assert sha(ROOT/'validation/core_output/build/native-v9/identity.json')==native['AH_identity']
+        if 'calceph' in native:verify(native['calceph'])
         for name,v in native['source'].items():assert sha(folder/'native/source'/name)==v['compiled']
         for group in ['paired','cli','banner']:
             receipt=folder/group/'receipt.json'
