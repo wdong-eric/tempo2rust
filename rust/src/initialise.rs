@@ -10,7 +10,7 @@ use rug::Float;
 
 /// Fresh O backing. The full lifecycle returns prior buffers on replacement;
 /// realloc is ignored by source, including negative caller values.
-pub(crate) fn allocate_memory(_realloc: i32) -> ParameterStore {
+pub fn allocate_memory(_realloc: i32) -> ParameterStore {
     let slots = (0..MAX_PARAMS)
         .map(|i| {
             let capacity = match i as i32 {
@@ -117,7 +117,7 @@ fn write_label(destination: &mut [u8], value: &[u8]) {
     destination[value.len()] = 0;
 }
 
-pub(crate) fn initialise_parameters() -> ParameterStore {
+pub fn initialise_parameters() -> ParameterStore {
     let mut psr = allocate_memory(0);
     let mut dm_series_type = None;
     label_parameters(&mut psr, &mut dm_series_type);
@@ -125,7 +125,7 @@ pub(crate) fn initialise_parameters() -> ParameterStore {
 }
 
 /// dm_series_type is written at its original position between FD and DM labels.
-pub(crate) fn label_parameters(
+pub fn label_parameters(
     psr: &mut ParameterStore,
     dm_series_type: &mut Option<crate::pulsar::SeriesType>,
 ) {

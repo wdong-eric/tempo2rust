@@ -22,6 +22,23 @@ fn main() {
         .collect();
     sources.sort();
     let mut objects = Vec::new();
+    println!("cargo:rerun-if-changed=include");
+    let predictor_object = Path::new(&out).join("predictor.o");
+    let cc = env::var("CC").unwrap_or_else(|_| "clang".into());
+    run(
+        &cc,
+        &[
+            "-std=c11",
+            "-O2",
+            "-fPIC",
+            "-Iinclude",
+            "-c",
+            "native/predictor.c",
+            "-o",
+            predictor_object.to_str().unwrap(),
+        ],
+    );
+    objects.push(predictor_object);
     for key in ["CC", "CALCEPH_DIR", "TEMPO2_ACCELERATE"] {
         println!("cargo:rerun-if-env-changed={key}");
     }

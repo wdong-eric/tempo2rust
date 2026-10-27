@@ -221,19 +221,9 @@ fn predictor_compiled_source_testfunc() {
     // cheby2d.c::testFunc/testCheby2D: sinl maps to sinq, then the result
     // narrows to the ordinary-long-double callback grid.
     use crate::predictor_number::PredictorNumber as N;
-    use rug::Float;
     let callback = |x: &[N], y: &[N]| -> Result<Vec<N>, String> {
         Ok(y.iter()
-            .flat_map(|y| {
-                x.iter().map(move |x| {
-                    N::from_float(
-                        &(Float::with_val(113, (x * 0.5).as_float())
-                            + Float::with_val(113, x.as_float()).sin() * 0.1f64
-                            + Float::with_val(113, (y * 0.7).as_float())
-                            + Float::with_val(113, (y * 0.1 * y).as_float())),
-                    )
-                })
-            })
+            .flat_map(|y| x.iter().map(move |x| crate::cheby2d::test_function(x, y)))
             .collect())
     };
     let c = Cheby2D::construct(30, 30, callback).unwrap();

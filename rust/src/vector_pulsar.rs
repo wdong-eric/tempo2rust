@@ -6,7 +6,7 @@ use crate::{
 use rug::Float;
 
 /// Shared fixed-direction calculation; source vectors are not normalized here.
-pub(crate) fn position(alpha: f64, delta: f64) -> [f64; 3] {
+pub fn position(alpha: f64, delta: f64) -> [f64; 3] {
     [
         alpha.cos() * delta.cos(),
         alpha.sin() * delta.cos(),
@@ -15,7 +15,7 @@ pub(crate) fn position(alpha: f64, delta: f64) -> [f64; 3] {
 }
 
 /// tempo2Util.C::equ2ecl/ecl2equ: double input, extended rotation, double writes.
-pub(crate) fn rotate(x: &mut [f64; 3], to_equatorial: bool, obliquity: f64) {
+pub fn rotate(x: &mut [f64; 3], to_equatorial: bool, obliquity: f64) {
     // LD_PI is the M_PIq decimal literal in the accepted compiler macro map.
     let pi = Float::with_val(
         PRECISION_BITS,
@@ -41,7 +41,7 @@ pub(crate) fn rotate(x: &mut [f64; 3], to_equatorial: bool, obliquity: f64) {
     .to_f64();
 }
 
-pub(crate) fn vector_pulsar(
+pub fn vector_pulsar(
     session: &mut ClockSession,
     context: &mut PulsarContext,
     npsr: i32,

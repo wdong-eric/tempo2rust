@@ -15,7 +15,7 @@ use std::{
 };
 
 #[derive(Default, Debug, Clone)]
-pub(crate) struct TabulatedFunction {
+pub struct TabulatedFunction {
     pub path: PathBuf,
     pub name: Vec<u8>,
     pub name_storage: Vec<u8>, // source-known fileName prefix and retained tail

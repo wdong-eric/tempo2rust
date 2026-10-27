@@ -14,7 +14,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-pub(crate) struct Ut1 {
+pub struct Ut1 {
     pub read: bool,
     pub mjd1: f64,
     pub mjd2: f64,
@@ -198,11 +198,7 @@ impl Ut1 {
         Ok(-ut1)
     }
 }
-pub(crate) fn tai2ut1(
-    s: &mut ClockSession,
-    c: &mut PulsarContext,
-    npsr: i32,
-) -> Result<(), TimingError> {
+pub fn tai2ut1(s: &mut ClockSession, c: &mut PulsarContext, npsr: i32) -> Result<(), TimingError> {
     s.diagnostics.version("tai2ut1.C", "tai2ut1()");
     for p in 0..npsr {
         let psr = c

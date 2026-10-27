@@ -18,7 +18,7 @@ use std::{
 };
 
 #[derive(Clone, Debug, Default)]
-pub(crate) struct Observatory {
+pub struct Observatory {
     pub xyz: [f64; 3],
     pub latitude: f64,
     pub longitude: f64,
@@ -28,13 +28,13 @@ pub(crate) struct Observatory {
     pub clock: [Option<u8>; 16],
 }
 #[derive(Default)]
-pub(crate) struct ObservatoryDatabase {
+pub struct ObservatoryDatabase {
     pub initialized: bool,
     pub observatories: Vec<Observatory>,
     pub aliases: Vec<AliasList>,
     pub resources: Vec<(PathBuf, Resource)>,
 }
-pub(crate) struct AliasList {
+pub struct AliasList {
     pub code: [Option<u8>; 100],
     pub aliases: Vec<Vec<u8>>,
     pub warned: bool,
@@ -404,7 +404,7 @@ impl Observatory {
     }
 }
 
-pub(crate) fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
+pub fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
     // observatory.C:373-375: GCC16 -O2 contracts the component subtractions.
     // W arithmetic evidence retains assembly and fused/unfused witnesses.
     let a = f / 1.0e4;
@@ -427,7 +427,7 @@ pub(crate) fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
     }
     Ok(angle)
 }
-pub(crate) fn itrf_to_grs80(obs: &mut Observatory) {
+pub fn itrf_to_grs80(obs: &mut Observatory) {
     // observatory.C:396,403,405,408-415: explicit mul_add matches only
     // contractions present in U's GCC16 -O2 body (W arithmetic evidence).
     let [x, y, z] = obs.xyz;
@@ -461,7 +461,7 @@ pub(crate) fn itrf_to_grs80(obs: &mut Observatory) {
     obs.latitude = latitude;
     obs.longitude = longitude;
 }
-pub(crate) fn grs80_to_itrf(obs: &mut Observatory) {
+pub fn grs80_to_itrf(obs: &mut Observatory) {
     let flattening = 1.0 / 298.257222101;
     let esq = flattening * (2.0 - flattening);
     // observatory.C:423,426: source-compiled subtract/add contractions.

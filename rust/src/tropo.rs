@@ -32,7 +32,7 @@ pub struct Weather {
 }
 
 #[derive(Default, Clone, Debug)]
-pub(crate) struct MeteorologyFunction {
+pub struct MeteorologyFunction {
     pub table: TabulatedFunction,
     pub site: Vec<u8>, // known initialized prefix of siteName[256], including tails
 }
@@ -68,12 +68,12 @@ impl MeteorologyFunction {
     }
 }
 #[derive(Default)]
-pub(crate) struct Meteorology {
+pub struct Meteorology {
     pub initialized: bool,
     pub wet: Vec<MeteorologyFunction>,
     pub pressure: Vec<MeteorologyFunction>,
 }
-pub(crate) fn initialize_meteorology_table(
+pub fn initialize_meteorology_table(
     root: Option<&Path>,
     warnings: i32,
     path: &[u8],
@@ -135,7 +135,7 @@ pub(crate) fn initialize_meteorology_table(
     }
     Ok(())
 }
-pub(crate) struct MeteorologicalValue {
+pub struct MeteorologicalValue {
     pub value: f64,
     pub reason: &'static str,
     pub resource: Option<PathBuf>,
@@ -297,7 +297,7 @@ fn niell_mapping(sin_elevation: f64, a: f64, b: f64, c: f64) -> f64 {
     (1.0 + a / (1.0 + b / (1.0 + c)))
         / (sin_elevation + a / (sin_elevation + b / (sin_elevation + c)))
 }
-pub(crate) fn nmf_hydrostatic(
+pub fn nmf_hydrostatic(
     utc: f64,
     latitude: f64,
     height: f64,
@@ -360,7 +360,7 @@ pub(crate) fn nmf_hydrostatic(
         mapping_hydrostatic,
     ))
 }
-pub(crate) fn nmf_wet(latitude: f64, elevation: f64) -> Result<f64, TimingError> {
+pub fn nmf_wet(latitude: f64, elevation: f64) -> Result<f64, TimingError> {
     let a = [
         5.8021897e-4,
         5.6794847e-4,
@@ -401,12 +401,12 @@ pub(crate) fn nmf_wet(latitude: f64, elevation: f64) -> Result<f64, TimingError>
 }
 
 /// Borrowed canonical fields with explicit inputs for the established frontend.
-pub(crate) struct TropospherePulsar<'a> {
+pub struct TropospherePulsar<'a> {
     pub source: &'a SourcePulsar,
     pub position: Option<[f64; 3]>,
     pub warnings: Option<i32>,
 }
-pub(crate) fn compute_observation(
+pub fn compute_observation(
     session: &mut ClockSession,
     psr: &TropospherePulsar<'_>,
     obs: &mut SourceObservation,
@@ -494,11 +494,7 @@ pub(crate) fn compute_observation(
     Ok(None)
 }
 /// Full source signed loops on T's canonical owners, including shared views.
-#[cfg_attr(
-    not(test),
-    expect(dead_code, reason = "full driver precedes broader frontend support")
-)]
-pub(crate) fn compute_tropospheric_delays(
+pub fn compute_tropospheric_delays(
     session: &mut ClockSession,
     context: &mut PulsarContext,
     npsr: i32,

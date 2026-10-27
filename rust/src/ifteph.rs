@@ -10,10 +10,10 @@ use crate::{
 use rug::{Float, float::Round};
 use std::path::{Path, PathBuf};
 
-pub(crate) const IFTE_LC: f64 = 1.48082686742e-8;
-pub(crate) const IFTE_KM1: f64 = 1.55051979176e-8;
-pub(crate) const IFTE_MJD0: f64 = 43144.0003725;
-pub(crate) const IFTE_TEPH0: f64 = -65.564518e-6;
+pub const IFTE_LC: f64 = 1.48082686742e-8;
+pub const IFTE_KM1: f64 = 1.55051979176e-8;
+pub const IFTE_MJD0: f64 = 43144.0003725;
+pub const IFTE_TEPH0: f64 = -65.564518e-6;
 
 pub(crate) fn native_i32(value: f64, field: &str) -> Result<i32, TimingError> {
     let v = value.trunc();
@@ -37,15 +37,15 @@ pub(crate) fn split_ifte_epoch(mjd: &Float) -> Result<(f64, f64), TimingError> {
     ))
 }
 
-pub(crate) fn IFTswap4(word: &mut [u8; 4]) {
+pub fn IFTswap4(word: &mut [u8; 4]) {
     word.reverse();
 }
-pub(crate) fn IFTswapInt(word: &mut i32) {
+pub fn IFTswapInt(word: &mut i32) {
     let mut bytes = word.to_ne_bytes();
     IFTswap4(&mut bytes);
     *word = i32::from_ne_bytes(bytes);
 }
-pub(crate) fn IFTswapInts(words: &mut [i32], n: i32) -> Result<(), TimingError> {
+pub fn IFTswapInts(words: &mut [i32], n: i32) -> Result<(), TimingError> {
     for i in 0..n {
         IFTswapInt(
             words
@@ -55,19 +55,15 @@ pub(crate) fn IFTswapInts(words: &mut [i32], n: i32) -> Result<(), TimingError> 
     }
     Ok(())
 }
-pub(crate) fn IFTswap8(word: &mut [u8; 8]) {
+pub fn IFTswap8(word: &mut [u8; 8]) {
     word.reverse();
 }
-pub(crate) fn IFTswapDouble(word: &mut f64) {
+pub fn IFTswapDouble(word: &mut f64) {
     let mut bytes = word.to_ne_bytes();
     IFTswap8(&mut bytes);
     *word = f64::from_ne_bytes(bytes);
 }
-#[cfg_attr(
-    not(test),
-    expect(dead_code, reason = "complete raw byte helper counterpart")
-)]
-pub(crate) fn IFTswap8N(words: &mut [u8], n: i32) -> Result<(), TimingError> {
+pub fn IFTswap8N(words: &mut [u8], n: i32) -> Result<(), TimingError> {
     for i in 0..n {
         let start = i as usize * 8;
         IFTswap8(
@@ -80,7 +76,7 @@ pub(crate) fn IFTswap8N(words: &mut [u8], n: i32) -> Result<(), TimingError> {
     }
     Ok(())
 }
-pub(crate) fn IFTswapDoubles(words: &mut [f64], n: i32) -> Result<(), TimingError> {
+pub fn IFTswapDoubles(words: &mut [f64], n: i32) -> Result<(), TimingError> {
     for i in 0..n {
         IFTswapDouble(
             words
@@ -190,14 +186,7 @@ impl InterpolationInfo {
     }
 }
 
-pub(crate) struct IfteEphemeris {
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "unused native title retained in the complete state map"
-        )
-    )]
+pub struct IfteEphemeris {
     pub title: [u8; 256],
     pub start_jd: f64,
     pub end_jd: f64,
@@ -208,7 +197,7 @@ pub(crate) struct IfteEphemeris {
     pub reclen: i32,
     pub irec: i32,
     pub buf: [f64; 322],
-    pub iinfo: InterpolationInfo,
+    pub(crate) iinfo: InterpolationInfo,
     pub ipt: [[i32; 3]; 2],
     pub stream: Option<Stream>,
     pub path: PathBuf,
@@ -520,10 +509,6 @@ impl IfteEphemeris {
         }
         Ok(())
     }
-    #[cfg_attr(
-        not(test),
-        expect(dead_code, reason = "complete source convenience interface")
-    )]
     pub fn get_ve(
         &mut self,
         jd0: f64,

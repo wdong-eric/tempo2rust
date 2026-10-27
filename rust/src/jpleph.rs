@@ -12,7 +12,7 @@ use std::{
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) struct Boundary(pub &'static str);
+pub struct Boundary(pub &'static str);
 impl std::fmt::Display for Boundary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "JPL boundary: {}", self.0)
@@ -23,7 +23,7 @@ type Result<T> = std::result::Result<T, Boundary>;
 
 // Safe storage preserves the sequential global error contract, not C data races.
 static INIT_ERROR: AtomicI32 = AtomicI32::new(-9);
-pub(crate) fn jpl_init_error_code() -> i32 {
+pub fn jpl_init_error_code() -> i32 {
     INIT_ERROR.load(Ordering::SeqCst)
 }
 pub(crate) fn init_error(code: i32) {
@@ -35,10 +35,10 @@ pub(crate) fn reset_init_status_for_test() {
     init_error(-9);
 }
 
-pub(crate) fn swap_32_bit_val(bytes: &mut [u8; 4]) {
+pub fn swap_32_bit_val(bytes: &mut [u8; 4]) {
     bytes.reverse();
 }
-pub(crate) fn swap_64_bit_val(bytes: &mut [u8]) -> Result<()> {
+pub fn swap_64_bit_val(bytes: &mut [u8]) -> Result<()> {
     if !bytes.len().is_multiple_of(8) {
         return Err(Boundary("swap_storage"));
     }
@@ -74,7 +74,7 @@ fn read(stream: &mut Stream, bytes: &mut [u8], size: usize, count: usize) -> Res
         .map_err(|_| Boundary("read_storage"))
 }
 
-pub(crate) struct Ephemeris {
+pub struct Ephemeris {
     pub ephem_start: f64,
     pub ephem_end: f64,
     pub ephem_step: f64,
@@ -340,13 +340,19 @@ impl Ephemeris {
     }
 }
 
-pub(crate) struct Interpolation {
+pub struct Interpolation {
     pub posn_coeff: [f64; 18],
     pub vel_coeff: [f64; 18],
     pub twot: f64,
     pub n_posn_avail: usize,
     pub n_vel_avail: usize,
 }
+impl Default for Interpolation {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Interpolation {
     pub fn new() -> Self {
         let mut posn_coeff = [0.0; 18];

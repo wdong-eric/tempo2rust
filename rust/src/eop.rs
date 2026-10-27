@@ -14,7 +14,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-pub(crate) fn load_eop(
+pub fn load_eop(
     samples: &mut Vec<[f64; 4]>,
     root: Option<&Path>,
     filename: &[u8],
@@ -135,7 +135,7 @@ pub(crate) fn load_eop(
     ))
 }
 #[derive(Default)]
-pub(crate) struct Eop {
+pub struct Eop {
     pub initialized: bool,
     pub samples: Vec<[f64; 4]>,
     pub resource: Option<Resource>,

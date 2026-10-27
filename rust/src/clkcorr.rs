@@ -27,7 +27,7 @@ pub struct ClockStep {
     pub correction_s: Scalar,
     pub resource: String,
 }
-pub(crate) struct ClockCorrectionFunction {
+pub struct ClockCorrectionFunction {
     pub table: TabulatedFunction,
     pub path: PathBuf,
     pub name: Vec<u8>,
@@ -40,23 +40,9 @@ pub(crate) struct ClockCorrectionFunction {
     pub indexed: Resource,
 }
 #[derive(Default, Clone)]
-pub(crate) struct ClockSequence {
+pub struct ClockSequence {
     pub indices: Vec<usize>,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "source spelling retained alongside normalized cache keys"
-        )
-    )]
     pub from: Vec<u8>,
-    #[cfg_attr(
-        not(test),
-        expect(
-            dead_code,
-            reason = "source spelling retained alongside normalized cache keys"
-        )
-    )]
     pub to: Vec<u8>,
     pub from_key: Vec<u8>,
     pub to_key: Vec<u8>,
@@ -64,13 +50,13 @@ pub(crate) struct ClockSequence {
     pub end: f64,
 }
 #[derive(Default)]
-pub(crate) struct PathBuildResult {
+pub struct PathBuildResult {
     pub indices: Vec<usize>,
     pub source_present: bool,
     pub target_present: bool,
     pub reverse_hint: bool,
 }
-pub(crate) struct TableQuery {
+pub struct TableQuery {
     #[cfg(test)]
     pub name: Vec<u8>,
     #[cfg(test)]
@@ -79,8 +65,8 @@ pub(crate) struct TableQuery {
     pub function: usize,
 }
 #[derive(Default)]
-pub(crate) struct ClockSession {
-    pub source: crate::source_state::SourceState,
+pub struct ClockSession {
+    pub(crate) source: crate::source_state::SourceState,
     pub initialized: bool,
     pub functions: Vec<ClockCorrectionFunction>,
     pub sequences: Vec<ClockSequence>,
@@ -102,7 +88,8 @@ pub(crate) struct ClockSession {
 static SESSION: LazyLock<Mutex<ClockSession>> =
     LazyLock::new(|| Mutex::new(ClockSession::default()));
 /// Source operations that do not choose a runtime root share the process owner.
-pub(crate) fn with_process<T>(
+/// The callback must use borrowed-session operations, never reacquire this lock.
+pub fn with_process<T>(
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
     let mut session = SESSION
@@ -124,7 +111,7 @@ pub(crate) fn with_session<T>(
     session.run(operation)
 }
 /// Resource operations share ownership/diagnostics but not a clock terminal fault.
-pub(crate) fn with_resources<T>(
+pub fn with_resources<T>(
     root: &Path,
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
@@ -1063,7 +1050,7 @@ impl ClockSession {
             .collect()
     }
 }
-pub(crate) fn get_correction_tt(obs: &SourceObservation) -> Result<f64, TimingError> {
+pub fn get_correction_tt(obs: &SourceObservation) -> Result<f64, TimingError> {
     let mut total = 0.0;
     for i in 0..*read(&obs.nclock_correction, "nclock_correction")? {
         total += *read(

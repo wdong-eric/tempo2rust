@@ -180,18 +180,23 @@ pub struct ChebyModel {
 }
 impl ChebyModel {
     pub fn phase(&self, mjd: &N, freq: &N) -> N {
-        self.cheby.evaluate(
-            &(n(-1.) + (mjd - &self.mjd_start) * 2. / (&self.mjd_end - &self.mjd_start)),
-            &(n(-1.) + (freq - &self.freq_start) * 2. / (&self.freq_end - &self.freq_start)),
-        ) + &self.dispersion_constant / (freq * freq)
+        model_phase(
+            &self.cheby,
+            [&self.mjd_start, &self.mjd_end],
+            [&self.freq_start, &self.freq_end],
+            &self.dispersion_constant,
+            mjd,
+            freq,
+        )
     }
     pub fn frequency(&self, mjd: &N, freq: &N) -> N {
-        self.frequency_cheby.evaluate(
-            &(n(-1.) + (mjd - &self.mjd_start) * 2. / (&self.mjd_end - &self.mjd_start)),
-            &(n(-1.) + (freq - &self.freq_start) * 2. / (&self.freq_end - &self.freq_start)),
-        ) * 2.
-            / (&self.mjd_end - &self.mjd_start)
-            / 86400.
+        model_frequency(
+            &self.frequency_cheby,
+            [&self.mjd_start, &self.mjd_end],
+            [&self.freq_start, &self.freq_end],
+            mjd,
+            freq,
+        )
     }
     pub fn write(&self, mut out: impl Write) -> Result<(), String> {
         // fda6ad4 cheby2d.c:430-443 passes native long double to ld_fprintf,
@@ -355,20 +360,10 @@ pub struct ChebyModelSet {
 }
 impl ChebyModelSet {
     pub fn nearest_index(&self, mjd: &N) -> Option<usize> {
-        let (mut best, mut index) = (n(1e6), None);
-        for (i, m) in self.segments.iter().enumerate() {
-            if mjd < &m.mjd_start || mjd > &m.mjd_end {
-                continue;
-            }
-            let offset = (&m.mjd_start + &m.mjd_end)
-                .source_mul_add(&n(0.5), &(-mjd.clone()))
-                .abs_double();
-            if offset < best {
-                best = offset;
-                index = Some(i);
-            }
-        }
-        index
+        nearest_index(
+            self.segments.iter().map(|m| (&m.mjd_start, &m.mjd_end)),
+            mjd,
+        )
     }
     pub fn insert(&mut self, from: &Self) {
         self.segments.extend(from.segments.iter().cloned());
@@ -408,4 +403,63 @@ impl ChebyModelSet {
         }
         Ok(Self { segments })
     }
+}
+
+pub(crate) fn nearest_index<'a>(
+    ranges: impl IntoIterator<Item = (&'a N, &'a N)>,
+    mjd: &N,
+) -> Option<usize> {
+    let (mut best, mut index) = (n(1e6), None);
+    for (i, (start, end)) in ranges.into_iter().enumerate() {
+        if mjd < start || mjd > end {
+            continue;
+        }
+        let offset = (start + end)
+            .source_mul_add(&n(0.5), &(-mjd.clone()))
+            .abs_double();
+        if offset < best {
+            best = offset;
+            index = Some(i);
+        }
+    }
+    index
+}
+
+/// Compiled cheby2d.c::testFunc callback, including source binary128 sinl macro.
+pub fn test_function(x: &N, y: &N) -> N {
+    use rug::Float;
+    N::from_float(
+        &(Float::with_val(113, (x * 0.5).as_float())
+            + Float::with_val(113, x.as_float()).sin() * 0.1f64
+            + Float::with_val(113, (y * 0.7).as_float())
+            + Float::with_val(113, (y * 0.1 * y).as_float())),
+    )
+}
+
+// cheby2d.c:398-424: each native call borrows only its selected polynomial.
+// The shared leaves avoid constructing unrelated metadata or derivative backing.
+fn model_evaluate(poly: &Cheby2D, time: [&N; 2], band: [&N; 2], mjd: &N, freq: &N) -> N {
+    poly.evaluate(
+        &(n(-1.) + (mjd - time[0]) * 2. / (time[1] - time[0])),
+        &(n(-1.) + (freq - band[0]) * 2. / (band[1] - band[0])),
+    )
+}
+pub(crate) fn model_phase(
+    poly: &Cheby2D,
+    time: [&N; 2],
+    band: [&N; 2],
+    dm: &N,
+    mjd: &N,
+    freq: &N,
+) -> N {
+    model_evaluate(poly, time, band, mjd, freq) + dm / (freq * freq)
+}
+pub(crate) fn model_frequency(
+    poly: &Cheby2D,
+    time: [&N; 2],
+    band: [&N; 2],
+    mjd: &N,
+    freq: &N,
+) -> N {
+    model_evaluate(poly, time, band, mjd, freq) * 2. / (time[1] - time[0]) / 86400.
 }

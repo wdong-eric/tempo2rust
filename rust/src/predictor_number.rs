@@ -101,9 +101,12 @@ impl PredictorNumber {
         if len == 0 {
             return Err("missing predictor numeric conversion".into());
         }
-        let s = std::str::from_utf8(&token[..len])
-            .map_err(|e| e.to_string())?
-            .trim();
+        Self::parse_number(std::str::from_utf8(&token[..len]).map_err(|e| e.to_string())?)
+    }
+    /// Complete numeric token. The C ABI's private C-locale representation
+    /// bypasses the public source scanner, whose prefix grammar uses libc locale.
+    pub(crate) fn parse_number(s: &str) -> Result<Self, String> {
+        let s = s.trim();
         let lower = s.to_ascii_lowercase();
         if let Some(hex) = lower.trim_start_matches(['+', '-']).strip_prefix("0x") {
             let (mantissa, exponent) = hex.split_once('p').unwrap_or((hex, "0"));

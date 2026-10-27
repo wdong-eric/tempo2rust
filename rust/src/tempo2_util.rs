@@ -4,7 +4,7 @@
 use crate::longdouble::normalized_decimal;
 use rug::Float;
 
-pub(crate) fn dot_product(a: [f64; 3], b: [f64; 3]) -> f64 {
+pub fn dot_product(a: [f64; 3], b: [f64; 3]) -> f64 {
     // tempo2Util.C::dotproduct at fda6ad4: GCC16 O2 contracts in this
     // operand order (second product rounded first). Y arithmetic.py records
     // actual assembly and 100 bounded native/Rust expression comparisons.
@@ -30,19 +30,19 @@ pub(crate) fn parse_binary64(token: &str) -> Result<f64, String> {
 }
 
 // The reader validates sexagesimal components before these source-order conversions.
-pub(crate) fn hms_turn(hr: f64, min: f64, sec: f64) -> f64 {
+pub fn hms_turn(hr: f64, min: f64, sec: f64) -> f64 {
     hr / 24.0 + min / 1440.0 + sec / 86400.0
 }
 
-pub(crate) fn dms_turn(deg: f64, min: f64, sec: f64, sign: f64) -> f64 {
+pub fn dms_turn(deg: f64, min: f64, sec: f64, sign: f64) -> f64 {
     (deg.abs() / 360.0 + min / 21600.0 + sec / 1296000.0) * sign
 }
 
-pub(crate) fn turn_deg(turn: f64) -> f64 {
+pub fn turn_deg(turn: f64) -> f64 {
     turn * 360.0
 }
 
-pub(crate) fn fortran_mod(a: Float, p: &Float) -> Result<Float, crate::TimingError> {
+pub fn fortran_mod(a: Float, p: &Float) -> Result<Float, crate::TimingError> {
     // tempo2Util.C::fortran_mod:186-191 (fda6ad4): a-(int)(a/p)*p.
     // The former % helper differed for signed zero, infinite divisors and
     // rounded quotients (0049). Preserve the expression at Rug128 and reject
@@ -52,7 +52,7 @@ pub(crate) fn fortran_mod(a: Float, p: &Float) -> Result<Float, crate::TimingErr
     Ok(a - Float::with_val(crate::PRECISION_BITS, p * n))
 }
 
-pub(crate) fn fortran_nlong(x: &Float) -> Float {
+pub fn fortran_nlong(x: &Float) -> Float {
     // fortran_nlong: signed half addition then truncation, not ties-to-even.
     (x.clone() + if x > &0 { 0.5f64 } else { -0.5f64 }).trunc()
 }

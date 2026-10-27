@@ -8,7 +8,7 @@ use crate::{
 use std::{ffi::OsStr, os::unix::ffi::OsStrExt, path::Path};
 
 #[derive(Default)]
-pub(crate) struct FortranReader {
+pub struct FortranReader {
     pub stream: Option<Stream>,
     pub swap_byte: i32,
     pub resource: Option<Resource>,

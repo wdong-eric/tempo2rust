@@ -15,7 +15,7 @@ use crate::{
 use rug::Float;
 use std::os::unix::ffi::OsStrExt;
 
-pub(crate) struct FbCache {
+pub struct FbCache {
     pub content: Option<String>,
     pub tdbnrl: i32,
     pub buf: [f64; 16],
@@ -30,7 +30,7 @@ impl Default for FbCache {
     }
 }
 
-pub(crate) fn init_ifte(session: &mut ClockSession) -> Result<(), TimingError> {
+pub fn init_ifte(session: &mut ClockSession) -> Result<(), TimingError> {
     let root = session
         .root
         .as_deref()
@@ -40,11 +40,11 @@ pub(crate) fn init_ifte(session: &mut ClockSession) -> Result<(), TimingError> {
         &mut session.diagnostics,
     )
 }
-pub(crate) fn if_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64, TimingError> {
+pub fn if_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64, TimingError> {
     let (jd0, jd1) = split_ifte_epoch(mjd)?;
     Ok(session.ifte.delta_t(jd0, jd1, &mut session.diagnostics)? * 86400.0)
 }
-pub(crate) fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64, TimingError> {
+pub fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64, TimingError> {
     let root = session
         .root
         .as_deref()
@@ -164,7 +164,7 @@ pub(crate) fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64,
 }
 
 /// tt2tb's observation body; deltaT retains once-per-call unmatched selections.
-pub(crate) fn compute_observation(
+pub fn compute_observation(
     session: &mut ClockSession,
     psr: &SourcePulsar,
     obs: &mut SourceObservation,
@@ -274,7 +274,7 @@ pub(crate) fn compute_observation(
     Ok(())
 }
 
-pub(crate) fn tt2tb(
+pub fn tt2tb(
     session: &mut ClockSession,
     context: &mut PulsarContext,
     npsr: i32,

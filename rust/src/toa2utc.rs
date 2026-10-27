@@ -10,7 +10,7 @@ use crate::{
 };
 
 /// Borrows canonical source fields. Overrides are the existing bounded single-TOA caller.
-pub(crate) struct ClockPulsarView<'a> {
+pub struct ClockPulsarView<'a> {
     pub source: &'a crate::pulsar::SourcePulsar,
     pub nobs: Option<i32>,
     pub no_warnings: Option<i32>,
@@ -37,7 +37,7 @@ impl<'a> ClockPulsarView<'a> {
         }
     }
 }
-pub(crate) fn toa2utc(
+pub fn toa2utc(
     session: &mut ClockSession,
     pulsars: &[ClockPulsarView<'_>],
     observations: &mut [impl AsMut<[SourceObservation]>],

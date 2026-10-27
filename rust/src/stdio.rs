@@ -22,7 +22,7 @@ unsafe extern "C" {
     fn ferror(stream: *mut c_void) -> c_int;
 }
 
-pub(crate) struct Stream {
+pub struct Stream {
     raw: NonNull<c_void>,
     #[cfg(test)]
     pub metadata_file: File,

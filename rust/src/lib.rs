@@ -3,39 +3,40 @@
 //! or C ABI equivalence. Reexports selected readParfile.C::readParfile,
 //! readTimfile.C::readTimfile, global.C::formBatsAll, formResiduals.C::formResiduals
 //! and t2fit.C::t2Fit responsibilities through the Rust modules.
-//! Timing and selected spin fitting for isolated-pulsar TCB `@` and PKS profiles.
+//! General timing, fitting, analysis and predictor APIs. External contracts and
+//! numerical acceptance limits are documented in LIBRARY_INTERFACES_API.md.
 //! See README.md for accepted input syntax and scientific conventions.
 
 mod averaging;
 pub mod bats;
 pub mod binary;
 pub mod calceph;
-mod clkcorr;
+pub mod clkcorr;
 mod clock_diagnostics;
 mod clock_glob;
 #[cfg(test)]
 mod clock_tests;
 mod clock_text;
-mod eop;
+pub mod eop;
 #[cfg(test)]
 mod fitting_tests;
 mod form_bats;
 mod form_residuals;
-mod get_obs_coord;
+pub mod get_obs_coord;
 pub mod global;
 mod gw_ecc;
 pub mod gw_file;
 pub mod gw_sim;
-mod ifteph;
+pub mod ifteph;
 pub mod ifunc;
-mod initialise;
+pub mod initialise;
 mod input;
-mod jpleph;
+pub mod jpleph;
 mod longdouble;
 mod observation;
 #[cfg(test)]
 mod observation_storage_tests;
-mod observatory;
+pub mod observatory;
 #[cfg(test)]
 mod parameter_storage_tests;
 pub mod preprocess;
@@ -47,7 +48,7 @@ pub mod pulsar_lifecycle;
 #[cfg(test)]
 mod pulsar_lifecycle_tests;
 pub mod read_ephemeris;
-mod read_fortran;
+pub mod read_fortran;
 pub mod read_fortran2;
 pub mod read_jbo_bat;
 mod read_parfile;
@@ -74,25 +75,25 @@ pub mod source_tim;
 mod source_tim_tests;
 pub mod spectrum;
 mod std_freq;
-mod stdio;
+pub mod stdio;
 pub mod t2accel;
 mod t2fit;
 pub mod t2fit_nestlike;
-mod tabulated_function;
-mod tai2ut1;
+pub mod tabulated_function;
+pub mod tai2ut1;
 pub mod tempo2;
-mod tempo2_util;
+pub mod tempo2_util;
 pub mod timing;
 pub mod tk_matrix;
 pub mod tkfit;
 pub mod tksvd;
-mod toa2utc;
+pub mod toa2utc;
 pub mod toolkit;
-mod tropo;
-mod tt2tdb;
+pub mod tropo;
+pub mod tt2tdb;
 pub mod units;
 pub mod update_epoch;
-mod vector_pulsar;
+pub mod vector_pulsar;
 
 pub use clkcorr::{ClockStep, take_clock_diagnostics};
 pub use clock_diagnostics::ClockDiagnostic;
@@ -461,3 +462,5 @@ mod display_parameters;
 pub mod core_cli;
 #[cfg(test)]
 mod core_output_tests;
+
+mod predictor_ffi;

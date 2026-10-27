@@ -166,8 +166,8 @@ impl T2Predictor {
                     kind: "T1",
                     psrname: a.psrname.clone(),
                     sitename: a.sitename.clone(),
-                    start_mjd: &a.mjd_mid - n(a.span as f64) / 2880.,
-                    end_mjd: &b.mjd_mid + n(b.span as f64) / 2880.,
+                    start_mjd: crate::t1polyco::span_bound(&a.mjd_mid, a.span, -1),
+                    end_mjd: crate::t1polyco::span_bound(&b.mjd_mid, b.span, 1),
                     freq_start_mhz: n(a.frequency_obs),
                     freq_end_mhz: n(a.frequency_obs),
                 })
@@ -209,33 +209,8 @@ impl T2Predictor {
         }
     }
     pub fn plan(&self, start: &N, end: &N, step: &N, freq: &N) -> Result<FrequencyPlan, String> {
-        if end < start || step <= &n(0.) || ![start, end, step, freq].iter().all(|v| v.is_finite())
-        {
-            return Err("plan requires finite inputs, end >= start, step > 0 seconds".into());
-        }
-        let count = ((end - start) * 86400. / step).ceil_count()?;
-        let mut last = self.evaluate(start, freq)?;
-        let phase0 = last.phase_turn.clone();
-        let mut lastmjd = start.clone();
-        let mut segments = vec![];
-        for i in 0..count {
-            let mut mjd = start + step * (i + 1) as f64 / 86400.;
-            if &mjd > end {
-                mjd = end.clone();
-            }
-            let next = self.evaluate(&mjd, freq)?;
-            let average = (&next.phase_turn - &last.phase_turn) / (&mjd - &lastmjd) / 86400.;
-            segments.push(PlanSegment {
-                start_mjd: lastmjd,
-                end_mjd: mjd.clone(),
-                average_frequency_hz: average,
-                start_segment: last.segment,
-                end_segment: next.segment,
-                out_of_range: last.out_of_range || next.out_of_range,
-            });
-            lastmjd = mjd;
-            last = next;
-        }
+        let (phase0, segments) =
+            plan_samples(start, end, step, freq, |mjd, freq| self.evaluate(mjd, freq))?;
         Ok(FrequencyPlan {
             metadata: self.metadata()?,
             phase0_turn: phase0,
@@ -263,4 +238,41 @@ pub fn get_plan_ext(
     T2Predictor::read(path)?
         .predictor
         .plan(start, end, step, freq)
+}
+
+// Shared source interval engine for owned plans and the native phase-only adapter.
+pub(crate) fn plan_samples(
+    start: &N,
+    end: &N,
+    step: &N,
+    freq: &N,
+    mut evaluate: impl FnMut(&N, &N) -> Result<Prediction, String>,
+) -> Result<(N, Vec<PlanSegment>), String> {
+    if end < start || step <= &n(0.) || ![start, end, step, freq].iter().all(|v| v.is_finite()) {
+        return Err("plan requires finite inputs, end >= start, step > 0 seconds".into());
+    }
+    let count = ((end - start) * 86400. / step).ceil_count()?;
+    let mut last = evaluate(start, freq)?;
+    let phase0 = last.phase_turn.clone();
+    let mut lastmjd = start.clone();
+    let mut segments = vec![];
+    for i in 0..count {
+        let mut mjd = start + step * (i + 1) as f64 / 86400.;
+        if &mjd > end {
+            mjd = end.clone();
+        }
+        let next = evaluate(&mjd, freq)?;
+        let average = (&next.phase_turn - &last.phase_turn) / (&mjd - &lastmjd) / 86400.;
+        segments.push(PlanSegment {
+            start_mjd: lastmjd,
+            end_mjd: mjd.clone(),
+            average_frequency_hz: average,
+            start_segment: last.segment,
+            end_segment: next.segment,
+            out_of_range: last.out_of_range || next.out_of_range,
+        });
+        lastmjd = mjd;
+        last = next;
+    }
+    Ok((phase0, segments))
 }

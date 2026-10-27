@@ -37,39 +37,26 @@ impl T1Polyco {
         &self.coeff
     }
     pub fn phase(&self, mjd: &N, freq: &N) -> N {
-        let dt = (mjd - &self.mjd_mid) * 1440.;
-        // fda6ad4 t1polyco.c:47/52/59: GCC16 arm64 contracts these four
-        // sites (AF native-v8 disassembly), including the final subtraction.
-        let mut phase = (&dt * 60.).source_mul_add(&self.frequency_psr_0, &self.reference_phase)
-            + &self.coeff[0];
-        let mut spin = &self.frequency_psr_0 + &self.coeff[1] / 60.;
-        let mut arg = dt.clone();
-        for i in 1..self.coeff.len() {
-            phase = self.coeff[i].source_mul_add(&arg, &phase);
-            if i < self.coeff.len() - 1 {
-                spin = spin + &self.coeff[i + 1] * (i + 1) as f64 * &arg / 60.;
-            }
-            arg = arg * &dt;
+        PhasePolynomial {
+            mjd_mid: &self.mjd_mid,
+            reference_phase: &self.reference_phase,
+            frequency_psr_0: &self.frequency_psr_0,
+            dm: self.dm,
+            doppler: self.doppler,
+            frequency_obs: self.frequency_obs,
+            coeff: &self.coeff,
+            count: self.coeff.len(),
         }
-        // T1 phase uses observing frequency; its instantaneous-frequency routine
-        // intentionally does not. The two source contracts are not merged.
-        let factor = spin * self.dm
-            / "2.41e-4".parse::<N>().expect("literal")
-            / n(self.doppler).source_mul_add(&"1e-4".parse::<N>().expect("literal"), &n(1.));
-        (-factor).source_mul_add(
-            &(n(1.) / (freq * freq) - n(1.) / n(self.frequency_obs * self.frequency_obs)),
-            &phase,
-        )
+        .phase(mjd, freq)
     }
     pub fn frequency(&self, mjd: &N, _freq: &N) -> N {
-        let dt = (mjd - &self.mjd_mid) * 1440.;
-        let mut spin = &self.frequency_psr_0 + &self.coeff[1] / 60.;
-        let mut arg = dt.clone();
-        for i in 2..self.coeff.len() {
-            spin = spin + &self.coeff[i] * i as f64 * &arg / 60.;
-            arg = arg * &dt;
-        }
-        spin
+        frequency_leaf(
+            &self.mjd_mid,
+            &self.frequency_psr_0,
+            &self.coeff[1..],
+            self.coeff.len(),
+            mjd,
+        )
     }
     pub fn write(&self, mut out: impl Write) -> Result<(), String> {
         let name = self.psrname.strip_prefix('J').unwrap_or(&self.psrname);
@@ -285,14 +272,7 @@ impl T1PolycoSet {
         if self.segments.is_empty() {
             return Err("empty T1 set".into());
         }
-        let (mut index, mut best) = (0, n(1e6));
-        for (i, m) in self.segments.iter().enumerate() {
-            let offset = (&m.mjd_mid - mjd).abs_double();
-            if offset < best {
-                index = i;
-                best = offset;
-            }
-        }
+        let index = nearest_index(self.segments.iter().map(|m| &m.mjd_mid), mjd);
         Ok(index)
     }
     pub fn read(input: &mut impl BufRead) -> Result<Self, String> {
@@ -320,5 +300,82 @@ impl T1PolycoSet {
             m.write(&mut out)?;
         }
         Ok(())
+    }
+}
+
+// t1polyco.c:39-84 reads fixed backing independently of ncoeff. This borrowed
+// leaf preserves counts 0/1 for the C ABI without weakening owned file models.
+pub(crate) struct PhasePolynomial<'a> {
+    pub mjd_mid: &'a N,
+    pub reference_phase: &'a N,
+    pub frequency_psr_0: &'a N,
+    pub dm: f64,
+    pub doppler: f64,
+    pub frequency_obs: f64,
+    pub coeff: &'a [N],
+    pub count: usize,
+}
+impl PhasePolynomial<'_> {
+    pub(crate) fn phase(&self, mjd: &N, freq: &N) -> N {
+        let dt = (mjd - self.mjd_mid) * 1440.;
+        // fda6ad4 t1polyco.c:47/52/59: GCC16 arm64 contracts these four
+        // sites (AF native-v8 disassembly), including the final subtraction.
+        let mut phase =
+            (&dt * 60.).source_mul_add(self.frequency_psr_0, self.reference_phase) + &self.coeff[0];
+        let mut spin = self.frequency_psr_0 + &self.coeff[1] / 60.;
+        let mut arg = dt.clone();
+        for i in 1..self.count {
+            phase = self.coeff[i].source_mul_add(&arg, &phase);
+            if i < self.count - 1 {
+                spin = spin + &self.coeff[i + 1] * (i + 1) as f64 * &arg / 60.;
+            }
+            arg = arg * &dt;
+        }
+        // T1 phase uses observing frequency; its instantaneous-frequency routine
+        // intentionally does not. The two source contracts are not merged.
+        let factor = spin * self.dm
+            / "2.41e-4".parse::<N>().expect("literal")
+            / n(self.doppler).source_mul_add(&"1e-4".parse::<N>().expect("literal"), &n(1.));
+        (-factor).source_mul_add(
+            &(n(1.) / (freq * freq) - n(1.) / n(self.frequency_obs * self.frequency_obs)),
+            &phase,
+        )
+    }
+}
+pub(crate) fn frequency_leaf(
+    mjd_mid: &N,
+    frequency_psr_0: &N,
+    coeff_from_one: &[N],
+    count: usize,
+    mjd: &N,
+) -> N {
+    let dt = (mjd - mjd_mid) * 1440.;
+    let mut spin = frequency_psr_0 + &coeff_from_one[0] / 60.;
+    let mut arg = dt.clone();
+    for i in 2..count {
+        spin = spin + &coeff_from_one[i - 1] * i as f64 * &arg / 60.;
+        arg = arg * &dt;
+    }
+    spin
+}
+
+pub(crate) fn nearest_index<'a>(midpoints: impl IntoIterator<Item = &'a N>, mjd: &N) -> usize {
+    let (mut index, mut best) = (0, n(1e6));
+    for (i, m) in midpoints.into_iter().enumerate() {
+        let offset = (m - mjd).abs_double();
+        if offset < best {
+            index = i;
+            best = offset;
+        }
+    }
+    index
+}
+
+// t1polyco.c metadata span conversion, shared by Rust and the native adapter.
+pub(crate) fn span_bound(mid: &N, span: i32, sign: i32) -> N {
+    if sign < 0 {
+        mid - n(span as f64) / 2880.
+    } else {
+        mid + n(span as f64) / 2880.
     }
 }

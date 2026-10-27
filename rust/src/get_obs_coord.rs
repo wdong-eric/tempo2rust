@@ -31,12 +31,12 @@ unsafe extern "C" {
     fn iau_trxpv_(r: *const f64, pv: *const f64, trpv: *mut f64);
     fn iau_trxp_(r: *const f64, p: *const f64, trp: *mut f64);
 }
-pub(crate) struct SiteGeometry {
+pub struct SiteGeometry {
     pub observatory_earth: [f64; 3],
     pub site_velocity: [f64; 3],
     pub zenith: [f64; 3],
 }
-pub(crate) fn iau2000b(
+pub fn iau2000b(
     s: &mut ClockSession,
     trs: [f64; 3],
     zenith_terrestrial: [f64; 3],
@@ -132,14 +132,7 @@ pub(crate) fn iau2000b(
 }
 
 /// get_obsCoord.C::remove_white: preserve byte-level branch order and stale tails.
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "direct source helper retained for complete observer API"
-    )
-)]
-pub(crate) fn remove_white(bytes: &mut [u8]) -> Result<(), TimingError> {
+pub fn remove_white(bytes: &mut [u8]) -> Result<(), TimingError> {
     let mut end = bytes
         .iter()
         .position(|&b| b == 0)
@@ -165,7 +158,7 @@ pub(crate) fn remove_white(bytes: &mut [u8]) -> Result<(), TimingError> {
     Ok(())
 }
 
-pub(crate) fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
+pub fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
     let n = crate::ifteph::native_i32(mjd, "lmst_mjd_integer")?;
     let fmjd = mjd - n as f64;
     let tu0 = (n
@@ -199,14 +192,7 @@ pub(crate) fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
     }
     Ok([xlst, sdd])
 }
-#[cfg_attr(
-    not(test),
-    expect(
-        dead_code,
-        reason = "direct source helper retained for complete observer API"
-    )
-)]
-pub(crate) fn ang(i: i32, f: f64) -> Result<f64, TimingError> {
+pub fn ang(i: i32, f: f64) -> Result<f64, TimingError> {
     let ia = crate::ifteph::native_i32((f / 1.0e4).floor(), "ang_degrees_integer")? as f64;
     let ib = crate::ifteph::native_i32(((f - ia * 1.0e4) / 1.0e2).floor(), "ang_minutes_integer")?
         as f64;
@@ -220,7 +206,7 @@ pub(crate) fn ang(i: i32, f: f64) -> Result<f64, TimingError> {
     }
     Ok(angle)
 }
-pub(crate) fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
+pub fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
     let t = (mjd - 51544.5) / 36525.0;
     let seconds_per_rad = 3600.0 * 180.0 / std::f64::consts::PI;
     // fda6ad4 get_obsCoord.C::get_precessionMatrix:568-571,587-598,629:
@@ -266,11 +252,7 @@ pub(crate) fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]
 }
 
 /// Full source driver; rows and pulsar remain owned by the same scoped context.
-pub(crate) fn driver(
-    s: &mut ClockSession,
-    c: &mut PulsarContext,
-    npsr: i32,
-) -> Result<(), TimingError> {
+pub fn driver(s: &mut ClockSession, c: &mut PulsarContext, npsr: i32) -> Result<(), TimingError> {
     s.diagnostics.version("get_obsCoord.C", "get_obsCoord()");
     for p in 0..npsr {
         let (psr, rows) = c.pulsar_observations_mut(p as usize)?;
@@ -548,7 +530,7 @@ fn legacy(
         zenith: [0.0; 3],
     })
 }
-pub(crate) fn zenith_trs(obs: &Observatory) -> [f64; 3] {
+pub fn zenith_trs(obs: &Observatory) -> [f64; 3] {
     [
         obs.height * obs.longitude.cos() * obs.latitude.cos(),
         obs.height * obs.longitude.sin() * obs.latitude.cos(),
