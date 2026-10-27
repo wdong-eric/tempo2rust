@@ -9,6 +9,10 @@ gates are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
 See [TIMING_MODELS_REPORT.md](TIMING_MODELS_REPORT.md) for the preceding fixed
 timing delivery and its unresolved acceptance gates.
 
+Optional CALCEPH and BLAS/LAPACK builds are described in
+[NATIVE_BACKENDS_API.md](NATIVE_BACKENDS_API.md), with matched-provider execution
+and qualification limits in [NATIVE_BACKENDS_REPORT.md](NATIVE_BACKENDS_REPORT.md).
+
 ## Predictors
 
 `predictor cheby`, `predictor polyco`, `predictor evaluate` and `predictor plan`
