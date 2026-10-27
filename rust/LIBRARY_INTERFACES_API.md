@@ -32,6 +32,11 @@ failure. Only filename operations close the streams they open. Callers must
 supply valid aligned live objects, correctly sized buffers and initialized cells
 actually read by the selected source operation. C cannot validate dangling
 pointers or discover allocation extents. Concurrent mutation is not supported.
+AK's [execution contract](PARALLEL_EXECUTION_API.md) specifies complete Rust
+workflow admission and C caller exclusivity. In particular, separate C models
+do not isolate process globals: Cheby lookup/evaluation can write OutOfRange.
+Callers serialize those operations and direct global access, including the
+lifetimes of callbacks and borrowed results.
 
 ## Frozen C source responsibilities
 

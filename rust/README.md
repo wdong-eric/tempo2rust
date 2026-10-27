@@ -13,6 +13,12 @@ Optional CALCEPH and BLAS/LAPACK builds are described in
 [NATIVE_BACKENDS_API.md](NATIVE_BACKENDS_API.md), with matched-provider execution
 and qualification limits in [NATIVE_BACKENDS_REPORT.md](NATIVE_BACKENDS_REPORT.md).
 
+Optional observation workers and complete concurrent library workflows are
+described in [PARALLEL_EXECUTION_API.md](PARALLEL_EXECUTION_API.md). Serial is
+the default; fitting reductions remain sequential and source process state is
+shared. Measurements and qualification limits are recorded in
+[PARALLEL_EXECUTION_REPORT.md](PARALLEL_EXECUTION_REPORT.md).
+
 ## Predictors
 
 `predictor cheby`, `predictor polyco`, `predictor evaluate` and `predictor plan`
