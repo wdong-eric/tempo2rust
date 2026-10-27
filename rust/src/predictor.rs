@@ -18,6 +18,7 @@ pub fn load_par(
     runtime: &Path,
     arguments: &[Vec<u8>],
 ) -> Result<PredictorInput, TimingError> {
+    let _workflow = crate::execution::enter();
     let mut context = PulsarContext::unwritten(1);
     context
         .initialise(1, 0, 1)
@@ -38,6 +39,7 @@ pub fn load_par(
     Ok(PredictorInput { context, inputs })
 }
 pub fn cli_defaults(context: &mut PulsarContext, site: &str) -> Result<Vec<String>, TimingError> {
+    let _workflow = crate::execution::enter();
     let p = &mut context.pulsars[0];
     let mut warnings = vec![];
     let epoch = p.param.slots[param_pepoch as usize].cells[0].val.clone();

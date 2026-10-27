@@ -427,6 +427,7 @@ pub fn run(
     env: &Environment,
     io: &mut OutputIo<'_>,
 ) -> Result<i32, TimingError> {
+    let _workflow = crate::execution::enter();
     let args = argv
         .iter()
         .map(|s| s.as_bytes().to_vec())

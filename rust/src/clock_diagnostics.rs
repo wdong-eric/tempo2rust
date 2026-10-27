@@ -24,8 +24,72 @@ pub struct Diagnostics {
     pub keys: Vec<Vec<u8>>,
     pub warned_multiple: bool,
     versions: Vec<(&'static str, &'static str)>,
+    observation_events: Option<Vec<ObservationEvent>>,
+}
+enum ObservationEvent {
+    Output(bool, Vec<u8>),
+    Log(u8, String, usize, Vec<u8>),
+    Version(&'static str, &'static str),
+    Once(i32),
+    EndOnce,
 }
 impl Diagnostics {
+    /// Observation transcripts carry intents, not copies/resets of source
+    /// counters or suppression histories. Only the parent replays those effects.
+    pub(crate) fn observation_transcript(debug: bool, quiet: bool) -> Self {
+        Self {
+            debug,
+            quiet,
+            observation_events: Some(Vec::new()),
+            ..Self::default()
+        }
+    }
+    pub(crate) fn replay_observation(self, target: &mut Self, warning_mask: &mut i32) {
+        let mut enabled = true;
+        for event in self.observation_events.expect("observation transcript") {
+            match event {
+                ObservationEvent::Once(mask) => {
+                    enabled = *warning_mask & mask != 0;
+                    *warning_mask &= !mask;
+                }
+                ObservationEvent::EndOnce => enabled = true,
+                ObservationEvent::Output(stderr, bytes) if enabled => {
+                    if stderr {
+                        target.stderr(&bytes);
+                    } else {
+                        target.stdout(&bytes);
+                    }
+                }
+                ObservationEvent::Log(kind, file, line, body) if enabled => {
+                    target.log(kind, &file, line, &body);
+                }
+                ObservationEvent::Version(file, function) if enabled => {
+                    target.version(file, function);
+                }
+                _ => {}
+            }
+        }
+    }
+    /// dm_delays.C:160-195 mutates a static mask without OpenMP protection.
+    /// Tag each diagnostic group and replay in observation order against the
+    /// single process mask; worker scheduling cannot duplicate/steal a warning.
+    pub(crate) fn dm_once(
+        &mut self,
+        warning_mask: &mut i32,
+        mask: i32,
+        emit: impl FnOnce(&mut Self),
+    ) {
+        if *warning_mask & mask != 0 {
+            if let Some(events) = &mut self.observation_events {
+                events.push(ObservationEvent::Once(mask));
+            }
+            emit(self);
+            *warning_mask &= !mask;
+            if let Some(events) = &mut self.observation_events {
+                events.push(ObservationEvent::EndOnce);
+            }
+        }
+    }
     pub fn timing(&mut self, file: &str, line: usize, body: &[u8]) {
         if self.tcheck == 0 {
             return;
@@ -54,9 +118,17 @@ impl Diagnostics {
         );
     }
     pub fn stdout(&mut self, bytes: &[u8]) {
+        if let Some(events) = &mut self.observation_events {
+            events.push(ObservationEvent::Output(false, c_bytes(bytes).to_vec()));
+            return;
+        }
         self.events.push((false, c_bytes(bytes).to_vec()));
     }
     pub fn stderr(&mut self, bytes: &[u8]) {
+        if let Some(events) = &mut self.observation_events {
+            events.push(ObservationEvent::Output(true, c_bytes(bytes).to_vec()));
+            return;
+        }
         self.events.push((true, c_bytes(bytes).to_vec()));
     }
     pub fn log(&mut self, kind: u8, file: &str, line: usize, body: &[u8]) {
@@ -64,6 +136,15 @@ impl Diagnostics {
             return;
         }
         let body = c_bytes(body);
+        if let Some(events) = &mut self.observation_events {
+            events.push(ObservationEvent::Log(
+                kind,
+                file.into(),
+                line,
+                body.to_vec(),
+            ));
+            return;
+        }
         let (counter, stored) = match kind {
             b'w' => (Some(&mut self.warnings), &mut self.warning_log),
             b'e' => (Some(&mut self.errors), &mut self.error_log),
@@ -235,6 +316,10 @@ impl Diagnostics {
         Ok(())
     }
     pub fn version(&mut self, file: &'static str, function: &'static str) {
+        if let Some(events) = &mut self.observation_events {
+            events.push(ObservationEvent::Version(file, function));
+            return;
+        }
         if !self.display_version || self.versions.contains(&(file, function)) {
             return;
         }

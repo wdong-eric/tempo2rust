@@ -30,6 +30,7 @@ pub(crate) struct JplEphemeris {
 impl JplEphemeris {
     pub fn open(path: &Path, file: File, units: i32) -> Result<Self, TimingError> {
         let error = |message: String| TimingError::new(path, None, "JPL", message);
+        let _workflow = crate::execution::enter();
         let _guard = JPL_INIT_LOCK
             .lock()
             .map_err(|_| error("JPL initialization lock poisoned".into()))?;

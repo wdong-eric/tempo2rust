@@ -124,6 +124,7 @@ pub fn fit_barycentric(
     input: &TimingInput,
     options: &FitOptions,
 ) -> Result<FitResult, TimingError> {
+    let _workflow = crate::execution::enter();
     t2_fit(input, options, |model| {
         evaluate_barycentric(model).map(FitTiming::from_timing)
     })
@@ -134,6 +135,7 @@ pub fn fit_terrestrial(
     runtime: &mut RuntimeContext,
     options: &FitOptions,
 ) -> Result<FitResult, TimingError> {
+    let _workflow = crate::execution::enter();
     t2_fit(input, options, |model| {
         evaluate_terrestrial(model, runtime).map(FitTiming::from_terrestrial)
     })

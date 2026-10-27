@@ -149,6 +149,7 @@ pub fn fit(
     runtime: &mut RuntimeContext,
     options: &FitOptions,
 ) -> Result<FitResult, TimingError> {
+    let _workflow = crate::execution::enter();
     let nits = count(
         *read(
             &input
@@ -797,6 +798,7 @@ pub fn t2_fit(
     context: &mut PulsarContext,
     options: &FitOptions,
 ) -> Result<Vec<FitSystem>, TimingError> {
+    let _workflow = crate::execution::enter();
     crate::t2accel::with_acceleration(options.acceleration, || t2_fit_selected(context, options))
 }
 fn t2_fit_selected(

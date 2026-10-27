@@ -45,6 +45,7 @@ pub fn form_bats_all(
     input: &TimingInput,
     runtime: &mut RuntimeContext,
 ) -> Result<TerrestrialResult, TimingError> {
+    let _workflow = crate::execution::enter();
     input.require_tcb()?;
     for i in 0..input.source_observations().len() {
         if !input.observation_site(i)?.eq_ignore_ascii_case(b"pks") {

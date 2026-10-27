@@ -92,6 +92,7 @@ static SESSION: LazyLock<Mutex<ClockSession>> =
 pub fn with_process<T>(
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
+    let _workflow = crate::execution::enter();
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
@@ -103,6 +104,7 @@ pub(crate) fn with_session<T>(
     root: &Path,
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
+    let _workflow = crate::execution::enter();
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
@@ -115,6 +117,7 @@ pub fn with_resources<T>(
     root: &Path,
     operation: impl FnOnce(&mut ClockSession) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
+    let _workflow = crate::execution::enter();
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
@@ -125,6 +128,7 @@ pub fn with_resources<T>(
 pub(crate) fn with_diagnostics<T>(
     operation: impl FnOnce(&mut Diagnostics) -> Result<T, TimingError>,
 ) -> Result<T, TimingError> {
+    let _workflow = crate::execution::enter();
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
@@ -135,6 +139,7 @@ pub(crate) fn with_diagnostics<T>(
 pub(crate) fn lifecycle_diagnostics(
     operation: impl FnOnce(&mut Diagnostics),
 ) -> Result<(), TimingError> {
+    let _workflow = crate::execution::enter();
     let mut session = SESSION
         .lock()
         .map_err(|_| boundary("clock_session_poisoned"))?;
@@ -1065,12 +1070,36 @@ pub fn get_correction_tt(obs: &SourceObservation) -> Result<f64, TimingError> {
 }
 
 #[cfg(test)]
-pub(crate) fn test_session() -> std::sync::MutexGuard<'static, ClockSession> {
-    SESSION.lock().unwrap()
+pub(crate) fn test_session() -> TestSession {
+    let workflow = crate::execution::enter();
+    TestSession {
+        session: SESSION.lock().unwrap(),
+        _workflow: workflow,
+    }
+}
+
+#[cfg(test)]
+pub(crate) struct TestSession {
+    session: std::sync::MutexGuard<'static, ClockSession>,
+    _workflow: crate::execution::WorkflowGuard,
+}
+#[cfg(test)]
+impl std::ops::Deref for TestSession {
+    type Target = ClockSession;
+    fn deref(&self) -> &ClockSession {
+        &self.session
+    }
+}
+#[cfg(test)]
+impl std::ops::DerefMut for TestSession {
+    fn deref_mut(&mut self) -> &mut ClockSession {
+        &mut self.session
+    }
 }
 
 /// Drain presentation events without resetting counters, key history or terminal state.
 pub fn take_clock_diagnostics() -> Vec<crate::clock_diagnostics::ClockDiagnostic> {
+    let _workflow = crate::execution::enter();
     let Ok(mut session) = SESSION.lock() else {
         return Vec::new();
     };

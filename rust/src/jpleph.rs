@@ -24,6 +24,7 @@ type Result<T> = std::result::Result<T, Boundary>;
 // Safe storage preserves the sequential global error contract, not C data races.
 static INIT_ERROR: AtomicI32 = AtomicI32::new(-9);
 pub fn jpl_init_error_code() -> i32 {
+    let _workflow = crate::execution::enter();
     INIT_ERROR.load(Ordering::SeqCst)
 }
 pub(crate) fn init_error(code: i32) {
@@ -104,6 +105,7 @@ impl Ephemeris {
         names: Option<&mut [u8]>,
         values: Option<&mut [u8]>,
     ) -> Result<Option<Self>> {
+        let _workflow = crate::execution::enter();
         init_error(0);
         let mut stream = match file.and_then(Stream::from_file) {
             Ok(s) => s,

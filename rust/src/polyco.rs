@@ -49,6 +49,7 @@ pub fn atimfake(
     r: &PolycoRequest,
     afmjd: &Float,
 ) -> Result<ArtificialToas, TimingError> {
+    let _workflow = crate::execution::enter();
     if r.span_minutes <= 0 || r.max_hour_angle <= 0 || !(2..=31).contains(&r.coefficients) {
         return Err(error(
             "polyco requires span > 0, maxha > 0, 2..=31 fitted coefficients",
@@ -232,6 +233,7 @@ pub fn tz_fit(
     samples: &ArtificialToas,
     r: &PolycoRequest,
 ) -> Result<Vec<PolycoFit>, TimingError> {
+    let _workflow = crate::execution::enter();
     let p = &context.pulsars()[0];
     let rows = predictor::observations(context)?;
     let f0 = predictor::spin_frequency(context)?;
@@ -363,6 +365,7 @@ pub fn polyco(
     runtime: &mut RuntimeContext,
     r: &PolycoRequest,
 ) -> Result<PolycoResult, TimingError> {
+    let _workflow = crate::execution::enter();
     if !r.start_mjd.is_finite() || !r.end_mjd.is_finite() || r.end_mjd < r.start_mjd {
         return Err(error("invalid polyco MJD range"));
     }

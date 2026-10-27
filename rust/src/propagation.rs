@@ -119,7 +119,11 @@ pub fn dm_delays(
     crate::clkcorr::with_resources(root, |s| {
         let (psrs, rows) = context.pulsars_observations_mut(index)?;
         dm(
-            s,
+            &mut ObservationEffects {
+                root: s.root.as_deref(),
+                diagnostics: &mut s.diagnostics,
+                dmmodel_warning: &mut s.source.dmmodel_warning,
+            },
             &psrs[0],
             &psrs[index],
             index,
@@ -131,9 +135,14 @@ pub fn dm_delays(
         )
     })
 }
+struct ObservationEffects<'a> {
+    root: Option<&'a Path>,
+    diagnostics: &'a mut crate::clock_diagnostics::Diagnostics,
+    dmmodel_warning: &'a mut i32,
+}
 #[allow(clippy::too_many_arguments)] // source pulsar/TOA indices plus the shared session
 fn dm(
-    s: &mut ClockSession,
+    s: &mut ObservationEffects<'_>,
     first: &SourcePulsar,
     p: &SourcePulsar,
     index: usize,
@@ -223,7 +232,7 @@ fn dm(
             p,
             param_dmmodel as usize,
             0,
-            &mut s.diagnostics,
+            s.diagnostics,
         )?
         .to_f64();
         // dm_delays.C:165 reads linkTo[0] even when initialise.C has only
@@ -235,23 +244,21 @@ fn dm(
             None if link.n_link_to == Some(0) => -1,
             None => *read(&link.link_to[0], "DMMODEL linkTo[0]")?,
         };
-        if is_set(p, param_dm, 0)
-            && target != param_dm as i32
-            && s.source.dmmodel_warning & 0xf != 0
-        {
-            s.diagnostics.log(
-                b'e',
-                "dm_delays.C",
-                168,
-                b"Using DMMODEL value for dispersion measure instead of the DM parameter",
-            );
-            s.diagnostics.log(
-                b'e',
-                "dm_delays.C",
-                169,
-                b"Please set 'DMMODEL DM' in the par file rather than specifying a value",
-            );
-            s.source.dmmodel_warning &= 0xfff0;
+        if is_set(p, param_dm, 0) && target != param_dm as i32 {
+            s.diagnostics.dm_once(s.dmmodel_warning, 0xf, |d| {
+                d.log(
+                    b'e',
+                    "dm_delays.C",
+                    168,
+                    b"Using DMMODEL value for dispersion measure instead of the DM parameter",
+                );
+                d.log(
+                    b'e',
+                    "dm_delays.C",
+                    169,
+                    b"Please set 'DMMODEL DM' in the par file rather than specifying a value",
+                );
+            });
         }
         let n = *read(&p.dmoffsDMnum, "dmoffsDMnum")?;
         let times = (0..n)
@@ -260,14 +267,14 @@ fn dm(
         let vals = (0..n)
             .map(|k| read(&p.dmoffsDM[k as usize], "dmoffsDM").copied())
             .collect::<Result<Vec<_>, _>>()?;
-        if s.source.dmmodel_warning & 0xf0 != 0 {
+        s.diagnostics.dm_once(s.dmmodel_warning, 0xf0, |d| {
             let mut m = 0.0;
             for v in &vals {
                 m += v;
             }
             m /= n as f64;
             if m > 1e-12 {
-                s.diagnostics.stdout(
+                d.stdout(
                     &[
                         b"WARNING: Mean DMOFF = ".as_slice(),
                         &crate::clock_text::format_number(
@@ -279,15 +286,14 @@ fn dm(
                     .concat(),
                 );
             }
-            s.source.dmmodel_warning &= 0xff0f;
-        }
+        });
         dm_value = mean
             + crate::ifunc::interpolate(
                 &times,
                 &vals,
                 read(&o.sat, "sat")?.to_f64(),
                 n,
-                &mut s.diagnostics,
+                s.diagnostics,
             )?;
     } else {
         for k in 0..*read(&p.ndmx, "ndmx")? as usize {
@@ -397,18 +403,18 @@ fn dm(
             let v = (0..n)
                 .map(|i| read(&p.ne_sw_ifuncV[i as usize], "ne_sw_ifuncV").copied())
                 .collect::<Result<Vec<_>, _>>()?;
-            let v = crate::ifunc::interpolate(
-                &t,
-                &v,
-                read(&o.sat, "sat")?.to_f64(),
-                n,
-                &mut s.diagnostics,
-            )?;
+            let v =
+                crate::ifunc::interpolate(&t, &v, read(&o.sat, "sat")?.to_f64(), n, s.diagnostics)?;
             o.tdis2 = Some(v.mul_add(scale, o.tdis2.unwrap()));
         }
     } else if p.swm == Some(1) {
-        o.tdis2 =
-            Some(crate::solar_wind::model(s, p, o, resources)? / 2.41e-4 / 1.0e-12 / freq / freq);
+        o.tdis2 = Some(
+            crate::solar_wind::model(s.root, s.diagnostics, p, o, resources)?
+                / 2.41e-4
+                / 1.0e-12
+                / freq
+                / freq,
+        );
     }
     Ok(())
 }
@@ -440,15 +446,6 @@ pub(crate) fn calculate(
             .as_bytes(),
         );
     }
-    let g = |v| {
-        String::from_utf8(crate::clock_text::format_number(
-            v,
-            crate::clock_text::NumberFormat::GeneralSix,
-        ))
-        .unwrap()
-    };
-    #[allow(clippy::excessive_precision)] // Preserve the pinned source literal.
-    let px_conv: f64 = 1.74532925199432958e-2 / 3600.0e3;
     for index in 0..context.pulsars.len() {
         let (psrs, rows) = context.pulsars_observations_mut(index)?;
         let p = &psrs[index];
@@ -481,132 +478,260 @@ pub(crate) fn calculate(
                 b"Complete correcting troposphere",
             );
         }
-        for (obs, o) in rows[..n].iter_mut().enumerate() {
-            // calculate_bclt.C:77 writes psr[0] in a loop over p. With a second
-            // pulsar this leaves its disabled troposphere field unwritten. Write
-            // the selected pulsar's observation, as the enabled branch does.
-            if p.correctTroposphere == Some(0) {
-                o.troposphericDelay = Some(0.0);
-            }
-            s.diagnostics.log(
-                b'd',
-                "calculate_bclt.C",
-                78,
-                format!(
-                    "In tdis2 calculate_bclt with observation {obs} {}",
-                    *read(&o.delayCorr, "delayCorr")?
-                )
-                .as_bytes(),
-            );
-            if o.delayCorr == Some(0) {
-                o.freqSSB = o.freq;
-                o.roemer = Some(Float::with_val(PRECISION_BITS, 0));
-                let delta = ((read(&o.sat, "sat")?.clone() - value(p, param_posepoch, 0))
-                    / 36525.0f64)
-                    .to_f64();
-                o.psrPos = direction(p, delta)?.map(Some);
-                continue;
-            }
-            let sat = read_string(&o.telID, "telID")? == b"STL_FBAT";
-            let mut rca = vector(&o.observatory_earth)?;
-            if !sat {
-                for (j, x) in rca.iter_mut().enumerate() {
-                    #[allow(clippy::assign_op_pattern)] // Preserve source operand order.
-                    {
-                        *x = *read(&o.earth_ssb[j], "earth_ssb")? + *x;
-                    }
-                }
-            }
-            let radial = if is_set(p, param_pmrv, 0) {
-                (value(p, param_pmrv, 0) * (2.0 * PI / 360.0) / 36000.0f64).to_f64()
-            } else {
-                0.0
-            };
-            let pos = vector(&p.posPulsar[..])?;
-            let vel = vector(&p.velPulsar[..])?;
-            let acc = vector(&p.accPulsar[..])?;
-            let (mut dt_ssb, mut loops) = (0.0f64, 0);
-            loop {
-                let old = dt_ssb;
-                let rcos = dot_product(pos, rca);
-                let rr = dot_product(rca, rca);
-                let delta = ((read(&o.sat, "sat")?.clone() - value(p, param_posepoch, 0)
-                    + (Float::with_val(PRECISION_BITS, crate::clkcorr::get_correction_tt(o)?)
-                        + read(&o.correctionTT_TB, "correctionTT_TB")?
-                        + dt_ssb)
-                        / 86400.0f64)
-                    / 36525.0f64)
-                    .to_f64();
-                let vdot = dot_product(vel, rca);
-                let speed = dot_product(vel, vel).sqrt();
-                let pm = delta * vdot;
-                let pmtt = -0.5 * speed * speed * delta * delta * rcos;
-                let acct = 0.5 * delta * delta * dot_product(acc, rca);
-                let px = (value(p, param_px, 0) * -0.5f64 * px_conv * (rr - rcos * rcos) / AULTSC)
-                    .to_f64();
-                let pmtr = -delta.powi(2) * radial * vdot;
-                s.diagnostics.log(b'd',"calculate_bclt.C",151,format!("Calculating roemer using {} {} {} {} {} (delt = {}; dt_SSB = {}) loop={loops} sat={}",g(rcos),g(pm),g(pmtt),g(px),g(pmtr),g(delta),g(dt_ssb),g(read(&o.sat,"sat")?.to_f64())).as_bytes());
-                o.roemer = Some(Float::with_val(
-                    PRECISION_BITS,
-                    rcos + pm + pmtt + px + pmtr + acct,
-                ));
-                shapiro(p, o, delta, dt_ssb, &mut s.diagnostics)?;
-                s.diagnostics.log(
-                    b'd',
-                    "calculate_bclt.C",
-                    154,
-                    format!(
-                        "In tdis2 calculate_bclt with observation {obs} {} calling dmdelays",
-                        *read(&o.delayCorr, "delayCorr")?
-                    )
-                    .as_bytes(),
-                );
-                dm(s, &psrs[0], p, index, o, delta, dt_ssb, resources)?;
-                s.diagnostics
-                    .log(b'd', "calculate_bclt.C", 157, b"Complete dm_delays");
-                dt_ssb = (read(&o.roemer, "roemer")?.clone()
-                    - (*read(&o.tdis1, "tdis1")? + read(&o.tdis2, "tdis2")?)
-                    - (*read(&o.shapiroDelaySun, "shapiroDelaySun")?
-                        + *read(&p.planetShapiro, "planetShapiro")? as f64
-                            * read(&o.shapiroDelayJupiter, "shapiroDelayJupiter")?))
-                .to_f64();
-                s.diagnostics.log(
-                    b'd',
-                    "calculate_bclt.C",
-                    165,
-                    format!(
-                        "dt_SSB: {} {} {} {} {}",
-                        g(read(&o.roemer, "roemer")?.to_f64()),
-                        g(*read(&o.tdis1, "tdis1")?),
-                        g(*read(&o.tdis2, "tdis2")?),
-                        g(*read(&o.shapiroDelaySun, "shapiroDelaySun")?),
-                        g(*read(&p.planetShapiro, "planetShapiro")? as f64
-                            * read(&o.shapiroDelayJupiter, "shapiroDelayJupiter")?)
-                    )
-                    .as_bytes(),
-                );
-                if s.source.very_fast == 1 {
-                    break;
-                }
-                loops += 1;
-                if !((dt_ssb - old).abs() > 1e-10 && o.deleted != Some(1) && loops < 100) {
-                    break;
-                }
-            }
-            if loops == 100 {
-                s.diagnostics.log(
-                    b'w',
-                    "calculate_bclt.C",
-                    174,
-                    b"Warning: the loop to obtain dt_SSB reached 100 iterations\n",
-                );
-            }
-        }
+        calculate_rows(s, &psrs[0], p, index, &mut rows[..n], resources)?;
     }
     s.diagnostics
         .log(b'd', "calculate_bclt.C", 181, b"Leaving calculate_bclt");
     Ok(())
 }
+fn calculate_rows(
+    s: &mut ClockSession,
+    first: &SourcePulsar,
+    p: &SourcePulsar,
+    index: usize,
+    rows: &mut [SourceObservation],
+    resources: &mut Vec<crate::runtime::Resource>,
+) -> Result<(), TimingError> {
+    let workers = crate::execution::observation_workers()
+        .get()
+        .min(rows.len());
+    let very_fast = s.source.very_fast;
+    if workers <= 1 {
+        let mut effects = ObservationEffects {
+            root: s.root.as_deref(),
+            diagnostics: &mut s.diagnostics,
+            dmmodel_warning: &mut s.source.dmmodel_warning,
+        };
+        for (obs, row) in rows.iter_mut().enumerate() {
+            calculate_observation(
+                &mut effects,
+                first,
+                p,
+                index,
+                obs,
+                row,
+                very_fast,
+                resources,
+            )?;
+        }
+        return Ok(());
+    }
+    let root = s.root.as_deref();
+    let (debug, quiet) = (s.diagnostics.debug, s.diagnostics.quiet);
+    let warning_mask = s.source.dmmodel_warning;
+    let acceleration = crate::t2accel::acceleration();
+    let chunk_size = rows.len().div_ceil(workers);
+    std::thread::scope(|scope| {
+        let mut handles = Vec::new();
+        // Immutable pulsars and disjoint output chunks are borrowed for this
+        // scope only. No worker reaches the parent-held process session. Scratch
+        // rows retain the serial partial-publication boundary on returned error.
+        for (chunk, originals) in rows.chunks(chunk_size).enumerate() {
+            handles.push(scope.spawn(move || {
+                crate::t2accel::with_acceleration(acceleration, || {
+                    let mut results = Vec::new();
+                    for (offset, original) in originals.iter().enumerate() {
+                        let mut row = original.execution_snapshot();
+                        let mut diagnostics =
+                            crate::clock_diagnostics::Diagnostics::observation_transcript(
+                                debug, quiet,
+                            );
+                        let mut mask = warning_mask;
+                        let mut resources = Vec::new();
+                        let result = calculate_observation(
+                            &mut ObservationEffects {
+                                root,
+                                diagnostics: &mut diagnostics,
+                                dmmodel_warning: &mut mask,
+                            },
+                            first,
+                            p,
+                            index,
+                            chunk * chunk_size + offset,
+                            &mut row,
+                            very_fast,
+                            &mut resources,
+                        );
+                        let failed = result.is_err();
+                        results.push((row, diagnostics, resources, result));
+                        if failed {
+                            break;
+                        }
+                    }
+                    results
+                })
+            }));
+        }
+        // Join every worker before mutating the borrowed source rows. Unwinding
+        // also joins through thread::scope; there are no detached resource users.
+        handles.into_iter().map(|h| h.join()).collect::<Vec<_>>()
+    })
+    .into_iter()
+    .map(|joined| joined.unwrap_or_else(|panic| std::panic::resume_unwind(panic)))
+    .collect::<Vec<_>>()
+    .into_iter()
+    .try_fold(0, |mut offset, results| {
+        for (row, diagnostics, row_resources, result) in results {
+            rows[offset] = row;
+            offset += 1;
+            diagnostics.replay_observation(&mut s.diagnostics, &mut s.source.dmmodel_warning);
+            resources.extend(row_resources);
+            result?;
+        }
+        Ok(offset)
+    })?;
+    Ok(())
+}
+
+#[cfg(test)]
+pub(crate) static WORKER_VISITS: std::sync::Mutex<
+    Option<Vec<(usize, usize, std::thread::ThreadId)>>,
+> = std::sync::Mutex::new(None);
+
+#[allow(clippy::too_many_arguments)]
+fn calculate_observation(
+    s: &mut ObservationEffects<'_>,
+    first: &SourcePulsar,
+    p: &SourcePulsar,
+    index: usize,
+    obs: usize,
+    o: &mut SourceObservation,
+    very_fast: i32,
+    resources: &mut Vec<crate::runtime::Resource>,
+) -> Result<(), TimingError> {
+    #[cfg(test)]
+    if let Some(visits) = &mut *WORKER_VISITS.lock().unwrap() {
+        visits.push((index, obs, std::thread::current().id()));
+    }
+    let g = |v| {
+        String::from_utf8(crate::clock_text::format_number(
+            v,
+            crate::clock_text::NumberFormat::GeneralSix,
+        ))
+        .unwrap()
+    };
+    #[allow(clippy::excessive_precision)] // Preserve the pinned source literal.
+    let px_conv: f64 = 1.74532925199432958e-2 / 3600.0e3;
+    // calculate_bclt.C:77 writes psr[0] in a loop over p. With a second
+    // pulsar this leaves its disabled troposphere field unwritten. Write
+    // the selected pulsar's observation, as the enabled branch does.
+    if p.correctTroposphere == Some(0) {
+        o.troposphericDelay = Some(0.0);
+    }
+    s.diagnostics.log(
+        b'd',
+        "calculate_bclt.C",
+        78,
+        format!(
+            "In tdis2 calculate_bclt with observation {obs} {}",
+            *read(&o.delayCorr, "delayCorr")?
+        )
+        .as_bytes(),
+    );
+    if o.delayCorr == Some(0) {
+        o.freqSSB = o.freq;
+        o.roemer = Some(Float::with_val(PRECISION_BITS, 0));
+        let delta =
+            ((read(&o.sat, "sat")?.clone() - value(p, param_posepoch, 0)) / 36525.0f64).to_f64();
+        o.psrPos = direction(p, delta)?.map(Some);
+        return Ok(());
+    }
+    let sat = read_string(&o.telID, "telID")? == b"STL_FBAT";
+    let mut rca = vector(&o.observatory_earth)?;
+    if !sat {
+        for (j, x) in rca.iter_mut().enumerate() {
+            #[allow(clippy::assign_op_pattern)] // Preserve source operand order.
+            {
+                *x = *read(&o.earth_ssb[j], "earth_ssb")? + *x;
+            }
+        }
+    }
+    let radial = if is_set(p, param_pmrv, 0) {
+        (value(p, param_pmrv, 0) * (2.0 * PI / 360.0) / 36000.0f64).to_f64()
+    } else {
+        0.0
+    };
+    let pos = vector(&p.posPulsar[..])?;
+    let vel = vector(&p.velPulsar[..])?;
+    let acc = vector(&p.accPulsar[..])?;
+    let (mut dt_ssb, mut loops) = (0.0f64, 0);
+    loop {
+        let old = dt_ssb;
+        let rcos = dot_product(pos, rca);
+        let rr = dot_product(rca, rca);
+        let delta = ((read(&o.sat, "sat")?.clone() - value(p, param_posepoch, 0)
+            + (Float::with_val(PRECISION_BITS, crate::clkcorr::get_correction_tt(o)?)
+                + read(&o.correctionTT_TB, "correctionTT_TB")?
+                + dt_ssb)
+                / 86400.0f64)
+            / 36525.0f64)
+            .to_f64();
+        let vdot = dot_product(vel, rca);
+        let speed = dot_product(vel, vel).sqrt();
+        let pm = delta * vdot;
+        let pmtt = -0.5 * speed * speed * delta * delta * rcos;
+        let acct = 0.5 * delta * delta * dot_product(acc, rca);
+        let px = (value(p, param_px, 0) * -0.5f64 * px_conv * (rr - rcos * rcos) / AULTSC).to_f64();
+        let pmtr = -delta.powi(2) * radial * vdot;
+        s.diagnostics.log(b'd',"calculate_bclt.C",151,format!("Calculating roemer using {} {} {} {} {} (delt = {}; dt_SSB = {}) loop={loops} sat={}",g(rcos),g(pm),g(pmtt),g(px),g(pmtr),g(delta),g(dt_ssb),g(read(&o.sat,"sat")?.to_f64())).as_bytes());
+        o.roemer = Some(Float::with_val(
+            PRECISION_BITS,
+            rcos + pm + pmtt + px + pmtr + acct,
+        ));
+        shapiro(p, o, delta, dt_ssb, s.diagnostics)?;
+        s.diagnostics.log(
+            b'd',
+            "calculate_bclt.C",
+            154,
+            format!(
+                "In tdis2 calculate_bclt with observation {obs} {} calling dmdelays",
+                *read(&o.delayCorr, "delayCorr")?
+            )
+            .as_bytes(),
+        );
+        dm(s, first, p, index, o, delta, dt_ssb, resources)?;
+        s.diagnostics
+            .log(b'd', "calculate_bclt.C", 157, b"Complete dm_delays");
+        dt_ssb = (read(&o.roemer, "roemer")?.clone()
+            - (*read(&o.tdis1, "tdis1")? + read(&o.tdis2, "tdis2")?)
+            - (*read(&o.shapiroDelaySun, "shapiroDelaySun")?
+                + *read(&p.planetShapiro, "planetShapiro")? as f64
+                    * read(&o.shapiroDelayJupiter, "shapiroDelayJupiter")?))
+        .to_f64();
+        s.diagnostics.log(
+            b'd',
+            "calculate_bclt.C",
+            165,
+            format!(
+                "dt_SSB: {} {} {} {} {}",
+                g(read(&o.roemer, "roemer")?.to_f64()),
+                g(*read(&o.tdis1, "tdis1")?),
+                g(*read(&o.tdis2, "tdis2")?),
+                g(*read(&o.shapiroDelaySun, "shapiroDelaySun")?),
+                g(*read(&p.planetShapiro, "planetShapiro")? as f64
+                    * read(&o.shapiroDelayJupiter, "shapiroDelayJupiter")?)
+            )
+            .as_bytes(),
+        );
+        if very_fast == 1 {
+            break;
+        }
+        loops += 1;
+        if !((dt_ssb - old).abs() > 1e-10 && o.deleted != Some(1) && loops < 100) {
+            break;
+        }
+    }
+    if loops == 100 {
+        s.diagnostics.log(
+            b'w',
+            "calculate_bclt.C",
+            174,
+            b"Warning: the loop to obtain dt_SSB reached 100 iterations\n",
+        );
+    }
+    Ok(())
+}
+
 pub fn form_bats(context: &mut PulsarContext) -> Result<(), TimingError> {
     crate::clkcorr::with_process(|s| form_bats_inner(context, &mut s.diagnostics))
 }

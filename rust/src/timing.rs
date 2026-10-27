@@ -134,6 +134,7 @@ pub fn evaluate(
     runtime: &mut RuntimeContext,
     remove_mean: bool,
 ) -> Result<TimingResult, TimingError> {
+    let _workflow = crate::execution::enter();
     let before: Vec<ParameterStore> = input
         .context
         .pulsars

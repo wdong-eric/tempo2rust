@@ -270,6 +270,10 @@ fn fit_controls_and_restrictions_leave_fixed_evaluation_intact() {
 
 #[test]
 fn terrestrial_fit_failure_recovers_with_the_same_runtime() {
+    // This is one logical failure/recovery workflow, including diagnostic
+    // collection. Other callers may run concurrently but cannot change its
+    // process controls or drain its warnings between the three evaluations.
+    let _workflow = crate::execution::enter();
     let root = root();
     let valid = load(
         &root.join("inputs/pks_all.par"),

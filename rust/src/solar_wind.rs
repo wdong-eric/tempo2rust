@@ -2,7 +2,6 @@
 //! mul_add preserves measured GCC16 arm64 O2 contractions in AB's native profile.
 use crate::{
     TimingError,
-    clkcorr::ClockSession,
     clock_diagnostics::boundary,
     observation::{SourceObservation, read},
     preprocess::value,
@@ -438,15 +437,18 @@ pub fn solar_wind_model(
     root: &Path,
     resources: &mut Vec<Resource>,
 ) -> Result<f64, TimingError> {
-    crate::clkcorr::with_resources(root, |s| model(s, p, o, resources))
+    crate::clkcorr::with_resources(root, |s| {
+        model(s.root.as_deref(), &mut s.diagnostics, p, o, resources)
+    })
 }
 pub(crate) fn model(
-    s: &mut ClockSession,
+    root: Option<&Path>,
+    d: &mut crate::clock_diagnostics::Diagnostics,
     p: &SourcePulsar,
     o: &SourceObservation,
     resources: &mut Vec<Resource>,
 ) -> Result<f64, TimingError> {
-    s.diagnostics.version("sw_delay.C", "solarWindModel()");
+    d.version("sw_delay.C", "solarWindModel()");
     let (lon, lat) = match p.eclCoord {
         Some(1) => (
             value(p, param_raj, 0).to_f64(),
@@ -461,7 +463,7 @@ pub(crate) fn model(
     let mjd = read(&o.sat, "sat")?;
     let day = crate::ifteph::extended_i32(mjd, "solar_mjd_int")?;
     let mut date = SolarDate::default();
-    calendar(day, &mut date, &mut s.diagnostics)?;
+    calendar(day, &mut date, d)?;
     let sec = ((mjd.clone() - day) * 86400i32).to_f64();
     let mut output = MclOutput::default();
     line_of_sight(
@@ -473,10 +475,10 @@ pub(crate) fn model(
         sec,
         400.0,
         &mut output,
-        &mut s.diagnostics,
+        d,
     )?;
     let (r1, r2, b) = calc_rot_n(output.crlne, output.rote)?;
-    s.diagnostics.stdout(
+    d.stdout(
         &[
             format!("rotN output = {r1} {r2} ").as_bytes(),
             &crate::clock_text::format_number(b, crate::clock_text::NumberFormat::GeneralSix),
@@ -491,18 +493,10 @@ pub(crate) fn model(
     let deg = PI / 180.0;
     for i in 0..output.line_of_sight as usize {
         let number = crate::ifteph::native_i32(output.rots[i], "solar_sheet_rotation_int")?;
-        let path = s
-            .root
-            .as_deref()
+        let path = root
             .ok_or_else(|| boundary("solar_runtime_root"))?
             .join(format!("solarWindModel/CS{number}.txt"));
-        let n = read_sheet(
-            &path,
-            &mut longitude,
-            &mut latitude,
-            resources,
-            &mut s.diagnostics,
-        )?;
+        let n = read_sheet(&path, &mut longitude, &mut latitude, resources, d)?;
         if n == 0 {
             return Err(boundary("solar_empty_current_sheet"));
         }
@@ -539,7 +533,7 @@ pub(crate) fn model(
         ))
         .unwrap()
     };
-    s.diagnostics.stdout(
+    d.stdout(
         format!(
             "Integral = {} {} {} {slow} {fast} {} {}\n",
             String::from_utf8(crate::clock_text::format_number(

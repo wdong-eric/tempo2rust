@@ -273,6 +273,44 @@ pub(crate) fn format_string(bytes: &mut [Option<u8>], text: &[u8]) {
 }
 
 impl SourceObservation {
+    /// Exact scratch snapshot for speculative observation work. Rug 1.30 clone
+    /// resets NaN signs; the source observation assignment retains those signs,
+    /// including fields not touched by calculate_bclt.C. Preserve each extended
+    /// cell's sign without rounding or changing initializedness.
+    pub(crate) fn execution_snapshot(&self) -> Self {
+        let mut snapshot = self.clone();
+        for (source, target) in [
+            (&self.sat, &mut snapshot.sat),
+            (&self.origsat, &mut snapshot.origsat),
+            (&self.sat_day, &mut snapshot.sat_day),
+            (&self.sat_sec, &mut snapshot.sat_sec),
+            (&self.bat, &mut snapshot.bat),
+            (&self.batCorr, &mut snapshot.batCorr),
+            (&self.bbat, &mut snapshot.bbat),
+            (&self.pet, &mut snapshot.pet),
+            (&self.prefitResidual, &mut snapshot.prefitResidual),
+            (&self.residual, &mut snapshot.residual),
+            (&self.residualtn, &mut snapshot.residualtn),
+            (&self.correctionTT_TB, &mut snapshot.correctionTT_TB),
+            (
+                &self.correctionTT_calcEph,
+                &mut snapshot.correctionTT_calcEph,
+            ),
+            (&self.correctionTT_Teph, &mut snapshot.correctionTT_Teph),
+            (&self.correctionUT1, &mut snapshot.correctionUT1),
+            (&self.shklovskii, &mut snapshot.shklovskii),
+            (&self.roemer, &mut snapshot.roemer),
+            (&self.torb, &mut snapshot.torb),
+            (&self.nphase, &mut snapshot.nphase),
+            (&self.phase, &mut snapshot.phase),
+        ] {
+            if let (Some(source), Some(target)) = (source, target) {
+                target.copysign_mut(source);
+            }
+        }
+        snapshot
+    }
+
     /// Explicit existing bounded timing caller inputs, not native allocation defaults.
     pub(crate) fn seed_clock_caller(&mut self) {
         self.clockCorr = Some(1);

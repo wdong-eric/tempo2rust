@@ -57,6 +57,7 @@ impl RuntimeContext {
     }
 
     pub fn new(root: &Path) -> Result<Self, TimingError> {
+        let _workflow = crate::execution::enter();
         let root = fs::canonicalize(root)
             .map_err(|e| TimingError::new(root, None, "runtime root", e.to_string()))?;
         let mut resources = Vec::new();

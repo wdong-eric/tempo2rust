@@ -42,6 +42,7 @@ pub(crate) fn consume(
 }
 
 pub fn load_pairs(pairs: &[InputPair], runtime: &Path) -> Result<BatInput, TimingError> {
+    let _workflow = crate::execution::enter();
     if pairs.is_empty() {
         return Err(TimingError::new(
             runtime,
@@ -87,6 +88,7 @@ pub fn preprocess(
     arguments: &[Vec<u8>],
     runtime: &Path,
 ) -> Result<(), TimingError> {
+    let _workflow = crate::execution::enter();
     crate::preprocess::pre_process(&mut input.context, arguments, runtime, &mut input.inputs)
 }
 
@@ -325,6 +327,7 @@ pub fn evaluate(
     input: &mut BatInput,
     runtime: &mut crate::RuntimeContext,
 ) -> Result<BatResult, TimingError> {
+    let _workflow = crate::execution::enter();
     form_bats_all(&mut input.context, runtime)?;
     project(input, runtime)
 }

@@ -31,6 +31,7 @@ pub fn cheby_model_func(
     compute_dispersion: bool,
     tim: &Path,
 ) -> Result<Vec<N>, TimingError> {
+    let _workflow = crate::execution::enter();
     let nx = x.len();
     let count = x
         .len()
@@ -112,6 +113,7 @@ pub fn construct_model(
     runtime: &mut RuntimeContext,
     tim: &Path,
 ) -> Result<(), TimingError> {
+    let _workflow = crate::execution::enter();
     model.psrname = String::from_utf8(read_string(&context.pulsars[0].name[..], "name")?)
         .map_err(|e| error(e.to_string()))?;
     model.cheby = Cheby2D::construct(model.cheby.nx(), model.cheby.ny(), |x, y| {
@@ -129,6 +131,7 @@ pub fn test_model(
     nfreq: usize,
     tim: &Path,
 ) -> Result<ErrorSummary, TimingError> {
+    let _workflow = crate::execution::enter();
     let polynomial = model.cheby.clone();
     polynomial
         .test(nmjd, nfreq, |x, y| {
@@ -142,6 +145,7 @@ pub fn construct_set(
     runtime: &mut RuntimeContext,
     tim: &Path,
 ) -> Result<ChebyModelSet, TimingError> {
+    let _workflow = crate::execution::enter();
     let r = request;
     if r.end_mjd <= r.start_mjd
         || r.segment_days <= r.overlap_days
@@ -202,6 +206,7 @@ pub fn test_set(
     nfreq: usize,
     tim: &Path,
 ) -> Result<ErrorSummary, TimingError> {
+    let _workflow = crate::execution::enter();
     let count = set.segments.len();
     if count == 0 {
         return Err(error("empty Cheby test set"));

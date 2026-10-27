@@ -18,6 +18,9 @@ mod clock_glob;
 mod clock_tests;
 mod clock_text;
 pub mod eop;
+pub mod execution;
+#[cfg(test)]
+mod execution_tests;
 #[cfg(test)]
 mod fitting_tests;
 mod form_bats;
