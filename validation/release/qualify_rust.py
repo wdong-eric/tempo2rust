@@ -39,7 +39,7 @@ def run(command,name,cwd=None):
  (out/(name+'.stdout')).write_bytes(r.stdout);(out/(name+'.stderr')).write_bytes(r.stderr)
  assert r.returncode==0,(name,r.stderr.decode(errors='replace'))
  return r
-build=['cargo','build','--offline','--manifest-path',crate/'Cargo.toml','--bins']
+build=['cargo','build','--offline','--manifest-path',crate/'Cargo.toml','--target-dir',crate/'target','--bins']
 if a.release:build+=['--release']
 if a.features:build+=['--features',a.features]
 run(['cargo','generate-lockfile','--offline','--manifest-path',crate/'Cargo.toml'],'lock');build+=['--locked'];run(build,'build');run(['cargo','tree','--offline','--manifest-path',crate/'Cargo.toml'],'dependency-tree')
