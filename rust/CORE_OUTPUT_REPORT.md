@@ -1,7 +1,8 @@
 # Assignment AH: core CLI and stateful output handover
 
-27 October 2026. AH delivers the native-style command entry point, the complete
-assigned report/helper/display transfer and public formatting/logging APIs on
+27 October 2026, updated after central's observer-artifact review. AH delivers
+the native-style command entry point, the complete assigned report/helper/display
+transfer and public formatting/logging APIs on
 the canonical Rust engine. This is an implementation candidate for central
 review under 0074/0080/0091. **Numerical acceptance remains pending:** each final
 debug/release matrix has 25 exact comparison groups and 12 failing groups, and
@@ -14,7 +15,8 @@ the checker exits 1. No failed group is excluded or relabelled a pass.
 | Released AH baseline | `732fd0ea30de9b22f566065b26dd7642f536d7ea` |
 | Contract freeze | `5ff9ae25f069a9cd28e3eaf3963f5b47236493bc` |
 | AH production/API/source map | `0dbcf0842394eb9cfaf93cb31bfac428e2ef7d67` |
-| AH validation sources | `6ef441a1a46a964770352bebdc3395ef12045c10` |
+| Initial AH validation sources | `6ef441a1a46a964770352bebdc3395ef12045c10` |
+| Observer artifact correction | `50f2bf33baaa3a0bfea0666c062ab5b59ba6b63b` |
 | Canonical TEMPO2 pin | `fda6ad4a9753ad7dc5d291406f2f310a9161423f` |
 | Independent reference checkout | `7795d53eeca32ef3dbb61c2b6cdb1c3e7c5d3572` |
 
@@ -104,9 +106,49 @@ propagate comparison failures. The final builder uses accepted
 fix. The final checker enforces statuses, input stability, file membership and
 bytes; its control tests exercise actual nonzero subprocess results.
 
+## Observer artifact correction
+
+Central found that `controls/-h` and `controls/-H` in the original `debug-final`
+and `release-final` matrices resolve to the same directory on this host's
+filesystem. The second command overwrote the first command's stdout. AH
+recomputed the old run-file hashes and reproduced exactly one stale hash per
+profile, `-h/stdout`, with no other recorded run-file mismatch. The old receipts,
+outputs and `delivery-identity.json` remain unchanged historical evidence.
+
+Correction `50f2bf3` uses `controls/help` and `controls/help-extra`. Each execution
+now records its absolute output directory and completion-time file hashes,
+including the PTY control. Before receipt publication, the production publisher
+recenses every recorded execution directory and records missing, extra and
+changed artifacts. Any mismatch contributes to `artifact_mismatches` and a
+nonzero checker exit; it does not replace the recorded hash with the overwritten
+content. The focused regression executes two successful commands that overwrite
+the same stdout and verifies actual publisher-process exit 1. Its otherwise
+identical distinct-directory control exits 0.
+
+Fresh authoritative runs, executed from `validation/core_output/`, are:
+
+```sh
+python3 test_check.py
+python3 check.py --native build/native-v9 --out build/debug-help-corrected
+python3 check.py --native build/native-v9 --out build/release-help-corrected --release
+```
+
+The controls pass all four tests. Both matrices actually exit 1 with the same
+37 comparison-group results as the original runs, and zero artifact mismatches.
+A post-publication audit verifies all 267 recorded file hashes across 78
+executions in each profile, distinct help directories and unchanged production,
+runtime, native and contract identities. All 622 historical files indexed in
+`help-correction-before.json` remain unchanged, including both old matrix trees
+and their original receipts and delivery index. No production Rust change or
+clap refactor is part of this correction.
+
 ## Executed verification
 
 All paths in this table are relative to `validation/core_output/build/`.
+The Rust suites, Clippy, formatting, source inventory and bug/UT1 witnesses are
+retained original-production results. This follow-up reran the checker controls
+and both matrices, including their direct-API evidence test; it did not rerun a
+broader Rust or historical scientific campaign.
 
 | Check | Actual final result | Evidence |
 | --- | --- | --- |
@@ -117,17 +159,18 @@ All paths in this table are relative to `validation/core_output/build/`.
 | Clippy, all targets, warnings denied | Passed | `clippy-ut1.log` |
 | Cargo formatting check | Passed | `fmt-delivery.log` |
 | Python compilation of validation sources | Passed; final translator whitespace edit rechecked | Executed `py_compile` |
-| Checker controls | 3 tests passed, including omitted/reordered records, changed units/flags/digits, missing files, unexpected exit/timeout and subsequent valid recovery | `checker-tests-final.log` |
+| Checker controls | 4 tests passed, including the actual completed-run overwrite failure and distinct-directory success controls | `checker-tests-help-corrected.log` |
 | Bounded source-bug witnesses | 17 checks passed | `bugs-v2/receipt.json` |
 | UT1 correction and unchanged-state witnesses | 21 checks passed | `ut1-check-v1/receipt.json` |
-| Debug final native/Rust matrix | 37 groups: 25 exact, 12 failing; actual exit 1 | `debug-final/receipt.json` |
-| Release final native/Rust matrix | 37 groups: 25 exact, 12 failing; actual exit 1 | `release-final/receipt.json` |
+| Debug final native/Rust matrix | 37 groups: 25 exact, 12 failing; 0 artifact mismatches; actual exit 1 | `debug-help-corrected/receipt.json` |
+| Release final native/Rust matrix | 37 groups: 25 exact, 12 failing; 0 artifact mismatches; actual exit 1 | `release-help-corrected/receipt.json` |
 | Static source accounting | Six bodies and 375 decision/loop/case sites | `source-inventory.json` |
 
 Each matrix contains 32 paired real workflows plus five direct comparison
 groups. Its receipt contains 78 execution entries and one source/runtime
 identity entry. Both final summaries report 17 differing files, three missing
-files, zero extra files, zero unexpected statuses and zero changed inputs.
+files, zero extra files, zero unexpected statuses, zero changed inputs and zero
+artifact mismatches.
 Known unwritten-state error statuses are recorded explicitly and do not turn
 their differing/missing output files into passes. Final live source/runtime,
 checker, contract and executable hashes were checked against both receipts.
@@ -150,8 +193,13 @@ An earlier parallel library run in `tests-debug.log` had 90 passes, one failure
 and 35 ignored tests: `terrestrial_fit_failure_recovers_with_the_same_runtime`.
 Its isolated retry passed (`recovery-isolated.log`), as did the subsequent serial
 suite (`lib-debug-serial.log`) and both final serial suites above. The failure is
-retained. This does not establish concurrent process-diagnostics correctness;
-AK's concurrency obligation remains open. The 36 ignored tests were not all
+retained. Central's additional comparison of the two retained JSON Debug objects
+reports differences only in `/cycles/0/postfit/warnings`,
+`/cycles/1/prefit/warnings` and `/cycles/1/postfit/warnings`; all other 6,716 scalar
+values and container membership/order match. This is central's retained-log
+localization to diagnostic collection, not a reproduction of the interleaving
+or a concurrency qualification. AK's concurrency obligation remains open.
+The 36 ignored tests were not all
 rerun as a historical corpus campaign; selected AH evidence tests were invoked
 explicitly by their runners.
 
@@ -212,20 +260,26 @@ failure witnesses retain bounded prefixes and statuses with a two-second time
 limit, 1-MiB file limit and disabled core dumps.
 
 All following evidence paths are beneath `validation/core_output/build/` unless
-otherwise specified. The delivery index also hashes authored files, all five
-native executables and final logs, and records protected repository status.
-It is frozen before this report and deliberately has no report self-hash.
+otherwise specified. `delivery-identity-help-corrected.json` indexes the new
+receipts, logs, authored correction files, original index and preservation
+audit, and records current protected-repository status. The unchanged original
+`delivery-identity.json` retains original production/native/log identities and
+its historical checkout status. Both indexes precede their corresponding report
+updates and deliberately have no report self-hash.
 
 | Artifact | SHA-256 |
 | --- | --- |
+| `delivery-identity-help-corrected.json` | `8ab38dd6a78ecdad4b33d2b33ebc4785670067c5131231af1b08aa5944bda498` |
+| `help-correction-before.json` | `2a9ac18dbdb956d1668174558b58511e69ba8d275e2be6b41e065706dde327e4` |
 | `delivery-identity.json` | `7c63ad15e0ab1a0fcc3b7a48991f3c28c273f4b2b2a036f6e3db3366bd7dacc7` |
 | `native-v9/identity.json` | `63e88ca4eed916986f755d4741b5bf35acde8230719117020ca7f252427a2de8` |
 | `native-v9/tempo2` | `b8dbab993d07cc291f95800d05018aac718f55ab3a81d9329a3d8e18ce160012` |
 | `../native_build.py` | `f8d88590ae796b8f89109f84d8410c58761ee1c8eb41d17d94e3f75e564fdf11` |
-| `../check.py` | `3e0c5d09760e58c5ba5b05963c9a5b4f2c23d5d8057e63885d8f9fc6ab0c5ad0` |
+| `../check.py` | `5f69e10dcf7d927ec532e698fc1c8ddb3f41a8f4834ad408fbfaf6476092275e` |
 | `../CONTRACT.md` | `c2561cb244ff13f26f0be24a4408932454d0b7cb800eec921e9b466cdb9b4a4b` |
-| `debug-final/receipt.json` | `2d227a4c810ef016e650acc178e2605705a59993a5b93b78878064e4417c312e` |
-| `release-final/receipt.json` | `8fb5c428158fd35271dca873c648b2170cf443d91bb0bc8679535321ef6337f2` |
+| `debug-help-corrected/receipt.json` | `a6c85fc6b23b10378a91cb895d4368564e15b522143dd4ac703eec3ad72da8d1` |
+| `release-help-corrected/receipt.json` | `752dabde6b6218c945914553d8f56ed0f4658f931e201a38c8deeca2c24d82c9` |
+| `checker-tests-help-corrected.log` | `650172a967c5a836b8717b328cbea49bfe1ee4984e0991dc5762f0c3ec58b5d6` |
 | `bugs-v2/receipt.json` | `1f26484c03607d405d61c21846fe82a8527288a6304246ab9fb768e7c56cd46e` |
 | `ut1-check-v1/receipt.json` | `a1e4ef4fedea208802c7ed32054712663f95271ff06ab3d3078cba81ff97d885` |
 | `source-inventory.json` | `583d9d77b79104de2d4cafeb4272bc98a894f20aa56beba0c6d2f8d133369438` |
@@ -234,15 +288,19 @@ It is frozen before this report and deliberately has no report self-hash.
 
 The accepted evidence and all AH attempts remain in place. Native v1-v6 used the
 superseded AF dependency selection and are not delivery oracles; v7-v8 and older
-debug/release/snapshot attempts are historical. The final names above identify
+debug/release/snapshot attempts are historical. The original `debug-final` and
+`release-final` matrices are superseded by the observer correction described
+above. The final names above identify
 the actual completed runs. The development translator uses pycparser 2.23;
 Cargo consumes committed Rust and has no Python-parser dependency.
 
-Canonical TEMPO2 retains its pin and unchanged tracked source, with exactly the
-five pre-existing untracked `.DS_Store` files in the root, T2runtime, python,
-tests and unsupported_plugins directories. The independent reference checkout
-is clean at its recorded pin. AH commits contain only explicit authored paths
-under `rust/` and `validation/core_output/`.
+Canonical TEMPO2 and the independent reference checkout are now both clean at
+their recorded pins. The five untracked `.DS_Store` files listed in the original
+delivery index (root, T2runtime, python, tests and unsupported_plugins) are now
+absent; their earlier presence remains a historical observation, and no cause
+for the change is attributed here. This correction made no edits to either
+checkout. AH commits contain only explicit authored paths under `rust/` and
+`validation/core_output/`.
 
 ## Remaining acceptance and release scope
 
