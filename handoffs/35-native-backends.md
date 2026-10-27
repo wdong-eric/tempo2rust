@@ -1,8 +1,8 @@
 # Assignment AI: enabled ephemeris and numerical backends
 
-**Released by 0094 after AH implementation handover and ownership closure.** Follow 0081/0074 from AH production `0dbcf08`, corrected validation `50f2bf3` and report `9dec65c`. AI is the sole Rust writer; consult HANDOFF.md for any later ownership decision. Work in `/Users/Eric.Dong/Downloads/tempo2rust`. Read HANDOFF.md, decisions 0094/0093/0092/0091/0086/0084/0083/0081/0074/0066/0065/0053/0039/0050, predecessor reports and the exact released baseline.
+**Implementation handover approved and ownership closed by 0095.** AI delivered production `4c04811`, validation `1a9f06f`, correction `e96b589` and report `20e368f`. AJ now owns Rust; AI must make no further Rust or validation edits. The following is the original assignment contract released by 0094 after AH production `0dbcf08`, corrected validation `50f2bf3` and report `9dec65c`. Consult HANDOFF.md and 0095 for current ownership and the complete open acceptance ledger.
 
-Own `rust/` and new `validation/native_backends/` as the sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and milestone acceptance. Preserve original 0008 and its later amendments.
+During the now-closed implementation window, AI owned `rust/` and new `validation/native_backends/` as the sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and milestone acceptance. Preserve original 0008 and its later amendments.
 
 Deliver real CALCEPH ephemeris/time processing and enabled BLAS/LAPACK matrix, Cholesky and QR routes through the canonical public timing/fitting/native-style CLI. Complete the scoped direct routines, including unused source `accel_uinv`, and retain disabled profiles. Reuse prior implementations; keep native bindings small and explain every necessary unsafe boundary beside it.
 
