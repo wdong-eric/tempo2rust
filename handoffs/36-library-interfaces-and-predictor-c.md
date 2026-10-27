@@ -17,6 +17,10 @@ Proceed in dependency order:
 
 Carry the complete unresolved ledger in 0095, including every inherited numerical gate, all twelve AH groups and the three diagnostic warning-vector findings assigned to AK. AI's measured macOS provider result does not establish Linux support; AL must implement and execute that provider boundary. Full scientific migration, operational/platform qualification and inherited numerical gates remain separate obligations. New consequential questions go to central for the 0082 user checkpoint; continue independent work while a choice is pending.
 
+## Central review during implementation
+
+Address `handoffs/36a-library-interface-review-corrections.md` before final delivery. Its supported original witnesses cover defined low-count C set reads, Cheby borrowed pipe reads and locale-independent private scalar conversion in both directions; it also records the notice-installation omission. The original bare-T1-pipe success claim is withdrawn after source inspection: qualify the defined replacement histories and retain the diagnostic with its corrected interpretation. Retain the witnesses, add the focused external consumers and return exact corrected artifact identities. These findings apply the existing interface contract and do not change scientific gates or release AK.
+
 ## Dispatch prompt
 
 Implement Assignment AJ under decisions/0084-library-interfaces-and-predictor-c-contract.md, decisions/0074-implementation-handover-and-acceptance.md and handoffs/36-library-interfaces-and-predictor-c.md from AI delivery `20e368f` plus the central 0095 release commit. Own rust/ and validation/library_interfaces/ as sole Rust writer. Deliver the user's selected full Rust core/toolkit API guarantee, complete standalone predictor C compatibility and getPeriod-equivalent client using existing scientific implementations. Qualify external Rust/C/C++ callers and actual ABI/ownership/file behavior, preserve source correspondence and numerical gates, apply 0053 to demonstrated small bugs, explain necessary unsafe, commit authored files only and return rust/LIBRARY_INTERFACES_REPORT.md for central's 0082 checkpoint.
