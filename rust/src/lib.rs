@@ -75,6 +75,7 @@ mod source_tim_tests;
 pub mod spectrum;
 mod std_freq;
 mod stdio;
+pub mod t2accel;
 mod t2fit;
 pub mod t2fit_nestlike;
 mod tabulated_function;

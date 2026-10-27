@@ -1,4 +1,4 @@
-//! TEMPO2 TKfit.C: shared nonaccelerated least squares and constraint augmentation.
+//! TEMPO2 TKfit.C: shared SVD/QR least squares and constraint augmentation.
 // GPL-3.0-or-later; source covariance and mixed-precision chi-square boundaries.
 #![allow(clippy::needless_range_loop)]
 use crate::tksvd::{ld, tk_backsubstitution_svd, tk_singular_value_decomposition};
@@ -69,9 +69,13 @@ pub(crate) fn serialize_matrix<S: Serializer>(
 
 #[derive(Clone, Debug, Serialize)]
 pub struct LeastSquares {
+    pub solver: &'static str,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub singular_values: Vec<FitNumber>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub retained: Vec<bool>,
-    pub rank: usize,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<usize>,
     pub dof: usize,
     pub increments: Vec<FitNumber>,
     pub covariance: Vec<Vec<FitNumber>>,
@@ -102,7 +106,8 @@ impl FitDiagnostics {
 }
 
 /// The three independently optional TKfit output pointers. Unrequested vectors
-/// in `LeastSquares` are empty; chi-square remains source zero without parameters.
+/// in `LeastSquares` are empty. SVD returns zero chi-square without parameters;
+/// QR consumes its supplied RHS and returns the augmented residual statistic.
 #[derive(Clone, Copy, Debug)]
 pub struct FitOutputs {
     pub parameters: bool,
@@ -136,8 +141,8 @@ pub fn tk_least_squares(
     )
 }
 
-/// TKrobustDefConstrainedLeastSquares nonrobust SVD branch. Constraint rows are
-/// already in their source weighted fit coordinates; chi-square uses data only.
+/// TKrobustDefConstrainedLeastSquares. Constraint rows are already weighted.
+/// SVD chi-square uses data rows; enabled QR uses the augmented rows.
 #[allow(clippy::too_many_arguments)]
 pub fn constrained_least_squares(
     data: &[f64],
@@ -163,7 +168,7 @@ pub fn constrained_least_squares(
     )
 }
 
-/// Shared SVD path with source optional data/parameter/error/covariance outputs.
+/// Shared solver dispatch with independent parameter/error/covariance outputs.
 #[allow(clippy::too_many_arguments)]
 pub fn least_squares_outputs(
     data: Option<&[f64]>,
@@ -200,102 +205,16 @@ pub fn least_squares_outputs(
     if nf > augmented_n {
         return Err("TKfit source boundary: n < p returns without initializing fit outputs".into());
     }
-    crate::clkcorr::with_diagnostics(|d| {
-        d.log(
-            b'm',
-            "TKfit.C",
-            345,
-            format!("SVD nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
-        );
-        Ok(())
-    })
-    .map_err(|e| e.to_string())?;
-    let mut svd = tk_singular_value_decomposition(
-        white_matrix
-            .iter()
-            .chain(constraints)
-            .map(|row| row.iter().map(|v| ld(*v)).collect())
-            .collect(),
-    )?;
-    let singular_values: Vec<_> = svd.w.iter().cloned().map(FitNumber).collect();
-    let wmax = find_max(&singular_values)?.0;
-    let cutoff = ld(tolerance) * &wmax;
-    for w in &mut svd.w {
-        if *w < cutoff {
-            *w = ld(0.0);
-        }
-    }
-    let retained: Vec<_> = svd.w.iter().map(|w| *w != 0).collect();
-    let rank = retained.iter().filter(|v| **v).count();
     let compute_covariance = outputs.covariance || outputs.errors;
-    let wt: Vec<_> = svd
-        .w
-        .iter()
-        .map(|w| if *w != 0 { ld(1.0) / w / w } else { ld(0.0) })
-        .collect();
-    let mut covariance = if compute_covariance {
-        vec![vec![FitNumber::from(0.0); nf]; nf]
-    } else {
-        vec![]
-    };
-    for i in 0..covariance.len() {
-        for j in 0..=i {
-            let mut sum = ld(0.0);
-            for k in 0..nf {
-                sum += svd.v[i][k].clone() * &svd.v[j][k] * &wt[k];
-            }
-            covariance[i][j] = FitNumber::from(sum.to_f64());
-            covariance[j][i] = covariance[i][j].clone();
-        }
-    }
-    let errors_unscaled: Vec<_> = (0..if outputs.errors { nf } else { 0 })
-        .map(|i| FitNumber::from(covariance[i][i].0.to_f64().sqrt()))
-        .collect();
-    // TKfit.C::TKrobustDefConstrainedLeastSquares:347 ignores constraint_vals
-    // in the SVD branch. Nonzero prior equations require their supplied RHS,
-    // as already used by the source QR branch. AE nonzero-target witness.
-    let p = if compute_params {
-        let augmented_data: Vec<_> = white_data.unwrap().iter().chain(targets).copied().collect();
-        tk_backsubstitution_svd(&svd, &augmented_data)
-    } else {
-        vec![]
-    };
-    let increments: Vec<_> = p.iter().map(|v| FitNumber::from(v.to_f64())).collect();
-    let mut chisq = 0.0;
-    for j in 0..if compute_params { n } else { 0 } {
-        let mut sum = ld(0.0);
-        for k in 0..nf {
-            sum += p[k].clone() * white_matrix[j][k];
-        }
-        // Source running chisq is double, but the row square and addition are longdouble.
-        chisq = (ld(chisq) + (ld(white_data.unwrap()[j]) - sum).square()).to_f64();
-    }
     let dof = augmented_n - nf;
-    // Defined source 0/0 and infinity are retained, including square fits.
-    let multiplier = if rescale {
-        (chisq / dof as f64).sqrt()
+    let solver = if crate::t2accel::qr_enabled() {
+        "QR"
     } else {
-        1.0
+        "SVD"
     };
-    let errors = errors_unscaled
-        .iter()
-        .map(|e| FitNumber::from(e.0.to_f64() * multiplier))
-        .collect();
-    let linearized_s = if compute_params {
-        matrix
-            .iter()
-            .zip(data.unwrap())
-            .map(|(row, y)| {
-                let mut sum = 0.0;
-                for j in 0..nf {
-                    sum += row[j] * increments[j].0.to_f64();
-                }
-                FitNumber::from(y - sum)
-            })
-            .collect()
-    } else {
-        vec![]
-    };
+    if solver == "QR" && white_data.is_none() {
+        return Err("QR requires the real supplied whitened RHS".into());
+    }
     let mut diagnostic_files = vec![];
     if let Some(io) = diagnostics {
         use crate::clock_text::{NumberFormat, format_number};
@@ -337,7 +256,228 @@ pub fn least_squares_outputs(
                 bytes.push(b'\n');
             }
             diagnostic_files.push(io.write("constraints.matrix", &bytes)?);
+            if solver == "QR" {
+                bytes.clear();
+                let mut rhs_bytes = vec![];
+                // fda6ad4 TKfit.C:289-308 checks only wFile then dereferences
+                // yFile. Fallible owned writes report either failed destination.
+                for (i, (row, y)) in white_matrix
+                    .iter()
+                    .chain(constraints)
+                    .zip(white_data.unwrap().iter().chain(targets))
+                    .enumerate()
+                {
+                    rhs_bytes.extend([format!("{i} ").as_bytes(), &g(*y), b"\n"].concat());
+                    for (j, v) in row.iter().enumerate() {
+                        bytes.extend([format!("{i} {j} ").as_bytes(), &g(*v), b"\n"].concat());
+                    }
+                    bytes.push(b'\n');
+                }
+                diagnostic_files.push(io.write("adesign.matrix", &bytes)?);
+                diagnostic_files.push(io.write("awhite.res", &rhs_bytes)?);
+            }
         }
+    }
+    let (
+        singular_values,
+        retained,
+        rank,
+        increments,
+        mut covariance,
+        errors_unscaled,
+        errors,
+        chisq,
+        multiplier,
+    ) = if crate::t2accel::qr_enabled() {
+        use crate::tk_matrix::BlasMatrix;
+        // fda6ad4 TKfit.C:194,260-270 allocates/copies only for computeParam
+        // then fills the matrix unconditionally. 0093 proves optional-output
+        // crashes. Allocate and copy the real RHS independently of outP.
+        let rhs = white_data.ok_or("QR requires the real supplied whitened RHS")?;
+        let mut rhs: Vec<_> = rhs.iter().chain(targets).copied().collect();
+        let rows: Vec<_> = white_matrix.iter().chain(constraints).cloned().collect();
+        let mut augmented = BlasMatrix::from_rows(&rows)?;
+        let mut params = vec![0.0; if compute_params { nf } else { 0 }];
+        let mut cov = if compute_covariance {
+            Some(BlasMatrix::malloc_uinv(nf).map_err(|e| e.to_string())?)
+        } else {
+            None
+        };
+        crate::clkcorr::with_diagnostics(|d| {
+            d.log(
+                b'm',
+                "TKfit.C",
+                277,
+                format!("QR nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
+            );
+            Ok(())
+        })
+        .map_err(|e| e.to_string())?;
+        let chisq = crate::t2accel::accel_lsq_qr(
+            &mut augmented,
+            &mut rhs,
+            if compute_params {
+                Some(&mut params)
+            } else {
+                None
+            },
+            cov.as_mut(),
+            rescale,
+        )?;
+        let covariance: Vec<Vec<FitNumber>> = cov
+            .map(|c| {
+                c.to_rows()
+                    .into_iter()
+                    .map(|r| r.into_iter().map(Into::into).collect())
+                    .collect()
+            })
+            .unwrap_or_default();
+        let errors = (0..if outputs.errors { nf } else { 0 })
+            .map(|i| FitNumber::from(covariance[i][i].0.to_f64().sqrt()))
+            .collect();
+        let multiplier = if rescale {
+            (chisq / dof as f64).sqrt()
+        } else {
+            1.0
+        };
+        // DGELS has no SVD spectrum/rank. Unscaled errors were not computed by
+        // the source scaled covariance product; do not invent them by a solve.
+        (
+            vec![],
+            vec![],
+            None,
+            params.into_iter().map(Into::into).collect(),
+            covariance,
+            vec![],
+            errors,
+            chisq,
+            multiplier,
+        )
+    } else {
+        if crate::t2accel::acceleration() == 2 {
+            crate::clkcorr::with_diagnostics(|d| {
+                d.log(
+                    b'w',
+                    "TKfit.C",
+                    317,
+                    b"Can't use QR fitting without LAPACK/BLAS. Defaulting to SVD.",
+                );
+                Ok(())
+            })
+            .map_err(|e| e.to_string())?;
+        }
+        crate::clkcorr::with_diagnostics(|d| {
+            d.log(
+                b'm',
+                "TKfit.C",
+                345,
+                format!("SVD nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
+            );
+            Ok(())
+        })
+        .map_err(|e| e.to_string())?;
+        let mut svd = tk_singular_value_decomposition(
+            white_matrix
+                .iter()
+                .chain(constraints)
+                .map(|row| row.iter().map(|v| ld(*v)).collect())
+                .collect(),
+        )?;
+        let singular_values: Vec<_> = svd.w.iter().cloned().map(FitNumber).collect();
+        let wmax = find_max(&singular_values)?.0;
+        let cutoff = ld(tolerance) * &wmax;
+        for w in &mut svd.w {
+            if *w < cutoff {
+                *w = ld(0.0);
+            }
+        }
+        let retained: Vec<_> = svd.w.iter().map(|w| *w != 0).collect();
+        let rank = retained.iter().filter(|v| **v).count();
+        let compute_covariance = outputs.covariance || outputs.errors;
+        let wt: Vec<_> = svd
+            .w
+            .iter()
+            .map(|w| if *w != 0 { ld(1.0) / w / w } else { ld(0.0) })
+            .collect();
+        let mut covariance = if compute_covariance {
+            vec![vec![FitNumber::from(0.0); nf]; nf]
+        } else {
+            vec![]
+        };
+        for i in 0..covariance.len() {
+            for j in 0..=i {
+                let mut sum = ld(0.0);
+                for k in 0..nf {
+                    sum += svd.v[i][k].clone() * &svd.v[j][k] * &wt[k];
+                }
+                covariance[i][j] = FitNumber::from(sum.to_f64());
+                covariance[j][i] = covariance[i][j].clone();
+            }
+        }
+        let errors_unscaled: Vec<_> = (0..if outputs.errors { nf } else { 0 })
+            .map(|i| FitNumber::from(covariance[i][i].0.to_f64().sqrt()))
+            .collect();
+        // TKfit.C::TKrobustDefConstrainedLeastSquares:347 ignores constraint_vals
+        // in the SVD branch. Nonzero prior equations require their supplied RHS,
+        // as already used by the source QR branch. AE nonzero-target witness.
+        let p = if compute_params {
+            let augmented_data: Vec<_> =
+                white_data.unwrap().iter().chain(targets).copied().collect();
+            tk_backsubstitution_svd(&svd, &augmented_data)
+        } else {
+            vec![]
+        };
+        let increments: Vec<_> = p.iter().map(|v| FitNumber::from(v.to_f64())).collect();
+        let mut chisq = 0.0;
+        for j in 0..if compute_params { n } else { 0 } {
+            let mut sum = ld(0.0);
+            for k in 0..nf {
+                sum += p[k].clone() * white_matrix[j][k];
+            }
+            // Source running chisq is double, but the row square and addition are longdouble.
+            chisq = (ld(chisq) + (ld(white_data.unwrap()[j]) - sum).square()).to_f64();
+        }
+        let dof = augmented_n - nf;
+        // Defined source 0/0 and infinity are retained, including square fits.
+        let multiplier = if rescale {
+            (chisq / dof as f64).sqrt()
+        } else {
+            1.0
+        };
+        let errors: Vec<FitNumber> = errors_unscaled
+            .iter()
+            .map(|e| FitNumber::from(e.0.to_f64() * multiplier))
+            .collect();
+        (
+            singular_values,
+            retained,
+            Some(rank),
+            increments,
+            covariance,
+            errors_unscaled,
+            errors,
+            chisq,
+            multiplier,
+        )
+    };
+    let linearized_s = if compute_params {
+        matrix
+            .iter()
+            .zip(data.unwrap())
+            .map(|(row, y)| {
+                let mut sum = 0.0;
+                for j in 0..nf {
+                    sum += row[j] * increments[j].0.to_f64();
+                }
+                FitNumber::from(y - sum)
+            })
+            .collect()
+    } else {
+        vec![]
+    };
+    if let Some(io) = diagnostics {
+        use crate::clock_text::{NumberFormat, format_number};
+        let g = |v| format_number(v, NumberFormat::GeneralSix);
         if io.debug && compute_covariance {
             let mut bytes = vec![];
             for i in 0..nf {
@@ -402,6 +542,7 @@ pub fn least_squares_outputs(
         covariance.clear();
     }
     Ok(LeastSquares {
+        solver,
         singular_values,
         retained,
         rank,

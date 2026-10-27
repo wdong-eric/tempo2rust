@@ -448,7 +448,7 @@ pub fn run(
     let mut writetim = false;
     let mut veryfast = 0;
     let mut allglitch = false;
-    let mut acceleration = 1;
+    let mut acceleration = crate::t2accel::NATIVE_DEFAULT;
     for (i, a) in args.iter().enumerate() {
         let lower = a.to_ascii_lowercase();
         match lower.as_slice() {
@@ -471,6 +471,7 @@ pub fn run(
             _ => (),
         }
     }
+    let _acceleration_scope = crate::t2accel::select(acceleration);
     if max_psr <= 0 || max_obs <= 0 {
         return Err(boundary("command_allocation_count"));
     }
@@ -543,7 +544,17 @@ pub fn run(
                 &[Argument::from(p.as_os_str().as_bytes())],
             )?)?;
         }
-        io.write(b"\n* Using slow linear algebra code (compile with LAPACK for speed improvements)\n* Using slow matrix code (compile with BLAS for speed improvements)\n")?;
+        io.write(b"\n")?;
+        io.write(if cfg!(feature = "lapack") {
+            b"* Using LAPACK acceleration for Cholesky decomposition\n"
+        } else {
+            b"* Using slow linear algebra code (compile with LAPACK for speed improvements)\n"
+        })?;
+        io.write(if cfg!(feature = "blas") {
+            b"* Using BLAS acceleration for matrix mulitplication\n"
+        } else {
+            b"* Using slow matrix code (compile with BLAS for speed improvements)\n"
+        })?;
         io.write(&format(
             "\nFor more help, use %s -h\n",
             &[Argument::from(args[0].clone())],

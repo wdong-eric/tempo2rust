@@ -110,6 +110,14 @@ pub fn decompose(a: &mut [Vec<f64>]) -> Result<Vec<f64>, TimingError> {
 }
 /// cholesky_formL, sharing the source decomposition with its direct API.
 pub fn form_l(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
+    if crate::t2accel::lapack_enabled() {
+        let mut a = crate::tk_matrix::BlasMatrix::from_rows(matrix).map_err(|e| boundary(&e))?;
+        let info = crate::t2accel::accel_cholfac(&mut a).map_err(|e| boundary(&e))?;
+        if info != 0 {
+            return Err(boundary(&format!("DPOTRF failed: INFO={info}")));
+        }
+        return Ok(a.to_rows());
+    }
     let n = matrix.len();
     let mut a = matrix.to_vec();
     let p = decompose(&mut a)?;
@@ -139,6 +147,58 @@ pub fn form_linv(matrix: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
         }
     }
     Ok(out)
+}
+/// getCholeskyMatrix retry, shared by observation and IFUNC coordinate callers.
+fn covariance_factor(matrix: &mut [Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingError> {
+    if crate::t2accel::lapack_enabled() {
+        // cholesky.C::getCholeskyMatrix:153-163 retries only the enabled
+        // factorization status, multiplying each diagonal by the source value.
+        let mut a = crate::tk_matrix::BlasMatrix::from_rows(matrix).map_err(|e| boundary(&e))?;
+        let mut info = crate::t2accel::accel_cholfac(&mut a).map_err(|e| boundary(&e))?;
+        if info != 0 {
+            crate::clkcorr::with_diagnostics(|d| {
+                d.log(
+                    b'w',
+                    "cholesky.C",
+                    155,
+                    b"Error with formL... adding 0.0001% to diagonal",
+                );
+                Ok(())
+            })?;
+            for (i, row) in matrix.iter_mut().enumerate() {
+                row[i] *= 1.000001;
+            }
+            a = crate::tk_matrix::BlasMatrix::from_rows(matrix).map_err(|e| boundary(&e))?;
+            info = crate::t2accel::accel_cholfac(&mut a).map_err(|e| boundary(&e))?;
+        }
+        if info != 0 {
+            return Err(boundary(&format!("DPOTRF retry failed: INFO={info}")));
+        }
+        Ok(a.to_rows())
+    } else {
+        source_log(
+            530,
+            "Doing Cholesky decomp and inverting matrix (SLOW method)",
+            &[],
+        )?;
+        form_l(matrix)
+    }
+}
+
+#[cfg(all(test, feature = "lapack"))]
+#[test]
+fn enabled_covariance_retry_keeps_source_diagonal_increment() {
+    crate::t2accel::with_acceleration(1, || {
+        let mut semidefinite = vec![vec![1.0, 1.0], vec![1.0, 1.0]];
+        let l = covariance_factor(&mut semidefinite).unwrap();
+        assert_eq!(semidefinite[0][0], 1.000001);
+        assert_eq!(semidefinite[1][1], 1.000001);
+        assert!(l[1][1] > 0.0);
+        assert_eq!(l[0][1], 1.0);
+        let mut indefinite = vec![vec![-1.0, 0.0], vec![0.0, 1.0]];
+        assert!(covariance_factor(&mut indefinite).is_err());
+        assert!(covariance_factor(&mut semidefinite).is_ok());
+    });
 }
 fn days(x: &[f64]) -> Result<usize, TimingError> {
     let span = (*x.last().ok_or_else(|| boundary("empty covariance times"))? - x[0] + 1e-10).ceil();
@@ -837,14 +897,7 @@ pub fn get_cholesky_matrix(
             NumberFormat::GeneralTwentyEight,
         )?);
     }
-    // Nonaccelerated T2cholDecomposition exits on a nonpositive pivot, before
-    // getCholeskyMatrix's accelerated formL return-code retry can be reached.
-    source_log(
-        530,
-        "Doing Cholesky decomp and inverting matrix (SLOW method)",
-        &[],
-    )?;
-    let l = form_l(&m)?;
+    let l = covariance_factor(&mut m)?;
     if let Some(io) = diagnostics.filter(|d| d.debug) {
         files.push(write_matrix(io, "chol.L", &l, NumberFormat::GeneralSix)?);
     }
@@ -906,7 +959,7 @@ pub fn ifunc_cholesky(
     for i in 0..n {
         m[i][i] += 1e-5 * 1e-5;
     }
-    let l = form_l(&m)?;
+    let l = covariance_factor(&mut m)?;
     let mut det = 1.0;
     for i in 0..n {
         det += l[i][i].ln();

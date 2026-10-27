@@ -262,8 +262,10 @@ fn t2_fit(
                 "source warning: wmax very large; precision issues likely to break fit".into(),
             );
         }
-        if solver.rank < columns.len() {
-            warnings.push(format!("SVD retained {} of {} modes; zero variance in discarded modes is a pseudoinverse artifact",solver.rank,columns.len()));
+        if let Some(rank) = solver.rank
+            && rank < columns.len()
+        {
+            warnings.push(format!("SVD retained {} of {} modes; zero variance in discarded modes is a pseudoinverse artifact",rank,columns.len()));
         }
         if solver.errors.iter().any(|e| !e.0.is_finite()) {
             nonfinite = true;

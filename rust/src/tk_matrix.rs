@@ -11,6 +11,24 @@ pub struct BlasMatrix {
     cells: Arc<Vec<f64>>,
 }
 impl BlasMatrix {
+    /// Copy the toolkit's public row vectors into its canonical FFI owner.
+    pub fn from_rows(rows: &[Vec<f64>]) -> Result<Self, String> {
+        let cols = rows.first().ok_or("empty matrix")?.len();
+        if rows.iter().any(|r| r.len() != cols) {
+            return Err("ragged matrix".into());
+        }
+        let mut out = Self::malloc_blas(rows.len(), cols).map_err(|e| e.to_string())?;
+        for (dst, src) in out.cells_mut().chunks_exact_mut(cols).zip(rows) {
+            dst.copy_from_slice(src);
+        }
+        Ok(out)
+    }
+    pub fn to_rows(&self) -> Vec<Vec<f64>> {
+        self.cells()
+            .chunks_exact(self.cols)
+            .map(<[f64]>::to_vec)
+            .collect()
+    }
     pub fn malloc_blas(rows: usize, cols: usize) -> Result<Self, LifecycleBoundary> {
         if rows == 0 || cols == 0 {
             return Err(fail(
@@ -103,6 +121,13 @@ pub fn forward_sub(l: &[Vec<f64>], m: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, Stri
 }
 /// TKmultMatrix: k/i/j accumulation order (nonaccelerated source branch).
 pub fn mult_matrix(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, String> {
+    if crate::t2accel::blas_enabled() {
+        return crate::t2accel::accel_mult_matrix(
+            &BlasMatrix::from_rows(a)?,
+            &BlasMatrix::from_rows(b)?,
+        )
+        .map(|m| m.to_rows());
+    }
     let n = b.len();
     let p = b.first().ok_or("empty matrix product")?.len();
     if a.iter().any(|r| r.len() != n) || b.iter().any(|r| r.len() != p) {
@@ -121,6 +146,9 @@ pub fn mult_matrix(a: &[Vec<f64>], b: &[Vec<f64>]) -> Result<Vec<Vec<f64>>, Stri
 
 /// TKmultMatrixVec (including its square wrapper): source column/row order.
 pub fn mult_matrix_vec(a: &[Vec<f64>], b: &[f64]) -> Result<Vec<f64>, String> {
+    if crate::t2accel::blas_enabled() {
+        return crate::t2accel::accel_mult_matrix_vec(&BlasMatrix::from_rows(a)?, b);
+    }
     if a.iter().any(|row| row.len() != b.len()) {
         return Err("matrix vector product dimensions".into());
     }

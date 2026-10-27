@@ -797,6 +797,12 @@ pub fn t2_fit(
     context: &mut PulsarContext,
     options: &FitOptions,
 ) -> Result<Vec<FitSystem>, TimingError> {
+    crate::t2accel::with_acceleration(options.acceleration, || t2_fit_selected(context, options))
+}
+fn t2_fit_selected(
+    context: &mut PulsarContext,
+    options: &FitOptions,
+) -> Result<Vec<FitSystem>, TimingError> {
     let p = context
         .pulsars
         .first()
@@ -805,17 +811,6 @@ pub fn t2_fit(
         return Err(boundary("native fit plugin ABI is not available"));
     }
     let covariance = options.covariance.as_deref().filter(|s| *s != "NULL");
-    if options.acceleration == 2 {
-        crate::clkcorr::with_process(|s| {
-            let _: () = s.diagnostics.log(
-                b'w',
-                "TKfit.C",
-                317,
-                b"Can't use QR fitting without LAPACK/BLAS. Defaulting to SVD.",
-            );
-            Ok(())
-        })?;
-    }
     for i in 0..context.pulsars.len() {
         if context.pulsars[i].auto_constraints != Some(0) {
             crate::constraints::auto_constraints(&mut context.pulsars[i], i)?;
@@ -1105,6 +1100,11 @@ pub fn t2_fit(
             white_matrix: numbers(white_matrix),
             constraints: numbers(constraints),
             constraint_targets: constraint_targets.into_iter().map(Into::into).collect(),
+            solver_engine: if solver.solver == "QR" {
+                "source QR (LAPACK)"
+            } else {
+                "source SVD (nonaccelerated)"
+            },
             solver,
             updates,
             whitening,
@@ -1112,7 +1112,6 @@ pub fn t2_fit(
             constraint_rows,
             noise: vec![],
             working_directory: std::env::current_dir().map_err(|e| boundary(&e.to_string()))?,
-            solver_engine: "source SVD (nonaccelerated)",
             diagnostic_files,
         });
     }

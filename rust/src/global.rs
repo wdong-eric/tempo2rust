@@ -3,7 +3,11 @@ use crate::{
     RuntimeContext, TimingError, clkcorr::ClockSession, observation::read,
     pulsar_lifecycle::PulsarContext, runtime::Resource,
 };
-fn clocks(s: &mut ClockSession, c: &mut PulsarContext) -> Result<(), TimingError> {
+fn clocks(
+    s: &mut ClockSession,
+    c: &mut PulsarContext,
+    resources: &mut Vec<Resource>,
+) -> Result<(), TimingError> {
     let count = c.pulsars.len() as i32;
     s.run(|s| {
         for i in 0..c.pulsars.len() {
@@ -19,7 +23,7 @@ fn clocks(s: &mut ClockSession, c: &mut PulsarContext) -> Result<(), TimingError
         .first()
         .ok_or_else(|| crate::clock_diagnostics::boundary("global_empty_pulsar_context"))?;
     if *read(&first.useCalceph, "useCalceph")? != 0 {
-        crate::calceph::unavailable_in(&mut s.diagnostics)?;
+        crate::calceph::time(s, c, resources)?;
     }
     crate::tt2tdb::tt2tb(s, c, count)
 }
@@ -34,16 +38,23 @@ fn ephemerides(
         .pulsars
         .first()
         .ok_or_else(|| crate::clock_diagnostics::boundary("global_empty_pulsar_context"))?;
-    if *read(&first.useCalceph, "useCalceph")? != 0 {
-        crate::calceph::unavailable_in(&mut s.diagnostics)?;
+    let calceph = *read(&first.useCalceph, "useCalceph")? != 0;
+    if calceph {
+        crate::calceph::positions(s, c, resources)?;
+    } else {
+        crate::read_ephemeris::driver(s, c, resources, 0)?;
     }
-    crate::read_ephemeris::driver(s, c, resources, 0)?;
     crate::get_obs_coord::driver(s, c, count)?;
     crate::tt2tdb::tt2tb(s, c, count)?;
-    crate::read_ephemeris::driver(s, c, resources, 0)
+    if calceph {
+        crate::calceph::time(s, c, resources)?;
+        crate::calceph::positions(s, c, resources)
+    } else {
+        crate::read_ephemeris::driver(s, c, resources, 0)
+    }
 }
 pub fn clock_corrections(c: &mut PulsarContext, r: &mut RuntimeContext) -> Result<(), TimingError> {
-    crate::clkcorr::with_resources(&r.root, |s| clocks(s, c))
+    crate::clkcorr::with_resources(&r.root, |s| clocks(s, c, &mut r.resources))
 }
 pub fn ephemeris_routines(
     c: &mut PulsarContext,
@@ -59,7 +70,7 @@ pub fn extra_delays(c: &mut PulsarContext, r: &mut RuntimeContext) -> Result<(),
 pub fn form_bats_all(c: &mut PulsarContext, r: &mut RuntimeContext) -> Result<(), TimingError> {
     crate::clkcorr::with_resources(&r.root, |s| {
         crate::refphs::init(c, s.source.max_observations, &mut s.diagnostics)?;
-        clocks(s, c)?;
+        clocks(s, c, &mut r.resources)?;
         ephemerides(s, c, &mut r.resources)?;
         crate::propagation::calculate(s, c, &mut r.resources)?;
         crate::propagation::form_bats_inner(c, &mut s.diagnostics)?;

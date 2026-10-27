@@ -22,6 +22,49 @@ fn main() {
         .collect();
     sources.sort();
     let mut objects = Vec::new();
+    for key in ["CC", "CALCEPH_DIR", "TEMPO2_ACCELERATE"] {
+        println!("cargo:rerun-if-env-changed={key}");
+    }
+    let blas = env::var_os("CARGO_FEATURE_BLAS").is_some();
+    let calceph = env::var_os("CARGO_FEATURE_CALCEPH").is_some();
+    if blas || calceph {
+        let cc = env::var("CC").unwrap_or_else(|_| "clang".into());
+        let object = Path::new(&out).join("backends.o");
+        let mut args = vec![
+            "-std=c11".to_owned(),
+            "-O2".into(),
+            "-fPIC".into(),
+            "-c".into(),
+            "native/backends.c".into(),
+            "-o".into(),
+            object.to_str().unwrap().into(),
+        ];
+        if blas {
+            assert!(
+                env::var("CARGO_CFG_TARGET_OS").unwrap() == "macos"
+                    && env::var("TEMPO2_ACCELERATE").as_deref() == Ok("1"),
+                "blas/lapack currently require the explicitly selected, measured macOS LP64 provider: TEMPO2_ACCELERATE=1; other provider ABIs need qualification"
+            );
+            args.push("-DT2_BLAS".into());
+            if env::var_os("CARGO_FEATURE_LAPACK").is_some() {
+                args.push("-DT2_LAPACK".into());
+            }
+            println!("cargo:rustc-link-lib=framework=Accelerate");
+        }
+        if calceph {
+            let prefix = env::var("CALCEPH_DIR").expect(
+                "calceph requires CALCEPH_DIR containing include/calceph.h and lib/libcalceph.a",
+            );
+            args.push("-DT2_CALCEPH".into());
+            args.push(format!("-I{prefix}/include"));
+            println!("cargo:rerun-if-changed={prefix}/include/calceph.h");
+            println!("cargo:rerun-if-changed={prefix}/lib/libcalceph.a");
+            println!("cargo:rustc-link-search=native={prefix}/lib");
+            println!("cargo:rustc-link-lib=static=calceph");
+        }
+        run(&cc, &args.iter().map(String::as_str).collect::<Vec<_>>());
+        objects.push(object);
+    }
     for source in sources {
         let object = Path::new(&out)
             .join(source.file_name().unwrap())

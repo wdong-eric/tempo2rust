@@ -6,6 +6,13 @@ publish = false
 license = "GPL-3.0-or-later"
 description = "TEMPO2 source fixed-parameter timing core with general residuals and bounded fit interfaces"
 
+[features]
+default = []
+calceph = []
+blas = []
+lapack = ["blas"]
+qr-default = []
+
 [dependencies]
 rug = { version = "=1.30.0", default-features = false, features = ["float", "integer", "std"] }
 serde = { version = "=1.0.229", features = ["derive"] }
