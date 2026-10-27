@@ -1,8 +1,8 @@
-# Selected release platforms and integrated qualification: prepared Assignment AL
+# Selected release platforms and integrated qualification: Assignment AL
 
 Central decision, 26 October 2026. **The user selected macOS arm64 plus Linux x86_64 for the first qualified release, with the exact OS/toolchain versions recorded when tested.** Combine this with 0084's full Rust core/toolkit APIs and standalone predictor C compatibility. The complete scientific function/model scope remains binding. A successful local build or a cross-compiled artifact cannot accept Linux execution; an actual tested profile is required on each selected platform. Other OS/architecture combinations receive no first-release qualification claim from this decision.
 
-**AL is prepared after AK, not released.** Sequencing updated 27 October: AK is the active Rust writer under 0096; AJ and predecessor ownership are closed. AL requires AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Once released it owns `rust/`, new `validation/release/`, and, if needed for those checks, a new `.github/workflows/tempo2-rust.yml`. Central retains shared design, numerical policy, platform/acceptance decisions and the final completion audit. Preserve canonical TEMPO2, original 0008, other chats' changes and accepted evidence under 0050. Use 0053 for small demonstrated source bugs, 0039 for generated artifacts and Conventional Commits for authored work.
+**AL is released by 0098 on 27 October 2026**, after AK's reviewed handover, ownership closure and the 0082 checkpoint. The user explicitly chose AL qualification before performance profiling. AL is the sole Rust writer from AK report `eaa30c5` plus central release, owning `rust/`, new `validation/release/` and the new `.github/workflows/tempo2-rust.yml` if needed. All predecessor ownership is closed. Central retains shared design, numerical policy, platform/acceptance decisions and final completion audit. Preserve canonical TEMPO2, original 0008, other chats' changes and accepted evidence under 0050. Use 0053 for small demonstrated source bugs, 0039 for generated artifacts and Conventional Commits for authored work.
 
 ## Executable release candidate
 
@@ -16,7 +16,7 @@ Use distinct development/install names and a private prefix as already specified
 
 ## Two actual platform profiles
 
-The user selected GitHub Actions for the Linux preparation route under 0097. Prepare an explicit `ubuntu-24.04` x64 workflow and reproducible native/reference/resource bootstrap in AL; record the actual image and toolchain when run. Decision 0097 identifies the current clean-checkout and comparator/provider portability obligations. The candidate and workflow still require concrete publication review before a push or dispatch; AL remains unreleased.
+The user selected GitHub Actions for the Linux preparation route under 0097. Prepare an explicit `ubuntu-24.04` x64 workflow and reproducible native/reference/resource bootstrap in AL; record the actual image and toolchain when run. Decision 0097 identifies the current clean-checkout and comparator/provider portability obligations. The candidate and workflow still require concrete publication review before a push or dispatch; 0098 authorizes local preparation and qualification work, not publication.
 
 Freeze the actual macOS arm64 and Linux x86_64 OS/release, compiler/target, Rust version, lockfile, native library/provider versions, compiler/link flags and feature profiles before collecting qualification results. Record the execution host/architecture, not only a target triple. A VM or CI runner may supply Linux execution; a generated workflow, successful cross-link or unexecuted job is insufficient. Report unavailable execution as unfinished work and continue independent local/source checks; do not claim the full migration ready while a selected platform is untested.
 

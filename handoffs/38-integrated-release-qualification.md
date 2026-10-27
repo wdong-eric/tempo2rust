@@ -1,8 +1,8 @@
 # Assignment AL: integrated release qualification
 
-**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0097/0096/0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Released by 0098 after AK's reviewed committed handover, ownership closure and the 0082 checkpoint.** The user explicitly chose AL next, before profiling. Start from AK production `81de1e6`, qualification/API `3926ae1`, report `eaa30c5` and central release 0098. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0098/0097/0096/0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named below.
 
-Once released, own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
+Own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
 
 Deliver a runnable, reproducibly built/installed release candidate for the user's selected macOS arm64 and Linux x86_64 profiles, with full Rust core/toolkit APIs and standalone predictor C compatibility. The full scientific/function inventory and all numerical gates remain binding. Actual target execution is required. Do not redefine completion around the current passing subset or replace canonical installations/publish products during qualification.
 
@@ -28,21 +28,40 @@ In particular, the existing macOS binary64 conversion cannot establish exact
 Linux ordinary-long-double agreement. Preserve the frozen numerical policy.
 Keep selected CI evidence as artifacts with recorded identities and retention;
 retain failed-check diagnostics without converting failures into passes. Workflow
-creation or a successful build alone does not qualify the platform. AL remains
-unreleased and central retains milestone acceptance.
+creation or a successful build alone does not qualify the platform. Central
+retains milestone acceptance; publication/dispatch still requires review of the
+concrete candidate and workflow.
 
 ## Delivered interface baseline
 
 0096 approves AJ handover at `3e41497` / `31c7290` / `f4b73f8` and releases AK;
-AL remains unreleased. Read the installed API/source maps and final report.
+0098 subsequently approves AK and releases AL. Read the installed API/source maps and final report.
 The 64-symbol native predictor interface and external Cargo consumers have bounded
 macOS evidence. Actual Linux ordinary-long-double width/calling convention,
 private locale conversion and installed static/shared consumers still require
 execution. Keep the withdrawn bare-T1-pipe interpretation separate from the
 defined replacement stream tests. Recheck final package contents from the actual
 AL source, including later documents, notices, source/lockfiles and dependencies.
-The complete 0096 numerical ledger and concurrency/performance follow-through remain.
+The complete 0098 numerical ledger and affected concurrency/performance follow-through remain.
 
-## Dispatch prompt after release
+## Delivered AK baseline and checkpoint
 
-Implement Assignment AL under decisions/0086-release-platforms-and-integrated-qualification.md and handoffs/38-integrated-release-qualification.md from the baseline explicitly released by central. Own rust/, validation/release/ and the named qualification workflow if needed. Deliver clean installed full Rust core/toolkit and predictor C consumers on the user's selected macOS arm64 and Linux x86_64 profiles, complete source/interface/unsafe/departure coverage, full applicable integrated verification and exact inherited/new numerical-gate evidence. Preserve scientific conventions and Rug128, apply 0053 only to demonstrated small bugs, keep generated artifacts ignored, and return committed authored work plus rust/RELEASE_QUALIFICATION_REPORT.md for central acceptance.
+Read `rust/PARALLEL_EXECUTION_CONTRACT.md`, `rust/PARALLEL_EXECUTION_API.md` and
+`rust/PARALLEL_EXECUTION_REPORT.md`. Central's independent six-test rebuild,
+3,195-file audit and fresh installed Rust/C replay are recorded in 0098. The
+AH diagnostic finding is closed within the tested complete-workflow contract.
+Default serial execution, process histories, outer workflow composition and C
+caller exclusivity remain binding. Do not infer independent contexts or blanket
+concurrent API safety from the scoped worker implementation.
+
+The final matched benchmarks show substantial Rust time/memory costs and no
+consistent four-worker benefit. Raw whole-process output work differs; only the
+declared evaluation intervals support direct raw comparisons. Preserve the
+corrected `performance-v2`/`evaluation-v1` identities and original provisional
+evidence. The user chose AL before profiling; do not divert this assignment into
+an optimization redesign, change precision or invent a performance pass gate.
+Recheck measurements affected by actual platform/provider/linkage changes.
+
+## Dispatch prompt
+
+Implement Assignment AL under decisions/0086-release-platforms-and-integrated-qualification.md and handoffs/38-integrated-release-qualification.md from AK report `eaa30c5` plus central release 0098. Own rust/, validation/release/ and the named qualification workflow if needed. Deliver clean installed full Rust core/toolkit and predictor C consumers on the user's selected macOS arm64 and Linux x86_64 profiles, complete source/interface/unsafe/departure coverage, full applicable integrated verification and exact inherited/new numerical-gate evidence. Preserve scientific conventions and Rug128, apply 0053 only to demonstrated small bugs, keep generated artifacts ignored, and return committed authored work plus rust/RELEASE_QUALIFICATION_REPORT.md for central acceptance.

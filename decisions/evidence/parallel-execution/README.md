@@ -82,3 +82,45 @@ finding before central accepts its performance claims.
 The in-progress source snapshot is ignored under
 `build/benchmark-review-20261027/`; it is not a committed implementation baseline.
 Snapshot receipt SHA-256: `dbafc4a3450eb68ea13949202adee3730232156f610d7c4ebaf8d2b7d7b9fdaa`.
+
+
+## Final audit and installed-client replay, 27 October 2026
+
+Decision 0098 accepts the scoped AK handover and closes the benchmark finding
+above. `native-timed-v1` removes worker instrumentation from timed binaries;
+twelve `timed-control-v1` product controls pass, and `performance-v2` distinguishes
+matched evaluation intervals from different raw publication work. The corrected
+measurements retain the material performance costs and no consistent four-worker
+benefit. The user chose AL qualification next, with profiling before cutover.
+
+`central-handover-review.py` is the exact executed final review recipe. It reruns
+the owner's read-only audit and supplements receipt runner/input identities,
+the entire committed Rust/AK validation trees, installed-source Git bindings and
+the two clean reference pins. At `eaa30c5`, it checks 3,195 unique files with zero
+mismatches, including 607 committed files and 209 installed source files. It
+checks the 99 qualification invocations / 484,314 comparisons, 108 performance
+records, twelve output-equivalence controls and uninstrumented native symbols.
+This is an identity/count audit, not another scientific comparison campaign.
+
+A fresh external release Cargo client built from the audited installed source
+passes four concurrent complete callers with repeated correlated fits,
+predictors, diagnostics and failure/recovery. A newly compiled C11 shared-library
+consumer passes and reports the installed library as actually loaded. The Rust
+target directory was fresh; the existing offline dependencies and AK private
+install were reused. There was no fresh reinstall, benchmark, Linux run or
+inherited numerical acceptance in this replay.
+
+Original run: `/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-ak-handover-review-_v5v511v`.
+The byte-preserving copy under ignored `build/handover-review-20261027/` contains
+53 selected files (17,002,285 bytes), plus its preservation
+manifest. Original receipt paths remain unchanged. It includes the selected
+executed binaries, recipes, external client source, logs and products, excluding
+the rest of the Cargo target cache. No generated evidence is committed.
+
+| Evidence | SHA-256 |
+| --- | --- |
+| Central audit | `84a6c12ff443233e2ed234c53585b50a8027de96ee727a07f0c52155d4498222` |
+| Completion | `e0dc5a83e849f4f8d5a86d24d4e8b26643bc6d63108f7d792feb6a7dcf7e9c83` |
+| Commands | `2d7d829528a7164a6613f77b01ae0bdd9115972e3a2aaf640eea506a73b4ae70` |
+| Executed recipe | `0c753dd38d7b683a9c0a5d17635deed61a78bb0fe8402ba8b6c05d08b603c4e0` |
+| Preservation | `5f9392e9397d3395aefd5939dbdf9efb03f37002d4edf19fb6156faea3fb159d` |

@@ -1,5 +1,7 @@
 # Parallel observation execution and concurrency: Assignment AK
 
+**Status, 27 October 2026: AK handover approved and ownership closed by 0098.** Production `81de1e6`, qualification/API `3926ae1` and report `eaa30c5` are delivered. AL is the sole Rust writer; the preparation/release text below retains its original context. The user selected AL qualification before profiling. No inherited numerical gate is accepted here.
+
 Central preparation, 26 October 2026. **AK implements the pinned core's optional observation-parallel capability and qualifies the delivered library's concurrency boundaries, with representative performance measurements.** This advances the OpenMP/operational responsibility retained in 0065/0081/0083/0084. It does not replace serial scientific behavior, introduce parallel fitting algorithms or accept unresolved numerical gates.
 
 **Released by 0096 on 27 October after AJ handover, ownership closure and the 0082 checkpoint.** AK is the sole Rust writer, owning `rust/` and new `validation/parallel_execution/`, from AJ production `3e41497`, validation `31c7290`, report `f4b73f8` and the central release. The preparation and native witnesses below retain their original scope. Central owns shared design, numerical policy and acceptance. Preserve 0008, its amendments, accepted evidence and other chats' changes. Apply 0053 to demonstrated small source bugs and 0039 to generated products.

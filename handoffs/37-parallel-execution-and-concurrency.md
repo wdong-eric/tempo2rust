@@ -1,5 +1,7 @@
 # Assignment AK: parallel observation execution and concurrency
 
+**Delivered; ownership closed by 0098.** Production `81de1e6`, qualification/API `3926ae1`, report `eaa30c5` passed scoped central handover review. AL now owns Rust implementation. The released brief below is historical; it grants no further AK edits. Numerical acceptance remains pending.
+
 **Released by 0096 after AJ's reviewed handover, ownership closure and the 0082 checkpoint.** Follow 0085/0074 from production `3e41497`, qualification `31c7290`, report `f4b73f8` and the central release commit. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0096/0095/0094/0090/0087/0086/0085/0084/0082/0074/0065/0053/0039/0050, `rust/LIBRARY_INTERFACES_API.md`, `rust/LIBRARY_INTERFACES_SOURCE_MAP.md`, `rust/LIBRARY_INTERFACES_REPORT.md` and the native-backend/analysis reports they reference.
 
 Own `rust/` and new `validation/parallel_execution/` as sole Rust writer. AJ ownership is closed and its evidence is read-only. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and acceptance. Preserve original 0008 and its amendments.
