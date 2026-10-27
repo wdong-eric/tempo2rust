@@ -1,8 +1,8 @@
-# Parallel observation execution and concurrency: prepared Assignment AK
+# Parallel observation execution and concurrency: Assignment AK
 
 Central preparation, 26 October 2026. **AK implements the pinned core's optional observation-parallel capability and qualifies the delivered library's concurrency boundaries, with representative performance measurements.** This advances the OpenMP/operational responsibility retained in 0065/0081/0083/0084. It does not replace serial scientific behavior, introduce parallel fitting algorithms or accept unresolved numerical gates.
 
-**Prepared after AJ; not released.** As of 27 October, AJ is the sole Rust writer under 0095; AI implementation handover is approved and its ownership is closed. AK requires AJ's reviewed committed baseline, ownership closure, the 0082 checkpoint and an explicit release under 0074. Once released it owns `rust/` and new `validation/parallel_execution/`. Central owns shared design, numerical policy and acceptance. Preserve 0008, its amendments, accepted evidence and other chats' changes. Apply 0053 to demonstrated small source bugs and 0039 to generated products.
+**Released by 0096 on 27 October after AJ handover, ownership closure and the 0082 checkpoint.** AK is the sole Rust writer, owning `rust/` and new `validation/parallel_execution/`, from AJ production `3e41497`, validation `31c7290`, report `f4b73f8` and the central release. The preparation and native witnesses below retain their original scope. Central owns shared design, numerical policy and acceptance. Preserve 0008, its amendments, accepted evidence and other chats' changes. Apply 0053 to demonstrated small source bugs and 0039 to generated products.
 
 ## Source boundary and executable deliverable
 
@@ -98,3 +98,31 @@ This proves actual worker participation in the pinned loop on this host for that
 Authored recipe: `decisions/evidence/parallel-execution/central-worker-preparation.py`, executed as `/tmp/tempo2-central-openmp-preparation.py`. It creates a new temporary directory, records exact inputs/outputs and asserts actual workers and equality. Original directory: `/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-central-openmp-7a6wagv1`. The 94 copied evidence files remain ignored under `decisions/evidence/parallel-execution/build/worker-preparation-20261027/`; copied receipts keep their original paths. Receipt SHA-256: `10be1c1f325d0f7d5706d72541ed51f9b0b03c37ba299dc392aac5e2ac957b37`; preservation SHA-256: `df805920181b8c1b1f6883837aef2e47486399473ea2cd8327ef529260a23a9b`; executed script SHA-256: `65f9e5221a5695515a46fb21edb1c83e09e859f9eee40ddfe910e4bb5df673c6`.
 
 This adds bounded preparation and actual host capability evidence. AJ retains sole Rust ownership; AK remains unreleased and still owes its complete source/parallel/concurrency/performance deliverable and 0082 checkpoint.
+
+## Release reconciliation with delivered AJ
+
+0096 closes AJ's ownership and releases this contract. Read the actual installed
+API/source maps and report at `f4b73f8`; the earlier AI snapshot and native worker
+witness remain preparation evidence, not a qualification of the new boundary.
+
+- `clkcorr::with_process` and `with_resources` are now externally available,
+  along with direct owner methods. The same non-reentrant process session and
+  borrowed-operation rule remain. Newly public stream/ephemeris owners do not
+  promise isolation of shared JPL status or diagnostic/control histories.
+- The C adapter retains `ChebyModelSet_OutOfRange` and `tempo2_verbose` as source
+  globals. Cheby lookup/evaluation can write the flag even when model storage is
+  read-only. State the caller-exclusivity requirement for such operations; model
+  separation alone does not prove concurrent C safety. Do not make the exported
+  datum thread-local or hide a changed ABI behind the Rust library.
+- Native scalar conversion uses a private numeric locale. MacOS preserves the
+  caller's process/thread locale in the measured cases; Linux's scoped formatting
+  branch remains unexecuted. Preserve that boundary and the synchronous callback,
+  borrowed FILE/name/segment and fixed-storage contracts during concurrency work.
+- Reuse the delivered external consumers for any affected API/ownership changes.
+  Their serial success and C-only sanitizers do not qualify simultaneous calls.
+  The complete diagnostic collection/history test, actual worker timing paths,
+  native provider behavior and measured workloads remain this assignment's work.
+
+0096 carries every inherited numerical gate, the AH three-vector finding and
+the actual Linux/provider obligations. No new scientific, precision or performance
+threshold decision was introduced at release.

@@ -1,6 +1,6 @@
 # Assignment AL: integrated release qualification
 
-**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
+**Prepared only; not released.** Follow decision 0086 after AK's reviewed committed handover, ownership closure, the 0082 checkpoint and explicit central release under 0074. Consult HANDOFF.md for current Rust ownership; this prepared brief grants no ownership. Work in `/Users/Eric.Dong/Downloads/tempo2rust`; read HANDOFF.md, decisions 0096/0095/0094/0090/0089/0088/0087/0086/0085/0084/0083/0082/0074/0065/0053/0039/0050 and the predecessor reports named at release.
 
 Once released, own `rust/`, new `validation/release/`, and if needed a new `.github/workflows/tempo2-rust.yml` as sole Rust writer. You are not alone in this repository: preserve other chats' changes, central files, canonical TEMPO2 and accepted evidence. Central retains shared design, numerical policy and final acceptance. Preserve original 0008 and its amendments.
 
@@ -16,6 +16,18 @@ Proceed in dependency order:
 6. Commit explicit authored owned paths with Conventional Commits and return `rust/RELEASE_QUALIFICATION_REPORT.md`, executable recipes, exact identities, requirement-by-requirement evidence and the complete unresolved ledger for central's 0082 reassessment and final audit.
 
 Keep generated products and large evidence ignored. An unavailable target is unfinished qualification; continue independent work and identify the exact missing execution capability. Consequential new scientific/public/platform choices go to central with alternatives and a recommendation. A runnable candidate with open gates is not full migration acceptance.
+
+## Delivered interface baseline
+
+0096 approves AJ handover at `3e41497` / `31c7290` / `f4b73f8` and releases AK;
+AL remains unreleased. Read the installed API/source maps and final report.
+The 64-symbol native predictor interface and external Cargo consumers have bounded
+macOS evidence. Actual Linux ordinary-long-double width/calling convention,
+private locale conversion and installed static/shared consumers still require
+execution. Keep the withdrawn bare-T1-pipe interpretation separate from the
+defined replacement stream tests. Recheck final package contents from the actual
+AL source, including later documents, notices, source/lockfiles and dependencies.
+The complete 0096 numerical ledger and concurrency/performance follow-through remain.
 
 ## Dispatch prompt after release
 
