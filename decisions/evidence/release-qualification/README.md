@@ -123,3 +123,30 @@ the real compressed input, output, logs, source snapshots and manifests.
 
 Historical selections remain unchanged. Future AL selections use the corrected
 collector; compressed generated evidence remains ignored by Git.
+
+## Lifecycle localization and first authorized Linux run
+
+Central read the retained `compare-v3` seeded-reinitialization failure without
+rerunning either engine. `central-lifecycle-localization.py` checks six events /
+469,282 state records under the unchanged lifecycle projection. Exactly sixteen
+records differ, covering `nchromx`, `nWhite_dm`, `AverageDMResiduals` and
+`ne_sw_ifuncN`, including retained `old2` state: Rust zero versus raw-native seed
+11. Every other compared state and diagnostic value is exact. These correspond
+to existing documented initializer departures; the raw comparison remains failed.
+This single-case localization is not a corrected-native proof or acceptance of
+the complete lifecycle corpus. AL is separately constructing that proof.
+
+The summary SHA-256 is
+`5be5cb14ffc8e9d397a75a90e5796016e164cbf4c9755260a26cd8e387ea3df9`.
+The exact executed recipe and all three inputs are retained under ignored
+`build/lifecycle-localization-20261030/`, with original hashes. The raw events
+are compressed losslessly; decompression was checked against their original
+SHA-256. Historical outputs are unchanged and generated inputs are not committed.
+
+Decision 0101 records the user's explicit authorization for AL publication and
+qualification, including later centrally reviewed fixes and reruns in scope.
+The frozen first candidate is b59a840, with its review/dispatch packet under
+`build/first-linux-b59a840-20261030/`. Central observed it already public, made
+no push and dispatched run 40903715685 once. That Linux execution and AL's local
+follow-through are ongoing; neither this packet nor a workflow status constitutes
+scientific or milestone acceptance.
