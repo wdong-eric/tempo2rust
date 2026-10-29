@@ -72,3 +72,26 @@ A green build, cross-compile, inherited receipt or workflow file alone does not
 meet it. AK performance evidence is reused only for its recorded source/profile;
 affected provider/linkage/platform measurements must be repeated without adding
 a performance threshold or optimization workstream.
+
+## 30 October follow-through
+
+1. Fix the shallow workflow's missing baseline at its fetch boundary; distinguish
+   unavailable evidence from actual modified/added/removed Rust bodies. Reproduce
+   the negative case and the narrow-fetch recovery in new local checkouts.
+2. Reconstruct P and required earlier native corpora in isolated staging from
+   their authored fixtures and pinned source, with explicit portable build
+   adaptations and fresh identities. Run unchanged native validations and Rust
+   gates; keep original and corrected source boundaries separate.
+3. Rebuild AK measured-worker and uninstrumented timing profiles against AL's
+   fresh dependencies. Preserve all eleven worker cases, six performance
+   workloads, worker counts, samples and instrumented/uninstrumented controls.
+4. Bind source responsibilities to actual functions, branches/families, public
+   consumers and executed evidence. Classify justified reused proof separately
+   from concrete missing cases; lexical indexes cannot close coverage.
+5. Integrate the successors, run affected local checks, preserve all failures and
+   update the report with exact commands/identities and remaining Linux gaps.
+
+Decision 0099 allows evidenced Rust implementation improvements within assigned
+scope while preserving scientific meaning and required behavior. The covariance
+allocation lead remains deferred until after AL; it is not implemented here.
+No push or workflow dispatch is authorized.

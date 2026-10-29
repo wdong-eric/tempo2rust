@@ -108,6 +108,10 @@ pipeline's `pending` ledger records that limitation and exits nonzero.
 ## Workflow review and evidence retention
 
 The manual workflow selects `ubuntu-24.04` x64 and checks a full reviewed SHA.
+Checkout remains depth one; a separate `git fetch --no-tags --depth=1` obtains
+only the required `source_audit.BASELINE` snapshot. Other shallow callers must
+fetch that same baseline before auditing. Missing baseline evidence is a failing
+audit, not a list of changed Rust files.
 It records actual image/OS/package/compiler/Rust/provider identities; the label
 is not an immutable image. GCC/GFortran 13, OpenBLAS pthread LP64 and LAPACK
 headers are explicitly provisioned. Rust 1.97.1 is selected. Dependencies are

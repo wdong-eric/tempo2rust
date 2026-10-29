@@ -247,3 +247,29 @@ SHA-256 of each named receipt, under `validation/release/build/`:
 | `c-concurrency-v2/receipt.json` | `0ce7801bbdcd6d3af4ef90a0b1acaa13878b0853675628596b3b3018d02d7f41` |
 | `performance-v2/receipt.json` | `4a5e6e972ff3d087ca6d8d18f8e96350b86bcbb5f40249a8dd05edfaf3f8ad5c` |
 | `preprocessing-v2/receipt-release.json` | `c15f8a6de3c24f31f3dca6cc079b875ef510ab8acf54fd041d0c06b3376b25d1` |
+
+## 30 October review correction and continued qualification
+
+Central found a false pass in a depth-one checkout: baseline `6acaf53` was absent,
+all 155 `git show` calls failed, and the old audit labeled them changed while
+returning success. Its original reproducer remains unchanged at
+`/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-al-shallow-review-58vbmv7z/`;
+summary SHA-256 `bc919c38eae4d80bd094be1e4293f38bcf193e1956611cb05ac704f7ae2c804c`.
+The earlier full-history macOS audits are not invalidated by this caller failure.
+
+The workflow now fetches the single required baseline with `--no-tags --depth=1`.
+The audit fails before classification when that baseline is unavailable; existing
+blob reads must succeed, and genuine additions/removals/modifications remain
+separate from unavailable evidence. A focused shallow regression checks failure,
+narrow-fetch recovery, unchanged candidate HEAD, and real changed/added/removed
+files. The full audit in a fresh shallow checkout of central `5dacc3c` plus the
+explicit successor script exits 1 without the baseline, then exits 0 with
+155 unchanged bodies after the narrow fetch. All five harness controls pass.
+Receipt: `shallow-followup-v1/receipt.json`, SHA-256 `bee54f8ef2e708d2f642ea1cbe26f039edd97330438f0f1ea85a2194f601590d`.
+No scientific campaign was rerun solely for this infrastructure correction.
+
+Decision 0099's evidenced implementation-departure policy applies to this work;
+the covariance allocation experiment stays deferred. AL remains unaccepted.
+Central reports the prior `c14b1ee` candidate is now public; this chat has not
+pushed or dispatched a workflow, and publication alone does not authorize a run.
+The follow-through plan is recorded in `validation/release/PLAN.md`.

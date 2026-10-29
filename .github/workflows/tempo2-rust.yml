@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ inputs.candidate }}
+          fetch-depth: 1
           persist-credentials: false
       - name: Verify identity and provision recorded tools
         shell: bash
@@ -34,6 +35,8 @@ jobs:
           [[ "$REVIEWED_CANDIDATE" =~ ^[0-9a-f]{40}$ ]]
           test "$(git rev-parse HEAD)" = "$REVIEWED_CANDIDATE"
           mkdir -p validation/release/build/host
+          baseline=$(PYTHONPATH=validation/release python3 -c 'from source_audit import BASELINE; print(BASELINE)')
+          git fetch --no-tags --depth=1 origin "$baseline" > validation/release/build/host/baseline-fetch.stdout 2> validation/release/build/host/baseline-fetch.stderr
           uname -a > validation/release/build/host/uname.txt
           cp /etc/os-release validation/release/build/host/os-release.txt
           printf '%s\n' "$ImageOS" "$ImageVersion" "$RUNNER_ARCH" > validation/release/build/host/runner.txt
