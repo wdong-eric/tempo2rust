@@ -1,7 +1,8 @@
 # AL review checkpoint and shallow-baseline correction
 
 Central review, 30 October 2026. **Close the demonstrated shallow-checkout audit
-finding at `8d9c11a`; keep AL implementation and qualification active under 0098.**
+finding at `8d9c11a` and compressed-evidence omission at `1c10ae0`; keep AL
+implementation and qualification active under 0098.**
 This is not AL handover, numerical acceptance or full-migration acceptance. The
 resumed goal preserves the user's AL-first sequence and the deferred covariance
 allocation investigation in 0099. No production Rust change or profiling run is
@@ -71,3 +72,16 @@ current departure policy: preserve source scientific behavior, document evidence
 corrections or better Rust implementation beside the code, and measure claimed
 resource improvements. Covariance profiling follows AL and preserves dimensions,
 zero values, ownership and all numerical gates.
+
+## Subsequent compressed-evidence finding
+
+During the same review, central demonstrated that the original collector omits
+real compressed JSON references and coverage records while exiting successfully.
+Its final-suffix check sees `.gz` rather than `.json`. AL corrected the selection
+predicate in `1c10ae07ebbc31259f6695a95d8bd09a8a23eecc`, preserving all existing
+source/cache/runtime/install/symlink exclusions. Central replay using frozen Git
+sources retains the same 3,541,285-byte reference without a byte or hash change;
+the realistic inclusion/exclusion control passes. This closes the second
+infrastructure finding. Preserve historical selections and collect new evidence
+with the successor; scientific runs do not need repeating for this correction.
+The linked evidence README records both original/corrected receipts and recipes.

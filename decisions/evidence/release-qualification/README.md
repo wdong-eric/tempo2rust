@@ -1,7 +1,7 @@
 # Central AL review evidence
 
 30 October 2026. This bounded review verifies the delivered evidence and closes
-one demonstrated source-audit defect. It does not accept AL, Linux qualification,
+two demonstrated CI evidence defects. It does not accept AL, Linux qualification,
 any inherited numerical gate or the full migration. Decision 0100 records the
 checkpoint; decision 0099 keeps allocation profiling after AL.
 
@@ -86,3 +86,40 @@ The selected Linux run still requires a concrete reviewed candidate and authoriz
 publication/dispatch. The already public c14 revision does not establish either
 permission to dispatch a newer run or Linux success. Central has not pushed or
 dispatched during this review.
+
+## Compressed evidence retention, 30 October follow-through
+
+The collector at `8d9c11a` accepts ordinary `.json` but inspects only the final
+suffix; real `reference.json.gz`, `coverage_receipts.json.gz` and gcov JSON files
+therefore fall through its whitelist. `central-collector-original.py` reproduces
+this using the actual 3,541,285-byte observer reference under a representative
+Linux staging path. The collector exits 0 and retains the control receipt but
+omits the compressed reference. This would discard required evidence when the
+disposable Linux runner ends; it is not a numerical difference.
+
+AL corrects that predicate in `1c10ae07ebbc31259f6695a95d8bd09a8a23eecc`, admitting
+`.json.gz` and `.jsonl.gz` after the existing source/cache/runtime/install/symlink
+exclusions. `central-collector-fixed.py` freezes the three relevant source files
+from that commit and collects the exact same input. Both files are retained;
+the compressed reference's bytes and SHA-256 are unchanged. The authored
+inclusion/exclusion control passes for references, coverage receipts, gcov JSON,
+JSONL events and the existing AE exception, while rejecting excluded trees and
+arbitrary compressed archives/binaries. Central closes this specific finding;
+no scientific rerun or Linux acceptance follows.
+
+The original script uses the exact 8d9c11a checkout identified by
+`/tmp/tempo2-al-shallow-fixed-current`; the correction script reads the original
+input via `/tmp/tempo2-al-collector-review-current`. Each recipe creates a fresh
+output and records those inputs. Ignored byte-preserving bundles are
+`build/collector-original-20261030/` and `build/collector-fixed-20261030/`, including
+the real compressed input, output, logs, source snapshots and manifests.
+
+| Receipt | SHA-256 |
+| --- | --- |
+| Original collector reproduction | `6f22258b0ffc1ae5e7319be4f3102f0405cbfa1624e4265bf599e12b449e27ec` |
+| Corrected independent check | `b6fea7322607adc1c77cff4c7ef2ce8dedcc2ba8b994bff0e951b1e1e9574b4f` |
+| Corrected selected manifest | `50e51180a254b56804f6efef19a6dd08283fc47cc462e90ec2ddfa099cf0152d` |
+| Preserved real reference | `e810f70fa52c778059413cc50ea24d5df96cfebd7b345aaa1efb4531b19b0a85` |
+
+Historical selections remain unchanged. Future AL selections use the corrected
+collector; compressed generated evidence remains ignored by Git.
