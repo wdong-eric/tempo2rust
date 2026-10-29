@@ -147,6 +147,37 @@ Decision 0101 records the user's explicit authorization for AL publication and
 qualification, including later centrally reviewed fixes and reruns in scope.
 The frozen first candidate is b59a840, with its review/dispatch packet under
 `build/first-linux-b59a840-20261030/`. Central observed it already public, made
-no push and dispatched run 40903715685 once. That Linux execution and AL's local
-follow-through are ongoing; neither this packet nor a workflow status constitutes
-scientific or milestone acceptance.
+no push and dispatched run 40903715685 once. The first Linux execution has since
+completed; 0102 records its failed matrix and the correction brief. AL's local
+follow-through remains ongoing. Neither this packet nor a workflow status
+constitutes scientific or milestone acceptance.
+
+## First Linux artifact review
+
+Decision 0102 records completed run 40903715685 at b59a840: 60 stages, 45 passing,
+12 failing and three blocked. `central-linux-run-audit.py` verifies the downloaded
+GitHub archive digest and all 6,580 selected files / 267,082,716 bytes, then
+summarizes the original stage receipts without rerunning or changing their gates.
+The package audit passes 2,474 checks and the source audit records 155 unchanged
+Rust bodies. Linux, AL and inherited scientific gates remain unaccepted.
+
+The packet is ignored `build/linux-run-40903715685-review-20261030/`. It preserves
+API identities, the exact archive, extracted evidence and the job log. The first
+job-log retrieval was rejected by gh's terminal-escape filter; that failed attempt
+is retained. The successful retry enabled raw escape sequences only while
+redirecting bytes to `job.raw.log`; no job was repeated. Archive retrieval and all
+hash checks succeeded independently.
+
+Replay (use a fresh `--out` filename):
+
+```sh
+python3 decisions/evidence/release-qualification/central-linux-run-audit.py \
+  decisions/evidence/release-qualification/build/linux-run-40903715685-review-20261030 \
+  --out /tmp/tempo2-first-linux-review-new.json
+```
+
+Archive SHA-256: `df69c6ef346ae5ddef5562c137d6f89c8947ae5ce2e4922468f12c8a87a0c20c`.
+Selected manifest: `c99c608a2f7d79d4df5ba08ea892d7748c2505d1176891951f0fc934be6cbe04`.
+Central review: `c866eef82c916ba11dbb67519a5c4271c7d9cb5c9d6747682aceb1717e613baf`.
+The raw failures and blocked stages are retained for AL's corrections and the
+next centrally reviewed, already authorized qualification run.
