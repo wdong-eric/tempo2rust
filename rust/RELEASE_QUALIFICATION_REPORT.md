@@ -273,3 +273,24 @@ the covariance allocation experiment stays deferred. AL remains unaccepted.
 Central reports the prior `c14b1ee` candidate is now public; this chat has not
 pushed or dispatched a workflow, and publication alone does not authorize a run.
 The follow-through plan is recorded in `validation/release/PLAN.md`.
+## 30 October follow-through: compressed evidence retention
+
+Central's collector review found that `Path.suffix` is `.gz` for compressed JSON,
+so the earlier collector omitted native reference/private-state/gcov records.
+The successor admits `.json.gz` and `.jsonl.gz` after the existing source, cache,
+runtime, installation and symlink exclusions. It does not admit arbitrary gzip
+archives. A realistic path-based control covers reference records, compressed
+JSONL events, coverage receipts, gcov JSON, the existing AE evidence exception,
+and excluded source/cache/runtime/binary/archive/symlink inputs; it passes.
+
+The original central reproducer remains at
+`/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-al-collector-review-r2gxgw2l/`.
+Recollection into `validation/release/build/collector-review-followup-v1` retains
+both its receipt and the actual 3,541,285-byte observer reference, with unchanged
+SHA256 `e810f70fa52c778059413cc50ea24d5df96cfebd7b345aaa1efb4531b19b0a85`.
+The new manifest SHA256 is
+`50e51180a254b56804f6efef19a6dd08283fc47cc462e90ec2ddfa099cf0152d`.
+This is artifact-retention verification only; no scientific comparison or Linux
+execution was rerun or accepted for this correction. The historical selected
+artifact directory remains unchanged; subsequent corpus collections use the
+corrected selector.

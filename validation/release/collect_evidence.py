@@ -20,7 +20,9 @@ if __name__=='__main__':
                          in '/'+relative.as_posix() for name in ['public','families'])
         if excluded.intersection(relative.parts) and not fit_evidence:continue
         if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
-        if path.suffix not in {'.json','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'} and path.name not in {'stdout','stderr'}:continue
+        if (path.suffix not in {'.json','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
+                and not path.name.endswith(('.json.gz','.jsonl.gz'))
+                and path.name not in {'stdout','stderr'}):continue
         target=a.out/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
         files[str(relative)]={'sha256':sha(target),'bytes':target.stat().st_size}
     (a.out/'manifest.json').write_text(json.dumps({'source':str(a.input.resolve()),'files':files},indent=2)+'\n')
