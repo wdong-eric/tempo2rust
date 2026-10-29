@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AL P replay of immutable explicitly selected macOS corpus; unchanged gates."""
+"""AL P replay of an immutable, explicitly selected host corpus; unchanged gates."""
 import argparse,gzip,hashlib,json,os,re,subprocess
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];P=ROOT/'validation/preprocessing';BUILD=HERE/'build/preprocessing'

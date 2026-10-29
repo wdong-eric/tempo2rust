@@ -10,12 +10,22 @@ from common import sha
 
 
 class EvidenceCollection(unittest.TestCase):
+    def test_missing_input_is_not_an_empty_success(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);out=root/'selected'
+            result=subprocess.run([sys.executable,Path(__file__).with_name('collect_evidence.py'),
+                '--input',root/'missing','--out',out],capture_output=True,text=True)
+            self.assertNotEqual(result.returncode,0)
+            self.assertIn('input directory does not exist',result.stderr)
+            self.assertFalse(out.exists())
+
     def test_compressed_native_records_and_existing_exclusions(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary);source=root/'input';out=root/'selected'
             native='linux/native-corpora/staging/validation/observer_coordinates/'
-            included=['receipt.json',native+'outputs/reference.json.gz',
+            included=['receipt.json','linux/native-corpora/producer.py',native+'outputs/reference.json.gz',
                 native+'outputs/coverage_receipts.json.gz',native+'outputs/raw/case.jsonl.gz',
+                native+'outputs/failed/events.jsonl',
                 native+'build/coverage/get_obsCoord.gcov.json.gz',
                 'linux/candidate/source/validation/general_fitting/build/public/reference.json.gz']
             excluded=[native+'build/ordinary/source/config.json.gz',

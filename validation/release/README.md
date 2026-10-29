@@ -1,8 +1,9 @@
 # AL release qualification recipes
 
-Preparation is authorized by 0098. No push, release publication or Actions dispatch
-has been performed or authorized. The workflow is a review candidate. Actual
-Linux execution remains mandatory, and a failing numerical gate stays failing.
+Qualification is authorized by 0101, including centrally reviewed AL fixes and
+reruns. Central coordinates publication and workflow dispatch for each reviewed
+candidate. Actual Linux execution remains mandatory, and a failing numerical
+gate stays failing.
 
 Use Python 3.12+, Git, patch, C/C++ compilers, GFortran, CMake, Rust/Cargo 1.97.1,
 rustfmt and Clippy. The baseline is serial Rug128. Network is used only to fetch
@@ -17,7 +18,7 @@ From the repository root, use a new output path and an exact committed candidate
 
 ```sh
 # macOS arm64; CMake must be installed or passed as an absolute --cmake path.
-export FC=gfortran-16 NATIVE_CC=gcc-16 NATIVE_CXX=g++-16 CC=clang
+export FC=gfortran-16 NATIVE_CC=gcc-16 NATIVE_CXX=g++-16 NATIVE_GCOV=gcov-16 CC=clang
 export TEMPO2_ACCELERATE=1 VECLIB_MAXIMUM_THREADS=1
 python3.13 validation/release/integrated.py \
   --revision REVIEWED_FULL_COMMIT \
@@ -25,7 +26,7 @@ python3.13 validation/release/integrated.py \
   --out validation/release/build/macos-final
 
 # Linux x86_64, only after approved workflow publication and dispatch.
-export FC=gfortran-13 NATIVE_CC=gcc-13 NATIVE_CXX=g++-13 CC=clang
+export FC=gfortran-13 NATIVE_CC=gcc-13 NATIVE_CXX=g++-13 NATIVE_GCOV=gcov-13 CC=clang
 export TEMPO2_OPENBLAS=1 OPENBLAS_NUM_THREADS=1
 python3 validation/release/integrated.py \
   --revision REVIEWED_FULL_COMMIT \
@@ -68,11 +69,47 @@ python3.13 validation/release/check_preprocessing.py --release \
   --out validation/release/build/p-replay
 ```
 
-This consumes the immutable P data and its declared resource tree read-only;
-it is not a portable fresh Linux P producer. Do not copy that corpus to CI and
-claim native ABI execution. Linux early-corpus reconstruction and the full AK
-native OpenMP worker/performance campaign remain follow-through work. The
-pipeline's `pending` ledger records that limitation and exits nonzero.
+This command consumes the immutable historical P data read-only. The integrated
+successor instead calls `native_corpora.py` to reconstruct H/J/K/M/N/P/Q/S/V/U/X/Z/AB
+from their authored complete catalogs and the raw pin on the executing host,
+then calls `corpus_compare.py` with the exported candidate. Both accept an explicit
+`--stages` list for focused follow-up; default execution retains the full list.
+Staging copies have source hashes and emitted adaptation patches. Historical
+runners and outputs are not rewritten. Required old source witnesses are fetched
+as individual shallow snapshots; the full repository history is not fetched.
+
+Q's seven telescope append fixtures use the defined native capacity 500 under
+0072. The original 1000-row fixtures are preserved but are not run as native
+goldens. Rust's explicit 501/1000 boundary checks remain. The separate gcov run
+has a 300-second per-case allowance for Q's full scalar history; no scientific
+threshold changes. Instrumented differences and unhit branches remain distinct
+from ordinary numerical comparison. K and N execute both engines against the
+same concrete caller paths before native log truncation.
+
+Raw lifecycle and observer expectations remain binding, failed evidence when
+they encounter later accepted changes. `lifecycle_correction.py` separately
+builds the four documented initializer writes (0068, AC, 0079), and
+AE's reserved jump/FDJUMP slot-zero copy correction, while
+`observer_correction.py` reuses AH's exact UT1 producer transformation (0094).
+These proofs require every other state/diagnostic field to remain exact before
+the Rust comparator consumes their separately identified corrected records.
+W/Y likewise rebuild their existing corrected-native witnesses and controls.
+O retains six copy boundaries and AE's initialized/unwritten copy test; its two
+old prefit-read boundaries were superseded by AE's documented ownership copy.
+
+`workers.py` retains AK's eleven cases, actual measured native workers at 1/2/4,
+complete Rust histories, six workloads, three shuffled samples and the separate
+instrumented/uninstrumented product control. `/usr/bin/time` measurements use
+host-specific parsers with RSS converted explicitly to bytes. There is no new
+performance threshold or optimization. The Linux recipe requires an actual
+Linux run; local macOS measurements do not qualify its compiler or ABI.
+
+`requirements.tsv` and `evidence_closure.py` join the 26 requirement families,
+all 93 library units, authored routine/branch maps, fresh measured function and
+edge records, exact comparator receipts and explicit missing evidence. The
+ledger's successful generation does not close unhit defined branches, numerical
+failures, platform execution or central acceptance. The integrated pending
+ledger continues to report those obligations.
 
 ## Numeric and construction boundaries
 
@@ -123,8 +160,9 @@ Reviewed action references are checkout v4.2.2
 were checked at those revisions. Checkout persists no credentials; permissions
 are `contents: read`. Selected evidence uploads on failure, with **30-day**
 retention, identified by run ID and attempt. The collector retains hashes/logs/
-comparisons/patches/assembly, including the fixed-output AE results under the
-isolated candidate export. It excludes runtime datasets, libraries, binaries,
+comparisons/patches/assembly, executed producer snapshots and JSON/JSONL (plain
+or compressed), including the fixed-output AE results under the isolated
+candidate export. A missing input directory is an error. It excludes runtime datasets, libraries, binaries,
 source trees and Cargo caches. Evidence retention is not release publication.
 Required acceptance evidence must be preserved separately before expiration.
 
@@ -135,9 +173,9 @@ git diff 6acaf53d2e13291eb6d0b0988faf7dee7d33a635 HEAD -- \
   rust validation/release .github/workflows/tempo2-rust.yml
 ```
 
-0097 requires this concrete diff to return to central before push/dispatch. A
-manual workflow must first exist on the remote default branch; after approval,
-select the workflow in Actions and supply the reviewed full SHA. Nothing here
+0101 authorizes central to publish reviewed AL diffs and dispatch qualification.
+A manual workflow must exist on the remote default branch; central selects
+the workflow in Actions and supplies the reviewed full SHA. Nothing here
 sends that request, changes the remote or dispatches a run.
 
 Official references: [checkout action at the pin](https://github.com/actions/checkout/blob/11bd71901bbe5b1630ceea73d27597364c9af683/action.yml),

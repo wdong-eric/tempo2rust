@@ -48,6 +48,13 @@ def qualify(args):
     step('rust-suite',script('rust_suite.py','--out',out/'rust-suite','--candidate',candidate,
          '--target',out/'test-target'),['dependencies','m2-inputs'])
     step('source-audit',script('source_audit.py','--out',out/'source-audit','--native-repository',repo),['a2'])
+    corpora=out/'native-corpora'
+    step('native-corpora',script('native_corpora.py','--out',corpora,'--native-repository',repo,
+         '--a2',a2,'--coverage'),['a2'])
+    # A coverage/observer failure must not suppress unrelated ordinary corpora.
+    # The comparator checks and records each stage's native prerequisites.
+    step('corpora-comparison',script('corpus_compare.py','--out',out/'corpus','--candidate',candidate,
+         '--reference-root',corpora/'staging','--target',out/'test-target'),['dependencies'])
     step('package-list',['cargo','package','--list','--manifest-path',manifest],['candidate'])
     for label,features in [('default',''),('combined','calceph,lapack')]:
         prefix=out/('install-'+label)
@@ -84,6 +91,8 @@ def qualify(args):
     step('performance',script('performance.py','--out',out/'performance','--prefix',out/'install-default',
          '--a2',a2,'--core',out/'core-disabled','--predictor',out/'c-default/native-run/cheby.dat',
          '--runtime',a2/'runtime'),['native-disabled','c-default'])
+    step('workers',script('workers.py','--out',out/'workers','--prefix',out/'install-default',
+         '--a2',a2,'--core',out/'core-disabled','--native-repository',repo),['native-disabled','install-default'])
     step('m2-example',['cargo','build','--offline','--locked','--release','--manifest-path',manifest,
          '--example','compare_fitting'],['dependencies'])
     step('m2-comparison',script('m2_compare.py','--out',out/'m2-comparison','--candidate',candidate,
@@ -105,13 +114,23 @@ def qualify(args):
          '--abi-receipt',out/'c-default/receipt.json'),['native-science','c-default'])
     step('output',script('check_output.py','--out',out/'output','--native',out/'science',
          '--core',out/'core-disabled','--candidate',candidate),['native-science','install-default'])
+    from native_corpora import STAGES
+    closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
+                   '--matrix',out/'receipt.json')
+    if (corpora/'receipt.json').exists():
+        for stage in json.loads((corpora/'receipt.json').read_text()).get('stages',{}):
+            assert stage in STAGES
+            closure+=['--native',stage+'='+str(corpora)]
+    comparison=out/'corpus/receipt.json'
+    if comparison.exists():
+        record=json.loads(comparison.read_text())
+        for stage in [*record.get('stages',{}),*record.get('blocked',{})]:
+            closure+=['--comparison',stage+'='+str(comparison)]
+    step('evidence-closure',closure,['source-audit'])
     failed=[name for name,row in records.items() if row['exit'] not in (0,None)]
     blocked=[name for name,row in records.items() if row['exit'] is None]
-    # The retained predecessor inventories/corpora are audited separately.
-    # This automated matrix never claims their execution by omission.
-    pending=['P and early input-corpus native reconstruction on Linux',
-             'AK native OpenMP measured-worker and matched performance campaign on Linux',
-             'Complete early-corpus and exhaustive body/branch execution closure'] if platform.system()=='Linux' else []
+    pending=['Per-function/branch gaps and numerical failures remain explicit in evidence-closure and stage receipts',
+             'Central acceptance of the recorded platform qualification']
     run.save({'status':'failure' if failed or blocked else 'pass', 'qualification':'incomplete' if pending else 'matrix executed; central acceptance separate',
         'candidate':args.revision,'stages':records,'failed':failed,'blocked':blocked,'pending':pending,
         'runner':sha(__file__),'environment':{k:env[k] for k in ['FC','NATIVE_CC','NATIVE_CXX','CALCEPH_DIR',

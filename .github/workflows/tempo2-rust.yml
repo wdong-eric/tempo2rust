@@ -11,11 +11,12 @@ permissions:
 jobs:
   linux-x86_64:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       FC: gfortran-13
       NATIVE_CC: gcc-13
       NATIVE_CXX: g++-13
+      NATIVE_GCOV: gcov-13
       CC: clang
       OPENBLAS_NUM_THREADS: '1'
       OMP_NUM_THREADS: '1'

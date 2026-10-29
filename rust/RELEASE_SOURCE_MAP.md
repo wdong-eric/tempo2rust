@@ -17,14 +17,14 @@ baseline. No new scientific implementation is substituted for a predecessor map.
 
 | Responsibility | Current body/capability authority | AL execution |
 | --- | --- | --- |
-| PAR/TIM, lifecycle, clocks, ephemerides, terrestrial geometry, propagation | LIBRARY_INTERFACES_SOURCE_MAP; prior input/BAT, resource and timing reports | Outside installed consumers, default tests, 130 timing comparisons, P replay; early corpus histories otherwise retained |
+| PAR/TIM, lifecycle, clocks, ephemerides, terrestrial geometry, propagation | LIBRARY_INTERFACES_SOURCE_MAP; prior input/BAT, resource and timing reports | Full fresh early native corpora, separate ordinary/observer/gcov identities, current Rust history comparisons and separately proved accepted corrections; raw failures retained |
 | Fourteen binary models, phase/residuals, reference phase and epoch/unit handling | TIMING_MODELS_REPORT and source modules | All fourteen plus lifecycle cases in 130 comparisons |
 | General/legacy/local/global/robust/noise fitting, callbacks, constraints, solvers | GENERAL_FITTING_SOURCE_MAP/API | 72 public/family cases, M2, DDH, provider solver matrix; failures retained |
 | Statistics, RNG/bootstrap, GW generation/files, spectra, interpolation, sigma-z | ANALYSIS_TOOLS_SOURCE_MAP/API | Installed direct clients and retained AG evidence; fresh Lomb contraction and 0049 boundary witnesses |
 | Timing-dependent predictors and standalone predictor leaves | PREDICTOR_SOURCE_MAP; LIBRARY_INTERFACES_SOURCE_MAP/API | AF generation/exchange, C11/C++17 static/shared all64 symbols, exact native-width comparator controls |
 | Native entry point, formatted output, logging and help | CORE_OUTPUT_SOURCE_MAP/API | Full unchanged AH comparison, installed CLI; same twelve failing groups |
 | Optional CALCEPH/BLAS/LAPACK and QR default | NATIVE_BACKENDS_API; native/backends.c | All six macOS profiles; actual Linux execution remains pending |
-| Resource ownership and observation/concurrent workflows | PARALLEL_EXECUTION_CONTRACT/API; current source | Actual worker/diagnostic unit tests, installed concurrent Rust and serialized C callers; bounded fresh serial performance |
+| Resource ownership and observation/concurrent workflows | PARALLEL_EXECUTION_CONTRACT/API; current source | Complete fresh AK eleven-case measured-worker campaign, 108 matched timing samples and twelve instrumented/uninstrumented product controls on macOS; Linux execution remains required |
 
 `tai2tt.C` and `utc2tai.C` remain entirely disabled source bodies at the pin;
 active clock chains supply their responsibility. `storePrecision.C` remains the
@@ -70,3 +70,12 @@ scientific acceptance are still open obligations. Presence and unchanged body
 identity do not settle the inherited numerical ledger. See the qualification
 report for actual pass/failure/unrun status rather than interpreting this map as
 full migration acceptance.
+
+The successor [requirements.tsv](../validation/release/requirements.tsv) groups
+all 93 units into 26 requirement families. `evidence_closure.py` binds each family
+to its canonical Rust route, authored function/branch rows with source hashes and
+line numbers, actual native function/edge records and explicitly selected
+numerical receipts. It retains unhit edges, static dispositions and missing fresh
+measurements. Authored correspondence may be reused for unchanged bodies; it
+does not become a fresh compiler/ABI or branch witness. The generated ledger
+therefore reports qualification incomplete even when accounting succeeds.

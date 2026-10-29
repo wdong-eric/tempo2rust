@@ -94,4 +94,12 @@ a performance threshold or optimization workstream.
 Decision 0099 allows evidenced Rust implementation improvements within assigned
 scope while preserving scientific meaning and required behavior. The covariance
 allocation lead remains deferred until after AL; it is not implemented here.
-No push or workflow dispatch is authorized.
+
+## 30 October authorization update
+
+Decision 0101 supersedes the preparation-only action limit above. The user
+authorized AL publication and qualification, including later centrally reviewed
+fixes and reruns within scope. Central coordinates each publication and dispatch;
+scientific-policy changes remain separate decisions. The initial Linux run
+40903715685 uses committed candidate `b59a84024317653d92cfd757709b2beee3e766a3`.
+Its smaller matrix does not replace the full corpus/worker follow-through.

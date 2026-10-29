@@ -1,11 +1,17 @@
 # AL release qualification handover
 
-27 October 2026. **Incomplete qualification; no migration acceptance.** The
+Updated 30 October 2026. **Incomplete qualification; no migration acceptance.** The
 clean macOS aggregate at `ca49531f5eb0b21362f585887f7278c269d4f7be`
 completed all 58 stages: 52 passed, six retained scientific failures, none blocked.
-Linux is unrun. The manual workflow and portable recipes are prepared for the
-review required by 0097; no push, workflow dispatch, canonical installation replacement or release
-publication has occurred. Central retains numerical policy and acceptance.
+Under 0101, the user has authorized AL qualification, including centrally
+reviewed fixes and reruns. Central dispatched the initial Linux run
+[40903715685](https://github.com/wdong-eric/tempo2rust/actions/runs/40903715685)
+at candidate `b59a84024317653d92cfd757709b2beee3e766a3`. Central reports that the
+matrix completed with failure while setup, evidence collection and upload passed;
+its independent artifact review is in progress. That initial run excludes the
+fuller corpus/worker follow-through below. A completed Linux qualification is not
+yet established.
+Central retains publication/dispatch coordination, numerical policy and acceptance.
 
 The production build/install change is `d10c855` on central release
 `6acaf53d2e13291eb6d0b0988faf7dee7d33a635`. Scientific Rust bodies remain unchanged.
@@ -41,7 +47,7 @@ The final aggregate-run section below distinguishes any later execution.
   `30727fdfaaec0f1775543804210d057ffe62076594bb8884d8f8ccafafb676be`.
   It is a separately selected runtime, not a new production default.
 
-## Requirement-to-evidence ledger
+## Initial requirement-to-evidence ledger
 
 All paths below are relative to ignored `validation/release/build/`. This table
 records the initial component campaigns; the final committed aggregate and its
@@ -294,3 +300,161 @@ This is artifact-retention verification only; no scientific comparison or Linux
 execution was rerun or accepted for this correction. The historical selected
 artifact directory remains unchanged; subsequent corpus collections use the
 corrected selector.
+
+## 30 October full native reconstruction and worker follow-through
+
+`native_corpora.py` now reconstructs all thirteen early native corpora from
+authored catalogs and raw pin `fda6ad4`, in a new working snapshot on the actual
+host. The A2 archive/configuration remain separately hash-bound. Required
+historical source witnesses are fetched as individual shallow commits. Each
+run retains its executed producer, build adaptation patch, compiler identities,
+ordinary results and separate coverage/observer receipts. Canonical source and
+historical runners are unchanged.
+
+| Corpus | Catalog size | Selected fresh native evidence |
+| --- | ---: | --- |
+| H / JPL | 55 | `corpora-followup-v3` |
+| J / clock chain | 151 catalog, 142 permitted native executions | `corpora-followup-v10` |
+| K / parameter input | 306 | `corpora-followup-v9` |
+| M / numeric utilities | 350 | `corpora-followup-v9` |
+| N / TIM input | 157 | `corpora-followup-v9` |
+| P / preprocessing | 302 | `corpora-followup-v9` |
+| Q / specialized PAR | 107 | `corpora-followup-v7` |
+| S / pulsar lifecycle | 30 | `corpora-followup-v9` |
+| V / time ephemeris | 97 | `corpora-followup-v9` |
+| U / terrestrial resources | 130 | `corpora-followup-v5` |
+| X / observer coordinates | 133 | `corpora-followup-v5` |
+| Z / planetary ephemeris | 96 | `corpora-followup-v5` |
+| AB / propagation | 311 ordinary + 13 supplemental | `corpora-followup-v8` |
+
+These selected native stages pass their authored recording/validation and
+applicable private-state observer and coverage runs. Catalog membership is not
+a claim that withheld undefined continuations executed. H retains its declared
+case/function map, rather than a newly measured gcov map. Q's seven telescope
+fixtures obey 0072's native capacity 500; original 1000-row fixtures remain
+unchanged. The Rust 501/1000 boundary cases remain required. Only Q's gcov
+process allowance changed from 90 to 300 seconds for its complete scalar history.
+
+Fresh P comparison in `p-fresh-followup-v1` reproduces all 154 inherited
+differences, including 32 SIMUL. `p-classification-followup-v1` runs the authored
+CFG classifier against the fresh v9 coverage: 122 compiler/exception unrun
+controls, two defined-but-unexercised entries, one defined prefix with unsafe
+continuation withheld, seventeen source-inspected unrun entries and five
+structurally unreachable entries. Classification does not convert unrun paths
+into numerical passes.
+
+`workers-followup-v1` passes the complete AK eleven-case campaign: 99 processes
+at requested counts 1/2/4 with actual native-worker measurements, complete Rust
+histories and unchanged comparison quantities. It records 108 timing samples
+from six workloads, two engines, three worker counts and three shuffled repeats.
+All twelve instrumented/uninstrumented native product controls pass.
+`worker-parser-followup-v1` confirms that the portable CPU/RSS parser reproduces
+all 108 stored macOS measurements exactly. Linux RSS is explicitly converted
+from KiB to bytes; synthetic parser controls are not Linux execution evidence.
+No performance threshold, optimization or controlled desktop-load claim is added.
+
+## 30 October current Rust corpus comparisons
+
+All following comparisons use a clean export of `8d9c11a`; its scientific Rust
+bodies are identical to the released baseline. Each selected receipt binds its
+own fresh native producer and exact compiler/input/executable identities. The
+native coverage selections above may be later reconstructions of the same
+catalog; they are separate evidence, not substituted oracle identities.
+
+| Route | Actual release-profile result | Comparator receipt directory |
+| --- | --- | --- |
+| JPL | Pass at the existing 55-scenario projection, including the declared title boundary/unreachable events | `compare-v16` |
+| Clocks | 142 exact native comparisons and eight Rust boundaries pass; the native cycle remains unrun | `compare-v3` |
+| K parameters | 304 cases pass; two ambient-environment cases retain their explicit-root API disposition | `compare-v10` |
+| O parameter storage | 10 histories/32 events, 2,000 slots/9,616 cells, six current boundaries and 30 controls pass; AE's initialized/unwritten copy test also passes | `compare-v22` |
+| R observation storage | Three histories, all 95 fields, four M cases, fifteen boundaries and 39 controls pass | `compare-v17` |
+| N TIM | All 157 histories pass, including five separate JBO diagnostic corrections | `compare-v6` |
+| Q specialized PAR | 121 checks pass: 100 ordinary histories, seven bounded native histories and fourteen 501/1000 Rust rejections | `compare-v14` |
+| S/T lifecycle | Raw: eight failing histories retained. Separate approved native corrections: all 30 Rust histories and controls pass | `compare-v18` |
+| V/Y time ephemeris | All 97 histories pass; fresh native 30 controls, 36 independent polynomial checks and thirteen compiled mutations pass; Rust controls pass | `compare-v20` |
+| U/W terrestrial resources | All 130 histories, existing corrected-coefficient proof and native/Rust controls pass | `compare-v11` |
+| X/AA observer coordinates | Raw: eighteen failing histories retained. Separate approved UT1 producer: all 133 histories pass | `compare-v12` |
+| Z planetary/random | Complete driver and random gates pass, covering the 96 unique native cases | `compare-v5` |
+| AB propagation | All 324 raw histories execute: 277 field/event differences remain in three approved correction cases; the other 321 pass. Three separately reproduced corrected histories and helper checks pass | `compare-v21` |
+| P preprocessing | 296 cases execute; all 154 inherited differences remain. Six plugin-ABI cases retain their explicit dispositions | `p-fresh-followup-v1` |
+
+The lifecycle proof first isolated exactly sixteen records in the four approved
+initializer fields (`compare-v10/lifecycle-corrected-native`). The final witness
+also applies AE's existing reserved jump/FDJUMP slot-zero correction, using the
+authored `fitting_corrections.py` transformation. Across all thirty histories,
+exactly 88 records differ: sixteen initializer records and 72 reserved-slot copy
+records. Every other complete native state/diagnostic record is exact, including
+all nonreserved array/string cells. The raw eight failures remain separately
+visible; they are not new production changes or erased comparisons.
+
+The observer witness reuses AH's exact `observer_corrected` transformation from
+`native_build.py` under 0094. Only 143 correctionUT1 field values change across
+the 133 native histories; every other caller/private state, diagnostic and
+outcome is exact. The corrected private observer independently agrees with its
+corrected ordinary execution before the exact Rust comparison. The eighteen
+raw failures remain retained. O's two former unwritten-prefit error expectations
+were superseded by AE's documented ownership copy; the successor retains the
+six remaining boundaries, retargets the same prefix mutation controls, and runs
+AE's existing initialized/unwritten-state test.
+
+Preparation failures remain evidence: obsolete Cargo artifact selection,
+missing type/catalog/control prerequisites, historical ownership snapshots,
+source/caller pathname truncation, the tracked JPL build-log overwrite and
+relocated native profile identities. The successor recreates caller files in
+matched paths before truncation, emits every staging adaptation and checks that
+candidate source bytes remain unchanged. Native launch scratch remains in its
+original producer directory rather than being copied into every follow-up.
+No historical runner, numerical tolerance, production precision or scientific
+body was changed.
+
+## Follow-through closure, controls and remaining work
+
+`closure-followup-v1` joins all 26 requirement families and 93 library units to
+91 explicitly selected execution records and 34 native source/coverage artifacts.
+It retains measured function/edge objects, authored correspondence rows with
+hashes/line numbers, static dispositions and exact comparator receipt identities.
+The separate fresh P classification receipt is included. Functions with only an
+authored case map, unhit branches and bodies without fresh counters remain
+identified as such. This is successful evidence accounting, not exhaustive
+branch execution or acceptance of the inherited numerical failures.
+
+`followup-checks-v1` passes nine harness controls, Python compilation and the
+diff check. `source-audit-followup-v2` again verifies all 155 unchanged scientific
+Rust body files, the 93-source inventory and all 36 retained SOFA files. The
+collector now also retains plain failed JSONL and exact producer snapshots.
+One local collection attempt named a nonexistent comparison directory and
+produced an empty selection; that attempt is explicitly labeled in the new
+archive index, and the collector now rejects missing input directories. No
+empty selection is evidence of an executed comparison.
+
+The current `integrated.py` defaults to the full native/corpus and AK campaigns,
+then writes the evidence ledger. Its components were exercised in the isolated
+follow-ups listed here; this is not a claim that the expanded aggregate was
+executed once end-to-end. The earlier 58-stage aggregate and every retained
+scientific failure remain unchanged. The next reviewed full Linux candidate
+must execute the new corpus/worker paths and measure its actual compiler, ABI,
+provider, contraction and process behavior. Initial run 40903715685 at b59a840
+does not contain these additions and cannot substitute for that execution.
+Central acceptance and remaining source/branch/numerical dispositions stay open.
+
+## Follow-through retained identities
+
+`followup-evidence-v1` contains 44 nonempty run archives plus the explicitly
+labeled empty selection attempt. All 118,917 selected file entries were read
+back from their archives and verified against their source hashes. The archives
+total 4,119,169,211 bytes; the index binds each archive and its per-file manifest.
+Original successful/failed workspaces and `selected-evidence-v1` remain unchanged.
+The package excludes generated binaries, runtime datasets and Cargo caches.
+
+| Receipt under `validation/release/build/` | SHA-256 |
+| --- | --- |
+| `followup-checks-v1/receipt.json` | `04218a16a37e47fe487f36166768108a971d2a2a8184dd228670a642f3cc1822` |
+| `source-audit-followup-v2/receipt.json` | `60b993b55e61e5a6569672f70a0a4e1b7109226a0c9616a076d12bebfe5d08d3` |
+| `closure-followup-v1/receipt.json` | `58fa964cb9896dc10c78974a46e9c3bdccfa731f4796aecaaf673ef5dcb16675` |
+| `workers-followup-v1/receipt.json` | `d1edde23a44d4453416729039c37c73a4166ce5e41325deed6452b69501955ba` |
+| `p-fresh-followup-v1/receipt-release.json` | `45698765395812869836b839bded159b507242fedad594238c2b5c3a17120282` |
+| `compare-v18/lifecycle-corrected-native/receipt.json` | `4ef92a96905ccacf9326b557e42629b1d7fb19ae45547b3a74f4db0873da3cef` |
+| `compare-v12/observer-corrected-native/receipt.json` | `f89def63795394f0ec8d79eaa803b8617b4c3798fd6da7ff476e2be0aec33447` |
+| `compare-v21/receipt.json` | `a274555570b8411a601c4d712a94342fc7f6af3a6df69a5d79c4f13db5c90828` |
+| `compare-v22/receipt.json` | `2b2060c0241f142a41c37f4b5b5532507549954b746ec3b76ae05bd67e1a3ce0` |
+| `followup-evidence-v1/manifest.json` | `0f9694fb0973ee4abd0fed9b30d585e6c3154c199d160c3d41bbfdeb1330658e` |
