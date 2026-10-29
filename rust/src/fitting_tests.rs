@@ -176,17 +176,23 @@ fn source_failure_boundaries_and_nonfinite_transport() {
         true,
     )
     .unwrap();
+    // TKfit.C:461 multiplies each error by sqrt(0/0) for this square fit.
+    // Its NaN sign is host arithmetic, not a portable positive-NaN promise.
+    // Retain that sign through the diagnostic transport; do not normalize it.
+    assert!(singular.error_multiplier.as_float().is_nan());
+    let multiplier = serde_json::to_value(&singular.error_multiplier).unwrap();
     assert_eq!(
         serde_json::to_value(&singular.errors).unwrap(),
-        json!(["NaN", "NaN"])
+        json!([multiplier, multiplier])
     );
     let encoded = serde_json::to_value([
         FitNumber::from(f64::NAN),
+        FitNumber::from(-f64::NAN),
         FitNumber::from(f64::INFINITY),
         FitNumber::from(f64::NEG_INFINITY),
     ])
     .unwrap();
-    assert_eq!(encoded, json!(["NaN", "+Infinity", "-Infinity"]));
+    assert_eq!(encoded, json!(["NaN", "-NaN", "+Infinity", "-Infinity"]));
     assert!("NaN".parse::<crate::Scalar>().is_err());
     fs::create_dir_all(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target/m2")).unwrap();
     fs::write(

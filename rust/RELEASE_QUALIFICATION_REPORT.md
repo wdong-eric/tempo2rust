@@ -1,5 +1,10 @@
 # AL release qualification handover
 
+Latest scoped follow-through: [first Linux findings, harness/test corrections,
+controlled diagnostics and remaining gates](RELEASE_LINUX_FOLLOWUP.md). The first
+Linux run is failed; its original evidence remains unchanged. The fuller corpus
+and worker handoff below still requires execution on the next Linux candidate.
+
 Updated 30 October 2026. **Incomplete qualification; no migration acceptance.** The
 clean macOS aggregate at `ca49531f5eb0b21362f585887f7278c269d4f7be`
 completed all 58 stages: 52 passed, six retained scientific failures, none blocked.

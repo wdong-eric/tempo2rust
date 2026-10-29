@@ -12,8 +12,10 @@ retains the detailed predecessor body/function maps. The executable source audit
 checks that union, binds every current Rust body, indexes functions/exports and
 unsafe/departure locations, and verifies all 36 retained SOFA source files against
 the pinned blobs. These lexical indexes aid review; they are not an exhaustive
-branch proof. AL's audited 155 Rust body files are byte-identical to the released
-baseline. No new scientific implementation is substituted for a predecessor map.
+branch proof. The first Linux follow-through audit finds 153 Rust files identical
+to baseline and two changed test modules (`fitting_tests`, `predictor_tests`).
+Production scientific bodies are unchanged. [The follow-through report](RELEASE_LINUX_FOLLOWUP.md)
+records those assertion corrections and the separate diagnostic interventions.
 
 | Responsibility | Current body/capability authority | AL execution |
 | --- | --- | --- |
@@ -22,8 +24,8 @@ baseline. No new scientific implementation is substituted for a predecessor map.
 | General/legacy/local/global/robust/noise fitting, callbacks, constraints, solvers | GENERAL_FITTING_SOURCE_MAP/API | 72 public/family cases, M2, DDH, provider solver matrix; failures retained |
 | Statistics, RNG/bootstrap, GW generation/files, spectra, interpolation, sigma-z | ANALYSIS_TOOLS_SOURCE_MAP/API | Installed direct clients and retained AG evidence; fresh Lomb contraction and 0049 boundary witnesses |
 | Timing-dependent predictors and standalone predictor leaves | PREDICTOR_SOURCE_MAP; LIBRARY_INTERFACES_SOURCE_MAP/API | AF generation/exchange, C11/C++17 static/shared all64 symbols, exact native-width comparator controls |
-| Native entry point, formatted output, logging and help | CORE_OUTPUT_SOURCE_MAP/API | Full unchanged AH comparison, installed CLI; same twelve failing groups |
-| Optional CALCEPH/BLAS/LAPACK and QR default | NATIVE_BACKENDS_API; native/backends.c | All six macOS profiles; actual Linux execution remains pending |
+| Native entry point, formatted output, logging and help | CORE_OUTPUT_SOURCE_MAP/API | Full unchanged AH comparison and installed CLI; twelve macOS and seventeen first-Linux failing groups retained |
+| Optional CALCEPH/BLAS/LAPACK and QR default | NATIVE_BACKENDS_API; native/backends.c | Six paired profiles pass on both hosts; Linux standalone provider ABI link/measurement still requires corrected rerun |
 | Resource ownership and observation/concurrent workflows | PARALLEL_EXECUTION_CONTRACT/API; current source | Complete fresh AK eleven-case measured-worker campaign, 108 matched timing samples and twelve instrumented/uninstrumented product controls on macOS; Linux execution remains required |
 
 `tai2tt.C` and `utc2tai.C` remain entirely disabled source bodies at the pin;

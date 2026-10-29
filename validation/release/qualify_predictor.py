@@ -28,18 +28,22 @@ shutil.copy2(ROOT/'rust/include/tempo2pred_int.h',src/'tempo2pred_int.h')
 (out/'native-corrections.patch').write_text(patch)
 cc=os.environ.get('NATIVE_CC','gcc');cxx=os.environ.get('NATIVE_CXX','g++')
 darwin=platform.system()=='Darwin';suffix='.dylib' if darwin else '.so'
+# C clients call libm directly; ELF does not inherit a DSO's dependencies.
+client_libs=['-lm']+([] if darwin else ['-ldl'])
 shared=prefix/('lib/libtempo2pred_rust'+suffix)
 native_library=src/('libnative'+suffix)
+run([cc,'-std=c11','-O2',ROOT/'validation/release/platform_semantics.c',*client_libs,'-o',out/'platform-semantics'],'platform-semantics-build')
+run([out/'platform-semantics'],'platform-semantics')
 objects=[]
 for name in ['tempo2pred.c','cheby2d.c','t1polyco.c']:
  obj=src/(name+'.o');run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-fPIC','-include','stdio.h','-include',src/'TKlongdouble.float128.h','-I'+str(src),'-c',src/name,'-o',obj],name);objects.append(obj)
 run([cc,'-dynamiclib' if darwin else '-shared',*objects,'-lquadmath','-lm','-o',native_library],'native-link')
-run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-DNATIVE','-I'+str(src),HERE/'consumer.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),'-o',out/'native-client'],'native-client-build')
-run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'low_count.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),'-o',out/'native-low-count'],'native-low-count-build')
+run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-DNATIVE','-I'+str(src),HERE/'consumer.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),*client_libs,'-o',out/'native-client'],'native-client-build')
+run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'low_count.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),*client_libs,'-o',out/'native-low-count'],'native-low-count-build')
 native_low=run([out/'native-low-count'],'native-low-count')
-run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'boundary.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),'-o',out/'native-boundary'],'native-boundary-build')
+run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'boundary.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),*client_libs,'-o',out/'native-boundary'],'native-boundary-build')
 native_boundary=run([out/'native-boundary'],'native-boundary')
-run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'storage.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),'-o',out/'native-storage'],'native-storage-build')
+run([cc,'-std=c11','-D_GNU_SOURCE','-O2','-I'+str(src),HERE/'storage.c','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),*client_libs,'-o',out/'native-storage'],'native-storage-build')
 work=out/'native-run';work.mkdir();reference=run([out/'native-client'],'native-client',cwd=work)
 ref_storage=run([out/'native-storage',out/'native-storage.tsv'],'native-storage',cwd=work)
 controls=mutation_controls(reference.stdout.splitlines(),(out/'native-storage.tsv').read_text().splitlines())
@@ -53,6 +57,7 @@ for language,compiler,standard in [('c',cc,'c11'),('cpp',cxx,'c++17')]:
  for linkage in ['shared','static']:
   tag=language+'-'+linkage
   link=['-L'+str(prefix/'lib'),'-ltempo2pred_rust','-Wl,-rpath,'+str(prefix/'lib')] if linkage=='shared' else [prefix/'lib/libtempo2pred_rust.a',*install['native_static_libs']]
+  link+=client_libs
   exe=out/tag
   run([compiler,'-x','c' if language=='c' else 'c++','-std='+standard,'-D_GNU_SOURCE','-O2','-I'+str(prefix/'include'),'-c',HERE/'consumer.c','-o',out/(tag+'.o')],tag+'-compile')
   run([compiler,out/(tag+'.o'),*link,'-o',exe],tag+'-link')
@@ -97,7 +102,7 @@ for language,compiler,standard in [('c',cc,'c11'),('cpp',cxx,'c++17')]:
 getperiod=subprocess.check_output(['git','-C',a.native_repository.resolve(),'show',PIN+':getPeriod.C']).decode()
 getperiod=getperiod.replace('    T2Predictor pred;','    T2Predictor pred; T2Predictor_Init(&pred);').replace('    return 0;','    T2Predictor_Destroy(&pred); return 0;')
 (src/'getPeriod.C').write_text(getperiod)
-run([cxx,'-I'+str(src),src/'getPeriod.C','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),'-o',out/'native-getPeriod'],'native-getPeriod-build')
+run([cxx,'-I'+str(src),src/'getPeriod.C','-L'+str(src),'-lnative','-Wl,-rpath,'+str(src),*client_libs,'-o',out/'native-getPeriod'],'native-getPeriod-build')
 # Installed getPeriod uses its real shared dependency; preserve source atof syntax.
 for filename in ['cheby.dat','t1.dat']:
  for mjd in ['58000.001','58000.001junk','nonnumeric']:
@@ -130,7 +135,7 @@ for name in ['LICENSE','MT19937_LICENSE.txt']:
  assert (prefix/'share/tempo2-rust/rust'/name).read_bytes()==(ROOT/'rust'/name).read_bytes()
 receipt={'pin':PIN,'platform':platform.platform(),'long_double_profile':ref_layout.stdout.decode().splitlines()[0],'gate_epsilon':'2**-52 unchanged AF','source':sources,'profiles':results,'commands':commands,
  'rejected_controls':controls,
- 'observer_sources':{str(p):sha(p) for p in [HERE/'consumer.c',HERE/'storage.c',HERE/'low_count.c',HERE/'boundary.c',Path(__file__).with_name('predictor_compare.py'),layout]},
+ 'observer_sources':{str(p):sha(p) for p in [HERE/'consumer.c',HERE/'storage.c',HERE/'low_count.c',HERE/'boundary.c',Path(__file__).with_name('predictor_compare.py'),ROOT/'validation/release/platform_semantics.c',layout]},
  'symbols':sorted(public_symbols(shared_symbols.stdout)),
  'prefix_artifacts':{str(p):sha(p) for p in [prefix/'lib/libtempo2pred_rust.a',shared,prefix/'bin/getPeriod-rust',prefix/'include/tempo2pred.h',prefix/'include/tempo2pred_int.h']},
  'evidence':{str(p.relative_to(out)):sha(p) for p in sorted(out.rglob('*')) if p.is_file()},'script':sha(Path(__file__))}

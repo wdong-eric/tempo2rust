@@ -14,7 +14,7 @@ if __name__ == '__main__':
     cc=os.environ.get('CC','clang');fc=os.environ.get('FC','gfortran')
     for label,compiler in [('c',cc),('fortran',fc)]:run.run([compiler,'--version'],label+'-version')
     run.run([fc,'-fPIC','-c',ROOT/'validation/release/fortran_abi.f90','-o',out/'fortran.o'],'fortran-build')
-    flags=['-framework','Accelerate'] if platform.system()=='Darwin' else ['-DT2_OPENBLAS','-lopenblas','-ldl']
+    flags=['-framework','Accelerate'] if platform.system()=='Darwin' else ['-DT2_OPENBLAS','-lopenblas','-ldl','-lm']
     run.run([cc,'-O2','-D_GNU_SOURCE','-DT2_BLAS','-DT2_LAPACK','-I'+str(provider/'include'),
         ROOT/'validation/release/provider_probe.c',ROOT/'rust/native/backends.c',out/'fortran.o',
         provider/'lib/libcalceph.a',*flags,'-o',out/'probe'],'link')

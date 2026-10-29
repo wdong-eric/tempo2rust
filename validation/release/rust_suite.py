@@ -6,6 +6,16 @@ from pathlib import Path
 import re
 from common import Run, sha
 
+
+def test_counts(stdout):
+    """A failed libtest target still executed its passing and failing tests."""
+    rows = re.findall(r'test result: (?:ok|FAILED)\. (\d+) passed; (\d+) failed; (\d+) ignored; (\d+) measured;', stdout)
+    counts = dict(zip(['passing_tests', 'failing_tests', 'ignored_tests', 'measured_tests'],
+                      [sum(int(row[i]) for row in rows) for i in range(4)]))
+    return dict(executed=counts['passing_tests'] + counts['failing_tests'] + counts['measured_tests'] > 0,
+                completed_targets=len(rows), **counts)
+
+
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for name in ['out','candidate','target']:p.add_argument('--'+name,type=Path,required=True)
@@ -22,9 +32,10 @@ if __name__=='__main__':
             if name=='constraints':selection[1]='general_fitting_tests::canonical_constraint_callbacks_survive_context_snapshot'
             label=profile+'-'+name
             stdout=run.run([*command,*selection],label,env=env,expected=None).decode(errors='replace')
-            counts=[int(x) for x in re.findall(r'test result: ok\. (\d+) passed',stdout)]
-            executed=sum(counts)>0
-            results.append({'label':label,'exit':run.commands[-1]['status'],'executed':executed,'passing_tests':sum(counts)})
+            status=run.commands[-1]['status']
+            results.append({'label':label,'exit':status,**test_counts(stdout),
+                            'all_requested_targets_completed':status==0,
+                            'unrun_scope':'Cargo stopped before all requested targets completed; targets without result summaries are unrun or incomplete.' if name=='all' and status else None})
             print(results[-1],flush=True)
     for label,command in [('fmt',['cargo','fmt','--manifest-path',manifest,'--','--check']),
         ('clippy',['cargo','clippy','--offline','--locked','--manifest-path',manifest,'--all-targets','--','-D','warnings'])]:

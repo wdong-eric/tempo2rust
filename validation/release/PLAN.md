@@ -1,5 +1,24 @@
 # AL frozen release qualification plan
 
+First Linux follow-through (30 October, decisions 0101/0102): the initial frozen
+plan below is historical; central now coordinates authorized publication/reruns.
+The first b59 run failed and excludes the full-corpus/worker handoff `df587cd`.
+Execute this scoped sequence before the next centrally reviewed candidate:
+
+1. Correct direct ELF client/provider dependencies and partial suite accounting.
+2. Correct the two test assumptions against native NaN transport and T1 decimal
+   formatting; preserve production arithmetic and all source-facing comparisons.
+3. Add separate MPFR-cache, Lomb-contraction and event-temporary interventions,
+   retaining original gates and comparing diagnostic controls/products exactly.
+4. Compare original Linux failure identities with the macOS ledger, verify the
+   affected components locally and prepare a bound candidate/evidence packet.
+5. Central runs the full reviewed Linux matrix, including formerly blocked
+   stages and the early corpora/workers. Diagnose its actual intervention results
+   before any production scientific correction or acceptance.
+
+Observable completion for this scoped handoff is a tested, committed candidate
+and reproducible diagnostics/ledger, with Linux execution explicitly pending.
+
 27 October 2026. Preparation and local execution are authorized by 0098;
 publication, push and workflow dispatch are not. Central owns scientific policy
 and acceptance. This plan is not a qualification result.

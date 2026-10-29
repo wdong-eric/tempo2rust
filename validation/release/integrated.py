@@ -86,6 +86,10 @@ def qualify(args):
             step('contraction',script('contraction.py','--out',out/'contraction','--a2',a2,'--core',core,
                  '--rust-lomb',out/'test-target/release/examples/release_contraction','--rust-backend',rust),
                  ['native-combined','backend-build-combined'])
+            step('lomb-diagnostic',script('lomb_diagnostic.py','--out',out/'lomb-diagnostic',
+                 '--prefix',out/'install-default','--contraction',out/'contraction',
+                 '--target',out/'external-default/client/target'),
+                 ['native-combined','backend-build-combined','external-default'])
     step('qr-default-independent',[*cargo,'--release','--test','native_backends','--features','qr-default'],
          ['dependencies'])
     step('performance',script('performance.py','--out',out/'performance','--prefix',out/'install-default',
@@ -108,6 +112,9 @@ def qualify(args):
     step('native-science',script('native_science.py','--out',out/'science','--core',out/'core-disabled','--a2',a2),['native-disabled'])
     step('timing',script('check_timing.py','--out',out/'timing','--native',out/'science',
          '--rust',out/'install-default/bin/tempo2-rust','--lifecycle',out/'external-default/client/target/release/timing_lifecycle',
+         '--runtime',a2/'runtime'),['native-science','external-default'])
+    step('event-diagnostic',script('event_diagnostic.py','--out',out/'event-diagnostic',
+         '--core',out/'core-disabled','--science',out/'science','--timing',out/'timing',
          '--runtime',a2/'runtime'),['native-science','external-default'])
     step('predictors',script('check_predictor_science.py','--out',out/'predictors','--candidate',candidate,
          '--native',out/'science/predictor','--rust',out/'install-default/bin/tempo2-rust',

@@ -244,7 +244,18 @@ fn predictor_t1_legacy_d_exponents_and_reader_bounds() {
     m.write(&mut bytes).unwrap();
     let text = String::from_utf8(bytes).unwrap().replace('e', "D");
     let parsed = T1Polyco::read(&mut Cursor::new(text.as_bytes())).unwrap();
-    assert_eq!(parsed.coefficients(), m.coefficients());
+    // t1polyco.c:106 writes 18 significant decimal digits (%25.17Le).
+    // They round-trip binary64, but not every x87 long-double coefficient.
+    // Check the actual source-format decimals at the reader's native precision.
+    let expected: Vec<crate::predictor_number::PredictorNumber> = [
+        "1.00000000000000006e-1",
+        "2.00000000000000011e-1",
+        "2.99999999999999989e-1",
+    ]
+    .into_iter()
+    .map(|s| s.parse().unwrap())
+    .collect();
+    assert_eq!(parsed.coefficients(), expected);
     for count in [1, 33] {
         let mut lines = text.lines().map(str::to_owned).collect::<Vec<_>>();
         lines[1].replace_range(48..53, &format!("{count:5}"));
