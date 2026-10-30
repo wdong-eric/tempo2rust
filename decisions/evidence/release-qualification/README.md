@@ -315,3 +315,33 @@ The prior Linux artifact lacks the generated predictor `.dat` files; its full
 source-token check cannot be replayed from that packet. The new collector retains
 the named generated products for the next Linux review. Original failures remain
 intact, and no scientific milestone or full candidate is accepted here.
+
+
+## Third candidate reviewed, published and dispatched
+
+Decision 0105 approves `a35104a` for Linux qualification under the existing 0101
+authorization. Central verified all 8,037 selected evidence files / 66,411,856
+bytes, all 157 production Rust source identities and the exact Git patches, then
+passed seventeen harness controls from a frozen candidate. The workflow remains
+unchanged. Saved-product review replays 209 event type/callback observations and
+all nine Lomb profile/variant comparisons; all six macOS event/control/Gaussian
+products and the amplitude-fit product retain their pre-repair scientific values.
+
+The exact executed recipes are `central-third-candidate-review.py` and
+`central-event-products-review.py`. Their original `/tmp` outputs and publication
+records are preserved byte-for-byte in ignored
+`build/third-linux-a35104a-review-20261031/`; `copied-artifacts.json` records
+original/saved paths and hashes. Candidate review SHA-256 is
+`d6f70ed3c734ad47836fe0dd1483cbe1f9eeed96eca979bec61f62cc456ab8a0`;
+event/Lomb review SHA-256 is
+`0d5ee761b933a54a5433645c1c343a9c08534fdf1e78599988fad81690babefb`.
+These exact recipes refuse to overwrite their original output directories.
+
+Central fast-forwarded public main from 4accd26 to the exact reviewed a35104a at
+14:10:15 UTC on 30 October and dispatched run 41069548581 once at 14:10:42 UTC.
+The exact-head checkout and provisioning passed; the matrix remained active at
+14:16 UTC. The recorded run is the one to observe; no duplicate dispatch is
+needed when a status/log request times out. The full native corpora, Linux
+arithmetic, revised observations and complete cache controls await actual
+results. The guard remains diagnostic-only. AL/M2/full migration acceptance
+remain pending, and allocation optimization remains deferred.
