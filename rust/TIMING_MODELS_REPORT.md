@@ -7,6 +7,13 @@ Raw TEMPO2 pin: `fda6ad4a9753ad7dc5d291406f2f310a9161423f`.
 Central retains milestone acceptance. This delivery does not close the inherited
 P, M2, 0049 or original DDH gates.
 
+AL successor under decision 0104: EXP/GAUS now preserves host ordinary arithmetic
+(53 bits on macOS arm64, 64 on Linux x86_64) and each wide/double assignment in
+residuals and eight fit callbacks. Timing-wide arithmetic stays Rug128. See the
+[second Linux follow-through](RELEASE_SECOND_LINUX_FOLLOWUP.md) for the source
+mapping, passing macOS checks and mandatory Linux evidence. The original AD
+delivery and its historical host-specific claims below retain their scope.
+
 ## Delivered public behavior
 
 `timing --par P --tim T [ordered pairs] --runtime ROOT [--no-mean]

@@ -76,7 +76,9 @@ then calls `corpus_compare.py` with the exported candidate. Both accept an expli
 `--stages` list for focused follow-up; default execution retains the full list.
 Staging copies have source hashes and emitted adaptation patches. Historical
 runners and outputs are not rewritten. Required old source witnesses are fetched
-as individual shallow snapshots; the full repository history is not fetched.
+as individual shallow snapshots with `--no-auto-maintenance`, retained exact refs
+and trace logs; the full repository history is not fetched. A preparation failure
+publishes all unavailable corpus comparisons and its original failed command.
 
 Q's seven telescope append fixtures use the defined native capacity 500 under
 0072. The original 1000-row fixtures are preserved but are not run as native
@@ -127,11 +129,32 @@ ledger continues to report those obligations.
 * `check_predictor_science.py` keeps AF cases and numeric gates, but uses the
   measured significand for exact fields; explicit C double fields stay binary64.
   Metadata follows native rounded division and addition/subtraction. EPS remains
-  exactly `2**-52`; serialization allowances are unchanged. Controls reject an
-  x87 neighbor that a Python float would collapse.
+  exactly `2**-52`. Under 0104, legacy polyco coefficients use the source binary64
+  cast, exact `%25.17le` token and measured-width ordinary parse; the superseded
+  lossless rows remain recorded. Modern-file/header/construction/evaluation gates
+  stay intact. Native writer/parser witnesses and conversion controls accompany
+  the successor. Controls reject an x87 neighbor that a Python float would collapse.
+* `m2.py` preserves the historical exporter/campaign and separately builds a
+  sign-preserving NaN observer. Neutrality allows only the newly observed NaN sign;
+  `m2_compare.py` retains both old and corrected comparisons on the same Rust data.
 * `contraction.py` preserves every Lomb input/bin and compares default source
   compilation. Off/fast builds and assembly record contraction effects. Its 32
   QR cases compare unchanged AI quantities; variant differences are measurements.
+  `lomb_diagnostic.py` compares installed, copied-current, frozen historical fused
+  and unfused implementations. Production selects the demonstrated native host
+  profile; the historical implementation is not relabeled as current.
+* `event_profile.py` records actual compiler expression types, ordinary exp/log
+  and all eight callbacks against the canonical Rust path. `event_diagnostic.py`
+  retains the observed/f64-temporary experiments and adds a Gaussian-only witness
+  under both mean modes. Original timing gates, source Gaussian sign and factor
+  six, and Rug128 timing are unchanged. Successful observer neutrality alone does
+  not pass a scientific comparison. Linux ordinary/transcendental execution is
+  mandatory; macOS results do not qualify it.
+* `c_concurrency.py` flushes the common successor caller before shutdown. It
+  compares baseline and explicit local cache cleanup first, then a private
+  one-file TLS-guard library experiment, with every workflow/storage product
+  bound. The production library remains unguarded pending Linux proof and central
+  review. A passing intervention does not erase the baseline sanitizer failure.
 * `ddh.py` executes current-clock fidelity and the separate versioned historical
   1 ns ideal check, including the original native check's raw exits. Neither
   clock selection nor the fidelity gate changes.
@@ -162,8 +185,10 @@ are `contents: read`. Selected evidence uploads on failure, with **30-day**
 retention, identified by run ID and attempt. The collector retains hashes/logs/
 comparisons/patches/assembly, executed producer snapshots and JSON/JSONL (plain
 or compressed), including the fixed-output AE results under the isolated
-candidate export. A missing input directory is an error. It excludes runtime datasets, libraries, binaries,
-source trees and Cargo caches. Evidence retention is not release publication.
+candidate export, named predictor coefficient files and the two generated event
+input files. A missing input directory is an error. It excludes runtime datasets,
+libraries, binaries, source trees and Cargo caches, including the private cache
+guard build. Evidence retention is not release publication.
 Required acceptance evidence must be preserved separately before expiration.
 
 Local working-directory paths in reports identify the producing runs; some

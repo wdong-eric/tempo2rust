@@ -12,10 +12,13 @@ retains the detailed predecessor body/function maps. The executable source audit
 checks that union, binds every current Rust body, indexes functions/exports and
 unsafe/departure locations, and verifies all 36 retained SOFA source files against
 the pinned blobs. These lexical indexes aid review; they are not an exhaustive
-branch proof. The first Linux follow-through audit finds 153 Rust files identical
-to baseline and two changed test modules (`fitting_tests`, `predictor_tests`).
-Production scientific bodies are unchanged. [The follow-through report](RELEASE_LINUX_FOLLOWUP.md)
-records those assertion corrections and the separate diagnostic interventions.
+branch proof. The second follow-through audit at production `5c8c0aa` finds 148
+Rust files identical to baseline and nine changed entries, including two additions
+(`ordinary_long_double`, `event_profile_tests`); none are removed. The other seven
+are `cholesky_spectrum`, `fitting_tests`, `lib`, `predictor_number`, `predictor_tests`,
+`residual_source` and `t2fit_glitch`. The [current report](RELEASE_SECOND_LINUX_FOLLOWUP.md)
+separates the authorized event/Lomb repairs, unchanged predictor rounding-kernel
+extraction, earlier assertion corrections and diagnostic-only cache experiment.
 
 | Responsibility | Current body/capability authority | AL execution |
 | --- | --- | --- |
@@ -25,8 +28,8 @@ records those assertion corrections and the separate diagnostic interventions.
 | Statistics, RNG/bootstrap, GW generation/files, spectra, interpolation, sigma-z | ANALYSIS_TOOLS_SOURCE_MAP/API | Installed direct clients and retained AG evidence; fresh Lomb contraction and 0049 boundary witnesses |
 | Timing-dependent predictors and standalone predictor leaves | PREDICTOR_SOURCE_MAP; LIBRARY_INTERFACES_SOURCE_MAP/API | AF generation/exchange, C11/C++17 static/shared all64 symbols, exact native-width comparator controls |
 | Native entry point, formatted output, logging and help | CORE_OUTPUT_SOURCE_MAP/API | Full unchanged AH comparison and installed CLI; twelve macOS and seventeen first-Linux failing groups retained |
-| Optional CALCEPH/BLAS/LAPACK and QR default | NATIVE_BACKENDS_API; native/backends.c | Six paired profiles pass on both hosts; Linux standalone provider ABI link/measurement still requires corrected rerun |
-| Resource ownership and observation/concurrent workflows | PARALLEL_EXECUTION_CONTRACT/API; current source | Complete fresh AK eleven-case measured-worker campaign, 108 matched timing samples and twelve instrumented/uninstrumented product controls on macOS; Linux execution remains required |
+| Optional CALCEPH/BLAS/LAPACK and QR default | NATIVE_BACKENDS_API; native/backends.c | Six paired profiles and actual provider ABI pass on both hosts in the named preceding campaigns; current candidate still requires Linux execution |
+| Resource ownership and observation/concurrent workflows | PARALLEL_EXECUTION_CONTRACT/API; current source | Second Linux worker campaign passes 99 processes, 33 comparisons, 484,314 quantities, 108 timing samples and twelve product controls; foreign-thread cache leak remains separate |
 
 `tai2tt.C` and `utc2tai.C` remain entirely disabled source bodies at the pin;
 active clock chains supply their responsibility. `storePrecision.C` remains the
@@ -51,7 +54,7 @@ algorithms. Existing local invariants and owner contracts remain unchanged.
 | `predictor_ffi.rs` | C owns layout/allocation; synchronous callbacks and advertised extents; unwind boundary | All64-symbol clients, storage/low-count/pipe/locale controls; caller exclusivity |
 | `sort_toas.rs` | Source libc qsort order; whole unpinned owned records; no escaping callback borrows | Existing order semantics retained; host tie order is not generalized |
 | `stdio.rs` | Unique owned FILE and source read-ahead, exclusive buffers, Drop closes once | Installed reader/resource clients and recovery tests |
-| `t2accel.rs` | Validated contiguous matrices/workspace; distinct borrowed buffers; LP64 ABI | Actual macOS helpers and all profile cases; Linux CBLAS/LAPACK execution pending |
+| `t2accel.rs` | Validated contiguous matrices/workspace; distinct borrowed buffers; LP64 ABI | Actual macOS helpers and second-Linux LP64 provider execution; current candidate replay pending |
 
 The native predictor shim and public headers retain the detailed AJ departure
 ledger (union ownership, bounded reads, locale, partial state, low counts, pipe
@@ -60,12 +63,15 @@ caller/shim sanitizer scope excludes Rust/MPFR/Fortran/providers. AK's process
 admission, ordered effects and native observation-worker correction remain the
 recorded contract; no blanket concurrent API safety is inferred.
 
-AL production changes are limited to explicit Linux OpenBLAS selection, a
-header-checked CBLAS/LAPACK boundary, PIC Fortran linkage, and core CLI installation.
-No Rust timing/fitting/toolkit body or numerical gate changes. Native construction
-patches reproduce already reviewed corrections with byte provenance; their
-observer hooks are not new scientific algorithms. The separate Linux declaration
-patch supplies the real provider ABI without changing matrix expressions.
+AL production changes include explicit Linux OpenBLAS selection, a header-checked
+CBLAS/LAPACK boundary, PIC Fortran linkage and core CLI installation. Decision 0104
+additionally authorizes measured host contraction in Lomb and ordinary arithmetic
+in EXP/GAUS residuals and eight callbacks. `ordinary_long_double.rs` shares the
+existing predictor rounding kernel without predictor-specific operations; the
+timing role stays Rug128. The cache guard exists only in a private diagnostic
+copy. Other ordinary sites remain [proposals](RELEASE_ORDINARY_TYPE_PROPOSALS.md).
+Native construction patches retain byte provenance. No numerical gate, frequency
+convention or global precision changes.
 
 Full per-function branch execution, early-corpus Linux reconstruction and final
 scientific acceptance are still open obligations. Presence and unchanged body

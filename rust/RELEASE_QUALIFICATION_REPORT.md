@@ -1,9 +1,19 @@
 # AL release qualification handover
 
-Latest scoped follow-through: [first Linux findings, harness/test corrections,
-controlled diagnostics and remaining gates](RELEASE_LINUX_FOLLOWUP.md). The first
-Linux run is failed; its original evidence remains unchanged. The fuller corpus
-and worker handoff below still requires execution on the next Linux candidate.
+Latest scoped follow-through, 31 October 2026: [second Linux corrections,
+source arithmetic, bound macOS checks and remaining gates](RELEASE_SECOND_LINUX_FOLLOWUP.md).
+Decision 0104 records the second Linux run at `4accd26`: **54/66 stages passed,
+twelve failed, none blocked**; early native corpus staging failed before any
+corpus executed. The successor corrects staging/observation contracts and the
+demonstrated Lomb and EXP/GAUS ordinary-type paths. Its Linux execution and AL
+acceptance remain pending. The cache ownership change is diagnostic-only.
+[Four further ordinary-type proposals](RELEASE_ORDINARY_TYPE_PROPOSALS.md) remain
+unimplemented. Original Linux failures and the [first follow-through](RELEASE_LINUX_FOLLOWUP.md)
+are retained. Central owns publication, dispatch and acceptance.
+
+The sections below record the initial and first-follow-through campaigns at
+their named revisions; their historical "unchanged" and "unrun" statements do
+not describe the second-run results or this successor.
 
 Updated 30 October 2026. **Incomplete qualification; no migration acceptance.** The
 clean macOS aggregate at `ca49531f5eb0b21362f585887f7278c269d4f7be`
@@ -18,8 +28,9 @@ fuller corpus/worker follow-through below. A completed Linux qualification is no
 yet established.
 Central retains publication/dispatch coordination, numerical policy and acceptance.
 
-The production build/install change is `d10c855` on central release
-`6acaf53d2e13291eb6d0b0988faf7dee7d33a635`. Scientific Rust bodies remain unchanged.
+The initial production build/install change was `d10c855` on central release
+`6acaf53d2e13291eb6d0b0988faf7dee7d33a635`. Scientific Rust bodies were unchanged
+in that initial campaign.
 New release recipes, examples and current documentation are in the subsequent
 AL handover commit(s). The initial installed/source campaigns deliberately use a
 clean archive of `d10c855`; they do not claim to contain later report documents.
