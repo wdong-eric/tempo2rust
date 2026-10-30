@@ -9,7 +9,7 @@ Linux candidate `a35104a` and run `41069548581` remain immutable.
 
 **Reduce the effort and cognitive load of moving from TEMPO2 to the Rust
 implementation. Preserve familiar commands, terminology, parameter conventions,
-units, result layouts and workflow behavior wherever practical. Improve safety,
+units, result layouts and workflow behavior wherever practical. Improve memory safety,
 reliability, usability and measured efficiency without unnecessary relearning.**
 Apply this principle across the project, including help, examples, diagnostics,
 installed interfaces and everyday result presentation. Keep the Rust identity
@@ -39,6 +39,14 @@ Correct that primary presentation first; reuse the existing native route and
 formatter instead of adding another report engine. This preserves the explicit
 machine-interface contracts already used by validation and scripts.
 
+The user clarified that the observed program was an unspecified executable under
+`target/*`; the old invocation is unavailable. This does not establish that the
+native root route itself emits JSON. Resolve the discoverability/demonstration
+problem without guessing which binary was used. When presenting runnable product
+capabilities, lead with the main native-style CLI and a human-readable result;
+clearly label diagnostic/example executables and machine interfaces. This applies
+to implementation documentation and central-chat demonstrations alike.
+
 A native-root fit command is not an interchangeable rendering of every JSON
 command: `timing` without `--fit` only evaluates, bounded `fit` has a narrower
 contract, and native `-pre` still fits. Do not rewrite an invocation onto another
@@ -55,9 +63,10 @@ explicit and update owned consumers together for any changed interface.
    interfaces and explain their different calculation scopes. Preserve established
    native short-help/version exits; the existing Rust `--help` success status can
    remain. Reuse native help rather than maintaining a second option catalogue.
-2. Inspect the user's reported invocation when available. Use the existing
-   source-style route where its semantics match; otherwise implement the smallest
-   presentation change on that same calculation path. Keep source names, units,
+2. Use the clarified entry-point context above; recovering the old invocation is
+   not a prerequisite. Use the existing source-style route where its semantics
+   match; otherwise implement the smallest presentation change on that same
+   calculation path. Keep source names, units,
    order and displayed precision, using existing output routines. Document the
    counterpart and intentional presentation difference beside changed code.
 3. Check the affected terminal/help path and structured output contract with
