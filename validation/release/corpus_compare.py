@@ -28,7 +28,10 @@ def execute(args):
     run=Run(args.out);reference=args.reference_root.resolve();candidate=args.candidate.resolve()
     shutil.copyfile(__file__,run.out/'producer.py')
     native_receipt=reference.parent/'receipt.json'
-    native_stages=json.loads(native_receipt.read_text())['stages']
+    native=json.loads(native_receipt.read_text())
+    # Preparation can fail before its first corpus. Its failed command remains
+    # bound below; absence is an unavailable prerequisite, never an empty pass.
+    native_stages=native.get('stages',{})
     blocked={}
     for stage in args.stages:
         for dependency in DEPENDENCIES.get(stage,[stage]):
@@ -41,7 +44,9 @@ def execute(args):
             if native_stages.get(stage,{}).get(proof)!=0:blocked.setdefault(stage,[]).append(proof)
     args.stages=[stage for stage in args.stages if stage not in blocked]
     if not args.stages:
-        run.save({'status':'failure','blocked':blocked,'native_receipt':sha(native_receipt)})
+        run.save({'status':'failure','stages':{},'blocked':blocked,
+                  'native_receipt':sha(native_receipt),'native_preparation':{
+                      'status':native['status'],'failed_command':native.get('failed_command')}})
         return 1
     assert (reference/'tempo2/.git').exists(),'Use an AL native corpus working snapshot'
     # TKlog truncates before path projection. Preserve the native root's byte

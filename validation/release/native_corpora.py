@@ -34,6 +34,21 @@ def bounded_telescope_inputs(source):
     return source
 
 
+def stage_history(run, root, history, source=ROOT):
+    """Retain only pinned shallow roots, with no detached metadata writer."""
+    if history:run.run(['git','init',root],'history-init')
+    for pin in history:
+        run.run(['git','-C',source,'cat-file','-e',pin+'^{commit}'],'history-present-'+pin,expected=None)
+        repository=source if run.commands[-1]['status']==0 else run.run(['git','-C',source,'remote','get-url','origin'],'history-origin-'+pin).decode().strip()
+        # Keep shallow metadata under one writer across sequential fetches (0104).
+        # Explicit refs retain earlier roots instead of relying on FETCH_HEAD.
+        run.run(['git','-C',root,'fetch','--no-auto-maintenance','--no-tags','--depth=1',
+                 repository,pin+':refs/al-history/'+pin],'history-fetch-'+pin,
+                env=dict(os.environ,GIT_TRACE2_EVENT=str(run.out/('history-trace-'+pin+'.jsonl'))))
+        actual=run.run(['git','-C',root,'rev-parse','refs/al-history/'+pin],'history-verify-'+pin).decode().strip()
+        assert actual==pin
+
+
 def build(args):
     run=Run(args.out);root=run.out/'staging';root.mkdir()
     shutil.copyfile(__file__,run.out/'producer.py')
@@ -57,11 +72,7 @@ def build(args):
     # These snapshots contain the original JPL defect witness and Q's accepted
     # parser projection. Fetch just their pinned commits, never all history.
     history=sorted({pin for stage in args.stages for pin in HISTORY.get(stage,[])})
-    if history:run.run(['git','init',root],'history-init')
-    for pin in history:
-        run.run(['git','-C',ROOT,'cat-file','-e',pin+'^{commit}'],'history-present-'+pin,expected=None)
-        repository=ROOT if run.commands[-1]['status']==0 else run.run(['git','-C',ROOT,'remote','get-url','origin'],'history-origin-'+pin).decode().strip()
-        run.run(['git','-C',root,'fetch','--no-tags','--depth=1',repository,pin],'history-fetch-'+pin)
+    stage_history(run,root,history)
     def copy_sources(stage):
         directory=root/'validation'/stage;directory.mkdir(exist_ok=True)
         names=run.run(['git','-C',ROOT,'ls-files','-z','--','validation/'+stage],stage+'-sources').decode().split('\0')
