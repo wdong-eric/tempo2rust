@@ -345,3 +345,28 @@ needed when a status/log request times out. The full native corpora, Linux
 arithmetic, revised observations and complete cache controls await actual
 results. The guard remains diagnostic-only. AL/M2/full migration acceptance
 remain pending, and allocation optimization remains deferred.
+
+## Truthful Rust terminal presentation review, 31 October
+
+`central-presentation-review.py` is the exact executed review for production
+commit `801bc94139cca90d6072234b09f5a1bcec5e4b05`. It verifies the Git archive
+against the delivered clean source export, all 262 installed files, the retained
+before/after evidence and its comparison implementation. It independently
+replays nine report/JSON comparisons, reruns four source-attribution corruption
+controls and executes the installed robust-H report once in a fresh directory.
+All those checks pass. This is a macOS presentation review; scientific equality
+to native TEMPO2 and Linux acceptance are separate obligations.
+
+The original temporary review and its tuple-versus-JSON-array assertion stop
+are preserved alongside the corrected successful execution under ignored
+`build/presentation-801bc94-review-20261031/`. Its copy manifest binds 158 files
+and 36,214,932 bytes; generated archives, JSON and logs remain untracked. The
+verified receipt is
+`0459603a9fdbbe88a7db1bd3e707361534b76b055a90fdb1b618020f32969ff4`,
+the recipe is
+`940e5e87a21265369c98ec6c5f13f069722ca35ccc3f3ef53dd40f97c606ed12`,
+and the preservation manifest is
+`7ecf01fe2a55ff4497e5d5bc12f8c2bf3de6b4e5dfb2554b6fac6a68f464c13e`.
+The recipe intentionally retains its exact original temporary destination and
+refuses to overwrite it. Decision 0107 records the review boundary and remaining
+final AL harness/report binding.

@@ -105,3 +105,45 @@ and historical evidence remain outside AL ownership. Keep changes in scoped
 Conventional Commits and return a reviewable report/examples/test evidence.
 No push or dispatch is released. The current job continues unchanged, and its
 result still determines the numerical/cache correction brief and acceptance.
+
+## Central installed-product review, 31 October
+
+AL implemented the presentation correction in
+`801bc94139cca90d6072234b09f5a1bcec5e4b05`. Central reviewed the shared logger,
+origin capture through wrappers and observation replay, version identity, the
+emitter conversions and the native-first help. The earlier unsupported `-gr plk`
+primary example is corrected to the supported `-f` route, with the retained
+plugin catalogue explicitly marked as unavailable for execution.
+
+The independent executed recipe is
+`decisions/evidence/release-qualification/central-presentation-review.py`.
+Its ignored packet is
+`decisions/evidence/release-qualification/build/presentation-801bc94-review-20261031/`.
+The review binds all **2,008 Git-export files and 262 installed files**, replays
+nine retained report/version/debug and machine-interface comparisons, and freshly
+passes four mutation/control tests. A fresh installed robust-H execution exits
+zero with no stderr and matches the retained corrected report after the named
+CPU-time metadata projection. It prints actual sites including
+`[general_fitting.rs:210]`, `[tkfit.rs:365]`, `[tkrobust.rs:124]` and
+`[core_cli.rs:819]`; the scientific report fields remain identical in these
+before/after checks. This establishes presentation behavior on the tested macOS
+installation, not independent scientific equivalence or Linux qualification.
+
+The verified review receipt has SHA-256
+`0459603a9fdbbe88a7db1bd3e707361534b76b055a90fdb1b618020f32969ff4`;
+the exact executed recipe has SHA-256
+`940e5e87a21265369c98ec6c5f13f069722ca35ccc3f3ef53dd40f97c606ed12`.
+The first central attempt stopped on a Python tuple-versus-JSON-array comparison
+in the reviewer. Canonical JSON comparison proves the metadata equal; the
+original attempt and corrected execution are both retained. It was not a
+production or scientific failure.
+
+AL is finishing its scoped harness/documentation delivery and additional
+identical-state output evidence. Central will bind that final commit before
+closing the complete presentation delivery. The implemented correction and fresh
+installed example pass the review above. The existing 359-byte rendered-line
+limit remains: longer truthful prefixes can shorten the visible tail of long
+messages, and the controls retain this effect rather than repairing or discarding
+it in comparison. No numeric tolerance, arithmetic or production cache change
+is accepted by this review. Linux run `41069548581` still uses frozen `a35104a`;
+there is no new publication or dispatch.
