@@ -113,6 +113,55 @@ ledger's successful generation does not close unhit defined branches, numerical
 failures, platform execution or central acceptance. The integrated pending
 ledger continues to report those obligations.
 
+## Presentation and diagnostic attribution (0106/0107)
+
+Run the focused comparison with an exported candidate, a private install built
+from that candidate, the retained pre-change executable and an identified runtime:
+
+```sh
+python3 validation/release/presentation.py \
+  --candidate /path/to/export/source \
+  --prefix /path/to/current-private-install \
+  --baseline /path/to/previous-private-install/bin/tempo2-rust \
+  --runtime /path/to/T2runtime \
+  --out validation/release/build/presentation-fresh
+python3 -m unittest discover -s validation/release -p 'test_*.py'
+```
+
+This runs the main installed application, preserves raw streams and debug files,
+and checks help, native reports/version metadata and three explicit JSON routes.
+It is a presentation regression check; unchanged calculation products do not
+establish independent numerical correctness. The installed user-facing recipe is
+`PREFIX/share/tempo2-rust/rust/TERMINAL_EXAMPLES.md`.
+
+`diagnostic_attribution.py` validates raw Rust basenames/lines against compiler
+call sites and their named native counterparts before one comparison projection.
+Internal comparison tags are rejected in raw input, including version identity
+and routine rows. Bodies, ordering, numerical data, severity and channel remain
+binding. The longer prefix may change the retained tail under the existing
+359-byte limit; the comparator never repairs that tail. Owned output/timing
+adapters use this projection after their existing native-source line mapping.
+Historical corpus runners remain immutable; their old exact-label gates need an
+explicit successor when next replayed against 0107 output.
+
+For development regeneration, run the historical translator only in a disposable
+export, then apply the maintained metadata-only successor to a fresh path:
+
+```sh
+python3 validation/release/attribute_generated_output.py \
+  --input /path/to/historical-generated/core_output_source.rs \
+  --out /path/to/fresh/core_output_source.rs
+rustfmt /path/to/fresh/core_output_source.rs
+```
+
+Review that result before replacing committed source. Cargo compiles committed
+Rust directly. `source_audit.py` rejects restored literal native-labelled Rust
+logging calls; the historical producer is preserved. The separate
+`diagnostic_controls.rs` is an installed-library diagnostic client for the line
+limit, not another application entry point. Exact executed identities, failed
+attempts and coverage limits are in
+[the presentation report](../../rust/RELEASE_PRESENTATION_REPORT.md).
+
 ## Numeric and construction boundaries
 
 * A2 initializer correction, instrumentation, reviewed core corrections and the

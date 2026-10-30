@@ -7,6 +7,9 @@ and `predictor` JSON subcommands. Native options retain source case, order,
 preprocessing controls and defaults. `-h`, `-H`, `-version`, `-v` and no arguments
 retain source status 1. Identity explicitly names Rust and the native source pin.
 Plugins are discovered but unavailable for execution; selection is an error.
+The native route leads `--help`, README and installed examples. `core_cli::help()`
+shares the pinned native option catalogue with short help, states the plugin
+execution boundary, and corrects its obsolete CVS-version description (0106/0107).
 
 `core_output::text_output(context, options, io)` accepts canonical mutable
 PulsarContext, explicit global/output controls, and OutputIo owning borrowed
@@ -61,6 +64,21 @@ unsupported/mismatched conversions fail. C integer widths/padding and L f/e/g
 are explicit. The native single-l integer vararg mismatch is not a golden ABI.
 `Diagnostics` is publicly reexported and can be owned independently; canonical
 engine operations continue using the existing synchronized process session.
+
+Under 0107, Rust emitters use `rust_log(kind, body)` and `rust_timing(body)`.
+Compiler-derived basename/line metadata survives wrappers, observation transcripts
+and draining. `log(kind, file, line, body)` and `timing(file, line, body)` remain
+explicit caller-metadata APIs: their file/line must identify the actual emitter.
+`source_directory` applies only to those explicit calls, never to Rust captures.
+No user filename or native reference inside a message body is rewritten.
+
+`version(native_file, native_function)` now clearly labels its arguments as the
+TEMPO2 counterpart. It reports the Rust build/source pin and actual Rust call
+site, while retaining the counterpart pair as its existing once-only key. This
+preserves suppression when a source routine has more than one Rust owner.
+The existing 359-byte full-line limit still precedes ANSI removal. A longer Rust
+prefix can therefore shorten the visible body; warning/error backing storage,
+counters, severity and routing retain their previous contracts.
 
 Modern terrestrial output now defines site-TOA-to-UT1 seconds at the existing
 clock/EOP producer, including modes that bypass clock correction. This also

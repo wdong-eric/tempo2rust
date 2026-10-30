@@ -1,6 +1,9 @@
 # AH source, state, type and branch correspondence
 
 Pin `fda6ad4a9753ad7dc5d291406f2f310a9161423f`; release `732fd0e`.
+Presentation successor 0106/0107: the [presentation source/departure report](RELEASE_PRESENTATION_REPORT.md)
+records actual Rust attribution, wrapper/replay capture and native-first help.
+The historical AH text below retains its original release scope.
 This is implementation correspondence, not a claim of exhaustive dynamic branch
 coverage. The generated, ignored `validation/core_output/build/source-inventory.json`
 lists all six `textOutput.C` bodies and all 375 decision/loop/case sites with
@@ -80,8 +83,8 @@ Optional fit diagnostic files are produced by AE, predictor files by AF.
   Existing preprocessing/covariance include resolvers retain their established
   path contracts; callers needing their relative paths should use the process
   working directory or absolute arguments. The library never calls chdir/setenv.
-* Native help/version/no-args statuses remain 1; explicit Rust `--help` retains
-  its old JSON-adapter help contract. Plugin selection is explicit unavailable,
+* Native help/version/no-args statuses remain 1; explicit Rust `--help` succeeds
+  and leads with the native route under 0106/0107. Plugin selection is explicit unavailable,
   not substitution. `-pre` fits once per outer NITS, skips the second evaluation;
   writetim precedes fitting. `-model`, old/newfit and dcm preserve inactive source
   consumers. Default native acceleration selector is 1; JSON defaults stay 0.

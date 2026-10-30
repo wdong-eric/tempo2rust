@@ -1,5 +1,10 @@
 # AL release qualification handover
 
+Presentation-only successor, 31 October 2026:
+[native-first terminal help and truthful Rust attribution](RELEASE_PRESENTATION_REPORT.md)
+records production `801bc94`, the corrected checker, installed examples and
+focused evidence under 0106/0107. This does not close scientific or Linux gates.
+
 Latest scoped follow-through, 31 October 2026: [second Linux corrections,
 source arithmetic, bound macOS checks and remaining gates](RELEASE_SECOND_LINUX_FOLLOWUP.md).
 Decision 0104 records the second Linux run at `4accd26`: **54/66 stages passed,

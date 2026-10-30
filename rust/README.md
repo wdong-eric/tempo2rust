@@ -50,6 +50,9 @@ sources, lockfile, retained native sources and notices. Runtime data is supplied
 separately. See [the release recipes](../validation/release/README.md) and
 [the qualification report](RELEASE_QUALIFICATION_REPORT.md) for the actual tested
 candidate, open scientific gates and unrun Linux requirements.
+The [presentation report](RELEASE_PRESENTATION_REPORT.md) separately binds the
+installed terminal examples, truthful diagnostic attribution and focused checks
+under decisions 0106/0107.
 
 ## Predictors
 
