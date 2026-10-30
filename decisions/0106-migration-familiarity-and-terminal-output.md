@@ -56,7 +56,7 @@ source formatter and established units. Do not invent fitted quantities or
 synthesize missing state to call the stateful report. Keep machine output
 explicit and update owned consumers together for any changed interface.
 
-## AL follow-through after the current run review
+## AL presentation follow-through
 
 1. Make native-style usage the first help/README/installed-example path, including
    the runtime setup and a real `-f` example. Label structured adapters as machine
@@ -81,8 +81,10 @@ explicit and update owned consumers together for any changed interface.
 
 This instruction does not close AH's remaining output comparisons or accept
 AL/M2/full migration. Keep the AL-first sequence and deferred covariance
-optimization. The current Linux result is reviewed before releasing edits to
-its frozen implementation; no running job is restarted for this amendment.
+optimization. Presentation-only preparation may proceed independently under 0107, while the
+Linux job continues at its frozen candidate. Its result is reviewed before
+numerical/cache changes are released; no running job is restarted for this
+amendment.
 
 
 ## Executed native-style application example

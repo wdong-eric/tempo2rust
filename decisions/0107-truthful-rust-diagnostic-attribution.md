@@ -53,8 +53,10 @@ successor generation path so it cannot silently restore misleading labels.
 
 ## AL implementation and verification handoff
 
-After central reviews frozen Linux run `41069548581`, AL owns this correction
-alongside the 0106 native-first help/documentation work. AL may edit its existing
+AL may begin this presentation correction alongside the 0106 native-first
+help/documentation work while central reviews frozen Linux run `41069548581`.
+The running job uses an immutable Git candidate; new local commits cannot change
+that checkout. AL may edit its existing
 `rust/` and `validation/release/` scope; historical accepted runners and reference
 exports remain immutable under 0050. No independent push or dispatch.
 
@@ -79,6 +81,27 @@ exports remain immutable under 0050. No independent push or dispatch.
    source map, raw evidence and focused results for central review. Do not claim
    that attribution changes resolve inherited scientific/output failures.
 
-The current Linux candidate is unchanged. Central reviews its full result before
-releasing edits; AL-first sequencing, deferred optimization and all milestone
-acceptance obligations remain in force.
+The current Linux candidate is unchanged. Arithmetic corrections and cache-guard
+promotion still await its full result; AL-first sequencing, deferred optimization
+and all milestone acceptance obligations remain in force.
+
+## Independent presentation preparation released
+
+Central rechecked GitHub run 41069548581 at exact head a35104a and verified the
+preserved candidate archive SHA-256
+`e04b10cf1e9171b449175cd85cbd617e14b016d4e75efe3a0596ba85c3a6e1bb`.
+Before this release the local implementation paths still match that candidate.
+The snapshot is retained in ignored
+`decisions/evidence/release-qualification/build/third-linux-a35104a-review-20261031/candidate-review/`.
+Central will use that frozen source for the run's comparisons, not a later working
+tree. Collection is independently bound to the same run and full SHA.
+
+The earlier whole-working-tree freeze is therefore unnecessary for the user's
+newly requested presentation work. This amendment releases **only 0106/0107**
+to the existing AL owner now, without waiting for the Linux matrix to finish.
+Do not change scientific expressions, ordinary-type sites, precision, tolerance
+gates or production cache ownership in this preparation. Central documentation
+and historical evidence remain outside AL ownership. Keep changes in scoped
+Conventional Commits and return a reviewable report/examples/test evidence.
+No push or dispatch is released. The current job continues unchanged, and its
+result still determines the numerical/cache correction brief and acceptance.

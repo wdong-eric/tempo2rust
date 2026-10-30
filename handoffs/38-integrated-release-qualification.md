@@ -77,9 +77,10 @@ Address the reported invocation with the smallest same-semantics presentation
 change; never turn evaluation into fitting just to obtain a text report. Preserve
 source labels, units, order, precision, explicit machine contracts and existing
 failed output gates. Return concrete before/after examples and focused checks.
-This is queued after central reviews run 41069548581 at frozen a35104a; no edit
-or independent push/dispatch is authorized during that freeze. AL retains
-ownership; central retains publication review and milestone acceptance.
+The independent presentation release in 0107 permits this work now while run
+41069548581 remains at frozen a35104a. Numerical/cache changes still await its
+result. No independent push/dispatch is authorized. AL retains ownership;
+central retains publication review and milestone acceptance.
 
 
 ## Truthful Rust diagnostic attribution amendment (0107)
@@ -92,6 +93,7 @@ worker replay. Keep pinned TEMPO2 counterparts in comments/source maps and retai
 truthful native-provider labels. AL-owned comparators must validate the new
 metadata before comparing unchanged message bodies/scientific records; preserve
 raw evidence and historical runners. Check full-line truncation boundaries rather
-than silently accepting lost message content. Queue this with 0106 after central
-reviews run 41069548581; current implementation freeze and publication ownership
-remain unchanged.
+than silently accepting lost message content. Implement 0106/0107 now under
+0107's independent presentation release; the immutable Linux candidate and its
+scientific/cache review remain separate. No numerical/cache changes or independent
+publication are released.
