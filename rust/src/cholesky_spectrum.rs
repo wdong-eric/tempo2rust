@@ -133,6 +133,16 @@ pub fn lomb(
     ofac: f64,
     hifac: f64,
 ) -> Result<(Vec<f64>, Vec<f64>, f64), TimingError> {
+    // TKlomb_d, GCC16/macOS arm64 contracts these nine sites. GCC13/Linux
+    // x86_64 keeps separate products/sums (0104, 102-quantity counterfactual).
+    // Target support is restricted by the ordinary-long-double profile module.
+    fn source_mul_add(a: f64, b: f64, c: f64) -> f64 {
+        if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            a.mul_add(b, c)
+        } else {
+            a * b + c
+        }
+    }
     let n = x.len();
     if n < 2 || y.len() != n {
         return Err(boundary("TKlomb_d dimensions"));
@@ -160,24 +170,22 @@ pub fn lomb(
         let (mut s1, mut s2) = (0.0, 0.0);
         for i in 0..n {
             let (st, ct) = (sine[i], cosine[i]);
-            s1 = st.mul_add(ct, s1);
-            s2 = (ct - st).mul_add(ct + st, s2);
+            s1 = source_mul_add(st, ct, s1);
+            s2 = source_mul_add(ct - st, ct + st, s2);
         }
         let tau = 0.5 * (2.0 * s1).atan2(s2);
         let (stau, ctau) = tau.sin_cos();
         let (mut s1, mut s2, mut s3, mut s4) = (0.0, 0.0, 0.0, 0.0);
         for i in 0..n {
             let (st, ct, value) = (sine[i], cosine[i], y[i] - mean);
-            // GCC16/arm64 pinned native contracts these multiply/add pairs;
-            // the Nyquist recurrence is sensitive to their rounding (AG witness).
-            let c = ctau.mul_add(ct, st * stau);
-            let s = ctau.mul_add(st, -(ct * stau));
-            s1 = c.mul_add(value, s1);
-            s2 = s.mul_add(value, s2);
+            let c = source_mul_add(ctau, ct, st * stau);
+            let s = source_mul_add(ctau, st, -(ct * stau));
+            s1 = source_mul_add(c, value, s1);
+            s2 = source_mul_add(s, value, s2);
             s3 += c.powf(2.0);
-            s4 += (-ctau).mul_add(st, ct * stau).powf(2.0);
-            cosine[i] += alpha[i].mul_add(ct, -(beta[i] * st));
-            sine[i] += alpha[i].mul_add(st, beta[i] * ct);
+            s4 += source_mul_add(-ctau, st, ct * stau).powf(2.0);
+            cosine[i] += source_mul_add(alpha[i], ct, -(beta[i] * st));
+            sine[i] += source_mul_add(alpha[i], st, beta[i] * ct);
         }
         frequencies.push(frequency * (j + 1) as f64);
         power.push(0.5 / variance * (s1 * s1 / s3 + s2 * s2 / s4));
