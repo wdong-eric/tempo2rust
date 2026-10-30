@@ -24,7 +24,8 @@ if __name__=='__main__':
         if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
         if (path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
-                and path.name not in {'stdout','stderr','producer.py'}):continue
+                and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',
+                                     't2pred.dat','t1.dat','cheby.dat','exchanged.dat'}):continue
         target=a.out/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
         files[str(relative)]={'sha256':sha(target),'bytes':target.stat().st_size}
     (a.out/'manifest.json').write_text(json.dumps({'source':str(a.input.resolve()),'files':files},indent=2)+'\n')

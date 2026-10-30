@@ -6,7 +6,20 @@ import json
 import os
 from pathlib import Path
 import shutil
+import difflib
 from common import ROOT, Run, sha
+
+
+def observer_differences(raw, corrected, path=''):
+    """Only the historical observer's discarded negative NaN sign may differ."""
+    if isinstance(raw,dict):
+        assert raw.keys()==corrected.keys(),path
+        return sum(observer_differences(v,corrected[k],path+'/'+k) for k,v in raw.items())
+    if isinstance(raw,list):
+        assert len(raw)==len(corrected),path
+        return sum(observer_differences(a,b,path+'/'+str(i)) for i,(a,b) in enumerate(zip(raw,corrected,strict=True)))
+    assert raw==corrected or (raw=='NaN' and corrected=='-NaN'),(path,raw,corrected)
+    return int(raw!=corrected)
 
 
 def prepare(out,a2,candidate):
@@ -33,17 +46,45 @@ def prepare(out,a2,candidate):
     assert not list(reference.glob('*.json')), 'Refuse to replace an existing native campaign'
     cases=json.loads((dest/'cases.json').read_text())
     env=dict(os.environ,TEMPO2=str(a2/'runtime'),LC_ALL='C',REFERENCE_RESOURCE_LOG=str(out/'resources.tsv'))
-    for row in cases['solver']:
-        run.run([out/'export_reference','solver',dest/'inputs'/row['input'],reference/(row['name']+'.json')],
-                row['name'],env=env,expected=None if row['expected']=='boundary' else 0)
-    run.run([out/'export_reference','callbacks','unused',reference/'callbacks.json'],'callbacks',env=env)
-    for row in cases['timing']:
-        run.run([out/'export_reference','fit',dest/'inputs'/row['par'],dest/'inputs'/row['tim'],
-            int(row['rescale']),reference/(row['name']+'.json')],row['name'],env=env)
+    def campaign(exe,directory,prefix):
+        for row in cases['solver']:
+            run.run([exe,'solver',dest/'inputs'/row['input'],directory/(row['name']+'.json')],
+                    prefix+row['name'],env=env,expected=None if row['expected']=='boundary' else 0)
+        run.run([exe,'callbacks','unused',directory/'callbacks.json'],prefix+'callbacks',env=env)
+        for row in cases['timing']:
+            run.run([exe,'fit',dest/'inputs'/row['par'],dest/'inputs'/row['tim'],
+                int(row['rescale']),directory/(row['name']+'.json')],prefix+row['name'],env=env)
+    campaign(out/'export_reference',reference,'')
+    # Decision 0104: successor observer, never edit the historical exporter or
+    # replace its raw outputs. Preserve the sign present in the actual value.
+    exporter=ROOT/'validation/fitting/export_reference.cc';original=exporter.read_text()
+    old='if (isnanq(x)) return "\\\"NaN\\\"";'
+    assert original.count(old)==1
+    corrected=original.replace(old,'if (isnanq(x)) return signbitq(x) ? "\\\"-NaN\\\"" : "\\\"NaN\\\"";')
+    observer=out/'signed_nan_exporter.cc';observer.write_text(corrected)
+    (out/'observer.patch').write_text(''.join(difflib.unified_diff(original.splitlines(True),corrected.splitlines(True),fromfile=str(exporter),tofile='AL/signed_nan_exporter.cc')))
+    command=run.commands[0]['argv'].copy()
+    command[command.index(str(exporter))]=str(observer);command[-1]=str(out/'signed_nan_exporter')
+    run.run(command,'build-signed-observer')
+    successor=out/'signed-reference';successor.mkdir()
+    campaign(out/'signed_nan_exporter',successor,'signed-')
+    changes={p.name:observer_differences(json.loads(p.read_text()),json.loads((successor/p.name).read_text()))
+             for p in reference.glob('*.json') if p.stat().st_size}
+    control=out/'observer_control.cc'
+    control.write_text('#define main historical_main\n#include "signed_nan_exporter.cc"\n#undef main\n'
+        'int main() { longdouble n=nanq(""); longdouble v[]={n,-n,0.0Q,-0.0Q,HUGE_VALQ,-HUGE_VALQ,1.25Q,-1.25Q}; '
+        'for(auto x:v) puts(number(x).c_str()); }\n')
+    command[command.index(str(observer))]=str(control);command[-1]=str(out/'observer_control')
+    run.run(command,'build-observer-control')
+    values=run.run([out/'observer_control'],'observer-control').decode().splitlines()
+    assert values==['"NaN"','"-NaN"','"0"','"-0"','"+Infinity"','"-Infinity"','"1.25"','"-1.25"'],values
     run.save({'status':'pass','scope':'M2 native preparation; numerical comparison separate',
         'regenerated_input_differences':differences,'regenerated_inputs':regenerated,
         'commands_from_catalogue':m.COMMANDS,'generator':sha(source),'a2_receipt':sha(a2/'receipt.json'),
-        'outputs':{p.name:sha(p) for p in reference.iterdir() if p.is_file()}})
+        'outputs':{p.name:sha(p) for p in reference.iterdir() if p.is_file()},
+        'signed_observer':{'source':sha(observer),'historical_source':sha(exporter),
+            'patch':sha(out/'observer.patch'),'sign_changes':changes,'controls':values,
+            'outputs':{p.name:sha(p) for p in successor.iterdir() if p.is_file()}}})
 
 
 if __name__=='__main__':

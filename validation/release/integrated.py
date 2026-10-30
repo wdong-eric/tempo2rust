@@ -100,6 +100,7 @@ def qualify(args):
     step('m2-example',['cargo','build','--offline','--locked','--release','--manifest-path',manifest,
          '--example','compare_fitting'],['dependencies'])
     step('m2-comparison',script('m2_compare.py','--out',out/'m2-comparison','--candidate',candidate,
+         '--signed-reference',out/'m2-inputs/signed-reference',
          '--example',out/'test-target/release/examples/compare_fitting'),['m2-example','rust-suite'])
     step('native-fitting',script('native_fitting.py','--out',out/'native-fitting','--native-repository',repo,'--a2',a2),['a2'])
     step('fits',script('fit_campaign.py','--out',out/'fits','--candidate',candidate,'--native',out/'native-fitting/fit',
