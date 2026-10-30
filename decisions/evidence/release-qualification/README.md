@@ -207,3 +207,12 @@ The archive-review SHA is
 the focused receipt is
 `cfa5a3aa52801b91416dcce49383040a19d36e59572d7247d1649705586776cb`.
 The expanded Linux result, numerical acceptance and full migration remain pending.
+
+
+The subsequent evidence-location documentation correction is `e484f28`.
+Central verified its nine corpus archive/member addresses and eight focused
+archive receipt members. `documentation-review.json` in the second-run packet
+records those exact locations and hashes; its SHA-256 is
+`af98c3f7b027f5062c90eedb40b2c3b39f16af9dbd63305ec69e7ce5c70cc32e`.
+This closes the location finding without repeating scientific checks or changing
+the running 4accd26 Linux candidate.

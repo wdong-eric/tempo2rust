@@ -119,3 +119,19 @@ scientific, cache and expanded-corpus evidence before issuing further correction
 or accepting a milestone. No new user decision is required for this already
 approved rerun. Optimization remains deferred until after AL; full source,
 interface, numerical and platform scope remains intact.
+
+
+## Evidence-location correction reviewed
+
+AL corrected the report and retrieval guidance in documentation-only commit
+`e484f28eef8f3e29fc653b4df7a34c69e0a2d2ea`. Central checked all nine corpus
+archive/member addresses against the bound receipt hashes and the previously
+verified archive index, and verified all eight focused receipt members in their
+separate archive. Receipt and archive identities are unchanged. This closes the
+stale working-directory retention statement; no scientific execution was repeated.
+
+The bounded review is `documentation-review.json` in the ignored second-run
+packet, SHA-256 `af98c3f7b027f5062c90eedb40b2c3b39f16af9dbd63305ec69e7ce5c70cc32e`.
+Run 41056090173 continues at the exact reviewed 4accd26 candidate; this later
+location-only documentation commit does not replace its source identity or
+establish Linux/AL acceptance.
