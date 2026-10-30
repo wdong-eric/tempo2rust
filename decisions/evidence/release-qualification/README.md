@@ -249,3 +249,30 @@ control. M2 and predictor generation ran for the first time on Linux, exposing
 both genuine open values and two source-observation defects detailed in 0104.
 The original artifact and every failing gate remain immutable. AL has further
 implementation/verification work; this review is not milestone acceptance.
+
+
+## First correction reviewed for the third Linux candidate
+
+Central reviewed `cecee60899611f52ba41975b082d4951e0c66195` on 31 October.
+Two history/publication tests passed from an isolated archive of that commit.
+The offline evidence review verified seven exact shallow Git trees, absence of
+automatic maintenance children in their corrected fetch traces, the unchanged
+actual Linux failed-preparation receipt, and fourteen explicit unavailable
+comparisons. It binds 102 retained files. No native corpus or new Linux run was
+executed by these checks. The historical metadata race remains a plausible
+explanation, not a proved cause. Linux must still confirm staging and execute
+the complete native/Rust corpora.
+
+The exact executed offline recipe is `central-history-review.py`. Its original
+unit-test and review packet is
+`/var/folders/0f/w1j_z2b96f53kqjcj06c8yrw0000gn/T/tempo2-central-history-cecee60-xuyonfrm/`;
+a byte-identical copy is retained in ignored
+`build/history-cecee60-review-20261031/`. `copied-artifacts.json` maps original
+and saved paths without relabelling the executed commands. The central evidence
+review SHA-256 is
+`1ab565e15df00dc7bb6f06d21340ae064c5b77434f32f34fd7e7a83de9488120`.
+The recipe refuses to overwrite that original review receipt.
+
+This component is suitable for the next reviewed candidate. AL is still working
+on the other 0104 corrections; no whole candidate, scientific milestone or
+platform qualification is accepted here.
