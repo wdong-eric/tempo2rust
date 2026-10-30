@@ -216,3 +216,13 @@ records those exact locations and hashes; its SHA-256 is
 `af98c3f7b027f5062c90eedb40b2c3b39f16af9dbd63305ec69e7ce5c70cc32e`.
 This closes the location finding without repeating scientific checks or changing
 the running 4accd26 Linux candidate.
+
+
+## Event source-type diagnostic
+
+[event-type-boundaries.md](event-type-boundaries.md) records the exact local
+compile-time probe and the inherited barycentric fixture frequency scale. It
+identifies the mixed ordinary-long-double/binary128 expression boundaries and
+explains why tiny rounding changes can reach nanoseconds in this fixture. It
+is not a causal finding, an approved precision change or a Linux qualification
+result; the existing second Linux run supplies the pending diagnostic evidence.
