@@ -6,11 +6,13 @@ import json
 from pathlib import Path
 import sys
 from common import ROOT, sha
+from diagnostic_attribution import Attribution
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for name in ['out','native','core','candidate']:p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();native=a.native.resolve();core=a.core.resolve()
+    attribution=Attribution(a.candidate)
     identity=json.loads((native/'receipt.json').read_text())
     assert identity['core_receipt']==sha(core/'receipt.json')
     for name in json.loads((core/'receipt.json').read_text())['source']:
@@ -22,7 +24,7 @@ if __name__=='__main__':
         def normalize_source(data,kind):
             if kind=='native':
                 data=data.replace(b'['+str(core/'source').encode()+b'/',b'['+str(native/'source').encode()+b'/')
-            return normalize(data,kind)
+            return attribution.stream(normalize(data,kind),kind)
         return original(left,right,normalize_source,diff_dir)
     m.compare=compare
     sys.argv=[str(path),'--native',str(native),'--out',str(a.out),'--release']
@@ -31,5 +33,6 @@ if __name__=='__main__':
     record['al_source_directory_binding']={'wrapper':sha(__file__),'compiled':str(core/'source'),
         'observer_copy':str(native/'source'),'core_receipt':sha(core/'receipt.json'),
         'meaning':'Exact known __FILE__ directory relocation before the unchanged pinned-line mapping; no numerical/text-value normalization'}
+    record['rust_diagnostic_attribution']=attribution.manifest()
     receipt.write_text(json.dumps(record,indent=2)+'\n')
     raise SystemExit(status)

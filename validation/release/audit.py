@@ -31,6 +31,7 @@ if __name__=='__main__':
         required=['bin/tempo2-rust','bin/getPeriod-rust','lib/libtempo2pred_rust.a','include/tempo2pred.h',
                   'include/tempo2pred_int.h','share/tempo2-rust/rust/Cargo.lock',
                   'share/tempo2-rust/rust/LICENSE','share/tempo2-rust/rust/MT19937_LICENSE.txt',
+                  'share/tempo2-rust/rust/TERMINAL_EXAMPLES.md',
                   'share/tempo2-rust/rust/RELEASE_QUALIFICATION_REPORT.md']
         for name in required:
             if name not in actual:mismatches.append(str(prefix/name)+': required product absent')

@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import re
 from common import ROOT, PIN, Run, identities, sha
+from diagnostic_attribution import Attribution
 
 BASELINE='6acaf53d2e13291eb6d0b0988faf7dee7d33a635'
 
@@ -57,7 +58,9 @@ if __name__=='__main__':
         original=run.run(['git','-C',a.native_repository,'show',PIN+':sofa/'+path.name],'sofa-'+path.name)
         assert original==path.read_bytes(),path
         sofa_records[path.name]=sha(path)
+    attribution=Attribution(ROOT).manifest()
     data={'status':'pass',**bodies,'native_pin':PIN,'responsibilities':rows,'sofa':sofa_records,
+          'diagnostic_attribution':attribution,
           'function_and_export_navigation':lexical,'unsafe_navigation':unsafe,'departure_navigation':departures,
           'meaning':'Identity/presence audit and lexical navigation, not exhaustive branch or numerical acceptance',
           'maps':{str(p.relative_to(ROOT)):sha(p) for p in (ROOT/'rust').glob('*SOURCE_MAP.md')},

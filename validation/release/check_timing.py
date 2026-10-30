@@ -4,6 +4,7 @@ from pathlib import Path
 from decimal import Decimal,localcontext
 import argparse,hashlib,importlib.util,json,os,re,subprocess,sys
 from common import ROOT, sha
+from diagnostic_attribution import Attribution
 HERE=ROOT/'validation/timing_models'
 sys.path.insert(0,str(HERE))
 sys.path.insert(0,str(ROOT/'validation/input_to_bat'))
@@ -80,6 +81,7 @@ def main():
  a=ap.parse_args();a.out=a.out.resolve();a.out.mkdir(parents=True,exist_ok=False)
  exe=a.native.resolve()/'timing';identity=json.loads((a.native/'receipt.json').read_text());assert sha(exe)==identity['executables']['timing']
  rust=a.rust.resolve();runtime=a.runtime.resolve();g=ROOT/'validation/binary/fixtures';f=HERE/'fixtures';acfix=ROOT/'validation/input_to_bat/fixtures'
+ attribution=Attribution(ROOT)
  cases=[(m,[(g/(m+'_baseline.par'),g/'barycentric.tim')],[]) for m in ['bt','btj','btx','ell1','dd','ddk','dds','mss','ddgr','t2','t2-pta','ddh','ell1h','ell1k']]
  cases += [('pks_dd',[(g/'pks_dd.par',g/'pks.tim')],[]),('t2-companions',[(g/'t2_companions.par',g/'barycentric.tim')],[]),('ordinary',[(acfix/'ordinary.par',acfix/'ordinary.tim')],[]),('ecliptic',[(acfix/'ecliptic.par',acfix/'ordinary.tim')],[])]
  for p in sorted(f.glob('*.par')):
@@ -124,13 +126,13 @@ def main():
      return re.sub(rb'\[([^\]\n]+\.C):(\d+)\]',location,data)
     for channel,expected in [('stdout',n.stdout),('stderr',n.stderr)]:
      actual=b''.join(bytes(event['bytes']) for event in result['diagnostics'] if event['source_channel']==channel)
-     if canonical_log(expected)!=actual:errors.append(channel+' diagnostic bytes differ after source-location mapping')
+     if attribution.stream(canonical_log(expected),'native')!=attribution.stream(actual,'rust'):errors.append(channel+' diagnostic bytes differ after validated source-location mapping')
    rust_avg=(work/'avg.dat').read_bytes() if (work/'avg.dat').exists() else None
    if native_avg!=rust_avg:errors.append('avg.dat byte content or file membership differs')
    receipt={'native_command':cmd,'rust_command':rc,'native_executable_sha256':before,'rust_executable_sha256':sha(Path(rc[0])),'comparator_sha256':sha(Path(__file__)), 'rust_source_sha256':{str(p.relative_to(ROOT)):sha(p) for p in sorted((ROOT/'rust/src').rglob('*.rs'))},'input_sha256':consumed,'native_identity_sha256':sha(work/'native-identity.json'),'native_returncode':n.returncode,'rust_returncode':r.returncode,'native_output_sha256':sha(out) if out.exists() else None,'rust_output_sha256':hashlib.sha256(r.stdout).hexdigest(),'errors':errors,'measurements':measurements}
    (work/'comparison.json').write_text(json.dumps(receipt,indent=2)+'\n')
    print(name,mean,'PASS' if not errors else f'FAIL {errors[:3]}',flush=True)
    if errors:failures.append((name,mean,errors))
- (a.out/'receipt.json').write_text(json.dumps({'failures':failures,'status':'failure' if failures else 'pass','cases':len(list(a.out.glob('*/comparison.json'))),'native_receipt':sha(a.native/'receipt.json'),'checker':sha(Path(__file__))},indent=2)+'\n')
+ (a.out/'receipt.json').write_text(json.dumps({'failures':failures,'status':'failure' if failures else 'pass','cases':len(list(a.out.glob('*/comparison.json'))),'native_receipt':sha(a.native/'receipt.json'),'checker':sha(Path(__file__)),'diagnostic_attribution':attribution.manifest()},indent=2)+'\n')
  return bool(failures)
 if __name__=='__main__':raise SystemExit(main())
