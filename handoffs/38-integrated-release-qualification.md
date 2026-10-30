@@ -65,3 +65,18 @@ Recheck measurements affected by actual platform/provider/linkage changes.
 ## Dispatch prompt
 
 Implement Assignment AL under decisions/0086-release-platforms-and-integrated-qualification.md and handoffs/38-integrated-release-qualification.md from AK report `eaa30c5` plus central release 0098. Own rust/, validation/release/ and the named qualification workflow if needed. Deliver clean installed full Rust core/toolkit and predictor C consumers on the user's selected macOS arm64 and Linux x86_64 profiles, complete source/interface/unsafe/departure coverage, full applicable integrated verification and exact inherited/new numerical-gate evidence. Preserve scientific conventions and Rug128, apply 0053 only to demonstrated small bugs, keep generated artifacts ignored, and return committed authored work plus rust/RELEASE_QUALIFICATION_REPORT.md for central acceptance.
+
+
+## Migration familiarity and terminal presentation amendment (0106)
+
+The user's 31 October instruction adds reducing migration effort and cognitive
+load to the working principles and active goal. Read decision 0106. Reuse the
+delivered native `-f`/`core_output::text_output` route, make it primary in help,
+README and installed examples, and explicitly identify machine JSON adapters.
+Address the reported invocation with the smallest same-semantics presentation
+change; never turn evaluation into fitting just to obtain a text report. Preserve
+source labels, units, order, precision, explicit machine contracts and existing
+failed output gates. Return concrete before/after examples and focused checks.
+This is queued after central reviews run 41069548581 at frozen a35104a; no edit
+or independent push/dispatch is authorized during that freeze. AL retains
+ownership; central retains publication review and milestone acceptance.
