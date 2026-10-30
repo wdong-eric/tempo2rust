@@ -83,3 +83,25 @@ This instruction does not close AH's remaining output comparisons or accept
 AL/M2/full migration. Keep the AL-first sequence and deferred covariance
 optimization. The current Linux result is reviewed before releasing edits to
 its frozen implementation; no running job is restarted for this amendment.
+
+
+## Executed native-style application example
+
+Central ran the actual installed `second-followthrough-install-v1/bin/tempo2-rust`
+from tested production `5c8c0aa`; its main source is byte-identical to the reviewed
+`a35104a` candidate. The command used the existing `robust-H.par` and
+`multi-frequency.tim` inputs, the recorded A2 runtime, and native options
+`-npsr 1 -nobs 100 -noaccel -f PAR TIM`. It exited zero with 3,780 bytes of text
+stdout and empty stderr. The output includes the PSR result heading, pre/post-fit
+RMS and chi-square, the native parameter/uncertainty/fit-flag table, derived
+quantities and timing conventions. It emits no JSON.
+
+This is an application demonstration, not a fresh native/Rust scientific
+comparison. The receipt records the exact executable, input/runtime identities,
+argv, environment and original temporary working directory. It and the complete
+stdout/stderr are preserved byte-for-byte in ignored
+`decisions/evidence/release-qualification/build/native-cli-demo-20261031/`;
+`copied-artifacts.json` retains original/saved addresses. Receipt SHA-256:
+`4b93f968c45e0c761c89d1d9f8b069e74293ab300a86f7b47644934dfa853e33`.
+Use this existing working path for the primary terminal example; the established
+output-comparison failures remain open.
