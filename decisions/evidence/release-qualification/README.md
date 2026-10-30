@@ -276,3 +276,42 @@ The recipe refuses to overwrite that original review receipt.
 This component is suitable for the next reviewed candidate. AL is still working
 on the other 0104 corrections; no whole candidate, scientific milestone or
 platform qualification is accepted here.
+
+
+## Observation and cache controls reviewed
+
+Central reviewed observation commit `0104447` and cache-diagnostic commit
+`ca60751` on 31 October. The independently frozen observer files all match the
+committed source. Three focused tests and eighteen macOS native writer/parser
+rows pass, including signed-zero preservation and wrong-sign rejection.
+
+`central-observer-cache-review.py` is the exact executed offline review. It
+verifies 960 retained files, all 31 nonempty raw/signed M2 JSON products, and
+replays all 21 saved macOS predictor serialization checks. The complete M2
+comparison still reports two SVD-order failures; the fourteen predictor cases
+still report seven raw RMS failures. These gates are not waived. The first
+review attempt incorrectly included historical native log files in the JSON
+membership check; its script and failure are preserved. The corrected review
+verifies every recorded file hash and separately compares exact JSON membership.
+
+The cache review verifies the original library, explicit cleanup and guard-only
+copy, twelve complete equal workflow blocks, all equal stored TSV products,
+and the single changed source file. The proposed guard registers within the
+existing C adapter panic boundary and frees only the calling thread's MPFR cache
+at thread exit. This design is suitable for the Linux counterfactual in 0104;
+production remains unchanged. macOS does not reproduce Linux's retained
+544-byte/16-allocation leak, so no Linux leak closure is claimed. The next run
+must first obtain complete flushed baseline/explicit-cleanup evidence, then
+execute the one-file guard variant. Production promotion remains a central
+review decision after that evidence.
+
+Original successful review: `/private/tmp/tempo2-central-observer-cache-review-20261031-v2/`.
+The failed attempt, successful review and focused native/unit controls are copied
+byte-for-byte to ignored `build/observers-cache-review-20261031/`; its
+`copied-artifacts.json` preserves original/saved addresses. Successful receipt
+SHA-256: `5868a7f65e918dd21d39360ed7b209e749220c3679e971f588e740166c7b5c36`.
+The recipe takes `--root`, `--focused` and a fresh `--out` directory.
+The prior Linux artifact lacks the generated predictor `.dat` files; its full
+source-token check cannot be replayed from that packet. The new collector retains
+the named generated products for the next Linux review. Original failures remain
+intact, and no scientific milestone or full candidate is accepted here.
