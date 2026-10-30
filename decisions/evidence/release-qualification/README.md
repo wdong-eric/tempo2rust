@@ -181,3 +181,29 @@ Selected manifest: `c99c608a2f7d79d4df5ba08ea892d7748c2505d1176891951f0fc934be6c
 Central review: `c866eef82c916ba11dbb67519a5c4271c7d9cb5c9d6747682aceb1717e613baf`.
 The raw failures and blocked stages are retained for AL's corrections and the
 next centrally reviewed, already authorized qualification run.
+
+
+## Expanded AL candidate and second Linux run
+
+Decision 0103 reviews df587cd / 4accd26 and dispatches run 41056090173 under 0101.
+The ignored packet is `build/second-linux-4accd26-review-20261030/`: frozen source
+identity/diff/workflow, independent focused checks, archive verification and the
+exact dispatch response. The public branch already matched the candidate;
+central made no push. The original b59 execution remains unchanged.
+
+`central-followthrough-review.py` is the exact executed archive verifier. It uses
+`/tmp/tempo2-al-next-review-current` to locate the review output; repeating the
+recipe requires pointing that file to a fresh review directory while retaining
+the original packet. It verifies 118,917 archive members and 1,300 focused files,
+then resolves all nineteen report receipt hashes. Nine receipt paths now resolve
+through preserved archives, not their empty/absent working files. The first
+path-only failure is retained with the successful archive-based check.
+
+The fresh frozen-source controls pass eleven harness tests, the two changed Rust
+tests and a native ordinary-long-double/serialization witness on macOS. Their
+receipt is `focused-checks/receipt.json`; commands and source hashes are included.
+The archive-review SHA is
+`4a7f0769f851385e8c57fd8297991e27d71903dff6881c5ba158adfaa2520821`;
+the focused receipt is
+`cfa5a3aa52801b91416dcce49383040a19d36e59572d7247d1649705586776cb`.
+The expanded Linux result, numerical acceptance and full migration remain pending.
