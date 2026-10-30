@@ -71,3 +71,76 @@ observer neutrality, and separately replaces only the ordinary-long-double event
 temporaries with double. Its actual result is needed before causal attribution
 or an implementation handoff. Any eventual correction must preserve every source
 conversion boundary, operation order, original evidence and existing gates.
+
+
+## Connected source obligations and conditional AL proposal
+
+AL completed a read-only design review in chat
+`01a17c51-359e-7041-b04b-efebd2b2ec6e`, turn
+`01a18ce1-3d87-72d2-b209-202610427719`, at 2026-10-30 13:00:33 UTC.
+Central checked the connected source expressions. No implementation or numerical
+policy is authorized by this proposal; the actual Linux intervention remains
+its first dependency.
+
+A coherent event correction must cover both residuals and
+`t2fit_glitch.C::t2FitFunc_expdip/t2FitFunc_gausdip`. Let D denote binary64, L the
+measured ordinary long double, and W the existing native-binary128/Rust-Rug128
+timing representation. The W mapping remains unchanged. Each L operation must
+round at its own source boundary; evaluating the whole expression in W and
+narrowing only the final value does not reproduce it.
+
+The residual contract is given above. In the callbacks, with P the W power and E
+the L exponential, the additional boundaries are:
+
+| Callback | Source expression and conversion before returning D |
+| --- | --- |
+| EXPPH | P * E in W, then assign L val, then convert to D |
+| EXPTAU | dm * P * E * dt / tau / tau, left to right in W, then L val, then D |
+| EXPINDEX | dm * log(freq) first in L; multiply by P and E in W, then L val, then D |
+| EXPEP | dm * P * E / tau in W, then L val, then D |
+| GAUSAMP | Common Gaussian product in W, narrowed into L val; val / amp in L, then D |
+| GAUSEP | val * ((-dt / sig) / sig) in L, then D |
+| GAUSSIG | val * ((((dt * dt) / 6.) / sig) / sig / sig) in L, then D |
+| GAUSINDEX | val * log(freq) in L, then D |
+
+Preserve source exp/expl selection, the narrowed-dt activation test, zero-return
+branches, predicates, loop order, signs, the Gaussian 6. denominator, and existing
+parameter updates. The purpose is source-type consistency, not rederiving or
+correcting the source derivative formulas.
+
+AL proposes sharing only host-width selection and the existing ordinary-type
+rounding kernel from `predictor_number.rs`, retaining PredictorNumber's public
+API. That kernel preserves rounding direction through subnormal conversion and
+the host exponent limits. Predictor parsing, formatting, quad_cos and contraction
+helpers do not belong in event expressions. Keep the existing macOS f64 exp/ln
+path; Linux ordinary-width transcendental results require direct native evidence.
+This is a proposed reuse boundary, not a decided module refactor.
+
+Before implementation authorization, inspect the actual Linux event intervention
+and observer neutrality. Then bound any missing evidence with the Linux type
+probe extended for log/expl and callback assignment/return conversions, exponent
+arguments/results and Gaussian val, and direct native outputs for all eight
+callbacks. The existing GAUSINDEX=2 fixture suppresses its Gaussian term under
+the preserved frequency convention, so add a separate Gaussian-only witness that
+can distinguish ordinary-width narrowing. It must complement the original
+fixture, not replace it. A candidate must retain the original event gates, the
+event-amplitude fit case, exact macOS before/after event outputs, and predictor
+rounding controls if the shared kernel changes. Do not infer numerical agreement
+from matching declared precision alone.
+
+A bounded source scan of the 93 responsibility files found related sites that
+remain outside the focused event proposal:
+
+| Source boundary | Current Rust counterpart / disposition |
+| --- | --- |
+| dm_delays.C:139 ordinary cmval accumulation | propagation.rs:216 explicitly retains the earlier macOS f64 profile |
+| formResiduals.C:1456 ordinary cosmic-string dt | residual_source.rs:3000 uses f64 |
+| t2fit_stdFitFuncs.C:29–32 and spin L-suffixed expressions | t2fit_stdFitFuncs.rs and the shared std_freq.rs currently use f64 |
+| secularMotion.C:40–41 L-suffixed constants before timing promotion | propagation.rs:809–810 constructs them from f64 |
+| readEphemeris_calceph.C:215 ordinary JD assignment | Already uses PredictorNumber::from_float in calceph.rs:220; not a missing conversion |
+
+These are source-contract obligations, not established causes of particular
+Linux failures. The scan does not claim to exhaust literal/typedef/compiler
+semantics or full function coverage. Keep the broader ordinary-type review
+visible in AL's remaining ledger without silently expanding an event correction
+or changing any caller before its own source/evidence review.
