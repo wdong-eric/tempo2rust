@@ -11,14 +11,12 @@ use crate::{
     tksvd::ld,
 };
 use std::path::{Path, PathBuf};
-fn source_log(
-    line: usize,
-    fmt: &str,
-    args: &[crate::source_format::Argument],
-) -> Result<(), TimingError> {
+#[track_caller]
+fn source_log(fmt: &str, args: &[crate::source_format::Argument]) -> Result<(), TimingError> {
+    let site = std::panic::Location::caller();
     let body = crate::source_format::format(fmt, args)?;
     crate::clkcorr::with_diagnostics(|d| {
-        d.log(b'm', "cholesky.C", line, &body);
+        d.rust_log_at(b'm', site, &body);
         Ok(())
     })
 }
@@ -157,10 +155,8 @@ fn covariance_factor(matrix: &mut [Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingErr
         let mut info = crate::t2accel::accel_cholfac(&mut a).map_err(|e| boundary(&e))?;
         if info != 0 {
             crate::clkcorr::with_diagnostics(|d| {
-                d.log(
-                    b'w',
-                    "cholesky.C",
-                    155,
+                d.rust_log(
+                    /* TEMPO2 cholesky.C:155 */ b'w',
                     b"Error with formL... adding 0.0001% to diagonal",
                 );
                 Ok(())
@@ -177,7 +173,7 @@ fn covariance_factor(matrix: &mut [Vec<f64>]) -> Result<Vec<Vec<f64>>, TimingErr
         Ok(a.to_rows())
     } else {
         source_log(
-            530,
+            /* TEMPO2 cholesky.C:530 */
             "Doing Cholesky decomp and inverting matrix (SLOW method)",
             &[],
         )?;
@@ -346,8 +342,7 @@ pub fn read_covariance_function(
     inputs: &mut Vec<ConsumedInput>,
 ) -> Result<Vec<Vec<f64>>, TimingError> {
     source_log(
-        384,
-        "Parsing '%s' as covariance function",
+        /* TEMPO2 cholesky.C:384 */ "Parsing '%s' as covariance function",
         &[selector.into()],
     )?;
     if nc >= x.len() {
@@ -606,7 +601,10 @@ impl ModelReader<'_> {
                 "MODEL" => {
                     let kind = *t.get(1).ok_or_else(|| boundary("MODEL needs type"))?;
                     if kind == "T2" {
-                        source_log(218, "Reading a Tempo2 MODEL file: '%s'", &[selector.into()])?;
+                        source_log(
+                            /* TEMPO2 cholesky.C:218 */ "Reading a Tempo2 MODEL file: '%s'",
+                            &[selector.into()],
+                        )?;
                         continue;
                     }
                     let nd = days(self.x)?;
@@ -624,23 +622,23 @@ impl ModelReader<'_> {
                         return Err(boundary("missing covariance model arguments"));
                     }
                     let shape = match kind {
-                        "T2SqExp" | "T2SqExpDM" => Some((
-                            901,
+                        "T2SqExp" | "T2SqExpDM" => Some(
+                            /* TEMPO2 cholesky.C:901 */
                             "Generate covar matrix from Square Exponential model (A=%lg sigma=%lf) (np=%d, nc=%d)",
-                        )),
-                        "T2Matern1.5" | "T2Matern1.5DM" => Some((
-                            845,
+                        ),
+                        "T2Matern1.5" | "T2Matern1.5DM" => Some(
+                            /* TEMPO2 cholesky.C:845 */
                             "Generate covar matrix from Matern Kernel model (A=%lg sigma=%lf nu=1.5) (np=%d, nc=%d)",
-                        )),
-                        "T2Matern2.5" | "T2Matern2.5DM" => Some((
-                            871,
+                        ),
+                        "T2Matern2.5" | "T2Matern2.5DM" => Some(
+                            /* TEMPO2 cholesky.C:871 */
                             "Generate covar matrix from Matern Kernel model (A=%lg sigma=%lf nu=2.5) (np=%d, nc=%d)",
-                        )),
+                        ),
                         _ => None,
                     };
-                    if let Some((line, fmt)) = shape {
+                    if let Some(fmt) = shape {
                         source_log(
-                            line,
+                            /* TEMPO2 cholesky.C:901,845,871 */
                             fmt,
                             &[
                                 v[0].into(),
@@ -841,8 +839,7 @@ pub fn get_cholesky_matrix(
         .collect::<Result<Vec<_>, _>>()?;
     let name = read_string(&psr.name[..], "name")?;
     source_log(
-        80,
-        "Reading Cholesky model '%s' for pulsar %s",
+        /* TEMPO2 cholesky.C:80 */ "Reading Cholesky model '%s' for pulsar %s",
         &[selector.into(), name.clone().into()],
     )?;
     let (mut m, mut files) = if selector == "PSRJ" {
@@ -869,7 +866,10 @@ pub fn get_cholesky_matrix(
     };
     let extra = psr.ToAextraCovar.flatten();
     if let Some(owner) = extra {
-        source_log(100, "adding extra covar function to m", &[])?;
+        source_log(
+            /* TEMPO2 cholesky.C:100 */ "adding extra covar function to m",
+            &[],
+        )?;
         let e = context
             .matrix(owner)
             .map_err(|e| boundary(&e.to_string()))?;

@@ -40,17 +40,16 @@ pub fn sort_toas(context: &mut PulsarContext, index: usize) -> Result<(), Timing
     let (p, rows) = context.pulsar_observations_mut(index)?;
     if *read(&p.sorted, "sorted")? == 0 {
         crate::clkcorr::with_process(|s| {
-            s.diagnostics.log(
-                b'm',
-                "sortToAs.C",
-                14,
+            s.diagnostics.rust_log(
+                /* TEMPO2 sortToAs.C:14 */ b'm',
                 &[
                     b"Sorting ToAs for psr ".as_slice(),
                     &crate::observation::read_string(&p.name[..], "name")?,
                 ]
                 .concat(),
             );
-            s.diagnostics.timing("sortToAs.C", 15, b"call qsort()");
+            s.diagnostics
+                .rust_timing(/* TEMPO2 sortToAs.C:15 */ b"call qsort()");
             Ok(())
         })?;
         let rows = &mut rows[..*read(&p.nobs, "nobs")? as usize];
@@ -71,7 +70,8 @@ pub fn sort_toas(context: &mut PulsarContext, index: usize) -> Result<(), Timing
         }
         p.sorted = Some(1);
         crate::clkcorr::with_process(|s| {
-            s.diagnostics.timing("sortToAs.C", 18, b"exit qsort()");
+            s.diagnostics
+                .rust_timing(/* TEMPO2 sortToAs.C:18 */ b"exit qsort()");
             Ok(())
         })?;
     }

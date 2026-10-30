@@ -207,10 +207,8 @@ pub fn get_fit_data(context: &mut PulsarContext, index: usize) -> Result<Vec<Fit
     let cut_a = matches!(start_flag, 1 | 2);
     let cut_b = matches!(finish_flag, 1 | 2);
     crate::clkcorr::with_diagnostics(|d| {
-        d.log(
-            b'm',
-            "t2fit.C",
-            850,
+        d.rust_log(
+            /* TEMPO2 t2fit.C:850 */ b'm',
             format!(
                 "ss/fs {} {}",
                 i32::from(start_flag == 1),
@@ -249,10 +247,8 @@ pub fn get_fit_data(context: &mut PulsarContext, index: usize) -> Result<Vec<Fit
         });
     }
     crate::clkcorr::with_diagnostics(|d| {
-        d.log(
-            b'm',
-            "t2fit.C",
-            879,
+        d.rust_log(
+            /* TEMPO2 t2fit.C:879 */ b'm',
             &crate::source_format::format(
                 "START=%.18lg FINISH = %.18lg",
                 &[start.to_f64().into(), finish.to_f64().into()],
@@ -322,10 +318,8 @@ fn parameter_columns(
             }
             if !crate::fit_callbacks::supported(label) {
                 crate::clkcorr::with_process(|s| {
-                    let _: () = s.diagnostics.log(
-                        b'e',
-                        "t2fit.C",
-                        2041,
+                    let _: () = s.diagnostics.rust_log(
+                        /* TEMPO2 t2fit.C:2041 */ b'e',
                         format!(
                             "ERROR: No methods for fitting parameter {} ({l})",
                             PARAMETER_NAMES[l]
@@ -865,7 +859,10 @@ fn t2_fit_selected(
         let mut covariance_files = vec![];
         let (white_data, white_matrix, cm, lower) = if let Some(selector) = covariance {
             crate::clkcorr::with_diagnostics(|d| {
-                d.log(b'm', "t2fit.C", 169, b"Doing a FULL COVARIANCE MATRIX fit");
+                d.rust_log(
+                    /* TEMPO2 t2fit.C:169 */ b'm',
+                    b"Doing a FULL COVARIANCE MATRIX fit",
+                );
                 Ok(())
             })?;
             let x: Vec<_> = rows.iter().map(|r| r.x_days.0.to_f64()).collect();
@@ -1374,10 +1371,8 @@ fn project_noise(
     for (j, &k) in ks.iter().enumerate() {
         let v = fit.increments[j].0.to_f64();
         crate::clkcorr::with_diagnostics(|d| {
-            d.log(
-                b'm',
-                "t2fit.C",
-                716,
+            d.rust_log(
+                /* TEMPO2 t2fit.C:716 */ b'm',
                 &crate::source_format::format(
                     "TNsubtractPoly -- Updating %s k=%d : %g +/- %g",
                     &[

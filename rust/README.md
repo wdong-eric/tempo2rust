@@ -1,8 +1,33 @@
 # TEMPO2 Rust timing core
 
-One Rust library and JSON CLI provide general ordered PAR/TIM input, source
-preprocessing, BAT/BBAT and fixed-parameter timing through all fourteen binary
-families. The existing bounded residual and ZERO/F0–F3 fit commands retain their
+`tempo2-rust` provides TEMPO2-style terminal commands and human-readable timing
+reports on an owned Rust library. Start with the main executable:
+
+```sh
+cargo build --manifest-path rust/Cargo.toml --locked --release --bin tempo2-rust
+export TEMPO2=/path/to/T2runtime
+rust/target/release/tempo2-rust -f model.par arrivals.tim
+rust/target/release/tempo2-rust --help
+```
+
+Supply an existing TEMPO2 runtime with the ephemeris, clocks and observatory data
+required by your inputs. The native route uses PAR fitting controls and prints
+the familiar PSR, RMS, chi-square, parameter/error/fit-flag and derived-quantity
+report. Rust diagnostics identify their actual Rust emit sites; `-displayVersion`
+distinguishes the Rust build from its TEMPO2 source counterparts. Native `-h`/`-H`
+and `-v`/`-version` retain their established exit behavior; `--help` succeeds.
+
+After private installation, use `PREFIX/bin/tempo2-rust` in the same commands.
+[Installed terminal examples](TERMINAL_EXAMPLES.md) include the verified robust-fit
+case and runtime setup. Binaries under `target/*/examples/` are diagnostic/library
+examples; they are not the primary application interface.
+
+Explicit machine commands (`bats`, `timing`, `residuals`, `fit`, `predictor`) emit
+JSON for scripts and validation. They do not select a different format based on
+terminal detection. `timing` evaluates without fitting unless `--fit` is requested;
+native `-pre` still fits and is not its evaluation-only equivalent. The shared
+library provides ordered PAR/TIM input, preprocessing, BAT/BBAT and timing through
+all fourteen binary families. The bounded residual and ZERO/F0–F3 fit commands retain their
 input scopes through adapters to the shared timing routines. General local/global fitting is
 available through `timing --fit`; delivered APIs, verification and open numerical
 gates are recorded in [GENERAL_FITTING_REPORT.md](GENERAL_FITTING_REPORT.md).
@@ -35,7 +60,7 @@ See [PREDICTOR_API.md](PREDICTOR_API.md) for runnable CLI/direct consumers,
 corrections, and [PREDICTOR_REPORT.md](PREDICTOR_REPORT.md) for evidence and open
 gates. Predictor construction uses the shared timing engine without a timing fit.
 
-## General fitting
+## General fitting: explicit JSON interface
 
 ```sh
 rust/target/debug/tempo2-rust timing --fit \
@@ -60,7 +85,7 @@ noise projections. Covariance stays in source fit coordinates.
 constraint, covariance, spectrum and bootstrap APIs. Numerical acceptance
 remains pending on the report's explicit failed gates.
 
-## General fixed-parameter timing
+## General fixed-parameter timing: explicit JSON interface
 
 ```sh
 rust/target/release/tempo2-rust timing \
@@ -111,7 +136,7 @@ explicit state switches. `AVERAGERES` writes source-format `avg.dat` in the work
 directory; file failures are recoverable errors. The direct averaging functions
 share the same routines. See [the runnable matrix](../validation/timing_models/EXAMPLES.md).
 
-## General input to BAT
+## General input to BAT: explicit JSON interface
 
 ```sh
 cd /Users/Eric.Dong/Downloads/tempo2rust

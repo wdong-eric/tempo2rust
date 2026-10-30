@@ -1,6 +1,7 @@
 //! tempo2Util.C::displayMsg, selected TKlog.C/h and global.C::CVSdisplayVersion.
 //! Byte events are a library presentation adapter; state belongs to the process session.
 use crate::{TimingError, clock_text::c_bytes};
+use std::panic::Location;
 #[cfg(target_os = "macos")]
 type ClockTicks = std::ffi::c_ulong;
 #[cfg(not(target_os = "macos"))]
@@ -15,6 +16,8 @@ pub struct Diagnostics {
     pub display_version: bool,
     pub tcheck: i32,
     pub timer_clock: ClockTicks,
+    /// Prefix for explicitly caller-attributed `log`/`timing` records only.
+    /// Compiler-captured Rust diagnostics never inherit a native build directory.
     pub source_directory: Vec<u8>,
     pub events: Vec<(bool, Vec<u8>)>, // false stdout, true stderr
     pub warnings: u32,
@@ -28,8 +31,8 @@ pub struct Diagnostics {
 }
 enum ObservationEvent {
     Output(bool, Vec<u8>),
-    Log(u8, String, usize, Vec<u8>),
-    Version(&'static str, &'static str),
+    Log(u8, Vec<u8>, usize, Vec<u8>),
+    Version(&'static str, &'static str, &'static Location<'static>),
     Once(i32),
     EndOnce,
 }
@@ -61,10 +64,10 @@ impl Diagnostics {
                     }
                 }
                 ObservationEvent::Log(kind, file, line, body) if enabled => {
-                    target.log(kind, &file, line, &body);
+                    target.record_log(kind, &file, line, &body);
                 }
-                ObservationEvent::Version(file, function) if enabled => {
-                    target.version(file, function);
+                ObservationEvent::Version(file, function, site) if enabled => {
+                    target.version_at(file, function, site);
                 }
                 _ => {}
             }
@@ -90,7 +93,24 @@ impl Diagnostics {
             }
         }
     }
+    /// Time a caller-supplied source location; metadata must name its actual emitter.
     pub fn timing(&mut self, file: &str, line: usize, body: &[u8]) {
+        let location = [self.source_directory.as_slice(), file.as_bytes()].concat();
+        self.record_timing(&location, line, body);
+    }
+    /// Capture the originating Rust site before any wrapper or worker replay.
+    #[track_caller]
+    pub fn rust_timing(&mut self, body: &[u8]) {
+        self.rust_timing_at(Location::caller(), body);
+    }
+    pub(crate) fn rust_timing_at(&mut self, site: &'static Location<'static>, body: &[u8]) {
+        self.record_timing(
+            site.file().rsplit('/').next().unwrap().as_bytes(),
+            site.line() as usize,
+            body,
+        );
+    }
+    fn record_timing(&mut self, file: &[u8], line: usize, body: &[u8]) {
         if self.tcheck == 0 {
             return;
         }
@@ -101,7 +121,7 @@ impl Diagnostics {
         // CLOCKS_PER_SEC is 1,000,000 on the supported POSIX hosts. TKlog.h uses
         // float division, then promotes that result for the printf conversion.
         let seconds = unsafe { clock() }.wrapping_sub(self.timer_clock) as f32 / 1_000_000.0f32;
-        self.log(
+        self.record_log(
             b't',
             file,
             line,
@@ -131,7 +151,26 @@ impl Diagnostics {
         }
         self.events.push((true, c_bytes(bytes).to_vec()));
     }
+    /// Explicit caller metadata, also suitable for genuinely retained native output.
+    /// `file`/`line` identify the emitter, never a fictional language counterpart.
     pub fn log(&mut self, kind: u8, file: &str, line: usize, body: &[u8]) {
+        let location = [self.source_directory.as_slice(), file.as_bytes()].concat();
+        self.record_log(kind, &location, line, body);
+    }
+    /// 0107: Rust attribution; TEMPO2 counterpart locations stay beside the caller.
+    #[track_caller]
+    pub fn rust_log(&mut self, kind: u8, body: &[u8]) {
+        self.rust_log_at(kind, Location::caller(), body);
+    }
+    pub(crate) fn rust_log_at(&mut self, kind: u8, site: &'static Location<'static>, body: &[u8]) {
+        self.record_log(
+            kind,
+            site.file().rsplit('/').next().unwrap().as_bytes(),
+            site.line() as usize,
+            body,
+        );
+    }
+    fn record_log(&mut self, kind: u8, file: &[u8], line: usize, body: &[u8]) {
         if (kind == b'd' && !self.debug) || (kind == b'm' && self.quiet) {
             return;
         }
@@ -161,12 +200,7 @@ impl Diagnostics {
             }
             *counter = counter.wrapping_add(1);
         }
-        let location = [
-            self.source_directory.as_slice(),
-            file.as_bytes(),
-            format!(":{line}").as_bytes(),
-        ]
-        .concat();
+        let location = [file, format!(":{line}").as_bytes()].concat();
         let rendered = match kind {
             b'e' => [
                 b"\x1b[0m\x1b[1;31m[".as_slice(),
@@ -277,17 +311,18 @@ impl Diagnostics {
                 self.stdout(&[b"[", key, b"] * ", search, b" ", variable, b"\n"].concat());
             } else if self.keys.iter().any(|k| k.eq_ignore_ascii_case(key)) {
                 if !self.warned_multiple {
-                    self.log(
-                        b'w',
-                        "tempo2Util.C",
-                        401,
+                    self.rust_log(
+                        /* TEMPO2 tempo2Util.C:401 */ b'w',
                         b"[DUP1] duplicated warnings have been suppressed.",
                     );
                     self.warned_multiple = true;
                 }
             } else {
                 if self.keys.len() == 50 {
-                    self.log(b'e', "tempo2Util.C", 390, b"Too many warnings!");
+                    self.rust_log(
+                        /* TEMPO2 tempo2Util.C:390 */ b'e',
+                        b"Too many warnings!",
+                    );
                     return Ok(());
                 }
                 if self.keys.len() > 50 {
@@ -298,37 +333,49 @@ impl Diagnostics {
                 }
                 self.keys.push(c_bytes(key).to_vec());
                 let body = [b"[", key, b"] ", search, b" ", variable].concat();
-                self.log(
+                self.rust_log(
+                    /* TEMPO2 tempo2Util.C:396,397 */
                     if kind == 1 { b'w' } else { b'm' },
-                    "tempo2Util.C",
-                    if kind == 1 { 396 } else { 397 },
                     &body,
                 );
             }
         } else {
-            self.log(
-                b'e',
-                "tempo2Util.C",
-                411,
+            self.rust_log(
+                /* TEMPO2 tempo2Util.C:411 */ b'e',
                 &[b"[", key, b"]: ", search, b" ", variable].concat(),
             );
         }
         Ok(())
     }
+    /// Identify this Rust build and emit site. The supplied TEMPO2 counterpart
+    /// remains the once-only key, so shared source routines retain suppression.
+    #[track_caller]
     pub fn version(&mut self, file: &'static str, function: &'static str) {
+        self.version_at(file, function, Location::caller());
+    }
+    fn version_at(
+        &mut self,
+        file: &'static str,
+        function: &'static str,
+        site: &'static Location<'static>,
+    ) {
         if let Some(events) = &mut self.observation_events {
-            events.push(ObservationEvent::Version(file, function));
+            events.push(ObservationEvent::Version(file, function, site));
             return;
         }
         if !self.display_version || self.versions.contains(&(file, function)) {
             return;
         }
         if self.versions.is_empty() {
-            self.stdout(b"[TEMPO2 VERSION:] [tempo2.h            ] [                    ] [2026.09.1           ]\n");
+            self.stdout(
+                format!("[TEMPO2-RUST VERSION:] {}\n", crate::core_cli::IDENTITY).as_bytes(),
+            );
         }
         self.stdout(
             format!(
-                "[TEMPO2 VERSION:] [{file:<20.20}] [{function:<20.20}] [$Id$                ]\n"
+                "[TEMPO2-RUST VERSION:] [{}:{}] [TEMPO2 counterpart: {file}::{function}]\n",
+                site.file().rsplit('/').next().unwrap(),
+                site.line()
             )
             .as_bytes(),
         );
@@ -362,4 +409,131 @@ pub(crate) fn cpu_clock() -> ClockTicks {
     }
     // No arguments, pointers or ownership; POSIX clock_t matches the host typedef.
     unsafe { clock() }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[track_caller]
+    fn wrapped(d: &mut Diagnostics, kind: u8, body: &[u8]) {
+        let site = Location::caller();
+        // The actual CLI wrapper crosses this closure boundary too.
+        let mut emit = || d.rust_log_at(kind, site, body);
+        emit();
+    }
+
+    #[test]
+    fn rust_callers_wrappers_timing_and_explicit_metadata() {
+        let mut d = Diagnostics {
+            source_directory: b"native/\xff/".to_vec(),
+            ..Default::default()
+        };
+        let direct = line!() + 1;
+        d.rust_log(b'm', b"user data [original.C:12]");
+        let wrapper = line!() + 1;
+        wrapped(&mut d, b'm', b"wrapper");
+        d.log(b'm', "provider.c", 7, b"retained provider");
+        assert_eq!(
+            d.events[0].1,
+            format!("[clock_diagnostics.rs:{direct}] user data [original.C:12]\n").as_bytes()
+        );
+        assert_eq!(
+            d.events[1].1,
+            format!("[clock_diagnostics.rs:{wrapper}] wrapper\n").as_bytes()
+        );
+        assert_eq!(
+            d.events[2].1,
+            b"[native/\xff/provider.c:7] retained provider\n"
+        );
+        d.rust_timing(b"suppressed");
+        assert_eq!(d.events.len(), 3);
+        d.tcheck = 1;
+        let timer = line!() + 1;
+        d.rust_timing(b"timer");
+        assert!(
+            d.events[3]
+                .1
+                .starts_with(format!("[clock_diagnostics.rs:{timer}] T=").as_bytes())
+        );
+        assert!(d.events[3].1.ends_with(b" s: timer\n"));
+        assert!(d.events.iter().all(|(stderr, _)| !stderr));
+    }
+
+    #[test]
+    fn replay_preserves_origin_once_state_versions_and_routing() {
+        fn worker() -> (Diagnostics, u32, u32) {
+            let mut d = Diagnostics::observation_transcript(true, false);
+            let line = line!() + 1;
+            wrapped(&mut d, b'd', b"worker");
+            d.dm_once(&mut 1, 1, |d| d.rust_log(b'w', b"once"));
+            let version = line!() + 1;
+            d.version("dm_delays.C", "dm_delays()");
+            d.stderr(b"worker stderr\n");
+            (d, line, version)
+        }
+        let mut parent = Diagnostics {
+            debug: true,
+            display_version: true,
+            source_directory: b"wrong-replay-directory/".to_vec(),
+            ..Default::default()
+        };
+        let mut mask = 1;
+        let (first, line, version) = worker();
+        first.replay_observation(&mut parent, &mut mask);
+        worker().0.replay_observation(&mut parent, &mut mask);
+        assert_eq!(parent.warnings, 1);
+        assert_eq!(parent.warning_log, [b"once".to_vec()]);
+        assert_eq!(mask, 0);
+        assert_eq!(parent.versions, [("dm_delays.C", "dm_delays()")]);
+        assert_eq!(
+            parent.events[0].1,
+            format!("[clock_diagnostics.rs:{line}] worker\n").as_bytes()
+        );
+        assert!(
+            parent.events[2]
+                .1
+                .starts_with(b"[TEMPO2-RUST VERSION:] tempo2-rust ")
+        );
+        assert_eq!(parent.events[3].1, format!("[TEMPO2-RUST VERSION:] [clock_diagnostics.rs:{version}] [TEMPO2 counterpart: dm_delays.C::dm_delays()]\n").as_bytes());
+        assert_eq!(parent.events[4], (true, b"worker stderr\n".to_vec()));
+        assert_eq!(parent.events[5], parent.events[0]);
+        assert_eq!(parent.events[6], parent.events[4]);
+        assert_eq!(parent.events.len(), 7);
+    }
+
+    #[test]
+    fn quiet_debug_counters_and_full_line_limit_are_preserved() {
+        for terminal in [false, true] {
+            let mut d = Diagnostics {
+                log_outfile_is_terminal: terminal,
+                quiet: true,
+                ..Default::default()
+            };
+            d.rust_log(b'm', b"hidden message");
+            d.rust_log(b'd', b"hidden debug");
+            assert!(d.events.is_empty());
+            d.rust_log(b'w', &[b'x'; 400]);
+            d.rust_log(b'e', b"visible error");
+            assert_eq!((d.warnings, d.errors), (1, 1));
+            assert_eq!(d.warning_log[0], [b'x'; 359]);
+            let mut native = Diagnostics {
+                log_outfile_is_terminal: terminal,
+                ..Default::default()
+            };
+            native.log(b'w', "TKfit.C", 345, &[b'x'; 400]);
+            let visible = |d: &Diagnostics| d.events[0].1.iter().filter(|&&b| b == b'x').count();
+            // A longer truthful prefix consumes more of the same 359-byte budget.
+            assert!(visible(&d) < visible(&native));
+            assert!(!d.events[0].1.ends_with(b"\n"));
+            if terminal {
+                assert_eq!(d.events[0].1.len(), 359);
+                assert_eq!(native.events[0].1.len(), 359);
+            }
+            let returned_errors = d.check();
+            assert_eq!(returned_errors, 1);
+            assert_eq!((d.warnings, d.errors), (0, 0));
+            assert_eq!(d.warning_log[0].len(), 359);
+        }
+    }
 }

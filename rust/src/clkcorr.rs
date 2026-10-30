@@ -218,10 +218,8 @@ impl ClockSession {
         };
         let name = basename_from_path(path.as_os_str().as_bytes()).to_vec();
         let badness = badness + offset as f32;
-        self.diagnostics.log(
-            b'd',
-            "clkcorr.C",
-            207,
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:207 */ b'd',
             &[
                 b"Indexed clock correction ".as_slice(),
                 &name,
@@ -252,14 +250,14 @@ impl ClockSession {
         if self.initialized {
             return Ok(());
         }
-        self.diagnostics
-            .log(b'd', "clkcorr.C", 244, b"Initialise clock file index");
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:244 */ b'd',
+            b"Initialise clock file index",
+        );
         let mut offset = 0;
         if !c_bytes(&self.extra).is_empty() {
-            self.diagnostics.log(
-                b'm',
-                "clkcorr.C",
-                249,
+            self.diagnostics.rust_log(
+                /* TEMPO2 clkcorr.C:249 */ b'm',
                 &[
                     b"Note, using '".as_slice(),
                     &self.extra,
@@ -269,10 +267,8 @@ impl ClockSession {
             );
             let files = source_files(&[c_bytes(&self.extra), b"/*.clk"].concat());
             if files.is_empty() {
-                self.diagnostics.log(
-                    b'e',
-                    "clkcorr.C",
-                    254,
+                self.diagnostics.rust_log(
+                    /* TEMPO2 clkcorr.C:254 */ b'e',
                     &[
                         b"No clock correction files in '".as_slice(),
                         &self.extra,
@@ -283,7 +279,10 @@ impl ClockSession {
             } else {
                 for path in files {
                     self.add_indexed_clock_file(&path, 0)?;
-                    self.log_loaded(b'm', 261, b"Loaded extra clock correction ");
+                    self.log_loaded(
+                        /* TEMPO2 clkcorr.C:261 */ b'm',
+                        b"Loaded extra clock correction ",
+                    );
                 }
                 offset = 1;
             }
@@ -306,19 +305,23 @@ impl ClockSession {
         }
         for path in files {
             self.add_indexed_clock_file(&path, offset)?;
-            self.log_loaded(b'd', 287, b"Loaded clock correction ");
+            self.log_loaded(
+                /* TEMPO2 clkcorr.C:287 */ b'd',
+                b"Loaded clock correction ",
+            );
         }
         self.initialized = true;
-        self.diagnostics
-            .log(b'd', "clkcorr.C", 292, b"Done with clock file index");
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:292 */ b'd',
+            b"Done with clock file index",
+        );
         Ok(())
     }
-    fn log_loaded(&mut self, kind: u8, line: usize, prefix: &[u8]) {
+    #[track_caller]
+    fn log_loaded(&mut self, kind: u8, prefix: &[u8]) {
         let f = self.functions.last().unwrap();
-        self.diagnostics.log(
+        self.diagnostics.rust_log(
             kind,
-            "clkcorr.C",
-            line,
             &[
                 prefix,
                 &f.name,
@@ -340,10 +343,8 @@ impl ClockSession {
         if f.loaded {
             return Ok(());
         }
-        self.diagnostics.log(
-            b'd',
-            "clkcorr.C",
-            300,
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:300 */ b'd',
             &[
                 b"Loading clock correction function from ".as_slice(),
                 &f.name,
@@ -531,10 +532,8 @@ impl ClockSession {
         }) {
             return Ok(Some(i));
         }
-        self.diagnostics.log(
-            b'd',
-            "clkcorr.C",
-            559,
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:559 */ b'd',
             &[b"Making clock sequence from ".as_slice(), from, b" to ", to].concat(),
         );
         let result = self.build_directed_path(from, to, mjd)?;
@@ -736,10 +735,8 @@ impl ClockSession {
         Ok(clock_name_equals(&current, to))
     }
     fn broken_chain(&mut self, current: &[u8], index: usize) {
-        self.diagnostics.log(
-            b'e',
-            "clkcorr.C",
-            625,
+        self.diagnostics.rust_log(
+            /* TEMPO2 clkcorr.C:625 */ b'e',
             &[
                 b"Broken directed clock correction chain: expected ".as_slice(),
                 current,
@@ -770,10 +767,8 @@ impl ClockSession {
             }
             self.ensure_function_loaded(i)?;
             if !clock_name_equals(&current, &self.functions[i].from) {
-                self.diagnostics.log(
-                    b'e',
-                    "clkcorr.C",
-                    659,
+                self.diagnostics.rust_log(
+                    /* TEMPO2 clkcorr.C:659 */ b'e',
                     &[
                         b"Broken directed clock correction chain: expected ".as_slice(),
                         &current,

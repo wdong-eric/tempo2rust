@@ -350,9 +350,8 @@ pub fn update(
         use crate::source_format::{Argument, format};
         let name = crate::tempo2::PARAMETER_NAMES[label as usize];
         let log = match label {
-            param_red_chrom_sin | param_red_chrom_cos => Some((
-                459,
-                format(
+            param_red_chrom_sin | param_red_chrom_cos => {
+                Some(/* TEMPO2 t2fit_nestlike.C:459 */ format(
                     "%d %s %d %lg %lg",
                     &[
                         (p as i32).into(),
@@ -361,49 +360,40 @@ pub fn update(
                         value.into(),
                         error.into(),
                     ],
-                )?,
-            )),
-            param_jitter => Some((
-                485,
-                format(
-                    "%d %s %.2f %lg %lg",
+                )?)
+            }
+            param_jitter => Some(/* TEMPO2 t2fit_nestlike.C:485 */ format(
+                "%d %s %.2f %lg %lg",
+                &[
+                    (p as i32).into(),
+                    name.into(),
+                    read(&rows[k].bat, "bat")?.to_f64().into(),
+                    value.into(),
+                    error.into(),
+                ],
+            )?),
+            param_band_red_sin | param_band_red_cos | param_group_red_sin | param_group_red_cos => {
+                let (group, channel) = crate::t2fit_nestlike::noise_group(psr, label, k)?;
+                Some(/* TEMPO2 t2fit_nestlike.C:604,623 */ format(
+                    "%d %s %d %d %d %lg %lg",
                     &[
-                        (p as i32).into(),
+                        Argument::from(p as i32),
                         name.into(),
-                        read(&rows[k].bat, "bat")?.to_f64().into(),
+                        (k as i32).into(),
+                        (group as i32).into(),
+                        (channel as i32).into(),
                         value.into(),
                         error.into(),
                     ],
-                )?,
-            )),
-            param_band_red_sin | param_band_red_cos | param_group_red_sin | param_group_red_cos => {
-                let (group, channel) = crate::t2fit_nestlike::noise_group(psr, label, k)?;
-                let line = if matches!(label, param_band_red_sin | param_band_red_cos) {
-                    604
-                } else {
-                    623
-                };
-                Some((
-                    line,
-                    format(
-                        "%d %s %d %d %d %lg %lg",
-                        &[
-                            Argument::from(p as i32),
-                            name.into(),
-                            (k as i32).into(),
-                            (group as i32).into(),
-                            (channel as i32).into(),
-                            value.into(),
-                            error.into(),
-                        ],
-                    )?,
-                ))
+                )?)
             }
             _ => None,
         };
-        if let Some((line, body)) = log {
+        if let Some(body) = log {
             crate::clkcorr::with_diagnostics(|d| {
-                d.log(b'm', "t2fit_nestlike.C", line, &body);
+                d.rust_log(
+                    /* TEMPO2 t2fit_nestlike.C:459,485,604,623 */ b'm', &body,
+                );
                 Ok(())
             })?;
         }

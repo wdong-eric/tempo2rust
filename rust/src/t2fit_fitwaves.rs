@@ -113,10 +113,8 @@ pub(crate) fn t2UpdateFunc_fitwaves(
         {
             if ((k % 2i32) == 0i32) {
                 {
-                    d.log(
-                        b'm',
-                        "t2fit_fitwaves.C",
-                        37,
+                    d.rust_log(
+                        /* TEMPO2 t2fit_fitwaves.C:37 */ b'm',
                         &crate::source_format::format(
                             "dm.COS(%d) = %.3e",
                             &[(k / 2i32).into(), val.into()],
@@ -132,10 +130,8 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                 }
             } else {
                 {
-                    d.log(
-                        b'm',
-                        "t2fit_fitwaves.C",
-                        41,
+                    d.rust_log(
+                        /* TEMPO2 t2fit_fitwaves.C:41 */ b'm',
                         &crate::source_format::format(
                             "dm.SIN(%d) = %.3e",
                             &[(k / 2i32).into(), val.into()],
@@ -156,10 +152,8 @@ pub(crate) fn t2UpdateFunc_fitwaves(
             k = (k % (*read(&psr.nWhite, "psr[p].nWhite")? * 2i32));
             if ((k % 2i32) == 0i32) {
                 {
-                    d.log(
-                        b'm',
-                        "t2fit_fitwaves.C",
-                        49,
+                    d.rust_log(
+                        /* TEMPO2 t2fit_fitwaves.C:49 */ b'm',
                         &crate::source_format::format(
                             "COS(%d) = %.3e",
                             &[(k / 2i32).into(), val.into()],
@@ -173,10 +167,8 @@ pub(crate) fn t2UpdateFunc_fitwaves(
                 }
             } else {
                 {
-                    d.log(
-                        b'm',
-                        "t2fit_fitwaves.C",
-                        53,
+                    d.rust_log(
+                        /* TEMPO2 t2fit_fitwaves.C:53 */ b'm',
                         &crate::source_format::format(
                             "SIN(%d) = %.3e",
                             &[(k / 2i32).into(), val.into()],

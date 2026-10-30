@@ -87,7 +87,9 @@ pub(crate) fn form_residuals_inner(
     let mut prev_a_p: Option<f64> = None;
     let mut coalesceFlag_p: Option<i32> = Some(0i32);
     d.version("formResiduals.C", "formResiduals()");
-    d.timing("formResiduals.C", 438, "Enter formresiduals()".as_bytes());
+    d.rust_timing(
+        /* TEMPO2 formResiduals.C:438 */ "Enter formresiduals()".as_bytes(),
+    );
     for p in 0..context.pulsars.len() {
         let n = *read(&context.pulsars[p].nobs, "nobs")?;
         if context.pulsars[p].refphs == Some(1) {
@@ -103,7 +105,7 @@ pub(crate) fn form_residuals_inner(
                 {
                     if (*read(&psr.nobs, "psr[p].nobs")? == max_observations) {
                         {
-                            d.log(b'e', "formResiduals.C", 481, b"Error, need at least 1 spare observation to reference to REFPHS TZR");
+                            d.rust_log(/* TEMPO2 formResiduals.C:481 */ b'e', b"Error, need at least 1 spare observation to reference to REFPHS TZR");
                             return Err(boundary("formResiduals.C::formResiduals: source exit"));
                         }
                     }
@@ -2812,10 +2814,8 @@ pub(crate) fn form_residuals_inner(
                                         }
                                         psr.quad_ifunc_geom_p = Some(((resp).clone()).to_f64());
                                         if d.debug {
-                                            d.log(
-                                                b'd',
-                                                "formResiduals.C",
-                                                1400,
+                                            d.rust_log(
+                                                /* TEMPO2 formResiduals.C:1400 */ b'd',
                                                 &[
                                                     b"Resp2 = ".to_vec(),
                                                     read_string(&psr.name[..], "string")?,
@@ -3082,10 +3082,8 @@ pub(crate) fn form_residuals_inner(
                                 }
                                 psr.gwcs_geom_p = Some(((resp).clone()).to_f64());
                                 if d.debug {
-                                    d.log(
-                                        b'd',
-                                        "formResiduals.C",
-                                        1493,
+                                    d.rust_log(
+                                        /* TEMPO2 formResiduals.C:1493 */ b'd',
                                         &[
                                             b"Resp2 = ".to_vec(),
                                             read_string(&psr.name[..], "string")?,
@@ -5100,10 +5098,8 @@ pub(crate) fn form_residuals_inner(
                                     )
                                 })?;
                                 if d.debug {
-                                    d.log(
-                                        b'd',
-                                        "formResiduals.C",
-                                        2292,
+                                    d.rust_log(
+                                        /* TEMPO2 formResiduals.C:2292 */ b'd',
                                         &[
                                             b"Have ".to_vec(),
                                             crate::clock_text::format_number(
@@ -5222,10 +5218,9 @@ pub(crate) fn form_residuals_inner(
                                                             boundary("source_integer_narrowing")
                                                         })?;
                                                     if d.debug {
-                                                        d.log(
+                                                        d.rust_log(
+                                                            /* TEMPO2 formResiduals.C:2317 */
                                                             b'd',
-                                                            "formResiduals.C",
-                                                            2317,
                                                             &[
                                                                 b"*** Adding phase ".to_vec(),
                                                                 (addPhase).to_string().into_bytes(),
@@ -5424,10 +5419,8 @@ pub(crate) fn form_residuals_inner(
                 {
                     psr.tzrobs = rows[(*read(&psr.nobs, "nobs")? - 1) as usize].clone();
                     psr.nobs = Some(*read(&psr.nobs, "psr[p].nobs")? - 1);
-                    d.log(
-                        b'm',
-                        "formResiduals.C",
-                        2400,
+                    d.rust_log(
+                        /* TEMPO2 formResiduals.C:2400 */ b'm',
                         &[
                             b"SHIFT RESIDUALS BY ".to_vec(),
                             crate::clock_text::format_number(
@@ -5671,7 +5664,9 @@ pub(crate) fn form_residuals_inner(
             }
         }
     }
-    d.timing("formResiduals.C", 2454, "Leave formresiduals()".as_bytes());
+    d.rust_timing(
+        /* TEMPO2 formResiduals.C:2454 */ "Leave formresiduals()".as_bytes(),
+    );
     Ok(references)
 }
 

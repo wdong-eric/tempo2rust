@@ -115,9 +115,10 @@ fn simple1(
     mut tempo1: i32,
     last: f64,
 ) -> Result<(), TimingError> {
-    session
-        .diagnostics
-        .log(b'd', "preProcessSimple.C", 46, b"In preProcessSimple1");
+    session.diagnostics.rust_log(
+        /* TEMPO2 preProcessSimple.C:46 */ b'd',
+        b"In preProcessSimple1",
+    );
     session.source.ecliptic_obliquity = 84381.4059;
     let (p, rows) = context.pulsar_observations_mut(p)?;
     let rows = &rows[..*read(&p.nobs, "nobs")? as usize];
@@ -226,9 +227,10 @@ fn simple2(
     trim: i32,
 ) -> Result<(), TimingError> {
     let (p, rows) = context.pulsar_observations_mut(p)?;
-    session
-        .diagnostics
-        .log(b'd', "preProcessSimple.C", 141, b"In preProcessSimple2");
+    session.diagnostics.rust_log(
+        /* TEMPO2 preProcessSimple.C:141 */ b'd',
+        b"In preProcessSimple2",
+    );
     for (index, o) in rows[..*read(&p.nobs, "nobs")? as usize]
         .iter_mut()
         .enumerate()
@@ -432,17 +434,18 @@ fn simple2(
             }
         }
     }
-    session.diagnostics.log(
-        b'd',
-        "preProcessSimple.C",
-        417,
+    session.diagnostics.rust_log(
+        /* TEMPO2 preProcessSimple.C:417 */ b'd',
         b"Complete preProcessSimple2",
     );
     Ok(())
 }
 pub fn pre_process_simple3(context: &mut PulsarContext, p: usize) -> Result<(), TimingError> {
     crate::clkcorr::lifecycle_diagnostics(|d| {
-        d.log(b'd', "preProcessSimple.C", 423, b"Start preProcessSimple3")
+        d.rust_log(
+            /* TEMPO2 preProcessSimple.C:423 */ b'd',
+            b"Start preProcessSimple3",
+        )
     })?;
     let (p, rows) = context.pulsar_observations_mut(p)?;
     let rows = &mut rows[..*read(&p.nobs, "nobs")? as usize];
@@ -526,10 +529,8 @@ pub fn pre_process_simple3(context: &mut PulsarContext, p: usize) -> Result<(), 
         }
     }
     crate::clkcorr::lifecycle_diagnostics(|d| {
-        d.log(
-            b'd',
-            "preProcessSimple.C",
-            517,
+        d.rust_log(
+            /* TEMPO2 preProcessSimple.C:517 */ b'd',
             b"Complete preProcessSimple3",
         )
     })?;
@@ -557,7 +558,7 @@ pub fn pre_process(
 ) -> Result<(), TimingError> {
     crate::clkcorr::lifecycle_diagnostics(|d| {
         d.version("preProcess.C", "preProcess()");
-        d.log(b'd', "preProcess.C", 74, b"In preProcess");
+        d.rust_log(/* TEMPO2 preProcess.C:74 */ b'd', b"In preProcess");
     })?;
     let (mut epoch, mut select, mut global, mut plugin, mut modify, mut dmfile) =
         (b"NONE".to_vec(), vec![], vec![], vec![], vec![], vec![]);
@@ -643,7 +644,10 @@ pub fn pre_process(
         i += 1;
     }
     crate::clkcorr::lifecycle_diagnostics(|d| {
-        d.log(b'd', "preProcess.C", 147, b"Parsed command line")
+        d.rust_log(
+            /* TEMPO2 preProcess.C:147 */ b'd',
+            b"Parsed command line",
+        )
     })?;
     // preProcess.C:48 declares ndm without initialization and line 480 passes
     // it by value even without -setdm. That read is undefined before simple2's
@@ -681,7 +685,7 @@ pub fn pre_process(
             {
                 let name = read_string(&p.name[..], "name")?;
                 crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(b'w',"preProcess.C",171,&[b"PSR ".as_slice(),&name,b" uses DM2+ but does not define DM_SERIES. Assume Taylor. This has behaviour has changed since June 2020!\nSee https://bitbucket.org/psrsoft/tempo2/issues/27/tempo2-dm-polynomial-is-not-a-taylor\n"].concat())
+                    d.rust_log(/* TEMPO2 preProcess.C:171 */ b'w', &[b"PSR ".as_slice(),&name,b" uses DM2+ but does not define DM_SERIES. Assume Taylor. This has behaviour has changed since June 2020!\nSee https://bitbucket.org/psrsoft/tempo2/issues/27/tempo2-dm-polynomial-is-not-a-taylor\n"].concat())
                 })?;
             }
         }
@@ -771,10 +775,8 @@ pub fn pre_process(
                 };
                 if line.first() == Some(&b'#') {
                     crate::clkcorr::lifecycle_diagnostics(|d| {
-                        d.log(
-                            b'd',
-                            "preProcess.C",
-                            302,
+                        d.rust_log(
+                            /* TEMPO2 preProcess.C:302 */ b'd',
                             b"preProces():skipping line in dmfile\n",
                         )
                     })?;
@@ -847,7 +849,10 @@ pub fn pre_process(
         }
         if !select.is_empty() {
             crate::clkcorr::lifecycle_diagnostics(|d| {
-                d.log(b'd', "preProcess.C", 540, b"Using select file")
+                d.rust_log(
+                    /* TEMPO2 preProcess.C:540 */ b'd',
+                    b"Using select file",
+                )
             })?;
             crate::selection::use_select_file(
                 Path::new(std::ffi::OsStr::from_bytes(&select)),
@@ -857,7 +862,10 @@ pub fn pre_process(
         }
         if !select.is_empty() {
             crate::clkcorr::lifecycle_diagnostics(|d| {
-                d.log(b'd', "preProcess.C", 542, b"Complete using select file")
+                d.rust_log(
+                    /* TEMPO2 preProcess.C:542 */ b'd',
+                    b"Complete using select file",
+                )
             })?;
         }
         pre_process_simple3(context, index)?;

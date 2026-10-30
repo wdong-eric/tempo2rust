@@ -362,10 +362,8 @@ fn check_all_set_named(
     } else if ecl.longitude.param_set == 1 || ecl.latitude.param_set == 1 {
         let name = read_string(&psr.name[..], "name")?;
         crate::clkcorr::lifecycle_diagnostics(|d| {
-            d.log(
-                b'e',
-                "readParfile.C",
-                2496,
+            d.rust_log(
+                /* TEMPO2 readParfile.C:2496 */ b'e',
                 &[
                     b"Cannot mix ecliptic and equatorial coordinates ".as_slice(),
                     &name,
@@ -427,8 +425,7 @@ fn check_binary_parameter_consistency(
             .any(|c| c.param_set == 1)
     {
         crate::clkcorr::lifecycle_diagnostics(|d| {
-            d.log(b'e', "readParfile.C", 2395,
-            b"BINARY DDGR does not support FB parameters; use PB/PBDOT or select a binary model that evaluates FBn.")
+            d.rust_log(/* TEMPO2 readParfile.C:2395 */ b'e', b"BINARY DDGR does not support FB parameters; use PB/PBDOT or select a binary model that evaluates FBn.")
         })?;
         return Err(s.error("BINARY DDGR", "FB parameters are unsupported; use PB/PBDOT"));
     }
@@ -595,10 +592,8 @@ fn check_line_fields(
                     let name = read_string(&psr.name[..], "name")?;
                     crate::clkcorr::lifecycle_diagnostics(|d| {
                         if id == 35 && ecliptic {
-                            d.log(
-                                b'm',
-                                "readParfile.C",
-                                521,
+                            d.rust_log(
+                                /* TEMPO2 readParfile.C:521 */ b'm',
                                 format!(
                                     "ra_set={} dec_set={} ecl={} pmra_set={} pmdec_set={}",
                                     cell(psr, param_raj, 0).param_set,
@@ -610,16 +605,9 @@ fn check_line_fields(
                                 .as_bytes(),
                             );
                         }
-                        let line = match (id, ecliptic) {
-                            (35, true) => 524,
-                            (35, false) => 531,
-                            (36, true) => 542,
-                            _ => 548,
-                        };
-                        d.log(
+                        d.rust_log(
+                            /* TEMPO2 readParfile.C:524,531,542,548 */
                             b'e',
-                            "readParfile.C",
-                            line,
                             &[
                                 b"Cannot mix ecliptic and equatorial coordinates ".as_slice(),
                                 &name,
@@ -669,7 +657,9 @@ fn check_line_fields(
                 let mut message = b"parameter '".to_vec();
                 message.extend_from_slice(key);
                 message.extend_from_slice(b"' not used");
-                d.log(b'e', "readParfile.C", 593 + (id - 48) * 3, &message)
+                d.rust_log(
+                    /* TEMPO2 readParfile.C:593 + (id - 48) * 3 */ b'e', &message,
+                )
             })?;
             let label = [
                 param_tel_vx,
@@ -704,10 +694,8 @@ fn check_line_fields(
                 b"MEAN" => psr.refphs = Some(0),
                 b"TZR" => psr.refphs = Some(1),
                 _ => crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(
-                        b'w',
-                        "readParfile.C",
-                        842,
+                    d.rust_log(
+                        /* TEMPO2 readParfile.C:842 */ b'w',
                         &[b"Unknown REFPHS '".as_slice(), &value, b"'"].concat(),
                     )
                 })?,
@@ -788,10 +776,8 @@ fn check_line_fields(
                 .ok_or_else(|| s.error("DM_SERIES", "unwritten series name"))?;
             if !matches!(name.first(), Some(b'p' | b'P' | b't' | b'T')) {
                 crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(
-                        b'w',
-                        "readParfile.C",
-                        2365,
+                    d.rust_log(
+                        /* TEMPO2 readParfile.C:2365 */ b'w',
                         &[
                             b"Not sure how to interpret '".as_slice(),
                             name,
@@ -844,8 +830,7 @@ fn check_complex(
                 read_value(psr, key, s, label, index as usize)?;
             } else if id == 97 {
                 crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(b'e', "readParfile.C", 869,
-                    b"Currently only period derivatives up to order 12 are available. All higher derivatives will be ignored!")
+                    d.rust_log(/* TEMPO2 readParfile.C:869 */ b'e', b"Currently only period derivatives up to order 12 are available. All higher derivatives will be ignored!")
                 })?;
             }
             if id == 98 {
@@ -1065,10 +1050,8 @@ fn check_complex(
             psr.TNShapeletEvFScale[n] = Some(s.double("TNShapeletEvFScale")?);
             if count > crate::pulsar::MAX_TNShapeCoef as i32 {
                 crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(
-                        b'e',
-                        "readParfile.C",
-                        1989,
+                    d.rust_log(
+                        /* TEMPO2 readParfile.C:1989 */ b'e',
                         format!(
                             "Max number of Shapelet coefs is {}",
                             crate::pulsar::MAX_TNShapeCoef
@@ -1084,7 +1067,7 @@ fn check_complex(
                     Some(v) => psr.TNShapeletEvCoef[n][i as usize] = Some(v),
                     None => {
                         crate::clkcorr::lifecycle_diagnostics(|d| {
-                            d.log(b'w',"readParfile.C",1995,format!("Couldn't read Shape coef for shape {n} coef={i}; setting coefs to zero.").as_bytes())
+                            d.rust_log(/* TEMPO2 readParfile.C:1995 */ b'w', format!("Couldn't read Shape coef for shape {n} coef={i}; setting coefs to zero.").as_bytes())
                         })?;
                         break;
                     }
@@ -1095,8 +1078,7 @@ fn check_complex(
             }
             if !matches!(psr.TNShapeletEvFScale[n], Some(0.0 | 2.0)) {
                 crate::clkcorr::lifecycle_diagnostics(|d| {
-                    d.log(b'e', "readParfile.C", 2009,
-                        b"Currently only can handle shapelets with freq scale 2.0 (DM) or 0.0 (red)")
+                    d.rust_log(/* TEMPO2 readParfile.C:2009 */ b'e', b"Currently only can handle shapelets with freq scale 2.0 (DM) or 0.0 (red)")
                 })?;
                 return Err(s.error("shapelet", "source supports frequency scale 0 or 2"));
             }

@@ -104,10 +104,8 @@ pub fn fit_function(
         )?
         .to_f64();
         if s.diagnostics.debug {
-            s.diagnostics.log(
-                b'd',
-                "t2fit_stdFitFuncs.C",
-                157,
+            s.diagnostics.rust_log(
+                /* TEMPO2 t2fit_stdFitFuncs.C:157 */ b'd',
                 &[
                     read_string(&p.name[..], "name")?,
                     format!("({pulsar}) ").into_bytes(),

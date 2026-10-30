@@ -205,10 +205,8 @@ pub(crate) fn t2FitFunc_dmsinusoids(
             }
         } else {
             {
-                d.log(
-                    b'e',
-                    "t2fit_dmother.C",
-                    52,
+                d.rust_log(
+                    /* TEMPO2 t2fit_dmother.C:52 */ b'e',
                     format!("Called dmsinusoids without dmsin1yr or dmcos1yr").as_bytes(),
                 );
                 return Ok((0i32) as f64);

@@ -601,10 +601,8 @@ pub(crate) fn t2FitFunc_notImplemented(
     mut k: i32,
     d: &mut Diagnostics,
 ) -> Result<f64, TimingError> {
-    d.log(
-        b'e',
-        "t2fit_stdFitFuncs.C",
-        402,
+    d.rust_log(
+        /* TEMPO2 t2fit_stdFitFuncs.C:402 */ b'e',
         format!("Parameter not implemented").as_bytes(),
     );
     return Err(boundary(
@@ -623,10 +621,8 @@ pub(crate) fn t2UpdateFunc_notImplemented(
     mut err: f64,
     d: &mut Diagnostics,
 ) -> Result<(), TimingError> {
-    d.log(
-        b'e',
-        "t2fit_stdFitFuncs.C",
-        406,
+    d.rust_log(
+        /* TEMPO2 t2fit_stdFitFuncs.C:406 */ b'e',
         format!("Parameter not implemented").as_bytes(),
     );
     return Err(boundary(

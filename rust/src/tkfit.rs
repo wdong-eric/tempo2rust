@@ -284,10 +284,8 @@ pub fn least_squares_outputs(
             None
         };
         crate::clkcorr::with_diagnostics(|d| {
-            d.log(
-                b'm',
-                "TKfit.C",
-                277,
+            d.rust_log(
+                /* TEMPO2 TKfit.C:277 */ b'm',
                 format!("QR nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
             );
             Ok(())
@@ -355,10 +353,8 @@ pub fn least_squares_outputs(
     } else {
         if crate::t2accel::acceleration() == 2 {
             crate::clkcorr::with_diagnostics(|d| {
-                d.log(
-                    b'w',
-                    "TKfit.C",
-                    317,
+                d.rust_log(
+                    /* TEMPO2 TKfit.C:317 */ b'w',
                     b"Can't use QR fitting without LAPACK/BLAS. Defaulting to SVD.",
                 );
                 Ok(())
@@ -366,10 +362,8 @@ pub fn least_squares_outputs(
             .map_err(|e| e.to_string())?;
         }
         crate::clkcorr::with_diagnostics(|d| {
-            d.log(
-                b'm',
-                "TKfit.C",
-                345,
+            d.rust_log(
+                /* TEMPO2 TKfit.C:345 */ b'm',
                 format!("SVD nparams={nf} nconst={} ndata={n}", constraints.len()).as_bytes(),
             );
             Ok(())

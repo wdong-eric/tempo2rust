@@ -16,18 +16,14 @@ pub(crate) fn init(
 ) -> Result<(), TimingError> {
     for i in 0..context.pulsars.len() {
         if context.pulsars[i].refphs == Some(1) {
-            d.log(
-                b'd',
-                "refphs.C",
-                9,
+            d.rust_log(
+                /* TEMPO2 refphs.C:9 */ b'd',
                 b"Creating extra observation to store TZR parameters for reference phase",
             );
             let n = *read(&context.pulsars[i].nobs, "nobs")?;
             if n == max_obsn {
-                d.log(
-                    b'e',
-                    "refphs.C",
-                    12,
+                d.rust_log(
+                    /* TEMPO2 refphs.C:12 */ b'e',
                     b"Error, need at least 1 spare observation to reference to REFPHS TZR",
                 );
                 return Err(crate::clock_diagnostics::boundary(
@@ -64,10 +60,8 @@ pub(crate) fn clean(
     d: &mut crate::clock_diagnostics::Diagnostics,
 ) -> Result<(), TimingError> {
     for i in 0..context.pulsars.len() {
-        d.log(
-            b'd',
-            "refphs.C",
-            49,
+        d.rust_log(
+            /* TEMPO2 refphs.C:49 */ b'd',
             b"Deleting extra observation to store TZR parameters for reference phase",
         );
         // refphs.C:50 tests psr[0] while init:8 tests psr[p]. Mixed modes

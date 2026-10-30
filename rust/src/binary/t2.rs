@@ -626,16 +626,14 @@ pub(super) fn T2model(
                                                 == 1i32)
                                             {
                                                 {
-                                                    d.log(b'e', "T2model.C", 353, b"You specified both H4 and STIG - Ignoring STIG");
-                                                    d.log(
-                                                        b'm',
-                                                        "T2model.C",
-                                                        354,
+                                                    d.rust_log(/* TEMPO2 T2model.C:353 */ b'e', b"You specified both H4 and STIG - Ignoring STIG");
+                                                    d.rust_log(
+                                                        /* TEMPO2 T2model.C:354 */ b'm',
                                                         b"WARNING! You specified both H4 and STIG.",
                                                     );
-                                                    d.log(b'm', "T2model.C", 355, b"We will ignore STIG and perform the approx. H4 fit instead.");
-                                                    d.log(b'm', "T2model.C", 356, b"If you want to perform the exact fit for H3 and STIG, then ");
-                                                    d.log(b'm', "T2model.C", 357, b"please remove H4 from your parameter file.");
+                                                    d.rust_log(/* TEMPO2 T2model.C:355 */ b'm', b"We will ignore STIG and perform the approx. H4 fit instead.");
+                                                    d.rust_log(/* TEMPO2 T2model.C:356 */ b'm', b"If you want to perform the exact fit for H3 and STIG, then ");
+                                                    d.rust_log(/* TEMPO2 T2model.C:357 */ b'm', b"please remove H4 from your parameter file.");
                                                 }
                                             }
                                             mode = 2i32;

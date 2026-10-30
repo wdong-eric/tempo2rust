@@ -152,10 +152,8 @@ impl ObservatoryDatabase {
             itrf_to_grs80(&mut record);
             self.observatories.push(record.clone());
         }
-        diagnostics.log(
-            b'd',
-            "observatory.C",
-            144,
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:144 */ b'd',
             format!(
                 "readObservatoryFile: {} entries\n",
                 self.observatories.len()
@@ -180,10 +178,8 @@ impl ObservatoryDatabase {
                 ]
                 .concat(),
             );
-            diagnostics.log(
-                b'e',
-                "observatory.C",
-                163,
+            diagnostics.rust_log(
+                /* TEMPO2 observatory.C:163 */ b'e',
                 &[
                     b"Cannot read '".as_slice(),
                     path.as_os_str().as_bytes(),
@@ -233,7 +229,10 @@ impl ObservatoryDatabase {
         alias: Option<&[u8]>,
         diagnostics: &mut Diagnostics,
     ) -> Result<(), TimingError> {
-        diagnostics.log(b'd', "observatory.C", 205, b"In initObservatories");
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:205 */ b'd',
+            b"In initObservatories",
+        );
         let root = root.ok_or_else(|| boundary("observatory_environment_storage"))?;
         let directory = [c_bytes(root.as_os_str().as_bytes()), b"/observatory/"].concat();
         let path = PathBuf::from(std::ffi::OsStr::from_bytes(
@@ -242,10 +241,8 @@ impl ObservatoryDatabase {
         if path.as_os_str().as_bytes().len() >= 1024 {
             return Err(boundary("observatory_path_storage"));
         }
-        diagnostics.log(
-            b'd',
-            "observatory.C",
-            211,
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:211 */ b'd',
             &[
                 b"Reading observatories file >".as_slice(),
                 path.as_os_str().as_bytes(),
@@ -254,17 +251,18 @@ impl ObservatoryDatabase {
             .concat(),
         );
         self.read_file(&path, diagnostics)?;
-        diagnostics.log(b'd', "observatory.C", 213, b"Reading other .dat files");
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:213 */ b'd',
+            b"Reading other .dat files",
+        );
         let pattern = PathBuf::from(std::ffi::OsStr::from_bytes(
             &[directory.as_slice(), b"*.dat"].concat(),
         ));
         if pattern.as_os_str().as_bytes().len() >= 1024 {
             return Err(boundary("observatory_path_storage"));
         }
-        diagnostics.log(
-            b'd',
-            "observatory.C",
-            216,
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:216 */ b'd',
             &[
                 b"Reading individual files >".as_slice(),
                 pattern.as_os_str().as_bytes(),
@@ -272,25 +270,27 @@ impl ObservatoryDatabase {
             ]
             .concat(),
         );
-        diagnostics.log(b'd', "observatory.C", 219, b"Return from glob = 0");
-        diagnostics.log(b'd', "observatory.C", 220, b"Glob success");
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:219 */ b'd',
+            b"Return from glob = 0",
+        );
+        diagnostics.rust_log(/* TEMPO2 observatory.C:220 */ b'd', b"Glob success");
         for other in source_files(pattern.as_os_str().as_bytes()) {
             if other.as_os_str().as_bytes() != path.as_os_str().as_bytes() {
-                diagnostics.log(
-                    b'd',
-                    "observatory.C",
-                    225,
+                diagnostics.rust_log(
+                    /* TEMPO2 observatory.C:225 */ b'd',
                     &[b"Reading >".as_slice(), other.as_os_str().as_bytes(), b"<"].concat(),
                 );
                 self.read_file(&other, diagnostics)?;
             }
         }
-        diagnostics.log(b'd', "observatory.C", 230, b"Reading aliases file");
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:230 */ b'd',
+            b"Reading aliases file",
+        );
         let path = if let Some(alias) = alias {
-            diagnostics.log(
-                b'm',
-                "observatory.C",
-                233,
+            diagnostics.rust_log(
+                /* TEMPO2 observatory.C:233 */ b'm',
                 &[b"Note: using alias file ".as_slice(), alias, b".aliases"].concat(),
             );
             PathBuf::from(std::ffi::OsStr::from_bytes(
@@ -306,7 +306,10 @@ impl ObservatoryDatabase {
         }
         self.read_aliases(&path, diagnostics)?;
         self.initialized = true;
-        diagnostics.log(b'd', "observatory.C", 241, b"Leaving initObservatories");
+        diagnostics.rust_log(
+            /* TEMPO2 observatory.C:241 */ b'd',
+            b"Leaving initObservatories",
+        );
         Ok(())
     }
     pub fn lookup_alias(
@@ -328,10 +331,8 @@ impl ObservatoryDatabase {
         {
             let resolved = read_string(&list.code, "alias_code")?;
             if !list.warned {
-                diagnostics.log(
-                    b'w',
-                    "observatory.C",
-                    272,
+                diagnostics.rust_log(
+                    /* TEMPO2 observatory.C:272 */ b'w',
                     &[
                         b"Assuming site '".as_slice(),
                         code,

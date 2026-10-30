@@ -1,3 +1,4 @@
+//! 0107 attribution successor: validation/release/attribute_generated_output.py.
 //! textOutput.C full report/PAR/helper transfer at fda6ad4; GPL-3.0-or-later.
 //! Lint allowances preserve source grouping, constants, branches and first-knot loop.
 //! Explicit source-order arithmetic and canonical state; no native ABI layout.
@@ -40,10 +41,8 @@ pub(crate) fn text_output_inner(
     let mut k: i32;
     let mut fout = None::<std::fs::File>;
     d.version("textOutput.C", "textOutput()");
-    d.log(
-        b'd',
-        "textOutput.C",
-        71,
+    d.rust_log(
+        /* TEMPO2 textOutput.C:71 */ b'd',
         &crate::source_format::format("In textOutput", &[])?,
     );
     io.drain(d)?;
@@ -180,10 +179,8 @@ pub(crate) fn text_output_inner(
                         }
                         if (closestI == (-1i32)) {
                             {
-                                d.log(
-                                    b'e',
-                                    "textOutput.C",
-                                    122,
+                                d.rust_log(
+                                    /* TEMPO2 textOutput.C:122 */ b'e',
                                     &crate::source_format::format("Cannot calculate TZRMJD", &[])?,
                                 );
                                 io.drain(d)?;
@@ -1165,10 +1162,8 @@ pub(crate) fn text_output_inner(
                 )? == 1i32)
                     && (*read(&context.pulsars[(p) as usize].fitMode, "psr[p].fitMode")? == 1i32))
                 {
-                    d.log(
-                        b'm',
-                        "textOutput.C",
-                        306,
+                    d.rust_log(
+                        /* TEMPO2 textOutput.C:306 */ b'm',
                         &crate::source_format::format(
                             "Notice: Parameter uncertainties multiplied by sqrt(red. chisq)\n",
                             &[],
@@ -1182,10 +1177,8 @@ pub(crate) fn text_output_inner(
                 )? == 0i32)
                     && (*read(&context.pulsars[(p) as usize].fitMode, "psr[p].fitMode")? == 1i32))
                 {
-                    d.log(
-                        b'm',
-                        "textOutput.C",
-                        309,
+                    d.rust_log(
+                        /* TEMPO2 textOutput.C:309 */ b'm',
                         &crate::source_format::format(
                             "Notice: Parameter uncertainties NOT multiplied by sqrt(red. chisq)\n",
                             &[],
@@ -5817,10 +5810,8 @@ pub(crate) fn text_output_inner(
                 if (*read(&context.pulsars[(p) as usize].setUnits, "psr[p].setUnits")? == 0i32) {
                     {
                         if (*read(&context.pulsars[(p) as usize].units, "psr[p].units")? != 1i32) {
-                            d.log(
-                                b'w',
-                                "textOutput.C",
-                                1155,
+                            d.rust_log(
+                                /* TEMPO2 textOutput.C:1155 */ b'w',
                                 &crate::source_format::format(
                                     "UNITS was not set in the parameter file: using TDB (tempo1)",
                                     &[],
@@ -5828,10 +5819,8 @@ pub(crate) fn text_output_inner(
                             );
                             io.drain(d)?;
                         } else {
-                            d.log(
-                                b'w',
-                                "textOutput.C",
-                                1157,
+                            d.rust_log(
+                                /* TEMPO2 textOutput.C:1157 */ b'w',
                                 &crate::source_format::format(
                                     "UNITS was not set in the parameter file: using TCB (tempo2)",
                                     &[],
@@ -5853,10 +5842,8 @@ pub(crate) fn text_output_inner(
                         let mut fout = io.create(&"global_covar.cvm".as_bytes().to_vec());
                         if !(fout.is_some()) {
                             {
-                                d.log(
-                                    b'w',
-                                    "textOutput.C",
-                                    1165,
+                                d.rust_log(
+                                    /* TEMPO2 textOutput.C:1165 */ b'w',
                                     &crate::source_format::format(
                                         "Unable to open global_covar.cvm for writing",
                                         &[],
@@ -6023,10 +6010,8 @@ pub(crate) fn text_output_inner(
                                 let mut fout = io.create(&"aplus_across.cvm".as_bytes().to_vec());
                                 if !(fout.is_some()) {
                                     {
-                                        d.log(
-                                            b'w',
-                                            "textOutput.C",
-                                            1208,
+                                        d.rust_log(
+                                            /* TEMPO2 textOutput.C:1208 */ b'w',
                                             &crate::source_format::format(
                                                 "Unable to open aplus_across.cvm for writing",
                                                 &[],
@@ -9022,7 +9007,7 @@ write_file(&mut fout2, &crate::source_format::format("CONSTRAIN NE_SW_IFUNC_SIGM
                                                                 )?;
                                                             io.write(&bytes)?;
                                                         }
-                                                        d.log(b'w',"textOutput.C",1806,&crate::source_format::format("There are output parameters with very high covariance", &[])?);
+                                                        d.rust_log(/* TEMPO2 textOutput.C:1806 */ b'w', &crate::source_format::format("There are output parameters with very high covariance", &[])?);
                                                         io.drain(d)?;
                                                         notwarned = false;
                                                     }
@@ -9204,7 +9189,7 @@ write_file(&mut fout2, &crate::source_format::format("CONSTRAIN NE_SW_IFUNC_SIGM
     let mut errorCount: i32 = d.check();
     if (errorCount != 0) {
         {
-            d.log(b'm',"textOutput.C",1847,&crate::source_format::format("NOTICE! There were %d errors thrown!! Check the logs as the results may not be valid.", &[Argument::from(errorCount)])?);
+            d.rust_log(/* TEMPO2 textOutput.C:1847 */ b'm', &crate::source_format::format("NOTICE! There were %d errors thrown!! Check the logs as the results may not be valid.", &[Argument::from(errorCount)])?);
             io.drain(d)?;
         }
     }
@@ -9413,10 +9398,8 @@ pub(crate) fn calc_rms_values(
             i = (i + 1);
         }
     }
-    d.log(
-        b'd',
-        "textOutput.C",
-        1910,
+    d.rust_log(
+        /* TEMPO2 textOutput.C:1910 */ b'd',
         &crate::source_format::format(
             "textOutput %g %g %d",
             &[
@@ -9450,10 +9433,8 @@ pub(crate) fn calc_rms_values(
         .clone())
         * Float::with_val(PRECISION_BITS, 1e3f64))
     .to_f64();
-    d.log(
-        b'd',
-        "textOutput.C",
-        1919,
+    d.rust_log(
+        /* TEMPO2 textOutput.C:1919 */ b'd',
         &crate::source_format::format(
             "textOutput %g %g %g %G %d",
             &[
@@ -9777,7 +9758,7 @@ pub(crate) fn dglep_inner(
     let mut df0: Option<f64> = None;
     if !(dglep_eval_phase(t0, fph, glf0, glf0d, glf1, tds, &mut f0, &mut df0, d)? != 0) {
         {
-            d.log(b'w',"textOutput.C",2057,&crate::source_format::format("Glitch epoch convergence failed (non-finite initial state for zero GLPH solve)", &[])?);
+            d.rust_log(/* TEMPO2 textOutput.C:2057 */ b'w', &crate::source_format::format("Glitch epoch convergence failed (non-finite initial state for zero GLPH solve)", &[])?);
 
             return Ok((0i32) as f64);
         }
@@ -10028,10 +10009,8 @@ pub(crate) fn dglep_inner(
             }
         }
     }
-    d.log(
-        b'w',
-        "textOutput.C",
-        2166,
+    d.rust_log(
+        /* TEMPO2 textOutput.C:2166 */ b'w',
         &crate::source_format::format(
             "Glitch epoch convergence failed (Couldn't guess a new PEPOCH for zero GLPH)",
             &[],

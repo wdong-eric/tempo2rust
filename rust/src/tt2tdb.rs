@@ -246,27 +246,23 @@ pub fn compute_observation(
         } else {
             (k * rate).to_f64()
         });
-        for (line, label, value) in [
+        // TEMPO2 tt2tdb.C:180-182: ordered debug quantities.
+        for (label, value) in [
             (
-                180,
                 "corrn TT_Teph",
                 read(&obs.correctionTT_Teph, "correctionTT_Teph")?.to_f64(),
             ),
             (
-                181,
                 "corrn TT_TB",
                 read(&obs.correctionTT_TB, "correctionTT_TB")?.to_f64(),
             ),
             (
-                182,
                 "corrn einstein",
                 read(&obs.einsteinRate, "einsteinRate")? - 1.0,
             ),
         ] {
-            session.diagnostics.log(
-                b'd',
-                "tt2tdb.C",
-                line,
+            session.diagnostics.rust_log(
+                /* TEMPO2 tt2tdb.C:180,181,182 */ b'd',
                 format!("{label} {value}").as_bytes(),
             );
         }

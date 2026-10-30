@@ -168,10 +168,8 @@ fn read_tim_inner(
             o.fdjump[0] = Some(*jump);
             o.obsNfdjump = Some(1);
             if time != 0.0 {
-                session.diagnostics.log(
-                    b'd',
-                    "readTimfile.C",
-                    501,
+                session.diagnostics.rust_log(
+                    /* TEMPO2 readTimfile.C:501 */ b'd',
                     &[
                         b"psr ".as_slice(),
                         &read_string(&psr.name[..], "name")?,
@@ -285,10 +283,8 @@ fn read_tim_inner(
                     b"TIME" => {
                         let delta = directive.double("TIME")?;
                         time += delta;
-                        session.diagnostics.log(
-                            b'd',
-                            "readTimfile.C",
-                            590,
+                        session.diagnostics.rust_log(
+                            /* TEMPO2 readTimfile.C:590 */ b'd',
                             &[
                                 b"Updating time: ".as_slice(),
                                 &clock_text::format_number(
@@ -659,8 +655,10 @@ pub fn read_timfiles(
 ) -> Result<(), TimingError> {
     crate::clkcorr::with_process(|s| {
         s.diagnostics.version("readTimfile.C", "readTimfile()");
-        s.diagnostics
-            .log(b'd', "readTimfile.C", 66, b"In reading tim file");
+        s.diagnostics.rust_log(
+            /* TEMPO2 readTimfile.C:66 */ b'd',
+            b"In reading tim file",
+        );
         Ok(())
     })?;
     let jbo = *read(&context.pulsars[0].jboFormat, "jboFormat")?;
@@ -676,8 +674,10 @@ pub fn read_timfiles(
             .to_vec();
         let result = if jbo != 0 {
             crate::clkcorr::with_process(|s| {
-                s.diagnostics
-                    .log(b'm', "readTimfile.C", 84, b"Reading JBO format!?");
+                s.diagnostics.rust_log(
+                    /* TEMPO2 readTimfile.C:84 */ b'm',
+                    b"Reading JBO format!?",
+                );
                 Ok(())
             })?;
             crate::read_jbo_bat::read_jbo_bat(path, &mut context.pulsars[p], &mut rows, inputs)
@@ -701,18 +701,18 @@ pub fn read_timfiles(
         context.pulsars[p].obsn = Some(Some(view));
         result?;
         crate::clkcorr::with_process(|s| {
-            s.diagnostics.log(
-                b'd',
-                "readTimfile.C",
-                89,
+            s.diagnostics.rust_log(
+                /* TEMPO2 readTimfile.C:89 */ b'd',
                 &[b"Checking for deleted points >".as_slice(), &deletion, b"<"].concat(),
             );
             Ok(())
         })?;
         if deletion != b"NONE" {
             crate::clkcorr::with_process(|s| {
-                s.diagnostics
-                    .log(b'd', "readTimfile.C", 94, b"In checking for deleted points");
+                s.diagnostics.rust_log(
+                    /* TEMPO2 readTimfile.C:94 */ b'd',
+                    b"In checking for deleted points",
+                );
                 Ok(())
             })?;
             let deletion = Path::new(std::ffi::OsStr::from_bytes(&deletion));
@@ -745,8 +745,10 @@ pub fn read_timfiles(
         }
     }
     crate::clkcorr::with_process(|s| {
-        s.diagnostics
-            .log(b'd', "readTimfile.C", 116, b"Leaving readTimfile");
+        s.diagnostics.rust_log(
+            /* TEMPO2 readTimfile.C:116 */ b'd',
+            b"Leaving readTimfile",
+        );
         Ok(())
     })?;
     Ok(())

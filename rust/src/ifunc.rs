@@ -44,7 +44,7 @@ pub(crate) fn interpolate(
             return Ok((y[i + 1] - y[i]) * fraction + y[i]);
         }
     }
-    d.log(b'e', "ifunc.C", 53, b"Shouldn't get here");
+    d.rust_log(/* TEMPO2 ifunc.C:53 */ b'e', b"Shouldn't get here");
     d.stderr(b"Assertion failed: (0), function ifunc, file ifunc.C, line 54.\n");
     Err(boundary("ifunc_unbracketed_time"))
 }
@@ -72,10 +72,8 @@ pub(crate) fn basis(
         ))
         .unwrap()
     };
-    d.log(
-        b'd',
-        "ifunc.C",
-        7,
+    d.rust_log(
+        /* TEMPO2 ifunc.C:7 */ b'd',
         format!(
             "ifunc {} => {} : {} {n} {k}",
             g(mjd[0]),

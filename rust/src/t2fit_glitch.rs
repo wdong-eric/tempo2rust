@@ -304,10 +304,8 @@ pub(crate) fn t2FitFunc_stdGlitch(
             }
         }
     }
-    d.log(
-        b'e',
-        "t2fit_glitch.C",
-        96,
+    d.rust_log(
+        /* TEMPO2 t2fit_glitch.C:96 */ b'e',
         format!(
             "Unknown glitch parameter: label={} str={} k={}",
             label,

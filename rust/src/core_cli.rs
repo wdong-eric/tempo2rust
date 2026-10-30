@@ -26,6 +26,17 @@ pub const IDENTITY: &str = concat!(
 );
 pub const HELP: &str = include_str!("../data/help.txt");
 pub const HELP_EXTRA: &str = include_str!("../data/help_extra.txt");
+/// Shared native option catalogue; 0107 replaces its obsolete CVS identity claim.
+pub fn help() -> String {
+    let catalogue = HELP.replace(
+        "-displayVersion   Display detailed CVS version number of every file used.",
+        "-displayVersion   Display Rust emit sites and TEMPO2 source counterparts.",
+    );
+    format!(
+        "Plugin execution (-gr, -output and selection plugins) is unavailable in this Rust build.\nThe retained native catalogue below includes those source options for reference.\n\n{catalogue}"
+    )
+}
+
 /// Rust environment snapshot. Callers supply paths; executing never changes cwd or environment.
 #[derive(Default, Clone, Debug)]
 pub struct Environment {
@@ -363,7 +374,11 @@ fn expand(
         } else if args[i].eq_ignore_ascii_case(b"-allInfo") {
             warnings = 0;
         } else if args[i] == b"-jbo" {
-            main_log(b'm', 154, b"Reading JBO format!!", io)?;
+            main_log(
+                /* TEMPO2 tempo2.C:154 */ b'm',
+                b"Reading JBO format!!",
+                io,
+            )?;
             jbo = true;
         } else if args[i] == b"-test" {
             test = true;
@@ -411,12 +426,14 @@ fn expand(
 fn drain(io: &mut OutputIo<'_>) -> Result<(), TimingError> {
     crate::clkcorr::with_diagnostics(|d| io.drain(d))
 }
-fn main_log(kind: u8, line: usize, body: &[u8], io: &mut OutputIo<'_>) -> Result<(), TimingError> {
+#[track_caller]
+fn main_log(kind: u8, body: &[u8], io: &mut OutputIo<'_>) -> Result<(), TimingError> {
+    let site = std::panic::Location::caller();
     crate::clkcorr::with_diagnostics(|d| {
         if kind == b't' {
-            d.timing("tempo2.C", line, body)
+            d.rust_timing_at(site, body)
         } else {
-            d.log(kind, "tempo2.C", line, body)
+            d.rust_log_at(kind, site, body)
         }
         io.drain(d)
     })
@@ -563,7 +580,7 @@ pub fn run(
         return Ok(1);
     }
     if args.len() == 2 && (args[1] == b"-h" || args[1] == b"-H") {
-        io.write(format!("\n{IDENTITY}\nexamples: {} mytim.tim\n          {} -f mypar.par mytim.tim\n          {} -gr plk -f mypar.par mytim.tim\n\n{HELP}\nCurrent Environment:\n",String::from_utf8_lossy(&args[0]),String::from_utf8_lossy(&args[0]),String::from_utf8_lossy(&args[0])).as_bytes())?;
+        io.write(format!("\n{IDENTITY}\nexample: {} -f mypar.par mytim.tim\n\n{help}\nCurrent Environment:\n",String::from_utf8_lossy(&args[0]),help=help()).as_bytes())?;
         for (name, value) in [
             ("TEMPO2", env.runtime.as_ref().map(|p| p.as_os_str())),
             (
@@ -599,9 +616,17 @@ pub fn run(
         return Ok(1);
     }
     let directory = io.directory.to_path_buf();
-    main_log(b'd', 296, b"Running getInputs 1", io)?;
+    main_log(
+        /* TEMPO2 tempo2.C:296 */ b'd',
+        b"Running getInputs 1",
+        io,
+    )?;
     let c = get_inputs(args, &directory, io)?;
-    main_log(b'd', 299, b"Completed getInputs", io)?;
+    main_log(
+        /* TEMPO2 tempo2.C:299 */ b'd',
+        b"Completed getInputs",
+        io,
+    )?;
     if let Some((_, p)) = &c.graphics {
         io.write(&format(
             "Plugin integration unavailable in this Rust build: %s\n",
@@ -659,11 +684,10 @@ pub fn run(
         })
         .collect::<Vec<_>>();
     let mut consumed = vec![];
-    main_log(b'd', 360, b"Reading par file", io)?;
+    main_log(/* TEMPO2 tempo2.C:360 */ b'd', b"Reading par file", io)?;
     crate::source_par::read_parfiles(&mut context, &pairs, runtime, &mut consumed)?;
     main_log(
-        b'd',
-        362,
+        /* TEMPO2 tempo2.C:362 */ b'd',
         format!(
             "Finished reading par file {}",
             read(&context.pulsars[0].nits, "nits")?
@@ -672,7 +696,11 @@ pub fn run(
         io,
     )?;
     if c.predictor.is_none() {
-        main_log(b'd', 365, b"Running readTimfile", io)?;
+        main_log(
+            /* TEMPO2 tempo2.C:365 */ b'd',
+            b"Running readTimfile",
+            io,
+        )?;
         crate::source_tim::read_timfiles(
             &mut context,
             &pairs.iter().map(|p| p.tim.clone()).collect::<Vec<_>>(),
@@ -680,8 +708,7 @@ pub fn run(
             &mut consumed,
         )?;
         main_log(
-            b'd',
-            367,
+            /* TEMPO2 tempo2.C:367 */ b'd',
             format!(
                 "Completed readTimfile {}",
                 context.pulsars[0].param.slots[param_ecc as usize].cells[1].param_set
@@ -691,8 +718,7 @@ pub fn run(
         )?;
     }
     main_log(
-        b'd',
-        370,
+        /* TEMPO2 tempo2.C:370 */ b'd',
         format!(
             "Running preProcess {}",
             read(&context.pulsars[0].nits, "nits")?
@@ -702,8 +728,7 @@ pub fn run(
     )?;
     crate::preprocess::pre_process(&mut context, &c.arguments, runtime, &mut consumed)?;
     main_log(
-        b'd',
-        372,
+        /* TEMPO2 tempo2.C:372 */ b'd',
         format!(
             "Completed preProcess {}",
             read(&context.pulsars[0].nits, "nits")?
@@ -712,7 +737,7 @@ pub fn run(
         io,
     )?;
     if writetim {
-        main_log(b'm', 374, b"write out.tim", io)?;
+        main_log(/* TEMPO2 tempo2.C:374 */ b'm', b"write out.tim", io)?;
         crate::source_tim::write_tim(
             &directory.join("out.tim"),
             &mut context,
@@ -725,7 +750,11 @@ pub fn run(
     let mut r = RuntimeContext::from_root(runtime)?;
     if let Some((kind, spec)) = &c.predictor {
         predict(&mut context, &mut r, *kind, spec, &c.polyco_prefix, io)?;
-        main_log(b't', 503, b"Return from main()", io)?;
+        main_log(
+            /* TEMPO2 tempo2.C:503 */ b't',
+            b"Return from main()",
+            io,
+        )?;
         return Ok(0);
     }
     let options = crate::general_fitting::FitOptions {
@@ -752,23 +781,43 @@ pub fn run(
             }
         }
         for iteration in 0..2 {
-            main_log(b'd', 531, format!("iteration {iteration}").as_bytes(), io)?;
-            main_log(b'd', 532, b"calling formBatsAll", io)?;
-            main_log(b't', 533, b"call formBatsAll()", io)?;
+            main_log(
+                /* TEMPO2 tempo2.C:531 */ b'd',
+                format!("iteration {iteration}").as_bytes(),
+                io,
+            )?;
+            main_log(
+                /* TEMPO2 tempo2.C:532 */ b'd',
+                b"calling formBatsAll",
+                io,
+            )?;
+            main_log(
+                /* TEMPO2 tempo2.C:533 */ b't',
+                b"call formBatsAll()",
+                io,
+            )?;
             crate::global::form_bats_all(&mut context, &mut r)?;
-            main_log(b'd', 536, b"calling formResiduals", io)?;
-            main_log(b't', 537, b"call formResiduals()", io)?;
+            main_log(
+                /* TEMPO2 tempo2.C:536 */ b'd',
+                b"calling formResiduals",
+                io,
+            )?;
+            main_log(
+                /* TEMPO2 tempo2.C:537 */ b't',
+                b"call formResiduals()",
+                io,
+            )?;
             crate::timing::form_residuals(&mut context, true)?;
             drain(io)?;
             if c.list && iteration == 0 {
                 core_output::display_parameters(13, &c.tim, &c.par, &context, io)?;
             }
             if iteration == 0 {
-                main_log(b'd', 562, b"calling doFit", io)?;
-                main_log(b't', 564, b"calling t2Fit", io)?;
+                main_log(/* TEMPO2 tempo2.C:562 */ b'd', b"calling doFit", io)?;
+                main_log(/* TEMPO2 tempo2.C:564 */ b't', b"calling t2Fit", io)?;
                 crate::general_fitting::t2_fit(&mut context, &options)?;
-                main_log(b'm', 566, b"Complete fit", io)?;
-                main_log(b'd', 568, b"completed doFit", io)?;
+                main_log(/* TEMPO2 tempo2.C:566 */ b'm', b"Complete fit", io)?;
+                main_log(/* TEMPO2 tempo2.C:568 */ b'd', b"completed doFit", io)?;
             }
             if iteration == 1 || c.pre_only {
                 if let Some(p) = &c.output_plugin {
@@ -799,7 +848,7 @@ pub fn run(
         "Finishing off: time taken = %.2f (s)\n",
         &[Argument::from(elapsed)],
     )?)?;
-    main_log(b't', 624, b"Exit from main()", io)?;
+    main_log(/* TEMPO2 tempo2.C:624 */ b't', b"Exit from main()", io)?;
     Ok(0)
 }
 fn predict(

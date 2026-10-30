@@ -11,14 +11,18 @@ use tempo2_rust::{
     fit_terrestrial, load,
 };
 
-const USAGE: &str = "Usage: tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean | --fit [--covariance SELECTOR] [--norescale] [--force-always-fit-for-glitches] [--acceleration N] [--fit-diagnostics DIR]] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]\n       tempo2-rust predictor {cheby|polyco|evaluate|plan} OPTIONS (see PREDICTOR_API.md)";
+const USAGE: &str = "Native terminal workflow (TEMPO2-style text):\n  export TEMPO2=/path/to/T2runtime\n  tempo2-rust -f model.par arrivals.tim\n  tempo2-rust -h                     Native short help\n  tempo2-rust -v                     Rust build and TEMPO2 source identity\n\nThe native workflow fits according to the PAR controls; -pre still fits.\nUse explicit machine interfaces below for JSON. timing evaluates unless --fit is\nrequested; residuals/fit use the narrower bounded input and spin-fit contracts.\nPredictor commands generate/evaluate predictors without a timing fit.\n\nMachine interfaces (JSON):\n  tempo2-rust timing --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [--no-mean | --fit [--covariance SELECTOR] [--norescale] [--force-always-fit-for-glitches] [--acceleration N] [--fit-diagnostics DIR]] [-- PREPROCESS_ARGS]\n       tempo2-rust bats --par PATH --tim PATH [--par PATH --tim PATH ...] --runtime PATH [-- PREPROCESS_ARGS]\n        tempo2-rust residuals --par PATH --tim PATH [--runtime PATH]\n       tempo2-rust fit --par PATH --tim PATH [--runtime PATH] [--norescale]\n       tempo2-rust predictor {cheby|polyco|evaluate|plan} OPTIONS (see PREDICTOR_API.md)";
 
 mod predictor_cli;
 
 fn run() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<OsString> = env::args_os().skip(1).collect();
-    if args == ["--help"] || args == ["-h"] {
-        println!("{USAGE}");
+    if args == ["--help"] {
+        println!(
+            "{}\n\n{USAGE}\n\nNative options:\n{}",
+            tempo2_rust::core_cli::IDENTITY,
+            tempo2_rust::core_cli::help()
+        );
         return Ok(());
     }
     if args.first().is_some_and(|s| s == "predictor") {

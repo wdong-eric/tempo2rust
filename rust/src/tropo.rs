@@ -417,13 +417,11 @@ pub fn compute_observation(
     let correct = *read(&obs.delayCorr, "delayCorr")? != 0
         && *read(&psr.source.correctTroposphere, "correctTroposphere")? != 0;
     if correct && *read(&obs.zenith[2], "zenith[2]")? == 0.0 && !*warned {
-        session.diagnostics.log(b'd',"tropo.C",408,format!("WARNING: Tropospheric delay correction not possible with T2CMETHOD TEMPO {index} {:.6}",read(&obs.zenith[2],"zenith[2]")?).as_bytes());
+        session.diagnostics.rust_log(/* TEMPO2 tropo.C:408 */ b'd', format!("WARNING: Tropospheric delay correction not possible with T2CMETHOD TEMPO {index} {:.6}",read(&obs.zenith[2],"zenith[2]")?).as_bytes());
         *warned = true;
     } else if read_string(&obs.telID, "telID")? == b"STL_FBAT" {
-        session.diagnostics.log(
-            b'd',
-            "tropo.C",
-            413,
+        session.diagnostics.rust_log(
+            /* TEMPO2 tropo.C:413 */ b'd',
             b"Not correcting for tropospheric delay",
         );
         *warned = true;

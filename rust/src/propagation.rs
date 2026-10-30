@@ -152,10 +152,8 @@ fn dm(
     resources: &mut Vec<crate::runtime::Resource>,
 ) -> Result<(), TimingError> {
     s.diagnostics.version("dm_delays.C", "dm_delays()");
-    s.diagnostics.log(
-        b'd',
-        "dm_delays.C",
-        50,
+    s.diagnostics.rust_log(
+        /* TEMPO2 dm_delays.C:50 */ b'd',
         format!(
             "dm_delays with pulsar {index}; number of obs = {}",
             *read(&p.nobs, "nobs")?
@@ -176,10 +174,8 @@ fn dm(
             if is_set(p, param_telx, 1) && is_set(p, param_tely, 1) && is_set(p, param_telz, 1) {
                 *v = value(p, [param_telx, param_tely, param_telz][j], 1).to_f64();
             } else {
-                s.diagnostics.log(
-                    b'e',
-                    "dm_delays.C",
-                    94,
+                s.diagnostics.rust_log(
+                    /* TEMPO2 dm_delays.C:94 */ b'e',
                     b"setting vobs = 0, this can give a large error!",
                 );
                 *v = 0.0;
@@ -246,16 +242,12 @@ fn dm(
         };
         if is_set(p, param_dm, 0) && target != param_dm as i32 {
             s.diagnostics.dm_once(s.dmmodel_warning, 0xf, |d| {
-                d.log(
-                    b'e',
-                    "dm_delays.C",
-                    168,
+                d.rust_log(
+                    /* TEMPO2 dm_delays.C:168 */ b'e',
                     b"Using DMMODEL value for dispersion measure instead of the DM parameter",
                 );
-                d.log(
-                    b'e',
-                    "dm_delays.C",
-                    169,
+                d.rust_log(
+                    /* TEMPO2 dm_delays.C:169 */ b'e',
                     b"Please set 'DMMODEL DM' in the par file rather than specifying a value",
                 );
             });
@@ -434,10 +426,8 @@ pub(crate) fn calculate(
     s.diagnostics
         .version("calculate_bclt.C", "calculate_bclt()");
     if let Some(p) = context.pulsars.first() {
-        s.diagnostics.log(
-            b'd',
-            "calculate_bclt.C",
-            49,
+        s.diagnostics.rust_log(
+            /* TEMPO2 calculate_bclt.C:49 */ b'd',
             format!(
                 "In calculate_bclt with number of psr = {}, nobs (psr[0]) = {}",
                 context.pulsars.len(),
@@ -451,8 +441,10 @@ pub(crate) fn calculate(
         let p = &psrs[index];
         let n = (*read(&p.nobs, "nobs")?).max(0) as usize;
         if p.correctTroposphere == Some(1) {
-            s.diagnostics
-                .log(b'd', "calculate_bclt.C", 58, b"Correcting troposphere");
+            s.diagnostics.rust_log(
+                /* TEMPO2 calculate_bclt.C:58 */ b'd',
+                b"Correcting troposphere",
+            );
             s.diagnostics
                 .version("tropo.C", "computer_tropospheric_delays()");
             let mut warned = false;
@@ -471,17 +463,17 @@ pub(crate) fn calculate(
             }
         }
         if p.correctTroposphere == Some(1) {
-            s.diagnostics.log(
-                b'd',
-                "calculate_bclt.C",
-                60,
+            s.diagnostics.rust_log(
+                /* TEMPO2 calculate_bclt.C:60 */ b'd',
                 b"Complete correcting troposphere",
             );
         }
         calculate_rows(s, &psrs[0], p, index, &mut rows[..n], resources)?;
     }
-    s.diagnostics
-        .log(b'd', "calculate_bclt.C", 181, b"Leaving calculate_bclt");
+    s.diagnostics.rust_log(
+        /* TEMPO2 calculate_bclt.C:181 */ b'd',
+        b"Leaving calculate_bclt",
+    );
     Ok(())
 }
 fn calculate_rows(
@@ -618,10 +610,8 @@ fn calculate_observation(
     if p.correctTroposphere == Some(0) {
         o.troposphericDelay = Some(0.0);
     }
-    s.diagnostics.log(
-        b'd',
-        "calculate_bclt.C",
-        78,
+    s.diagnostics.rust_log(
+        /* TEMPO2 calculate_bclt.C:78 */ b'd',
         format!(
             "In tdis2 calculate_bclt with observation {obs} {}",
             *read(&o.delayCorr, "delayCorr")?
@@ -673,16 +663,14 @@ fn calculate_observation(
         let acct = 0.5 * delta * delta * dot_product(acc, rca);
         let px = (value(p, param_px, 0) * -0.5f64 * px_conv * (rr - rcos * rcos) / AULTSC).to_f64();
         let pmtr = -delta.powi(2) * radial * vdot;
-        s.diagnostics.log(b'd',"calculate_bclt.C",151,format!("Calculating roemer using {} {} {} {} {} (delt = {}; dt_SSB = {}) loop={loops} sat={}",g(rcos),g(pm),g(pmtt),g(px),g(pmtr),g(delta),g(dt_ssb),g(read(&o.sat,"sat")?.to_f64())).as_bytes());
+        s.diagnostics.rust_log(/* TEMPO2 calculate_bclt.C:151 */ b'd', format!("Calculating roemer using {} {} {} {} {} (delt = {}; dt_SSB = {}) loop={loops} sat={}",g(rcos),g(pm),g(pmtt),g(px),g(pmtr),g(delta),g(dt_ssb),g(read(&o.sat,"sat")?.to_f64())).as_bytes());
         o.roemer = Some(Float::with_val(
             PRECISION_BITS,
             rcos + pm + pmtt + px + pmtr + acct,
         ));
         shapiro(p, o, delta, dt_ssb, s.diagnostics)?;
-        s.diagnostics.log(
-            b'd',
-            "calculate_bclt.C",
-            154,
+        s.diagnostics.rust_log(
+            /* TEMPO2 calculate_bclt.C:154 */ b'd',
             format!(
                 "In tdis2 calculate_bclt with observation {obs} {} calling dmdelays",
                 *read(&o.delayCorr, "delayCorr")?
@@ -690,18 +678,18 @@ fn calculate_observation(
             .as_bytes(),
         );
         dm(s, first, p, index, o, delta, dt_ssb, resources)?;
-        s.diagnostics
-            .log(b'd', "calculate_bclt.C", 157, b"Complete dm_delays");
+        s.diagnostics.rust_log(
+            /* TEMPO2 calculate_bclt.C:157 */ b'd',
+            b"Complete dm_delays",
+        );
         dt_ssb = (read(&o.roemer, "roemer")?.clone()
             - (*read(&o.tdis1, "tdis1")? + read(&o.tdis2, "tdis2")?)
             - (*read(&o.shapiroDelaySun, "shapiroDelaySun")?
                 + *read(&p.planetShapiro, "planetShapiro")? as f64
                     * read(&o.shapiroDelayJupiter, "shapiroDelayJupiter")?))
         .to_f64();
-        s.diagnostics.log(
-            b'd',
-            "calculate_bclt.C",
-            165,
+        s.diagnostics.rust_log(
+            /* TEMPO2 calculate_bclt.C:165 */ b'd',
             format!(
                 "dt_SSB: {} {} {} {} {}",
                 g(read(&o.roemer, "roemer")?.to_f64()),
@@ -722,10 +710,8 @@ fn calculate_observation(
         }
     }
     if loops == 100 {
-        s.diagnostics.log(
-            b'w',
-            "calculate_bclt.C",
-            174,
+        s.diagnostics.rust_log(
+            /* TEMPO2 calculate_bclt.C:174 */ b'w',
             b"Warning: the loop to obtain dt_SSB reached 100 iterations\n",
         );
     }
@@ -740,7 +726,7 @@ pub(crate) fn form_bats_inner(
     d: &mut crate::clock_diagnostics::Diagnostics,
 ) -> Result<(), TimingError> {
     d.version("formBats.C", "formBats()");
-    d.log(b'd', "formBats.C", 45, b"In formBats");
+    d.rust_log(/* TEMPO2 formBats.C:45 */ b'd', b"In formBats");
     for index in 0..context.pulsars.len() {
         let (p, rows) = context.pulsar_observations_mut(index)?;
         for o in &mut rows[..(*read(&p.nobs, "nobs")?).max(0) as usize] {
@@ -788,7 +774,7 @@ pub(crate) fn form_bats_inner(
             }
         }
     }
-    d.log(b'd', "formBats.C", 87, b"Leaving formBats");
+    d.rust_log(/* TEMPO2 formBats.C:87 */ b'd', b"Leaving formBats");
     Ok(())
 }
 pub fn secular_motion(context: &mut PulsarContext) -> Result<(), TimingError> {

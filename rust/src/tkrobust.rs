@@ -121,16 +121,14 @@ pub fn robust_least_squares(
         );
     }
     crate::clkcorr::with_diagnostics(|d| {
-        d.log(b'm', "TKrobust.C", 25, b"Doing robust fit!");
+        d.rust_log(/* TEMPO2 TKrobust.C:25 */ b'm', b"Doing robust fit!");
         Ok(())
     })
     .map_err(|e| e.to_string())?;
     if !matches!(kind, b'H' | b'B' | b'W') {
         crate::clkcorr::with_process(|s| {
-            let _: () = s.diagnostics.log(
-                b'e',
-                "TKrobust.C",
-                113,
+            let _: () = s.diagnostics.rust_log(
+                /* TEMPO2 TKrobust.C:113 */ b'e',
                 format!(
                     "Robust type '{}' not supported. (fall back to huber!)",
                     kind as char
@@ -200,10 +198,8 @@ pub fn robust_least_squares(
         count += 1;
         if count > 16 {
             crate::clkcorr::with_process(|s| {
-                let _: () = s.diagnostics.log(
-                    b'w',
-                    "TKrobust.C",
-                    84,
+                let _: () = s.diagnostics.rust_log(
+                    /* TEMPO2 TKrobust.C:84 */ b'w',
                     b"Warning, robust fit did not converge after 16 iterations, aborting...",
                 );
                 Ok(())

@@ -1820,10 +1820,8 @@ pub(super) fn tables(
             psr.nWhite = Some((*read(&psr.nWhite, "nWhite")?).max(n));
             let v = *read(&psr.wave_cos[i], "wave_cos")?;
             crate::clkcorr::lifecycle_diagnostics(|d| {
-                d.log(
-                    b'm',
-                    "readParfile.C",
-                    1102,
+                d.rust_log(
+                    /* TEMPO2 readParfile.C:1102 */ b'm',
                     &[
                         format!("READ WAVE_COS {n} ").as_bytes(),
                         &clock_text::format_number(v, clock_text::NumberFormat::GeneralSix),

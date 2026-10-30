@@ -75,18 +75,14 @@ pub fn read_jbo_bat(
                 // Failed fread retains the last (possibly swapped) buffer and type.
                 kind = kind.swap_bytes();
             }
-            diagnostics.log(
-                b'm',
-                "readJBO_bat.C",
-                74,
+            diagnostics.rust_log(
+                /* TEMPO2 readJBO_bat.C:74 */ b'm',
                 format!("Got record type = {kind} ({})", index + 1).as_bytes(),
             );
             let chars = makechars(&raw);
             match kind {
-                0 => diagnostics.log(
-                    b'm',
-                    "readJBO_bat.C",
-                    84,
+                0 => diagnostics.rust_log(
+                    /* TEMPO2 readJBO_bat.C:84 */ b'm',
                     &[
                         b"Source name: ".as_slice(),
                         c_bytes(&chars[0]),
@@ -95,10 +91,8 @@ pub fn read_jbo_bat(
                     ]
                     .concat(),
                 ),
-                3 => diagnostics.log(
-                    b'm',
-                    "readJBO_bat.C",
-                    80,
+                3 => diagnostics.rust_log(
+                    /* TEMPO2 readJBO_bat.C:80 */ b'm',
                     &[
                         b"Read BAT file created by ".as_slice(),
                         c_bytes(&chars[1]),
@@ -119,10 +113,8 @@ pub fn read_jbo_bat(
                             F::Six,
                         )
                     });
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        91,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:91 */ b'm',
                         &[
                             b"Observatory name: ".as_slice(),
                             c_bytes(&chars[0]),
@@ -157,20 +149,16 @@ pub fn read_jbo_bat(
                     let mut d = [0.0; 25];
                     for i in 0..25 {
                         if i == 13 {
-                            diagnostics.log(
-                                b'm',
-                                "readJBO_bat.C",
-                                105,
+                            diagnostics.rust_log(
+                                /* TEMPO2 readJBO_bat.C:105 */ b'm',
                                 &[format!("{i} {} ", i + 1).as_bytes(), c_bytes(&chars[i])]
                                     .concat(),
                             );
                         } else {
                             raw[i * 8..i * 8 + 8].reverse();
                             d[i] = f64::from_ne_bytes(raw[i * 8..i * 8 + 8].try_into().unwrap());
-                            diagnostics.log(
-                                b'm',
-                                "readJBO_bat.C",
-                                108,
+                            diagnostics.rust_log(
+                                /* TEMPO2 readJBO_bat.C:108 */ b'm',
                                 &[format!("{i} {} ", i + 1).as_bytes(), &num(d[i], F::Six)]
                                     .concat(),
                             );
@@ -180,10 +168,8 @@ pub fn read_jbo_bat(
                     let site = sites
                         .get(index as usize)
                         .ok_or_else(|| s.error("JBO site", "unwritten or invalid site index"))?;
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        112,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:112 */ b'm',
                         &[b"site = ".as_slice(), site].concat(),
                     );
                     let date = crate::ifteph::native_i32(d[0], "JBO_date_int")?;
@@ -191,10 +177,8 @@ pub fn read_jbo_bat(
                         * 86400.0
                         + d[24])
                         - (date2mjd(date)? * 86400.0 + d[1]);
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        117,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:117 */ b'm',
                         &[b"sat-bat = ".as_slice(), &num(diff, F::GeneralSix)].concat(),
                     );
                     let bat = Float::with_val(PRECISION_BITS, date2mjd(date)? + d[1] / 86400.0);
@@ -202,29 +186,23 @@ pub fn read_jbo_bat(
                         rows.resize_with(count + 1, SourceObservation::default);
                     }
                     let corr = d[15] + d[16] + d[17] + d[21];
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        122,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:122 */ b'm',
                         &[b"corr =  = ".as_slice(), &num(corr, F::Six)].concat(),
                     );
                     let o = &mut rows[count];
                     o.sat = Some(bat.clone());
                     o.bat = Some(bat);
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        125,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:125 */ b'm',
                         &[
                             b"SAT = ".as_slice(),
                             &num(o.sat.as_ref().unwrap().to_f64(), F::Twelve),
                         ]
                         .concat(),
                     );
-                    diagnostics.log(
-                        b'm',
-                        "readJBO_bat.C",
-                        126,
+                    diagnostics.rust_log(
+                        /* TEMPO2 readJBO_bat.C:126 */ b'm',
                         &[
                             b"BAT = ".as_slice(),
                             &num(o.bat.as_ref().unwrap().to_f64(), F::Twelve),

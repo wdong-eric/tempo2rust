@@ -86,10 +86,8 @@ pub(super) fn ELL1Hmodel(
     an = ((2.0f64 * std::f64::consts::PI) / pb);
     if (psr.param.slots[param_h3 as usize].cells[0].param_set != 1i32) {
         {
-            d.log(
-                b'e',
-                "ELL1Hmodel.C",
-                78,
+            d.rust_log(
+                /* TEMPO2 ELL1Hmodel.C:78 */ b'e',
                 b"Cannot use the ELL1H model without H3.",
             );
         }
@@ -113,34 +111,24 @@ pub(super) fn ELL1Hmodel(
             }
             if (psr.param.slots[param_stig as usize].cells[0].param_set == 1i32) {
                 {
-                    d.log(
-                        b'e',
-                        "ELL1Hmodel.C",
-                        97,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:97 */ b'e',
                         b"You specified both H4 and STIG - Ignoring STIG",
                     );
-                    d.log(
-                        b'm',
-                        "ELL1Hmodel.C",
-                        98,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:98 */ b'm',
                         b"WARNING! You specified both H4 and STIG.",
                     );
-                    d.log(
-                        b'm',
-                        "ELL1Hmodel.C",
-                        99,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:99 */ b'm',
                         b"We will ignore STIG and perform the approx. H4 fit instead.",
                     );
-                    d.log(
-                        b'm',
-                        "ELL1Hmodel.C",
-                        100,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:100 */ b'm',
                         b"If you want to perform the exact fit for H3 and STIG, then ",
                     );
-                    d.log(
-                        b'm',
-                        "ELL1Hmodel.C",
-                        101,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:101 */ b'm',
                         b"please remove H4 from your parameter file.",
                     );
                 }
@@ -151,10 +139,8 @@ pub(super) fn ELL1Hmodel(
         {
             if (psr.param.slots[param_nharm as usize].cells[0].param_set == 1i32) {
                 {
-                    d.log(
-                        b'e',
-                        "ELL1Hmodel.C",
-                        107,
+                    d.rust_log(
+                        /* TEMPO2 ELL1Hmodel.C:107 */ b'e',
                         b"ELL1H - Cannot use NHARM without H4. Reverting to H3 only and nharm=3",
                     );
                 }

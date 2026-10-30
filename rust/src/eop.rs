@@ -98,6 +98,8 @@ pub fn load_eop(
             samples.push(row);
         } else {
             let contains = |needle: &[u8]| c_bytes(line).windows(needle.len()).any(|w| w == needle);
+            // Distinct source branches retain distinct compiler-captured emit sites.
+            #[allow(clippy::if_same_then_else)]
             if contains(b"FORMAT(2X,I4,2X,A4,I3,2X,I5,2F9.6,F10.7,2X,F10.7,2X,2F9.6)") {
                 modern = false;
                 diagnostics.stdout(b"Warning: using old format for $TEMPO2/eopc04_IAU2000.62-now - should update\n");
@@ -105,20 +107,16 @@ pub fn load_eop(
                 b"FORMAT(3(I4),I7,2(F11.6),2(F12.7),2(F11.6),2(F11.6),2(F11.7),2F12.6)",
             ) {
                 modern = true;
-                diagnostics.log(
-                    b'd',
-                    "eop.C",
-                    124,
+                diagnostics.rust_log(
+                    /* TEMPO2 eop.C:124 */ b'd',
                     b"Using new format for $TEMPO2/eopc04_IAU2000.62-now",
                 );
             } else if contains(
                 b"FORMAT(3(I4),I7,2(F11.6),2(F12.7),2(F11.6),2(F11.6),2(F11.7),2(F12.6))",
             ) {
                 modern = true;
-                diagnostics.log(
-                    b'd',
-                    "eop.C",
-                    130,
+                diagnostics.rust_log(
+                    /* TEMPO2 eop.C:130 */ b'd',
                     b"Using new format for $TEMPO2/eopc04_IAU2000.62-now",
                 );
             }

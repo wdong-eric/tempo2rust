@@ -49,10 +49,8 @@ pub(crate) fn os_error(error: &std::io::Error) -> String {
 impl TabulatedFunction {
     pub fn load(&mut self, path: &Path, diagnostics: &mut Diagnostics) -> Result<(), TimingError> {
         self.check()?;
-        diagnostics.log(
-            b'd',
-            "tabulatedfunction.C",
-            47,
+        diagnostics.rust_log(
+            /* TEMPO2 tabulatedfunction.C:47 */ b'd',
             &[
                 b"Loading tabulated function from ".as_slice(),
                 path.as_os_str().as_bytes(),
@@ -89,10 +87,8 @@ impl TabulatedFunction {
             path: path.into(),
             ..Self::default()
         };
-        diagnostics.log(
-            b'd',
-            "tabulatedfunction.C",
-            47,
+        diagnostics.rust_log(
+            /* TEMPO2 tabulatedfunction.C:47 */ b'd',
             &[
                 b"Loading tabulated function from ".as_slice(),
                 path.as_os_str().as_bytes(),
@@ -156,10 +152,8 @@ impl TabulatedFunction {
                 {
                     let index = i32::try_from(self.samples.len())
                         .map_err(|_| boundary("table_sample_count"))?;
-                    diagnostics.log(
-                        b'w',
-                        "tabulatedfunction.C",
-                        85,
+                    diagnostics.rust_log(
+                        /* TEMPO2 tabulatedfunction.C:85 */ b'w',
                         &[
                             b"Error parsing file ".as_slice(),
                             path_bytes,
@@ -177,10 +171,8 @@ impl TabulatedFunction {
                 self.samples.push(sample);
             }
         }
-        diagnostics.log(
-            b'd',
-            "tabulatedfunction.C",
-            95,
+        diagnostics.rust_log(
+            /* TEMPO2 tabulatedfunction.C:95 */ b'd',
             &[
                 format!("Loaded {} samples from ", self.samples.len()).as_bytes(),
                 path_bytes,

@@ -342,10 +342,8 @@ impl PulsarContext {
     ) -> Result<MatrixOwner, LifecycleBoundary> {
         self.run(|s| {
             diagnostic(|d| {
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    169,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:169 */ b'd',
                     format!(
                         "Allocate {rows} x {cols} double array ({:.3} kb)",
                         rows as f64 * cols as f64 * 8.0 / 1024.0
@@ -361,22 +359,16 @@ impl PulsarContext {
             // Host address/header presentation is projected explicitly: Rust has
             // typed metadata and one dense owner, no fabricated native pointer table.
             diagnostic(|d| {
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    184,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:184 */ b'd',
                     format!("Allocated owned matrix {}", owner.index).as_bytes(),
                 );
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    192,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:192 */ b'd',
                     format!("Typed metadata rows={rows} cols={cols}").as_bytes(),
                 );
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    194,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:194 */ b'd',
                     format!("Accessible owned cells 0 -> {}", matrix.cells().len()).as_bytes(),
                 );
             })?;
@@ -481,29 +473,23 @@ impl PulsarContext {
         self.run(|s| {
             let m = s.matrix(owner)?;
             diagnostic(|d| {
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    203,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:203 */ b'd',
                     format!("free owned matrix {}", owner.index).as_bytes(),
                 );
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    204,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:204 */ b'd',
                     format!("m was {} x {}", m.get_blas_rows(), m.get_blas_cols()).as_bytes(),
                 );
             })?;
             s.matrices[owner.index] = None;
             s.releases.push(format!("matrix:{}", owner.index));
             diagnostic(|d| {
-                d.log(
-                    b'd',
-                    "TKmatrix.C",
-                    208,
+                d.rust_log(
+                    /* TEMPO2 TKmatrix.C:208 */ b'd',
                     format!("free owned metadata {}", owner.index).as_bytes(),
                 );
-                d.log(b'd', "TKmatrix.C", 211, b"leaving free_blas");
+                d.rust_log(/* TEMPO2 TKmatrix.C:211 */ b'd', b"leaving free_blas");
             })?;
             Ok(())
         })
@@ -813,7 +799,7 @@ impl PulsarContext {
         self.run(|s| {
             diagnostic(|d| {
                 d.version("initialise.C", "initialise()");
-                d.log(b'd', "initialise.C", 49, b"Initialise");
+                d.rust_log(/* TEMPO2 initialise.C:49 */ b'd', b"Initialise");
             })?;
             let mut retired = Vec::new();
             for p in 0..max_psr {
