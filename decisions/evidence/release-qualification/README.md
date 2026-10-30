@@ -226,3 +226,26 @@ identifies the mixed ordinary-long-double/binary128 expression boundaries and
 explains why tiny rounding changes can reach nanoseconds in this fixture. It
 is not a causal finding, an approved precision change or a Linux qualification
 result; the existing second Linux run supplies the pending diagnostic evidence.
+
+
+## Second Linux artifact and correction review
+
+Decision 0104 records the actual 4accd26 result: 54/66 top-level stages pass,
+twelve fail, none are blocked. The early native corpus did not execute; the
+history fetch failed and its comparator then encountered a missing stages field.
+The passed closure stage is evidence accounting, not corpus completion.
+
+`central-second-linux-review.py` is the exact offline review. Run it with the
+ignored packet `build/linux-run-41056090173-review-20261030/` and a fresh `--out`
+filename. It checks the GitHub archive identity, every one of the 11,242 selected
+files / 617,149,255 bytes, and the result/diagnostic identities. The central review
+SHA-256 is `f782f1de5cbe9ac4234fc27096bd442e24071fbe438ea6b1dabf1af01568a378`.
+The complete successful job log is `job.complete.raw.log`; earlier command/live
+log retrieval failures remain distinct and did not restart the qualification.
+
+The Lomb and event counterfactuals now isolate the Linux source-profile
+mismatches. The cache intervention still lacks a complete original stdout
+control. M2 and predictor generation ran for the first time on Linux, exposing
+both genuine open values and two source-observation defects detailed in 0104.
+The original artifact and every failing gate remain immutable. AL has further
+implementation/verification work; this review is not milestone acceptance.
