@@ -116,7 +116,9 @@ def qualify(args):
          '--runtime',a2/'runtime'),['native-science','external-default'])
     step('event-diagnostic',script('event_diagnostic.py','--out',out/'event-diagnostic',
          '--core',out/'core-disabled','--science',out/'science','--timing',out/'timing',
-         '--runtime',a2/'runtime'),['native-science','external-default'])
+         '--runtime',a2/'runtime','--rust',out/'install-default/bin/tempo2-rust'),['native-science','external-default'])
+    step('event-source-profile',script('event_profile.py','--out',out/'event-source-profile',
+         '--candidate',candidate,'--a2',a2,'--target',out/'test-target'),['dependencies','a2'])
     step('predictors',script('check_predictor_science.py','--out',out/'predictors','--candidate',candidate,
          '--native',out/'science/predictor','--rust',out/'install-default/bin/tempo2-rust',
          '--abi-receipt',out/'c-default/receipt.json'),['native-science','c-default'])

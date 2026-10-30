@@ -21,6 +21,7 @@
     clippy::unnecessary_cast,
     clippy::needless_return
 )]
+use crate::ordinary_long_double as ordinary;
 use crate::{
     PRECISION_BITS, TimingError,
     clock_diagnostics::{Diagnostics, boundary},
@@ -352,115 +353,50 @@ pub(crate) fn t2FitFunc_expdip(
     mut k: i32,
     d: &mut Diagnostics,
 ) -> Result<f64, TimingError> {
-    let mut val: f64;
-    let mut dt: f64;
-    let mut dm: f64;
-    let mut tau: f64;
-    let mut freq: f64;
-    let mut gamma: f64;
-    freq = (*read(&rows[(ipos) as usize].freqSSB, "psr[p].obsn[ipos].freqSSB")? / 1.4e9f64);
-    dt = ((read(&rows[(ipos) as usize].bbat, "psr[p].obsn[ipos].bbat")?).clone()
-        - (psr.param.slots[(param_expep as i32) as usize].cells[(k) as usize].val).clone())
-    .to_f64();
-    dm =
-        ((psr.param.slots[(param_expph as i32) as usize].cells[(k) as usize].val).clone()).to_f64();
-    tau = ((psr.param.slots[(param_exptau as i32) as usize].cells[(k) as usize].val).clone())
-        .to_f64();
-    if (psr.param.slots[(param_expindex as i32) as usize].cells[(k) as usize].param_set == 1i32) {
-        {
-            gamma = ((psr.param.slots[(param_expindex as i32) as usize].cells[(k) as usize].val)
-                .clone())
-            .to_f64();
-        }
+    // t2fit_glitch.C:110-198: source locals are ordinary long double;
+    // powl remains wide, then assignment to val precedes the double return.
+    let freq =
+        ordinary::round(*read(&rows[ipos as usize].freqSSB, "psr[p].obsn[ipos].freqSSB")? / 1.4e9);
+    let dt = ordinary::round(
+        read(&rows[ipos as usize].bbat, "psr[p].obsn[ipos].bbat")?.clone()
+            - &psr.param.slots[param_expep as usize].cells[k as usize].val,
+    );
+    let dm = ordinary::round(&psr.param.slots[param_expph as usize].cells[k as usize].val);
+    let tau = ordinary::round(&psr.param.slots[param_exptau as usize].cells[k as usize].val);
+    let index = &psr.param.slots[param_expindex as usize].cells[k as usize];
+    let gamma = if index.param_set == 1 {
+        ordinary::round(&index.val)
     } else {
-        {
-            gamma = (-2i32) as f64;
-        }
+        ordinary::round(-2)
+    };
+    if dt > 0 {
+        let exponent = ordinary::div(&(-dt.clone()), &tau);
+        // Source overload exp(long double) and expl both return ordinary values.
+        let decay = Float::with_val(PRECISION_BITS, ordinary::exp(&exponent));
+        let power =
+            Float::with_val(PRECISION_BITS, &freq).pow(&Float::with_val(PRECISION_BITS, &gamma));
+        let val = if label == param_expph as i32 {
+            power * decay
+        } else if label == param_exptau as i32 {
+            Float::with_val(PRECISION_BITS, &dm)
+                * power
+                * decay
+                * Float::with_val(PRECISION_BITS, &dt)
+                / Float::with_val(PRECISION_BITS, &tau)
+                / Float::with_val(PRECISION_BITS, &tau)
+        } else if label == param_expindex as i32 {
+            let logarithm = ordinary::ln(&freq);
+            let logarithmic_amplitude = ordinary::mul(&dm, &logarithm);
+            Float::with_val(PRECISION_BITS, logarithmic_amplitude) * power * decay
+        } else if label == param_expep as i32 {
+            Float::with_val(PRECISION_BITS, &dm) * power * decay
+                / Float::with_val(PRECISION_BITS, &tau)
+        } else {
+            return Ok(0.0);
+        };
+        return Ok(ordinary::round(val).to_f64());
     }
-    if (label == (param_expph as i32)) {
-        {
-            if (dt > (0i32) as f64) {
-                {
-                    return Ok({
-                        val = ((Float::with_val(PRECISION_BITS, freq))
-                            .pow(&(Float::with_val(PRECISION_BITS, gamma)))
-                            * Float::with_val(PRECISION_BITS, ((-dt) / tau).exp()))
-                        .to_f64();
-                        val
-                    });
-                }
-            } else {
-                {
-                    return Ok(0.0f64);
-                }
-            }
-        }
-    }
-    if (label == (param_exptau as i32)) {
-        {
-            if (dt > (0i32) as f64) {
-                {
-                    return Ok({
-                        val = (((((Float::with_val(PRECISION_BITS, dm)
-                            * (Float::with_val(PRECISION_BITS, freq))
-                                .pow(&(Float::with_val(PRECISION_BITS, gamma))))
-                            * Float::with_val(PRECISION_BITS, ((-dt) / tau).exp()))
-                            * Float::with_val(PRECISION_BITS, dt))
-                            / Float::with_val(PRECISION_BITS, tau))
-                            / Float::with_val(PRECISION_BITS, tau))
-                        .to_f64();
-                        val
-                    });
-                }
-            } else {
-                {
-                    return Ok(0.0f64);
-                }
-            }
-        }
-    }
-    if (label == (param_expindex as i32)) {
-        {
-            if (dt > (0i32) as f64) {
-                {
-                    return Ok({
-                        val = ((Float::with_val(PRECISION_BITS, (dm * (freq).ln()))
-                            * (Float::with_val(PRECISION_BITS, freq))
-                                .pow(&(Float::with_val(PRECISION_BITS, gamma))))
-                            * Float::with_val(PRECISION_BITS, ((-dt) / tau).exp()))
-                        .to_f64();
-                        val
-                    });
-                }
-            } else {
-                {
-                    return Ok(0.0f64);
-                }
-            }
-        }
-    }
-    if (label == (param_expep as i32)) {
-        {
-            if (dt > (0i32) as f64) {
-                {
-                    return Ok({
-                        val = (((Float::with_val(PRECISION_BITS, dm)
-                            * (Float::with_val(PRECISION_BITS, freq))
-                                .pow(&(Float::with_val(PRECISION_BITS, gamma))))
-                            * Float::with_val(PRECISION_BITS, ((-dt) / tau).exp()))
-                            / Float::with_val(PRECISION_BITS, tau))
-                        .to_f64();
-                        val
-                    });
-                }
-            } else {
-                {
-                    return Ok(0.0f64);
-                }
-            }
-        }
-    }
-    return Ok((0i32) as f64);
+    Ok(0.0)
 }
 
 /// t2fit_glitch.C::t2FitFunc_gausdip (pinned source line 204).
@@ -474,57 +410,49 @@ pub(crate) fn t2FitFunc_gausdip(
     mut k: i32,
     d: &mut Diagnostics,
 ) -> Result<f64, TimingError> {
-    let mut val: f64;
-    let mut dt: f64;
-    let mut amp: f64;
-    let mut sig: f64;
-    let mut freq: f64;
-    let mut gamma: f64;
-    freq = (*read(&rows[(ipos) as usize].freqSSB, "psr[p].obsn[ipos].freqSSB")? / 1.4e9f64);
-    dt = ((read(&rows[(ipos) as usize].bbat, "psr[p].obsn[ipos].bbat")?).clone()
-        - (psr.param.slots[(param_gausep as i32) as usize].cells[(k) as usize].val).clone())
-    .to_f64();
-    amp = ((psr.param.slots[(param_gausamp as i32) as usize].cells[(k) as usize].val).clone())
-        .to_f64();
-    sig = ((psr.param.slots[(param_gaussig as i32) as usize].cells[(k) as usize].val).clone())
-        .to_f64();
-    if (psr.param.slots[(param_gausindex as i32) as usize].cells[(k) as usize].param_set == 1i32) {
-        {
-            gamma = ((psr.param.slots[(param_gausindex as i32) as usize].cells[(k) as usize].val)
-                .clone())
-            .to_f64();
-        }
+    // t2fit_glitch.C:204-257. Retain the source derivative signs and 6.
+    // denominator; this is a type-boundary correction, not a formula change.
+    let freq =
+        ordinary::round(*read(&rows[ipos as usize].freqSSB, "psr[p].obsn[ipos].freqSSB")? / 1.4e9);
+    let dt = ordinary::round(
+        read(&rows[ipos as usize].bbat, "psr[p].obsn[ipos].bbat")?.clone()
+            - &psr.param.slots[param_gausep as usize].cells[k as usize].val,
+    );
+    let amp = ordinary::round(&psr.param.slots[param_gausamp as usize].cells[k as usize].val);
+    let sig = ordinary::round(&psr.param.slots[param_gaussig as usize].cells[k as usize].val);
+    let index = &psr.param.slots[param_gausindex as usize].cells[k as usize];
+    let gamma = if index.param_set == 1 {
+        ordinary::round(&index.val)
     } else {
-        {
-            gamma = (0i32) as f64;
-        }
-    }
-    val = ((Float::with_val(PRECISION_BITS, amp)
-        * (Float::with_val(PRECISION_BITS, freq)).pow(&(Float::with_val(PRECISION_BITS, gamma))))
-        * Float::with_val(
-            PRECISION_BITS,
-            (((((-dt) * dt) / 2.0f64) / sig) / sig).exp(),
-        ))
-    .to_f64();
-    if (label == (param_gausamp as i32)) {
-        {
-            return Ok((val / amp));
-        }
-    }
-    if (label == (param_gausep as i32)) {
-        {
-            return Ok((val * (((-dt) / sig) / sig)));
-        }
-    }
-    if (label == (param_gaussig as i32)) {
-        {
-            return Ok((val * (((((dt * dt) / 6.0f64) / sig) / sig) / sig)));
-        }
-    }
-    if (label == (param_gausindex as i32)) {
-        {
-            return Ok((val * (freq).ln()));
-        }
-    }
-    return Ok((0i32) as f64);
+        ordinary::round(0)
+    };
+    let exponent = ordinary::mul(&(-dt.clone()), &dt);
+    let exponent = ordinary::div(&exponent, &ordinary::round(2));
+    let exponent = ordinary::div(&exponent, &sig);
+    let exponent = ordinary::div(&exponent, &sig);
+    let val = ordinary::round(
+        Float::with_val(PRECISION_BITS, &amp)
+            * Float::with_val(PRECISION_BITS, &freq).pow(&Float::with_val(PRECISION_BITS, &gamma))
+            * Float::with_val(PRECISION_BITS, ordinary::exp(&exponent)),
+    );
+    let result = if label == param_gausamp as i32 {
+        ordinary::div(&val, &amp)
+    } else if label == param_gausep as i32 {
+        let factor = ordinary::div(&(-dt.clone()), &sig);
+        let factor = ordinary::div(&factor, &sig);
+        ordinary::mul(&val, &factor)
+    } else if label == param_gaussig as i32 {
+        let factor = ordinary::mul(&dt, &dt);
+        let factor = ordinary::div(&factor, &ordinary::round(6));
+        let factor = ordinary::div(&factor, &sig);
+        let factor = ordinary::div(&factor, &sig);
+        let factor = ordinary::div(&factor, &sig);
+        ordinary::mul(&val, &factor)
+    } else if label == param_gausindex as i32 {
+        let logarithm = ordinary::ln(&freq);
+        ordinary::mul(&val, &logarithm)
+    } else {
+        return Ok(0.0);
+    };
+    Ok(result.to_f64())
 }

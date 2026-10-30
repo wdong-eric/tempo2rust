@@ -447,6 +447,9 @@ mod general_fitting_tests;
 
 pub mod cheby2d;
 pub mod cheby2d_int;
+#[cfg(test)]
+mod event_profile_tests;
+mod ordinary_long_double;
 pub mod polyco;
 pub mod predictor;
 pub mod predictor_number;

@@ -1,22 +1,11 @@
 //! tempo2pred.h ordinary C `long double`, distinct from TKlongdouble's timing type.
 //! Owned arithmetic/format glue, not a native ABI layout. AJ/AL qualify the ABI.
-use rug::{
-    Float,
-    float::{Round, Special},
-};
+use rug::{Float, float::Round};
 use serde::{Serialize, Serializer};
 use std::cmp::Ordering;
 use std::{fmt, ops, str::FromStr};
 
-#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
-pub const NATIVE_BITS: u32 = 53;
-#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
-pub const NATIVE_BITS: u32 = 64;
-#[cfg(not(any(
-    all(target_os = "macos", target_arch = "aarch64"),
-    all(target_os = "linux", target_arch = "x86_64")
-)))]
-compile_error!("Predictor ordinary-long-double profile requires qualification on this target");
+pub use crate::ordinary_long_double::NATIVE_BITS;
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct PredictorNumber(Float);
@@ -29,26 +18,8 @@ impl PredictorNumber {
         let (v, direction) = Float::with_val_round(NATIVE_BITS, x, Round::Nearest);
         Self::rounded(v, direction)
     }
-    fn rounded(mut v: Float, direction: Ordering) -> Self {
-        let (normal_min, maximum) = if NATIVE_BITS == 53 {
-            (-1021, 1024)
-        } else {
-            (-16381, 16384)
-        };
-        // Preserve the first rounding direction: a p-bit intermediate exactly
-        // at a subnormal midpoint must not erase which side the exact value lay.
-        v.subnormalize_round(normal_min, direction, Round::Nearest);
-        if v.get_exp().is_some_and(|exponent| exponent > maximum) {
-            v = Float::with_val(
-                NATIVE_BITS,
-                if v.is_sign_negative() {
-                    Special::NegInfinity
-                } else {
-                    Special::Infinity
-                },
-            );
-        }
-        Self(v)
+    fn rounded(v: Float, direction: Ordering) -> Self {
+        Self(crate::ordinary_long_double::rounded(v, direction))
     }
     pub fn as_float(&self) -> &Float {
         &self.0

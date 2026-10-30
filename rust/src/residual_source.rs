@@ -18,6 +18,7 @@
     clippy::neg_multiply,
     clippy::unnecessary_cast
 )]
+use crate::ordinary_long_double as ordinary;
 use crate::{
     PRECISION_BITS, TimingError,
     clock_diagnostics::{Diagnostics, boundary},
@@ -707,78 +708,53 @@ pub(crate) fn form_residuals_inner(
                                         == 1i32)
                                     {
                                         {
-                                            let mut freq: f64;
-                                            let mut dt: f64;
-                                            let mut dm: f64;
-                                            let mut tau: f64;
-                                            let mut gamma: f64;
-                                            if (psr.param.slots[param_expindex as usize].cells
-                                                [(k) as usize]
-                                                .param_set
-                                                == 1i32)
-                                            {
-                                                {
-                                                    gamma = ((psr.param.slots
-                                                        [param_expindex as usize]
-                                                        .cells
-                                                        [(k) as usize]
-                                                        .val)
-                                                        .clone())
-                                                    .to_f64();
-                                                }
+                                            // formResiduals.C:675-695: ordinary assignments and exp, with
+                                            // powl promoted to the existing Rug128 timing role (0104).
+                                            let freq = ordinary::round(
+                                                *read(
+                                                    &rows[i as usize].freqSSB,
+                                                    "psr[p].obsn[i].freqSSB",
+                                                )? / 1.4e9,
+                                            );
+                                            let dt = ordinary::round(
+                                                read(
+                                                    &rows[i as usize].bbat,
+                                                    "psr[p].obsn[i].bbat",
+                                                )?
+                                                .clone()
+                                                    - &psr.param.slots[param_expep as usize].cells
+                                                        [k as usize]
+                                                        .val,
+                                            );
+                                            let dm = ordinary::round(
+                                                &psr.param.slots[param_expph as usize].cells
+                                                    [k as usize]
+                                                    .val,
+                                            );
+                                            let tau = ordinary::round(
+                                                &psr.param.slots[param_exptau as usize].cells
+                                                    [k as usize]
+                                                    .val,
+                                            );
+                                            let index = &psr.param.slots[param_expindex as usize]
+                                                .cells[k as usize];
+                                            let gamma = if index.param_set == 1 {
+                                                ordinary::round(&index.val)
                                             } else {
-                                                {
-                                                    gamma = (-2i32) as f64;
-                                                }
-                                            }
-                                            freq = (*read(
-                                                &rows[(i) as usize].freqSSB,
-                                                "psr[p].obsn[i].freqSSB",
-                                            )? / 1.4e9f64);
-                                            dt = ((read(
-                                                &rows[(i) as usize].bbat,
-                                                "psr[p].obsn[i].bbat",
-                                            )?)
-                                            .clone()
-                                                - (psr.param.slots[param_expep as usize].cells
-                                                    [(k) as usize]
-                                                    .val)
-                                                    .clone())
-                                            .to_f64();
-                                            dm = ((psr.param.slots[param_expph as usize].cells
-                                                [(k) as usize]
-                                                .val)
-                                                .clone())
-                                            .to_f64();
-                                            tau = ((psr.param.slots[param_exptau as usize].cells
-                                                [(k) as usize]
-                                                .val)
-                                                .clone())
-                                            .to_f64();
-                                            if (dt > (0i32) as f64) {
-                                                {
-                                                    phase4 = ((phase4).clone()
-                                                        + (((Float::with_val(
-                                                            PRECISION_BITS,
-                                                            dm,
-                                                        ) * (Float::with_val(
-                                                            PRECISION_BITS,
-                                                            freq,
-                                                        ))
-                                                        .pow(
-                                                            &(Float::with_val(
-                                                                PRECISION_BITS,
-                                                                gamma,
-                                                            )),
-                                                        )) * Float::with_val(
-                                                            PRECISION_BITS,
-                                                            ((-dt) / tau).exp(),
-                                                        )) * (psr.param.slots
-                                                            [param_f as usize]
-                                                            .cells[0]
-                                                            .val)
-                                                            .clone()));
-                                                }
+                                                ordinary::round(-2)
+                                            };
+                                            if dt > 0 {
+                                                let exponent = ordinary::div(&(-dt.clone()), &tau);
+                                                phase4 += Float::with_val(PRECISION_BITS, &dm)
+                                                    * Float::with_val(PRECISION_BITS, &freq).pow(
+                                                        &Float::with_val(PRECISION_BITS, &gamma),
+                                                    )
+                                                    * Float::with_val(
+                                                        PRECISION_BITS,
+                                                        ordinary::exp(&exponent),
+                                                    )
+                                                    * &psr.param.slots[param_f as usize].cells[0]
+                                                        .val;
                                             }
                                         }
                                     }
@@ -798,70 +774,58 @@ pub(crate) fn form_residuals_inner(
                                         == 1i32)
                                     {
                                         {
-                                            let mut freq: f64;
-                                            let mut dt: f64;
-                                            let mut amp: f64;
-                                            let mut sig: f64;
-                                            let mut gamma: f64;
-                                            let mut val: f64;
-                                            freq = (*read(
-                                                &rows[(i) as usize].freqSSB,
-                                                "psr[p].obsn[i].freqSSB",
-                                            )? / 1.4e9f64);
-                                            dt = ((read(
-                                                &rows[(i) as usize].bbat,
-                                                "psr[p].obsn[i].bbat",
-                                            )?)
-                                            .clone()
-                                                - (psr.param.slots[param_gausep as usize].cells
-                                                    [(k) as usize]
-                                                    .val)
-                                                    .clone())
-                                            .to_f64();
-                                            amp = ((psr.param.slots[param_gausamp as usize].cells
-                                                [(k) as usize]
-                                                .val)
-                                                .clone())
-                                            .to_f64();
-                                            sig = ((psr.param.slots[param_gaussig as usize].cells
-                                                [(k) as usize]
-                                                .val)
-                                                .clone())
-                                            .to_f64();
-                                            if (psr.param.slots[param_gausindex as usize].cells
-                                                [(k) as usize]
-                                                .param_set
-                                                == 1i32)
-                                            {
-                                                {
-                                                    gamma = ((psr.param.slots
-                                                        [param_gausindex as usize]
-                                                        .cells
-                                                        [(k) as usize]
-                                                        .val)
-                                                        .clone())
-                                                    .to_f64();
-                                                }
+                                            // formResiduals.C:705-728: every exponent operation is
+                                            // ordinary; the wide amplitude product narrows into val.
+                                            let freq = ordinary::round(
+                                                *read(
+                                                    &rows[i as usize].freqSSB,
+                                                    "psr[p].obsn[i].freqSSB",
+                                                )? / 1.4e9,
+                                            );
+                                            let dt = ordinary::round(
+                                                read(
+                                                    &rows[i as usize].bbat,
+                                                    "psr[p].obsn[i].bbat",
+                                                )?
+                                                .clone()
+                                                    - &psr.param.slots[param_gausep as usize].cells
+                                                        [k as usize]
+                                                        .val,
+                                            );
+                                            let amp = ordinary::round(
+                                                &psr.param.slots[param_gausamp as usize].cells
+                                                    [k as usize]
+                                                    .val,
+                                            );
+                                            let sig = ordinary::round(
+                                                &psr.param.slots[param_gaussig as usize].cells
+                                                    [k as usize]
+                                                    .val,
+                                            );
+                                            let index = &psr.param.slots[param_gausindex as usize]
+                                                .cells[k as usize];
+                                            let gamma = if index.param_set == 1 {
+                                                ordinary::round(&index.val)
                                             } else {
-                                                {
-                                                    gamma = (0i32) as f64;
-                                                }
-                                            }
-                                            val = ((Float::with_val(PRECISION_BITS, amp)
-                                                * (Float::with_val(PRECISION_BITS, freq)).pow(
-                                                    &(Float::with_val(PRECISION_BITS, gamma)),
-                                                ))
-                                                * Float::with_val(
-                                                    PRECISION_BITS,
-                                                    (((((-dt) * dt) / 2.0f64) / sig) / sig).exp(),
-                                                ))
-                                            .to_f64();
-                                            phase4 = ((phase4).clone()
-                                                + (Float::with_val(PRECISION_BITS, val)
-                                                    * (psr.param.slots[param_f as usize].cells
-                                                        [0]
-                                                    .val)
-                                                        .clone()));
+                                                ordinary::round(0)
+                                            };
+                                            let exponent = ordinary::mul(&(-dt.clone()), &dt);
+                                            let exponent =
+                                                ordinary::div(&exponent, &ordinary::round(2));
+                                            let exponent = ordinary::div(&exponent, &sig);
+                                            let exponent = ordinary::div(&exponent, &sig);
+                                            let val = ordinary::round(
+                                                Float::with_val(PRECISION_BITS, &amp)
+                                                    * Float::with_val(PRECISION_BITS, &freq).pow(
+                                                        &Float::with_val(PRECISION_BITS, &gamma),
+                                                    )
+                                                    * Float::with_val(
+                                                        PRECISION_BITS,
+                                                        ordinary::exp(&exponent),
+                                                    ),
+                                            );
+                                            phase4 += Float::with_val(PRECISION_BITS, &val)
+                                                * &psr.param.slots[param_f as usize].cells[0].val;
                                         }
                                     }
                                 }

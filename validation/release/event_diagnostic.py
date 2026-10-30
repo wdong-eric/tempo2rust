@@ -24,8 +24,9 @@ def observed(source):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ['out', 'core', 'science', 'timing', 'runtime']:
+    for name in ['out', 'core', 'science', 'timing', 'runtime', 'rust']:
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--baseline-rust',type=Path,help='Retained pre-correction executable for exact macOS before/after products')
     a = parser.parse_args()
     run = Run(a.out)
     core, science, timing = a.core.resolve(), a.science.resolve(), a.timing.resolve()
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     source = original.read_text()
     narrow = source
     # formResiduals.C:675,705 use ordinary long double. This counterfactual
-    # isolates the existing Rust f64 temporary boundary; it is not an approved
+    # isolates the historical 4accd26 Rust f64 temporary boundary; it is not an approved
     # native correction or a change to the production Rust precision policy.
     for declaration in ['long double freq, dt, dm, tau, gamma;', 'long double freq, dt, amp, sig, gamma,val;']:
         assert narrow.count(declaration) == 1
@@ -53,8 +54,12 @@ if __name__ == '__main__':
     fixture = ROOT/'validation/timing_models/fixtures/events.par'
     control = run.out/'without-events.par'
     control.write_text(''.join(line for line in fixture.read_text().splitlines(True) if not line.startswith(('EXP', 'GAUS'))))
+    gaussian=run.out/'gaussian-only.par'
+    gaussian.write_text(''.join(line for line in fixture.read_text().splitlines(True)
+        if not line.startswith(('EXP','GAUSINDEX','GAUSAMP')))+'GAUSAMP_1 123456789.123456789123\n')
     records = []; invariant_failures = []
-    for case, par in [('events', fixture), ('without-events', control)]:
+    product_controls=[]
+    for case, par in [('events', fixture), ('without-events', control), ('gaussian-only',gaussian)]:
         for mean in [0, 1]:
             outputs = {}
             for variant, exe in executables.items():
@@ -62,19 +67,41 @@ if __name__ == '__main__':
                 run.run([exe, table, mean, 1, par, fixture.with_suffix('.tim')], tag,
                         cwd=work, env=dict(os.environ, TEMPO2=str(a.runtime.resolve()), LC_ALL='C'))
                 outputs[variant] = table.read_text()
+            # The new ordinary-width witness is separate from the unchanged
+            # historical fixture and its original gate. Compare installed output.
+            if case=='events':rust=timing/f'events-mean{mean}/rust.json'
+            else:
+                rust=run.out/f'{case}-{mean}-rust.json'
+                command=[a.rust.resolve(),'timing','--par',par,'--tim',fixture.with_suffix('.tim'),
+                         '--runtime',a.runtime.resolve(),*(['--no-mean'] if mean==0 else [])]
+                rust.write_bytes(run.run(command,f'{case}-{mean}-rust',cwd=run.out))
+            candidate=json.loads(rust.read_text())
+            errors,measurements=compare(outputs['original'],candidate)
+            records.append(dict(case=case,mean=mean,variant='original',rust_errors=errors,measurements=measurements,rust_output_sha256=sha(rust)))
+            if a.baseline_rust:
+                command=[a.baseline_rust.resolve(),'timing','--par',par,'--tim',fixture.with_suffix('.tim'),
+                         '--runtime',a.runtime.resolve(),*(['--no-mean'] if mean==0 else [])]
+                before=run.run(command,f'{case}-{mean}-baseline',cwd=run.out)
+                equal=json.loads(before)==candidate
+                product_controls.append(dict(case=case,mean=mean,exact_before_after=equal))
+                if not equal:invariant_failures.append(f'{case}-{mean}-macos-before-after')
             for variant in ['observed', 'f64-temporaries']:
                 equal = outputs['original'] == outputs[variant]
                 if not equal and (variant=='observed' or case=='without-events'):
                     invariant_failures.append(f'{case}-{mean}-{variant}')
                 row = dict(case=case, mean=mean, variant=variant, native_state_equal=equal)
-                if case=='events':
-                    rust = timing/f'events-mean{mean}/rust.json'
-                    errors, measurements = compare(outputs[variant], json.loads(rust.read_text()))
-                    row.update(rust_errors=errors, measurements=measurements, rust_output_sha256=sha(rust))
+                errors, measurements = compare(outputs[variant], candidate)
+                row.update(rust_errors=errors, measurements=measurements, rust_output_sha256=sha(rust))
                 records.append(row)
             if case=='events':
                 assert outputs['original'] == (timing/f'events-mean{mean}/native.tsv').read_text()
-    run.save(dict(status='failure' if invariant_failures else 'pass', invariant_failures=invariant_failures,
+    scientific_failures=[r for r in records if r['variant']=='original' and r['rust_errors']]
+    run.save(dict(status='failure' if invariant_failures or scientific_failures else 'pass', invariant_failures=invariant_failures,
+                  scientific_failures=scientific_failures,
                   scope='Diagnostic execution and observer neutrality only; f64-temporaries is an unaccepted counterfactual. The original timing scientific gate is unchanged.',
-                  records=records, inputs={str(p):sha(p) for p in [original, core/'receipt.json', science/'receipt.json', fixture, fixture.with_suffix('.tim'), Path(__file__)]}))
-    raise SystemExit(bool(invariant_failures))
+                  records=records,product_controls=product_controls,
+                  historical_f64_profile='4accd26e2d51b3dc805d9a1ae0a2be7195e171ea',
+                  gaussian_scope='Large-amplitude default-index numerical witness of ordinary val narrowing; not an astrophysical calibration',
+                  inputs={str(p):sha(p) for p in [original, core/'receipt.json', science/'receipt.json', fixture, fixture.with_suffix('.tim'),gaussian,a.rust.resolve(),
+                      *([a.baseline_rust.resolve()] if a.baseline_rust else []),Path(__file__)]}))
+    raise SystemExit(bool(invariant_failures or scientific_failures))
