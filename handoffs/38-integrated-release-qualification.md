@@ -80,3 +80,18 @@ failed output gates. Return concrete before/after examples and focused checks.
 This is queued after central reviews run 41069548581 at frozen a35104a; no edit
 or independent push/dispatch is authorized during that freeze. AL retains
 ownership; central retains publication review and milestone acceptance.
+
+
+## Truthful Rust diagnostic attribution amendment (0107)
+
+The user corrected the 0106 demonstration: `[t2fit.C:850]` is misleading when
+Rust emitted the message. Follow decision 0107 across Rust-owned log/timing/version
+paths, using actual Rust filenames and captured emitting locations rather than
+native aliases or native line numbers. Preserve that origin through wrappers and
+worker replay. Keep pinned TEMPO2 counterparts in comments/source maps and retain
+truthful native-provider labels. AL-owned comparators must validate the new
+metadata before comparing unchanged message bodies/scientific records; preserve
+raw evidence and historical runners. Check full-line truncation boundaries rather
+than silently accepting lost message content. Queue this with 0106 after central
+reviews run 41069548581; current implementation freeze and publication ownership
+remain unchanged.
