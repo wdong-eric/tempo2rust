@@ -1,5 +1,6 @@
 """AL installed C caller exclusivity; unchanged AK assertions and C-only sanitizer scope."""
 from pathlib import Path
+from cache_lifetime import prepare
 import hashlib,json,os,re,shlex,subprocess,sys
 ROOT=Path(__file__).resolve().parents[2];HERE=ROOT/'validation/parallel_execution'
 import argparse
@@ -18,13 +19,19 @@ sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 # before thread exit. Original callers and their leak result remain the gate.
 # Exact MPFR 4.2.2 mpfr.h enum/prototype; the installed Rust archive owns MPFR.
 caller=HERE/'predictor_threads.c';original=caller.read_text()
+# LSan can terminate without libc's normal final stdout flush. Preserve the
+# completed evidence in both callers before shutdown, including the last line.
+end='    puts("AK four caller threads completed twelve exclusive full workflows");'
+assert original.count(end)==1
+flushed=original.replace(end,end+'\n    assert(fflush(stdout)==0);')
+(out/'flushed_callers.c').write_text(flushed)
 cleanup='''typedef enum { MPFR_FREE_LOCAL_CACHE=1, MPFR_FREE_GLOBAL_CACHE=2 } mpfr_free_cache_t;
 extern void mpfr_free_cache2(mpfr_free_cache_t);
 '''
 assert original.count('    return NULL;')==1
-(out/'cache_cleanup.c').write_text(cleanup+original.replace('    return NULL;',
+(out/'cache_cleanup.c').write_text(cleanup+flushed.replace('    return NULL;',
     '    mpfr_free_cache2(MPFR_FREE_LOCAL_CACHE);\n    return NULL;'))
-cache_control={}
+cache_control={};ownership_control={}
 def run(label,cmd,cwd):
  cmd=list(map(str,cmd));r=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=120,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1',TSAN_OPTIONS='halt_on_error=1'))
  (out/(label+'.stdout')).write_bytes(r.stdout);(out/(label+'.stderr')).write_bytes(r.stderr);records.append(dict(label=label,command=cmd,exit=r.returncode));return r
@@ -34,7 +41,7 @@ for mode,extra in [('plain',[]),('asan',['-fsanitize=address,undefined']),('tsan
   source=out/'consumer.c' if name=='consumer' else ROOT/'validation/library_interfaces'/(name+'.c')
   obj=wd/(name+'.o');r=run(mode+'-'+name,['clang',*flags,'-Dmain=ak_'+name+'_main','-c',source,'-o',obj],wd);assert r.returncode==0,r.stderr;objects.append(obj)
  obj=wd/'predictor.o';r=run(mode+'-boundary-shim',['clang',*flags,'-c',prefix/'share/tempo2-rust/rust/native/predictor.c','-o',obj],wd);assert r.returncode==0,r.stderr;objects.append(obj)
- exe=wd/'callers';r=run(mode+'-link',['clang',*flags,caller,*objects,archive,*libs,'-pthread','-o',exe],wd);assert r.returncode==0,r.stderr
+ exe=wd/'callers';r=run(mode+'-link',['clang',*flags,out/'flushed_callers.c',*objects,archive,*libs,'-pthread','-o',exe],wd);assert r.returncode==0,r.stderr
  r=run(mode+'-execute',[exe],wd)
  if r.returncode!=0:
   print(mode,'failed',r.returncode,r.stderr[-1500:].decode(errors='replace'),flush=True)
@@ -56,6 +63,16 @@ for mode,extra in [('plain',[]),('asan',['-fsanitize=address,undefined']),('tsan
       complete_workflows=len(before)==len(after)==12,workflow_output_equal=before==after,
       storage_equal=original_files=={p.name:sha(p) for p in clean.glob('*.tsv')},
       interpretation='Diagnostic cache-lifetime intervention only; original sanitizer failures remain failures. No production leak fix or full-dependency sanitizer coverage is established.')
-(out/'receipt.json').write_text(json.dumps(dict(scope='C clients and C shim instrumented; Rust/MPFR/Fortran/providers are not sanitizer-instrumented',cache_control=cache_control,records=records,inputs={str(p):sha(p) for p in [archive,prefix/'share/tempo2-rust/rust/native/predictor.c',caller,*[ROOT/'validation/library_interfaces'/(n+'.c') for n in ['consumer','storage','low_count','boundary']]]},files={str(p.relative_to(out)):sha(p) for p in out.rglob('*') if p.is_file()}),indent=2)+'\n')
+  if corrected.returncode==0 and all(cache_control[k] for k in ['complete_workflows','workflow_output_equal','storage_equal']):
+   guarded,identity=prepare(prefix,out,run)
+   owned=out/'asan-library-owned';owned.mkdir();exe=owned/'callers'
+   r=run('asan-library-owned-link',['clang',*flags,out/'flushed_callers.c',*objects,guarded,*libs,'-pthread','-o',exe],owned);assert r.returncode==0,r.stderr
+   result=run('asan-library-owned-execute',[exe],owned)
+   ownership_control=dict(identity=identity,exit=result.returncode,complete_workflows=len(blocks(result.stdout))==12,
+      workflow_output_equal=blocks(result.stdout)==before,
+      storage_equal=original_files=={p.name:sha(p) for p in owned.glob('*.tsv')})
+  else:ownership_control={'unavailable':'Incomplete flushed baseline/explicit-cleanup proof'}
+(out/'receipt.json').write_text(json.dumps(dict(scope='C clients and C shim instrumented; Rust/MPFR/Fortran/providers are not sanitizer-instrumented',cache_control=cache_control,ownership_control=ownership_control,records=records,inputs={str(p):sha(p) for p in [archive,prefix/'share/tempo2-rust/rust/native/predictor.c',caller,*[ROOT/'validation/library_interfaces'/(n+'.c') for n in ['consumer','storage','low_count','boundary']]]},files={str(p.relative_to(out)):sha(p) for p in out.rglob('*') if p.is_file() and not any(part in p.relative_to(out).parts for part in ['library-owned-cache-source','cache-target'])}),indent=2)+'\n')
 assert all(r['exit']==0 for r in records)
 assert cache_control['complete_workflows'] and cache_control['workflow_output_equal'] and cache_control['storage_equal']
+assert ownership_control['complete_workflows'] and ownership_control['workflow_output_equal'] and ownership_control['storage_equal']
