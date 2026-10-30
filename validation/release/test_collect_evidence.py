@@ -27,10 +27,17 @@ class EvidenceCollection(unittest.TestCase):
                 native+'outputs/coverage_receipts.json.gz',native+'outputs/raw/case.jsonl.gz',
                 native+'outputs/failed/events.jsonl',
                 native+'build/coverage/get_obsCoord.gcov.json.gz',
+                'linux/predictors/case/rust/polyco_new.dat',
+                'linux/predictors/case/native/newpolyco.dat',
+                'linux/event-diagnostic/gaussian-only.par',
+                'linux/event-diagnostic/without-events.par',
                 'linux/candidate/source/validation/general_fitting/build/public/reference.json.gz']
             excluded=[native+'build/ordinary/source/config.json.gz',
                 'linux/test-target/fingerprint.json.gz','linux/runtime/resources.json.gz',
                 'linux/install-default/share/source.json.gz','linux/gmp-cache/cache.json.gz',
+                'linux/c-concurrency-default/cache-target/fingerprint.json',
+                'linux/c-concurrency-default/library-owned-cache-source/Cargo.toml',
+                'linux/providers/inpop17a.dat',
                 'linux/providers/source.tar.gz',native+'build/probe',native+'outputs/raw.bin.gz']
             data=gzip.compress(b'{"case":"observer","events":[{"phase":"end","state":{}}]}\n',mtime=0)
             for name in included+excluded:

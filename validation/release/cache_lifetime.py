@@ -33,7 +33,7 @@ def prepare(prefix, out, run):
     install=json.loads((prefix.parent/(prefix.name+'-build')/'install.json').read_text())
     command=['cargo','build','--offline','--locked','--release','--lib','--manifest-path',candidate/'Cargo.toml','--target-dir',out/'cache-target']
     if install['features']:command+=['--features',install['features']]
-    result=run('library-owned-cache-build',command,out)
+    result=run('library-owned-cache-build',command,out,timeout=900)
     assert result.returncode==0,result.stderr
     archive=out/'cache-target/release/libtempo2_rust.a'
     identities={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()}

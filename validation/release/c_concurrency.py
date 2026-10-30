@@ -32,8 +32,8 @@ assert original.count('    return NULL;')==1
 (out/'cache_cleanup.c').write_text(cleanup+flushed.replace('    return NULL;',
     '    mpfr_free_cache2(MPFR_FREE_LOCAL_CACHE);\n    return NULL;'))
 cache_control={};ownership_control={}
-def run(label,cmd,cwd):
- cmd=list(map(str,cmd));r=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=120,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1',TSAN_OPTIONS='halt_on_error=1'))
+def run(label,cmd,cwd,timeout=120):
+ cmd=list(map(str,cmd));r=subprocess.run(cmd,cwd=cwd,capture_output=True,timeout=timeout,env=dict(os.environ,UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1',TSAN_OPTIONS='halt_on_error=1'))
  (out/(label+'.stdout')).write_bytes(r.stdout);(out/(label+'.stderr')).write_bytes(r.stderr);records.append(dict(label=label,command=cmd,exit=r.returncode));return r
 for mode,extra in [('plain',[]),('asan',['-fsanitize=address,undefined']),('tsan',['-fsanitize=thread'])]:
  wd=out/mode;wd.mkdir();flags=['-D_GNU_SOURCE','-std=c11','-O1','-g','-fno-omit-frame-pointer','-I'+str(prefix/'include'),*extra];objects=[]

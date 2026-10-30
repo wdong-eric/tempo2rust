@@ -12,7 +12,8 @@ if __name__=='__main__':
     a=p.parse_args()
     if not a.input.is_dir():p.error('input directory does not exist: '+str(a.input))
     a.out.mkdir(parents=True,exist_ok=False);files={}
-    excluded={'source','src','target','test-target','runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
+    excluded={'source','src','target','test-target','cache-target','library-owned-cache-source',
+              'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)
         if not path.is_file() or path.is_symlink():continue
@@ -25,7 +26,8 @@ if __name__=='__main__':
         if (path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
                 and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',
-                                     't2pred.dat','t1.dat','cheby.dat','exchanged.dat'}):continue
+                                     't2pred.dat','t1.dat','cheby.dat','exchanged.dat',
+                                     'gaussian-only.par','without-events.par'}):continue
         target=a.out/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(path,target)
         files[str(relative)]={'sha256':sha(target),'bytes':target.stat().st_size}
     (a.out/'manifest.json').write_text(json.dumps({'source':str(a.input.resolve()),'files':files},indent=2)+'\n')
