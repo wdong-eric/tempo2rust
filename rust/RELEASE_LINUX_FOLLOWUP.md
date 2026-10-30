@@ -116,8 +116,15 @@ correction or acceptance. Covariance optimization stays deferred under 0099.
 ## Bound local evidence
 
 The selected packet contains 1,300 files (13,239,796 bytes), all read back and
-hash checked. Eleven original run directories remain in place, including both
-source-audit iterations. Recipe snapshots accompany the selected evidence.
+hash checked. Eleven run selections, including both source-audit iterations, are
+preserved in `validation/release/build/linux-followthrough-evidence-v1/`, with
+recipe snapshots. Original working-directory paths are provenance, not a
+guarantee that every working file remains there. For a receipt named
+`linux-followthrough-NAME/receipt.json` below, the selected copy is
+`linux-followthrough-evidence-v1/NAME/receipt.json` under the same build root.
+The same copy is member `linux-followthrough-evidence-v1/NAME/receipt.json` in
+`validation/release/build/linux-followthrough-evidence-v1.tar.gz` (SHA-256
+`02ae9a504dfdf9b42ce2c283125761863eaf38777c2434ce0fbd746643c6a5a8`).
 
 | Receipt under `validation/release/build/` | SHA-256 |
 | --- | --- |

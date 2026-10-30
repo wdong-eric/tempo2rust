@@ -166,6 +166,17 @@ candidate export. A missing input directory is an error. It excludes runtime dat
 source trees and Cargo caches. Evidence retention is not release publication.
 Required acceptance evidence must be preserved separately before expiration.
 
+Local working-directory paths in reports identify the producing runs; some
+follow-through directories are now empty. Use the [receipt archive/member
+table](../../rust/RELEASE_QUALIFICATION_REPORT.md#follow-through-retained-identities)
+to retrieve the nine archived corpus/worker receipts. The unchanged index at
+`validation/release/build/followup-evidence-v1/manifest.json` binds archive and
+per-file hashes. Read an individual member with `tar -xOf` and verify its hash;
+do not infer missing evidence solely from an empty original directory. The
+[focused Linux follow-through report](../../rust/RELEASE_LINUX_FOLLOWUP.md#bound-local-evidence)
+documents its separate selected-copy and archive paths. These selected packages
+do not contain the original binaries, runtime datasets or Cargo caches.
+
 Review the local publication diff with:
 
 ```sh

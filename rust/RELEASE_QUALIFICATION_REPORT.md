@@ -407,8 +407,9 @@ missing type/catalog/control prerequisites, historical ownership snapshots,
 source/caller pathname truncation, the tracked JPL build-log overwrite and
 relocated native profile identities. The successor recreates caller files in
 matched paths before truncation, emits every staging adaptation and checks that
-candidate source bytes remain unchanged. Native launch scratch remains in its
-original producer directory rather than being copied into every follow-up.
+candidate source bytes remain unchanged. At execution, native launch scratch was
+left in its producer directory rather than copied into every follow-up; this is
+not a retention guarantee for working directories. See the archive locations below.
 No historical runner, numerical tolerance, production precision or scientific
 body was changed.
 
@@ -448,7 +449,10 @@ Central acceptance and remaining source/branch/numerical dispositions stay open.
 labeled empty selection attempt. All 118,917 selected file entries were read
 back from their archives and verified against their source hashes. The archives
 total 4,119,169,211 bytes; the index binds each archive and its per-file manifest.
-Original successful/failed workspaces and `selected-evidence-v1` remain unchanged.
+Some original successful/failed working directories are now empty. The nine
+report-bound receipts below are available from the preserved archives at the
+exact locations listed after the hash table; their receipt and archive identities
+are unchanged. `selected-evidence-v1` is a separate historical selection.
 The package excludes generated binaries, runtime datasets and Cargo caches.
 
 | Receipt under `validation/release/build/` | SHA-256 |
@@ -463,3 +467,36 @@ The package excludes generated binaries, runtime datasets and Cargo caches.
 | `compare-v21/receipt.json` | `a274555570b8411a601c4d712a94342fc7f6af3a6df69a5d79c4f13db5c90828` |
 | `compare-v22/receipt.json` | `2b2060c0241f142a41c37f4b5b5532507549954b746ec3b76ae05bd67e1a3ce0` |
 | `followup-evidence-v1/manifest.json` | `0f9694fb0973ee4abd0fed9b30d585e6c3154c199d160c3d41bbfdeb1330658e` |
+
+The receipt paths above identify the original runs. For retrieval, archives are
+under `validation/release/build/followup-evidence-v1/`; member paths are relative
+to each archive root, with **no run-directory prefix**. The unchanged
+`manifest.json` binds each archive's SHA-256 and its per-file manifest under
+`manifests/`. Central's independent verification is recorded in
+`decisions/evidence/release-qualification/build/second-linux-4accd26-review-20261030/evidence-review.json`
+as `verified_at: "verified selected archive"` for these nine receipts.
+
+| Original receipt path under `validation/release/build/` | Archive in `followup-evidence-v1/` | Exact member |
+| --- | --- | --- |
+| `followup-checks-v1/receipt.json` | `followup-checks-v1.tar.gz` | `receipt.json` |
+| `source-audit-followup-v2/receipt.json` | `source-audit-followup-v2.tar.gz` | `receipt.json` |
+| `closure-followup-v1/receipt.json` | `closure-followup-v1.tar.gz` | `receipt.json` |
+| `workers-followup-v1/receipt.json` | `workers-followup-v1.tar.gz` | `receipt.json` |
+| `p-fresh-followup-v1/receipt-release.json` | `p-fresh-followup-v1.tar.gz` | `receipt-release.json` |
+| `compare-v18/lifecycle-corrected-native/receipt.json` | `compare-v18.tar.gz` | `lifecycle-corrected-native/receipt.json` |
+| `compare-v12/observer-corrected-native/receipt.json` | `compare-v12.tar.gz` | `observer-corrected-native/receipt.json` |
+| `compare-v21/receipt.json` | `compare-v21.tar.gz` | `receipt.json` |
+| `compare-v22/receipt.json` | `compare-v22.tar.gz` | `receipt.json` |
+
+For example, from the repository root, read the lifecycle receipt without
+recreating or overwriting its original working directory:
+
+```sh
+tar -xOf validation/release/build/followup-evidence-v1/compare-v18.tar.gz \
+  lifecycle-corrected-native/receipt.json
+```
+
+Verify the archive against the index and the extracted member against the receipt
+hash table. Location verification is not a new scientific execution. Selected
+archives exclude binaries, runtime datasets and Cargo caches; they are evidence
+packages, not complete copies of the original working directories.
