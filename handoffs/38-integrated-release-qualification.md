@@ -97,3 +97,14 @@ than silently accepting lost message content. Implement 0106/0107 now under
 0107's independent presentation release; the immutable Linux candidate and its
 scientific/cache review remain separate. No numerical/cache changes or independent
 publication are released.
+
+## Presentation delivery accepted (0108)
+
+Central accepts the focused 0106/0107 delivery at `b093586`, with production
+`801bc94` and corrected checker `0b83606`. The source-attribution false-acceptance
+controls are resolved; review scope and retained long-line behavior are recorded
+in 0108. This is separate from full integrated, numerical and Linux acceptance.
+The next corpus replay must apply explicit AL-owned 0107 metadata adapters to
+historical native-label expectations without changing their scientific gates.
+Further implementation awaits the bounded brief from the frozen a35104a Linux
+result; no independent publication or workflow dispatch is authorized.

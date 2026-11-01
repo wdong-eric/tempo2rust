@@ -370,3 +370,21 @@ and the preservation manifest is
 The recipe intentionally retains its exact original temporary destination and
 refuses to overwrite it. Decision 0107 records the review boundary and remaining
 final AL harness/report binding.
+
+## Final presentation delivery accepted, 1 November
+
+`central-presentation-final-review.py` independently verifies the delivered
+b093586 archive and source binding, replays nine genuine report/JSON comparisons,
+rejects all three original internal-tag substitutions and freshly passes five
+attribution control families. All 1,802 selected files / 25,682,677 bytes and
+1,803 archive members match. The review receipt is
+`2763906694e9c3c8eda72796b6a0f0aa1b5b4c8bcb8eb60a9d2f19839f7d9e67`.
+The exact recipe is
+`6ce142d9f20e5df2099afa903fe029358036a6de0b4958a953703e5a1f7a8129`.
+
+Ignored `build/presentation-final-review-20261101/` retains the review artifacts,
+frozen candidate archive and AL evidence archive, with original-path hashes.
+The disposable extracted Git tree is omitted; its exact archive is retained.
+Decision 0108 accepts this focused macOS presentation work, preserving the
+separate clean-export missing-fixture failure/preparation/rerun and the unresolved
+integrated scientific and Linux qualification obligations.
