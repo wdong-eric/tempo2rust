@@ -101,6 +101,18 @@ observations, executables and return trace. Four event/source-profile Python
 controls pass. Actual Linux qualification remains required; completed macOS
 both-mean timing checks are recorded below.
 
+Event-v5's exact executed recipe is retained as
+`/private/tmp/tempo2-al-0117-event-v5/executed_event_profile.py`, SHA-256
+`f7ead73c22a6711440481a3f2b9c4dc17649a15cac6e7af01ec10e296243e9a7`,
+matching the original receipt. It was reconstructed from the committed recipe
+by removing exactly one later descriptive `return_observation_scope` field and
+then verified byte-for-byte by that recorded hash. The current recipe hash is
+`4da09914a7f31944aa63e0b5bbed28f0eb481cb09c091ba86df6402e0fd2cadd`.
+The adjacent `recipe-delta.patch` and `recipe-binding.json` retain the exact delta
+and identity explanation. Execution, comparisons, numeric observations and input
+selection are unchanged; no scientific producer was repeated. The original
+receipt remains byte-identical.
+
 ## Completed local comparisons and partial Linux recipe
 
 Clean contraction export `ade689f` passes all 130 W cases, its 29 native controls,
