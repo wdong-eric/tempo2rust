@@ -37,6 +37,20 @@ class DiagnosticAttribution(unittest.TestCase):
         for changed in [row.replace(file.encode(),b'wrong.rs'),row.replace(f':{line}]'.encode(),b':1]'),row.replace(native.encode(),b'wrong.C'),m.identity.replace(b'0.1.0',b'9.9.9')]:
             with self.assertRaises(AssertionError):m.stream(changed,'rust')
 
+    def test_telescope_unused_branches_keep_explicit_source_sites_and_bodies(self):
+        m=self.mapping
+        lines=(593,596,599,602,605,608)
+        (file,line),_=next((site,value) for site,value in m.sites.items()
+                          if site[0]=='source_par.rs' and value==('readParfile.C',lines))
+        for native,key in zip(lines,['TEL_VX','TEL_VY','TEL_VZ','TEL_X0','TEL_Y0','TEL_Z0'],strict=True):
+            body=f" parameter '{key}' not used\n".encode()
+            expected=m.stream(f'[readParfile.C:{native}]'.encode()+body,'native')
+            actual=f'[{file}:{line}]'.encode()+body
+            self.assertEqual(m.stream(actual,'rust'),expected)
+            self.assertNotEqual(m.stream(actual.replace(b'not used',b'used'),'rust'),expected)
+        with self.assertRaises(AssertionError):
+            m.stream(b"[source_par.rs:1] parameter 'TEL_VX' not used\n",'rust')
+
     def test_long_line_is_not_repaired_or_dropped(self):
         m=self.mapping;(file,line),native=next((site,value) for site,value in m.sites.items() if site[0]=='general_fitting.rs')
         before=(f'[{native[0]}:{native[1][0]}] '.encode()+b'x'*400+b'\n')[:359]

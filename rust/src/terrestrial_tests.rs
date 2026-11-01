@@ -16,6 +16,11 @@ use rug::Float;
 use sha2::{Digest, Sha256};
 use std::{collections::HashMap, fs, io::Write, path::Path};
 include!("terrestrial_fixture_fields.rs");
+// Native W probe.cc reports <glob.h>'s GLOB_NOMATCH, including its host ABI sign.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+const GLOB_NOMATCH: i32 = -3;
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+const GLOB_NOMATCH: i32 = 3;
 fn q(v: impl serde::Serialize) -> String {
     serde_json::to_string(&v).unwrap()
 }
@@ -306,7 +311,7 @@ fn terrestrial_probe() {
                             q(std::mem::size_of::<SourceObservation>()),
                         ),
                         ("pulsar_size", q(std::mem::size_of::<SourcePulsar>())),
-                        ("glob_nomatch", q(-3)),
+                        ("glob_nomatch", q(GLOB_NOMATCH)),
                     ]),
                     "env" => {
                         env.insert(a[1].to_owned(), a[2].to_owned());
@@ -620,7 +625,7 @@ fn terrestrial_probe() {
                     "glob_nomatch" => {
                         assert!(crate::clock_glob::files(a[1].as_bytes()).is_empty());
                         r.extend([
-                            ("status", q(-3)),
+                            ("status", q(GLOB_NOMATCH)),
                             ("path_count", q(0)),
                             ("pathv_null", q(true)),
                         ]);

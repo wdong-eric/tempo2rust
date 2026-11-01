@@ -52,6 +52,20 @@ def compare_case(case, expected, actual, destination):
     write(path,text.replace(old,"run.compare_case(case,next(r for r in expected if r['id']==case['id']),fresh,run.OUT/profile/'controls'/'fresh_positive')"))
 
 
+def stage_preservation(root, write, stages):
+    """Bind historical preservation checks to the actual staged adaptation ledger."""
+    for stage,filename,old in [
+            ('par_specialized','run.py',"json.loads((HERE/'protected.json').read_text())"),
+            ('terrestrial_resources','inventory.py',"json.loads((base/'protected.json').read_text())")]:
+        if stage not in stages:continue
+        path=root/'validation'/stage/filename;text=path.read_text()
+        assert old in text,(stage,old)
+        imported="import sys\nsys.path.insert(0,"+repr(str(ROOT/'validation/release'))+")\nfrom native_metadata import preservation_expected\n"
+        ledger="Path("+repr(str(root/'al-source-adaptations.json'))+")"
+        replacement="preservation_expected("+old+",json.loads("+ledger+".read_text()))"
+        write(path,imported+text.replace(old,replacement))
+
+
 def execute(args):
     run=Run(args.out);reference=args.reference_root.resolve();candidate=args.candidate.resolve()
     shutil.copyfile(__file__,run.out/'producer.py')
@@ -311,15 +325,7 @@ def execute(args):
         write(path,text)
     # Preserve historical freezes; only explicitly recorded AL staging patches
     # may replace their expected hash in memory. Other drift still fails.
-    for stage,filename,old in [
-            ('par_specialized','run.py',"json.loads((HERE/'protected.json').read_text())"),
-            ('terrestrial_resources','inventory.py',"json.loads((base/'protected.json').read_text())")]:
-        if stage not in args.stages:continue
-        path=root/'validation'/stage/filename;text=path.read_text()
-        assert old in text,(stage,old)
-        imported="import sys\nsys.path.insert(0,"+repr(str(ROOT/'validation/release'))+")\nfrom native_metadata import preservation_expected\n"
-        replacement="preservation_expected("+old+",json.loads((ROOT/'al-source-adaptations.json').read_text()))"
-        write(path,imported+text.replace(old,replacement))
+    stage_preservation(root,write,args.stages)
     (root/'al-source-adaptations.json').write_text(json.dumps(adaptations,indent=2)+'\n')
     if 'terrestrial_resources' in args.stages:
         # U binds inventory.py both in preservation and its native harness

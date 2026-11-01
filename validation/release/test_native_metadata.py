@@ -1,8 +1,12 @@
 """Reject non-metadata differences at the measured Linux failure boundaries."""
 from pathlib import Path
+import ast
+import json
 import tempfile
 import unittest
 from native_metadata import assertion_emitter, cheby_assertion, loader_identity, precision_profile, preservation_expected
+from common import ROOT
+from corpus_compare import stage_preservation
 
 
 class NativeMetadata(unittest.TestCase):
@@ -52,6 +56,28 @@ class NativeMetadata(unittest.TestCase):
         self.assertEqual(original['catalog.py'],'old')
         self.assertNotEqual(expected,{'catalog.py':'unexpected','fixture.par':'unchanged'})
         with self.assertRaises(AssertionError):preservation_expected({'catalog.py':'different'},changes)
+
+    def test_staged_par_preservation_needs_no_runner_root_global(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);here=root/'validation/par_specialized';here.mkdir(parents=True)
+            path=here/'run.py';path.write_bytes((ROOT/'validation/par_specialized/run.py').read_bytes())
+            protected=here/'protected.json'
+            protected.write_text(json.dumps({'catalog.py':'old','fixture.par':'unchanged'}))
+            (root/'al-source-adaptations.json').write_text(json.dumps({'catalog.py':{'original':'old','adapted':'new'}}))
+            stage_preservation(root,lambda path,text:path.write_text(text),['par_specialized'])
+            # Execute both actual before/after check expressions from the staged
+            # historical runner, whose namespace has HERE and Path but no ROOT.
+            expressions=[n for n in ast.walk(ast.parse(path.read_text()))
+                         if isinstance(n,ast.Call) and isinstance(n.func,ast.Name)
+                         and n.func.id=='preservation_expected']
+            self.assertEqual(len(expressions),2)
+            namespace={'HERE':here,'Path':Path,'json':json,'preservation_expected':preservation_expected}
+            for expression in expressions:
+                code=compile(ast.Expression(expression),str(path),'eval')
+                self.assertEqual(eval(code,namespace),{'catalog.py':'new','fixture.par':'unchanged'})
+                protected.write_text(json.dumps({'catalog.py':'unexpected'}))
+                with self.assertRaises(AssertionError):eval(code,namespace)
+                protected.write_text(json.dumps({'catalog.py':'old','fixture.par':'unchanged'}))
 
 
 if __name__=='__main__':unittest.main()

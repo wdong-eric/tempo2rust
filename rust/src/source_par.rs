@@ -658,7 +658,7 @@ fn check_line_fields(
                 message.extend_from_slice(key);
                 message.extend_from_slice(b"' not used");
                 d.rust_log(
-                    /* TEMPO2 readParfile.C:593 + (id - 48) * 3 */ b'e', &message,
+                    /* TEMPO2 readParfile.C:593,596,599,602,605,608 */ b'e', &message,
                 )
             })?;
             let label = [
