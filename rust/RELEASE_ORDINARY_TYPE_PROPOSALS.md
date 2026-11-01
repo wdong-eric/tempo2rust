@@ -1,7 +1,9 @@
 # Remaining ordinary-type sites: proposal for central review
 
-Decision 0104 authorizes the demonstrated EXP/GAUS and Lomb corrections. The
-sites below remain proposals, with no production edits. None is closed by the
+Decision 0104 authorized the demonstrated EXP/GAUS and Lomb corrections. Decision
+0109 now releases the spin measurements and a correction conditional on their
+source evidence. No production spin edit has been made; actual Linux tracing
+remains required. The other sites below remain proposals. None is closed by the
 event result. Native timing remains binary128 and Rust timing remains Rug128.
 
 ## Spin callbacks and L-suffixed scale constants
@@ -25,7 +27,7 @@ roles, including compound assignment back into double `v`. The source's zero
 
 Both `std_freq.rs` (bounded F0–F3) and `t2fit_stdFitFuncs.rs` (general dispatch)
 currently use f64 ordinary locals. The bounded caller even narrows F0 before
-entering `std_freq`. Recommended correction, subject to central approval: feed
+entering `std_freq`. Released correction after the required 0109 evidence: feed
 the canonical parameter store into one source-ordered arithmetic path shared by
 both callers, round each ordinary operation, and preserve each double assignment
 and wide promotion. Do not change the fit-coordinate scaling or comparison gate.
@@ -38,6 +40,11 @@ two M2 rows; an ordinary-to-double temporary counterfactual; F0–F13, fallback 
 brake-set/unset neighbors including signed x; direct checks that bounded/general
 callbacks agree on canonical inputs; and update-scale observations at k=9/10.
 Then rerun M2 and affected spin fits on both hosts. Preserve raw SVD-order rows.
+
+The prepared `spin_profile.py` campaign and its actual macOS results are recorded
+in `RELEASE_THIRD_LINUX_FOLLOWUP.md`. Its callback/ordinary-literal counterfactual
+and wide-update diagnostics are separate; the latter do not authorize a change
+to the binary128/Rug128 precision policy.
 
 ## Chromatic accumulation
 

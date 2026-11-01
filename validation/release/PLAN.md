@@ -1,6 +1,6 @@
 # AL frozen release qualification plan
 
-## 1 November correction release (0109)
+## 1 November correction release (0109-0111)
 
 Start from central `e55d494`, with presentation `b093586` accepted by 0108.
 Preserve run 41069548581 on a35104a and read its case-distinct evidence directly
@@ -20,6 +20,12 @@ from exact ZIP member names. Work in this dependency order:
 4. Fresh installed default/combined macOS checks, focused controls, complete
    ledger and scoped commits; prepare the concrete Linux candidate/workflow for
    central review. Actual Linux checks remain required and centrally dispatched.
+
+Alongside this order, 0110 releases the single clock interpolation contraction
+and 0111 releases the LMST expression tree. Preserve their accepted macOS trees,
+verify the actual APIs and full applicable corpora, and prepare one grouped
+source/profile inventory for remaining observer/terrestrial contractions.
+Unverified sites remain unchanged; inventory counts are not defects or coverage.
 
 Completion is a reproducible candidate with exact pass/failure/unrun evidence,
 including retained failures; it is not full migration acceptance. No independent

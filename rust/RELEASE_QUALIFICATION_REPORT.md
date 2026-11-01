@@ -1,11 +1,19 @@
 # AL release qualification handover
 
+Latest correction bundle, 1 November 2026:
+[third Linux follow-through and complete retained ledger](RELEASE_THIRD_LINUX_FOLLOWUP.md).
+Decisions 0109-0111 release portability/observation fixes, the measured cache
+owner, clock interpolation and LMST platform corrections. Installed macOS cache
+verification and corrected clock/observer comparisons pass; actual corrected
+Linux execution and full AL acceptance remain pending. Event/spin and grouped
+contraction diagnostics preserve the unresolved scientific gates.
+
 Presentation-only successor, 31 October 2026:
 [native-first terminal help and truthful Rust attribution](RELEASE_PRESENTATION_REPORT.md)
 records production `801bc94`, the corrected checker, installed examples and
 focused evidence under 0106/0107. This does not close scientific or Linux gates.
 
-Latest scoped follow-through, 31 October 2026: [second Linux corrections,
+Earlier scoped follow-through, 31 October 2026: [second Linux corrections,
 source arithmetic, bound macOS checks and remaining gates](RELEASE_SECOND_LINUX_FOLLOWUP.md).
 Decision 0104 records the second Linux run at `4accd26`: **54/66 stages passed,
 twelve failed, none blocked**; early native corpus staging failed before any

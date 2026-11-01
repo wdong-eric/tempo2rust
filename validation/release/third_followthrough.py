@@ -26,7 +26,7 @@ if __name__=='__main__':
     build=ROOT/'validation/release/build'
     selected={name:build/name for name in [
         'third-followthrough-v1','third-prebootstrap-v1',
-        'third-candidate-v1','third-cache-candidate-v1','third-lmst-candidate-v1','third-final-candidate-v1',
+        'third-candidate-v1','third-cache-candidate-v1','third-lmst-candidate-v1','third-final-candidate-v1','third-final-candidate-v2',
         'third-native-portable-v1','third-native-tim-v1','third-native-propagation-v2','third-native-observer-v1',
         'third-n-v1','third-j-v1','third-portable-v1','third-aa-v1','third-ab-v1','third-y-v2','third-w-v2',
         'third-cache-default-v1-build','third-cache-combined-v1-build','third-cache-combined-v2-build',
