@@ -30,6 +30,11 @@ fn main() {
         &[
             "-std=c11",
             "-O2",
+            // The qualified GCC source calls expl/logl. On macOS, Clang can
+            // substitute exp/log for these ABI-equal types. Bind the actual
+            // source-library symbols rather than infer equality from the ABI.
+            "-fno-builtin-expl",
+            "-fno-builtin-logl",
             "-fPIC",
             "-Iinclude",
             "-c",

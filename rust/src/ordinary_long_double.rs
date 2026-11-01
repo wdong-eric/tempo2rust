@@ -5,6 +5,15 @@ use rug::{
     ops::AssignRound,
 };
 use std::cmp::Ordering;
+use std::ffi::{CStr, CString, c_char, c_int};
+
+// Rust has no portable C long-double ABI. These private functions borrow only
+// terminated text and a 128-byte output; C owns each native scalar synchronously.
+// Native exp(long double)/expl and log(long double) are expl/logl (0117).
+unsafe extern "C" {
+    fn t2r_ld_exp(input: *const c_char, output: *mut c_char) -> c_int;
+    fn t2r_ld_log(input: *const c_char, output: *mut c_char) -> c_int;
+}
 
 #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
 pub const NATIVE_BITS: u32 = 53;
@@ -63,19 +72,45 @@ pub(crate) fn div(a: &Float, b: &Float) -> Float {
     }
 }
 
-// macOS keeps the established native double libm path. Linux ordinary exp/log
-// use 64-bit MPFR results; AL separately measures their correspondence to libm.
-pub(crate) fn exp(value: &Float) -> Float {
-    if NATIVE_BITS == 53 {
-        round(value.to_f64().exp())
+// MPFR's get_d canonicalizes NaN sign. Source return conversion retains it;
+// finite rounding, signed zero and infinities still use Rug's conversion.
+pub(crate) fn to_f64(value: &Float) -> f64 {
+    let result = value.to_f64();
+    if value.is_nan() {
+        result.copysign(if value.is_sign_negative() { -1.0 } else { 1.0 })
     } else {
-        round(value.exp_ref())
+        result
     }
 }
-pub(crate) fn ln(value: &Float) -> Float {
-    if NATIVE_BITS == 53 {
-        round(value.to_f64().ln())
-    } else {
-        round(value.ln_ref())
+
+fn native_math(
+    value: &Float,
+    operation: unsafe extern "C" fn(*const c_char, *mut c_char) -> c_int,
+) -> Float {
+    // 25 significant digits exceed both qualified LDBL_DECIMAL_DIG values.
+    // Native output is exact %La, parsed by the existing predictor transport.
+    let input = CString::new(value.to_string_radix(10, Some(25))).unwrap();
+    let mut output = [0 as c_char; 128];
+    // Both buffers are live for the call. C copies/parses the complete input
+    // and writes at most 128 bytes, including the terminating NUL, on success.
+    assert_eq!(
+        unsafe { operation(input.as_ptr(), output.as_mut_ptr()) },
+        0,
+        "ordinary native math transport failed"
+    );
+    let text = unsafe { CStr::from_ptr(output.as_ptr()) }.to_str().unwrap();
+    let parsed = crate::predictor_number::N::parse_number(text).unwrap();
+    let mut result = round(parsed.as_float());
+    // MPFR assignment may discard a NaN sign; retain the sign just emitted by C.
+    if parsed.as_float().is_nan() {
+        result.copysign_mut(parsed.as_float());
     }
+    result
+}
+
+pub(crate) fn exp(value: &Float) -> Float {
+    native_math(value, t2r_ld_exp)
+}
+pub(crate) fn ln(value: &Float) -> Float {
+    native_math(value, t2r_ld_log)
 }

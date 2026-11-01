@@ -19,13 +19,30 @@ static_assert(std::is_same_v<decltype(log(freq)),long double>);
 static_assert(std::is_same_v<decltype(amp*log(freq)),long double>);
 static_assert(std::is_same_v<decltype(val=amp*powl(freq,source_index)*expl(-dt/width)),long double&>);
 static_assert(std::is_same_v<decltype(t2FitFunc_expdip(nullptr,0,0,0,param_expph,0)),double>);
-static void emit(const std::string& name,const char* key,long double value) {
+// GCC may infer exp's sign as positive inside an inlined signbit observer even
+// when the returned NaN bit pattern is negative. Observe an actual passed value.
+__attribute__((noipa)) static void emit(const std::string& name,const char* key,long double value) {
+    // macOS %Lg omits the sign of an actual negative NaN. Observe the value,
+    // preserving the existing finite/infinite/zero formatting unchanged.
+    if (std::isnan(value)) {
+        printf("%s\t%s\t%sNaN\n",name.c_str(),key,std::signbit(value)?"-":"");
+        return;
+    }
     printf("%s\t%s\t%.40Lg\n",name.c_str(),key,value);
 }
 int main(int argc,char**argv) {
     if(argc!=2)return 2;
     printf("profile\tordinary_bits\t%d\n",LDBL_MANT_DIG);
     printf("profile\ttiming_bits\t%d\n",FLT128_MANT_DIG);
+    // Direct source-overload and ordinary-to-double transport controls, before
+    // event arithmetic can introduce a separate NaN or underflow operation.
+    for (const char *token : {"nan", "-nan", "0", "-0", "inf", "-inf", "-1", "-0.75"}) {
+        std::string name=std::string("boundary_")+token;
+        long double value=strtold(token,nullptr);
+        emit(name,"input",value);emit(name,"exp",exp(value));
+        emit(name,"expl",expl(value));emit(name,"log",log(value));
+        emit(name,"callback_transport",(double)value);
+    }
     MAX_PSR=1;auto p=new pulsar;initialise(p,0);p->nobs=1;
     std::ifstream input(argv[1]);std::string name,b,e,a,w,g;int set;
     while(input>>name>>b>>e>>a>>w>>g>>set>>frequency) {

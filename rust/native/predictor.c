@@ -1,6 +1,7 @@
 /* Native ABI/ownership adapter for pinned fda6ad4 tempo2pred.c, cheby2d.c,
  * t1polyco.c. Retained source scanning/formatting preserves FILE partial state.
- * Every scientific arithmetic body delegates to the canonical Rust leaf. */
+ * Predictor arithmetic delegates to the canonical Rust leaf. The two private
+ * ordinary event-libm calls below retain the measured native library contract. */
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
@@ -60,6 +61,26 @@ int t2r_ld_set(void *p, size_t i, const char *s) {
 }
 void *t2r_ld_alloc(size_t n) { return n <= SIZE_MAX/sizeof(long double) ? malloc(n*sizeof(long double)) : NULL; }
 void t2r_ld_free(void *p) { free(p); }
+/* formResiduals.C and t2fit_glitch.C ordinary exp(long double)/expl/log(long
+ * double): C++ resolves these to expl/logl. The float128 header only redirects
+ * powl here; these calls must not pass through double or the timing-wide type.
+ * Reuse the exact C-locale transport above. Native scalars stay on this stack;
+ * the caller owns the NUL-terminated input and writable 128-byte output. */
+int t2r_ld_exp(const char *input, char *output) {
+    long double value;
+    if (t2r_ld_set(&value, 0, input)) return -1;
+    value = expl(value);
+    /* macOS %La omits a negative NaN's sign despite signbit(value). */
+    if (isnan(value)) { strcpy(output, signbit(value) ? "-nan" : "nan"); return 0; }
+    return t2r_ld_get(&value, 0, output);
+}
+int t2r_ld_log(const char *input, char *output) {
+    long double value;
+    if (t2r_ld_set(&value, 0, input)) return -1;
+    value = logl(value);
+    if (isnan(value)) { strcpy(output, signbit(value) ? "-nan" : "nan"); return 0; }
+    return t2r_ld_get(&value, 0, output);
+}
 void t2r_phase_call(const T2Predictor *p, const void *mjd, const void *freq, void *out) {
     *(long double *)out = T2Predictor_GetPhase(p, *(const long double *)mjd, *(const long double *)freq);
 }

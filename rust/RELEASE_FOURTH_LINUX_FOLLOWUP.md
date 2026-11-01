@@ -63,3 +63,39 @@ index. The repeated native spin profile in
 `/private/tmp/tempo2-al-0117-spin-v2/receipt.json` again passes all 288 callbacks;
 its eight wide-update differences remain diagnostic. Receipt SHA-256:
 8d48015195bbc280ee171e877419b078136b7d05c5c02b30a6839c0857285aae.
+
+## Ordinary event math and sign observation
+
+The existing private predictor C-locale transport already carries finite native
+long doubles exactly (25-digit decimal input, hexadecimal output). Two adjacent
+C functions now call source-native `expl` and `logl`; native scalar storage stays
+inside C, with only bounded text crossing the ABI. Clang's builtin substitutions
+for these two functions are disabled so the actual library symbols match the
+qualified GCC source calls. No numerical dependency or portable Rust long-double
+layout is introduced. The predictor arithmetic and its public transport are
+unchanged. Only the ordinary event exp/log interface uses this addition; timing
+power operations remain Rug128.
+
+The callback return retains a NaN sign when converting through MPFR `get_d`;
+the test emitter uses the existing sign-preserving `FitNumber` path. A test-only
+observer records 76 actual computed ordinary returns before and after conversion.
+The twelve literal-zero branches have no ordinary intermediate. All 76 return
+conversions preserve the observed value/class/sign at binary64 precision.
+
+The expanded native probe adds forty direct signed NaN/zero/infinity and finite
+transport/math checks. This exposed two observer issues: macOS `%Lg`/`%La` omit
+a negative NaN sign, and GCC can infer a positive sign inside an inlined exp
+observer although the returned raw bits are negative. The native emitter now
+observes a passed value behind `noipa` and prints NaN sign explicitly; the new
+math adapter also handles NaN text explicitly. Runtime raw-bit witnesses and
+all intermediate failed probes are retained in `/private/tmp/tempo2-al-0117-harness`
+and `...-event-v1` through `...-event-v4`. These are observer/transport repairs,
+not NaN canonicalization or a tolerance change.
+
+On macOS arm64/GCC16, all 249 source-profile comparisons now pass, including the
+original 209 and forty added controls. Receipt
+`/private/tmp/tempo2-al-0117-event-v5/receipt.json`, SHA-256
+`72a560e1e1510fb1e0627012ea0718106c03d28b4517187d32e1dfa38fd18728`, binds
+the source, compiler observations, actual adapter object, library dependency
+observations, executables and return trace. Four event/source-profile Python
+controls pass. Actual Linux and both-mean timing qualification remain required.

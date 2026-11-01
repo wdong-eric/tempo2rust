@@ -392,7 +392,7 @@ pub(crate) fn t2FitFunc_expdip(
         } else {
             return Ok(0.0);
         };
-        return Ok(ordinary::round(val).to_f64());
+        return Ok(event_return(ordinary::round(val)));
     }
     Ok(0.0)
 }
@@ -452,5 +452,13 @@ pub(crate) fn t2FitFunc_gausdip(
     } else {
         return Ok(0.0);
     };
-    Ok(result.to_f64())
+    Ok(event_return(result))
+}
+
+/// Source ordinary event value to binary64 return, preserving NaN sign.
+fn event_return(value: Float) -> f64 {
+    let result = ordinary::to_f64(&value);
+    #[cfg(test)]
+    crate::event_profile_tests::observe_return(&value, result);
+    result
 }

@@ -5,8 +5,10 @@ from decimal import Decimal as D
 import json
 import os
 from pathlib import Path
+import platform
 from common import ROOT,Run,sha
 from af_compare import round_binary
+from spin_profile import equal as binary_equal
 
 
 def comparison(native, rust):
@@ -39,17 +41,44 @@ if __name__=='__main__':
     for name in ['out','a2','candidate','target']:p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();run=Run(a.out);a2=a.a2.resolve();candidate=a.candidate.resolve()
     source=ROOT/'validation/release/event_types.cc';cases=ROOT/'validation/release/event_cases.tsv'
-    run.run([os.environ.get('NATIVE_CXX','g++'),'-std=gnu++17','-O2','-DHAVE_CONFIG_H',
+    compiler=os.environ.get('NATIVE_CXX','g++')
+    run.run([compiler,'--version'],'native-compiler')
+    run.run([os.environ.get('CC','clang'),'--version'],'adapter-compiler')
+    run.run([compiler,'-std=gnu++17','-O2','-DHAVE_CONFIG_H',
         '-I'+str(a2/'source'),'-I'+str(ROOT/'validation/release/a2'),source,
         a2/'libtempo2-reference.a','-lquadmath','-lgfortran','-o',run.out/'native'],'native-build')
     (run.out/'native.tsv').write_bytes(run.run([run.out/'native',cases],'native'))
-    command=['cargo','test','--offline','--locked','--release','--manifest-path',candidate/'rust/Cargo.toml',
+    command=['cargo','test','--offline','--locked','--release','--message-format=json','--manifest-path',candidate/'rust/Cargo.toml',
         '--target-dir',a.target.resolve(),'--lib','event_profile_tests::source_profile','--','--ignored','--exact']
-    run.run(command,'rust',env=dict(os.environ,AL_EVENT_CASES=str(cases),AL_EVENT_PROFILE_OUTPUT=str(run.out/'rust.tsv')))
+    build=run.run(command,'rust',env=dict(os.environ,AL_EVENT_CASES=str(cases),AL_EVENT_PROFILE_OUTPUT=str(run.out/'rust.tsv')))
+    messages=[json.loads(line) for line in build.decode().splitlines() if line.startswith('{')]
+    executable=Path(next(m['executable'] for m in messages if m.get('reason')=='compiler-artifact'
+        and m.get('profile',{}).get('test') and m.get('executable') and m['target']['name']=='tempo2_rust'))
+    native_object=Path(next(m['out_dir'] for m in messages if m.get('reason')=='build-script-executed'
+        and '#tempo2-rust@' in m['package_id']))/'predictor.o'
+    for name,path in [('native',run.out/'native'),('rust',executable)]:
+        run.run(['otool','-L',path] if platform.system()=='Darwin' else ['ldd',path],name+'-libraries')
+    run.run(['nm','-u',native_object],'adapter-symbols')
     rows=comparison(run.out/'native.tsv',run.out/'rust.tsv');failed=[r for r in rows if not r['equal']]
+    callbacks={(r['case'],r['field']):r for r in rows if r['field'].startswith('callback_')}
+    returns=[]
+    return_path=run.out/'rust.tsv.returns.tsv'
+    for line in return_path.read_text().splitlines():
+        case,label,before,after=line.split('\t');row=callbacks[case,'callback_'+label]
+        assert binary_equal(D(after),D(row['rust']),53),'return observer changed the emitted callback'
+        returns.append(dict(case=case,label=int(label),before=before,after=after,native=row['native'],
+            conversion_preserved=binary_equal(D(before),D(after),53),
+            native_equal=row['equal']))
     run.save({'status':'failure' if failed else 'pass','rows':rows,'failed':failed,
+        'callback_return_observations':returns,'callback_return_file':sha(return_path),
+        'return_observation_scope':'Actual computed ordinary returns before/after f64 conversion; the twelve literal-zero branches have no ordinary intermediate.',
+        'native_executable':sha(run.out/'native'),'rust_executable':sha(executable),'adapter_object':sha(native_object),
+        'native_library_observation':sha(run.out/'native-libraries.stdout'),
+        'rust_library_observation':sha(run.out/'rust-libraries.stdout'),
+        'adapter_symbols':sha(run.out/'adapter-symbols.stdout'),
         'scope':'Exact native ordinary fields and binary64 callbacks; wide timing mapping remains binary128 versus Rug128',
         'inputs':{str(p):sha(p) for p in [source,cases,a2/'receipt.json',candidate/'rust/src/ordinary_long_double.rs',
-            candidate/'rust/src/event_profile_tests.rs',candidate/'rust/src/t2fit_glitch.rs',Path(__file__)]}})
+            candidate/'rust/native/predictor.c',candidate/'rust/build.rs',candidate/'rust/src/predictor_number.rs',
+            candidate/'rust/src/tkfit.rs',candidate/'rust/src/event_profile_tests.rs',candidate/'rust/src/t2fit_glitch.rs',Path(__file__)]}})
     print(len(rows),'source-profile comparisons;',len(failed),'differences',flush=True)
     raise SystemExit(bool(failed))
