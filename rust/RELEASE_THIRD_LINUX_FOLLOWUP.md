@@ -69,14 +69,46 @@ cap and every message-body gate. Propagation's first preparation attempt assumed
 a GCC16 macro that does not exist; the successor reads the available significand
 macros and still requires the live probe to report 16-byte/113-bit timing storage.
 
-Terrestrial's retained `alias_bounded_tokens`, `observatory_exit_read_alias` and
-`observatory_missing_alias` differences are full-line truncation effects after
-truthful attribution changes. Native warning/error bodies end earlier than their
-Rust counterparts; one difference is the final newline alone. The existing
-adapter validates both emitters and still reports all three differences. Their
-raw pairs and attribution receipt are retained under `third-followthrough-v1`.
-No body bytes or newline were dropped to make them pass. A separate central
-decision is needed before changing this comparison/public-output contract.
+Terrestrial's three retained stdout differences are the bounded presentation
+effect anticipated by 0107/0108. The logger truncates the **colored rendering**
+to 359 bytes, then strips ANSI sequences for redirected `LOG_OUTFILE`. Thus the
+native visible emissions are 336 bytes for the warning and 344 for each error,
+not 359 bytes. The native prefix is 125 bytes, including the source directory;
+the truthful Rust basename prefix is 20 bytes. The native prefixes are
+`[/private/tmp/t2-local/linux/corpus/wxxxxxxxxxxxxxx/rust/verification/terrestrial_resources/fixed00/source/observatory.C:272]`
+for the warning and the same prefix ending `:163]` for both errors. Rust emits
+`[observatory.rs:334]` and `[observatory.rs:181]`, respectively.
+
+| Case | Full colored bytes, native / Rust | ANSI bytes removed | Visible bytes, native / Rust | Tail visible only in Rust |
+| --- | --- | --- | --- | --- |
+| `alias_bounded_tokens` | 410 / 305 | 23 | 336 / 282 | 49 `C` bytes, closing quote and newline |
+| `observatory_exit_read_alias` | 360 / 255 | 15 | 344 / 240 | Newline only |
+| `observatory_missing_alias` | 376 / 271 | 15 | 344 / 256 | `ed the contents.\n` |
+
+The warning's common body contains `Assuming site`, all 127 `x` bytes, `means`
+and the first 50 of the 99 `C` bytes. The first error's common body is the entire
+message through `updated the contents.`; the second ends at `not updat`.
+Each error's observed filename is byte-identical on both sides. Full raw and
+projected common bodies, prefixes, colored representations and tails are in
+`validation/release/build/third-cap-review-v4/receipt.json`. This read-only
+witness reproduces all six emissions exactly using the cap/strip order. It
+reuses W's exact schema/ABI projection and comparator to check each field:
+`id`, `classification`, `actions`, `status`, all events/state and `stderr` agree,
+as do all stdout bytes outside the one diagnostic emission in each case.
+
+The explanatory recipe is `validation/release/diagnostic_cap_review.py`; its
+copied producer and sixteen input hashes are bound by receipt SHA-256
+`bc433f43c7e99bda8ef422e2692769ac049842ac43b51872a2466a3811218218`
+and recipe SHA-256
+`86ee7e146e57b39932df662f81e707f287f89c8aac2af04c9a6a754369a5a804`.
+The first two witness attempts failed on a missing Python import and an
+incorrect post-strip 359-byte assertion; both are retained. The passing third
+attempt is also retained; the fourth additionally binds its imported recipes.
+No corpus rerun or production change was needed. All three original full
+comparisons still fail: no body bytes, newline or diagnostic were dropped,
+repaired or normalized away. These remain documented presentation differences
+in the publication ledger, without a generic comparison relaxation or a claim
+of scientific drift.
 
 The first time-ephemeris comparison shared `corpus-target` with concurrent spin,
 event, observer and propagation builds. Its executable identity check correctly
@@ -137,6 +169,16 @@ The concrete code candidate is `91309fd`, exported cleanly under
 `validation/release/third_followthrough.py` collects each named current/failed
 attempt separately and preserves all 67 original Linux stage records. Generated
 JSON, build products and evidence archives remain ignored.
+
+The immutable collected packet is `validation/release/build/third-review-v1/`:
+67 original Linux stage records and 37 separately bound local evidence groups.
+Its integrity verification passes for all 47,887 copied files / 7,139,104,046
+bytes, including prefixed predictor products. Ledger SHA-256 is
+`0ccefc241a9c321dbe960535411282268068c9d82970de049c49f8776e8c97d6`;
+collection recipe SHA-256 is
+`fe371f2e40372d650f86323226461dc4e163b0f68e74f7b469f4e79eafa3f92b`.
+The later cap witness above is a separately bound supplement; it does not
+replace any collected result or modify this packet.
 
 Actual Linux event/spin results must precede a source-ordinary spin repair.
 The probe covers F0-F13, fallback k=14, brake set/unset, signed zero and neighboring
