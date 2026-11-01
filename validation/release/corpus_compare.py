@@ -24,6 +24,34 @@ DEPENDENCIES={
 }
 
 
+def stage_terrestrial_comparison(root, write):
+    """One W adapter used by live staging and saved-evidence controls (0113)."""
+    path=root/'validation/terrestrial_resources_port/run.py';text=path.read_text()
+    old="try:compare(project(expected),project(actual),case['id'])"
+    assert text.count(old)==1
+    imported=("import sys\nsys.path.insert(0,"+repr(str(root/'validation/release'))+")\n"
+              "from diagnostic_attribution import Attribution, compare_terrestrial\n"
+              "al_attribution=Attribution("+repr(str(root))+")\n")
+    wrapper='''
+def compare_case(case, expected, actual, destination):
+ report=compare_terrestrial(al_attribution,case,expected,actual,OUT,destination,compare,project)
+ save(destination/'diagnostic-rendering.json',report)
+ assert report['status']=='pass',report
+ return report
+
+'''
+    text=imported+text.replace('def main():',wrapper+'def main():')
+    text=text.replace(old,"try:compare_case(case,expected,actual,OUT/a.profile/case['id'])")
+    old="results.append(dict(id=case['id'],events=len(actual['events']),status=actual['status']))"
+    assert text.count(old)==1
+    text=text.replace(old,"results.append(dict(id=case['id'],events=len(actual['events']),status=actual['status'],diagnostic_rendering_sha256=sha(OUT/a.profile/case['id']/'diagnostic-rendering.json')))")
+    write(path,text)
+    path=root/'validation/terrestrial_resources_port/controls.py';text=path.read_text()
+    old="run.compare(run.project(next(r for r in expected if r['id']==case['id'])),run.project(fresh))"
+    assert text.count(old)==1
+    write(path,text.replace(old,"run.compare_case(case,next(r for r in expected if r['id']==case['id']),fresh,run.OUT/profile/'controls'/'fresh_positive')"))
+
+
 def execute(args):
     run=Run(args.out);reference=args.reference_root.resolve();candidate=args.candidate.resolve()
     shutil.copyfile(__file__,run.out/'producer.py')
@@ -275,9 +303,7 @@ def execute(args):
         text=text.replace('y.project(y.native_payload(raw))',"y.project(y.native_payload(raw),'native')")
         write(path,text)
     if 'terrestrial_resources' in args.stages:
-        path=root/'validation/terrestrial_resources_port/run.py';text=attribution(path)
-        text=text.replace('compare(project(expected),project(actual),',"compare(al_attribution.structured(project(expected),'native'),al_attribution.structured(project(actual),'rust'),")
-        write(path,text)
+        stage_terrestrial_comparison(root,write)
     if 'observer_coordinates' in args.stages:
         path=root/'validation/observer_coordinates_port/run.py';text=attribution(path)
         text=text.replace("exact_compare(e,actual,c['id']+'.private')","exact_compare(al_attribution.structured(e,'native'),al_attribution.structured(actual,'rust'),c['id']+'.private')")
@@ -309,6 +335,8 @@ def execute(args):
     # They do not pretend to reproduce historical ownership snapshots.
     protected={str(p.relative_to(root)):sha(p) for p in rust.rglob('*') if p.is_file()}
     protected.update({p:sha(root/p) for p in scripts})
+    if 'terrestrial_resources' in args.stages:
+        protected['validation/release/diagnostic_attribution.py']=sha(root/'validation/release/diagnostic_attribution.py')
     for name in ['parameter_storage_port','observation_storage_port']:
         (root/'validation'/name/'protected_hashes.json').write_text(json.dumps(protected)+'\n')
     if 'pulsar_lifecycle' in args.stages:
