@@ -12,7 +12,7 @@ if __name__=='__main__':
     a=p.parse_args()
     if not a.input.is_dir():p.error('input directory does not exist: '+str(a.input))
     a.out.mkdir(parents=True,exist_ok=False);files={}
-    excluded={'source','src','target','test-target','cache-target','library-owned-cache-source',
+    excluded={'source','src','target','test-target','rust-target','cache-target','library-owned-cache-source',
               'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)
@@ -25,6 +25,7 @@ if __name__=='__main__':
         if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
         if (path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
+                and not path.name.endswith(('polyco_new.dat','newpolyco.dat','polyco.tim','t2pred.dat','pred.tim'))
                 and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',
                                      't2pred.dat','t1.dat','cheby.dat','exchanged.dat',
                                      'gaussian-only.par','without-events.par'}):continue

@@ -295,6 +295,16 @@ def execute(args):
         replacement="preservation_expected("+old+",json.loads((ROOT/'al-source-adaptations.json').read_text()))"
         write(path,imported+text.replace(old,replacement))
     (root/'al-source-adaptations.json').write_text(json.dumps(adaptations,indent=2)+'\n')
+    if 'terrestrial_resources' in args.stages:
+        # U binds inventory.py both in preservation and its native harness
+        # manifest. Retain that manifest and authorize the same exact edit there.
+        path=root/'validation/terrestrial_resources/run.py';text=path.read_text()
+        old="compare(stored['harness'],harness(),'harness identity')"
+        assert text.count(old)==1
+        imported="import sys\nsys.path.insert(0,"+repr(str(ROOT/'validation/release'))+")\nfrom native_metadata import preservation_expected\n"
+        expected="preservation_expected(stored['harness'],{name:json.loads((ROOT/'al-source-adaptations.json').read_text())['validation/terrestrial_resources/'+name] for name in ['inventory.py','run.py']})"
+        write(path,imported+text.replace(old,"compare("+expected+",harness(),'harness identity')"))
+        (root/'al-source-adaptations.json').write_text(json.dumps(adaptations,indent=2)+'\n')
     # New preservation manifests bind this candidate and these staged recipes.
     # They do not pretend to reproduce historical ownership snapshots.
     protected={str(p.relative_to(root)):sha(p) for p in rust.rglob('*') if p.is_file()}
