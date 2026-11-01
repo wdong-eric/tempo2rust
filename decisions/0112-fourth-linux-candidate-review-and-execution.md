@@ -117,3 +117,28 @@ under ignored `decisions/evidence/release-qualification/build/` in
 Central continues to own publication, later design decisions and milestone
 acceptance. No further implementation or optimization is released by this
 execution approval.
+
+
+## Actual publication and startup
+
+Central pushed exact `fecbc18af95196a16db2046306099b6345a50976` to public main
+as an ordinary fast-forward, completing at **09:45:17 UTC on 1 November**.
+Both Git remote and GitHub commit reads then confirmed that exact public head.
+The publication receipt hash is
+`6cf39f3f9e0d6d674e8993bbea107b45c880f38f3240168c336f2e4b495fea22`.
+
+Central dispatched once. GitHub created
+[run 41294531402](https://github.com/wdong-eric/tempo2rust/actions/runs/41294531402)
+at **09:46:00 UTC**, attempt 1, on the exact reviewed candidate. The bound job is
+`124812485584`, `linux-x86_64`, started at 09:46:04 UTC. The initial authoritative
+snapshot confirms checkout and identity/tool provisioning succeeded; the full
+native/installed matrix is in progress. This is a live execution record, not a
+qualification result. The accepted dispatch receipt hash is
+`10667fb6ef5883531f0414fe4bbf269989d2990501c7c8cd901859c2e2c9740f`.
+
+Original `/tmp/tempo2-fourth-publication-20261101/` and
+`/tmp/tempo2-fourth-dispatch-20261101/` records are retained byte-for-byte under
+the review directory's `publication/` and `dispatch/`; ignored
+`publication-copies.json` binds both paths and every copied hash. Continue
+observing this run/job, retain all failed evidence, and keep AL implementation
+frozen until central review releases the next work.
