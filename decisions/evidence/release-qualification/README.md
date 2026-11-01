@@ -499,3 +499,47 @@ Original `/tmp/tempo2-central-0109-adapter-review-20261101/` files are retained
 byte-for-byte in ignored `build/0109-adapter-review-20261101/`; the disposable
 extracted source tree is omitted while its exact archive remains. Generated
 JSON, logs and archives are not committed.
+
+
+## Installed cache promotion reviewed, 1 November
+
+Central independently reviewed both macOS installed C campaigns from exact
+`a8ba6f15d2933b206f85ce70c99003b10f3f653d`, including `fd185ec`'s production
+cache owner. `central-installed-cache-review.py` reconstructs the measured
+private guard from the immutable third-run recipe. Its entire code matches the
+production source after removing only whole-line comments and blank lines.
+The production source hash is `e13d8c48ec14e71993ffaef3a6da85c6ec3ee25cda918e03f43cb5c186d2ef72`;
+the retained Linux private-source hash remains `9cef7c936bb5e92bd5d991f125190ee24e4e7afccd821521cbee2a9683e8d91e`.
+The nearby explanation correctly identifies a Rust/Rug integration lifetime,
+its native predictor counterparts, the observed leak and local-only cleanup.
+
+The review verifies all 2,030 exported source hashes against the exact Git
+archive. For each default and combined installation it checks all 263 installed
+files (257 source files bound to the candidate), all 136 campaign files and all
+23 successful compile/link/execute records. An independent sequential parser
+requires exactly twelve complete keyed workflows and twelve named storage
+files. Their complete bytes agree across plain, ASan/UBSan, TSan and explicit
+caller cleanup, and between default and combined builds. No guard is injected
+into these campaigns. The sanitizers instrument C clients and the C shim;
+Rust, MPFR and providers are not all instrumented.
+
+The original premature default check (missing the unfinished installation's
+receipt) and first combined build failure (missing explicit
+`TEMPO2_ACCELERATE=1` provider selection) are retained and hashed. Successful
+fresh checks/installations do not replace those records. This accepts the
+bounded macOS installed-cache evidence, not AL or full Linux qualification;
+actual corrected Linux installed campaigns remain required by 0109.
+
+The executed recipe hash is `b93368865437eacfa347dc97551dcbfed6a37df4c1a9607d71ef3c4cea7bd8a3`;
+the review receipt is `0893ab3a49f9450ab4bb9ee2d80dbf4172d34944bd18bb73cc11952fcfdcfcb8`.
+Original `/tmp/tempo2-central-installed-cache-review-20261101/` files are copied
+byte-for-byte into ignored `build/installed-cache-review-20261101/`. The recipe
+accepts --root and a fresh --out. Generated receipts remain uncommitted.
+
+Central also reviewed `75692fd`'s LMST source diff: the Linux branch restores
+0111's native grouping while the accepted macOS fused tree, constants, casts
+and final `fortran_mod` path are preserved. Its four real-API regression cases
+include negative dates and longitude wrapping. AL's local macOS API execution
+passes; the complete observer corpora and actual corrected Linux execution
+remain separate requirements. This source review does not claim those broader
+checks have passed.
