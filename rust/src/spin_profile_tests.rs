@@ -40,10 +40,7 @@ fn source_profile() -> Result<(), Box<dyn std::error::Error>> {
                 Float::with_val(53, value).to_string_radix(10, Some(45))
             )?;
             if k < 4 && fields[2] == "0" {
-                let f0 = context.pulsars[0].param.slots[param_f as usize].cells[0]
-                    .val
-                    .to_f64();
-                let bounded = crate::std_freq::std_freq(x, f0, k);
+                let bounded = crate::std_freq::std_freq(&context.pulsars[0].param, x, param_f, k);
                 writeln!(
                     output,
                     "{name}-F{k}\tbounded\t{}",

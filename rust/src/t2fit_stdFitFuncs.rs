@@ -72,109 +72,16 @@ pub(crate) fn t2FitFunc_stdFreq(
             "t2fit_stdFitFuncs.C::t2FitFunc_stdFreq: assertion",
         ));
     }
-    let mut arg3: f64;
-    let mut arg4: f64;
-    let mut f1: f64;
-    let mut f0: f64;
-    let mut bindex: f64;
-    let mut t2: f64;
-    t2 = (x * 86400.0f64);
-    arg3 = ((t2 * t2) * t2);
-    arg4 = (((t2 * t2) * t2) * t2);
-    f0 = ((psr.param.slots[(param_f as i32) as usize].cells[(0i32) as usize].val).clone()).to_f64();
-    f1 = ((psr.param.slots[(param_f as i32) as usize].cells[(1i32) as usize].val).clone()).to_f64();
-    bindex = (0i32) as f64;
-    if (label == (param_brake as i32)) {
-        return Ok((((((f1 * f1) / f0) * arg3) / 6.0f64)
-            + ((((((((((4i32) as f64 * bindex) - (1i32) as f64) * f1) * f1) * f1) / f0) / f0)
-                * arg4)
-                / 24.0f64)));
-    }
-    let mut v: f64 = (0i32) as f64;
-    match k {
-        source_case if source_case == 0 => {
-            v = crate::std_freq::std_freq(x, f0, 0);
-            if (psr.param.slots[(param_brake as i32) as usize].cells[(0i32) as usize].param_set
-                == 1i32)
-            {
-                {
-                    v = (v
-                        + ((((((((((-bindex) * f1) * f1) / f0) / f0) * arg3) / 6.0f64)
-                            - (((((((((((2i32) as f64 * bindex)
-                                * (((2i32) as f64 * bindex) - (1i32) as f64))
-                                * f1)
-                                * f1)
-                                * f1)
-                                / f0)
-                                / f0)
-                                / f0)
-                                * arg4)
-                                / 24.0f64))
-                            * 84000.0f64)
-                            / f0));
-                }
-            }
-            return Ok(v);
-        }
-        source_case if source_case == 1 => {
-            v = crate::std_freq::std_freq(x, f0, 1);
-            if (psr.param.slots[(param_brake as i32) as usize].cells[(0i32) as usize].param_set
-                == 1i32)
-            {
-                {
-                    v = (v
-                        + ((((((((((2i32) as f64 * bindex) * f1) / f0) * arg3) / 6.0f64)
-                            + (((((((((3i32) as f64 * bindex)
-                                * (((2i32) as f64 * bindex) - (1i32) as f64))
-                                * f1)
-                                * f1)
-                                / f0)
-                                / f0)
-                                * arg4)
-                                / 24.0f64))
-                            * 86400.0f64)
-                            * 86400.0f64)
-                            / f0));
-                }
-            }
-            return Ok(v);
-        }
-        source_case if source_case == 2 => {
-            return Ok(crate::std_freq::std_freq(x, f0, 2));
-        }
-        source_case if source_case == 3 => {
-            return Ok(crate::std_freq::std_freq(x, f0, 3));
-        }
-        source_case if source_case == 4 => {
-            return Ok((((((((1.0f64 / 120.0f64) * x) * x) * x) * x) * x) / 1.0e18f64));
-        }
-        _ => {
-            let mut native_factor = 1.0f64 / 3628800.0;
-            let factor = match k {
-                5 => 1.0 / 720.0,
-                6 => 1.0 / 5040.0,
-                7 => 1.0 / 40320.0,
-                8 => 1.0 / 362880.0,
-                9 => native_factor,
-                _ => {
-                    for d in 11..=if k <= 13 { k + 1 } else { 14 } {
-                        native_factor /= d as f64;
-                    }
-                    native_factor
-                }
-            };
-            let mut base = Float::with_val(PRECISION_BITS, x);
-            if k > 13 {
-                base /= k;
-            }
-            // powl is powq in the actual preprocessed source: promote after the
-            // native-long-double factorial division and retain extended multiplication.
-            let result = Float::with_val(PRECISION_BITS, factor)
-                * base.pow(&Float::with_val(PRECISION_BITS, k + 1))
-                / Float::with_val(PRECISION_BITS, if k < 10 { 1e18 } else { 1e23 });
-            return Ok(result.to_f64());
-        }
-    }
+    Ok(crate::std_freq::std_freq(
+        &psr.param,
+        x,
+        if label == param_f as i32 {
+            param_f
+        } else {
+            param_brake
+        },
+        k as usize,
+    ))
 }
 
 /// t2fit_stdFitFuncs.C::t2UpdateFunc_stdFreq (pinned source line 95).

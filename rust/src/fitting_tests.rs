@@ -86,7 +86,14 @@ fn independent_source_solver_inputs_and_callbacks() {
     }
     let x = callback["x_days"].as_str().unwrap().parse().unwrap();
     let columns: Vec<FitNumber> = std::iter::once(1.0)
-        .chain((0..4).map(|k| std_freq(x, input.parameter_cell("F0").val.to_f64(), k)))
+        .chain((0..4).map(|k| {
+            std_freq(
+                &input.source.pulsars[0].param,
+                x,
+                crate::tempo2::Label::param_f,
+                k,
+            )
+        }))
         .map(FitNumber::from)
         .collect();
     for k in 0..4 {

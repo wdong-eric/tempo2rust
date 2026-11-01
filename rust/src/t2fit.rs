@@ -198,12 +198,18 @@ fn t2_fit(
             .iter()
             .map(|o| crate::observation::read(&o.toaErr, "toaErr").map(|v| *v * 1e-6))
             .collect::<Result<_, _>>()?;
-        let f0 = model.parameter_cell("F0").val.to_f64();
         let matrix: Vec<Vec<f64>> = x
             .iter()
             .map(|&x| {
                 std::iter::once(1.0)
-                    .chain(selected.iter().map(|&k| std_freq(x, f0, k)))
+                    .chain(selected.iter().map(|&k| {
+                        std_freq(
+                            &model.source.pulsars[0].param,
+                            x,
+                            crate::tempo2::Label::param_f,
+                            k,
+                        )
+                    }))
                     .collect()
             })
             .collect();
