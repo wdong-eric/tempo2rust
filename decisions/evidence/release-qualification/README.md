@@ -630,3 +630,24 @@ acceptance. Syntax checking and an actual invocation against the live run pass:
 the invocation reports `in_progress`/`waiting` and creates no collection directory.
 Completed-run collection and verification remain pending. No generated evidence
 is committed.
+
+
+## Fourth Linux result review, 1 November
+
+The original collector completed successfully at 12:39:47 UTC. Run 41294531402
+at fecbc18 finished all 69 stages: 58 passed, eleven failed, none blocked. The
+exact 1088755847-byte ZIP has SHA-256
+`f6bb6e05a5e40ba094efc4bb08f37ad8b435dfbb826c210470f71dc7ac48760e`.
+All 50079 selected files / 8760551506 bytes and 207 case-distinct path groups
+are verified. Keep the archive authoritative; do not extract it wholesale on macOS.
+
+`central-fourth-linux-review.py FRESH_OUTPUT_DIRECTORY` reads that verified packet
+without running producers. It reconstructs both installed cache campaigns, binds
+source/install identities, reviews the actual contraction products and records
+the complete failed-stage ledger. Final receipt SHA-256:
+`43019b5c9972dbc8c25cc1c3f5918ffdd2fc102ac29d1b53e8f440a25e0c8cdd`.
+The exact executed recipe, v3 receipt and original v1/v2 analysis attempts are
+retained under ignored `build/fourth-linux-result-review-20261101/`. V2 exposed a
+limitation in the review's debug-string parser, corrected in v3; no engine or
+scientific fixture changed. Decision 0117 gives the scoped acceptance, remaining
+failures and next AL release. Generated JSON/archive evidence is not committed.

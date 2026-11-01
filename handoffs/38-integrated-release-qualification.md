@@ -222,3 +222,19 @@ controls pass. Central independently verified the 4,805 input identities, exact
 Retain the branch and evidence; wait for the next bounded integration/Linux
 brief from central's fourth-run review. No further engine work, main integration
 or publication is released by this scoped macOS acceptance.
+
+
+## Fourth Linux review and resumed implementation (0117)
+
+The run and verified collection are complete: 58 passing / eleven failing stages,
+none blocked. Read decision 0117 for the exact evidence and updated failure ledger.
+AL resumes sole implementation ownership in the main checkout after the central
+release commit. Integrate the three accepted isolated comparator commits, preserve
+the isolated branch/evidence and AM documentation, repair the ROOT/host-glob/
+source-site observation issues, and implement the demonstrated spin boundaries.
+Then complete the measured contraction and bounded ordinary event-math work with
+its sign-faithful probe and existing focused checks. No historical evidence or
+scientific gate may be rewritten. Return clean staged candidates promptly for
+central review of focused Linux execution; final full qualification remains due.
+The accepted cache evidence is scoped, AL/M2/full migration remain pending, and
+post-AL allocation profiling remains unreleased.
