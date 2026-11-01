@@ -90,20 +90,29 @@ and the first 50 of the 99 `C` bytes. The first error's common body is the entir
 message through `updated the contents.`; the second ends at `not updat`.
 Each error's observed filename is byte-identical on both sides. Full raw and
 projected common bodies, prefixes, colored representations and tails are in
-`validation/release/build/third-cap-review-v4/receipt.json`. This read-only
-witness reproduces all six emissions exactly using the cap/strip order. It
-reuses W's exact schema/ABI projection and comparator to check each field:
+`validation/release/build/third-cap-review-v5/receipt.json`. This read-only
+witness reconstructs each rendering from its own independently recorded backing
+message: `events[9].state.warning_log[0]` for the warning,
+`events[7].state.error_log[0]` for the first error and
+`events[9].state.error_log[0]` for the second error. Native and Rust backing
+messages match exactly, including the raw filenames; their established pathname
+projection also matches the structured records. No expected full body is derived
+from Rust stdout. Both source renderings reproduce all six emissions exactly
+using the cap/strip order. The witness reuses W's exact schema/ABI projection
+and comparator to check each field:
 `id`, `classification`, `actions`, `status`, all events/state and `stderr` agree,
 as do all stdout bytes outside the one diagnostic emission in each case.
 
 The explanatory recipe is `validation/release/diagnostic_cap_review.py`; its
-copied producer and sixteen input hashes are bound by receipt SHA-256
-`bc433f43c7e99bda8ef422e2692769ac049842ac43b51872a2466a3811218218`
+copied producer and twenty-two input hashes are bound by receipt SHA-256
+`d68ec56eb523df4679f610681ce478aa747fb7f3a406fa7a0731fa443a1d006b`
 and recipe SHA-256
-`86ee7e146e57b39932df662f81e707f287f89c8aac2af04c9a6a754369a5a804`.
+`bdaec315a55c5e2eee9857dc4e1e24ba0efb5ddbb35481264b077f502917e0b0`.
 The first two witness attempts failed on a missing Python import and an
 incorrect post-strip 359-byte assertion; both are retained. The passing third
 attempt is also retained; the fourth additionally binds its imported recipes.
+The fifth uses independent backing messages and binds their raw event streams;
+its reconstructed colored bytes and all observed comparisons match the fourth.
 No corpus rerun or production change was needed. All three original full
 comparisons still fail: no body bytes, newline or diagnostic were dropped,
 repaired or normalized away. These remain documented presentation differences
@@ -177,8 +186,14 @@ bytes, including prefixed predictor products. Ledger SHA-256 is
 `0ccefc241a9c321dbe960535411282268068c9d82970de049c49f8776e8c97d6`;
 collection recipe SHA-256 is
 `fe371f2e40372d650f86323226461dc4e163b0f68e74f7b469f4e79eafa3f92b`.
+Central independently verified exact membership, hashes and original/copied
+equality for the complete packet; its review receipt at
+`/tmp/tempo2-central-fourth-evidence-review-20261101/receipt.json` has SHA-256
+`be71d33fac43f38ab9249ba59c3aaa0ed0fcc38277e971560236f616c5564d30`.
 The later cap witness above is a separately bound supplement; it does not
 replace any collected result or modify this packet.
+Implementation is frozen at this handoff for central publication review. No
+additional corpus reruns or arithmetic changes are started.
 
 Actual Linux event/spin results must precede a source-ordinary spin repair.
 The probe covers F0-F13, fallback k=14, brake set/unset, signed zero and neighboring
