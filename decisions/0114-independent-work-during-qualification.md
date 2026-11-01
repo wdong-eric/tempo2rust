@@ -63,3 +63,13 @@ a bounded deliverable and no dependency on the unfinished execution. Keep
 ownership and exact input identities clear. Central will review AM's delivered
 commands/claims and the Linux result independently, then release the next
 implementation work from actual evidence. Full migration remains pending.
+
+
+## Actual AM dispatch
+
+Central created **Assignment AM: User migration documentation**, thread
+`01a196a7-fd45-7043-b025-70c612415e5e` in the local `rustify-tempo2` project, from
+release commit `a8752fcec2af65e5756e6cfc41d85f0de23e4a3f`. The first observed turn
+is in progress and has confirmed the clean release and the evaluation/fitting
+contract before writing. Its final report will be read here for central review.
+This records actual task startup, not documentation delivery or acceptance.
