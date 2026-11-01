@@ -10,7 +10,7 @@ from diagnostic_attribution import Attribution
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    for name in ['out','native','core','candidate']:p.add_argument('--'+name,type=Path,required=True)
+    for name in ['out','native','core','candidate','rust']:p.add_argument('--'+name,type=Path,required=True)
     a=p.parse_args();native=a.native.resolve();core=a.core.resolve()
     attribution=Attribution(a.candidate)
     identity=json.loads((native/'receipt.json').read_text())
@@ -18,7 +18,14 @@ if __name__=='__main__':
     for name in json.loads((core/'receipt.json').read_text())['source']:
         assert sha(core/'source'/name)==sha(native/'source'/name)
     path=a.candidate.resolve()/'validation/core_output/check.py'
-    spec=importlib.util.spec_from_file_location('al_ah',path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    spec=importlib.util.spec_from_file_location('al_ah',path);m=importlib.util.module_from_spec(spec)
+    # AH's source-tree target is absent in a clean private installation. Bind
+    # the actual installed CLI explicitly; leave every workflow/check unchanged.
+    source=path.read_text()
+    original_cli="    rust = ROOT / 'rust/target' / ('release' if args.release else 'debug') / 'tempo2-rust'"
+    assert source.count(original_cli)==1
+    installed_cli="    rust = Path("+repr(str(a.rust.resolve()))+")"
+    exec(compile(source.replace(original_cli,installed_cli),str(path),'exec'),m.__dict__)
     original=m.compare
     def compare(left,right,normalize=lambda data,kind:data,diff_dir=None):
         def normalize_source(data,kind):
@@ -54,5 +61,7 @@ if __name__=='__main__':
         'meaning':'Exact known __FILE__ directory relocation before the unchanged pinned-line mapping; no numerical/text-value normalization'}
     record['rust_diagnostic_attribution']=attribution.manifest()
     record['direct_api_build']=build_receipt
+    record['installed_cli_binding']={'path':str(a.rust.resolve()),'sha256':sha(a.rust),
+        'original':original_cli,'adapted':installed_cli,'historical_checker':sha(path)}
     receipt.write_text(json.dumps(record,indent=2)+'\n')
     raise SystemExit(status)

@@ -8,16 +8,16 @@
 #include <type_traits>
 #include <cfloat>
 static double frequency;
-static long double dt,amp,width,freq,gamma,val;
+static long double dt,amp,width,freq,source_index,val;
 static longdouble bbat,epoch;
 static_assert(std::is_same_v<decltype(frequency/1.4e9),double>);
 static_assert(std::is_same_v<decltype(bbat-epoch),longdouble>);
-static_assert(std::is_same_v<decltype(powl(freq,gamma)),longdouble>);
+static_assert(std::is_same_v<decltype(powl(freq,source_index)),longdouble>);
 static_assert(std::is_same_v<decltype(exp(-dt/width)),long double>);
 static_assert(std::is_same_v<decltype(expl(-dt/width)),long double>);
 static_assert(std::is_same_v<decltype(log(freq)),long double>);
 static_assert(std::is_same_v<decltype(amp*log(freq)),long double>);
-static_assert(std::is_same_v<decltype(val=amp*powl(freq,gamma)*expl(-dt/width)),long double&>);
+static_assert(std::is_same_v<decltype(val=amp*powl(freq,source_index)*expl(-dt/width)),long double&>);
 static_assert(std::is_same_v<decltype(t2FitFunc_expdip(nullptr,0,0,0,param_expph,0)),double>);
 static void emit(const std::string& name,const char* key,long double value) {
     printf("%s\t%s\t%.40Lg\n",name.c_str(),key,value);
@@ -37,8 +37,8 @@ int main(int argc,char**argv) {
         for(auto label:{param_expindex,param_gausindex}){p->param[label].val[0]=strtoflt128(g.c_str(),nullptr);p->param[label].paramSet[0]=set;}
         dt=bbat-epoch;amp=p->param[param_expph].val[0];width=p->param[param_exptau].val[0];freq=frequency/1.4e9;
         long double exp_arg=-dt/width,gaus_arg=-dt*dt/2./width/width;
-        gamma=set?p->param[param_gausindex].val[0]:0;
-        val=amp*powl(freq,gamma)*exp(gaus_arg);
+        source_index=set?p->param[param_gausindex].val[0]:0;
+        val=amp*powl(freq,source_index)*exp(gaus_arg);
         emit(name,"freq",freq);emit(name,"dt",dt);emit(name,"amp",amp);emit(name,"width",width);
         emit(name,"exp_arg",exp_arg);emit(name,"exp",exp(exp_arg));emit(name,"expl",expl(exp_arg));
         emit(name,"log",log(freq));emit(name,"gaus_arg",gaus_arg);emit(name,"gaus_exp",exp(gaus_arg));emit(name,"gaus_val",val);

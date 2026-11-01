@@ -455,6 +455,8 @@ pub mod predictor;
 pub mod predictor_number;
 #[cfg(test)]
 mod predictor_tests;
+#[cfg(test)]
+mod spin_profile_tests;
 pub mod t1polyco;
 pub mod tempo2pred;
 

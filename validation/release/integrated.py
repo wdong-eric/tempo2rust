@@ -55,6 +55,9 @@ def qualify(args):
     # The comparator checks and records each stage's native prerequisites.
     step('corpora-comparison',script('corpus_compare.py','--out',out/'corpus','--candidate',candidate,
          '--reference-root',corpora/'staging','--target',out/'test-target'),['dependencies'])
+    step('contraction-source-profile',script('contraction_profile.py','--out',out/'contraction-source-profile',
+         '--observer',corpora/'staging/validation/observer_coordinates',
+         '--terrestrial',corpora/'staging/validation/terrestrial_resources'),['a2'])
     step('package-list',['cargo','package','--list','--manifest-path',manifest],['candidate'])
     for label,features in [('default',''),('combined','calceph,lapack')]:
         prefix=out/('install-'+label)
@@ -116,14 +119,16 @@ def qualify(args):
          '--runtime',a2/'runtime'),['native-science','external-default'])
     step('event-diagnostic',script('event_diagnostic.py','--out',out/'event-diagnostic',
          '--core',out/'core-disabled','--science',out/'science','--timing',out/'timing',
-         '--runtime',a2/'runtime','--rust',out/'install-default/bin/tempo2-rust'),['native-science','external-default'])
+         '--runtime',a2/'runtime','--rust',out/'install-default/bin/tempo2-rust','--candidate',candidate),['native-science','external-default'])
     step('event-source-profile',script('event_profile.py','--out',out/'event-source-profile',
+         '--candidate',candidate,'--a2',a2,'--target',out/'test-target'),['dependencies','a2'])
+    step('spin-source-profile',script('spin_profile.py','--out',out/'spin-source-profile',
          '--candidate',candidate,'--a2',a2,'--target',out/'test-target'),['dependencies','a2'])
     step('predictors',script('check_predictor_science.py','--out',out/'predictors','--candidate',candidate,
          '--native',out/'science/predictor','--rust',out/'install-default/bin/tempo2-rust',
          '--abi-receipt',out/'c-default/receipt.json'),['native-science','c-default'])
     step('output',script('check_output.py','--out',out/'output','--native',out/'science',
-         '--core',out/'core-disabled','--candidate',candidate),['native-science','install-default'])
+         '--core',out/'core-disabled','--candidate',candidate,'--rust',out/'install-default/bin/tempo2-rust'),['native-science','install-default'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
