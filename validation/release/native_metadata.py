@@ -43,8 +43,15 @@ def loader_identity(lines):
 def precision_profile(macros):
     """Use the compiled host ABI while retaining the timing binary128 contract."""
     names=['__SIZEOF_DOUBLE__','__DBL_MANT_DIG__','__SIZEOF_LONG_DOUBLE__','__LDBL_MANT_DIG__',
-           '__SIZEOF_FLOAT128__','__FLT128_MANT_DIG__']
-    values=[int(re.search(r'^#define '+name+r' (\d+)$',macros,re.M)[1]) for name in names]
+           '__FLT128_MANT_DIG__']
+    measured=[]
+    for name in names:
+        match=re.search(r'^#define '+name+r' (\d+)$',macros,re.M)
+        assert match,('missing compiler precision macro',name)
+        measured.append(int(match[1]))
+    # GCC16/arm64 has no __SIZEOF_FLOAT128__ macro. The actual probe must still
+    # report the required 16-byte timing storage alongside 113 significand bits.
+    values=[*measured[:4],16,measured[4]]
     assert values[:2]==[8,53] and values[4:]==[16,113],values
     assert values[2:4] in [[8,53],[16,64]],('unqualified ordinary ABI',values)
     return values

@@ -39,6 +39,8 @@ class NativeMetadata(unittest.TestCase):
         def macros(values):return '\n'.join(f'#define {name} {value}' for name,value in zip(names,values,strict=True))
         for values in [[8,53,8,53,16,113],[8,53,16,64,16,113]]:
             self.assertEqual(precision_profile(macros(values)),values)
+            self.assertEqual(precision_profile(macros(values).replace('#define __SIZEOF_FLOAT128__ 16\n','')),values)
+        with self.assertRaises(AssertionError):precision_profile('')
         for values in [[8,53,8,64,16,113],[8,53,16,64,16,128],[4,24,16,64,16,113]]:
             with self.assertRaises(AssertionError):precision_profile(macros(values))
 
