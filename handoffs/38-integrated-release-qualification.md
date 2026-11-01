@@ -108,3 +108,22 @@ The next corpus replay must apply explicit AL-owned 0107 metadata adapters to
 historical native-label expectations without changing their scientific gates.
 Further implementation awaits the bounded brief from the frozen a35104a Linux
 result; no independent publication or workflow dispatch is authorized.
+
+
+## Third Linux result and resumed implementation (0109)
+
+0109 supersedes 0108's wait for a Linux-derived correction brief. The 67-stage
+run on a35104a completed with 54 passes and thirteen failures; its complete
+artifact is verified in the central ignored packet. Read the decision for the
+specific native-producer/comparator portability failures, the M2 signed-NaN
+recognition fix, the cold output-test build boundary and the unexecuted Linux
+event source profile. Preserve the original failures and all scientific gates.
+
+AL is released to implement those bounded corrections, promote the measured
+thread-local MPFR cache cleanup through Rug's safe API, and pursue the spin
+source-type profile/correction under 0109's evidence conditions. Apply 0107's
+validated attribution adapters to affected historical comparisons. Keep the
+other numerical differences explicit; do not treat them as host metadata.
+Return the updated installed evidence, complete ledger and scoped commits for
+central candidate review. Central retains publication/dispatch and acceptance;
+AL-first sequencing and the deferred covariance optimization lead remain.

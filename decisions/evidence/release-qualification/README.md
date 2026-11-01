@@ -388,3 +388,46 @@ The disposable extracted Git tree is omitted; its exact archive is retained.
 Decision 0108 accepts this focused macOS presentation work, preserving the
 separate clean-export missing-fixture failure/preparation/rerun and the unresolved
 integrated scientific and Linux qualification obligations.
+
+
+## Third Linux result recovered and reviewed, 1 November
+
+Run 41069548581 completed on exact a35104a with 54 passing / thirteen failing
+matrix stages. No duplicate run was dispatched. `central-third-linux-collect.py`
+is the original collector, whose artifact download timed out at 595,591,168
+bytes. `central-third-linux-recover.py` resumed the same artifact with curl;
+its exclusive extraction then stopped at the first case-distinct filename pair
+on macOS. Both original failures and the partial extraction are retained.
+
+`central-third-linux-verify-archive.py` verified all 30,316 files / 6,605,117,390
+bytes by exact ZIP member names, preserving twelve case-distinct groups. The
+774,024,809-byte archive hash is
+`cdb2fca1cf14f4bd5c9c025c4aa2f9185bdf5c289a60e1d4a4456bff4831cf0a`.
+Its verification receipt is
+`bef1530dd2ea464e3c67d7749c339ecd57022058f556ecc5a021da03c54e24b6`.
+The packet is ignored `build/linux-run-41069548581-review-20261030/`; use
+`recovery-20261101/artifact.zip`, not its incomplete extracted directory.
+The three collection scripts preserve their exact original paths and refuse to
+overwrite them. Replaying them is unnecessary for the completed review.
+
+`central-third-linux-review.py` binds 157 frozen source files and independently
+rechecks 180 selected artifact members. Both cache profiles retain twelve equal
+complete workflow transcripts and twelve equal stored TSV files across original,
+explicit cleanup and library-owned cleanup variants. The original 544-byte /
+sixteen-allocation leak remains recorded; both interventions succeed. All fifty
+M2 records replay exactly. A diagnostic-only recognized-set extension for -NaN
+removes eleven observation/status errors, leaves four numerical/order failures,
+and passes seven sign-sensitive controls. No historical checker is changed.
+The review also localizes the TIM failure to a 152-byte fixture path copied into
+its 100-byte caller field before readTimfile runs.
+
+The selected review receipt is
+`46640be739a8fde1b4a22ac6c7d71449a4a30a5fccaecd40575e31d17e32ce19`,
+and its executed recipe is
+`5892ce432841b1fdff832cecd37b062014c2d128769b87814a45c5bf959d3e72`.
+Original outputs are `/tmp/tempo2-central-third-linux-review-20261101/`, copied
+byte-for-byte into the packet's `central-review-20261101/`. The selected review
+accepts --root, --packet, --frozen and a fresh --out directory. Decision 0109
+releases bounded fixes and the measured cache promotion; full scientific and
+Linux acceptance remain pending. Generated JSON, logs, binaries and archives
+remain ignored and are not committed.
