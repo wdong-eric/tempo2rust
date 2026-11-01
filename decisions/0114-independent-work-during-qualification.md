@@ -73,3 +73,36 @@ release commit `a8752fcec2af65e5756e6cfc41d85f0de23e4a3f`. The first observed tu
 is in progress and has confirmed the clean release and the evaluation/fitting
 contract before writing. Its final report will be read here for central review.
 This records actual task startup, not documentation delivery or acceptance.
+
+
+## Independent AL source-map documentation refresh
+
+After AM closure under 0115, central releases a second independent,
+documentation-only item to the existing AL owner. `rust/RELEASE_SOURCE_MAP.md`
+still describes the predictor cache guard as present only in a private
+diagnostic copy. Current `predictor_ffi.rs` contains the accepted production
+guard from `fd185ec`; 0112 binds it to the frozen candidate. The map's older
+body-change counts and execution rows also need clearly dated historical scope
+when read beside the current candidate. This is a concrete source/status
+documentation gap, not a newly diagnosed scientific or memory defect.
+
+AL may edit only `rust/RELEASE_SOURCE_MAP.md` and the corresponding documentary
+update in `rust/RELEASE_THIRD_LINUX_FOLLOWUP.md`. Reconcile the map with exact
+`fecbc18` production sources, accepted 0107-0111 changes, preserved predecessor
+records and current known execution limits. Distinguish previous private-cache
+evidence from the promoted guard and its scoped macOS evidence; actual current
+Linux qualification remains pending. Keep routine presence, source correspondence,
+lexical unsafe/comment indexes, executed branches and scientific acceptance
+separate. Do not turn a count or a source-map refresh into a safety or coverage
+proof. Preserve the original failures and historical identities.
+
+Use existing source/audit recipes and saved evidence. Read-only Git/source
+inspection, a fresh ignored documentation/source-identity receipt, link checks
+and exact diff checks are authorized. No source/test/manifest/installer/script/
+workflow changes, engine execution, compilation, numerical comparison, new
+precision policy, optimization, publication or workflow dispatch is released.
+The production implementation freeze and running candidate remain unchanged.
+
+Return a scoped `docs:` commit and the updated report for central review, then
+stop. AM's accepted `rust/README.md` is preserved. Central monitors the same
+Linux job on the fifteen-minute schedule and retains every acceptance decision.

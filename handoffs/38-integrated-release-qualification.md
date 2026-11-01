@@ -152,3 +152,20 @@ remaining explicit-contraction inventory/probes as one coordinated diagnostic
 pass, preserving actual types and source-site evidence. This does not authorize
 a blanket mul_add replacement or delay completion of the already released
 0109 corrections solely for the wider inventory.
+
+
+## Independent documentation refresh while the fourth run executes (0114)
+
+Central releases only `rust/RELEASE_SOURCE_MAP.md` and its corresponding
+documentary update in `rust/RELEASE_THIRD_LINUX_FOLLOWUP.md` under 0114's final
+section. Bring current source/status descriptions into agreement with frozen
+`fecbc18`, especially the promoted production cache guard versus the historical
+private experiment. Date old body-count/execution evidence, retain the complete
+source obligations and distinguish lexical indexes from safety/branch proof.
+Reuse existing receipts/source-audit tooling; only read-only source/Git work and
+scoped documentation verification are needed. Keep all code, tests, manifests,
+installer, release scripts and workflow frozen; do not rebuild or rerun science.
+AM has closed ownership after accepted `f792b79`; preserve its README changes.
+Return the exact documentation commit and updated report for central review,
+then stop. This does not release the pending numerical/0113 corrections or
+post-AL allocation investigation, nor alter the active Linux run.
