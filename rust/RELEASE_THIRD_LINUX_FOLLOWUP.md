@@ -6,6 +6,14 @@ the measured foreign-thread cache owner, and limits clock/LMST contractions to
 their measured platform profiles. Spin and other unverified arithmetic remain
 unchanged. Central owns candidate publication, dispatch and acceptance.
 
+Documentation refresh under 0114, 1 November: the
+[source/status map](RELEASE_SOURCE_MAP.md) now binds frozen
+`fecbc18af95196a16db2046306099b6345a50976`, including the promoted production
+cache owner. Central published and dispatched that candidate under 0112 as
+run `41294531402`, job `124812485584`, attempt 1. The local executions and original
+Linux ledger below remain their pre-dispatch evidence; this refresh reports no
+result or acceptance from the fourth run. Implementation remains frozen.
+
 ## Committed changes and evidence boundaries
 
 | Commit | Change |
@@ -163,15 +171,16 @@ These are their frozen execution results, not automatic acceptance of new source
 Source presence, branch coverage, diagnostic equivalence and scientific
 acceptance remain separate.
 
-## Next candidate and unresolved source work
+## Frozen fourth-run candidate and unresolved source work
 
 The existing full workflow now prepares short `/tmp/t2/` paths to avoid
 incidental long-root truncation and collects that complete evidence root. This
 does not claim to resolve the three intrinsic/truncated diagnostic comparisons.
 The integrated runner adds spin-source-profile and contraction-source-profile;
 the intended full matrix therefore has 69 stages. No workflow was dispatched or
-candidate pushed by AL. Central must review the concrete source/workflow diff
-and choose the publication/dispatch candidate.
+candidate pushed by AL. Central completed candidate review, publication and the
+single dispatch under [0112](../decisions/0112-fourth-linux-candidate-review-and-execution.md).
+The reviewed execution uses final `fecbc18`; its qualification remains pending.
 
 The concrete code candidate is `91309fd`, exported cleanly under
 `validation/release/build/third-final-candidate-v2/`. The authored
@@ -192,8 +201,9 @@ equality for the complete packet; its review receipt at
 `be71d33fac43f38ab9249ba59c3aaa0ed0fcc38277e971560236f616c5564d30`.
 The later cap witness above is a separately bound supplement; it does not
 replace any collected result or modify this packet.
-Implementation is frozen at this handoff for central publication review. No
-additional corpus reruns or arithmetic changes are started.
+Implementation remains frozen during central execution/review. The later 0114
+release permits only this report and the source-map documentation refresh; it
+does not release further corpus runs, 0113 comparator work or arithmetic changes.
 
 Actual Linux event/spin results must precede a source-ordinary spin repair.
 The probe covers F0-F13, fallback k=14, brake set/unset, signed zero and neighboring
@@ -211,3 +221,31 @@ offsets and terrestrial terms. Its fresh macOS compiler experiment reproduces
 four bounded original/contraction-off scalar differences. Actual Linux profiles
 and source-specific separate/fused intermediate witnesses remain required.
 Chromatic, cosmic-string and secular proposals remain subsequent bounded work.
+
+## Documentation-only source-map refresh (0114)
+
+On 1 November, the existing `source_audit.py` ran read-only against sources
+checked byte-for-byte against frozen `fecbc18`. It passes all 93 responsibility
+rows and 36 pinned SOFA source comparisons. Of 158 Rust files, 107 match the
+27 October AL baseline, 48 are modified and three are additions; none is removed.
+The map dates the older 31 October counts and execution rows instead of presenting
+them as measurements of the current candidate. Its 63 `unsafe` line matches,
+1,721 function/export navigation lines and 118 comment-pattern matches are
+lexical indexes, not exhaustive departure, safety or branch proofs.
+
+The cache entry now distinguishes the historical Linux private intervention,
+the production guard committed in `fd185ec`, the independently reviewed macOS
+installations, and pending actual promoted Linux qualification. It preserves
+the original 544-byte/sixteen-allocation failure, source counterparts, sanitizer
+scope, caller exclusivity and all numerical/presentation failures. 0107/0108
+attribution and the measured 0110/0111 clock/LMST branches are included; unverified
+arithmetic and the pending 0113 comparator remain unchanged.
+
+Evidence is under `validation/release/build/source-map-fecbc18-20261101-v1/`.
+The audit receipt SHA-256 is
+`49857535a7772c2d921f2a3c9fe28adcde9b12f39ae3009ee172cac895f82c7e`.
+The companion `receipt.json` binds the final two documents, saved predecessor
+receipts, checked relative links, unchanged AM `rust/README.md`, and exact
+frozen identity for 332 inspected source/test/native/interface/manifest/recipe/
+workflow files. Its scope is documentary verification: no engine execution,
+compilation, numerical comparison, implementation change or new dispatch.
