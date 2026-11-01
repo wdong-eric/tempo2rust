@@ -97,3 +97,16 @@ executed onboarding and migration guide using the existing native-style CLI,
 installer and API contracts. Preserve AL's frozen source/workflow and every
 scientific gate. Work independently of the running Linux result, commit only
 authored owned paths, and return the report and exact commits for central review.
+
+
+## Initial delivery accepted; narrow follow-up under 0115
+
+Central accepts `81af309` / report `8f293a2` as repository onboarding, with the
+review and exact evidence in decision 0115. That decision extends AM ownership
+to two stale statements in `rust/README.md` only: CALCEPH feature availability
+and the bounded scope of runtime-free barycentric evaluation. Correct those
+statements from source and append the follow-up to `docs/MIGRATION_REPORT.md`.
+Preserve the initial evidence and make its later documentation-only exception
+explicit. Recheck wording, links/syntax and exact two-file scope; do not rerun
+scientific qualification. All other AL files remain frozen. Return the scoped
+`docs:` commit for central review, then close this ownership window.
