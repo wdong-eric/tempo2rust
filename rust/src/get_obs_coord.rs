@@ -226,10 +226,23 @@ pub fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
     let t = (mjd - 51544.5) / 36525.0;
     let seconds_per_rad = 3600.0 * 180.0 / std::f64::consts::PI;
     // fda6ad4 get_obsCoord.C::get_precessionMatrix:568-571,587-598,629:
-    // retain GCC16 O2's bounded Horner/product contractions (AA c010 witness).
-    let zeta = t * t.mul_add(t.mul_add(0.017998, 0.30188), 2306.2181) / seconds_per_rad;
-    let z = t * t.mul_add(t.mul_add(0.018203, 1.09468), 2306.2181) / seconds_per_rad;
-    let theta = t * t.mul_add(t.mul_add(-0.041833, -0.42665), 2004.3109) / seconds_per_rad;
+    // macOS GCC16 -O2 contracts the AA c010 sites; Linux GCC13 -O2
+    // has separate binary64 operations (0117 object/source-profile evidence).
+    let zeta = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        t * t.mul_add(t.mul_add(0.017998, 0.30188), 2306.2181)
+    } else {
+        t * (2306.2181 + t * (0.30188 + t * 0.017998))
+    } / seconds_per_rad;
+    let z = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        t * t.mul_add(t.mul_add(0.018203, 1.09468), 2306.2181)
+    } else {
+        t * (2306.2181 + t * (1.09468 + t * 0.018203))
+    } / seconds_per_rad;
+    let theta = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        t * t.mul_add(t.mul_add(-0.041833, -0.42665), 2004.3109)
+    } else {
+        t * (2004.3109 + t * (-0.42665 + t * -0.041833))
+    } / seconds_per_rad;
     let czeta = zeta.cos();
     let szeta = zeta.sin();
     let cz = z.cos();
@@ -238,13 +251,29 @@ pub fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
     let stheta = theta.sin();
     let prc = [
         [
-            (czeta * ctheta).mul_add(cz, -(szeta * sz)),
-            (-szeta * ctheta).mul_add(cz, -(czeta * sz)),
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                (czeta * ctheta).mul_add(cz, -(szeta * sz))
+            } else {
+                czeta * ctheta * cz - szeta * sz
+            },
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                (-szeta * ctheta).mul_add(cz, -(czeta * sz))
+            } else {
+                -szeta * ctheta * cz - czeta * sz
+            },
             -stheta * cz,
         ],
         [
-            (czeta * ctheta).mul_add(sz, szeta * cz),
-            (-szeta * ctheta).mul_add(sz, czeta * cz),
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                (czeta * ctheta).mul_add(sz, szeta * cz)
+            } else {
+                czeta * ctheta * sz + szeta * cz
+            },
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                (-szeta * ctheta).mul_add(sz, czeta * cz)
+            } else {
+                -szeta * ctheta * sz + czeta * cz
+            },
             -stheta * sz,
         ],
         [czeta * stheta, -szeta * stheta, ctheta],
@@ -259,10 +288,14 @@ pub fn get_precession_matrix(mjd: f64, delp: f64, dele: f64) -> [[f64; 3]; 3] {
     let nut = [[1.0, n01, n02], [-n01, 1.0, n12], [-n02, -n12, 1.0]];
     std::array::from_fn(|j| {
         std::array::from_fn(|i| {
-            nut[i][2].mul_add(
-                prc[2][j],
-                nut[i][0].mul_add(prc[0][j], nut[i][1] * prc[1][j]),
-            )
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                nut[i][2].mul_add(
+                    prc[2][j],
+                    nut[i][0].mul_add(prc[0][j], nut[i][1] * prc[1][j]),
+                )
+            } else {
+                nut[i][0] * prc[0][j] + nut[i][1] * prc[1][j] + nut[i][2] * prc[2][j]
+            }
         })
     })
 }
@@ -386,9 +419,15 @@ fn compute_observation(
                         let vl = *read(&v[k], "telD_v")?;
                         let vh = *read(&v[k + 1], "telD_v")?;
                         // get_obsCoord.C:255-260,282-287,310-315: native O2 contracts
-                        // intercept and evaluation separately; c114-c123 witness cancellation.
+                        // intercept and evaluation separately on macOS; c114-c123
+                        // witness cancellation. Linux GCC13 -O2 retains both source
+                        // binary64 operations separately (0117).
                         let m = (vl - vh) / (lo - hi);
-                        let intercept = (-lo).mul_add(m, vl);
+                        let intercept = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                            (-lo).mul_add(m, vl)
+                        } else {
+                            vl - lo * m
+                        };
                         let mode = p
                             .param
                             .parameter(label)
@@ -396,7 +435,11 @@ fn compute_observation(
                             .map_err(|_| boundary("satellite_mode_storage"))?
                             .value();
                         if mode == &0 || mode == &1 {
-                            ival = sat.mul_add(m, intercept);
+                            ival = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                                sat.mul_add(m, intercept)
+                            } else {
+                                sat * m + intercept
+                            };
                         } else if mode == &2 {
                             ival = vl;
                         }
@@ -501,9 +544,15 @@ fn legacy(
 ) -> Result<SiteGeometry, TimingError> {
     use std::f64::consts::PI;
     // get_obsCoord.C:388,399,410,424: source-compiled O2 contractions;
-    // c041/c127/c131 retain bounded whole-driver witnesses.
+    // c041/c127/c131 retain macOS whole-driver witnesses. Linux GCC13
+    // -O2 keeps these binary64 source trees separate (0117).
     let [x, y, z] = obs.xyz;
-    let erad = z.mul_add(z, x.mul_add(x, y * y)).sqrt();
+    let erad = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        z.mul_add(z, x.mul_add(x, y * y))
+    } else {
+        x * x + y * y + z * z
+    })
+    .sqrt();
     let hlt = (z / erad).asin();
     let alng = (-y).atan2(x);
     let hrd = erad / (2.99792458e8 * 499.004786);
@@ -511,20 +560,32 @@ fn legacy(
     let coord1 = coord0 * hlt.tan();
     let sat = read(&o.sat, "sat")?;
     let t = ((sat.clone() + 2400000.5f64 - 2451545.0f64) / 36525.0f64).to_f64();
-    let oblq = t.mul_add(
-        t.mul_add(t.mul_add(1.813e-3, -5.9e-4), -4.6815e1),
-        84381.448,
-    ) / 3600.0;
+    let oblq = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        t.mul_add(
+            t.mul_add(t.mul_add(1.813e-3, -5.9e-4), -4.6815e1),
+            84381.448,
+        )
+    } else {
+        84381.448 + t * (-4.6815e1 + t * (-5.9e-4 + t * 1.813e-3))
+    }) / 3600.0;
     let n0 = *read(&o.nutations[0], "nutations[0]")?;
     let n1 = *read(&o.nutations[1], "nutations[1]")?;
     let cos_oblq = (oblq * PI / 180.0 + n1).cos();
     let corr = read(&o.correctionUT1, "correctionUT1")?.clone() / 86400.0f64;
     let tsid = lmst((sat.clone() + &corr).to_f64(), 0.0)?[0] * (2.0 * PI);
-    let ph = cos_oblq.mul_add(n0, tsid) - alng;
+    let ph = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        cos_oblq.mul_add(n0, tsid)
+    } else {
+        tsid + n0 * cos_oblq
+    }) - alng;
     let eeq = [coord0 * ph.cos(), coord0 * ph.sin(), coord1];
     let prn = get_precession_matrix((Float::with_val(128, sat.to_f64()) + corr).to_f64(), n0, n1);
     let mut pos = std::array::from_fn(|j| {
-        eeq[2].mul_add(prn[j][2], eeq[0].mul_add(prn[j][0], eeq[1] * prn[j][1]))
+        if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            eeq[2].mul_add(prn[j][2], eeq[0].mul_add(prn[j][0], eeq[1] * prn[j][1]))
+        } else {
+            eeq[0] * prn[j][0] + eeq[1] * prn[j][1] + eeq[2] * prn[j][2]
+        }
     });
     let ecliptic = *read(&p.eclCoord, "eclCoord")? == 1;
     if ecliptic {

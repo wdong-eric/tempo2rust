@@ -35,5 +35,23 @@ observer neutrality passes. Receipt:
 `/private/tmp/tempo2-al-0117-spin-v1/receipt.json`, SHA-256
 `60dc97d355891bbdb124a68fce7926949749dbb52422cdb1e03c102c778c5f27`.
 This is a local implementation check, not corrected Linux evidence or closure of
-the unrelated M2 raw SVD order/value failures. Focused public/M2 checks follow in
-a clean committed export before the remaining arithmetic work.
+the unrelated M2 raw SVD order/value failures.
+
+Clean export `126378c` then passed the selected public spin fit and the
+independent solver/callback test. M2 has exactly the two existing
+`dependent_columns-shared-0` failures (raw retention order and raw singular
+value), with its callback comparison passing. Receipts:
+
+- `/private/tmp/tempo2-al-0117-public-spin/receipt.json`:
+  `788bb3c3fbc8f459c0ce56358b2aa07c9c190e0244d912a1d9b2cd2ed4e0c17c`.
+- `/private/tmp/tempo2-al-0117-m2-compare/receipt.json`:
+  `5a6ccec60be0549fe4c41de76c2c893629c6fcb6ac69fed58f180ef5062d4573`.
+
+## Measured contraction corrections
+
+The per-site source types, grouping and first affected fields are recorded in
+`RELEASE_CONTRACTION_INVENTORY.md`. Linux now follows the separate binary64
+source expressions at the measured observer, UT1, observatory, EOP and tropo
+sites; existing macOS contractions remain. The W scalar observer follows its
+native probe's matching expressions. Clippy for all targets with `-D warnings`
+passes. Full affected macOS campaigns follow in a clean committed export.

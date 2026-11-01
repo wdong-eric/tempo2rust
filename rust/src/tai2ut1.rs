@@ -171,13 +171,24 @@ impl Ut1 {
             for i in 0..2 {
                 // tai2ut1.C::ut1red:203-205,210: GCC16 O2 contracts the
                 // neighbor sum into both coefficients and each interpolation term.
-                // AA c017/c023 and the retained assembly witness these exact sites.
+                // AA c017/c023 witness macOS. Linux GCC13 -O2 retains the
+                // separate binary64 f2 assignment and source grouping (0117).
                 let nr = i + 1;
                 let sum = tab[nr + 1] as f64 + tab[nr - 1] as f64;
-                y1[i] = (-sum).mul_add(1.0 / 6.0, 4.0 / 3.0 * tab[nr] as f64);
-                y2[i] = sum.mul_add(1.0 / 6.0, -1.0 / 3.0 * tab[nr] as f64);
+                if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                    y1[i] = (-sum).mul_add(1.0 / 6.0, 4.0 / 3.0 * tab[nr] as f64);
+                    y2[i] = sum.mul_add(1.0 / 6.0, -1.0 / 3.0 * tab[nr] as f64);
+                } else {
+                    let f2 = 1.0 / 6.0 * sum;
+                    y1[i] = 4.0 / 3.0 * tab[nr] as f64 - f2;
+                    y2[i] = -1.0 / 3.0 * tab[nr] as f64 + f2;
+                }
             }
-            ((t * t).mul_add(y2[1], y1[1])).mul_add(t, s * (s * s).mul_add(y2[0], y1[0])) * 1.0e-4
+            (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                ((t * t).mul_add(y2[1], y1[1])).mul_add(t, s * (s * s).mul_add(y2[0], y1[0]))
+            } else {
+                t * (y1[1] + t * t * y2[1]) + s * (y1[0] + s * s * y2[0])
+            }) * 1.0e-4
         } else {
             d.display(
                 1,

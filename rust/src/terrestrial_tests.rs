@@ -593,12 +593,17 @@ fn terrestrial_probe() {
                             )
                         })?;
                         let utc = (read(&o.sat, "sat")?.clone() + correction / 86400.0).to_f64();
-                        let zhd = 0.02268 * pressure
-                            / (299792458.0
-                                * ((-2.8e-7f64).mul_add(
-                                    site.height,
-                                    (-0.00266f64).mul_add(site.latitude.cos(), 1.0),
-                                )));
+                        // Native W probe's tropo.C:434-450 scalar observer uses
+                        // the same qualified host grouping as the source driver.
+                        let gravity = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                            (-2.8e-7f64).mul_add(
+                                site.height,
+                                (-0.00266f64).mul_add(site.latitude.cos(), 1.0),
+                            )
+                        } else {
+                            1.0 - 0.00266 * site.latitude.cos() - 2.8e-7 * site.height
+                        };
+                        let zhd = 0.02268 * pressure / (299792458.0 * gravity);
                         let mh = tropo::nmf_hydrostatic(utc, site.latitude, site.height, el)?;
                         let wet = s
                             .meteorology
@@ -613,7 +618,14 @@ fn terrestrial_probe() {
                             ("wet", num(wet)),
                             ("hydrostatic_mapping", num(mh)),
                             ("wet_mapping", num(mw)),
-                            ("delay", num(zhd.mul_add(mh, wet * mw))),
+                            (
+                                "delay",
+                                num(if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                                    zhd.mul_add(mh, wet * mw)
+                                } else {
+                                    zhd * mh + wet * mw
+                                }),
+                            ),
                         ]);
                     }
                     "copy" => {

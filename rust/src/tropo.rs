@@ -335,16 +335,26 @@ pub fn nmf_hydrostatic(
     let cos_phase = ((utc - 53398.0) * 2.0 * std::f64::consts::PI / 365.25).cos()
         * if latitude < 0.0 { -1.0 } else { 1.0 };
     // tropo.C:116-127: only the coefficient fmadd/fmsub sites emitted by
-    // GCC16 -O2 are fused; W arithmetic evidence includes bounded witnesses.
+    // macOS GCC16 -O2 are fused. Linux GCC13 -O2 retains the separate
+    // binary64 source expressions (0117 assembly and W scalar witnesses).
     let mut mapping_coefficients = [0.0; 3];
     for k in 0..3 {
-        mapping_coefficients[k] = if i == j {
-            (-amplitudes[k][i]).mul_add(cos_phase, averages[k][i])
+        mapping_coefficients[k] = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            if i == j {
+                (-amplitudes[k][i]).mul_add(cos_phase, averages[k][i])
+            } else {
+                (-f.mul_add(amplitudes[k][j], (1.0 - f) * amplitudes[k][i])).mul_add(
+                    cos_phase,
+                    f.mul_add(averages[k][j], (1.0 - f) * averages[k][i]),
+                )
+            }
         } else {
-            (-f.mul_add(amplitudes[k][j], (1.0 - f) * amplitudes[k][i])).mul_add(
-                cos_phase,
-                f.mul_add(averages[k][j], (1.0 - f) * averages[k][i]),
-            )
+            if i == j {
+                averages[k][i] - amplitudes[k][i] * cos_phase
+            } else {
+                f * averages[k][j] + (1.0 - f) * averages[k][i]
+                    - (f * amplitudes[k][j] + (1.0 - f) * amplitudes[k][i]) * cos_phase
+            }
         };
     }
     let sin_elevation = elevation.sin();
@@ -355,10 +365,13 @@ pub fn nmf_hydrostatic(
         mapping_coefficients[2],
     );
     // tropo.C:156 fuses the height correction product with the basic value.
-    Ok((height * 1.0e-3).mul_add(
-        1.0 / sin_elevation - niell_mapping(sin_elevation, 2.53e-5, 5.49e-3, 1.14e-3),
-        mapping_hydrostatic,
-    ))
+    let height_factor =
+        1.0 / sin_elevation - niell_mapping(sin_elevation, 2.53e-5, 5.49e-3, 1.14e-3);
+    Ok(if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        (height * 1.0e-3).mul_add(height_factor, mapping_hydrostatic)
+    } else {
+        mapping_hydrostatic + height * 1.0e-3 * height_factor
+    })
 }
 pub fn nmf_wet(latitude: f64, elevation: f64) -> Result<f64, TimingError> {
     let a = [
@@ -391,11 +404,19 @@ pub fn nmf_wet(latitude: f64, elevation: f64) -> Result<f64, TimingError> {
         // Interpolate cs at both ends. W's disposable native one-line patch,
         // explicit changed-field contract and knot-continuity regression retain
         // the original witness. Source O2 contractions remain expression-local.
-        (
-            f.mul_add(a[j], (1.0 - f) * a[i]),
-            f.mul_add(b[j], (1.0 - f) * b[i]),
-            f.mul_add(c[j], (1.0 - f) * c[i]),
-        )
+        if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            (
+                f.mul_add(a[j], (1.0 - f) * a[i]),
+                f.mul_add(b[j], (1.0 - f) * b[i]),
+                f.mul_add(c[j], (1.0 - f) * c[i]),
+            )
+        } else {
+            (
+                f * a[j] + (1.0 - f) * a[i],
+                f * b[j] + (1.0 - f) * b[i],
+                f * c[j] + (1.0 - f) * c[i],
+            )
+        }
     };
     Ok(niell_mapping(elevation.sin(), a, b, c))
 }
@@ -462,11 +483,14 @@ pub fn compute_observation(
                 &mut session.diagnostics,
             )?;
             // tropo.C:434-435 and :450 use two fmsub and one fmadd in U's
-            // O2 profile; preserve these expression-specific boundaries.
-            let hydrostatic = 0.02268 * pressure.value
-                / (299792458.0
-                    * (-2.8e-7f64)
-                        .mul_add(site.height, (-0.00266f64).mul_add(site.latitude.cos(), 1.0)));
+            // macOS O2 profile; Linux GCC13 -O2 preserves separate source
+            // subtractions/products (0117).
+            let gravity = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                (-2.8e-7f64).mul_add(site.height, (-0.00266f64).mul_add(site.latitude.cos(), 1.0))
+            } else {
+                1.0 - 0.00266 * site.latitude.cos() - 2.8e-7 * site.height
+            };
+            let hydrostatic = 0.02268 * pressure.value / (299792458.0 * gravity);
             let from = read_string(&psr.source.clockFromOverride[..], "clockFromOverride")?;
             let correction =
                 session.run(|s| s.get_correction(obs, Some(&from), Some(b"UTC"), warnings))?;
@@ -482,7 +506,12 @@ pub fn compute_observation(
                 &mut session.diagnostics,
             )?;
             let mw = nmf_wet(site.latitude, elevation)?;
-            obs.troposphericDelay = Some(hydrostatic.mul_add(mh, wet.value * mw));
+            obs.troposphericDelay =
+                Some(if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                    hydrostatic.mul_add(mh, wet.value * mw)
+                } else {
+                    hydrostatic * mh + wet.value * mw
+                });
             return Ok(Some(Weather {
                 pressure: pressure.weather(true),
                 zenith_wet_delay: wet.weather(false),

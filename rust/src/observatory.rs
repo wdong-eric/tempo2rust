@@ -407,18 +407,27 @@ impl Observatory {
 
 pub fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
     // observatory.C:373-375: GCC16 -O2 contracts the component subtractions.
-    // W arithmetic evidence retains assembly and fused/unfused witnesses.
+    // W retains macOS witnesses; Linux GCC13 -O2 separates these binary64
+    // subtractions (0117). Integer conversion guards stay unchanged.
     let a = f / 1.0e4;
     if !a.is_finite() || a.trunc() < i32::MIN as f64 || a.trunc() > i32::MAX as f64 {
         return Err(boundary("observatory_angle_integer"));
     }
     let ia = a as i32;
-    let b = (-(ia as f64)).mul_add(1.0e4, f) / 1.0e2;
+    let b = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        (-(ia as f64)).mul_add(1.0e4, f)
+    } else {
+        f - ia as f64 * 1.0e4
+    }) / 1.0e2;
     if !b.is_finite() || b.trunc() < i32::MIN as f64 || b.trunc() > i32::MAX as f64 {
         return Err(boundary("observatory_angle_integer"));
     }
     let ib = b as i32;
-    let g = (-(ib as f64)).mul_add(1.0e2, (-(ia as f64)).mul_add(1.0e4, f));
+    let g = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        (-(ib as f64)).mul_add(1.0e2, (-(ia as f64)).mul_add(1.0e4, f))
+    } else {
+        f - ia as f64 * 1.0e4 - ib as f64 * 1.0e2
+    };
     let mut angle = (ia as f64 + (ib as f64 + g / 6.0e1) / 6.0e1) / 36.0e1;
     if mode > 2 {
         angle *= 15.0;
@@ -430,33 +439,57 @@ pub fn fang(mode: i32, f: f64) -> Result<f64, TimingError> {
 }
 pub fn itrf_to_grs80(obs: &mut Observatory) {
     // observatory.C:396,403,405,408-415: explicit mul_add matches only
-    // contractions present in U's GCC16 -O2 body (W arithmetic evidence).
+    // contractions present in U's macOS GCC16 -O2 body. Linux GCC13 -O2
+    // retains the binary64 source grouping throughout (0117).
     let [x, y, z] = obs.xyz;
     let a = 6378137.0;
     let flattening = 1.0 / 298.257222101;
-    let p = (x.mul_add(x, y * y)) / (a * a);
+    let xy2 = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        x.mul_add(x, y * y)
+    } else {
+        x * x + y * y
+    };
+    let p = xy2 / (a * a);
     let esq = flattening * (2.0 - flattening);
     let q = (1.0 - esq) / (a * a) * z * z;
     let r = (p + q - esq * esq) / 6.0;
     let s = esq * esq * p * q / (4.0 * r * r * r);
     let t = (1.0 + s + (s * (2.0 + s)).sqrt()).powf(1.0 / 3.0);
     let u = r * (1.0 + t + 1.0 / t);
-    let v = (u.mul_add(u, esq * esq * q)).sqrt();
-    let w = esq * (u + v - q) / (2.0 * v);
-    let k = (w.mul_add(w, u + v)).sqrt() - w;
-    let d = k * (x.mul_add(x, y * y)).sqrt() / (k + esq);
-    let height = (k + esq - 1.0) / k * (d.mul_add(d, z * z)).sqrt();
-    let latitude = 2.0 * z.atan2(d + (d.mul_add(d, z * z)).sqrt());
-    let longitude = if y >= 0.0 {
-        (-2.0f64).mul_add(
-            x.atan2((x.mul_add(x, y * y)).sqrt() + y),
-            0.5 * std::f64::consts::PI,
-        )
+    let v = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        u.mul_add(u, esq * esq * q)
     } else {
-        2.0f64.mul_add(
-            x.atan2((x.mul_add(x, y * y)).sqrt() - y),
-            -0.5 * std::f64::consts::PI,
-        )
+        u * u + esq * esq * q
+    })
+    .sqrt();
+    let w = esq * (u + v - q) / (2.0 * v);
+    let k = (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        w.mul_add(w, u + v)
+    } else {
+        u + v + w * w
+    })
+    .sqrt()
+        - w;
+    let d = k * xy2.sqrt() / (k + esq);
+    let dz2 = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        d.mul_add(d, z * z)
+    } else {
+        d * d + z * z
+    };
+    let height = (k + esq - 1.0) / k * dz2.sqrt();
+    let latitude = 2.0 * z.atan2(d + dz2.sqrt());
+    let longitude = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        if y >= 0.0 {
+            (-2.0f64).mul_add(x.atan2(xy2.sqrt() + y), 0.5 * std::f64::consts::PI)
+        } else {
+            2.0f64.mul_add(x.atan2(xy2.sqrt() - y), -0.5 * std::f64::consts::PI)
+        }
+    } else {
+        if y >= 0.0 {
+            0.5 * std::f64::consts::PI - 2.0 * x.atan2(xy2.sqrt() + y)
+        } else {
+            -0.5 * std::f64::consts::PI + 2.0 * x.atan2(xy2.sqrt() - y)
+        }
     };
     obs.height = height;
     obs.latitude = latitude;
@@ -466,13 +499,21 @@ pub fn grs80_to_itrf(obs: &mut Observatory) {
     let flattening = 1.0 / 298.257222101;
     let esq = flattening * (2.0 - flattening);
     // observatory.C:423,426: source-compiled subtract/add contractions.
+    // Linux GCC13 -O2 separates the same binary64 source operations (0117).
     let n = 6378137.0
-        / (-(esq * obs.latitude.sin()))
-            .mul_add(obs.latitude.sin(), 1.0)
-            .sqrt();
+        / (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            (-(esq * obs.latitude.sin())).mul_add(obs.latitude.sin(), 1.0)
+        } else {
+            1.0 - esq * obs.latitude.sin() * obs.latitude.sin()
+        })
+        .sqrt();
     obs.xyz = [
         (n + obs.height) * obs.latitude.cos() * obs.longitude.cos(),
         (n + obs.height) * obs.latitude.cos() * obs.longitude.sin(),
-        n.mul_add(1.0 - esq, obs.height) * obs.latitude.sin(),
+        (if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            n.mul_add(1.0 - esq, obs.height)
+        } else {
+            n * (1.0 - esq) + obs.height
+        }) * obs.latitude.sin(),
     ];
 }

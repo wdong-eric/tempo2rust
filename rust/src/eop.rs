@@ -211,10 +211,17 @@ impl Eop {
         outputs[dot] = (b[3] - leap - a[3]) / 86400.0;
         let f = (mjd - a[0]) / (b[0] - a[0]);
         // eop.C:197-199: three GCC16 -O2 fmadd sites; subtraction and
-        // division remain separate (W arithmetic evidence).
-        outputs[xp] = f.mul_add(b[1] - a[1], a[1]);
-        outputs[yp] = f.mul_add(b[2] - a[2], a[2]);
-        outputs[dut1] = f.mul_add(b[3] - leap - a[3], a[3]);
+        // division remain separate (W arithmetic evidence). Linux GCC13 -O2
+        // has three separate binary64 product/additions (0117).
+        if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            outputs[xp] = f.mul_add(b[1] - a[1], a[1]);
+            outputs[yp] = f.mul_add(b[2] - a[2], a[2]);
+            outputs[dut1] = f.mul_add(b[3] - leap - a[3], a[3]);
+        } else {
+            outputs[xp] = a[1] + f * (b[1] - a[1]);
+            outputs[yp] = a[2] + f * (b[2] - a[2]);
+            outputs[dut1] = a[3] + f * (b[3] - leap - a[3]);
+        }
         Ok(())
     }
 }
