@@ -33,7 +33,8 @@ class EvidenceCollection(unittest.TestCase):
                 'linux/event-diagnostic/without-events.par',
                 'linux/candidate/source/validation/general_fitting/build/public/reference.json.gz']
             excluded=[native+'build/ordinary/source/config.json.gz',
-                'linux/test-target/fingerprint.json.gz','linux/runtime/resources.json.gz',
+                'linux/test-target/fingerprint.json.gz','linux/corpus-target/fingerprint.json',
+                'linux/runtime/resources.json.gz',
                 'linux/install-default/share/source.json.gz','linux/gmp-cache/cache.json.gz',
                 'linux/c-concurrency-default/cache-target/fingerprint.json',
                 'linux/c-concurrency-default/library-owned-cache-source/Cargo.toml',

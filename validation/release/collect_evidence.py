@@ -12,7 +12,7 @@ if __name__=='__main__':
     a=p.parse_args()
     if not a.input.is_dir():p.error('input directory does not exist: '+str(a.input))
     a.out.mkdir(parents=True,exist_ok=False);files={}
-    excluded={'source','src','target','test-target','rust-target','cache-target','library-owned-cache-source',
+    excluded={'source','src','target','test-target','corpus-target','rust-target','cache-target','library-owned-cache-source',
               'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)

@@ -6,6 +6,14 @@ on:
         description: Reviewed full 40-character candidate commit SHA
         required: true
         type: string
+      scope:
+        description: Full release matrix or partial decision 0117 correction check
+        required: true
+        default: full
+        type: choice
+        options:
+          - full
+          - corrections-0117
 permissions:
   contents: read
 jobs:
@@ -52,7 +60,11 @@ jobs:
           rustc -Vv > /tmp/t2/host/rust.txt
           cargo -V > /tmp/t2/host/cargo.txt
       - name: Execute clean native and installed candidate matrix
+        if: inputs.scope != 'corrections-0117'
         run: python3 validation/release/integrated.py --out /tmp/t2/linux --revision "$REVIEWED_CANDIDATE"
+      - name: Execute partial 0117 correction qualification
+        if: inputs.scope == 'corrections-0117'
+        run: python3 validation/release/focused_0117.py --out /tmp/t2/linux --revision "$REVIEWED_CANDIDATE"
       - name: Collect evidence including failures
         if: always()
         run: python3 validation/release/collect_evidence.py --input /tmp/t2 --out validation/release/evidence

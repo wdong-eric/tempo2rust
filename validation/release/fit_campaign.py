@@ -10,6 +10,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for name in ['out', 'candidate', 'native', 'rust']:
         p.add_argument('--' + name, type=Path, required=True)
+    p.add_argument('--public-case', help='Run one existing public case; omit the family campaign')
     a = p.parse_args()
     run = Run(a.out)
     candidate = a.candidate.resolve()
@@ -24,16 +25,19 @@ if __name__ == '__main__':
         target.symlink_to(source)
     failures = 0
     evidence = {}
-    for script, directory in [('run_public.py', 'public'), ('check_families.py', 'families')]:
+    campaigns=[('run_public.py', 'public')] if a.public_case else [('run_public.py', 'public'), ('check_families.py', 'families')]
+    for script, directory in campaigns:
         path = candidate / 'validation/general_fitting' / script
-        run.run([sys.executable, path, '--profile', 'release'], directory, cwd=candidate)
-        receipt = candidate / 'validation/general_fitting/build' / directory / 'release/receipt.json'
+        run.run([sys.executable, path, '--profile', 'release', *([a.public_case] if a.public_case else [])], directory, cwd=candidate)
+        filename='receipt-'+a.public_case+'.json' if a.public_case else 'receipt.json'
+        receipt = candidate / 'validation/general_fitting/build' / directory / 'release' / filename
         rows = json.loads(receipt.read_text())
         count = sum(r['failures'] if isinstance(r['failures'], int) else 1 for r in rows)
         failures += count
         evidence[directory] = {'cases': len(rows), 'failures': count, 'receipt': str(receipt),
                                'sha256': sha(receipt), 'runner_sha256': sha(path)}
     run.save({'status': 'failure' if failures else 'pass', 'failures': failures,
+              'selection': a.public_case or 'complete public and family campaigns',
               'campaigns': evidence, 'native': sha(a.native), 'rust': sha(a.rust),
               'candidate_export_receipt': sha(candidate.parent / 'receipt.json')})
     raise SystemExit(bool(failures))
