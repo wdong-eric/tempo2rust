@@ -439,6 +439,7 @@ fn ab_histories() {
     let path = PathBuf::from(std::env::var_os("AC_PROPAGATION_CASES").unwrap());
     let cases: Vec<Value> = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
     let mut differences = vec![];
+    let mut diagnostic_pairs = vec![];
     for case in cases {
         crate::clkcorr::with_process(|s| {
             *s = Default::default();
@@ -553,8 +554,8 @@ fn ab_histories() {
                 )
                 .replace(native.join("build/cases").to_str().unwrap(), "{cases}")
                 .replace(native.to_str().unwrap(), "{propagation}");
-            if actual != case[channel] {
-                differences.push(
+            {
+                diagnostic_pairs.push(
                     json!({"case":case["id"],"field":channel,"rust":actual,"native":case[channel]}),
                 );
             }
@@ -575,6 +576,7 @@ fn ab_histories() {
         serde_json::to_vec_pretty(&differences).unwrap(),
     )
     .unwrap();
+    crate::corpus_wire::check_diagnostics(path.parent().unwrap(), &diagnostic_pairs);
     assert!(
         differences.is_empty(),
         "{} AB differences",

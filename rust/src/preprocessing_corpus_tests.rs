@@ -298,7 +298,7 @@ fn p_corpus() {
     let mut transport = vec![];
     let original_cwd = std::env::current_dir().unwrap();
     let mut failures = vec![];
-    let mut diagnostic_differences = vec![];
+    let mut diagnostic_pairs = vec![];
     for case in cases.as_array().unwrap() {
         let id = case["id"].as_str().unwrap();
         std::env::set_current_dir(case["workdir"].as_str().unwrap()).unwrap();
@@ -601,8 +601,8 @@ fn p_corpus() {
             .into_iter()
             .zip(crate::corpus_wire::diagnostic_streams())
         {
-            if actual != case[channel] {
-                diagnostic_differences.push(
+            {
+                diagnostic_pairs.push(
                     json!({"case":id,"channel":channel,"rust":actual,"native":case[channel]}),
                 );
             }
@@ -620,16 +620,7 @@ fn p_corpus() {
     )
     .unwrap();
     std::env::set_current_dir(original_cwd).unwrap();
-    fs::write(
-        work.join("diagnostic-differences.json"),
-        serde_json::to_vec_pretty(&diagnostic_differences).unwrap(),
-    )
-    .unwrap();
-    assert!(
-        diagnostic_differences.is_empty(),
-        "{} P diagnostic differences",
-        diagnostic_differences.len()
-    );
+    crate::corpus_wire::check_diagnostics(&work, &diagnostic_pairs);
     assert!(
         failures.is_empty(),
         "{} differences: {:?}",

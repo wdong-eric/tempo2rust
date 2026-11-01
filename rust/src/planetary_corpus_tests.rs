@@ -219,6 +219,7 @@ fn z_driver_histories() {
     let path = PathBuf::from(std::env::var_os("AC_PLANETARY_CASES").unwrap());
     let cases: Vec<Value> = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
     let mut out = vec![];
+    let mut diagnostic_pairs = vec![];
     for case in cases {
         crate::clkcorr::with_process(|s| {
             *s = Default::default();
@@ -406,18 +407,10 @@ fn z_driver_histories() {
             })
             .unwrap();
         }
-        differences(
-            &format!("{}.stdout", case["id"]),
-            &json!(String::from_utf8(stdout).unwrap()),
-            &case["stdout"],
-            &mut out,
-        );
-        differences(
-            &format!("{}.stderr", case["id"]),
-            &json!(String::from_utf8(stderr).unwrap()),
-            &case["stderr"],
-            &mut out,
-        );
+        for (channel, data) in [("stdout", stdout), ("stderr", stderr)] {
+            diagnostic_pairs.push(json!({"case":case["id"],"channel":channel,
+                "rust":String::from_utf8(data).unwrap(),"native":case[channel]}));
+        }
         eprintln!("Z {}: {} cumulative differences", case["id"], out.len());
     }
     std::fs::write(
@@ -425,5 +418,6 @@ fn z_driver_histories() {
         serde_json::to_vec_pretty(&out).unwrap(),
     )
     .unwrap();
+    crate::corpus_wire::check_diagnostics(path.parent().unwrap(), &diagnostic_pairs);
     assert!(out.is_empty(), "{} Z differences", out.len());
 }

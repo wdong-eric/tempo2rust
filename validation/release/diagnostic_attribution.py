@@ -4,6 +4,8 @@ Only diagnostic streams are eligible. This is not a generic text scrubber;
 callers preserve raw products and run their existing numerical/order comparisons.
 """
 import hashlib
+import argparse
+import json
 import re
 from pathlib import Path
 
@@ -107,3 +109,31 @@ class Attribution:
                     for (file,line),(native_file,lines) in sorted(self.sites.items())],
                 'versions':[{'rust_file':file,'rust_line':line,'native_counterpart':counterpart}
                     for (file,line),counterpart in sorted(self.versions.items())]}
+
+
+def compare_pairs(pairs, mapping):
+    """Use one validated adapter for the ignored Rust corpus harnesses too."""
+    differences=[]
+    for pair in pairs:
+        try:
+            native=mapping.stream(pair['native'].encode('latin1'),'native')
+            rust=mapping.stream(pair['rust'].encode('latin1'),'rust')
+        except AssertionError as error:
+            differences.append({**pair,'attribution_error':str(error)})
+        else:
+            if native!=rust:differences.append(pair)
+    return differences
+
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    for name in ['candidate','pairs','out']:p.add_argument('--'+name,type=Path,required=True)
+    a=p.parse_args();mapping=Attribution(a.candidate)
+    differences=compare_pairs(json.loads(a.pairs.read_text()),mapping)
+    a.out.write_text(json.dumps(differences,indent=2)+'\n')
+    a.out.with_suffix('.receipt.json').write_text(json.dumps({'status':'failure' if differences else 'pass',
+        'pairs':hashlib.sha256(a.pairs.read_bytes()).hexdigest(),
+        'adapter':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        'differences':len(differences),'attribution':mapping.manifest()},indent=2)+'\n')
+    print(len(differences),'diagnostic differences after validated attribution')
+    raise SystemExit(bool(differences))

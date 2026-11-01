@@ -384,7 +384,7 @@ fn k_corpus() {
     let root = work.join("runtime");
     let mut failures = vec![];
     let mut qualified = vec![];
-    let mut diagnostic_differences = vec![];
+    let mut diagnostic_pairs = vec![];
     let native_build = Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .unwrap()
@@ -672,8 +672,8 @@ fn k_corpus() {
             .zip(crate::corpus_wire::diagnostic_streams())
         {
             let actual = actual.replace(native_build.to_str().unwrap(), work.to_str().unwrap());
-            if actual != case[channel] {
-                diagnostic_differences.push(
+            {
+                diagnostic_pairs.push(
                     json!({"case":id,"channel":channel,"rust":actual,"native":case[channel]}),
                 );
             }
@@ -690,16 +690,7 @@ fn k_corpus() {
         serde_json::to_vec_pretty(&failures).unwrap(),
     )
     .unwrap();
-    std::fs::write(
-        work.join("diagnostic-differences.json"),
-        serde_json::to_vec_pretty(&diagnostic_differences).unwrap(),
-    )
-    .unwrap();
-    assert!(
-        diagnostic_differences.is_empty(),
-        "{} K diagnostic differences",
-        diagnostic_differences.len()
-    );
+    crate::corpus_wire::check_diagnostics(&work, &diagnostic_pairs);
     assert!(
         failures.is_empty(),
         "{} differences; first {:?}",

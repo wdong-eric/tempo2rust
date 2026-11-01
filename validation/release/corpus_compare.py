@@ -68,11 +68,16 @@ def execute(args):
     # A short pathname is essential for N's native 100-byte deleteFileName.
     # The alias points into retained output; it does not copy or truncate inputs.
     alias=Path(tempfile.mkdtemp(prefix='al-corpus-',dir='/tmp'))/'root';alias.symlink_to(root,target_is_directory=True)
-    changes=[];scripts={}
+    changes=[];scripts={};adaptations={}
+    shutil.copyfile(ROOT/'validation/release/diagnostic_attribution.py',root/'validation/release/diagnostic_attribution.py')
     cxx=shutil.which(os.environ.get('NATIVE_CXX','g++'));assert cxx
     cc=shutil.which(os.environ.get('NATIVE_CC','gcc'));assert cc
     def write(path,text):
-        before=path.read_text();path.write_text(text)
+        before=path.read_text();original=sha(path);name=str(path.relative_to(root))
+        if name in adaptations:assert adaptations[name]['adapted']==original,name
+        path.write_text(text)
+        if text!=before:
+            adaptations.setdefault(name,{'original':original})['adapted']=sha(path)
         changes.extend(difflib.unified_diff(before.splitlines(True),text.splitlines(True),fromfile='historical/'+str(path.relative_to(root)),tofile='AL/'+str(path.relative_to(root))))
         (run.out/'adaptations.patch').write_text(''.join(changes))
     def function(path,name,body):
@@ -224,6 +229,62 @@ def execute(args):
         # AA records failed comparisons but historically returned zero. Preserve
         # its complete rows and make the enclosing qualification gate fail too.
         write(path,text.replace(old," if any(r['error'] for r in rows):raise SystemExit(1)\n"+old))
+    # Project only designated raw diagnostic products, before the historical
+    # state comparisons. Never feed an internal comparison tag back as raw input.
+    def attribution(path):
+        text=path.read_text()
+        imported="import sys\nsys.path.insert(0,"+repr(str(root/'validation/release'))+")\nfrom diagnostic_attribution import Attribution\nal_attribution=Attribution("+repr(str(root))+")\n"
+        return imported+text
+    if 'clocks' in args.stages:
+        path=root/'validation/clocks_port/run.py';text=attribution(path)
+        text=text.replace("return dict(id=case['id'],classification=case['classification'],actions=case['actions'],returncode=raw['returncode'],timeout=False,events=raw['events'],stdout=raw['stdout'],stderr=raw['stderr'])",
+            "return al_attribution.structured(dict(id=case['id'],classification=case['classification'],actions=case['actions'],returncode=raw['returncode'],timeout=False,events=raw['events'],stdout=raw['stdout'],stderr=raw['stderr']),'rust')")
+        text=text.replace("def expected_record(ref):return {k:v for k,v in ref.items() if k!='command'}","def expected_record(ref):return al_attribution.structured({k:v for k,v in ref.items() if k!='command'},'native')")
+        write(path,text)
+    if 'tim_io' in args.stages:
+        path=root/'validation/input_to_bat/check_tim_corpus.py';text=attribution(path)
+        text=text.replace('def normalized(value):','def normalized(value,kind):')
+        old="            if normalized(actual[channel])!=normalized(expected[channel]):"
+        assert old in text
+        text=text.replace("                return re.sub(","                data=re.sub(")
+        text=text.replace(old,"                data=al_attribution.stream(data,kind)\n                prefix=al_attribution.native['sortToAs.C',15]\n                data=re.sub(re.escape(prefix)+rb' T=[0-9.]+( s: )',prefix+rb' T={cpu_seconds}\\1',data)\n                prefix=al_attribution.native['sortToAs.C',18]\n                return re.sub(re.escape(prefix)+rb' T=[0-9.]+( s: )',prefix+rb' T={cpu_seconds}\\1',data)\n"+old)
+        text=text.replace('normalized(actual[channel])',"normalized(actual[channel],'rust')").replace('normalized(expected[channel])',"normalized(expected[channel],'native')")
+        write(path,text)
+    if 'pulsar_lifecycle' in args.stages:
+        path=root/'validation/pulsar_lifecycle_port/run.py';text=attribution(path)
+        text=text.replace('def diagnostic_projection(s):','def diagnostic_projection(s,kind):\n s=al_attribution.stream(s.encode(\'latin1\'),kind).decode(\'latin1\')')
+        text=text.replace("r'(\\[\\{source\\}/TKmatrix.C:'","r'(\\[TEMPO2:TKmatrix.C:'")
+        text=text.replace('def project(e):','def project(e,kind=\'rust\'):').replace("diagnostic_projection(e.get('stdout',''))","diagnostic_projection(e.get('stdout',''),kind)")
+        text=text.replace("project(e|dict(stdout=expected['stdout'][prior:current]))","project(e|dict(stdout=expected['stdout'][prior:current]),'native')")
+        write(path,text)
+    if 'time_ephemeris' in args.stages:
+        path=root/'validation/time_ephemeris_port/run.py';text=attribution(path)
+        text=text.replace('def project(payload):','def project(payload,kind):')
+        text=text.replace(' visit(x)\n return x'," visit(x)\n for channel in ['stdout','stderr']:x[channel]=al_attribution.stream(bytes.fromhex(x[channel]),kind).hex()\n return x")
+        text=text.replace('project(native_payload(unpack(expected_path)))',"project(native_payload(unpack(expected_path)),'native')")
+        text=text.replace("project(execute(case,exe,ident,dest/case['id']))","project(execute(case,exe,ident,dest/case['id']),'rust')")
+        write(path,text)
+    if 'terrestrial_resources' in args.stages:
+        path=root/'validation/terrestrial_resources_port/run.py';text=attribution(path)
+        text=text.replace('compare(project(expected),project(actual),',"compare(al_attribution.structured(project(expected),'native'),al_attribution.structured(project(actual),'rust'),")
+        write(path,text)
+    if 'observer_coordinates' in args.stages:
+        path=root/'validation/observer_coordinates_port/run.py';text=attribution(path)
+        text=text.replace("exact_compare(e,actual,c['id']+'.private')","exact_compare(al_attribution.structured(e,'native'),al_attribution.structured(actual,'rust'),c['id']+'.private')")
+        text=text.replace("exact_compare(o,projection,c['id']+'.ordinary')","exact_compare(al_attribution.structured(o,'native'),al_attribution.structured(projection,'rust'),c['id']+'.ordinary')")
+        write(path,text)
+    # Preserve historical freezes; only explicitly recorded AL staging patches
+    # may replace their expected hash in memory. Other drift still fails.
+    for stage,filename,old in [
+            ('par_specialized','run.py',"json.loads((HERE/'protected.json').read_text())"),
+            ('terrestrial_resources','inventory.py',"json.loads((base/'protected.json').read_text())")]:
+        if stage not in args.stages:continue
+        path=root/'validation'/stage/filename;text=path.read_text()
+        assert old in text,(stage,old)
+        imported="import sys\nsys.path.insert(0,"+repr(str(ROOT/'validation/release'))+")\nfrom native_metadata import preservation_expected\n"
+        replacement="preservation_expected("+old+",json.loads((ROOT/'al-source-adaptations.json').read_text()))"
+        write(path,imported+text.replace(old,replacement))
+    (root/'al-source-adaptations.json').write_text(json.dumps(adaptations,indent=2)+'\n')
     # New preservation manifests bind this candidate and these staged recipes.
     # They do not pretend to reproduce historical ownership snapshots.
     protected={str(p.relative_to(root)):sha(p) for p in rust.rglob('*') if p.is_file()}
@@ -306,6 +367,7 @@ def execute(args):
     run.save({'status':'failure' if failed or blocked or source_mismatches else 'pass',
               'stages':statuses,'failed':failed,'blocked':blocked,'source_mismatches':source_mismatches,'profile':profile,
               'candidate_sources':source_ids,'authored_comparators':scripts,'short_path_alias':str(alias),
+              'staged_adaptations':adaptations,'metadata_adapter':sha(ROOT/'validation/release/native_metadata.py'),
               'native_receipt':sha(reference.parent/'receipt.json'),'corrected_proofs':proofs,
               'native_root':str(reference),'workspace':str(root),'adaptations':sha(run.out/'adaptations.patch'),'producer':sha(run.out/'producer.py')})
     return bool(failed or blocked or source_mismatches)

@@ -259,7 +259,7 @@ fn q_corpus() {
         .canonicalize()
         .unwrap();
     let mut failures = vec![];
-    let mut diagnostic_differences = vec![];
+    let mut diagnostic_pairs = vec![];
     let source = root.parent().unwrap().join("probe_source");
     for case in cases.as_array().unwrap() {
         let id = case["id"].as_str().unwrap();
@@ -373,8 +373,8 @@ fn q_corpus() {
             let actual = actual
                 .replace(source.to_str().unwrap(), "{source}")
                 .replace(root.parent().unwrap().to_str().unwrap(), "{build}");
-            if case["expected_boundary"] != true && actual != case[channel] {
-                diagnostic_differences.push(
+            if case["expected_boundary"] != true {
+                diagnostic_pairs.push(
                     json!({"case":id,"channel":channel,"rust":actual,"native":case[channel]}),
                 );
             }
@@ -389,16 +389,7 @@ fn q_corpus() {
         serde_json::to_vec_pretty(&failures).unwrap(),
     )
     .unwrap();
-    std::fs::write(
-        work.join("diagnostic-differences.json"),
-        serde_json::to_vec_pretty(&diagnostic_differences).unwrap(),
-    )
-    .unwrap();
-    assert!(
-        diagnostic_differences.is_empty(),
-        "{} Q diagnostic differences",
-        diagnostic_differences.len()
-    );
+    crate::corpus_wire::check_diagnostics(&work, &diagnostic_pairs);
     assert!(
         failures.is_empty(),
         "{} differences; first {:?}",

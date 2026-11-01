@@ -2,6 +2,30 @@
 use crate::PRECISION_BITS;
 use rug::{Float, Integer};
 use serde_json::{Value, json};
+/// Keep raw corpus streams and reuse AL's single validated attribution adapter.
+/// These ignored native-corpus tests already run under the Python validators.
+pub(crate) fn check_diagnostics(work: &std::path::Path, pairs: &[Value]) {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .parent()
+        .unwrap();
+    let input = work.join("diagnostic-pairs.json");
+    std::fs::write(&input, serde_json::to_vec_pretty(pairs).unwrap()).unwrap();
+    let status = std::process::Command::new("python3")
+        .arg(root.join("validation/release/diagnostic_attribution.py"))
+        .arg("--candidate")
+        .arg(root)
+        .arg("--pairs")
+        .arg(input)
+        .arg("--out")
+        .arg(work.join("diagnostic-differences.json"))
+        .status()
+        .unwrap();
+    assert!(
+        status.success(),
+        "corpus diagnostic comparison failed; see diagnostic-differences.json"
+    );
+}
+
 pub(crate) fn diagnostic_streams() -> [String; 2] {
     crate::clkcorr::with_process(|s| {
         let mut streams = [String::new(), String::new()];

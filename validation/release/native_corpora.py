@@ -10,6 +10,7 @@ import platform
 import re
 import shutil
 import sys
+import tempfile
 from common import ROOT, Run, sha
 
 STAGES=['jpl','clocks','parameters','numeric_toolkit','tim_io','preprocessing','par_specialized',
@@ -64,11 +65,16 @@ def build(args):
     reference=root/'validation/reference/build';reference.mkdir(parents=True)
     (reference/'source').symlink_to(a2/'source',target_is_directory=True)
     (reference/'libtempo2-reference.a').symlink_to(a2/'libtempo2-reference.a')
+    # N's caller owns deleteFileName[100]; keep its full pathname below capacity.
+    alias=Path(tempfile.mkdtemp(prefix='al-native-',dir='/tmp'))/'root'
+    alias.symlink_to(root,target_is_directory=True)
+    metadata=root/'validation/release';metadata.mkdir()
+    shutil.copyfile(ROOT/'validation/release/native_metadata.py',metadata/'native_metadata.py')
     compiler=shutil.which(os.environ.get('NATIVE_CXX','g++'))
     assert compiler,'Selected NATIVE_CXX is unavailable'
     cc=shutil.which(os.environ.get('NATIVE_CC','gcc'));fc=shutil.which(os.environ.get('FC','gfortran'))
     gcov=shutil.which(os.environ.get('NATIVE_GCOV','gcov'))
-    changes=[];sources={};stages={}
+    changes=[];sources={'validation/release/native_metadata.py':sha(metadata/'native_metadata.py')};stages={}
     # These snapshots contain the original JPL defect witness and Q's accepted
     # parser projection. Fetch just their pinned commits, never all history.
     history=sorted({pin for stage in args.stages for pin in HISTORY.get(stage,[])})
@@ -118,6 +124,9 @@ def build(args):
                 updated=updated.replace(old,new)
         write_adapter(path,updated)
 
+    def metadata_import(path, names):
+        write_adapter(path,"import sys\nsys.path.insert(0,"+repr(str(metadata))+ ")\nfrom native_metadata import "+names+"\n"+path.read_text())
+
     if 'parameters' in args.stages:
         binary=copy_sources('binary')
         run.run([sys.executable,binary/'prepare_fixtures.py'],'binary-fixtures',cwd=root)
@@ -133,6 +142,37 @@ def build(args):
     elif 'planetary_ephemeris' in args.stages:copy_sources('jpl')
     for stage in args.stages:
         directory=copy_sources(stage);path=directory/('run.py' if stage=='jpl' else 'profile.py');adapt(path)
+        if stage=='jpl':
+            metadata_import(path,'cheby_assertion')
+            text=path.read_text();marker='        if asan:\n'
+            assert text.count(marker)==1
+            write_adapter(path,text.replace(marker,"        if name=='max_cheby_assertion' and not assertion:\n            assertion=cheby_assertion(summary,case['returncode'])\n"+marker))
+        if stage=='tim_io':
+            text=path.read_text();old='HERE = Path(__file__).resolve().parent'
+            assert text.count(old)==1
+            write_adapter(path,text.replace(old,'HERE = Path('+repr(str(alias/'validation/tim_io'))+')'))
+            runner=directory/'run.py';text=runner.read_text();marker="    ap=work/'actions.tsv';"
+            assert text.count(marker)==1
+            check="    for action in actions:\n        if action[:1]==['set'] and action[2]=='deleteFileName':\n            assert len(action[3].encode())+1<=100,('deleteFileName caller capacity',action[3])\n"
+            write_adapter(runner,text.replace(marker,check+marker))
+        if stage in ['planetary_ephemeris','time_ephemeris'] and platform.system()=='Linux':
+            metadata_import(path,'loader_identity')
+            text=path.read_text()
+            if stage=='planetary_ephemeris':
+                old="dynamic_libraries=subprocess.check_output(['ldd',str(exe)],text=True).splitlines(),"
+                assert text.count(old)==1
+                text=text.replace(old,"dynamic_libraries=loader_identity(loader_raw),loader_raw=loader_raw,")
+                text=text.replace('    profile=dict(pin=PIN,',"    loader_raw=subprocess.check_output(['ldd',str(exe)],text=True).splitlines()\n    profile=dict(pin=PIN,")
+                text=text.replace("('executable_sha256','link_map_sha256','objects')","('executable_sha256','link_map_sha256','objects','loader_raw')")
+            else:
+                text=text.replace('dependencies=dependencies,','dependencies=loader_identity(dependencies),')
+                text=text.replace('profile=dict(stable=stable,','profile=dict(loader_raw=dependencies,stable=stable,')
+            write_adapter(path,text)
+        if stage=='propagation':
+            runner=directory/'run.py';metadata_import(runner,'precision_profile')
+            text=runner.read_text();old="[8,53,8,53,16,113], 'measured native precision changed'"
+            assert text.count(old)==1
+            write_adapter(runner,text.replace(old,"precision_profile((BUILD/'ordinary/macros.txt').read_text()), 'measured native precision changed'"))
         if args.coverage and stage!='jpl':
             assert gcov,'Selected NATIVE_GCOV is unavailable'
             adapt(directory/'coverage.py')
@@ -173,6 +213,10 @@ def build(args):
             runner=directory/'run.py';original=runner.read_text()
             updated=original.replace("['tempo2','validation/reference']","['tempo2']")
             assert updated!=original;write_adapter(runner,updated)
+            metadata_import(runner,'assertion_emitter')
+            text=runner.read_text();old="        return s\n"
+            assert text.count(old)==1
+            write_adapter(runner,text.replace(old,"        return assertion_emitter(s,exe,proc.returncode)\n"))
             run.run([sys.executable,'-c','from inventory import build,save,HERE; save(HERE/"inventory.json",build())'],stage+'-inventory',cwd=directory)
             for generator in ['fixtures.py','generate.py']:
                 run.run([sys.executable,directory/generator],stage+'-'+generator,cwd=root)
@@ -206,6 +250,7 @@ def build(args):
     failed=[name for name,row in stages.items() if row['exit']]
     run.save({'status':'failure' if failed else 'pass','stages':stages,'failed':failed,
               'sources':sources,'a2_receipt':sha(a2/'receipt.json'),'compiler':compiler,
+              'short_path_alias':str(alias),
               'adaptations':sha(run.out/'platform-adaptations.patch'),'producer':sha(run.out/'producer.py'),
               'scope':'Fresh complete authored native corpora; Rust comparison is a separate gate'})
     return bool(failed)

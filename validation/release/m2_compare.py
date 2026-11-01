@@ -7,6 +7,16 @@ from pathlib import Path
 import shutil
 from common import ROOT, Run, sha
 
+
+def load_comparator():
+    """0109 successor: recognize signed NaN without changing historical gates."""
+    spec=importlib.util.spec_from_file_location('al_m2_compare',ROOT/'validation/fitting/compare.py')
+    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+    assert module.NONFINITE=={'NaN','+Infinity','-Infinity'}
+    module.NONFINITE.add('-NaN')
+    return module
+
+
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--out',type=Path,required=True);p.add_argument('--candidate',type=Path,required=True)
@@ -16,8 +26,7 @@ if __name__=='__main__':
     run.run([a.example.resolve()],'public-fits')
     actual=candidate/'rust/target/m2';shutil.copytree(actual,out/'rust')
     fitting=candidate/'validation/fitting';cases=json.loads((fitting/'cases.json').read_text())
-    spec=importlib.util.spec_from_file_location('al_m2_compare',ROOT/'validation/fitting/compare.py')
-    m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+    m=load_comparator()
     def comparison(directory):
         rows=[]
         def record(name,result):
@@ -41,5 +50,6 @@ if __name__=='__main__':
     failures=signed['failures']
     run.save({'status':'failure' if failures else 'pass',**signed,'raw_observer':raw,
         'comparator':sha(ROOT/'validation/fitting/compare.py'),
+        'successor':sha(__file__),'recognized_nonfinite':sorted(m.NONFINITE),
         'observer_receipt':sha(a.signed_reference.parent/'receipt.json')})
     raise SystemExit(bool(failures))

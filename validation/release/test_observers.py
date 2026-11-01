@@ -2,10 +2,22 @@ import unittest
 from af_compare import NativeChecks
 from m2 import observer_differences
 from polyco_serialization import legacy_checks
+from m2_compare import load_comparator
+from decimal import Decimal
 
 
 class ObserverTests(unittest.TestCase):
     def tearDown(self):NativeChecks.bits=53
+
+    def test_m2_signed_nan_remains_an_exact_class(self):
+        module=load_comparator()
+        for expected,actual,accepted in [('-NaN','-NaN',True),('NaN','NaN',True),
+                ('-NaN','NaN',False),('NaN','-NaN',False),('-NaN','0',False),
+                ('-NaN','+Infinity',False),('-NaN','nan',False)]:
+            with self.subTest(expected=expected,actual=actual):
+                result=module.Comparison()
+                result.number(expected,actual,Decimal(0),'control','control')
+                self.assertEqual(not result.errors,accepted)
 
     def test_nan_sign_is_the_only_observer_correction(self):
         self.assertEqual(observer_differences({'x':['NaN','-0','1']},{'x':['-NaN','-0','1']}),1)

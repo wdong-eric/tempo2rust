@@ -1,5 +1,32 @@
 # AL frozen release qualification plan
 
+## 1 November correction release (0109)
+
+Start from central `e55d494`, with presentation `b093586` accepted by 0108.
+Preserve run 41069548581 on a35104a and read its case-distinct evidence directly
+from exact ZIP member names. Work in this dependency order:
+
+1. `native_corpora.py`, `corpus_compare.py`, `m2_compare.py`, `check_output.py`:
+   correct the measured caller/host metadata and signed-NaN boundaries. Retain
+   historical runners/freezes; bind staging patches and reject unrelated drift.
+   Apply validated 0107 attribution at the affected diagnostic boundaries.
+2. `predictor_ffi.rs` and `c_concurrency.py`: promote the measured thread-local
+   Rug Local-cache owner inside the panic boundary; replace the current injected
+   guard campaign with installed production/explicit-cleanup agreement checks.
+3. `event_types.cc` and bounded event/spin probes: fix the glibc name collision,
+   measure source types/first divergence and F0-F13/fallback/brake/update-9/10
+   paths. Correct spin only on the demonstrated source assignment/promotion
+   boundaries; preserve all scientific gates and the other deferred proposals.
+4. Fresh installed default/combined macOS checks, focused controls, complete
+   ledger and scoped commits; prepare the concrete Linux candidate/workflow for
+   central review. Actual Linux checks remain required and centrally dispatched.
+
+Completion is a reproducible candidate with exact pass/failure/unrun evidence,
+including retained failures; it is not full migration acceptance. No independent
+push/dispatch, covariance profiling, SVD reordering or tolerance change.
+
+## Historical plans
+
 First Linux follow-through (30 October, decisions 0101/0102): the initial frozen
 plan below is historical; central now coordinates authorized publication/reruns.
 The first b59 run failed and excludes the full-corpus/worker handoff `df587cd`.
