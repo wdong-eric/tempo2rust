@@ -110,3 +110,12 @@ Preserve the initial evidence and make its later documentation-only exception
 explicit. Recheck wording, links/syntax and exact two-file scope; do not rerun
 scientific qualification. All other AL files remain frozen. Return the scoped
 `docs:` commit for central review, then close this ownership window.
+
+
+## Ownership closed after central review
+
+Decision 0115 accepts initial `81af309` / report `8f293a2` and the scoped
+`f792b79` README follow-up. Central verified the concrete documents and retained
+evidence; AM ownership is now closed. Preserve all authored files and ignored
+evidence. Further work needs a new bounded release; no publication, numerical
+acceptance, AL release or optimization is implied.

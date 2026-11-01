@@ -4,8 +4,8 @@ Central decision, 1 November 2026. Accept the repository onboarding delivery
 from Assignment AM: `81af30989aa39748a65d13a015397d8ab997ca9e` adds the root
 README and migration guide; `8f293a2667c20d80cd6b1b608f6a5b79734ba576` records its
 verification. This accepts the scoped documentation delivery under 0114, not
-AL, M2, platform qualification or full migration. A small documentation-only
-follow-up below remains assigned to AM.
+AL, M2, platform qualification or full migration. The documentation-only
+follow-up below is now accepted, and AM ownership is closed.
 
 ## Reviewed delivery
 
@@ -78,3 +78,32 @@ The new root/guide pages are repository onboarding; the current installer does
 not copy them. Changing package membership is separate AL work and is not
 released here. The drafted covariance investigation stays unreleased, and
 central's Linux monitor continues at roughly fifteen-minute intervals.
+
+
+## Follow-up accepted and AM ownership closed
+
+Central accepts `f792b79974f387feb6dcf7bc4f3a88bcf4637f19`,
+`docs: clarify CALCEPH and runtime requirements`. The actual diff contains only
+the two released README paragraphs and an appended report section. Both claims
+match the inspected source. Central independently verified all 66 relative links
+and twelve shell blocks in these two files, unchanged code blocks, the original
+report prefix and exact preservation of all 73 original AM evidence files against
+its previously retained copies. `rust/README.md` is the sole exception in the
+protected-tree comparison to `fecbc18`; no production or qualification file
+changed. No engine/build/install/scientific run was added.
+
+The executed follow-up recipe is
+`decisions/evidence/user-migration/central-readme-followup-review.py`, hash
+`0569a206896a59c37a00c9927248787703d885ef4e22156ab105093f5bd756a4`.
+Its receipt hash is
+`25976633faae29718ebd03c3d1fd33264144718d32ecbf7ee72af2eaa4d0457d`;
+original records are retained under ignored
+`decisions/evidence/user-migration/build/am-followup-review-20261101/`.
+
+This completes AM's bounded repository documentation assignment. Close AM's
+ownership of the new pages/report and the temporary `rust/README.md` partition.
+AL retains its original path ownership for its next explicit release, including
+the accepted README correction, and remains frozen pending central's Linux
+result review. The fifteen-minute monitor and unreleased post-AL profiling draft
+continue unchanged. Full migration and inherited scientific acceptance remain
+pending; repository onboarding does not establish those outcomes.
