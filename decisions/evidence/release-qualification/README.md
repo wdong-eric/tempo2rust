@@ -473,3 +473,29 @@ outputs byte-for-byte. The refinement binds the Git blob/frozen function map
 instead of merely recording the working source's expanded CVS-identifier hash;
 the numerical witness is unchanged. The recipe takes --root, --frozen, --archive
 and a fresh --out. Generated products remain uncommitted.
+
+
+## First 0109 adapter components reviewed, 1 November
+
+Central reviewed `993ec81` (0110's clock-site platform branch) and `92862b0`
+(portable preparation, signed-NaN successor and historical diagnostic adapters).
+The clock change preserves all preceding arithmetic and the macOS fused result;
+actual corrected Linux execution remains pending. The Rust diagnostic bridge
+lives under `#[cfg(test)]`; it introduces no production Python dependency.
+The wrappers retain the immutable historical comparators, bind named staging
+changes, separate cold test compilation from bounded API execution, and keep
+finite/scientific comparisons in their original owners.
+
+`central-0109-adapter-review.py` freezes exact 92862b0 via Git archive and runs
+all release-harness unit tests from that export. All 28 pass, including the five
+new native-metadata control families and signed-NaN class controls. This does
+not replace actual native preparation, installed Rust workflows or Linux
+execution, and does not accept the whole AL candidate.
+
+The archive SHA-256 is `f6d8e3dc230b77fefe6939b046bb552bb14c21f0f19fca6a7973db2302d9a306`.
+The exact executed recipe is `50c32db1f130a149e809c807046dbee0b553c3011d8ff85980a2b2399295785e`.
+The review receipt is `3b3e57a36c693100b5a24ef536e8950f1491c780feb4ed5f73c0b29a9b46d9ea`.
+Original `/tmp/tempo2-central-0109-adapter-review-20261101/` files are retained
+byte-for-byte in ignored `build/0109-adapter-review-20261101/`; the disposable
+extracted source tree is omitted while its exact archive remains. Generated
+JSON, logs and archives are not committed.
