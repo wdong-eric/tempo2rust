@@ -8,9 +8,10 @@ start implementation or change any current result. AL, M2 and full migration
 remain pending.
 
 **Scheduling update:** [0116](0116-isolated-diagnostic-comparator-work.md)
-releases implementation and saved-evidence controls in an isolated worktree.
-The main candidate remains frozen; fresh corpus/Linux execution and integration
-still await central review of the current run. All requirements below remain.
+records the isolated implementation/saved-evidence release and its reviewed
+follow-through into fresh macOS W verification. The main candidate remains
+frozen; Linux replay and integration still await central review of the current
+run. All requirements below remain.
 
 ## Evidence and policy
 

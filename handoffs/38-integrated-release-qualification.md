@@ -199,3 +199,15 @@ the isolated branch and evidence; do not integrate or start fresh engine work.
 Central will combine this reviewed implementation with the actual fourth Linux
 result in the next bounded release. All main/candidate and numerical-policy
 boundaries remain unchanged.
+
+
+### Fresh macOS W follow-through released
+
+After the isolated saved-evidence stage is accepted, 0116's final section releases
+fresh macOS W/native/downstream verification on a clean `13e33f2` export in the
+same isolated worktree. Use the accepted native preparation, recorded compiler
+profile, fresh short output and dedicated target. Preserve all failures and
+source identities. Only existing 0116 Python/report ownership remains; no
+production, numerical-policy, Linux, main integration or publication changes are
+released. Return the updated report and exact execution evidence for central
+review, then stop. The fourth Linux run and monitor remain unchanged.

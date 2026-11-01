@@ -174,3 +174,48 @@ job was still executing its matrix at 11:39:26 UTC and the same fifteen-minute
 monitor continues. No extra execution, integration, arithmetic repair, publication
 or optimization is released by this review. AL, M2 and full migration acceptance
 remain pending; retain the isolated branch until the fourth-run review.
+
+
+## Next isolated stage: fresh macOS W verification
+
+After the saved-evidence stage passes central review, release the next independent
+step to the same AL worktree: fresh macOS terrestrial comparison and its complete
+applicable downstream controls. This supersedes the earlier scheduling hold for
+this macOS execution only. The current Linux run is immutable and separate;
+its unfinished result cannot change the already reviewed macOS formatter/source
+contract. Advancing this verification follows the user's independent-work
+instruction without changing main or starting post-AL optimization.
+
+Freeze a clean export of `13e33f27dc043b3a68ac6f8ff8133c417996a57a`, whose
+implementation is `25bd81f`, before execution. Use the existing
+`validation/release/corpus_compare.py` selected for `terrestrial_resources`,
+release profile and a fresh short output root plus a dedicated compilation
+`--target`. Reuse the accepted macOS native preparation at
+`/private/tmp/t2-local/linux/native-corpora/staging` after checking its receipt
+and source/compiler identities; the directory's historical name does not make
+this Linux execution. Use its recorded GCC/Fortran/toolchain profile rather than
+an incidental compiler on PATH. A short new root must satisfy the runner's
+pathname-length check; do not overwrite `/private/tmp/t2-local` or an old target.
+Run sequentially within this assigned target; the earlier shared-target
+identity failure must not recur. Existing immutable dependency caches may be
+reused, but no main implementation, installation or prior evidence may change.
+
+The existing runner performs native controls, a separately built corrected
+native producer, all 130 W comparisons and, once they pass, W's downstream
+controls. Retain every result and every skipped downstream step if an earlier
+gate fails. Bind exact producer executables/sources, compiled native paths,
+resources, staged adaptations, new per-case proof receipts and source identities
+before/after. Reuse the meaningful rejection controls already accepted; repeat
+or extend them only if source or verification changes require it. Confirm that
+the generated case receipt hashes bind the actual proofs and that W's preservation
+manifest includes the copied verifier. Original strict failures remain preserved.
+
+AL retains only the existing 0116 Python/report ownership. Small demonstrated
+staging/comparator corrections within that contract are allowed if this execution
+reveals a defect; retain the failed attempt and verify the changed behavior in
+a fresh isolated attempt. No Rust/native production or historical runner edits,
+scientific projection, precision/tolerance change, generic normalization, Linux
+execution, main integration, publication or workflow action is released. Return
+scoped commits if needed, the updated `RELEASE_DIAGNOSTIC_RENDERING_REPORT.md`,
+complete execution receipts and remaining limits for central review, then stop.
+The running fourth Linux matrix and fifteen-minute monitor continue unchanged.
