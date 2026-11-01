@@ -79,8 +79,25 @@ fn polynomial(p: *const c_void, nx: c_int, ny: c_int) -> Result<Cheby2D, String>
     let (x, y) = shape(nx, ny)?;
     Cheby2D::from_coefficients(x, y, values(p, x * y)?)
 }
+// tempo2pred.c/cheby2d.c/t1polyco.c counterparts acquire an extra Rust/Rug
+// lifetime here: foreign pthread exit retained 544 bytes in 16 MPFR cache
+// allocations on Linux (0109). A calling-thread owner releases only its local
+// caches. This fixes the Rust integration, not a native TEMPO2 algorithm.
+struct ForeignThreadCache;
+impl Drop for ForeignThreadCache {
+    fn drop(&mut self) {
+        rug::float::free_cache(rug::float::FreeCache::Local);
+    }
+}
+thread_local! {
+    static FOREIGN_THREAD_CACHE: ForeignThreadCache = const { ForeignThreadCache };
+}
+
 fn finish(f: impl FnOnce() -> Result<(), String>) -> c_int {
-    match catch_unwind(AssertUnwindSafe(f)) {
+    match catch_unwind(AssertUnwindSafe(|| {
+        FOREIGN_THREAD_CACHE.with(|_| {});
+        f()
+    })) {
         Ok(Ok(())) => 0,
         Ok(Err(e)) => {
             eprintln!("tempo2pred-rust: {e}");
