@@ -127,3 +127,15 @@ other numerical differences explicit; do not treat them as host metadata.
 Return the updated installed evidence, complete ledger and scoped commits for
 central candidate review. Central retains publication/dispatch and acceptance;
 AL-first sequencing and the deferred covariance optimization lead remain.
+
+
+## Clock interpolation source profile (0110)
+
+0110 adds one bounded correction to 0109: retain the measured macOS final
+multiply/add contraction from 0027 and use separate operations at the same
+`tabulatedfunction.C:163-164` site on qualified Linux x86_64. Central's exact
+arithmetic witness matches all five saved Linux duplicate-knot queries; the
+current Rust fused result differs by one ULP at the query immediately below 2.
+Implement with nearby source/platform rationale and verify real API and complete
+applicable clock/table gates on both platforms. No precision, clock-resource or
+tolerance change is authorized; all other 0109 obligations remain active.

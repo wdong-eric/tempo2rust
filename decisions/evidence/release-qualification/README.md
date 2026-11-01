@@ -431,3 +431,22 @@ accepts --root, --packet, --frozen and a fresh --out directory. Decision 0109
 releases bounded fixes and the measured cache promotion; full scientific and
 Linux acceptance remain pending. Generated JSON, logs, binaries and archives
 remain ignored and are not committed.
+
+
+## Clock interpolation platform witness, 1 November
+
+`central-clock-contraction-review.py` verifies the third-run native fixture,
+five finite query results, compiler/source identities and retained Rust failure.
+Separate binary64 operations agree with all five Linux results. Exact rational
+single-rounding and `math.fma` agree with each other and with 0027's accepted
+macOS result; they differ from Linux at the duplicate knot's lower neighbor.
+Decision 0110 releases the corresponding one-site platform correction without
+changing scientific gates. No new Linux executable or corrected Rust code was
+run by this review.
+
+The receipt is `1df02b2601fc8574959a16e469446411d68f0cdccb24b87e6eea298ba483e89f`;
+the executed recipe is `a43349ca41787b4accaefac3577a935fc18c801c59337094e181fa281f6af91b`.
+Original `/tmp/tempo2-central-clock-contraction-review-20261101/` outputs are
+copied byte-for-byte into ignored `build/clock-contraction-review-20261101/`.
+The recipe accepts --root, --archive and a fresh --out. Original 0027 evidence,
+historical runners and generated JSON remain unchanged/uncommitted.
