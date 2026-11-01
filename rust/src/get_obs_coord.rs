@@ -172,17 +172,33 @@ pub fn lmst(mjd: f64, olong: f64) -> Result<[f64; 2], TimingError> {
     let b = 8640184.812866;
     let c = 0.093104;
     let d = -6.2e-6;
-    // fda6ad4 get_obsCoord.C::lmst:517-529: GCC16 -O2 contracts the
-    // Horner terms and three-product sum. AA arithmetic evidence retains the
-    // actual assembly and c008 witness; no global contraction is enabled.
-    let gmst0 = tu0.mul_add(tu0.mul_add(tu0.mul_add(d, c), b), a) / 86400.0;
+    // get_obsCoord.C::lmst:517-529: accepted macOS arm64 GCC16 -O2 contracts
+    // these terms; Linux x86_64 GCC13 -O2 retains the source grouping. Applying
+    // the macOS tree on Linux changed ten c008/c009 values (0111).
+    let gmst0 = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        tu0.mul_add(tu0.mul_add(tu0.mul_add(d, c), b), a) / 86400.0
+    } else {
+        (a + tu0 * (b + tu0 * (c + tu0 * d))) / 86400.0
+    };
     let seconds_per_jc = 86400.0 * 36525.0;
     let bprime = 1.0 + b / seconds_per_jc;
     let cprime = 2.0 * c / seconds_per_jc;
     let dprime = 3.0 * d / seconds_per_jc;
-    let sdd = tu.mul_add(tu.mul_add(dprime, cprime), bprime);
-    let sum = tu0.mul_add(tu0, tu.mul_add(tu, tu * tu0));
-    let gst = gmst0 + dtu * sum.mul_add(d, (tu + tu0).mul_add(c, seconds_per_jc + b)) / 86400.0;
+    let (sdd, gst) = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        let sum = tu0.mul_add(tu0, tu.mul_add(tu, tu * tu0));
+        (
+            tu.mul_add(tu.mul_add(dprime, cprime), bprime),
+            gmst0 + dtu * sum.mul_add(d, (tu + tu0).mul_add(c, seconds_per_jc + b)) / 86400.0,
+        )
+    } else {
+        (
+            bprime + tu * (cprime + tu * dprime),
+            gmst0
+                + dtu
+                    * (seconds_per_jc + b + c * (tu + tu0) + d * (tu * tu + tu * tu0 + tu0 * tu0))
+                    / 86400.0,
+        )
+    };
     let xlst = gst - olong / 360.0;
     let mut xlst =
         crate::tempo2_util::fortran_mod(Float::with_val(128, xlst), &Float::with_val(128, 1))?

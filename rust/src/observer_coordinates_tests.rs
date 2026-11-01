@@ -746,6 +746,49 @@ fn whitespace_overlap_and_boundaries() {
     assert!(crate::get_obs_coord::ang(1, f64::INFINITY).is_err());
 }
 #[test]
+fn lmst_matches_measured_platform_contraction() {
+    // 0111 c008/c009 native outputs and independently checked fused witnesses.
+    // Exercise the real API, including negative dates and longitude wrapping.
+    for (mjd, longitude, linux, macos, derivative) in [
+        (
+            -20000.75,
+            0.0,
+            0x3fe4a0fe212ce600,
+            0x3fe4a0fe212ce800,
+            0x3ff00b36e7e9fe39,
+        ),
+        (
+            -1.75,
+            0.0,
+            0x3fd99b3b208a4c00,
+            0x3fd99b3b208a4a00,
+            0x3ff00b36e7ec36c9,
+        ),
+        (
+            51544.5,
+            0.0,
+            0x3fe8ee0984cc238a,
+            0x3fe8ee0984cc238a,
+            0x3ff00b36e7f1eff0,
+        ),
+        (
+            58010.25,
+            77.1,
+            0x3f91f2dddd338400,
+            0x3f91f2dddd338400,
+            0x3ff00b36e7f2a7b1,
+        ),
+    ] {
+        let result = crate::get_obs_coord::lmst(mjd, longitude).unwrap();
+        let sidereal = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            macos
+        } else {
+            linux
+        };
+        assert_eq!(result.map(f64::to_bits), [sidereal, derivative]);
+    }
+}
+#[test]
 fn ut1_failure_is_local_and_prefix_is_retained() {
     let mut p = Probe::new();
     let root = std::env::temp_dir().join(format!("tempo2-aa-ut1-{}", std::process::id()));
