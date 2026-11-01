@@ -610,3 +610,23 @@ byte-for-byte into ignored `build/fourth-evidence-review-20261101/`. The committ
 recipe corrects one explanatory comment; its parsed executable statements are
 identical to the retained executed copy. Generated receipts remain uncommitted.
 This packet review precedes central review of the final publication candidate.
+
+
+## Fourth-run collection preparation, 1 November
+
+`central-fourth-linux-collect.py` is bound to run `41294531402`, job
+`124812485584`, attempt 1 and reviewed candidate `fecbc18af95196a16db2046306099b6345a50976`.
+It reuses the third-run Range download and direct ZIP verification patterns.
+Run it with Python 3.13 after the job completes. A still-live run returns a
+waiting status without creating a collection directory or dispatching work.
+
+The collector retains the terminal run/job/artifact identities, exact archive,
+manifest and all file hashes/sizes under ignored
+`build/linux-run-41294531402-review-20261101/`. Case-distinct Linux names remain
+separate archive members; nothing is extracted onto the macOS filesystem.
+It records the observed stage inventory against the planned 69 stages. Archive
+identity and membership verification do not establish scientific or milestone
+acceptance. Syntax checking and an actual invocation against the live run pass:
+the invocation reports `in_progress`/`waiting` and creates no collection directory.
+Completed-run collection and verification remain pending. No generated evidence
+is committed.
