@@ -189,3 +189,13 @@ Main remains read-only for AL. No Rust/native production edits, fresh engine
 execution, integration, publication or workflow dispatch are released. Return
 the branch/commit and new report for central review, then stop; the original
 fourth run and its fifteen-minute monitor continue unchanged.
+
+
+### Isolated comparator stage reviewed
+
+0116 accepts isolated code `25bd81f` and report `13e33f2` after central's fresh
+thirteen-method/51-outcome saved-evidence replay. This stage is complete. Keep
+the isolated branch and evidence; do not integrate or start fresh engine work.
+Central will combine this reviewed implementation with the actual fourth Linux
+result in the next bounded release. All main/candidate and numerical-policy
+boundaries remain unchanged.

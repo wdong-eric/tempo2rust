@@ -127,3 +127,50 @@ so that the appropriate contract check is reached, and record the actual
 rejection stage/reason. Retain all original attempts. This clarification remains
 within isolated 0116 work; production, fresh execution, integration and Linux
 acceptance boundaries do not change.
+
+
+## Central review of the isolated implementation
+
+Central reviews code `25bd81fa2bdbce7759de6ddba5bca1784e0be48c` and report
+`13e33f27dc043b3a68ac6f8ff8133c417996a57a` on `al/diagnostic-rendering-0116`.
+The exact four-file diff stays within the released ownership; the worktree is
+clean. No production source or historical runner changed. Main retains its
+frozen implementation, and these commits are not integrated or published.
+
+The implementation follows the clarified 0113 contract. It binds the complete
+independent messages, source arguments/sites, raw products and event association;
+reconstructs the source byte formatter/cap/parser and whole surrounding stream;
+and reuses the actual W staging/positive-control entry point. The strict
+`Attribution` class and `compare_pairs` are byte-identical to the release base.
+Resource-map ordering is not scientific field ordering; ordered W state/schema
+comparisons remain exact. Unqualified profiles/history do not gain a rendering
+exception. The report retains the original strict failures and development
+attempts rather than replacing them with the successor result.
+
+Central independently ran the committed test module through that staged W
+entry point with the bound cap evidence and a new output directory. All thirteen
+test methods pass. The 51 recorded outcomes comprise three paired proofs, one
+unchanged strict positive, and 47 rejected mutations: eleven integrity, three
+attribution, thirteen non-rendering, five event-association, three backing-message
+and twelve rendering failures. Each rejection records a nonempty reason at the
+asserted stage. The coherently rebound tail/newline/common-prefix/native-site
+controls reach semantic checks. The original 22 inputs remain unchanged.
+Central also matched the final AL v6 receipt hashes to the report; no engine,
+compiler or full scientific corpus was run in this review.
+
+The central replay receipt SHA-256 is
+`610fd490e2c23ade8dd81e26997cae62b58734b3dcfa190c0d89e0504e93ce2a`;
+its 51-outcome summary is
+`1a3c692be46edc4b7e984ccfa0b94c5533f2d56c25f514c2929de47523d5cec1`.
+The complete central review output is copied byte-for-byte to ignored
+`decisions/evidence/release-qualification/build/isolated-rendering-review-20261101/`:
+772 files, 80271445 bytes and 1 explicitly recorded source symlink.
+Copy-manifest SHA-256 is `b41846c9db6784930249601e4678d388e0e28efdd940e5cdefda2adfdfc42bf8`. Generated evidence is not committed.
+
+This accepts the isolated implementation and its saved-evidence proof for the
+released stage only. It is ready for later integration review; fresh full W,
+downstream controls and actual Linux verification remain required. The Linux
+job was still executing its matrix at 11:39:26 UTC and the same fifteen-minute
+monitor continues. No extra execution, integration, arithmetic repair, publication
+or optimization is released by this review. AL, M2 and full migration acceptance
+remain pending; retain the isolated branch until the fourth-run review.
