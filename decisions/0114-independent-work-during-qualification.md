@@ -141,3 +141,14 @@ This accepts the documentation correction only. The same fourth Linux job was
 verified in progress at 11:09:24 UTC, executing its native/installed matrix.
 The fifteen-minute monitor remains active. AL, M2 and full migration acceptance,
 0113 implementation and the post-AL profiling release remain pending.
+
+
+## Isolated implementation follow-through
+
+After AM and the source-map refresh are accepted, 0116 releases the previously
+specified 0113 comparator and saved-evidence controls in a separate Git worktree.
+This supersedes the blanket scheduling freeze only for that bounded successor;
+the main implementation and active candidate remain unchanged. Fresh engine
+execution, actual Linux replay, integration and publication still await central
+review. The user-requested independent work now advances a diagnosed AL issue
+without starting the deferred covariance/performance pass.

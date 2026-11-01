@@ -178,3 +178,14 @@ review. The independent source-map item is closed; retain its report and ignored
 evidence. No further work is released by this acceptance. Keep implementation
 frozen while central reviews the fourth Linux result, preserve AM's accepted
 README and await a bounded implementation brief based on that result.
+
+
+## Isolated 0113 implementation released under 0116
+
+The accepted documentation item is closed. Read 0116 for the new isolated
+worktree, precise file ownership and dependency-ordered implementation of the
+paired diagnostic proof, W staging adapter and saved-evidence rejection controls.
+Main remains read-only for AL. No Rust/native production edits, fresh engine
+execution, integration, publication or workflow dispatch are released. Return
+the branch/commit and new report for central review, then stop; the original
+fourth run and its fifteen-minute monitor continue unchanged.

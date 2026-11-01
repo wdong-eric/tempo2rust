@@ -7,6 +7,11 @@ AL's work explicitly after reviewing that run; this document does not itself
 start implementation or change any current result. AL, M2 and full migration
 remain pending.
 
+**Scheduling update:** [0116](0116-isolated-diagnostic-comparator-work.md)
+releases implementation and saved-evidence controls in an isolated worktree.
+The main candidate remains frozen; fresh corpus/Linux execution and integration
+still await central review of the current run. All requirements below remain.
+
 ## Evidence and policy
 
 The three terrestrial cases `alias_bounded_tokens`,
