@@ -139,3 +139,16 @@ current Rust fused result differs by one ULP at the query immediately below 2.
 Implement with nearby source/platform rationale and verify real API and complete
 applicable clock/table gates on both platforms. No precision, clock-resource or
 tolerance change is authorized; all other 0109 obligations remain active.
+
+
+## Sidereal-time correction and contraction review (0111)
+
+0111 releases the measured LMST source-profile correction alongside 0110's clock
+site: retain macOS contractions and Linux source expression grouping, with real
+API and complete applicable observer-coordinate checks. Central independently
+matched all ninety saved native outputs to separate arithmetic and all ninety
+Rust outputs to the fused tree; ten sidereal-time values differ. Prepare the
+remaining explicit-contraction inventory/probes as one coordinated diagnostic
+pass, preserving actual types and source-site evidence. This does not authorize
+a blanket mul_add replacement or delay completion of the already released
+0109 corrections solely for the wider inventory.

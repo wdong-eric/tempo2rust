@@ -450,3 +450,26 @@ Original `/tmp/tempo2-central-clock-contraction-review-20261101/` outputs are
 copied byte-for-byte into ignored `build/clock-contraction-review-20261101/`.
 The recipe accepts --root, --archive and a fresh --out. Original 0027 evidence,
 historical runners and generated JSON remain unchanged/uncommitted.
+
+
+## Sidereal-time contraction witness and source navigation, 1 November
+
+`central-observer-contraction-review.py` binds the pinned LMST source map and
+frozen Rust body to 45 saved Linux queries / ninety scalar outputs. Native
+ordinary and observed results agree. Source separate arithmetic matches every
+native output; the explicit fused tree matches every recorded Rust output.
+Ten sidereal-time values differ. Each fused witness is cross-checked with exact
+rational single-rounding. This is a saved-product diagnosis, not corrected Rust
+execution or a new Linux experiment. Decision 0111 releases the bounded LMST
+correction and a coordinated diagnostic review of remaining contraction sites.
+The lexical inventory includes tests/comments and already qualified helpers;
+its 130 lines / 23 files do not count demonstrated defects or branch coverage.
+
+The final receipt is `bc23955f805339f7233a0343339243deec0528bb2d6fb4921a5fb5351a26ea78`;
+the recipe is `9ec87550c21d284daaf278c12ba2ff015705ee1a5fed332486f94e867f1b5491`.
+Ignored `build/observer-contraction-review-20261101/` retains both original
+`/tmp/tempo2-central-observer-contraction-review-20261101/` and final `-v2/`
+outputs byte-for-byte. The refinement binds the Git blob/frozen function map
+instead of merely recording the working source's expanded CVS-identifier hash;
+the numerical witness is unchanged. The recipe takes --root, --frozen, --archive
+and a fresh --out. Generated products remain uncommitted.
