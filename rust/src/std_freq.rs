@@ -74,7 +74,7 @@ pub(crate) fn std_freq(params: &ParameterStore, x: f64, label: Label, k: usize) 
                 &quartic,
                 &ordinary::round(ordinary::mul(&ordinary::round(2), &bindex) - 1),
             );
-            for _ in 0..3 {
+            for _ in 0..if k == 0 { 3 } else { 2 } {
                 quartic = ordinary::mul(&quartic, &f1);
             }
             for _ in 0..if k == 0 { 3 } else { 2 } {

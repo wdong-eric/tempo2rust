@@ -55,3 +55,11 @@ source expressions at the measured observer, UT1, observatory, EOP and tropo
 sites; existing macOS contractions remain. The W scalar observer follows its
 native probe's matching expressions. Clippy for all targets with `-D warnings`
 passes. Full affected macOS campaigns follow in a clean committed export.
+
+Central's static review caught an F1 braking-term regression in `126378c`: the
+shared quartic branch used three `f1` factors for both indices, while source F1
+uses two. The source expression is restored without changing its zero braking
+index. The repeated native spin profile in
+`/private/tmp/tempo2-al-0117-spin-v2/receipt.json` again passes all 288 callbacks;
+its eight wide-update differences remain diagnostic. Receipt SHA-256:
+8d48015195bbc280ee171e877419b078136b7d05c5c02b30a6839c0857285aae.
