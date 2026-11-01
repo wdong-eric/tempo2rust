@@ -583,3 +583,30 @@ and logs are retained there under `pre-bootstrap-failure/`. An earlier central
 scratch probe lacked committed Python dependencies; its import failure is
 separately retained as `incomplete-central-probe/` and is not a project defect.
 Generated JSON, logs and archives remain uncommitted.
+
+
+## Fourth-run packet review, 1 November
+
+Central independently verified AL's `validation/release/build/third-review-v1/`:
+all 37 selected groups have exact file membership and every recorded hash/size
+matches both the copied and original file. This covers 47,887 selected files /
+7,139,104,046 bytes, including failed attempts and prefixed predictor products.
+The original Linux receipt matches its already verified archive member and
+preserves all 67 stages (54 passed, thirteen failed). No corrected Linux or
+scientific acceptance is inferred from this packet review.
+
+The ledger hash is `0ccefc241a9c321dbe960535411282268068c9d82970de049c49f8776e8c97d6`.
+Its exact executed producer is `fe371f2e40372d650f86323226461dc4e163b0f68e74f7b469f4e79eafa3f92b`,
+committed in `b95879c`. The ledger records collection-time Git HEAD `91309fd`;
+that field alone is not a claim that the collection helper had no pending edit.
+The helper's final evidence-group selection is bound by its exact source hash.
+The production code candidate was separately exported cleanly at `91309fd`.
+
+`central-fourth-evidence-review.py` takes --root, --packet and a fresh --out.
+The review receipt is `be71d33fac43f38ab9249ba59c3aaa0ed0fcc38277e971560236f616c5564d30`;
+the executed recipe is `f7edec314923d5075875fd2594914bdcaf36b360e1e520297f8fcb3c8fd6193c`.
+Original `/tmp/tempo2-central-fourth-evidence-review-20261101/` files are copied
+byte-for-byte into ignored `build/fourth-evidence-review-20261101/`. The committed
+recipe corrects one explanatory comment; its parsed executable statements are
+identical to the retained executed copy. Generated receipts remain uncommitted.
+This packet review precedes central review of the final publication candidate.
