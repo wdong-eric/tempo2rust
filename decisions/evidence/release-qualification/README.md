@@ -664,3 +664,23 @@ release further production edits. Receipt SHA-256:
 Keep the typed deletion changes separate from continuous and nonfinite records.
 The exact interpolation delta is a source-profile follow-up, not full acceptance.
 Generated evidence is ignored under `build/fourth-corpus-triage-20261102/`.
+
+
+## Focused 0117 publication and local review
+
+Decision 0118 reviews clean candidate `0d968bf` and records focused Linux run
+`41312212554`, job `124864766765`. The ignored packet
+`build/focused-0117-0d968bf-20261102/` retains the exact workflow/publication diff,
+remote identities, one dispatch, monitor recipe and saved local-evidence review.
+Central's final review receipt hashes to
+`75a1b4acc80c81cb8ce5b9a27888ed212b3c442ef6c8b22da422922c543294c1`:
+six campaign receipts, 31 input bindings, 249 recomputed event rows, 76 callback
+returns, and six neutrality plus six exact before/after product controls.
+The single script-hash discrepancy is resolved as a descriptive receipt-field
+addition; the exact executed bytes and failed central analysis attempts remain.
+
+`central-focused-0117-collect.py` reuses the fourth-run collector, with only its
+frozen identities and explicit 26-stage partial-scope assertion changed. The
+900-second monitor invokes it for this same run when complete; it never dispatches.
+Its future collection output is `build/linux-run-41312212554-review-20261102/`.
+Actual Linux results and the full 69-stage qualification remain pending.

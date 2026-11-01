@@ -238,3 +238,18 @@ scientific gate may be rewritten. Return clean staged candidates promptly for
 central review of focused Linux execution; final full qualification remains due.
 The accepted cache evidence is scoped, AL/M2/full migration remain pending, and
 post-AL allocation profiling remains unreleased.
+
+
+## Focused execution and independent analysis (0118)
+
+Central reviewed and published exact candidate `0d968bf48f4f5b48cd12e3d2256d2fb60f95e967`.
+Focused Linux run `41312212554`, job `124864766765`, executes the explicit 26-stage
+`corrections-0117` scope. Central owns the 900-second monitor, collection and all
+acceptance. The original full matrix and unresolved scientific ledger remain due.
+
+While that fixed run executes, AL's sole newly released task is a bounded causal
+analysis of M2's dependent-column raw-order failure using existing evidence first.
+If needed, minimal source-bound observations may be made in a new ignored or
+`/private/tmp` directory. Return the first demonstrated divergence and decision
+needed; no tracked implementation, historical runner, central-document, precision,
+ordering or tolerance change is released. See 0118 for the exact constraints.
