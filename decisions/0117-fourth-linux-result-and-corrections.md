@@ -225,3 +225,15 @@ Generated JSON/JSONL, binaries and archives remain ignored. Native binary128,
 Rust Rug128, scientific assumptions, output conventions and acceptance thresholds
 remain unchanged. AL-first sequencing continues; no milestone is accepted by
 this correction release.
+
+
+## Comparator integration completed
+
+Central integrated the exact reviewed commits after AL's automatic approval
+review did not recognize the existing authorization. The resulting commits are
+`89ca70e` (from `25bd81f`), `4b76464` (from `13e33f2`) and `5e68c0b` (from
+`a6b27f1`). Only the four reviewed files changed; central verified their contents
+are identical to the accepted isolated branch. The main checkout was clean and
+returned to AL at `5e68c0b690201f8876bfc9a45b9cbe1366a46c9f`. Step 1 is complete;
+the unchanged accepted tests were not repeated. This does not qualify Linux
+rendering or any subsequent arithmetic change.

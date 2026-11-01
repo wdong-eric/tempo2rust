@@ -651,3 +651,16 @@ retained under ignored `build/fourth-linux-result-review-20261101/`. V2 exposed 
 limitation in the review's debug-string parser, corrected in v3; no engine or
 scientific fixture changed. Decision 0117 gives the scoped acceptance, remaining
 failures and next AL release. Generated JSON/archive evidence is not committed.
+
+
+## Independent early-corpus triage, 2 November local
+
+While AL implements 0117, [the saved-data triage](fourth-corpus-triage.md)
+classifies the 160 P records and tests the three repeated Z vector differences
+against the source interpolation operands. `central-fourth-corpus-triage.py`
+reproduces this bounded read-only analysis; it does not execute either engine or
+release further production edits. Receipt SHA-256:
+`8c211055ea591e0ea6c7baefaaad2021482c3807e2b380c34be454178453a664`.
+Keep the typed deletion changes separate from continuous and nonfinite records.
+The exact interpolation delta is a source-profile follow-up, not full acceptance.
+Generated evidence is ignored under `build/fourth-corpus-triage-20261102/`.
