@@ -211,3 +211,14 @@ source identities. Only existing 0116 Python/report ownership remains; no
 production, numerical-policy, Linux, main integration or publication changes are
 released. Return the updated report and exact execution evidence for central
 review, then stop. The fourth Linux run and monitor remain unchanged.
+
+
+### Fresh macOS W follow-through accepted
+
+0116 accepts isolated report `a6b27f1` with unchanged code `25bd81f`: fresh native
+controls/mutations, corrected oracle, all 130 W cases and all 28 downstream
+controls pass. Central independently verified the 4,805 input identities, exact
+2,056-file export and all 130 recorded proof results. This stage is closed.
+Retain the branch and evidence; wait for the next bounded integration/Linux
+brief from central's fourth-run review. No further engine work, main integration
+or publication is released by this scoped macOS acceptance.

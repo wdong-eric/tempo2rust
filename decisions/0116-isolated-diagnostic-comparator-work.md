@@ -219,3 +219,51 @@ execution, main integration, publication or workflow action is released. Return
 scoped commits if needed, the updated `RELEASE_DIAGNOSTIC_RENDERING_REPORT.md`,
 complete execution receipts and remaining limits for central review, then stop.
 The running fourth Linux matrix and fifteen-minute monitor continue unchanged.
+
+
+## Central acceptance of fresh macOS W verification
+
+Central accepts the fresh macOS scope reported in
+`a6b27f1505884ae3a0859065b663cfa35db22d99` on the isolated branch. The execution
+used clean export `13e33f27dc043b3a68ac6f8ff8133c417996a57a`; implementation
+remains the previously reviewed `25bd81f`. No code correction was needed. The
+branch still changes only the three owned Python files and its report; its
+worktree and main are clean. No integration or publication has occurred.
+
+The recorded macOS 26.7 arm64/GCC-GFortran 16.2.0 execution ran 11:51:18–11:59:07
+UTC in `/private/tmp/alw16a/wxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`, with a dedicated
+target and no optional providers. Native controls pass all 29 checks (26
+rejections/three positives) and detect all thirteen compiled mutations. The
+separate corrected native producer supplies 130 cases. All 130 Rust comparisons
+pass: 127 retain strict comparison, and the three previously failing stdout
+pairs pass the full source-rendering proof while retaining their strict
+failure records. All 28 downstream controls pass, including one freshly
+challenged positive; no downstream gate is skipped. The report preserves the
+failed preflight identity-assumption attempt separately from engine execution.
+
+Central inspected the implementation/report boundary, executed command and
+verifier audit, independently rehashed all 4,805 bound input paths, and compared
+all 2,056 exported files with `git archive` of the exact candidate. The source
+archive hash is `83ed51e4fb0d2eaf6a203cc430aa5e971313172ccaf8a9bb1c5e91a9f0df8aac`.
+All 732 protected files and the verifier binding remain intact. Central then
+recompared all 130 saved fresh results through the same staged verification
+function: each result exactly reproduces its recorded proof, including the
+127/three strict/paired split. The 4,805 inputs were unchanged after this
+read-only review. This is an independent offline recompare of AL's fresh
+execution, not a second producer execution.
+
+The producer verification receipt is
+`3838e3052b5e844a393d2577589c26ebe9d9ace4e6369f0ba788c12595828b96`.
+The central receipt is
+`c7982908413f2a6a6847ecbca4676788b294a1cee0fd2492943d0066b5c29ec7`,
+retained with the 130 reproduced proofs and copied launch/source/audit receipts
+in ignored `decisions/evidence/release-qualification/build/fresh-macos-rendering-review-20261101/`.
+That packet contains 138 files (1578387 bytes); manifest SHA-256 is
+`8d22983a8c35e4fa4f6b5e4d29098c21355bded9864370c307b487665682abd6`. Generated receipts remain uncommitted.
+
+The macOS stage is closed. Keep the isolated commits and original evidence for
+subsequent integration and Linux verification after central reviews the exact
+fourth run. That job remained in progress at 12:09:27 UTC; the existing monitor
+continues at fifteen-minute intervals. No Rust/native scientific behavior,
+precision/tolerance/resource policy or acceptance gate changed. AL, M2, Linux
+qualification and full migration remain pending; no optimization is released.
