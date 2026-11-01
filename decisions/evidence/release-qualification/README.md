@@ -543,3 +543,43 @@ include negative dates and longitude wrapping. AL's local macOS API execution
 passes; the complete observer corpora and actual corrected Linux execution
 remain separate requirements. This source review does not claim those broader
 checks have passed.
+
+
+## Source-profile preparation and clean harness review, 1 November
+
+Central reviewed `dc8f6d11a9c70ab5fdcef9dda967c4badcaf67a7`'s diagnostic-only
+spin/event/contraction additions and installed-output binding. The spin probe
+retains original/native-observed equality, the separate f64 counterfactual,
+signed callbacks and update-scale observations. The event trace preserves the
+original accumulation statements and checks actual native/Rust observer
+neutrality separately from the original residual/phase gates. Comparing wide
+trace values at native 113 bits is diagnostic; it changes neither production
+Rug128 nor scientific acceptance. The compiler/object campaign is preparation
+for source-specific Linux contraction evidence, not a blanket fusion policy.
+The output adapter now explicitly invokes the installed CLI and records its
+hash, while preserving the historical workflow/checker and original failures.
+
+Review found a real pre-bootstrap issue in the first new unit control: it read
+`tempo2/formResiduals.C` before Actions had prepared native sources. A full Git
+export plus the then-current Python sources reproduced two passing controls
+and one FileNotFoundError. AL fixed the early control to use the exact two
+statements as a unit fixture; the live diagnostic still checks them against
+its prepared native source and tests observer neutrality. No native-source
+absence is hidden or treated as a passed execution.
+
+`central-frozen-harness-review.py` now exports exact dc8f6d1 with no native
+checkout and runs all release-harness controls: all 31 pass. This closes the
+reported bootstrap dependency within these controls, not AL/scientific/Linux
+acceptance. The recipe accepts --root, --revision and a fresh --out, so future
+changes can be checked against a named immutable candidate without editing it.
+
+The source archive is `152fd4448841999f2c2e89be0c5716c7020d68947a78d5b433f08e622d362e29`;
+the executed recipe is `53b8b4601f445e679abb946d31dc2f48a4af422f59a503e2bca63ee7d529bf3a`;
+the receipt is `511d77bf3a91bbca71efc4d38435c3cca9c8ca44b965340a2386e30c4e1e6227`.
+Original `/tmp/tempo2-central-frozen-harness-review-20261101/` files are retained
+under ignored `build/frozen-harness-review-20261101/`, omitting the extracted
+tree but retaining its exact archive. The original failing control, receipts
+and logs are retained there under `pre-bootstrap-failure/`. An earlier central
+scratch probe lacked committed Python dependencies; its import failure is
+separately retained as `incomplete-central-probe/` and is not a project defect.
+Generated JSON, logs and archives remain uncommitted.
