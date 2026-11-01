@@ -89,3 +89,41 @@ result before integrating or releasing fresh execution. The original failures,
 raw SVD order, precision/tolerance policies, versioned DDH clocks, source weighting
 and the AL-first optimization sequence remain unchanged. This release does not
 accept AL, M2, Linux qualification or full migration.
+
+
+## Common-prefix control and strict-pass clarification
+
+AL's initial negative control found that an early return on strict equality can
+bypass the required rendering proof: truncating Rust output to the native visible
+body produces equal attribution-projected text. Central independently reproduced
+this with all three bound 0113 emissions, removing 51, one and seventeen bytes
+respectively. The original streams differ; each altered Rust stream compares
+equal under the unchanged strict adapter. Other fields remain the original
+bound values. This is an offline comparator counterexample, not a new engine
+execution or a scientific discrepancy.
+
+The central witness receipt is retained in ignored
+`decisions/evidence/release-qualification/build/common-prefix-review-20261101/`;
+SHA-256 `c9ae272ea15285034cf86be2f54d0058b91ac4d342b7cf99e3d6133e8037879c`.
+It binds the original cap receipt, unchanged adapter and all original/altered
+stream hashes. Central also inspected the actual saved campaign at the cap
+receipt's bound root `/private/tmp/t2-local/linux/corpus/wxxxxxxxxxxxxxx`:
+127 strict passes and the original three differences remain; none of the 127
+passing histories is selected by the draft's single-message operation gate.
+An earlier inspection pointed at the main workspace's older corpus and stopped
+on its native-labelled Rust output; it was not used as current campaign evidence.
+
+Clarify 0113 item 2: for a source-qualified single-message W history, validate
+independent message/render consistency before returning a pass, including when
+strict text is equal. A differing rendering can gain acceptance only through
+the complete paired proof. This preserves the standalone strict adapter and
+unsupported-history behavior; it does not create a generic evidence-free
+fallback, case whitelist or common-prefix normalization. Keep the strict outcome
+and paired source-consistency outcome distinct in the receipt.
+
+The rejection controls must separate stale-identity failures from semantic
+failures. Rebind copied raw/result/receipt hashes for stream/message mutations
+so that the appropriate contract check is reached, and record the actual
+rejection stage/reason. Retain all original attempts. This clarification remains
+within isolated 0116 work; production, fresh execution, integration and Linux
+acceptance boundaries do not change.

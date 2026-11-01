@@ -47,12 +47,16 @@ projection, public output change or exception based solely on a case name.
    Its raw-input validation must still reject internal comparison tags,
    fictional Rust files/lines and native labels used for Rust emitters. A string
    pair without independent message data continues to use the strict comparison.
-2. The additional proof is eligible only when the existing comparison exposes a
-   diagnostic rendering difference and the caller supplies independently recorded
-   native and Rust message bodies. For the initial delivery, use the three
-   demonstrated warning/error emissions in W, with a single unambiguous emission
-   associated with its event and warning/error storage slot. Keep the complete
-   case inventory; do not whitelist their case identifiers as passing results.
+2. A diagnostic rendering difference may be accepted through the additional
+   proof only when the caller supplies independently recorded native and Rust
+   message bodies. For the initial delivery, use the three demonstrated W
+   warning/error histories, with a single unambiguous emission associated with
+   its event and storage slot. For a qualified history, verify the prescribed
+   rendering even when the initial strict text comparison is equal: deleting
+   Rust's additional visible tail can otherwise manufacture that equality.
+   Record the strict result separately. Missing required backing evidence still
+   fails; other string-only/unsupported histories retain the strict contract.
+   Keep the complete inventory; do not whitelist case identifiers as passes.
 3. Verify all existing schema, membership/order, scientific state, counters,
    severity, stream routing, outcome and file/input/source identities first.
    Compare the complete backing messages exactly. Apply only the pre-existing,
