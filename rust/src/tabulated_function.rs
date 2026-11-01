@@ -286,10 +286,16 @@ impl TabulatedFunction {
             }
             let [x0, y0] = self.samples[hi as usize - 1];
             let [x1, y1] = self.samples[hi as usize];
-            // User-authorized host correspondence: J's pinned GCC -O2 emits
-            // fmadd for this final multiply/add. Earlier subtraction/division
-            // remain separate. This preserves the measured one-ULP knot case.
-            Ok(((x - x0) / (x1 - x0)).mul_add(y1 - y0, y0))
+            // tabulatedfunction.C:163-164: GCC16/macOS arm64 contracts the final
+            // multiply/add (0027); GCC13/Linux x86_64 keeps it separate (0110).
+            // Earlier subtractions/division and duplicate-knot selection agree.
+            let fraction = (x - x0) / (x1 - x0);
+            let delta = y1 - y0;
+            Ok(if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                fraction.mul_add(delta, y0)
+            } else {
+                fraction * delta + y0
+            })
         })();
         self.finish(result)
     }

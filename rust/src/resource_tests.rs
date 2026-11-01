@@ -45,6 +45,32 @@ fn table_steps_endpoints_and_source_rows() {
 }
 
 #[test]
+fn duplicate_knot_matches_measured_native_contraction() {
+    let t = table(
+        Path::new("duplicate.clk"),
+        "# A B\n1 10\n2 20\n2 30\n3 40\n",
+    );
+    let below = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        20.0_f64.next_down()
+    } else {
+        20.0
+    };
+    let mut diagnostics = crate::clock_diagnostics::Diagnostics::default();
+    for (x, expected) in [
+        (1.0, 10.0),
+        (2.0_f64.next_down(), below),
+        (2.0, 30.0),
+        (2.0_f64.next_up(), 30.0_f64.next_up()),
+        (3.0, 40.0),
+    ] {
+        assert_eq!(
+            t.get_value(x, &mut diagnostics).unwrap().to_bits(),
+            expected.to_bits()
+        );
+    }
+}
+
+#[test]
 fn meteorology_valid_zero_missing_and_outside_coverage() {
     let table = |text| MeteorologyFunction {
         site: b"PKS\0".to_vec(),
