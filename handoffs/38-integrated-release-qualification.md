@@ -169,3 +169,12 @@ AM has closed ownership after accepted `f792b79`; preserve its README changes.
 Return the exact documentation commit and updated report for central review,
 then stop. This does not release the pending numerical/0113 corrections or
 post-AL allocation investigation, nor alter the active Linux run.
+
+
+### Documentation refresh accepted
+
+Central accepts `062a567` under 0114 after the exact two-file/source-identity/link
+review. The independent source-map item is closed; retain its report and ignored
+evidence. No further work is released by this acceptance. Keep implementation
+frozen while central reviews the fourth Linux result, preserve AM's accepted
+README and await a bounded implementation brief based on that result.

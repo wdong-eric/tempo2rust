@@ -106,3 +106,38 @@ The production implementation freeze and running candidate remain unchanged.
 Return a scoped `docs:` commit and the updated report for central review, then
 stop. AM's accepted `rust/README.md` is preserved. Central monitors the same
 Linux job on the fifteen-minute schedule and retains every acceptance decision.
+
+
+## Central acceptance of the independent source-map refresh
+
+Central accepts documentation commit `062a567b943c18855ab05742d51f504da8278cdd`
+on 1 November. Its exact two-file change corrects the production cache status,
+dates historical source counts and execution evidence, and retains current
+Linux/scientific qualification limits. The real AL follow-up turn completed in
+thread `01a17c51-359e-7041-b04b-efebd2b2ec6e`; this bounded documentation item is
+closed. AL retains its main assignment and implementation remains frozen.
+
+Central inspected the final diff and source/report claims, checked the exact
+parent and path membership, independently rehashed all 332 declared frozen
+files, and verified that those files have no Git difference from `fecbc18`.
+The direct baseline comparison confirms 158 Rust files: 107 unchanged, 48
+modified, three added and none removed. Both historical audit receipts and
+counts remain preserved. All 32 relative links resolve with exact tracked
+path case; the accepted AM README hash is unchanged. Across the frozen Rust,
+release and workflow trees, only the two reviewed documents and AM README differ.
+No engine was run and no scientific evidence was regenerated for this review.
+
+The AL documentary receipt is
+`df3ad68181bb9ab8cccd9950520d1b9ce07ad94476b49bb7dd4be90b1d998529`;
+its source-audit receipt is
+`49857535a7772c2d921f2a3c9fe28adcde9b12f39ae3009ee172cac895f82c7e`.
+The central receipt and reviewed diff are retained in ignored
+`decisions/evidence/release-qualification/build/source-map-review-20261101/`;
+central receipt SHA-256 is
+`6274ac5b95064fc128755ce73d83b0692cd8d16a9a7d44c09d0fa9e326fb19bf`.
+Generated receipts remain outside version control.
+
+This accepts the documentation correction only. The same fourth Linux job was
+verified in progress at 11:09:24 UTC, executing its native/installed matrix.
+The fifteen-minute monitor remains active. AL, M2 and full migration acceptance,
+0113 implementation and the post-AL profiling release remain pending.
