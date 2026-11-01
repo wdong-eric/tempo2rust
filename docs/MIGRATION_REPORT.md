@@ -206,3 +206,43 @@ Only authored owned paths were staged/committed. Frozen implementation/workflow
 files match `fecbc18`; executable, inputs and runtime match their pre-run hashes.
 Generated evidence remains ignored. No push, workflow dispatch, broad suite or
 optimization was performed. This bounded assignment stops for central review.
+
+## README clarification follow-up under decision 0115
+
+1 November 2026. [Decision 0115](../decisions/0115-user-migration-guide-review.md)
+accepts the initial documentation at `81af30989aa39748a65d13a015397d8ab997ca9e`
+and report `8f293a2667c20d80cd6b1b608f6a5b79734ba576`, and releases this narrow
+follow-up from `8b323ba1df63cae83cdff78acc55429a16af0862`. The only authored
+changes are two paragraphs in `rust/README.md` and this appended record.
+
+The general input-to-BAT paragraph now states that CALCEPH requires the
+`calceph` feature, the build-time `CALCEPH_DIR` provider and the ephemeris data
+selected by `EPH_FILE`, while disabled CALCEPH and external selection plugins
+retain their unavailable boundaries. The build paragraph identifies the bounded
+`residuals`/`evaluate_barycentric` `@` scope of runtime-free evaluation; general
+`bats`/`timing` require `--runtime`, and native `-f` requires `TEMPO2`.
+These are wording corrections checked against `build.rs`, `calceph.rs`,
+`source_par_dispatch.rs`, `source_par.rs`, `main.rs`, `core_cli.rs` and the existing
+`NATIVE_BACKENDS_API.md` contract. No command, dependency, calculation or resource
+selection changed.
+
+**Later README-only exception:** the original full-`rust/` equality statements
+above describe the initial delivery and remain historically true. After this
+follow-up, `rust/README.md` is the sole changed path within the frozen `rust/`,
+`validation/release/` and qualification-workflow comparison to `fecbc18`.
+Production code, tests, manifests, installer and release/workflow files still
+match that candidate. No existing installation is updated. The original report
+body and all 73 original AM evidence files are preserved byte-for-byte; their
+source/executable identities and accepted operational results are reused without
+being relabelled as a new build or execution.
+
+Fresh, ignored `docs/build/am-readme-followup-20261101/` holds the before-hash
+manifest, focused documentation-check recipe and receipts. All 66 relative links
+resolve against case-sensitive tracked names and heading fragments; all twelve
+shell blocks pass `sh -n`. Code blocks are unchanged. Scoped whitespace, exact
+two-file changes, the README-only frozen-tree exception, append-only report
+history and all 73 original-evidence hashes pass their checks.
+The exact scoped `docs:` commit is returned in the final handoff for central review.
+No engine commands, scientific comparisons, builds, installations, qualification
+runs, push or workflow dispatch were performed. AL, M2 and migration acceptance
+remain pending; this follow-up stops at the documentation boundary.

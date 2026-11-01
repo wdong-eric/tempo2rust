@@ -156,9 +156,13 @@ cargo run --manifest-path rust/Cargo.toml --locked --offline --release -- bats \
 Each nth `--par` pairs with the nth `--tim`. Arguments after `--` are source
 preprocessing arguments, for example `-- -epoch 55001`. The runtime directory
 supplies the selected planetary ephemeris, clocks, observatories, EOP and time
-resources. CALCEPH and external selection-plugin requests return explicit
-unavailable-boundary errors. The CLI emits one complete JSON result or exits with
-an error on stderr; it does not emit success JSON before the calculation finishes.
+resources. CALCEPH requires the explicitly enabled `calceph` feature and a
+build-time provider selected through `CALCEPH_DIR`, plus the ephemeris data
+selected by `EPH_FILE`; see [NATIVE_BACKENDS_API.md](NATIVE_BACKENDS_API.md).
+Without that feature, CALCEPH requests return an explicit unavailable-boundary
+error. External selection plugins remain unavailable. The CLI emits one complete
+JSON result or exits with an error on stderr; it does not emit success JSON before
+the calculation finishes.
 
 ```rust,no_run
 use std::path::Path;
@@ -194,7 +198,10 @@ GFortran 16 compiles the vendored SOFA sources (`FC` overrides the compiler);
 a C toolchain also builds GMP/MPFR. JPL parsing/interpolation executes in Rust
 with a minimal owned libc stdio boundary. Python 3 runs the fixture
 comparators. The normal build uses only sources inside this crate. No TEMPO2
-executable is needed. Barycentric evaluation requires no runtime data.
+executable is needed. The bounded `residuals` adapter and `evaluate_barycentric`
+require no runtime data for `@` observations. General `bats` and `timing` commands
+require `--runtime PATH`, even for `@` inputs; the native `-f` workflow requires
+`TEMPO2`.
 
 ```sh
 cd /Users/Eric.Dong/Downloads/tempo2rust/rust
