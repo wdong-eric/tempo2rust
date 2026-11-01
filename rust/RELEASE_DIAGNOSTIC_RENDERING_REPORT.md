@@ -1,7 +1,8 @@
-# Paired terrestrial diagnostic rendering: isolated saved-evidence handoff
+# Paired terrestrial diagnostic rendering: isolated macOS verification
 
-1 November 2026. **Saved-data verification only; fresh W/Linux qualification,
-AL, M2 and full migration acceptance remain pending.**
+1 November 2026. **Saved-data proof and fresh macOS W/native/downstream
+verification pass. Linux qualification, AL, M2 and full migration acceptance
+remain pending.**
 
 Implementation commit: `25bd81fa2bdbce7759de6ddba5bca1784e0be48c` on
 `al/diagnostic-rendering-0116`, based on
@@ -11,7 +12,10 @@ Implementation commit: `25bd81fa2bdbce7759de6ddba5bca1784e0be48c` on
 bounded implementation of [0113](../decisions/0113-diagnostic-rendering-verification-contract.md).
 The strict-pass clarification was read from main commit
 `efbd22c4aba59de0b954129724e285648f78cb92`; central decisions were not merged or
-edited in this branch. Central retains integration, execution and acceptance.
+edited in this branch. Main commit `553fb0ed7b0955fdfd69fc03dec01cc1222454e1`
+subsequently released fresh macOS W execution in this same isolated worktree.
+Central retains integration and acceptance. The fresh run used a clean export of
+`13e33f27dc043b3a68ac6f8ff8133c417996a57a`; no implementation correction was needed.
 
 ## Result and preserved boundary
 
@@ -31,8 +35,9 @@ No diagnostic is removed, shortened, repaired or compared only by its prefix.
 The names above identify evidence, not acceptance conditions in the comparator.
 Eligibility comes from the recorded action, event phase and single counter/storage
 transition at the two qualified `observatory.C` emit sites. The original three
-failed receipts remain unchanged. No new producer, full terrestrial comparison
-or downstream control execution is claimed.
+failed receipts remain unchanged. This table records the saved-evidence phase;
+the subsequent fresh producer, complete comparison and downstream results are
+reported separately below.
 
 ## Implementation
 
@@ -147,15 +152,116 @@ and the 22 original evidence inputs. The diff is confined to the three owned
 Python files and this report; exact diff checks pass. No generated evidence is
 committed.
 
+## Fresh macOS execution
+
+The clean export is retained at
+`validation/release/build/macos-w-candidate-v1/source`, with export receipt
+SHA-256 `e4fe22e782c7e0572452f24b1ab14af4212e9ada6fcac06e388dec9f0329d4e3`.
+The accepted preparation at `/private/tmp/t2-local/linux/native-corpora/staging`
+was verified as **macOS 26.7 arm64**, despite its historical directory name.
+Preflight checked its receipt, ordinary executable, all 334 recorded dependencies,
+36 protected preparation sources, exact platform-adaptation patch, A2 receipt,
+compiler binaries/versions and every exported candidate file. Preflight v1
+incorrectly compared pre-adaptation source hashes with staged files; it failed
+before any engine execution and is retained with its reason. V2 checked the
+original hashes against original sources and the staged hashes against the
+protected manifest, and passed. Its receipt is
+`validation/release/build/macos-w-preflight-v2/receipt.json`, SHA-256
+`2ab5e192bc8bfb69076663d161b6406ae3c909dc900398f944e15e26b2cdd188`.
+
+The recorded tool selection was GCC/GFortran 16.2.0:
+`NATIVE_CXX=/opt/homebrew/bin/g++-16`,
+`NATIVE_CC=/opt/homebrew/bin/gcc-16`,
+`FC=/opt/homebrew/bin/gfortran-16`, and `CC=/usr/bin/clang`.
+`CARGO_HOME=/Users/Eric.Dong/.cargo`, `LC_ALL=C`, `LANG=C` and
+`PYTHONDONTWRITEBYTECODE=1` were explicit. Optional provider variables and Rust
+flag overrides were absent. No optional Cargo features were selected. Native
+binary128, Rust Rug precision, tolerances, resources and case ordering were
+unchanged. The isolated launch receipt records the complete command/environment:
+
+```sh
+python3.13 validation/release/build/macos-w-candidate-v1/source/validation/release/corpus_compare.py \
+  --out /private/tmp/alw16a \
+  --candidate /private/tmp/tempo2-al-rendering-0116-20261101/validation/release/build/macos-w-candidate-v1/source \
+  --reference-root /private/tmp/t2-local/linux/native-corpora/staging \
+  --target /private/tmp/tempo2-al-rendering-0116-20261101/validation/release/build/macos-w-target-v1 \
+  --profile release --stages terrestrial_resources
+```
+
+Execution ran from this isolated worktree, 11:51:18–11:59:07 UTC. The fresh
+workspace `/private/tmp/alw16a/wxxxxxxxxxxxxxxxxxxxxxxxxxxxxx` is exactly 50 path
+bytes, matching the retained preparation's pathname length. Compilation used
+the new dedicated target sequentially. The Rust build completed with
+`cargo test --lib --locked --offline --no-run --message-format=json --release`;
+the target's GMP/MPFR dependencies were freshly built. The retained preparation,
+previous targets and original evidence were not overwritten.
+
+| Fresh gate | Result |
+| --- | --- |
+| Native controls | Pass: 29 controls (26 rejections and three positives), plus all 13 separately compiled behavioral mutations detected. |
+| Corrected native producer | Pass: separate executable and 130 cases under the existing 0053 correction. |
+| W release corpus | Pass: all 130 cases; 127 strict passes and three additional paired rendering proofs. |
+| W downstream controls | Pass: 27 rejections and one fresh challenged positive execution. |
+| Preservation and receipt audit | Pass: 732 protected files, all 130 case proof hashes, source/compiled dependency identities, raw products, exact staged adaptations and 22 original cap inputs. |
+
+All three stage commands exited zero. No downstream step was skipped. The three
+new paired receipts preserve their strict failures and complete raw/native/Rust
+renderings; their emission lengths remain 336/282, 344/240 and 344/256 bytes.
+
+| Fresh paired case | `diagnostic-rendering.json` SHA-256 |
+| --- | --- |
+| `alias_bounded_tokens` | `35afe37c1cae7acf81789815fd86d40ba2da44b79bc79ec9deba270217f54e75` |
+| `observatory_exit_read_alias` | `20240708d8c3da673f266b8bf9767c3bd4ac224397327f76efed923bf979a3e3` |
+| `observatory_missing_alias` | `5fa0b9147788434d704865c0c5c48f68d38b8acdea48ab6a3715f3bf183010d6` |
+
+The read-only audit is retained under
+`validation/release/build/macos-w-campaign-v1/`: `launch.json`, complete launch
+stdout/stderr, `verify.py`, `verification.json` and audit stdout/stderr. The final
+verification binds 4,805 input paths and records every case's proof hash and
+strict/paired disposition. It rechecks the clean export, native preparation,
+corrected producer dependencies, Rust compiler/executable/source identities,
+native and Rust raw case products, original cap evidence, and the six main files
+listed in the saved v6 preservation receipt. All remain unchanged. W's freeze
+explicitly protects the copied verifier; its hash is the same accepted
+`cb83f64c6714ed7322a596c202848814a72e00e858a548966353334aebda909e`.
+The 33 staged file adaptations are retained as exact before/after hashes and a
+patch. The 51 accepted saved-data outcomes were reused; no comparator code changed
+and no new defect required repeating those controls.
+
+Fresh evidence identities (all SHA-256):
+
+| Artifact | Identity |
+| --- | --- |
+| `macos-w-campaign-v1/verification.json` | `3838e3052b5e844a393d2577589c26ebe9d9ace4e6369f0ba788c12595828b96` |
+| `macos-w-campaign-v1/verify.py` | `658eaa1af7a4fe5df52e1e903ff8c8135d09187c3c6cb76f3e1dc8d48c25bbaa` |
+| `/private/tmp/alw16a/receipt.json` | `b88669f0e8e5acc69732303a5b154d052881c0a33ffb3d9d5d1a0e8a328b8739` |
+| `/private/tmp/alw16a/adaptations.patch` | `92e598c540756d6b34903962257a7fd06031d9f967e3c11911a492eed07b12e2` |
+| Workspace `al-source-adaptations.json` | `ba486fdb970ad201ec6004fe476fcb3b8425901e05407006e27ea437dfcd20c6` |
+| W `build/freeze.json` | `47d892cc119122557a2d2c9b8f05082d8752c135ca19e6e54f33cb2ef4eaa058` |
+| Native `outputs/controls.json` | `4206bd6f17e346e3edd2baeb54a6be2145e2cf11045341f9f70c2f4ddaa4cbde` |
+| Native `outputs/mutations.json.gz` | `a9064210ef73f823002dbca07c8e2bbb57a3e18f79fbf985a8ffa3f908427b29` |
+| Corrected native executable | `7301391b7998db339516761c971ed95a954affb06b1d72744483f594c9ff50a3` |
+| Rust release executable | `aaaeae1a0a8ea85ac4ee011cc2edc2200bec3236a3a1272036e0670e3ec5b2c9` |
+| `corrected_native/reference.json.gz` | `11b0d67775e1a7abb81d56be2b6c8fdeff4b670b26295b40a88b3b2a9984d083` |
+| `corrected_native/receipts.json.gz` | `de81954bda8b838551b731cf482c01f406aef5c9461863919335fc2336fb6b20` |
+| `corrected_native/contract.json` | `099d876b8582fa897e2e73a589ebe57f8cd09d73efd175b491ad97ef14dca693` |
+| W `release/direct.json` | `129c4bede485162e40a7b5d350f6f506f339278feb35a9885e4dedea03b0a133` |
+| W `release/controls.json` | `92a30dd794e78bb8ebe87b0cb569853e5a2d7b85dd24c11678e4294f85e69c2e` |
+
+This stage changes only this report. The implementation remains `25bd81f`;
+the complete isolated branch still has only the four originally owned files.
+These results establish the bounded macOS comparator contract, not broader
+scientific validation or migration acceptance.
+
 ## Remaining execution boundary
 
-No engine execution, native/Rust compilation, fresh full W/downstream controls,
-actual fourth-run Linux replay, integration into main, publication or workflow
-action was performed. The additional proof is limited to the reviewed redirected,
+Fresh macOS W/native/downstream execution is complete. No Linux replay,
+integration into main, publication or workflow action was performed. The
+additional proof is limited to the reviewed redirected,
 single-message source/event shape and requires its independently bound evidence.
 Unsupported histories retain strict comparison. Other formatting modes, ambiguous
 histories or changed source profiles cannot gain acceptance through this proof
 without further review. All original scientific gates and
 failures, production precision/resources and deferred covariance work remain.
-Central must review this isolated commit and the exact fourth Linux result before
+Central must review this isolated result and the exact fourth Linux result before
 releasing integration or further execution. Work stops at this handoff.
