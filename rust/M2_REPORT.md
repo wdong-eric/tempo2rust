@@ -1,5 +1,7 @@
 # M2 fitting implementation delivery
 
+**Central acceptance update, 2 November 2026:** [Decision 0122](../decisions/0122-m2-acceptance-and-al-checkpoint-review.md) accepts this bounded M2 milestone under the user-approved paired-mode rule, after replaying the original debug/release and current macOS/Linux evidence. The dated delivery and original failed receipts below are preserved; their then-pending exact-position gate has been superseded. General fitting and full migration acceptance remain separate.
+
 23 October 2026. Assignment E delivers the ZERO plus selected local F0–F3
 library and JSON CLI for the accepted homogeneous barycentric `@` and PKS
 profiles. **M2 is not accepted by this chat. The exact singular-mode order gate
