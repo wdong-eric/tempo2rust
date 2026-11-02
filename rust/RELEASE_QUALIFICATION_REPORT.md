@@ -21,7 +21,11 @@ Decision [0123](../decisions/0123-memory-review-and-predictor-performance-releas
 AN's measured macOS allocation improvement. Central merged the exact history at
 `6cc0b79b1836ace952c7c25b3cfaf5651adff1dd`. The [AN report](ALLOCATION_PROFILE_REPORT.md)
 retains original measurements and inherited failures. AO owns predictor CPU/FFI
-work in its separate clone; this batch does not include that work.
+work in its separate clone. Decision
+[0124](../decisions/0124-predictor-transport-review-and-evaluator-release.md)
+accepts its measured macOS scalar-transport improvement, integrated through
+`a44bda2defc2616c3e05c34ff0e2ecc7401918e7`. This batch includes that completed
+transport pair; AO's newly released evaluator work remains separate.
 
 The prepared Linux allocation stages reuse AN's existing runners:
 
@@ -67,9 +71,50 @@ proof pairs at the wired paths (61 manifest-verified members). Local receipts:
 `validation/release/build/allocation-lifecycle-linux-0123/receipt.json`
 (`af3384a6366fc8c27d4196f7e378874593377fe651642b56bb2d0d95fd62ea16`).
 
+The prepared AO Linux follow-through reuses its
+[executable recipe](../validation/predictor_performance/README.md):
+
+- Fetch and independently install exact before `68973d669af0e1180ad8532bb8b364452ca203d7`
+  and after `0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe`. Their frozen crate diff
+  is exactly `predictor_ffi.rs`, `predictor_number.rs` and `native/predictor.c`.
+  Reuse the populated Cargo/GMP caches and retain separate installer targets.
+- Run the unchanged C11/C++17 static/shared qualifier for each prefix, with its
+  native source, locales, rejection controls and 4x2 interface fixture. Those
+  checks remain separate from the combined-candidate qualification.
+- Bind the benchmark to the existing worker campaign's successful native
+  `cheby-native-1-2` record and `t2pred.dat` hash, with the versioned isolated PAR
+  and exact `-pred PKS 58000 58000.03 1000 2000 8 4 3600` workload. Missing,
+  failed or mismatched prerequisites block its dependent stages; the 4x2 fixture
+  is never substituted. Before, after and native receive the same Linux 8x4 file.
+- Preserve complete before/after transcripts and legacy products, allocation
+  observations, caller-exclusive concurrency/sanitizer checks, installed Rust
+  consumers and debug/release predictor tests. The separate supplemental native
+  gate keeps the original negative-NaN T1 frequency witness as a failure; neither
+  same-engine equality nor its macOS performance acceptance waives that sign.
+- After compilation, run AO's existing seven shuffled samples for getPeriod,
+  one loaded call and 100000 phase/frequency pairs: 63 fresh processes. Retain
+  every raw `.usage` file alongside outputs, load averages and identities.
+  Instrumented allocation observations remain separate from timing claims.
+
+Local preparation passed six AO routing/workload controls and two collection
+controls. The actual shallow-fetch workflow block passed present/missing-object
+controls without changing checkout HEAD. Saved AO evidence retains its one
+supplemental native failure and all 143 selected products, including 63 resource
+reports. The archived fourth Linux run supplies the matching worker receipt
+`19db5ad7f42dce2241c613f9242a8df097155e228045b8217a82370f535a6a24`
+and 8x4 predictor `d178a983957de8a21860bac99d50fee08fca3e6c018d2b7d6a0bc0ceb6b5ce36`;
+this validates existing paths and identities, not a new timing campaign.
+Preparation evidence is under `validation/release/build/predictor-linux-prep-0123/`.
+
+The workflow job budget is now 240 minutes. Run `41294531402` took about 153
+minutes; its matrix ran 09:46:31–12:15:17 UTC and upload ended around 12:19.
+The previous 180-minute limit left about 27 minutes for the new isolated AN/AO
+builds and qualification. The additional hour provides execution and artifact
+collection headroom only; no scientific or performance threshold changes.
+
 Current unsafe/source accounting is refreshed in the [source map](RELEASE_SOURCE_MAP.md),
-with the two reviewed allocator unsafe operations distinguished from historical
-counts. Local preparation uses harness, source and build-routing checks only;
+with the reviewed allocator and predictor boundaries distinguished from historical
+counts. Local preparation uses saved-evidence, harness, source and build-routing checks;
 actual Linux measurements, scientific verification and predictor results await
 central review/publication/dispatch of one batched candidate. Existing
 scientific gates, Rug128 and native binary128 remain unchanged.

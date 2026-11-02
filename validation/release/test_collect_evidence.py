@@ -24,6 +24,11 @@ class EvidenceCollection(unittest.TestCase):
             root=Path(temporary);source=root/'input';out=root/'selected'
             native='linux/native-corpora/staging/validation/observer_coordinates/'
             included=['receipt.json','linux/native-corpora/producer.py',native+'outputs/reference.json.gz',
+                'linux/predictor-performance/measure/after-100000-0.usage',
+                'linux/predictor-performance/verify/after-outputs.stdout',
+                'linux/predictor-performance/qualify-before/c-shared-run/cheby.dat',
+                'linux/predictor-performance/qualify-after/c-shared-run/exchanged.dat',
+                'linux/predictor-performance/native-gate/receipt.json',
                 'linux/allocation/verify/same-engine/science-correlated-global/after/diagnostics/cov.matrix',
                 'linux/allocation/verify/same-engine/science-correlated-global/before/diagnostics/param.labels',
                 'linux/allocation/verify/same-engine/science-correlated-global/after/diagnostics/postfit.res',
@@ -43,6 +48,11 @@ class EvidenceCollection(unittest.TestCase):
                 'linux/event-diagnostic/without-events.par',
                 'linux/candidate/source/validation/general_fitting/build/public/reference.json.gz']
             excluded=[native+'build/ordinary/source/config.json.gz',
+                'linux/predictor-performance/after/source/rust/Cargo.toml',
+                'linux/predictor-performance/after/prefix-build/target/fingerprint.json',
+                'linux/predictor-performance/after/prefix/share/install.json',
+                'linux/predictor-performance/predictor-tests/fingerprint.json',
+                'linux/predictor-performance/verify/after-evaluation',
                 'linux/allocation/before/source/rust/target/fingerprint.json',
                 'linux/allocation/provider-target/fingerprint.json','linux/allocation/debug-target/fingerprint.json',
                 'linux/allocation/before/bin/observe',

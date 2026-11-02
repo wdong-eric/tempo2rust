@@ -19,7 +19,7 @@ permissions:
 jobs:
   linux-x86_64:
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 240
     env:
       FC: gfortran-13
       NATIVE_CC: gcc-13
@@ -59,20 +59,20 @@ jobs:
           rustup default 1.97.1
           rustc -Vv > /tmp/t2/host/rust.txt
           cargo -V > /tmp/t2/host/cargo.txt
-      - name: Fetch frozen allocation comparison sources
+      - name: Fetch frozen allocation and predictor comparison sources
         if: inputs.scope != 'corrections-0117'
         shell: bash
         run: |
           # Keep each failure as evidence; the matrix checks both objects and
-          # blocks only their dependent allocation stages if unavailable.
-          while read -r label revision; do
-            if git fetch --no-auto-maintenance --no-tags --depth=1 origin "$revision:refs/al-allocation/$label" > "/tmp/t2/host/allocation-$label-fetch.stdout" 2> "/tmp/t2/host/allocation-$label-fetch.stderr"; then
+          # blocks only their dependent comparison stages if unavailable.
+          while read -r group label revision; do
+            if git fetch --no-auto-maintenance --no-tags --depth=1 origin "$revision:refs/al-$group/$label" > "/tmp/t2/host/$group-$label-fetch.stdout" 2> "/tmp/t2/host/$group-$label-fetch.stderr"; then
               fetch_status=0
             else
               fetch_status=$?
             fi
-            printf '%s\n' "$fetch_status" > "/tmp/t2/host/allocation-$label-fetch-status.txt"
-          done < <(PYTHONPATH=validation/release python3 -c 'from integrated import ALLOCATION_REVISIONS; print("\n".join(k+" "+v for k,v in ALLOCATION_REVISIONS.items()))')
+            printf '%s\n' "$fetch_status" > "/tmp/t2/host/$group-$label-fetch-status.txt"
+          done < <(PYTHONPATH=validation/release python3 -c 'from integrated import ALLOCATION_REVISIONS, PREDICTOR_REVISIONS; print("\n".join(group+" "+k+" "+v for group, pair in [("allocation", ALLOCATION_REVISIONS), ("predictor-performance", PREDICTOR_REVISIONS)] for k,v in pair.items()))')
       - name: Execute clean native and installed candidate matrix
         if: inputs.scope != 'corrections-0117'
         run: python3 validation/release/integrated.py --out /tmp/t2/linux --revision "$REVIEWED_CANDIDATE"

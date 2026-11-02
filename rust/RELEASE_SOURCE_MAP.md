@@ -2,33 +2,39 @@
 
 ## Current integrated source accounting — 2 November 2026
 
-This refresh binds Rust source at integrated `6cc0b79b1836ace952c7c25b3cfaf5651adff1dd`,
-which merges the exact reviewed AN history through `497168b`. M2 is accepted
+This refresh binds Rust source at `f511cede0851cc375ceed263ad97e40cae25a0a0`,
+including the exact reviewed AN history through `497168b` and AO history through
+`f077292` (central merge `a44bda2`). M2 is accepted
 under 0122; AN's allocation improvement is accepted for measured macOS behavior
 under 0123. Actual Linux allocation qualification, AL and full migration remain
-open. AO's predictor work is isolated and is not part of this source snapshot.
+open. AO's completed scalar transport is included under 0124; its next evaluator
+stage remains isolated and is not part of this snapshot.
 
 Against the unchanged `6acaf53d2e13291eb6d0b0988faf7dee7d33a635` baseline, the 158
 Rust source files comprise 101 unchanged bodies, 54 modified existing files and
-three additions, with no removals. The audit indexes 69 lines containing `unsafe`
-in ten files, 1,730 function/export lines and 119 source-departure-pattern lines.
+three additions, with no removals. The audit indexes 73 lines containing `unsafe`
+in ten files, 1,735 function/export lines and 119 source-departure-pattern lines.
 These are lexical navigation counts, not exhaustive safety or scientific checks.
-The six additional unsafe lines relative to the dated 63-line snapshot below
-are four existing ordinary-long-double transport lines and AN's two allocator
-operations; they are not six new allocator operations.
+The AN-only refresh had 69 unsafe lexical lines: four ordinary-long-double
+transport lines and two allocator operations beyond the dated 63-line snapshot
+below. AO changes predictor transport and its test oracle, bringing the lexical
+total to 73; that net count is not a count of new production pointer operations.
 
 | Current boundary | Necessity and invariant | Reviewed evidence / remaining limit |
 | --- | --- | --- |
 | `tk_matrix.rs:59`, `alloc_zeroed` | Checked nonzero f64 array layout; global allocation; null maps to the established recoverable allocation error. Native `TKmatrix.C::malloc_blas` uses calloc. | 0123 source review and macOS allocation/failure controls; actual Linux residency and allocation controls pending. |
 | `tk_matrix.rs:67`, `Vec::from_raw_parts` | All bytes are initialized positive-zero f64; aligned unique storage transfers once with matching length/capacity and global deallocator. Existing Arc ownership/COW remains. | 0123 full positive-zero/layout, lifecycle, complete science and COW evidence; no deferred-cell semantics or custom allocator. |
 | `ordinary_long_double.rs:13,88,97,101` | Existing synchronous native math transport uses owned NUL-terminated text and a bounded output buffer, with source ordinary precision retained. | 0117/0119 ordinary-exp/log qualification; separate from allocator changes and AO predictor profiling. |
+| `predictor_ffi.rs:43,80` | Synchronous native scalar reads/writes use exclusive local significand/exponent/class values; current public cells are reread, no pointers escape and ordinary 53/64-bit precision remains. | 0124 review and macOS scalar/native/consumer evidence; Linux transport and matched 8x4 performance follow-through pending. Test-only text transport remains an independent oracle. |
 
 The fresh identity/navigation audit is retained at
-`validation/release/build/source-map-an-0123/audit/receipt.json`. It checks all
+`validation/release/build/source-map-ao-0124/receipt.json`. It checks all
 93 responsibility rows and 36 retained SOFA sources. The allocation-only Linux
-pair remains `dc435f5` / `68973d6`; the ordinary integrated matrix separately
+pair remains `dc435f5` / `68973d6`; the predictor pair is `68973d6` / `0bd8e2c`.
+The ordinary integrated matrix separately
 qualifies the merged candidate. See [qualification status](RELEASE_QUALIFICATION_REPORT.md)
-and [AN's measured report](ALLOCATION_PROFILE_REPORT.md).
+and the measured [AN](ALLOCATION_PROFILE_REPORT.md) and
+[AO](PREDICTOR_PERFORMANCE_REPORT.md) reports.
 
 ## Dated frozen-source snapshot — 1 November 2026
 

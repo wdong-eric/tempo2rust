@@ -13,7 +13,7 @@ if __name__=='__main__':
     if not a.input.is_dir():p.error('input directory does not exist: '+str(a.input))
     a.out.mkdir(parents=True,exist_ok=False);files={}
     excluded={'source','src','target','test-target','corpus-target','rust-target','cache-target','library-owned-cache-source',
-              'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache','provider-target','debug-target'}
+              'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache','provider-target','debug-target','predictor-tests'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)
         if not path.is_file() or path.is_symlink():continue
@@ -27,7 +27,8 @@ if __name__=='__main__':
         allocation_product='allocation' in relative.parts and path.name in {
             'constraints.matrix','cov.matrix','design.matrix','param.labels','param.vals',
             'postfit.res','prefit.res','fitted.par_1','fitted.par_2','global_covar.cvm'}
-        if (not allocation_product and path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
+        predictor_usage='predictor-performance' in relative.parts and path.suffix=='.usage'
+        if (not allocation_product and not predictor_usage and path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
                 and not path.name.endswith(('polyco_new.dat','newpolyco.dat','polyco.tim','t2pred.dat','pred.tim'))
                 and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',

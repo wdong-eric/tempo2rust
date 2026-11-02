@@ -12,6 +12,10 @@ ALLOCATION_REVISIONS={
     "before":"dc435f53a64e4dd5c25cae6319841a28bd981fcb",
     "after":"68973d669af0e1180ad8532bb8b364452ca203d7",
 }
+PREDICTOR_REVISIONS={
+    "before":"68973d669af0e1180ad8532bb8b364452ca203d7",
+    "after":"0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe",
+}
 
 
 def qualify(args):
@@ -178,6 +182,47 @@ def qualify(args):
     step('allocation-debug-lifecycle',['cargo','test','--offline','--locked','--manifest-path',after_manifest,
          '--lib','pulsar_lifecycle_tests::','--','--test-threads=1'],['allocation-resources-after'],
          extra_env={'CARGO_TARGET_DIR':str(allocation/'debug-target')})
+    # AO's installed predictor pair is distinct from the combined candidate.
+    predictor=out/'predictor-performance';predictor.mkdir()
+    ao=candidate/'validation/predictor_performance'
+    cargo_home=Path(env.get('CARGO_HOME',Path.home()/'.cargo')).resolve()
+    for label,revision in PREDICTOR_REVISIONS.items():
+        step('predictor-source-'+label,['git','-C',ROOT,'cat-file','-e',revision+'^{commit}'])
+        step('predictor-build-'+label,[python,ROOT/'validation/predictor_performance/build.py',
+             '--revision',revision,'--out',predictor/label,'--cargo-home',cargo_home],
+             ['dependencies','predictor-source-'+label])
+        step('predictor-qualify-'+label,script('qualify_predictor.py',
+             '--prefix',predictor/label/'prefix','--out',predictor/('qualify-'+label),
+             '--native-repository',repo),['predictor-build-'+label])
+    prediction=out/'workers/performance/cheby-native-1-2/t2pred.dat'
+    # An unrelated worker failure cannot hide this case's successful bound
+    # product; missing/failed generation never substitutes the 4x2 ABI fixture.
+    step('predictor-workload',script('predictor_workload.py','--performance',out/'workers/performance',
+         '--candidate',candidate,'--out',predictor/'workload'),['candidate'])
+    step('predictor-pair-verify',[python,ao/'verify.py','--before',predictor/'before/prefix',
+         '--after',predictor/'after/prefix','--before-qualification',predictor/'qualify-before',
+         '--after-qualification',predictor/'qualify-after','--predictor',prediction,
+         '--out',predictor/'verify'],['predictor-qualify-before','predictor-qualify-after','predictor-workload','candidate'])
+    step('predictor-pair-native-gate',script('predictor_performance_gate.py',
+         '--verification',predictor/'verify/receipt.json','--out',predictor/'native-gate'),['predictor-pair-verify'])
+    step('predictor-pair-concurrency',script('c_concurrency.py','--prefix',predictor/'after/prefix',
+         '--out',predictor/'concurrency'),['predictor-build-after'])
+    step('predictor-pair-consumers',[python,ao/'consumers.py','--before',predictor/'before/prefix',
+         '--after',predictor/'after/prefix','--out',predictor/'consumers','--cargo-home',cargo_home],
+         ['predictor-build-before','predictor-build-after','candidate'])
+    for profile in ['debug','release']:
+        step('predictor-pair-tests-'+profile,['cargo','test','--offline','--locked',
+             '--manifest-path',predictor/'after/source/rust/Cargo.toml',
+             '--target-dir',predictor/'predictor-tests',*(['--release'] if profile=='release' else []),
+             '--lib','predictor','--','--test-threads=1'],['predictor-build-after'])
+    # All compilation precedes these uninstrumented, shuffled fresh processes.
+    # A supplemental native failure remains a gate failure, not a timing veto.
+    step('predictor-pair-measure',[python,ao/'measure.py',
+         '--before',predictor/'verify/before-evaluation','--after',predictor/'verify/after-evaluation',
+         '--native',predictor/'verify/native-evaluation','--before-period',predictor/'before/prefix/bin/getPeriod-rust',
+         '--after-period',predictor/'after/prefix/bin/getPeriod-rust',
+         '--native-period',predictor/'qualify-before/native-getPeriod','--predictor',prediction,
+         '--out',predictor/'measure','--iterations','100000','--samples','7'],['predictor-pair-verify','candidate'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -197,6 +242,8 @@ def qualify(args):
              'Central acceptance of the recorded platform qualification']
     run.save({'status':'failure' if failed or blocked else 'pass', 'qualification':'incomplete' if pending else 'matrix executed; central acceptance separate',
         'candidate':args.revision,'stages':records,'failed':failed,'blocked':blocked,'pending':pending,
+        'predictor_performance':{'revisions':PREDICTOR_REVISIONS,'cargo_home':str(cargo_home),
+            'scope':'Frozen AO installed pair; combined-candidate gates remain separate; supplemental native failures retained'},
         'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',
             'cargo_home':env.get('CARGO_HOME','Cargo default'),'gmp_cache':env['GMP_MPFR_SYS_CACHE'],
             'allocator_environment':{k:v for k,v in env.items() if k in ['LD_PRELOAD','DYLD_INSERT_LIBRARIES','GLIBC_TUNABLES']
