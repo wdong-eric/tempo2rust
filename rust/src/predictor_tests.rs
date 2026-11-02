@@ -1,6 +1,144 @@
 //! AF analytic contracts, parser failures and owned lifecycle regressions.
 use crate::{cheby2d::*, predictor_number::n, t1polyco::*, tempo2pred::*};
 use std::io::Cursor;
+
+// Copies used to compare ownership forms must retain negative NaN inputs;
+// Rug's ordinary Clone initializes a fresh positive-NaN destination.
+fn signed_copy(x: &crate::predictor_number::N) -> crate::predictor_number::N {
+    let copy = x.clone();
+    if x.as_float().is_nan() && x.as_float().is_sign_negative() {
+        -copy
+    } else {
+        copy
+    }
+}
+#[track_caller]
+fn same_number(actual: crate::predictor_number::N, expected: &crate::predictor_number::N) {
+    assert_eq!(actual.as_float().prec(), expected.as_float().prec());
+    assert_eq!(actual.as_float().is_nan(), expected.as_float().is_nan());
+    assert_eq!(
+        actual.as_float().is_sign_negative(),
+        expected.as_float().is_sign_negative(),
+        "actual={actual:?}, expected={expected:?}"
+    );
+    if !expected.as_float().is_nan() {
+        assert_eq!(&actual, expected);
+    }
+}
+
+#[test]
+fn predictor_owned_operations_preserve_rounding_and_classes() {
+    use crate::predictor_number::{N, NATIVE_BITS};
+    let (tiny, normal, maximum) = if NATIVE_BITS == 53 {
+        ("0x1p-1074", "0x1p-1022", "0x1.fffffffffffffp1023")
+    } else {
+        ("0x1p-16445", "0x1p-16382", "0x1.fffffffffffffffep16383")
+    };
+    let mut values = vec![
+        n(0.),
+        n(-0.),
+        n(1.),
+        n(-1.),
+        n(2.),
+        n(-2.),
+        n(0.5),
+        n(-0.5),
+        n(f64::INFINITY),
+        n(f64::NEG_INFINITY),
+        n(f64::NAN),
+        -n(f64::NAN),
+    ];
+    for text in [
+        tiny,
+        normal,
+        maximum,
+        "0x1.0000000000000002p0",
+        "0x1.fffffffffffffp-1",
+    ] {
+        let x = N::parse_number(text).unwrap();
+        values.extend([x.clone(), -x]);
+    }
+    macro_rules! compare_ownership {
+        ($a:expr, $b:expr, $op:tt) => {{
+            // The borrowed operation is the unchanged fresh-result path.
+            let expected = $a $op $b;
+            same_number(signed_copy($a) $op $b, &expected);
+            same_number($a $op signed_copy($b), &expected);
+            same_number(signed_copy($a) $op signed_copy($b), &expected);
+        }};
+    }
+    for a in &values {
+        for b in &values {
+            compare_ownership!(a, b, +);
+            compare_ownership!(a, b, -);
+            compare_ownership!(a, b, *);
+            compare_ownership!(a, b, /);
+            for c in [n(0.), n(-0.), n(1.), n(f64::INFINITY), -n(f64::NAN)] {
+                // The pre-reuse source boundary: hardware FMA on macOS,
+                // separately rounded multiply and add on the 64-bit profile.
+                let expected = if NATIVE_BITS == 53 {
+                    n(a.to_f64().mul_add(b.to_f64(), c.to_f64()))
+                } else {
+                    let product = a * b;
+                    &product + &c
+                };
+                same_number(a.source_mul_add(b, &c), &expected);
+                same_number(signed_copy(a).source_mul_add_owned(b, &c), &expected);
+            }
+        }
+        for b in [
+            0.,
+            -0.,
+            1.,
+            -1.,
+            f64::from_bits(1),
+            f64::MIN_POSITIVE,
+            f64::MAX,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NAN,
+            -f64::NAN,
+        ] {
+            macro_rules! mixed {
+                ($op:tt) => {{
+                    let expected = a $op &n(b);
+                    same_number(a $op b, &expected);
+                    same_number(signed_copy(a) $op b, &expected);
+                }};
+            }
+            mixed!(+);
+            mixed!(-);
+            mixed!(*);
+            mixed!(/);
+        }
+    }
+    // Detect the actual aliasing trap, rather than assume MPFR clears NaN sign.
+    use rug::{Float, float::Round, ops::MulAssignRound};
+    let mut negative_zero = Float::with_val(NATIVE_BITS, -0.0);
+    negative_zero.mul_assign_round(&Float::with_val(NATIVE_BITS, f64::INFINITY), Round::Nearest);
+    assert!(negative_zero.is_nan() && negative_zero.is_sign_negative());
+    same_number(n(-0.) * n(f64::INFINITY), &n(f64::NAN));
+}
+
+#[test]
+fn predictor_owned_subnormal_midpoint_keeps_first_rounding_direction() {
+    use crate::predictor_number::{N, NATIVE_BITS};
+    use rug::Float;
+    let p = NATIVE_BITS;
+    let normal_exp = if p == 53 { -1022 } else { -16382 };
+    let wide = 2 * p + 4;
+    let a = (Float::with_val(wide, 1) + (Float::with_val(wide, 1) >> (p - 1))) << normal_exp;
+    let b = (Float::with_val(wide, 1) - (Float::with_val(wide, 1) >> p)) >> p;
+    let a = N::from_float(&a);
+    let b = N::from_float(&b);
+    let tiny = N::parse_number(&format!("0x1p{}", normal_exp - (p as i32 - 1))).unwrap();
+    // Exact product is just above half the minimum subnormal; the p-bit
+    // intermediate is exactly that midpoint. Dropping direction returns zero.
+    same_number(a.clone() * &b, &tiny);
+    same_number(&a * b.clone(), &tiny);
+    same_number((-a) * b, &(-tiny));
+}
+
 fn model(start: f64, end: f64) -> ChebyModel {
     let c =
         Cheby2D::from_coefficients(3, 2, vec![n(12.), n(4.), n(0.), n(2.), n(0.), n(0.)]).unwrap();
