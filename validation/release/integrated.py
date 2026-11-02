@@ -16,6 +16,10 @@ PREDICTOR_REVISIONS={
     "before":"68973d669af0e1180ad8532bb8b364452ca203d7",
     "after":"0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe",
 }
+EVALUATOR_REVISIONS={
+    "before":"0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe",
+    "after":"8716d1dc026641f3a51c2ba88850c5599293cbdd",
+}
 
 
 def qualify(args):
@@ -215,7 +219,38 @@ def qualify(args):
              '--manifest-path',predictor/'after/source/rust/Cargo.toml',
              '--target-dir',predictor/'predictor-tests',*(['--release'] if profile=='release' else []),
              '--lib','predictor','--','--test-threads=1'],['predictor-build-after'])
-    # All compilation precedes these uninstrumented, shuffled fresh processes.
+    # 0128 reuses the transport pair's frozen after install as its before.
+    # Direct and complete C evaluations share the same bound native 8x4 file.
+    evaluator=predictor/'evaluator';evaluator.mkdir()
+    before=predictor/'after/prefix';after=evaluator/'after/prefix'
+    step('evaluator-source-after',['git','-C',ROOT,'cat-file','-e',EVALUATOR_REVISIONS['after']+'^{commit}'])
+    step('evaluator-build-after',[python,ROOT/'validation/predictor_performance/build.py',
+         '--revision',EVALUATOR_REVISIONS['after'],'--out',evaluator/'after','--cargo-home',cargo_home],
+         ['dependencies','evaluator-source-after'])
+    step('evaluator-qualify-after',script('qualify_predictor.py','--prefix',after,
+         '--out',evaluator/'qualify-after','--native-repository',repo),['evaluator-build-after'])
+    step('evaluator-pair-verify',[python,ao/'verify.py','--before',before,'--after',after,
+         '--before-qualification',predictor/'qualify-after','--after-qualification',evaluator/'qualify-after',
+         '--predictor',prediction,'--out',evaluator/'verify'],
+         ['predictor-qualify-after','evaluator-qualify-after','predictor-workload','candidate'])
+    step('evaluator-pair-native-gate',script('predictor_performance_gate.py',
+         '--verification',evaluator/'verify/receipt.json','--out',evaluator/'native-gate'),['evaluator-pair-verify'])
+    for label,prefix,dependency in [('before',before,'predictor-build-after'),('after',after,'evaluator-build-after')]:
+        step('evaluator-direct-build-'+label,[python,ao/'evaluator_build.py','--prefix',prefix,
+             '--out',evaluator/(label+'-direct'),'--cargo-home',cargo_home],[dependency,'candidate'])
+    step('evaluator-direct-verify',[python,ao/'evaluator_verify.py','--before',evaluator/'before-direct',
+         '--after',evaluator/'after-direct','--predictor',prediction,'--out',evaluator/'direct-verify'],
+         ['evaluator-direct-build-before','evaluator-direct-build-after','predictor-workload','candidate'])
+    step('evaluator-pair-concurrency',script('c_concurrency.py','--prefix',after,
+         '--out',evaluator/'concurrency'),['evaluator-build-after'])
+    step('evaluator-pair-consumers',[python,ao/'consumers.py','--before',before,'--after',after,
+         '--out',evaluator/'consumers','--cargo-home',cargo_home],['predictor-build-after','evaluator-build-after','candidate'])
+    for profile in ['debug','release']:
+        step('evaluator-pair-tests-'+profile,['cargo','test','--offline','--locked',
+             '--manifest-path',evaluator/'after/source/rust/Cargo.toml',
+             '--target-dir',evaluator/'predictor-tests',*(['--release'] if profile=='release' else []),
+             '--lib','predictor','--','--test-threads=1'],['evaluator-build-after'])
+    # All comparison compilation precedes these shuffled fresh processes.
     # A supplemental native failure remains a gate failure, not a timing veto.
     step('predictor-pair-measure',[python,ao/'measure.py',
          '--before',predictor/'verify/before-evaluation','--after',predictor/'verify/after-evaluation',
@@ -223,6 +258,16 @@ def qualify(args):
          '--after-period',predictor/'after/prefix/bin/getPeriod-rust',
          '--native-period',predictor/'qualify-before/native-getPeriod','--predictor',prediction,
          '--out',predictor/'measure','--iterations','100000','--samples','7'],['predictor-pair-verify','candidate'])
+    step('evaluator-direct-measure',[python,ao/'evaluator_measure.py',
+         '--before',evaluator/'before-direct/plain','--after',evaluator/'after-direct/plain',
+         '--predictor',prediction,'--out',evaluator/'direct-measure','--iterations','100000','--samples','7'],
+         ['evaluator-direct-verify','candidate'])
+    step('evaluator-pair-measure',[python,ao/'measure.py',
+         '--before',evaluator/'verify/before-evaluation','--after',evaluator/'verify/after-evaluation',
+         '--native',evaluator/'verify/native-evaluation','--before-period',before/'bin/getPeriod-rust',
+         '--after-period',after/'bin/getPeriod-rust','--native-period',predictor/'qualify-after/native-getPeriod',
+         '--predictor',prediction,'--out',evaluator/'measure','--iterations','100000','--samples','7'],
+         ['evaluator-pair-verify','candidate'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -244,6 +289,9 @@ def qualify(args):
         'candidate':args.revision,'stages':records,'failed':failed,'blocked':blocked,'pending':pending,
         'predictor_performance':{'revisions':PREDICTOR_REVISIONS,'cargo_home':str(cargo_home),
             'scope':'Frozen AO installed pair; combined-candidate gates remain separate; supplemental native failures retained'},
+        'evaluator_performance':{'revisions':EVALUATOR_REVISIONS,'before_install':str(before),
+            'before_qualification':str(predictor/'qualify-after'),'predictor':str(prediction),
+            'scope':'0128 owner reuse; direct and complete C timings separate; supplemental native failures retained'},
         'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',
             'cargo_home':env.get('CARGO_HOME','Cargo default'),'gmp_cache':env['GMP_MPFR_SYS_CACHE'],
             'allocator_environment':{k:v for k,v in env.items() if k in ['LD_PRELOAD','DYLD_INSERT_LIBRARIES','GLIBC_TUNABLES']

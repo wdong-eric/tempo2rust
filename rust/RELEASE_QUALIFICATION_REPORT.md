@@ -77,7 +77,10 @@ work in its separate clone. Decision
 [0124](../decisions/0124-predictor-transport-review-and-evaluator-release.md)
 accepts its measured macOS scalar-transport improvement, integrated through
 `a44bda2defc2616c3e05c34ff0e2ecc7401918e7`. This batch includes that completed
-transport pair; AO's newly released evaluator work remains separate.
+transport pair. Decision
+[0128](../decisions/0128-predictor-evaluator-review-and-cpu-assessment.md)
+also accepts AO's measured macOS evaluator owner reuse; the queued Linux
+continuation is described below and remains separate from the running candidate.
 
 The prepared Linux allocation stages reuse AN's existing runners:
 
@@ -158,18 +161,44 @@ and 8x4 predictor `d178a983957de8a21860bac99d50fee08fca3e6c018d2b7d6a0bc0ceb6b5c
 this validates existing paths and identities, not a new timing campaign.
 Preparation evidence is under `validation/release/build/predictor-linux-prep-0123/`.
 
+The next reviewed successor also queues the existing
+[owner-reuse recipe](../validation/predictor_performance/EVALUATOR.md) for exact
+`0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe` →
+`8716d1dc026641f3a51c2ba88850c5599293cbdd`. It reuses the transport pair's after
+installation and qualifier as this pair's before, builds/qualifies the new
+after, and passes the same bound native 8x4 workload to both scopes. The direct
+runner retains all 5,880 ordinary edge outputs, 28 finite outputs and separate
+allocation observations. Complete installed C outputs, native failures,
+consumers, concurrency/sanitizers and debug/release predictor tests keep their
+existing runners. All comparison compilation precedes timing: seven samples
+produce 28 direct and 63 complete-C/getPeriod process records in separate
+campaigns, using plain clients. Their times do not establish an exact FFI cost.
+
+Local preparation passes 19 allocation/predictor/evaluator routing and retention
+tests. Real shallow-fetch controls retrieve all three exact pairs and preserve
+the selected HEAD; a missing evaluator after object is recorded without stopping
+the other fetches. The collector retains 382 saved macOS products byte-for-byte,
+including all 91 resource reports and the unchanged supplemental native sign
+failure. Preparation receipt:
+`validation/release/build/evaluator-linux-prep-0128/receipt.json`, SHA-256
+`afc4d9bc1fa6d57a12c5eac5ee4ffa7ac90198e5072b6b0a27e0bb0568ff70eb`.
+These checks validate release routing and saved-evidence retention. They do not
+execute or establish the Linux owner-reuse numerical/performance result. Run
+`41392963741` stays at `9991e80`; publication, successor dispatch and acceptance
+remain with central.
+
 The workflow job budget is now 240 minutes. Run `41294531402` took about 153
 minutes; its matrix ran 09:46:31–12:15:17 UTC and upload ended around 12:19.
 The previous 180-minute limit left about 27 minutes for the new isolated AN/AO
 builds and qualification. The additional hour provides execution and artifact
 collection headroom only; no scientific or performance threshold changes.
 
-Current unsafe/source accounting is refreshed in the [source map](RELEASE_SOURCE_MAP.md),
+The [source map](RELEASE_SOURCE_MAP.md) retains its dated pre-0128 accounting,
 with the reviewed allocator and predictor boundaries distinguished from historical
-counts. Local preparation uses saved-evidence, harness, source and build-routing checks;
+counts. Local preparation uses saved-evidence, harness and build-routing checks;
 actual Linux measurements, scientific verification and predictor results await
-central review/publication/dispatch of one batched candidate. Existing
-scientific gates, Rug128 and native binary128 remain unchanged.
+central review/publication/dispatch of one batched candidate. Outside the bounded
+0127 contract, scientific gates remain unchanged, as do Rug128 and native binary128.
 
 ## Dated campaign history
 
