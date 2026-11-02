@@ -14,6 +14,9 @@ existing rational binary-rounding facility, and retains each original native
 comparison. The other twelve utility cases keep their native gates, including
 zero/class behavior. MPFR's zero exponent sentinel is handled as zero, avoiding
 an unnecessary billion-bit denominator in the comparison.
+The adopted `nlong` integer decision is zero. Native `nlong` returns `long`,
+whose zero has no sign; the existing Rust `Float::trunc` representation retains
+`-0` for the negative witness and the target checks that representation exactly.
 
 The P adapter binds the eight histories' complete input actions, stored-input
 rounding, flags and equal errors. It derives the additional deletion, constructs

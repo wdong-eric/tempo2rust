@@ -21,6 +21,8 @@ def utility_target(name, operation, left, right):
         sign=1 if name=='half_below' else -1
         assert operation=='nlong' and Fraction(x)==sign*(Fraction(1,2)-Fraction(2)**-114)
         result=round_binary(Fraction(x)+sign*Fraction(1,2),128)
+        # The adopted integer decision is zero. Its negative Float::trunc
+        # representation is -0; native nlong's long return has no zero sign.
         return ('finite',sign<0,Fraction(int(result)))
     if name in ['mod_rounded_quotient','mod_negative_quotient']:
         sign=1 if name=='mod_rounded_quotient' else -1

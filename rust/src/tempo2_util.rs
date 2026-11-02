@@ -58,6 +58,8 @@ pub fn fortran_nlong(x: &Float) -> Float {
     // tempo2Util.C:211-220 (fda6ad4): signed half addition then truncation.
     // 0127 adopts integer zero for +/-(0.5-2^-114) at Rug128; binary128 rounds
     // the half addition to +/-1. This bounded departure is not native equality.
+    // Native nlong returns long, whose zero has no sign. This Float helper's
+    // existing truncation retains -0 for the negative witness, checked exactly.
     (x.clone() + if x > &0 { 0.5f64 } else { -0.5f64 }).trunc()
 }
 
