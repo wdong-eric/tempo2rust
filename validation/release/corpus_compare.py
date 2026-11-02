@@ -11,6 +11,7 @@ import shutil
 import sys
 import tempfile
 from common import ROOT, Run, sha, identities
+from native_corpora import HISTORY, stage_history
 
 PORTS=['jpl_port','clocks_port','parameter_storage_port','observation_storage_port',
        'pulsar_lifecycle_port','time_ephemeris_port','terrestrial_resources_port',
@@ -56,6 +57,7 @@ def stage_preservation(root, write, stages):
     """Bind historical preservation checks to the actual staged adaptation ledger."""
     for stage,filename,old in [
             ('par_specialized','run.py',"json.loads((HERE/'protected.json').read_text())"),
+            ('par_specialized','verify.py',"json.loads((HERE/'protected.json').read_text())"),
             ('terrestrial_resources','inventory.py',"json.loads((base/'protected.json').read_text())")]:
         if stage not in stages:continue
         path=root/'validation'/stage/filename;text=path.read_text()
@@ -103,6 +105,10 @@ def execute(args):
         # Each successor recreates its own concrete caller files when needed.
         return excluded(directory,names)|({'cases'} if Path(directory).name=='build' else set())
     shutil.copytree(reference,root,symlinks=True,ignore=staged_inputs)
+    if 'par_specialized' in args.stages:
+        # Q still reads its immutable released membership and K projection with
+        # git show. Retain those exact shallow roots from the bound native stage.
+        stage_history(run,root,HISTORY['par_specialized'],reference)
     (root/'tempo2').symlink_to(reference/'tempo2',target_is_directory=True)
     rust=root/'rust'
     shutil.copytree(candidate/'rust',rust)
@@ -370,6 +376,7 @@ def execute(args):
             filename={'parameters':'check_parameters.py','tim_io':'check_tim_corpus.py','par_specialized':'check_par.py','planetary_ephemeris':'check_planetary.py','propagation':'check_propagation.py'}[stage]
             if stage=='parameters' and not call('parameters-native-matched',script('parameters','run.py','--record')):continue
             if stage=='par_specialized' and not call('par-native-matched',script('par_specialized','run.py','--record')):continue
+            if stage=='par_specialized' and not call('par-native-controls',script('par_specialized','verify.py')):continue
             call(stage,script('input_to_bat',filename,*release))
             if stage=='planetary_ephemeris':call('planetary-random',script('input_to_bat','check_random.py',*release))
             if stage=='propagation':

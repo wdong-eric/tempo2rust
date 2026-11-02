@@ -60,17 +60,18 @@ class NativeMetadata(unittest.TestCase):
     def test_staged_par_preservation_needs_no_runner_root_global(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);here=root/'validation/par_specialized';here.mkdir(parents=True)
-            path=here/'run.py';path.write_bytes((ROOT/'validation/par_specialized/run.py').read_bytes())
+            paths=[here/name for name in ['run.py','verify.py']]
+            for path in paths:path.write_bytes((ROOT/'validation/par_specialized'/path.name).read_bytes())
             protected=here/'protected.json'
             protected.write_text(json.dumps({'catalog.py':'old','fixture.par':'unchanged'}))
             (root/'al-source-adaptations.json').write_text(json.dumps({'catalog.py':{'original':'old','adapted':'new'}}))
             stage_preservation(root,lambda path,text:path.write_text(text),['par_specialized'])
             # Execute both actual before/after check expressions from the staged
             # historical runner, whose namespace has HERE and Path but no ROOT.
-            expressions=[n for n in ast.walk(ast.parse(path.read_text()))
+            expressions=[n for path in paths for n in ast.walk(ast.parse(path.read_text()))
                          if isinstance(n,ast.Call) and isinstance(n.func,ast.Name)
                          and n.func.id=='preservation_expected']
-            self.assertEqual(len(expressions),2)
+            self.assertEqual(len(expressions),3)
             namespace={'HERE':here,'Path':Path,'json':json,'preservation_expected':preservation_expected}
             for expression in expressions:
                 code=compile(ast.Expression(expression),str(path),'eval')
