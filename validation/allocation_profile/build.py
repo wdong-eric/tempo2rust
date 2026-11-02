@@ -17,12 +17,23 @@ sys.path.insert(0, str(ROOT / 'validation/release'))
 from common import sha
 
 
+def cargo_environment(source):
+    """Keep each frozen build isolated while reusing the caller's prepared cache."""
+    # CARGO_HOME remains supplied by the caller, or unset for Cargo's own default.
+    return dict(os.environ,
+        GMP_MPFR_SYS_CACHE=os.environ.get('GMP_MPFR_SYS_CACHE', str(HERE / 'build/gmp-cache')),
+        CARGO_TARGET_DIR=str(source / 'rust/target'), CARGO_BUILD_JOBS='4')
+
+
 def command(out, name, args, env=None):
     args = list(map(str, args))
     result = subprocess.run(args, cwd=ROOT, env=env, capture_output=True)
     (out / (name + '.stdout')).write_bytes(result.stdout)
     (out / (name + '.stderr')).write_bytes(result.stderr)
     record = {'argv': args, 'exit': result.returncode}
+    if env is not None:
+        record['cargo_environment'] = {k: env[k] for k in
+            ['CARGO_HOME', 'CARGO_TARGET_DIR', 'GMP_MPFR_SYS_CACHE', 'CARGO_BUILD_JOBS'] if k in env}
     (out / (name + '.json')).write_text(json.dumps(record, indent=2) + '\n')
     assert result.returncode == 0, (name, result.stderr.decode()[-3000:])
     return record
@@ -89,8 +100,7 @@ if __name__ == '__main__':
     (out / 'freeze.json').write_text(json.dumps({'revision': revision,
         'export_sha256': hashlib.sha256(raw).hexdigest(),
         'sources': {str(f.relative_to(source)): sha(f) for f in source.rglob('*') if f.is_file()}}, indent=2) + '\n')
-    env = dict(os.environ, CARGO_HOME=str(ROOT / 'rust/.cargo-home'),
-               GMP_MPFR_SYS_CACHE=str(HERE / 'build/gmp-cache'), CARGO_BUILD_JOBS='4')
+    env = cargo_environment(source)
     command(out, 'cargo-build', ['cargo', 'build', '--offline', '--locked', '--release',
                                '--manifest-path', source / 'rust/Cargo.toml'], env)
     bind(out, a.a2.resolve())
