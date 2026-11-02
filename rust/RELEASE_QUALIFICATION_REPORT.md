@@ -37,13 +37,35 @@ The prepared Linux allocation stages reuse AN's existing runners:
   two CLI workloads with five fresh interleaved samples. Measurement adds no
   timing/RSS acceptance threshold. Full science/file and eleven lifecycle
   histories retain exact before/after checks and all native gate outcomes.
-- Record inherited native lifecycle/fitting failures as matrix failures even
-  when same-engine equality passes. Run the existing isolated-PKS predictor
+- Preserve AN's original native lifecycle receipt and every raw mismatch.
+  Separately compare both engines' complete lifecycle outputs with
+  `corpus/lifecycle-corrected-native/expected`, using the existing S/T comparator.
+  This reuses the accepted 0068/0079 corrections and the separate native proof
+  acknowledged in 0103, including AE's reserved-slot copy correction. Bind the
+  proof's producer, copy transformation and original/corrected input hashes;
+  a missing, failed or mismatched proof is a dependent failure. No field is
+  removed to make a correction pass. Original fitting failures remain matrix
+  failures even when same-engine equality passes. Run the isolated-PKS predictor
   gate on after, and also before if after fails. Provider and debug lifecycle
   checks remain independent of those scientific failure statuses.
 - Retain AN's diagnostic matrices, labels, residuals and complete CLI products,
   while excluding frozen source/build/cache trees. Missing Git/native ordinary
   prerequisites remain explicit; unrelated matrix stages continue.
+
+Lifecycle routing controls pass, including an unrelated state regression shared
+by both engines and missing/failed/changed proof rejection. Saved AN `verify-v4`
+events pass all 22 full corrected-state comparisons against the accepted
+`compare-v18` proof (`4ef92a96905ccacf9326b557e42629b1d7fb19ae45547b3a74f4db0873da3cef`).
+Both original `seeded_reinitialise` mismatches remain intact. Those two historical
+campaigns have different original file identities, which the live adapter
+correctly rejects; their original complete S/T projections also compare equal.
+This is a saved-content check, not a new integrated verification run.
+The fourth Linux artifact independently supplies 30 matching original/corrected
+proof pairs at the wired paths (61 manifest-verified members). Local receipts:
+`validation/release/build/allocation-lifecycle-0123/content-replay.json`
+(`f42f2ffd56b6e8c4d22811cfbbb543e7cc04f9993145c39ab8ac689ebf538cc5`) and
+`validation/release/build/allocation-lifecycle-linux-0123/receipt.json`
+(`af3384a6366fc8c27d4196f7e378874593377fe651642b56bb2d0d95fd62ea16`).
 
 Current unsafe/source accounting is refreshed in the [source map](RELEASE_SOURCE_MAP.md),
 with the two reviewed allocator unsafe operations distinguished from historical

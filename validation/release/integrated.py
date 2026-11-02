@@ -157,11 +157,12 @@ def qualify(args):
          '--after',allocation/'after','--native-cli',out/'core-disabled/tempo2','--a2',a2,
          '--out',allocation/'measure','--samples','5'],
          ['allocation-build-before','allocation-build-after','native-disabled','candidate'])
-    # The adapter checks S's ordinary record, not the aggregate corpus exit:
-    # an unrelated corpus/coverage failure must not suppress valid S inputs.
+    # Check S's ordinary record and its separate corrected-native proof, not the
+    # aggregate corpus exit: unrelated failures must not suppress valid S inputs.
     step('allocation-verify',script('allocation_verify.py','--out',allocation/'verify',
          '--before',allocation/'before','--after',allocation/'after','--a2',a2,
-         '--candidate',candidate,'--native-corpora',corpora,'--native-fit',out/'native-fitting/fit'),
+         '--candidate',candidate,'--native-corpora',corpora,'--native-fit',out/'native-fitting/fit',
+         '--lifecycle-corrected',out/'corpus/lifecycle-corrected-native'),
          ['allocation-resources-before','allocation-resources-after','native-fitting','candidate'])
     step('allocation-predictor-after',[python,an/'predictor_gate.py','--out',allocation/'predictor-after',
          '--a2',a2,'--native',out/'science/predictor','--rust',allocation/'after/bin/tempo2-rust',
