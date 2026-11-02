@@ -111,21 +111,24 @@ impl Cheby2D {
         Ok(d)
     }
     pub fn evaluate(&self, x: &N, y: &N) -> N {
+        // cheby2d.c Clenshaw recurrence: the former numeric owners allocated
+        // 236 times per 8x4 leaf on macOS. Consume only dead temporaries here;
+        // keep every multiply, source FMA/separate operation and add in order.
         let (mut dj, mut dj1) = (n(0.), n(0.));
         for j in (0..self.ny).rev() {
             let (mut di, mut di1) = (n(0.), n(0.));
             for i in (1..self.nx).rev() {
                 let di2 = di1;
                 di1 = di;
-                di = (x * 2.).source_mul_add(&di1, &(-di2)) + &self.coeff[j * self.nx + i];
+                di = (x * 2.).source_mul_add_owned(&di1, &(-di2)) + &self.coeff[j * self.nx + i];
             }
             di = self.coeff[j * self.nx].source_mul_add(&n(0.5), &x.source_mul_add(&di, &(-di1)));
             let dj2 = dj1;
             dj1 = dj;
             dj = if j > 0 {
-                (y * 2.).source_mul_add(&dj1, &(-dj2)) + di
+                (y * 2.).source_mul_add_owned(&dj1, &(-dj2)) + di
             } else {
-                di.source_mul_add(&n(0.5), &y.source_mul_add(&dj1, &(-dj2)))
+                di.source_mul_add_owned(&n(0.5), &y.source_mul_add(&dj1, &(-dj2)))
             };
         }
         dj
