@@ -774,6 +774,38 @@ fn independent_clone_preserves_internal_aliases_and_detaches_matrix_writes() {
     let moved = clone;
     assert_eq!(moved.matrix(cm).unwrap().get_blas_cols(), 3);
 }
+
+#[test]
+fn full_covariance_keeps_positive_zeros_contiguous_rows_and_unique_mutation() {
+    use crate::{pulsar::MAX_FIT, tk_matrix::BlasMatrix};
+    let mut matrix = BlasMatrix::malloc_blas(MAX_FIT, MAX_FIT).unwrap();
+    assert_eq!(matrix.get_blas_rows(), MAX_FIT);
+    assert_eq!(matrix.get_blas_cols(), MAX_FIT);
+    assert_eq!(matrix.cells().len(), MAX_FIT * MAX_FIT);
+    assert_eq!(
+        matrix
+            .cells()
+            .as_ptr()
+            .align_offset(std::mem::align_of::<f64>()),
+        0
+    );
+    // Exhaustive value validation deliberately touches the full payload. The
+    // separate allocation observer measures residency before any such reads.
+    assert!(matrix.cells().iter().all(|value| value.to_bits() == 0));
+    let base = matrix.cells().as_ptr() as usize;
+    for row in 0..MAX_FIT {
+        assert_eq!(
+            matrix.row(row).unwrap().as_ptr() as usize - base,
+            row * MAX_FIT * 8
+        );
+    }
+    assert_eq!(matrix.row(MAX_FIT).unwrap_err().kind, "capacity");
+    matrix.cells_mut()[MAX_FIT] = -0.0;
+    matrix.cells_mut()[MAX_FIT * MAX_FIT - 1] = 3.5;
+    assert_eq!(matrix.cells().as_ptr() as usize, base);
+    assert_eq!(matrix.row(1).unwrap()[0].to_bits(), (-0.0f64).to_bits());
+    assert_eq!(matrix.row(MAX_FIT - 1).unwrap()[MAX_FIT - 1], 3.5);
+}
 #[test]
 fn copy_prefix_terminal_boundary_and_fresh_context_recovery() {
     let mut c = PulsarContext::unwritten(2);
