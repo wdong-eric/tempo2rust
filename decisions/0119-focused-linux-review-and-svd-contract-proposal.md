@@ -3,7 +3,7 @@
 Central review, 2 November 2026. The 0117 correction run completed and its
 artifact is verified. Release the bounded follow-through below; AL, M2 and full
 migration remain pending. The final complete 69-stage qualification remains due.
-The SVD proposal in this document is **not adopted** without the user's answer.
+The user subsequently adopted the SVD proposal; decision 0120 records the answer, precise position-only contract and scoped implementation release. This document retains the review and proposal as presented.
 
 ## Actual Linux result
 
@@ -89,7 +89,7 @@ The complete report, recipes, traces and bound products are retained in the
 ignored `build/focused-result-and-svd-review-20261102/` packet. No production
 solver, ordering, precision or acceptance check changed.
 
-## SVD proposal for the user's decision — not adopted
+## SVD proposal as presented — subsequently adopted under 0120
 
 The new branch trace gives a concrete reason to reconsider the user's 0012
 exact raw-order requirement. Central recommends retaining Rug128 and each
@@ -109,8 +109,9 @@ rotation allowances are not proposed.
 
 The alternatives are to retain 0012's pending exact gate or separately investigate
 source-precision solver arithmetic, which would require an explicit numerical
-policy decision and broader qualification. Until the user answers, **0012 remains
-fully binding**. No comparator or solver change is authorized by this proposal.
+policy decision and broader qualification. At the time of this review, **0012 remained fully binding** and this proposal
+authorized no comparator or solver change. Decision 0120 records the subsequent
+user approval and comparator implementation release; production remains unchanged.
 
 ## Bounded AL follow-through released
 

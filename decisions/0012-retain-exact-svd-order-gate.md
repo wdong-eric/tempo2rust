@@ -1,5 +1,7 @@
 # Retain the exact singular-mode order gate
 
+**Current status:** the user superseded this exact-position acceptance requirement on 2 November 2026 by adopting [decision 0120](/Users/Eric.Dong/Downloads/tempo2rust/decisions/0120-user-adopted-paired-svd-acceptance.md). Rug128 and raw outputs remain unchanged; paired-mode acceptance requires all retained numerical and physical gates. This document and its failed-run evidence remain the historical record of the earlier rule.
+
 Central decision, 23 October 2026. The user's later direct answer in Assignment E is authoritative: **“Keep exact order gate and report it unresolved.”** It supersedes decision 0010's permission for a pure singular-mode permutation to pass acceptance. This is a recorded instruction, not a new numerical finding or a request to change the production solver.
 
 The answer was retrieved from `Assignment E: Rust TEMPO2 fitting`, thread `01a16734-4da3-7810-979a-4dad2f647ecd`, user message `01a16754-1760-7182-8ba2-fefee46e1b84`. The question explicitly concerned matching an unordered spectrum while preserving each engine's exported raw mode order. Central's earlier follow-up requiring decision 0010 to be applied is superseded by this later user choice.

@@ -268,3 +268,19 @@ finite calculations, exact sign checks, precision and all historical evidence.
 Return clean commits and concrete verification for central publication review;
 continue this independent work while the SVD policy answer is pending. The full
 69-stage qualification, inherited scientific ledger and AL-first sequence remain.
+
+
+## User adopts paired SVD acceptance (0120)
+
+The user approved 0119's paired-mode proposal while retaining Rug128. Decision
+0120 supersedes the exact-position acceptance requirement of 0012; no production
+solver, raw array, precision or other tolerance changes. AL may separately update
+the current M2 comparator/tests and directly related general/robust SVD-mode
+comparison paths, preserving each path's existing value and physical gates.
+This explicitly releases those comparator files despite the prior historical
+freeze; native producers, inputs and old evidence remain immutable. Keep raw
+exact-position discrepancies as diagnostics, record mode mappings, and verify
+positive permutations plus the required rejection controls. Re-evaluate saved
+macOS/Linux evidence in new versioned reports; do not relabel original failures.
+Return the concrete commit for central acceptance review while Q/event work
+continues. No other numerical policy or post-AL optimization scope changes.
