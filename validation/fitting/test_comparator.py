@@ -76,7 +76,7 @@ def mutations(actual_dir):
         assert not compare_shared(r,a,r['mode']).errors
         a['solver'][key][index]=replacement;errors=compare_shared(r,a,r['mode']).errors;assert errors
         results.append({'mutation':fixture+' nonfinite class','detected':True,'first_error':errors[0]})
-    # Paired-mode analysis remains diagnostic; latest user choice retains strict order.
+    # Decision 0120 accepts a pure mode permutation and retains its raw diagnostics.
     for fixture in ['dependent_columns','at_cutoff']:
         r=json.loads((ROOT/'reference'/f'{fixture}.json').read_text())
         a=json.loads((actual_dir/f'shared_{fixture}.json').read_text())[0]
@@ -89,15 +89,19 @@ def mutations(actual_dir):
         assert not compare_shared(r,a,r['mode']).errors
         permuted=copy.deepcopy(a)
         for key in ['singular_values','retained']:permuted['solver'][key].reverse()
-        c=compare_shared(r,permuted,r['mode']);assert c.errors
-        assert all('strict_raw_' in error for error in c.errors),c.errors
-        results.append({'mutation':fixture+' paired mode permutation','strict_order_rejected':True,'paired_diagnostic_valid':True,'permutations':c.mode_permutations})
+        before=copy.deepcopy(permuted)
+        c=compare_shared(r,permuted,r['mode']);assert not c.errors,c.errors
+        assert permuted==before
+        assert c.mode_permutations[0]['raw_position_discrepancies']
+        results.append({'mutation':fixture+' paired mode permutation','accepted':True,'raw_diagnostics_retained':True,'permutations':c.mode_permutations})
         for name,mutate in [
             ('flag/value mismatch',lambda d:d['solver']['singular_values'].reverse()),
             ('negative singular value',lambda d:d['solver']['singular_values'].__setitem__(0,'-1')),
             ('nonfinite singular value',lambda d:d['solver']['singular_values'].__setitem__(0,'NaN')),
             ('changed rank',lambda d:d['solver'].__setitem__('rank',0)),
             ('changed retention',lambda d:d['solver']['retained'].__setitem__(0,not d['solver']['retained'][0])),
+            ('missing mode',lambda d:d['solver']['singular_values'].pop()),
+            ('extra mode',lambda d:d['solver']['singular_values'].append('0')),
         ]:
             # Both at-cutoff modes are retained; a pure value permutation there is valid.
             if fixture=='at_cutoff' and name=='flag/value mismatch':continue
@@ -108,6 +112,7 @@ def mutations(actual_dir):
             c=compare_shared(r,bad,r['mode']);assert c.errors
             results.append({'mutation':'threshold equality wrongly dropped','detected':True,'first_error':c.errors[0]})
     change('physical parameter output permutation',s+['increments'],list(reversed(rc['solver']['increments'])))
+    change('physical covariance permutation',s+['covariance'],[list(reversed(row)) for row in reversed(rc['solver']['covariance'])])
     return results
 
 if __name__=='__main__':

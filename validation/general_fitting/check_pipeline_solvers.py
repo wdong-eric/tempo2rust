@@ -41,7 +41,8 @@ def run(profile):
                 (out/(engine+'.stderr')).write_bytes(proc.stderr);(out/(engine+'.stdout')).write_bytes(proc.stdout)
                 assert proc.returncode==0,(name,owner,engine,proc.stderr.decode())
             got=json.loads((out/'rust.stdout').read_text())
-            failures=solver.compare(trace.read_text(),got,matrix,data,7,True,mode)
+            mode_permutations=[]
+            failures=solver.compare(trace.read_text(),got,matrix,data,7,True,mode,mode_permutations)
             lines=[r.split()for r in trace.read_text().splitlines()];values={tuple(r[:-1]):r[-1]for r in lines if r[0]!='S'}
             reproduction=[]
             if owner=='native':
@@ -57,7 +58,7 @@ def run(profile):
             for key,a,b in pairs:
                 if float(a).hex()!=float(b).hex():reproduction.append({'quantity':key,'standalone':str(a),'pipeline':str(b)})
             record={'case':name,'input_owner':owner,'commands':cmds,'input_sha256':sha(source),'pipeline_export_sha256':sha(directory/('native.tsv'if owner=='native'else'rust.json')),
-                'native_output_sha256':sha(trace),'rust_output_sha256':sha(out/'rust.stdout'),'failures':failures,'same_engine_reproduction_failures':reproduction,
+                'native_output_sha256':sha(trace),'rust_output_sha256':sha(out/'rust.stdout'),'failures':failures,'mode_permutations':mode_permutations,'mode_acceptance':'0120','same_engine_reproduction_failures':reproduction,
                 'native_chi':values['CHI',],'rust_chi':got['chi_square'],'raw_native_singular_values':[r[2]for r in lines if r[0]=='S']}
             records.append(record);print(name,owner,'shared failures',len(failures),'reproduction failures',len(reproduction),flush=True)
     receipt={'profile':profile,'pin':solver.PIN,'builder_sha256':sha(__file__),'comparator_sha256':sha(HERE/'check_solver_contract.py'),

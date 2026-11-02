@@ -7,6 +7,8 @@ from pathlib import Path
 from decimal import Decimal as D, getcontext
 import argparse, hashlib, json, os, subprocess
 from fitting_corrections import corrected
+from compare import round_binary
+from fractions import Fraction
 getcontext().prec = 80
 ROOT = Path(__file__).resolve().parents[2];HERE = Path(__file__).resolve().parent
 BUILD = HERE / 'build/solver-contract';REF = ROOT / 'validation/reference/build'
@@ -53,7 +55,7 @@ def build():
     return native, commands
 
 
-def compare(output, got, matrix, data, mask, has_data, mode=0):
+def compare(output, got, matrix, data, mask, has_data, mode=0, mode_permutations=None):
     failures = []
     def check(name, actual, expected, gate):
         actual = D(actual);expected = D(expected)
@@ -63,6 +65,42 @@ def compare(output, got, matrix, data, mask, has_data, mode=0):
             equal = abs(actual - expected) <= gate
             if expected == 0: equal &= actual == 0 and actual.is_signed() == expected.is_signed()
         if not equal: failures.append({'quantity': name, 'rust': str(actual), 'native': str(expected), 'gate': str(gate)})
+    def compare_modes(raw, actual, name):
+        assert len(actual['singular_values']) == len(raw)
+        assert len(actual['retained']) == len(raw)
+        values = [D(v) for v in actual['singular_values']]
+        reference = [D(v) for v in raw]
+        start = len(failures)
+        for j, value in enumerate(reference):
+            check(f'{name}.raw_position.{j}', values[j], value, D('1e-10') * abs(value))
+        discrepancies = failures[start:];del failures[start:]
+        record = {'path':name, 'raw_reference':raw, 'raw_candidate':actual['singular_values'],
+                  'candidate_retained':actual['retained'], 'raw_position_discrepancies':discrepancies,
+                  'reference_to_candidate':None}
+        if mode_permutations is not None:mode_permutations.append(record)
+        if any(not v.is_finite() for v in reference + values):
+            failures.extend(discrepancies)
+            record['pairing'] = 'not attempted: nonfinite spectrum'
+            return
+        if any(v < 0 for v in reference + values):
+            failures.append({'quantity':name, 'kind':'negative_singular_spectrum'});return
+        orders=[];masks=[]
+        for spectrum,bits in [(reference,113),(values,128)]:
+            exact=[round_binary(v,bits) for v in spectrum]
+            cutoff=round_binary(Fraction.from_float(1e-27)*max(exact),bits)
+            masks.append([v!=0 and not v<cutoff for v in exact])
+            orders.append(sorted(range(len(raw)),key=lambda j:-exact[j]))
+        record['reference_retained']=masks[0]
+        pairs=list(zip(*orders));record['reference_to_candidate']=pairs
+        check(name+'.rank',actual['rank'],sum(masks[0]),D(0))
+        check(name+'.own_rank',actual['rank'],sum(masks[1]),D(0))
+        for j,want in enumerate(masks[1]):
+            check(f'{name}.own_cutoff.{j}',int(actual['retained'][j]),int(want),D(0))
+        for rj,aj in pairs:
+            check(f'{name}.retained.{rj}->{aj}',int(actual['retained'][aj]),int(masks[0][rj]),D(0))
+            # Retain the standalone/robust discarded-value gate as well.
+            check(f'{name}.{rj}->{aj}',values[aj],reference[rj],D('1e-10')*abs(reference[rj]))
+
     lines = [line.split() for line in output.splitlines()]
     modes = [];history = [];current = None
     final = {}
@@ -102,8 +140,7 @@ def compare(output, got, matrix, data, mask, has_data, mode=0):
         for j, value in enumerate(got['linearized_s']):
             check(f'linearized.{j}', value, final['L', str(j)], D('1e-12'))
     check('chi', got['chi_square'], final['CHI',], D('1e-10') * abs(D(final['CHI',])) + D('1e-12' if mode==1 else '1e-24'))
-    assert len(got['singular_values']) == len(modes[-1])
-    for j, value in enumerate(modes[-1]): check(f'raw_mode.{j}', got['singular_values'][j], value, D('1e-10') * abs(D(value)))
+    compare_modes(modes[-1], got, 'modes')
     assert len(history) == len(got['robust_history'])
     for i, (ref, actual) in enumerate(zip(history, got['robust_history'])):
         count, final_step, scale, after, phi, dphi = ref['head']
@@ -126,7 +163,7 @@ def compare(output, got, matrix, data, mask, has_data, mode=0):
             elif kind == 'K':
                 k = int(r[2]);cov = {(int(a[1]), int(a[2])): D(a[3]) for a in ref['rows'] if a[0] == 'K'}
                 check(f'history.{i}.cov.{j}.{k}', actual['solver']['covariance'][j][k], r[3], D('1e-10') * (cov[j, j] * cov[k, k]).sqrt())
-        for j, value in enumerate(modes[i]): check(f'history.{i}.raw_mode.{j}', actual['solver']['singular_values'][j], value, D('1e-10') * abs(D(value)))
+        compare_modes(modes[i], actual['solver'], f'history.{i}.modes')
     return failures
 
 
@@ -152,12 +189,13 @@ def run(profile):
             (dirs[engine] / 'stdout').write_bytes(proc.stdout);(dirs[engine] / 'stderr').write_bytes(proc.stderr)
             assert proc.returncode == 0, (name, engine, proc.returncode, proc.stderr.decode())
         got = json.loads((dirs['rust'] / 'stdout').read_text())
-        failures = compare(trace.read_text(), got, matrix, data, mask, present)
+        mode_permutations = []
+        failures = compare(trace.read_text(), got, matrix, data, mask, present, mode_permutations=mode_permutations)
         file_names = [p.name for p in dirs['native'].iterdir() if p.name not in ['stdout', 'stderr', 'observations.txt']]
         assert set(file_names) == {Path(p).name for p in got['diagnostic_files']}
         for f in file_names:
             if (dirs['native'] / f).read_bytes() != (dirs['rust'] / f).read_bytes(): failures.append({'quantity': f, 'kind': 'file_bytes'})
-        records.append({'case': name, 'commands': cmds, 'input_sha256': sha(path), 'native_output_sha256': sha(trace), 'rust_output_sha256': sha(dirs['rust'] / 'stdout'), 'failures': failures})
+        records.append({'case': name, 'commands': cmds, 'input_sha256': sha(path), 'native_output_sha256': sha(trace), 'rust_output_sha256': sha(dirs['rust'] / 'stdout'), 'failures': failures, 'mode_permutations': mode_permutations, 'mode_acceptance': '0120'})
     receipt = {'pin': PIN, 'profile': profile, 'commands': commands, 'builder_sha256': sha(__file__), 'probe_sha256': sha(HERE / 'solver_file.cc'), 'native_sha256': sha(native), 'rust_sha256': sha(rust), 'records': records}
     (out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print('solver contract cases', len(records), 'failures', sum(len(r['failures']) for r in records))

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Decision 0007 finite gates / 0008 exact nonfinite classes, using Decimal(90).
+"""Decision 0007 finite gates / 0008 classes / 0120 paired modes, using Decimal(90).
 Compares independent reference outputs, never tolerances fitted to Rust results.
 """
 from decimal import Decimal, localcontext
@@ -91,13 +91,13 @@ class Comparison:
         for key in ['dof','rank']:self.exact(sr[key],sa.get(key),path+'.solver.'+key)
         for key in ['increments','errors','errors_unscaled','singular_values','retained','covariance','linearized_s']:
             if not self.shape(sr[key],sa.get(key),path+'.solver.'+key):return
-        # Latest direct user instruction retains the exact raw-order gate pending
-        # review. Decision 0010 pairing below remains diagnostic, not a waiver.
-        self.exact(sr['retained'],sa['retained'],path+'.solver.strict_raw_retention_order')
+        # Decision 0120 adopts 0010 pairing; preserve the former position checks
+        # as diagnostics without changing either engine's raw arrays or flags.
+        raw=Comparison()
+        raw.exact(sr['retained'],sa['retained'],path+'.solver.strict_raw_retention_order')
         for j in range(m):
             if sr['retained'][j]:
-                self.number(sr['singular_values'][j],sa['singular_values'][j],D('1e-10')*abs(D(sr['singular_values'][j])),path+f'.solver.strict_raw_singular_values[{j}]','strict_raw_singular_values')
-        # Decision 0010 paired-mode diagnostic; no physical coordinate is permuted.
+                raw.number(sr['singular_values'][j],sa['singular_values'][j],D('1e-10')*abs(D(sr['singular_values'][j])),path+f'.solver.strict_raw_singular_values[{j}]','strict_raw_singular_values')
         orders=[]
         for engine,sol,bits in [('reference',sr,113),('candidate',sa,128)]:
             values=[D(v) for v in sol['singular_values']]
@@ -110,7 +110,10 @@ class Comparison:
             self.exact(sum(expected),sol['rank'],path+'.solver.'+engine+'.own_rank')
             orders.append(sorted(range(m),key=lambda i:-exact[i]))
         pairs=list(zip(*orders))
-        self.mode_permutations.append({'path':path+'.solver','reference_to_candidate':pairs})
+        self.mode_permutations.append({'path':path+'.solver','reference_to_candidate':pairs,
+            'raw_reference':{'singular_values':sr['singular_values'],'retained':sr['retained']},
+            'raw_candidate':{'singular_values':sa['singular_values'],'retained':sa['retained']},
+            'raw_position_discrepancies':raw.errors,'raw_position_maxima':raw.maxima})
         for rj,aj in pairs:
             self.exact(sr['retained'][rj],sa['retained'][aj],path+f'.solver.matched_retained[{rj}->{aj}]')
             if sr['retained'][rj]:

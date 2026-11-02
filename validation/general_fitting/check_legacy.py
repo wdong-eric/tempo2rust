@@ -36,7 +36,8 @@ def run(profile):
    if r[0]=='A':matrix[int(r[1])][int(r[2])]=r[3]
    if r[0]=='D':data[int(r[1])]=r[2]
   final='\n'.join(' '.join(r)for r in rows if r[0]in ['S','CHI','P','E','C'])
-  failures+=compare(final,result['solver'],matrix,data,7,True)
+  mode_permutations=[]
+  failures+=compare(final,result['solver'],matrix,data,7,True,mode_permutations=mode_permutations)
   for r in rows:
    if r[0]=='A':
     i,j=map(int,r[1:3])
@@ -48,7 +49,7 @@ def run(profile):
     for name,value in [('data',r[2]),('white_data',r[3])]:
      scale=max(abs(D(a[2 if name=='data'else 3]))for a in rows if a[0]=='D');actual=D(result['design'][name][i]);expected=D(value)
      if abs(actual-expected)>D('5e-14')*scale:failures.append({'quantity':f'{name}.{i}','native':value,'rust':str(actual)})
-  records.append({'mode':mode,'lower':lower,'commands':cmds,'failures':failures,'native_output_sha256':sha(trace),'rust_output_sha256':sha(dest/'rust.stdout')});print(mode,lower,len(failures),failures[:2])
+  records.append({'mode':mode,'lower':lower,'commands':cmds,'failures':failures,'mode_permutations':mode_permutations,'mode_acceptance':'0120','native_output_sha256':sha(trace),'rust_output_sha256':sha(dest/'rust.stdout')});print(mode,lower,len(failures),failures[:2])
  out=BUILD/profile/'receipt.json';out.write_text(json.dumps({'pin':identity['pin'],'profile':profile,'commands':commands,'builder_sha256':sha(__file__),'probe_sha256':sha(HERE/'native_legacy.cc'),'inputs':{str(p):sha(p)for p in pars+[tim]},'native_sha256':sha(native),'rust_sha256':sha(rust),'records':records},indent=2)+'\n')
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run existing M2 comparisons without sorting raw modes or weakening gates."""
+"""0120 paired-mode M2 acceptance; raw position discrepancies remain diagnostic."""
 import argparse
 import importlib.util
 import json
@@ -17,6 +17,27 @@ def load_comparator():
     return module
 
 
+def comparison(fitting, actual, directory, m):
+    cases=json.loads((fitting/'cases.json').read_text())
+    rows=[]
+    def record(name,result):
+        rows.append({'name':name,'failures':result.errors,'measurements':result.measurements,'maxima':result.maxima,'mode_permutations':result.mode_permutations})
+    for family in ['solver','timing']:
+        for c in cases[family]:
+            if c.get('expected')=='boundary':continue
+            name=c['name'];reference=json.loads((directory/(name+'.json')).read_text())
+            values=json.loads((actual/('shared_'+name+'.json')).read_text())
+            references=[reference] if family=='solver' else reference['cycles']
+            for index,(ref,value) in enumerate(zip(references,values,strict=True)):
+                record(name+'-shared-'+str(index),m.compare_shared(ref,value,reference['mode']))
+            if family=='timing':
+                par=(fitting/'inputs'/c['par']).read_text()
+                epoch=next(line.split()[1] for line in par.splitlines() if line.startswith('PEPOCH '))
+                record(name+'-timing',m.compare_timing(reference,json.loads((actual/(name+'.json')).read_text()),epoch))
+    record('callbacks',m.compare_callbacks(json.loads((directory/'callbacks.json').read_text()),json.loads((actual/'callbacks.json').read_text())))
+    return {'failures':sum(len(r['failures']) for r in rows),'records':rows,
+            'inputs':{str(p):sha(p) for p in directory.glob('*.json')}}
+
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--out',type=Path,required=True);p.add_argument('--candidate',type=Path,required=True)
@@ -25,30 +46,12 @@ if __name__=='__main__':
     a=p.parse_args();run=Run(a.out);out=run.out;candidate=a.candidate.resolve()
     run.run([a.example.resolve()],'public-fits')
     actual=candidate/'rust/target/m2';shutil.copytree(actual,out/'rust')
-    fitting=candidate/'validation/fitting';cases=json.loads((fitting/'cases.json').read_text())
+    fitting=candidate/'validation/fitting'
     m=load_comparator()
-    def comparison(directory):
-        rows=[]
-        def record(name,result):
-            rows.append({'name':name,'failures':result.errors,'measurements':result.measurements,'maxima':result.maxima,'mode_permutations':result.mode_permutations})
-        for family in ['solver','timing']:
-            for c in cases[family]:
-                if c.get('expected')=='boundary':continue
-                name=c['name'];reference=json.loads((directory/(name+'.json')).read_text())
-                values=json.loads((actual/('shared_'+name+'.json')).read_text())
-                references=[reference] if family=='solver' else reference['cycles']
-                for index,(ref,value) in enumerate(zip(references,values,strict=True)):
-                    record(name+'-shared-'+str(index),m.compare_shared(ref,value,reference['mode']))
-                if family=='timing':
-                    par=(fitting/'inputs'/c['par']).read_text()
-                    epoch=next(line.split()[1] for line in par.splitlines() if line.startswith('PEPOCH '))
-                    record(name+'-timing',m.compare_timing(reference,json.loads((actual/(name+'.json')).read_text()),epoch))
-        record('callbacks',m.compare_callbacks(json.loads((directory/'callbacks.json').read_text()),json.loads((actual/'callbacks.json').read_text())))
-        return {'failures':sum(len(r['failures']) for r in rows),'records':rows,
-                'inputs':{str(p):sha(p) for p in directory.glob('*.json')}}
-    raw=comparison(fitting/'reference');signed=comparison(a.signed_reference.resolve())
+    raw=comparison(fitting,actual,fitting/'reference',m);signed=comparison(fitting,actual,a.signed_reference.resolve(),m)
     failures=signed['failures']
     run.save({'status':'failure' if failures else 'pass',**signed,'raw_observer':raw,
+        'mode_acceptance':'0120 stable descending paired modes; original raw positions retained as diagnostics',
         'comparator':sha(ROOT/'validation/fitting/compare.py'),
         'successor':sha(__file__),'recognized_nonfinite':sorted(m.NONFINITE),
         'observer_receipt':sha(a.signed_reference.parent/'receipt.json')})

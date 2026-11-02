@@ -1,4 +1,4 @@
-"""0007/0012/0071 public fitting gates; all arithmetic is decimal precision 70.
+"""0007/0071/0120 public fitting gates; all arithmetic is decimal precision 70.
 
 This compares exported quantities, not truth recovery or complete AE coverage.
 Native TSV may repeat SVD records during robust iteration: the final solve owns
@@ -9,6 +9,14 @@ from pathlib import Path
 import json
 import math
 import re
+import importlib.util
+from fractions import Fraction
+
+# Reuse M2's exact source-precision cutoff reconstruction, including equality.
+_spec = importlib.util.spec_from_file_location("m2_mode_gates", Path(__file__).resolve().parents[1] / "fitting/compare.py")
+_m2 = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_m2)
+round_binary = _m2.round_binary
 
 getcontext().prec = 70
 D = Decimal
@@ -150,6 +158,7 @@ def compare(native, candidate, destination):
         ref[int(cycle), stage, int(p), int(row), key] = D(value)
     result = json.loads(Path(candidate).read_text())
     failures, stats, unchecked_physical = [], {}, set()
+    mode_permutations = []
     shape_failures = checked_shape(ref, result)
     if shape_failures:
         receipt = {"native": str(native), "candidate": str(candidate), "stats": {}, "failures": shape_failures, "unchecked": ["numeric comparison not run after shape/membership failure"]}
@@ -178,6 +187,51 @@ def compare(native, candidate, destination):
             s.update(max_ratio=str(ratio), worst_identity=identity, worst_signed_difference=str(delta))
         if ratio > 1:
             failures.append({"identity": identity, "got": str(got), "reference": str(want), "difference": str(delta), "gate": str(gate)})
+
+    def source_mask(values, bits):
+        exact = [round_binary(v, bits) for v in values]
+        cutoff = round_binary(Fraction.from_float(1e-27) * max(exact), bits)
+        return [v != 0 and not v < cutoff for v in exact]
+
+    def modes(raw, retained, actual, identity, category):
+        values = list(map(decimal, actual["singular_values"]))
+        # checked_shape has already enforced the exact number of values/flags.
+        start = len(failures)
+        for j, w in enumerate(raw):
+            if retained is not None:
+                check(identity + [j, "raw_retained"], int(actual["retained"][j]), int(retained[j]), ZERO, "diagnostic.raw_mode_identity")
+            check(identity + [j, "raw_singular_value"], values[j], w, D("1e-10") * abs(w), "diagnostic." + category, structural=True)
+        discrepancies = failures[start:]
+        del failures[start:]
+        record = {"identity": identity, "raw_reference": {"singular_values": list(map(str, raw)), "retained": retained},
+                  "raw_candidate": {"singular_values": actual["singular_values"], "retained": actual["retained"]},
+                  "raw_position_discrepancies": discrepancies, "reference_to_candidate": None}
+        mode_permutations.append(record)
+        # A nonfinite outcome keeps its old exact class/sign and raw position
+        # checks. It cannot enter finite-mode sorting or cutoff reconstruction.
+        if any(not w.is_finite() for w in raw + values):
+            failures.extend(discrepancies)
+            if retained is None:
+                failures.append({"identity": identity, "kind": "native_nonfinite_cutoff_flags_not_exported"})
+            record["pairing"] = "not attempted: nonfinite spectrum"
+            return
+        if any(w < 0 for w in raw + values):
+            failures.append({"identity": identity, "kind": "negative_singular_spectrum"})
+            return
+        for engine, spectrum, flags, bits in [("reference", raw, retained, 113), ("candidate", values, actual["retained"], 128)]:
+            expected = source_mask(spectrum, bits)
+            for j, (want, got) in enumerate(zip(expected, flags, strict=True)):
+                check(identity + [engine, j, "own_cutoff_flag"], int(got), int(want), ZERO, "mode_identity")
+            if engine == "candidate":
+                check(identity + [engine, "own_rank"], actual["rank"], sum(expected), ZERO, "identity")
+        pairs = list(zip(sorted(range(len(raw)), key=lambda j: -round_binary(raw[j], 113)),
+                         sorted(range(len(values)), key=lambda j: -round_binary(values[j], 128))))
+        record["reference_to_candidate"] = pairs
+        for rj, aj in pairs:
+            check(identity + [rj, aj, "retained"], int(actual["retained"][aj]), int(retained[rj]), ZERO, "mode_identity")
+            # General/robust gates apply to discarded values too. Pairing changes
+            # positions only; unlike M2 it does not exempt a tiny discarded value.
+            check(identity + [rj, aj, "singular_value"], values[aj], raw[rj], D("1e-10") * abs(raw[rj]), category, structural=True)
 
     def at(it, stage, p, row, key):
         return ref[it, stage, p, row, key]
@@ -266,13 +320,11 @@ def compare(native, candidate, destination):
             mode = ref.get((it, "prepared", first, -1, "fit_mode"), 0)
             chi = at(it, "fit", first, -1, "chi")
             check([it, owner, "chi"], sol["chi_square"], chi, D("1e-6") * abs(chi) + D("1e-12" if mode == 1 else "1e-24"), "chi_square")
-            rank = 0
+            raw = [at(it, "svd", owner, j, "raw") for j in range(np)]
+            retained = [int(at(it, "svd", owner, j, "retained")) for j in range(np)]
+            rank = sum(retained)
+            modes(raw, retained, sol, [it, owner], "raw_singular_value")
             for j, scale in enumerate(scales["matrix"]):
-                w = at(it, "svd", owner, j, "raw")
-                keep = int(at(it, "svd", owner, j, "retained"))
-                rank += keep
-                check([it, owner, j, "retained"], int(sol["retained"][j]), keep, ZERO, "raw_mode_identity")
-                check([it, owner, j, "singular_value"], sol["singular_values"][j], w, D("1e-10") * abs(w), "raw_singular_value", structural=True)
                 for field, key, relative in (("increments", "increment", D("1e-11")), ("errors", "error", D("1e-6"))):
                     expected = at(it, "fit", first, j, key)
                     check([it, owner, j, key], decimal(sol[field][j]) * scale, expected * scale, D("1e-11") + relative * abs(expected * scale), field, structural=scale == 0 or (key == "error" and expected == 0))
@@ -306,14 +358,14 @@ def compare(native, candidate, destination):
                         for i, value in enumerate(actual[key]):
                             check(identity + [key, i], value, at(it, stage, owner, i, key), D("5e-14") * scale, "robust." + key, structural=True)
                     raw = [at(it, inner_stage, owner, j, "raw") for j in range(np)]
-                    mask = [v != 0 and not v < D.from_float(1e-27) * max(raw) for v in raw]
-                    check(identity + ["rank"], inner["rank"], sum(mask), ZERO, "identity")
+                    mask = source_mask(raw, 113) if all(v.is_finite() for v in raw) else None
+                    modes(raw, mask, inner, identity, "robust.raw")
+                    if mask is not None:
+                        check(identity + ["rank"], inner["rank"], sum(mask), ZERO, "identity")
                     check(identity + ["dof"], inner["dof"], sol["dof"], ZERO, "identity")
                     expected = at(it, inner_stage, owner, -1, "chi")
                     check(identity + ["chi"], inner["chi_square"], expected, D("1e-6") * abs(expected) + D("1e-12" if mode == 1 else "1e-24"), "robust.chi")
                     for j, scale in enumerate(scales["matrix"]):
-                        check(identity + [j, "retained"], int(inner["retained"][j]), int(mask[j]), ZERO, "identity")
-                        check(identity + [j, "raw"], inner["singular_values"][j], raw[j], D("1e-10") * abs(raw[j]), "robust.raw", structural=True)
                         column_scale = max(abs(at(it, stage, owner, i, "matrix." + str(j))) for i in range(len(actual["white_matrix"])))
                         for i, row in enumerate(actual["white_matrix"]):
                             check(identity + [i, j, "matrix"], row[j], at(it, stage, owner, i, "matrix." + str(j)), D("5e-14") * column_scale, "robust.matrix", structural=True)
@@ -395,6 +447,7 @@ def compare(native, candidate, destination):
                     error = at(it, "postfit_update", p, l, "error." + str(k))
                     check([it, p, k, "postfit_error"], decimal(update["postfit_error"]) * scale, error * scale, D("1e-11") + D("1e-6") * abs(error * scale), "physical_spin_postfit_error", structural=True)
     receipt = {"native": str(native), "candidate": str(candidate), "stats": stats, "failures": failures,
+               "mode_acceptance": "0120 paired SVD modes; all existing value gates retained", "mode_permutations": mode_permutations,
                "unchecked": (["physical unit maps: " + ", ".join(sorted(unchecked_physical))] if unchecked_physical else [])
                + ([] if any(k[1] == "solver_details" for k in ref) else ["robust history and solver unscaled errors/multiplier/linearized residuals: legacy native trace"])
                + ([] if any(k[4] == "full_covariance" for k in ref) else ["covariance/Cholesky: legacy native trace"])

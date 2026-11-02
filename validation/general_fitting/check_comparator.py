@@ -2,18 +2,35 @@
 from pathlib import Path
 from copy import deepcopy
 import argparse, hashlib, json
+from decimal import Decimal as D
 from compare import compare
 
 HERE = Path(__file__).resolve().parent
 BUILD = HERE / "build/comparator-controls"
 
 
-def check(native, candidate):
+def check(native, candidate, out=None):
     global BUILD
-    BUILD = BUILD / candidate.parent.name
+    BUILD = (out or BUILD) / candidate.parent.name
     BUILD.mkdir(parents=True, exist_ok=True)
     baseline = json.loads(candidate.read_text())
     assert not compare(native, candidate, BUILD / "baseline.json")["failures"]
+    positives = []
+    for target in ['final', 'robust']:
+        x = deepcopy(baseline);count = 0
+        for cycle in x['cycles']:
+            for system in cycle['systems']:
+                solvers = [system['solver']] if target == 'final' else [step['solver'] for step in system['solver']['robust_history']]
+                for solver in solvers:
+                    for key in ['singular_values', 'retained']:solver[key].reverse()
+                    count += 1
+        if not count:continue
+        path = BUILD / (target + '-permuted.json');path.write_text(json.dumps(x) + '\n')
+        result = compare(native, path, BUILD / (target + '-permuted.comparison.json'))
+        assert not result['failures'], result['failures']
+        assert json.loads(path.read_text()) == x
+        assert any(any(a != b for a,b in row['reference_to_candidate']) for row in result['mode_permutations'])
+        positives.append({'name':target+' paired permutation','mode_permutations':result['mode_permutations']})
     mutants = {}
     x = deepcopy(baseline)
     for c in x["cycles"]:
@@ -39,6 +56,8 @@ def check(native, candidate):
         ("update", ["cycles", 0, "systems", 0, "updates"]),
         ("whitening", ["cycles", 0, "systems", 0, "whitening"]),
         ("unscaled_error", ["cycles", 0, "systems", 0, "solver", "errors_unscaled"]),
+        ("singular_mode", ["cycles", 0, "systems", 0, "solver", "singular_values"]),
+        ("retention_flag", ["cycles", 0, "systems", 0, "solver", "retained"]),
         ("linearized_residual", ["cycles", 0, "systems", 0, "solver", "linearized_s"]),
     ]:
         for mutation in ("missing", "extra"):
@@ -102,6 +121,20 @@ def check(native, candidate):
                 elif action == "extra": matrix.append(deepcopy(matrix[-1]))
                 else: matrix[0][0] = "1e100"
                 mutants[action + "_input_" + key] = x
+    for target in ['final', 'robust']:
+        if target == 'robust' and not baseline['cycles'][0]['systems'][0]['solver']['robust_history']:continue
+        for name in ['rank', 'retention', 'value', 'nonfinite', 'physical_covariance', 'physical_increment']:
+            x = deepcopy(baseline);solver = x['cycles'][0]['systems'][0]['solver']
+            if target == 'robust':solver = solver['robust_history'][0]['solver']
+            if name == 'rank':solver['rank'] += 1
+            elif name == 'retention':solver['retained'][0] = not solver['retained'][0]
+            elif name == 'value':solver['singular_values'][0] = str(D(solver['singular_values'][0]) * D('1.1'))
+            elif name == 'nonfinite':solver['singular_values'][0] = '-NaN'
+            elif name == 'physical_covariance':solver['covariance'] = [list(reversed(row)) for row in reversed(solver['covariance'])]
+            else:solver['increments'].reverse()
+            mutants[target + '_' + name] = x
+    x = deepcopy(baseline);x['cycles'][0]['postfit']['pulsars'][0]['observations'].reverse()
+    mutants['physical_observation_permutation'] = x
     records = []
     for name, x in mutants.items():
         path = BUILD / (name + ".json");path.write_text(json.dumps(x) + "\n")
@@ -132,8 +165,59 @@ def check(native, candidate):
         result = compare(ref, path, BUILD / (name + ".opposite.json"))
         assert len(result["failures"]) == 1, name
         records.append({"name": name, "failures": len(result["failures"])})
+    # Comparator-only counterfactuals: change the two input spectra together,
+    # leaving physical fields alone, to protect discarded-value and equality gates.
+    for name, small, keep in [('discarded', '1e-30', False), ('cutoff_equality', str(D.from_float(1e-27)), True), ('zero', '0', False)]:
+        x = deepcopy(baseline);solver = x['cycles'][0]['systems'][0]['solver'];n = len(solver['singular_values'])
+        values = [str(D(2) ** -j) for j in range(n)];values[-1] = small
+        flags = [True] * n;flags[-1] = keep
+        solver.update(singular_values=values, retained=flags, rank=sum(flags))
+        lines = native.read_text().splitlines()
+        for i,line in enumerate(lines):
+            row=line.split('\t')
+            if row[0]=='1' and row[1]=='svd' and row[3]!='-1':
+                j=int(row[3])
+                if row[4]=='raw':row[5]=values[j]
+                elif row[4]=='retained':row[5]=str(int(flags[j]))
+                lines[i]='\t'.join(row)
+        ref = BUILD / (name + '.tsv');ref.write_text('\n'.join(lines)+'\n')
+        path = BUILD / (name + '.json');path.write_text(json.dumps(x)+'\n')
+        result=compare(ref,path,BUILD/(name+'.same.json'));assert not result['failures'],result['failures']
+        # Move value+flag pairs together, then corrupt the tiny value or its flag.
+        for key in ['singular_values','retained']:solver[key].reverse()
+        path.write_text(json.dumps(x)+'\n')
+        result=compare(ref,path,BUILD/(name+'.paired.json'));assert not result['failures'],result['failures']
+        positives.append({'name':name+' paired','mode_permutations':result['mode_permutations']})
+        if name=='discarded':
+            wrong=deepcopy(x);wrong['cycles'][0]['systems'][0]['solver']['singular_values'].reverse()
+            bad=BUILD/'flag-value-mismatch.json';bad.write_text(json.dumps(wrong)+'\n')
+            rejection=compare(ref,bad,BUILD/'flag-value-mismatch.comparison.json')
+            assert rejection['failures']
+            records.append({'name':'flag/value mismatch','failures':len(rejection['failures'])})
+            solver['singular_values'][0]='2e-30'
+        else:solver['retained'][0]=not keep
+        path.write_text(json.dumps(x)+'\n')
+        result=compare(ref,path,BUILD/(name+'.changed.json'));assert result['failures'],name
+        records.append({'name':name+' changed','failures':len(result['failures'])})
+        if name=='discarded':assert any(row['identity'][-1]=='singular_value' for row in result['failures'])
+    for native_value, opposite in [('NaN', '-NaN'), ('-NaN', 'NaN'), ('Infinity', '-Infinity')]:
+        x=deepcopy(baseline);x['cycles'][0]['systems'][0]['solver']['singular_values'][0]=native_value
+        lines=native.read_text().splitlines()
+        for index,line in enumerate(lines):
+            if line.startswith('1\tsvd\t0\t0\traw\t'):
+                lines[index]='1\tsvd\t0\t0\traw\t'+native_value
+        ref=BUILD/('mode-class-'+native_value+'.tsv');ref.write_text('\n'.join(lines)+'\n')
+        path=BUILD/('mode-class-'+native_value+'.json');path.write_text(json.dumps(x)+'\n')
+        result=compare(ref,path,BUILD/('mode-class-'+native_value+'.same.json'))
+        assert not result['failures'],result['failures']
+        assert result['mode_permutations'][0]['reference_to_candidate'] is None
+        x['cycles'][0]['systems'][0]['solver']['singular_values'][0]=opposite
+        path.write_text(json.dumps(x)+'\n')
+        result=compare(ref,path,BUILD/('mode-class-'+native_value+'.opposite.json'))
+        assert result['failures']
+        records.append({'name':'mode class sign '+native_value,'failures':len(result['failures'])})
     sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
-    (BUILD / "receipt.json").write_text(json.dumps({"native": str(native), "candidate": str(candidate), "native_sha256": sha(native), "candidate_sha256": sha(candidate), "comparator_sha256": sha(HERE / "compare.py"), "controls": records}, indent=2) + "\n")
+    (BUILD / "receipt.json").write_text(json.dumps({"native": str(native), "candidate": str(candidate), "native_sha256": sha(native), "candidate_sha256": sha(candidate), "comparator_sha256": sha(HERE / "compare.py"), "controls": records, "positive_permutations": positives, "mode_acceptance": "0120"}, indent=2) + "\n")
     print("baseline passes;", len(records), "mutants rejected")
 
 
@@ -141,4 +225,5 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--native", type=Path, default=HERE / "build/public/release/spin/native.tsv")
     p.add_argument("--candidate", type=Path, default=HERE / "build/public/release/spin/rust.json")
-    a = p.parse_args();check(a.native, a.candidate)
+    p.add_argument("--out", type=Path)
+    a = p.parse_args();check(a.native, a.candidate, a.out)
