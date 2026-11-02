@@ -24,6 +24,12 @@ class EvidenceCollection(unittest.TestCase):
             root=Path(temporary);source=root/'input';out=root/'selected'
             native='linux/native-corpora/staging/validation/observer_coordinates/'
             included=['receipt.json','linux/native-corpora/producer.py',native+'outputs/reference.json.gz',
+                'linux/allocation/verify/same-engine/science-correlated-global/after/diagnostics/cov.matrix',
+                'linux/allocation/verify/same-engine/science-correlated-global/before/diagnostics/param.labels',
+                'linux/allocation/verify/same-engine/science-correlated-global/after/diagnostics/postfit.res',
+                'linux/allocation/measure/correlated-global-before-0/fitted.par_1',
+                'linux/allocation/measure/correlated-global-after-0/fitted.par_2',
+                'linux/allocation/measure/correlated-global-native-0/global_covar.cvm',
                 'linux/contraction-source-profile/planetary-readEphemeris.object.s',
                 'linux/contraction-source-profile/propagation-shapelet.object.s',
                 'linux/contraction-source-profile/ephemeris-offsets/source.patch',
@@ -37,6 +43,9 @@ class EvidenceCollection(unittest.TestCase):
                 'linux/event-diagnostic/without-events.par',
                 'linux/candidate/source/validation/general_fitting/build/public/reference.json.gz']
             excluded=[native+'build/ordinary/source/config.json.gz',
+                'linux/allocation/before/source/rust/target/fingerprint.json',
+                'linux/allocation/provider-target/fingerprint.json','linux/allocation/debug-target/fingerprint.json',
+                'linux/allocation/before/bin/observe',
                 'linux/test-target/fingerprint.json.gz','linux/corpus-target/fingerprint.json',
                 'linux/runtime/resources.json.gz',
                 'linux/install-default/share/source.json.gz','linux/gmp-cache/cache.json.gz',

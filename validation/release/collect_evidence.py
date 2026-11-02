@@ -13,7 +13,7 @@ if __name__=='__main__':
     if not a.input.is_dir():p.error('input directory does not exist: '+str(a.input))
     a.out.mkdir(parents=True,exist_ok=False);files={}
     excluded={'source','src','target','test-target','corpus-target','rust-target','cache-target','library-owned-cache-source',
-              'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache'}
+              'runtime','runtime-historical','prefix','upstream.git','.git','cmake','gmp-cache','provider-target','debug-target'}
     for path in sorted(a.input.rglob('*')):
         relative=path.relative_to(a.input)
         if not path.is_file() or path.is_symlink():continue
@@ -23,7 +23,11 @@ if __name__=='__main__':
                          in '/'+relative.as_posix() for name in ['public','families'])
         if excluded.intersection(relative.parts) and not fit_evidence:continue
         if any(part.startswith('install-') and not part.endswith('-build') for part in relative.parts):continue
-        if (path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
+        # AN binds complete fit diagnostics and AK CLI products byte-for-byte.
+        allocation_product='allocation' in relative.parts and path.name in {
+            'constraints.matrix','cov.matrix','design.matrix','param.labels','param.vals',
+            'postfit.res','prefit.res','fitted.par_1','fitted.par_2','global_covar.cvm'}
+        if (not allocation_product and path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
                 and not path.name.endswith(('polyco_new.dat','newpolyco.dat','polyco.tim','t2pred.dat','pred.tim'))
                 and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',

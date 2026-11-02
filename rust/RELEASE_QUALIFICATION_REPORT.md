@@ -2,39 +2,55 @@
 
 ## Current checkpoint — 2 November 2026
 
-Actual two-platform evidence is now available. Central reviewed complete Linux
-run `41294531402` (58/69 passing stages, eleven failing, none blocked) and focused
-run `41312212554` (23/26 passing stages, three failing, none blocked). Decision
-[0119](../decisions/0119-focused-linux-review-and-svd-contract-proposal.md)
-accepts the scoped spin, finite-event, contraction, W and K corrections. Full AL
-and integrated migration qualification remain pending; the final complete
-69-stage run on the next integrated candidate is still due.
+Central reviewed complete Linux run `41294531402` (58/69 passing stages,
+eleven failing, none blocked) and focused run `41312212554` (23/26 passing,
+three failing, none blocked). Decision 0119 accepts the scoped spin,
+finite-event, contraction, W and K corrections. The next complete integrated
+matrix remains due; AL and full migration are not accepted.
 
-New AL delivery, awaiting central review:
+Decision [0122](../decisions/0122-m2-acceptance-and-al-checkpoint-review.md)
+accepts bounded M2 under the user's paired-mode policy. It also accepts Q's
+scoped macOS staging correction; Q Linux follow-through remains due. General
+fitting, DDH fidelity and discrete/preprocessing failures remain separate.
+The `febb650` [diagnostic preparation](RELEASE_CONTRACTION_INVENTORY.md) adds
+actual-object/neutral interpolation evidence, truthful propagation host metadata
+and the reviewed internal event NaN trace to the next full matrix. Its local
+checks do not establish Linux correction.
 
-- [Q history staging](../validation/release/Q_HISTORY_REPORT.md), `d819bef`: the
-  actual fresh macOS staged workflow passes 107 native / 121 Rust cases and
-  its identity, rejection and semantic controls. Linux follow-through is due.
-- [Paired SVD acceptance](RELEASE_PAIRED_SVD_REPORT.md), `4769394`, implements the
-  user's decision [0120](../decisions/0120-user-adopted-paired-svd-acceptance.md).
-  Rug128 and raw production outputs are unchanged. Saved complete macOS and
-  focused Linux M2 sets now pass all fifty comparison records under the new
-  policy; original exact-position failures remain diagnostic and historical
-  receipts stay unchanged. Remaining general-fit physical/value failures are
-  listed separately; this is not broad family acceptance.
-- [Internal event NaN probe](RELEASE_EVENT_NAN_PROBE_REPORT.md) preserves all
-  original 249 macOS observations and provides 339 additional operation,
-  assignment and source-prefix observations. Its sixty new macOS NaN arithmetic
-  differences and the thirteen previously observed Linux sign failures remain
-  open. Actual Linux prefix/propagation measurement is the next bounded step.
+Decision [0123](../decisions/0123-memory-review-and-predictor-performance-release.md) accepts
+AN's measured macOS allocation improvement. Central merged the exact history at
+`6cc0b79b1836ace952c7c25b3cfaf5651adff1dd`. The [AN report](ALLOCATION_PROFILE_REPORT.md)
+retains original measurements and inherited failures. AO owns predictor CPU/FFI
+work in its separate clone; this batch does not include that work.
 
-Decision [0121](../decisions/0121-parallel-migration-progress-and-an-release.md)
-keeps AL as the main compatibility/qualification owner and releases AN's separate
-covariance-memory investigation in an isolated clone. No AN allocation code is
-changed by this batch. Material preprocessing deletion decisions, discrete
-utility boundaries and remaining fit/timing values retain priority and their
-original gates; small diagnostics are batched. Central owns integration,
-publication/dispatch, performance quiet windows and milestone acceptance.
+The prepared Linux allocation stages reuse AN's existing runners:
+
+- Fetch and retain exact `dc435f53a64e4dd5c25cae6319841a28bd981fcb` before and
+  `68973d669af0e1180ad8532bb8b364452ca203d7` after objects in the shallow checkout.
+  Their crate diff contains only allocator/lifecycle-test changes. Cargo.lock
+  matches the merged candidate, so offline builds reuse its populated Cargo
+  cache; AN keeps separate before/after targets and a shared GMP cache.
+- Reuse A2, core-disabled CLI, native fitting, S ordinary expected records,
+  native predictor, C ABI receipt and provider installation. Scientific runners
+  use the prepared candidate export's canonical header/runtime bindings.
+- Run AN's bounded residency/read/write/COW/reinitialization observations and
+  two CLI workloads with five fresh interleaved samples. Measurement adds no
+  timing/RSS acceptance threshold. Full science/file and eleven lifecycle
+  histories retain exact before/after checks and all native gate outcomes.
+- Record inherited native lifecycle/fitting failures as matrix failures even
+  when same-engine equality passes. Run the existing isolated-PKS predictor
+  gate on after, and also before if after fails. Provider and debug lifecycle
+  checks remain independent of those scientific failure statuses.
+- Retain AN's diagnostic matrices, labels, residuals and complete CLI products,
+  while excluding frozen source/build/cache trees. Missing Git/native ordinary
+  prerequisites remain explicit; unrelated matrix stages continue.
+
+Current unsafe/source accounting is refreshed in the [source map](RELEASE_SOURCE_MAP.md),
+with the two reviewed allocator unsafe operations distinguished from historical
+counts. Local preparation uses harness, source and build-routing checks only;
+actual Linux measurements, scientific verification and predictor results await
+central review/publication/dispatch of one batched candidate. Existing
+scientific gates, Rug128 and native binary128 remain unchanged.
 
 ## Dated campaign history
 

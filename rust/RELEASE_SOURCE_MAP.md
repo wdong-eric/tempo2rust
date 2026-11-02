@@ -1,5 +1,40 @@
 # AL frozen-source correspondence and boundary map
 
+## Current integrated source accounting — 2 November 2026
+
+This refresh binds Rust source at integrated `6cc0b79b1836ace952c7c25b3cfaf5651adff1dd`,
+which merges the exact reviewed AN history through `497168b`. M2 is accepted
+under 0122; AN's allocation improvement is accepted for measured macOS behavior
+under 0123. Actual Linux allocation qualification, AL and full migration remain
+open. AO's predictor work is isolated and is not part of this source snapshot.
+
+Against the unchanged `6acaf53d2e13291eb6d0b0988faf7dee7d33a635` baseline, the 158
+Rust source files comprise 101 unchanged bodies, 54 modified existing files and
+three additions, with no removals. The audit indexes 69 lines containing `unsafe`
+in ten files, 1,730 function/export lines and 119 source-departure-pattern lines.
+These are lexical navigation counts, not exhaustive safety or scientific checks.
+The six additional unsafe lines relative to the dated 63-line snapshot below
+are four existing ordinary-long-double transport lines and AN's two allocator
+operations; they are not six new allocator operations.
+
+| Current boundary | Necessity and invariant | Reviewed evidence / remaining limit |
+| --- | --- | --- |
+| `tk_matrix.rs:59`, `alloc_zeroed` | Checked nonzero f64 array layout; global allocation; null maps to the established recoverable allocation error. Native `TKmatrix.C::malloc_blas` uses calloc. | 0123 source review and macOS allocation/failure controls; actual Linux residency and allocation controls pending. |
+| `tk_matrix.rs:67`, `Vec::from_raw_parts` | All bytes are initialized positive-zero f64; aligned unique storage transfers once with matching length/capacity and global deallocator. Existing Arc ownership/COW remains. | 0123 full positive-zero/layout, lifecycle, complete science and COW evidence; no deferred-cell semantics or custom allocator. |
+| `ordinary_long_double.rs:13,88,97,101` | Existing synchronous native math transport uses owned NUL-terminated text and a bounded output buffer, with source ordinary precision retained. | 0117/0119 ordinary-exp/log qualification; separate from allocator changes and AO predictor profiling. |
+
+The fresh identity/navigation audit is retained at
+`validation/release/build/source-map-an-0123/audit/receipt.json`. It checks all
+93 responsibility rows and 36 retained SOFA sources. The allocation-only Linux
+pair remains `dc435f5` / `68973d6`; the ordinary integrated matrix separately
+qualifies the merged candidate. See [qualification status](RELEASE_QUALIFICATION_REPORT.md)
+and [AN's measured report](ALLOCATION_PROFILE_REPORT.md).
+
+## Dated frozen-source snapshot — 1 November 2026
+
+The following counts and pending statements describe their named historical
+candidate; they are retained without reinterpreting old evidence.
+
 Documentation refresh, 1 November 2026, under
 [0114](../decisions/0114-independent-work-during-qualification.md). Current
 source means frozen `fecbc18af95196a16db2046306099b6345a50976`, the candidate

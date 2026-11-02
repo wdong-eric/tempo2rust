@@ -8,11 +8,17 @@ import platform
 import sys
 from common import ROOT, Run, sha
 
+ALLOCATION_REVISIONS={
+    "before":"dc435f53a64e4dd5c25cae6319841a28bd981fcb",
+    "after":"68973d669af0e1180ad8532bb8b364452ca203d7",
+}
+
 
 def qualify(args):
     run=Run(args.out);out=run.out;records={};python=sys.executable
     env=dict(os.environ,LC_ALL='C',VECLIB_MAXIMUM_THREADS='1',OPENBLAS_NUM_THREADS='1',
-             OMP_NUM_THREADS='1',OMP_DYNAMIC='FALSE',CARGO_TARGET_DIR=str(out/'test-target'))
+             OMP_NUM_THREADS='1',OMP_DYNAMIC='FALSE',CARGO_TARGET_DIR=str(out/'test-target'),
+             GMP_MPFR_SYS_CACHE=os.environ.get('GMP_MPFR_SYS_CACHE',str(out/'gmp-cache')))
     provider=out/'providers';a2=out/'a2';candidate=out/'candidate/source'
     env['CALCEPH_DIR']=str(provider/'prefix')
     env['TEMPO2_ACCELERATE' if platform.system()=='Darwin' else 'TEMPO2_OPENBLAS']='1'
@@ -131,6 +137,46 @@ def qualify(args):
          '--abi-receipt',out/'c-default/receipt.json'),['native-science','c-default'])
     step('output',script('check_output.py','--out',out/'output','--native',out/'science',
          '--core',out/'core-disabled','--candidate',candidate,'--rust',out/'install-default/bin/tempo2-rust'),['native-science','install-default'])
+    # 0123 freezes an allocator-only pair. Its Cargo.lock matches the populated
+    # candidate cache; AN overrides our shared target separately for each export.
+    allocation=out/'allocation';allocation.mkdir()
+    an=candidate/'validation/allocation_profile'
+    step('allocation-path-controls',[python,an/'check_build_paths.py',allocation/'path-controls'],
+         ['candidate','dependencies'])
+    for label,revision in ALLOCATION_REVISIONS.items():
+        step('allocation-source-'+label,['git','-C',ROOT,'cat-file','-e',revision+'^{commit}'])
+        step('allocation-build-'+label,[python,ROOT/'validation/allocation_profile/build.py',
+             '--revision',revision,'--out',allocation/label,'--a2',a2],
+             ['a2','dependencies','allocation-source-'+label,'allocation-path-controls'])
+        # Reuse the candidate's canonical header/runtime binding outside each
+        # frozen rust/ manifest. Debug controls do not depend on S gate success.
+        step('allocation-resources-'+label,['ln','-s',candidate/'tempo2',allocation/label/'source/tempo2'],
+             ['allocation-build-'+label,'candidate'])
+    step('allocation-libc',['ldd','--version'] if platform.system()=='Linux' else ['sw_vers'])
+    step('allocation-measure',[python,an/'measure.py','--before',allocation/'before',
+         '--after',allocation/'after','--native-cli',out/'core-disabled/tempo2','--a2',a2,
+         '--out',allocation/'measure','--samples','5'],
+         ['allocation-build-before','allocation-build-after','native-disabled','candidate'])
+    # The adapter checks S's ordinary record, not the aggregate corpus exit:
+    # an unrelated corpus/coverage failure must not suppress valid S inputs.
+    step('allocation-verify',script('allocation_verify.py','--out',allocation/'verify',
+         '--before',allocation/'before','--after',allocation/'after','--a2',a2,
+         '--candidate',candidate,'--native-corpora',corpora,'--native-fit',out/'native-fitting/fit'),
+         ['allocation-resources-before','allocation-resources-after','native-fitting','candidate'])
+    step('allocation-predictor-after',[python,an/'predictor_gate.py','--out',allocation/'predictor-after',
+         '--a2',a2,'--native',out/'science/predictor','--rust',allocation/'after/bin/tempo2-rust',
+         '--abi-receipt',out/'c-default/receipt.json'],['allocation-build-after','native-science','c-default','candidate'])
+    if records['allocation-predictor-after']['exit'] not in (0,None):
+        step('allocation-predictor-before',[python,an/'predictor_gate.py','--out',allocation/'predictor-before',
+             '--a2',a2,'--native',out/'science/predictor','--rust',allocation/'before/bin/tempo2-rust',
+             '--abi-receipt',out/'c-default/receipt.json'],['allocation-build-before','native-science','c-default','candidate'])
+    after_manifest=allocation/'after/source/rust/Cargo.toml'
+    step('allocation-providers',['cargo','test','--offline','--locked','--release','--manifest-path',after_manifest,
+         '--features','calceph,lapack','--test','native_backends','--','--test-threads=1'],
+         ['allocation-build-after','providers'],extra_env={'CARGO_TARGET_DIR':str(allocation/'provider-target')})
+    step('allocation-debug-lifecycle',['cargo','test','--offline','--locked','--manifest-path',after_manifest,
+         '--lib','pulsar_lifecycle_tests::','--','--test-threads=1'],['allocation-resources-after'],
+         extra_env={'CARGO_TARGET_DIR':str(allocation/'debug-target')})
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -150,6 +196,10 @@ def qualify(args):
              'Central acceptance of the recorded platform qualification']
     run.save({'status':'failure' if failed or blocked else 'pass', 'qualification':'incomplete' if pending else 'matrix executed; central acceptance separate',
         'candidate':args.revision,'stages':records,'failed':failed,'blocked':blocked,'pending':pending,
+        'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',
+            'cargo_home':env.get('CARGO_HOME','Cargo default'),'gmp_cache':env['GMP_MPFR_SYS_CACHE'],
+            'allocator_environment':{k:v for k,v in env.items() if k in ['LD_PRELOAD','DYLD_INSERT_LIBRARIES','GLIBC_TUNABLES']
+                or k.startswith(('MALLOC_','Malloc'))}},
         'runner':sha(__file__),'environment':{k:env[k] for k in ['FC','NATIVE_CC','NATIVE_CXX','CALCEPH_DIR',
              'CARGO_TARGET_DIR','TEMPO2_ACCELERATE','TEMPO2_OPENBLAS','VECLIB_MAXIMUM_THREADS','OPENBLAS_NUM_THREADS'] if k in env}})
     return bool(failed or blocked or pending)
