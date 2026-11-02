@@ -1,5 +1,6 @@
 //! TKmatrix.C malloc_blas/accessors/free and square wrappers.
 use crate::pulsar_lifecycle::{LifecycleBoundary, fail};
+use std::alloc::{Layout, alloc_zeroed};
 use std::sync::Arc;
 
 /// Source hidden size_t header and row pointers become typed side metadata.
@@ -48,11 +49,22 @@ impl BlasMatrix {
         rows.checked_mul(std::mem::size_of::<usize>())
             .filter(|n| *n <= isize::MAX as usize)
             .ok_or_else(|| fail("malloc_blas", "row_table", "size_overflow"))?;
-        let mut cells = Vec::new();
-        cells
-            .try_reserve_exact(len)
-            .map_err(|_| fail("malloc_blas", "cells", "allocation_failure"))?;
-        cells.resize(len, 0.0); // Every source calloc cell is positive zero.
+        // TEMPO2 TKmatrix.C::malloc_blas:177 (fda6ad4) uses calloc. Request
+        // zeroed storage directly instead of eagerly writing every cell after
+        // reservation. This equivalent Rust improvement avoids resident unused
+        // covariance pages on measured hosts; see ALLOCATION_PROFILE_REPORT.md.
+        let layout = Layout::array::<f64>(len).expect("validated matrix byte size");
+        // SAFETY: The checked, nonzero array layout fits isize::MAX. Use the
+        // global allocator, which also owns the Vec's eventual deallocation.
+        let ptr = unsafe { alloc_zeroed(layout) }.cast::<f64>();
+        if ptr.is_null() {
+            return Err(fail("malloc_blas", "cells", "allocation_failure"));
+        }
+        // SAFETY: All bytes are initialized to zero, a valid positive-zero f64.
+        // This unique, aligned allocation has exactly the layout for len cells;
+        // length and capacity match it. Transfer ownership once to Vec, retaining
+        // the existing Arc lifetime/COW behavior and matching global deallocator.
+        let cells = unsafe { Vec::from_raw_parts(ptr, len, len) };
         Ok(Self {
             rows,
             cols,
