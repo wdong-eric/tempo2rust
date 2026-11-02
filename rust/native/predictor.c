@@ -29,6 +29,39 @@ _Static_assert(LDBL_MANT_DIG == 64 && sizeof(long double) == 16, "native long do
 #endif
 _Static_assert(sizeof(int) == 4, "source int ABI");
 
+/* tempo2pred.c/cheby2d.c/t1polyco.c expose mutable native scalar storage.
+ * Copy its current value on every call, without a pointer cache. A finite
+ * value is exactly significand * 2^exponent; frexpl/ldexpl retain all 53/64
+ * bits, including subnormals, without inspecting native padding or MPFR layout.
+ * Signed kinds: +/-1 finite (including zero), +/-2 infinity, +/-3 NaN.
+ * All pointers are live, aligned synchronous borrows; outputs are exclusive. */
+int t2r_ld_parts(const void *p, size_t i, uint64_t *significand, int *exponent) {
+    long double value = ((const long double *)p)[i];
+    int sign = signbit(value) ? -1 : 1;
+    *significand = 0;
+    *exponent = 0;
+    /* Preserve the previous %La read convention: Darwin omits the NaN sign. */
+    if (isnan(value)) {
+#ifdef __APPLE__
+        return 3;
+#else
+        return 3 * sign;
+#endif
+    }
+    if (isinf(value)) return 2 * sign;
+    if (value != 0) {
+        long double fraction = frexpl(fabsl(value), exponent);
+        *significand = (uint64_t)ldexpl(fraction, LDBL_MANT_DIG);
+        *exponent -= LDBL_MANT_DIG;
+    }
+    return sign;
+}
+void t2r_ld_from_parts(void *p, size_t i, uint64_t significand, int exponent, int kind) {
+    long double value = abs(kind) == 3 ? NAN : abs(kind) == 2 ? INFINITY
+        : ldexpl((long double)significand, exponent);
+    ((long double *)p)[i] = copysignl(value, kind < 0 ? -1.L : 1.L);
+}
+
 /* Rust sees only pointers, int and binary64 source fields. %La is exact, and
  * decimal output has >= LDBL_DECIMAL_DIG digits. No wider value visits f64.
  * Arrays are live for the synchronous call; callbacks must initialize all z. */

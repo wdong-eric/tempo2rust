@@ -7,7 +7,7 @@ use crate::{
     tempo2pred::{self, Prediction},
 };
 use std::{
-    ffi::{CStr, CString, c_char, c_int, c_void},
+    ffi::{c_int, c_void},
     panic::{AssertUnwindSafe, catch_unwind},
     ptr::NonNull,
 };
@@ -16,8 +16,13 @@ use std::{
 // representation conversion/allocation and phase dispatch. Pointers are borrowed
 // for the call, properly aligned native storage; no C pointer escapes an owner.
 unsafe extern "C" {
-    fn t2r_ld_get(p: *const c_void, i: usize, s: *mut c_char) -> c_int;
-    fn t2r_ld_set(p: *mut c_void, i: usize, s: *const c_char) -> c_int;
+    fn t2r_ld_parts(
+        p: *const c_void,
+        i: usize,
+        significand: *mut u64,
+        exponent: *mut c_int,
+    ) -> c_int;
+    fn t2r_ld_from_parts(p: *mut c_void, i: usize, significand: u64, exponent: c_int, kind: c_int);
     fn t2r_ld_alloc(n: usize) -> *mut c_void;
     fn t2r_ld_free(p: *mut c_void);
     fn t2r_phase_call(p: *const c_void, mjd: *const c_void, freq: *const c_void, out: *mut c_void);
@@ -32,37 +37,48 @@ fn read(p: *const c_void, i: usize) -> Result<N, String> {
     if p.is_null() {
         return Err("null native scalar backing".into());
     }
-    let mut text = [0 as c_char; 128];
-    // C's snprintf writes at most 128 bytes including NUL; p[i] is live native
-    // storage supplied by the wrapper, and conversion retains the entire value.
-    if unsafe { t2r_ld_get(p, i, text.as_mut_ptr()) } != 0 {
-        return Err("native scalar formatting failed".into());
-    }
-    // The initialized buffer above is NUL terminated by snprintf.
-    N::parse_number(
-        unsafe { CStr::from_ptr(text.as_ptr()) }
-            .to_str()
-            .map_err(|e| e.to_string())?,
-    )
+    let (mut significand, mut exponent) = (0, 0);
+    // C reads the current initialized p[i], writes only these exclusive local
+    // integers, and retains no pointers. No Rust reference aliases native data.
+    let kind = unsafe { t2r_ld_parts(p, i, &mut significand, &mut exponent) };
+    let value = match kind.abs() {
+        1 => N::from_native_parts(significand, exponent),
+        2 => n(f64::INFINITY),
+        3 => n(f64::NAN),
+        _ => unreachable!("native scalar kind"),
+    };
+    Ok(if kind < 0 { -value } else { value })
 }
 fn write(p: *mut c_void, i: usize, v: &N) -> Result<(), String> {
     if p.is_null() {
         return Err("null native output backing".into());
     }
-    let text = if v.as_float().is_nan() {
-        if v.as_float().is_sign_negative() {
-            "-nan".into()
-        } else {
-            "nan".into()
-        }
+    let value = v.as_float();
+    let (significand, exponent, kind) = if let Some(significand) = value.get_significand() {
+        // Rug's borrowed, positive significand is padded to whole GMP limbs.
+        // Both qualified 53/64-bit profiles fit in u64, including that padding.
+        (
+            significand.to_u64().expect("ordinary significand fits u64"),
+            value.get_exp().unwrap() - significand.significant_bits() as i32,
+            1,
+        )
+    } else if value.is_nan() {
+        (0, 0, 3)
+    } else if value.is_infinite() {
+        (0, 0, 2)
     } else {
-        v.significant(25)
+        (0, 0, 1)
     };
-    let text = CString::new(text).map_err(|e| e.to_string())?;
-    // p[i] is an exclusive initialized or writable native scalar cell; C copies
-    // the complete decimal value before text is dropped. No native value uses f64.
-    if unsafe { t2r_ld_set(p, i, text.as_ptr()) } != 0 {
-        return Err("native scalar parsing failed".into());
+    let kind = if value.is_sign_negative() {
+        -kind
+    } else {
+        kind
+    };
+    // C writes one exclusive native cell. The canonical owner has already
+    // rounded to the host range/precision, so integer conversion and ldexpl
+    // reconstruct it exactly. No borrowed Rug limb or C pointer escapes.
+    unsafe {
+        t2r_ld_from_parts(p, i, significand, exponent, kind);
     }
     Ok(())
 }
@@ -380,4 +396,100 @@ extern "C" fn t2r_testfunc(
         }
         Ok(())
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::ffi::{CStr, CString, c_char};
+
+    // Retained event-libm text transport is an independent before-path oracle.
+    unsafe extern "C" {
+        fn t2r_ld_get(p: *const c_void, i: usize, s: *mut c_char) -> c_int;
+        fn t2r_ld_set(p: *mut c_void, i: usize, s: *const c_char) -> c_int;
+    }
+
+    fn text(p: &NativeBuffer) -> String {
+        let mut out = [0 as c_char; 128];
+        // p owns a live native cell; C writes a bounded NUL-terminated buffer.
+        assert_eq!(unsafe { t2r_ld_get(p.0.as_ptr(), 0, out.as_mut_ptr()) }, 0);
+        unsafe { CStr::from_ptr(out.as_ptr()) }
+            .to_str()
+            .unwrap()
+            .into()
+    }
+
+    #[test]
+    fn binary_transport_matches_native_text_boundaries() {
+        let mut tokens: Vec<String> = [
+            "0",
+            "-0",
+            "inf",
+            "-inf",
+            "nan",
+            "-nan",
+            "0x1p-1074",
+            "-0x1p-1074",
+            "0x1p-1022",
+            "0x1.fffffffffffffp1023",
+            "0x1p-16445",
+            "-0x1p-16445",
+            "0x1p-16382",
+            "0x1.fffffffffffffffep16383",
+            "0x1.0000000000000002p0",
+        ]
+        .into_iter()
+        .map(str::to_owned)
+        .collect();
+        let mut bits = 0x123456789abcdef0_u64;
+        for exponent in [
+            -16510, -16445, -16444, -16400, -16382, -1138, -1075, -1074, -1073, -1022, -64, -63, 0,
+            960, 16319,
+        ] {
+            for _ in 0..32 {
+                bits ^= bits << 13;
+                bits ^= bits >> 7;
+                bits ^= bits << 17;
+                tokens.push(format!("0x{bits:x}p{exponent}"));
+                tokens.push(format!("-0x{bits:x}p{exponent}"));
+            }
+        }
+        let input = NativeBuffer::new(1).unwrap();
+        let output = NativeBuffer::new(1).unwrap();
+        let old_output = NativeBuffer::new(1).unwrap();
+        for token in tokens {
+            let c = CString::new(token.clone()).unwrap();
+            // Each buffer owns one exclusive native cell; text remains live.
+            assert_eq!(unsafe { t2r_ld_set(input.0.as_ptr(), 0, c.as_ptr()) }, 0);
+            let old = N::parse_number(&text(&input)).unwrap();
+            let new = read(input.0.as_ptr(), 0).unwrap();
+            assert_eq!(old.as_float().is_nan(), new.as_float().is_nan(), "{token}");
+            assert_eq!(
+                old.as_float().is_sign_negative(),
+                new.as_float().is_sign_negative(),
+                "{token}"
+            );
+            if !old.as_float().is_nan() {
+                assert_eq!(old, new, "{token}");
+            }
+            write(output.0.as_ptr(), 0, &new).unwrap();
+            let old_text = CString::new(if new.as_float().is_nan() {
+                if new.as_float().is_sign_negative() {
+                    "-nan".into()
+                } else {
+                    "nan".into()
+                }
+            } else {
+                new.significant(25)
+            })
+            .unwrap();
+            assert_eq!(
+                unsafe { t2r_ld_set(old_output.0.as_ptr(), 0, old_text.as_ptr()) },
+                0
+            );
+            assert_eq!(text(&output), text(&old_output), "{token}");
+        }
+        assert!(read(std::ptr::null(), 0).is_err());
+        assert!(write(std::ptr::null_mut(), 0, &n(1.)).is_err());
+    }
 }

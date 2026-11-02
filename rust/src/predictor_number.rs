@@ -14,6 +14,14 @@ pub(crate) fn n(x: f64) -> N {
     N::from(x)
 }
 impl PredictorNumber {
+    /// Exact finite native scalar transport. The C shim supplies at most
+    /// NATIVE_BITS significand bits and an already representable exponent.
+    pub(crate) fn from_native_parts(significand: u64, exponent: i32) -> Self {
+        let mut value = Float::with_val(NATIVE_BITS, significand);
+        value <<= exponent;
+        Self(value)
+    }
+
     pub fn from_float(x: &Float) -> Self {
         let (v, direction) = Float::with_val_round(NATIVE_BITS, x, Round::Nearest);
         Self::rounded(v, direction)
