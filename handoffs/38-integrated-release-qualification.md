@@ -253,3 +253,18 @@ If needed, minimal source-bound observations may be made in a new ignored or
 `/private/tmp` directory. Return the first demonstrated divergence and decision
 needed; no tracked implementation, historical runner, central-document, precision,
 ordering or tolerance change is released. See 0118 for the exact constraints.
+
+
+## Focused result and bounded follow-through (0119)
+
+The focused run is complete and collected: 23/26 stages pass, none blocked.
+Central accepts the scoped two-platform spin/finite-event/contraction/W/K fixes.
+The independent SVD cause is reviewed; its acceptance-rule proposal is pending
+with the user and does not release any solver/comparator change.
+
+AL now owns the bounded Q historical-blob staging correction and source-localized
+internal event NaN generation/propagation corrections described in 0119. Preserve
+finite calculations, exact sign checks, precision and all historical evidence.
+Return clean commits and concrete verification for central publication review;
+continue this independent work while the SVD policy answer is pending. The full
+69-stage qualification, inherited scientific ledger and AL-first sequence remain.

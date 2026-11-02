@@ -684,3 +684,23 @@ frozen identities and explicit 26-stage partial-scope assertion changed. The
 900-second monitor invokes it for this same run when complete; it never dispatches.
 Its future collection output is `build/linux-run-41312212554-review-20261102/`.
 Actual Linux results and the full 69-stage qualification remain pending.
+
+
+## Focused Linux result and SVD cause reviewed
+
+Decision 0119 records the completed run `41312212554`: 23/26 stages pass, no blocked
+stages. The collector verified artifact `13087172369`, SHA-256
+`928a0796bac120200cbbb4b0f794c80d6e3dd7f1d6526e3bbbb35aded78939e2`,
+all 14121 files and 2314760936 bytes. The local monitor's later polls are not
+recorded; central collected the same completed run on resumption without restart.
+
+The ignored packet `build/focused-result-and-svd-review-20261102/` preserves both
+exact central review recipes and the complete delivered SVD diagnosis/products.
+Focused review receipt `be6aa5c566137dcf23c5cfd1d65052ebc55be184540e961411377a8877c3b310`
+binds all 2063 exported files, sixteen selected members and the recomputed 249-row
+event comparison. SVD review receipt
+`9760d234c9925a211229ee1ca8fe9998661923dda745ad94c7f7b97280c4819a`
+verifies source/product identities, observer neutrality and the 82-point
+native/Rug113 trace correspondence. Its mode-selecting sign change is established
+for the one fixture; the exact raw gate remains pending unless the user adopts
+the explicit 0119 proposal. No generated evidence is staged in Git.
