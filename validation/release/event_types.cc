@@ -67,4 +67,5 @@ int main(int argc,char**argv) {
     }
     if(!input.eof())return 3;
     destroyOne(p);delete p;
+    return 0;
 }

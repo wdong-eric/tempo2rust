@@ -1,5 +1,47 @@
 # AL release qualification handover
 
+## Current checkpoint — 2 November 2026
+
+Actual two-platform evidence is now available. Central reviewed complete Linux
+run `41294531402` (58/69 passing stages, eleven failing, none blocked) and focused
+run `41312212554` (23/26 passing stages, three failing, none blocked). Decision
+[0119](../decisions/0119-focused-linux-review-and-svd-contract-proposal.md)
+accepts the scoped spin, finite-event, contraction, W and K corrections. Full AL
+and integrated migration qualification remain pending; the final complete
+69-stage run on the next integrated candidate is still due.
+
+New AL delivery, awaiting central review:
+
+- [Q history staging](../validation/release/Q_HISTORY_REPORT.md), `d819bef`: the
+  actual fresh macOS staged workflow passes 107 native / 121 Rust cases and
+  its identity, rejection and semantic controls. Linux follow-through is due.
+- [Paired SVD acceptance](RELEASE_PAIRED_SVD_REPORT.md), `4769394`, implements the
+  user's decision [0120](../decisions/0120-user-adopted-paired-svd-acceptance.md).
+  Rug128 and raw production outputs are unchanged. Saved complete macOS and
+  focused Linux M2 sets now pass all fifty comparison records under the new
+  policy; original exact-position failures remain diagnostic and historical
+  receipts stay unchanged. Remaining general-fit physical/value failures are
+  listed separately; this is not broad family acceptance.
+- [Internal event NaN probe](RELEASE_EVENT_NAN_PROBE_REPORT.md) preserves all
+  original 249 macOS observations and provides 339 additional operation,
+  assignment and source-prefix observations. Its sixty new macOS NaN arithmetic
+  differences and the thirteen previously observed Linux sign failures remain
+  open. Actual Linux prefix/propagation measurement is the next bounded step.
+
+Decision [0121](../decisions/0121-parallel-migration-progress-and-an-release.md)
+keeps AL as the main compatibility/qualification owner and releases AN's separate
+covariance-memory investigation in an isolated clone. No AN allocation code is
+changed by this batch. Material preprocessing deletion decisions, discrete
+utility boundaries and remaining fit/timing values retain priority and their
+original gates; small diagnostics are batched. Central owns integration,
+publication/dispatch, performance quiet windows and milestone acceptance.
+
+## Dated campaign history
+
+The entries below retain their original dates and then-current evidence. Earlier
+statements that Linux was unrun or only partly collected are historical and are
+superseded by the current checkpoint above.
+
 Latest correction bundle, 1 November 2026:
 [third Linux follow-through and complete retained ledger](RELEASE_THIRD_LINUX_FOLLOWUP.md).
 Decisions 0109-0111 release portability/observation fixes, the measured cache
