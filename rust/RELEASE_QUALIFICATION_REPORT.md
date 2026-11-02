@@ -2,6 +2,55 @@
 
 ## Current checkpoint — 2 November 2026
 
+Decision [0127](../decisions/0127-user-adopted-rug128-discrete-contract.md)
+records the user's bounded Rug128 contract for four 0049 utility witnesses and
+eight 0077 SIMUL histories. The successor changes adjacent source comments and
+release verification; production expressions, thresholds, precision and original
+oracles remain unchanged. Running candidate `9991e80` is unaffected. Central
+acceptance of this implementation remains separate from the adopted contract.
+
+The utility comparator independently derives the four exact targets using the
+existing rational binary-rounding facility, and retains each original native
+comparison. The other twelve utility cases keep their native gates, including
+zero/class behavior. MPFR's zero exponent sentinel is handled as zero, avoiding
+an unnecessary billion-bit denominator in the comparison.
+
+The P adapter binds the eight histories' complete input actions, stored-input
+rounding, flags and equal errors. It derives the additional deletion, constructs
+separate complete expected histories, and reuses the existing Rust comparator
+for every state field and diagnostic after every action. Its original mismatch
+list must exactly match the independently predicted 32 records; an unrelated,
+missing, extra or reordered record fails. The raw comparison and receipt remain
+intact. Full runs also execute one positive and nine corruption controls through
+that same state/diagnostic comparator.
+
+| 0127 evidence | Result |
+| --- | --- |
+| Fresh public Rust utility API, 16 saved identical native operands | All 16 declared targets pass; all four original native differences retained |
+| Existing focused Rust utility/domain regression | One test passes; no production test or oracle changed |
+| Fresh P selection replay | Eight adopted histories plus ten existing threshold/order/repeat neighbors pass complete target state/diagnostics; original 32 differences retained |
+| Actual P comparator controls | Positive passes; wrong decision, missing/extra state, observation order, class/sign, unrelated state, repeat, threshold and diagnostics corruptions all fail |
+| Saved macOS P replay | 154 original records → 122 remaining; exactly 32 independently accounted SIMUL records |
+| Saved Linux `41294531402` P replay | 160 original records → 128 remaining: the 122 continuous records plus six historical `phase_divzero` NaN-sign records, all outside 0127 |
+| Saved macOS/Linux utility replay | Four original failures → zero declared-contract failures on each host; original receipts and source identities retained |
+
+Evidence receipts (SHA-256):
+
+- `validation/release/build/discrete-0127-utility/receipt.json`:
+  `6e0dfdccfa94f89083be5e38b21d683307feb8d3b7162e02510aca52d86e5103`.
+- `validation/release/build/discrete-0127-live/receipt.json`:
+  `7da92c0155ba33633a8401cea0e85eaf0f1f5130b4f96f0135b56afc34f4e6b5`.
+- `validation/release/build/discrete-0127-controls/receipt.json`:
+  `4732b31b04c5bd877408f0710cafd6f08cea5004451aa5fd60925f4ec6a64fa3`.
+- `validation/release/build/discrete-0127-saved-v2/receipt.json`:
+  `6e900f6cb9ea4d93eabc0751c6c65d3c90d6e4e07955e3b769f6ab26b88cda00`.
+
+The first saved-replay preparation assumed the older 154-record count on both
+hosts and stopped; the corrected receipt preserves Linux's additional six
+failures. No unchanged full 113-bit or full-engine campaign was rerun. This
+contract establishes no observed end-to-end pulse-slip correction and accepts
+neither the remaining preprocessing records nor other timing/fitting gates.
+
 Central reviewed complete Linux run `41294531402` (58/69 passing stages,
 eleven failing, none blocked) and focused run `41312212554` (23/26 passing,
 three failing, none blocked). Decision 0119 accepts the scoped spin,

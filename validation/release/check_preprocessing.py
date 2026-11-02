@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""AL P replay of an immutable, explicitly selected host corpus; unchanged gates."""
-import argparse,gzip,hashlib,json,os,re,subprocess
+"""AL P replay: retain raw comparisons and separately verify bounded 0127 targets."""
+import argparse,gzip,hashlib,json,os,re,shutil,subprocess,sys
 from pathlib import Path
+from discrete_contract import simul_targets, resolve_simul
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1];P=ROOT/'validation/preprocessing';BUILD=HERE/'build/preprocessing'
 def sha(b):return hashlib.sha256(b).hexdigest()
 def main():
@@ -53,5 +54,37 @@ def main():
     cmd=['cargo','test','--manifest-path',str(ROOT/'rust/Cargo.toml'),'--locked','--offline',*(['--release'] if a.release else []),'--lib','preprocessing_corpus_tests::p_corpus','--','--ignored','--exact','--nocapture','--test-threads=1']
     run=subprocess.run(cmd,env=env)
     (BUILD/('receipt-'+('release' if a.release else 'debug')+'.json')).write_text(json.dumps({'reference_sha256':sha((P/'observations.json.gz').read_bytes()),'initial_sha256':sha((P/'initial.json.gz').read_bytes()),'profile_sha256':sha((P/'profile.json').read_bytes()),'types_sha256':sha((P/'TYPES.json').read_bytes()),'runner_sha256':sha(Path(__file__).read_bytes()),'cases':len(selected),'dispositions':dispositions,'returncode':run.returncode},indent=2)+'\n')
-    raise SystemExit(run.returncode)
+    # Native histories and their failed comparison remain intact. Only the
+    # separately derived 0127 histories use a second expected-state file.
+    targets,deltas,proofs=simul_targets([c for c in selected if c['id'].startswith('simul')],initial)
+    if not proofs:raise SystemExit(run.returncode)
+    contract=BUILD/'rug128-contract';contract.mkdir()
+    for name in ['initial.json','floating-layout.json']:shutil.copyfile(BUILD/name,contract/name)
+    for case in targets:
+        work=contract/case['id'];work.mkdir();case['workdir']=str(work)
+        for name,raw in case['files'].items():(work/name).write_bytes(bytes.fromhex(raw))
+    (contract/'cases.json').write_text(json.dumps(targets)+'\n')
+    (contract/'expectations.json').write_text(json.dumps({'authority':'0127','proofs':proofs,'original_differences':deltas},indent=2)+'\n')
+    target_run=subprocess.run(cmd,env={**env,'AC_PREPROCESS_CORPUS':str(contract)})
+    failures=json.loads((BUILD/'differences.json').read_text())
+    remaining=resolve_simul(failures,deltas)
+    diagnostics=json.loads((BUILD/'diagnostic-differences.json').read_text())
+    controls=None
+    if target_run.returncode==0 and any(c['id']=='simul_123' for c in targets):
+        controls=subprocess.run([sys.executable,HERE/'discrete_contract_controls.py',
+            '--corpus',contract,'--candidate',ROOT,'--out',BUILD/'contract-controls',
+            *(['--release'] if a.release else [])],env=env).returncode
+    failed=bool(remaining or diagnostics or target_run.returncode or controls)
+    (BUILD/'receipt.json').write_text(json.dumps({'status':'failure' if failed else 'pass',
+        'authority':'0127','original_returncode':run.returncode,'original_differences':len(failures),
+        'contract_returncode':target_run.returncode,'contract_histories':len(proofs),
+        'contract_controls_returncode':controls,
+        'checked_simul_histories':len(targets),'resolved_original_records':len(deltas),
+        'remaining_failures':remaining,'diagnostic_failures':diagnostics,
+        'inputs':{str(p):sha(p.read_bytes()) for p in [P/'observations.json.gz',P/'initial.json.gz',
+            ROOT/'rust/src/selection.rs',ROOT/'rust/src/preprocessing_corpus_tests.rs',
+            BUILD/'differences.json',contract/'cases.json',contract/'expectations.json',
+            Path(__file__),HERE/'discrete_contract.py']},
+        'scope':'Original P comparison retained; complete state/diagnostics replayed against independently derived bounded Rug128 targets; other gates unchanged'},indent=2)+'\n')
+    raise SystemExit(failed)
 if __name__=='__main__':main()

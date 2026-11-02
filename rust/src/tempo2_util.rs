@@ -46,14 +46,18 @@ pub fn fortran_mod(a: Float, p: &Float) -> Result<Float, crate::TimingError> {
     // tempo2Util.C::fortran_mod:186-191 (fda6ad4): a-(int)(a/p)*p.
     // The former % helper differed for signed zero, infinite divisors and
     // rounded quotients (0049). Preserve the expression at Rug128 and reject
-    // undefined native i32 conversions; 113/128-bit boundary differences remain.
+    // undefined native i32 conversions. Under 0127, the four bounded 0049 cases
+    // use Rug128 decisions: native-rounded 0.1 selects quotient +/-9, not the
+    // binary128 +/-10. Original native outcomes remain separate evidence.
     let quotient = Float::with_val(crate::PRECISION_BITS, &a / p);
     let n = crate::ifteph::extended_i32(&quotient, "fortran_mod_quotient_int")?;
     Ok(a - Float::with_val(crate::PRECISION_BITS, p * n))
 }
 
 pub fn fortran_nlong(x: &Float) -> Float {
-    // fortran_nlong: signed half addition then truncation, not ties-to-even.
+    // tempo2Util.C:211-220 (fda6ad4): signed half addition then truncation.
+    // 0127 adopts integer zero for +/-(0.5-2^-114) at Rug128; binary128 rounds
+    // the half addition to +/-1. This bounded departure is not native equality.
     (x.clone() + if x > &0 { 0.5f64 } else { -0.5f64 }).trunc()
 }
 

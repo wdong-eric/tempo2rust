@@ -118,6 +118,10 @@ pub fn process_simultaneous(line: &[u8], context: &mut PulsarContext) -> Result<
         for i in 0..n {
             let mut simul = false;
             for j in 0..n {
+                // preProcess.C:871,930 (fda6ad4); 0127 keeps strict Rug128 SIMUL
+                // decisions for the eight named histories. Their decimal SAT
+                // quantization differs from binary128; the separation is exact
+                // at each precision, so rounding seconds afterward is no remedy.
                 if i != j
                     && (read(&rows[i].sat, "sat")?.clone() - read(&rows[j].sat, "sat")?).abs()
                         * 86400.0f64
