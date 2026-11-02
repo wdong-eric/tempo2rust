@@ -18,6 +18,12 @@ use std::{
 };
 type Map = BTreeMap<String, Value>;
 include!("propagation_corpus_fields.rs");
+// AB probe.cc:95 reports the host's ordinary long double separately from
+// timing-wide binary128. Match the two qualified ordinary_long_double targets.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+const ORDINARY_BYTES: usize = 8;
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+const ORDINARY_BYTES: usize = 16;
 
 fn bytes(v: &Value) -> Vec<u8> {
     let w = v["width"].as_u64().unwrap() as usize;
@@ -332,8 +338,8 @@ fn action(
             return Ok(vec![
                 json!(8),
                 json!(53),
-                json!(8),
-                json!(53),
+                json!(ORDINARY_BYTES),
+                json!(crate::ordinary_long_double::NATIVE_BITS),
                 json!(16),
                 json!(113),
             ]);
@@ -433,6 +439,36 @@ fn action(
     }
     Ok(vec![])
 }
+#[test]
+#[ignore = "AL_PROPAGATION_MACROS supplies the qualified native compiler macros"]
+fn ordinary_profile_matches_native() {
+    let macros = fs::read_to_string(std::env::var_os("AL_PROPAGATION_MACROS").unwrap()).unwrap();
+    let native: Vec<Value> = [
+        "__SIZEOF_DOUBLE__",
+        "__DBL_MANT_DIG__",
+        "__SIZEOF_LONG_DOUBLE__",
+        "__LDBL_MANT_DIG__",
+    ]
+    .iter()
+    .map(|name| {
+        let prefix = format!("#define {name} ");
+        let value = macros
+            .lines()
+            .find_map(|line| line.strip_prefix(&prefix))
+            .unwrap();
+        json!(value.parse::<u32>().unwrap())
+    })
+    .collect();
+    let actual = action(
+        &mut PulsarContext::unwritten(0),
+        &["profile"],
+        &mut PathBuf::new(),
+    )
+    .unwrap();
+    assert_eq!(&actual[..4], native);
+    assert_eq!(&actual[4..], &[json!(16), json!(113)]);
+}
+
 #[test]
 #[ignore = "check_propagation.py supplies the full AB histories"]
 fn ab_histories() {

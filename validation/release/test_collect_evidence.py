@@ -24,6 +24,10 @@ class EvidenceCollection(unittest.TestCase):
             root=Path(temporary);source=root/'input';out=root/'selected'
             native='linux/native-corpora/staging/validation/observer_coordinates/'
             included=['receipt.json','linux/native-corpora/producer.py',native+'outputs/reference.json.gz',
+                'linux/contraction-source-profile/planetary-readEphemeris.object.s',
+                'linux/contraction-source-profile/propagation-shapelet.object.s',
+                'linux/contraction-source-profile/ephemeris-offsets/source.patch',
+                'linux/contraction-source-profile/ephemeris-offsets/c076_absent_nutation.trace.tsv',
                 native+'outputs/coverage_receipts.json.gz',native+'outputs/raw/case.jsonl.gz',
                 native+'outputs/failed/events.jsonl',
                 native+'build/coverage/get_obsCoord.gcov.json.gz',

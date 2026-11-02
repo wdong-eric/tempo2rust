@@ -100,3 +100,46 @@ shapelets, solar wind, likelihoods and utility routines. Keep these unverified
 sites, explicit native fused operations and already platform-aware helpers
 unchanged. Reuse the existing Rug/native arithmetic and compiler tools; no new
 numerical library or global contraction helper is warranted by this inventory.
+
+## Batched diagnostic preparation after 0122
+
+2 November 2026. The full integration recipe now passes the existing planetary
+and propagation ordinary builds to `contraction_profile.py`. It retains actual
+object disassembly for `readEphemeris`, `shapelet`, `sw_delay`, `calculate_bclt`,
+`shapiro_delay`, `dm_delays` and `secularMotion`, with source/compiler/object
+hashes and the original compile/link commands. Z's prior object hashes are
+checked. AB's original profile did not hash objects; its new receipt explicitly
+records that limitation and captures their current hashes. These are actual
+ordinary objects, not reconstructed scalar assembly. Existing observer and
+terrestrial evidence remains part of the same integration stage.
+
+A disposable `readEphemeris` copy adds an observer after the unchanged slope,
+intercept and offset statements for all three axes. A separate callback compiles
+those exact extracted expressions under the same flags and compares every
+intermediate as binary64 bits. Five existing cases cover the Y cancellation
+lead, repeated/boundary histories for each axis and overlapping intervals.
+Every case must preserve the original executable's complete event bytes,
+stdout and stderr. Original inputs, source, objects, resources and executables
+are checked unchanged. No native reference or production arithmetic is edited.
+
+Focused macOS evidence is `/private/tmp/al-contraction-prep-0122-v2/receipt.json`
+(SHA-256 `0e1ecee2c0e054e82cfc3ba8f5591c7c20edfc7dea740cca5c9ff89ed54d97e9`).
+All five cases are neutral and all 28 source/replay intermediate rows agree.
+Seven retained disassemblies total 159,365 bytes; the real evidence collector
+preserves all seven, five traces, the observer patch and receipt. The original
+two groups also pass the updated identity/disassembly path without repeating
+terrestrial scalar producers. Preparation recipes and profile controls remain
+ignored under `validation/release/build/contraction-prep-0122/`.
+
+The propagation test observer now reports ordinary long-double size/precision
+using the existing qualified-platform conventions. Its focused check accepts
+actual macOS compiler macros and rejects a changed ordinary mantissa. This
+changes only profile metadata; the 324 saved Linux profile mismatches still
+require live Linux verification. Scientific fields and gates remain intact.
+The full integration event-profile invocation now includes the already reviewed
+`--nan-trace`; original observation names and rows remain unchanged.
+
+Actual Linux object instructions, neutral interpolation replay, corrected
+propagation profile observations and internal event traces remain pending the
+next centrally dispatched batch. No Linux contraction correction is inferred
+from these macOS checks. No full W or unchanged producer campaign was repeated.

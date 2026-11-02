@@ -57,7 +57,9 @@ def qualify(args):
          '--reference-root',corpora/'staging','--target',out/'test-target'),['dependencies'])
     step('contraction-source-profile',script('contraction_profile.py','--out',out/'contraction-source-profile',
          '--observer',corpora/'staging/validation/observer_coordinates',
-         '--terrestrial',corpora/'staging/validation/terrestrial_resources'),['a2'])
+         '--terrestrial',corpora/'staging/validation/terrestrial_resources',
+         '--planetary',corpora/'staging/validation/planetary_ephemeris',
+         '--propagation',corpora/'staging/validation/propagation'),['a2'])
     step('package-list',['cargo','package','--list','--manifest-path',manifest],['candidate'])
     for label,features in [('default',''),('combined','calceph,lapack')]:
         prefix=out/('install-'+label)
@@ -121,7 +123,7 @@ def qualify(args):
          '--core',out/'core-disabled','--science',out/'science','--timing',out/'timing',
          '--runtime',a2/'runtime','--rust',out/'install-default/bin/tempo2-rust','--candidate',candidate),['native-science','external-default'])
     step('event-source-profile',script('event_profile.py','--out',out/'event-source-profile',
-         '--candidate',candidate,'--a2',a2,'--target',out/'test-target'),['dependencies','a2'])
+         '--candidate',candidate,'--a2',a2,'--target',out/'test-target','--nan-trace'),['dependencies','a2'])
     step('spin-source-profile',script('spin_profile.py','--out',out/'spin-source-profile',
          '--candidate',candidate,'--a2',a2,'--target',out/'test-target'),['dependencies','a2'])
     step('predictors',script('check_predictor_science.py','--out',out/'predictors','--candidate',candidate,
