@@ -1,11 +1,18 @@
-# Draft Assignment AN: covariance allocation profiling
+# Assignment AN: covariance allocation and memory optimization
 
-**Prepared, not released.** This is the post-AL optimization handoff requested by
-0099. It grants no present ownership and starts no profiling or implementation.
-Central must first review the AL checkpoint, record outstanding gates, resolve
-writer ownership and explicitly release a named post-AL candidate. Do not start
-this work from a still-running qualification candidate. The user's AL-first
-sequence, numerical policy and full migration objective remain unchanged.
+**Released under decision 0121, 2 November 2026.** The user asked central to
+prioritize substantial migration progress and put small differences in one chat.
+AL continues compatibility/qualification work; AN now owns this independent
+performance stage. This supersedes the earlier draft's post-AL waiting condition,
+without accepting AL or any outstanding scientific gate.
+
+The exact baseline is `dc435f53a64e4dd5c25cae6319841a28bd981fcb`. Work only in the isolated clone
+`/private/tmp/tempo2-an-allocation-20261102`; the main checkout remains AL's work
+area. Read the current released handoff and decision 0121 from the main checkout,
+not the older draft present in the baseline snapshot. This is a full authorized
+measurement/implementation task within the bounds below: do not stop at a plan
+or request another release merely to implement a demonstrated equivalent allocator.
+Central retains numerical policy, integration, publication and acceptance.
 
 ## Goal and existing evidence
 
@@ -32,7 +39,7 @@ The unchanged matrix source hash at this inspection is
 `75534fee4b18e7634ce20e6c65f8df859adcd800d22e2aa5022f6c4ddab86857`.
 Native `TKmatrix.C` is
 `3817bedcd680e88be6b715b1165eacec028f942d3213eec1b0f02c097a01fb11`.
-Rebind the actual candidate, build profiles and executables at release.
+Bind the released baseline, every implementation revision, build profile and executable in the actual measurement receipts.
 
 Each covariance payload is 800000000 bytes = 762.939453125 MiB; two payloads
 are 1525.87890625 MiB. Headers, pointers and allocator/process storage are extra.
@@ -41,15 +48,24 @@ Chebyshev and 1578.1 MiB two-pulsar fit figures are medians of whole-process
 maximum RSS. Their proximity to the payload arithmetic does not prove residency,
 actual allocation count, simultaneous lifetime or causation.
 
-## Prospective ownership
+## Released ownership
 
-At release, confirm a bounded owner for the shared matrix implementation and
-its directly necessary lifecycle/tests/report changes, plus a new
-`validation/allocation_profile/` evidence recipe. AL ownership must first be
-closed or explicitly partitioned. Other writers' changes, canonical TEMPO2,
-accepted historical runners and evidence must remain intact. Source experiments
-use disposable snapshots; generated traces, JSON, binaries and archives stay
-ignored. This draft does not allocate those paths to a live chat.
+AN owns `rust/src/tk_matrix.rs`, directly necessary matrix/lifecycle controls
+in `rust/src/pulsar_lifecycle_tests.rs`, a small observer example if needed,
+`validation/allocation_profile/`, and `rust/ALLOCATION_PROFILE_REPORT.md` in its
+isolated clone. The lifecycle implementation is read-only unless a directly
+necessary allocation/lifetime change is justified and coordinated with central.
+Cargo manifests/build glue may change only for a demonstrated required dependency
+or observer integration; prefer existing facilities. No fitting/event/precision,
+CLI presentation, source-comparison or qualification-workflow changes belong here.
+
+You are not alone in this project. Preserve AL's main-checkout changes and all
+other authors' work. Commit only AN-owned authored paths in the isolated clone;
+return commit identities for central integration. Do not push, dispatch workflows,
+change canonical TEMPO2, rewrite historical runners, or commit generated evidence.
+Freeze each before/after build from an exact commit/export. Avoid simultaneous
+heavy runs when measuring timing; record host load and coordinate a quiet window
+through central when needed. Report in this chat; central will read and relay it.
 
 ## Dependency-ordered work
 
@@ -93,8 +109,7 @@ ignored. This draft does not allocate those paths to a live chat.
    residency observations and initialization/full-workflow wall and CPU time,
    including every failed or outlying sample. Establish whether memory work is
    removed, shifted to first use or moved to another owner. Recheck both selected
-   release targets before making a two-platform improvement claim. No new speed
-   or memory acceptance threshold is invented by this draft.
+   release targets before making a two-platform improvement claim. No speed or memory threshold is invented; report the measured effect and its limits.
 5. **Protect affected behavior.** The factory is shared by covariance storage
    and ordinary matrix/BLAS paths. Reuse the existing lifecycle and matrix
    controls for full dimensions, positive-zero bit patterns, row access/stride,
@@ -117,11 +132,15 @@ ignored. This draft does not allocate those paths to a live chat.
 ## Explicit limits
 
 No scientific algorithm, expression order, precision policy, runtime resource,
-output convention or numerical/discrete gate changes. Keep the exact SVD-order
-obligation and other inherited failures. Broad predictor marshalling, fitting
+output convention or numerical/discrete gate changes. Preserve the user-adopted paired-mode contract in 0120 and all other inherited
+scientific/discrete gates; no precision or output adjustment is permitted. Broad predictor marshalling, fitting
 parallelism, worker-pool changes and unrelated performance work require their
 own evidence and scope. This pass tests the covariance allocation lead first;
 it does not promise to remove all measured Rust overhead.
 
-There is deliberately no executable dispatch prompt or active chat until
-central releases the post-AL ownership and exact baseline.
+Return the first measured allocation/residency diagnosis promptly, then continue
+the authorized equivalent implementation and focused verification when supported.
+If this lead does not explain the memory cost, report the evidence and next
+measured allocation target instead of forcing a change. Final delivery must state
+what improved, by how much, what stayed scientifically identical, and which
+platform/execution remains unverified. Do not wait for every AL mismatch to close.

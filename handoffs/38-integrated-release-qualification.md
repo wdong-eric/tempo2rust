@@ -284,3 +284,20 @@ positive permutations plus the required rejection controls. Re-evaluate saved
 macOS/Linux evidence in new versioned reports; do not relabel original failures.
 Return the concrete commit for central acceptance review while Q/event work
 continues. No other numerical policy or post-AL optimization scope changes.
+
+
+## Parallel progress and one compatibility owner (0121)
+
+The user delegated reprioritization toward substantial migration progress.
+AL remains the one main-checkout compatibility/qualification owner, including
+Q/event/paired-mode work. Batch minor differences; prioritize material scientific
+and operational failures, and return coherent candidates rather than serializing
+independent work behind every diagnostic detail. No gate is waived.
+
+AN now owns the isolated covariance-allocation performance stage under released
+handoff 40. Its clone is `/private/tmp/tempo2-an-allocation-20261102`; main's active
+files remain AL's. Reserve `tk_matrix.rs` and directly necessary lifecycle controls
+for AN, coordinate coupled changes through central, and use frozen exports for
+verification. Central handles integration, publication and acceptance. Full
+qualification remains due, while performance work no longer waits for complete
+AL acceptance. Coordinate heavy benchmark windows through central when needed.
