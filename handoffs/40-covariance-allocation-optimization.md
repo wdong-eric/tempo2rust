@@ -14,6 +14,10 @@ measurement/implementation task within the bounds below: do not stop at a plan
 or request another release merely to implement a demonstrated equivalent allocator.
 Central retains numerical policy, integration, publication and acceptance.
 
+Active chat: **Assignment AN: Covariance memory optimization**, thread
+`01a19a64-27ab-77c3-a36e-416defad0906` on the local host. Central verified its
+initial work is active; report and acceptance remain pending.
+
 ## Goal and existing evidence
 
 Determine whether eager touching of the full covariance storage explains a

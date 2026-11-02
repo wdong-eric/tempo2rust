@@ -95,3 +95,13 @@ implementation; qualified before/after benefit with unchanged products; a measur
 CPU-priority decision; and a complete integrated migration candidate with explicit
 remaining blockers. Full migration still requires the original scientific,
 interface, platform and operational scope to be verified.
+
+
+## Dispatch completed
+
+Central created **Assignment AN: Covariance memory optimization**, local thread
+`01a19a64-27ab-77c3-a36e-416defad0906`, and verified its active first turn. The
+isolated clone is clean at the named baseline and has no publishing remote.
+AN has begun source/baseline and residency-observer preparation. No allocation
+improvement or measured benefit is claimed yet. AL was informed of the revised
+priorities and partition; its in-flight main-checkout changes remain intact.
