@@ -1,5 +1,7 @@
 # Assignment AO: predictor CPU optimization
 
+Delivered and integrated under [0124](../decisions/0124-predictor-transport-review-and-evaluator-release.md). The bounded macOS result is accepted; Linux follow-through belongs to AL. The same AO chat continues under [handoff 42](42-predictor-evaluator-allocation.md). Instructions below describe the completed transport stage.
+
 Active chat: **Assignment AO: Predictor CPU optimization**, local thread
 `01a19a86-1e28-7962-b3ff-d81c5cd16ad8`. Central verified its active first turn.
 

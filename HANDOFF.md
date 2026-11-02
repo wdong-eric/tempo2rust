@@ -1,6 +1,6 @@
 # TEMPO2 Rust implementation handoff
 
-**Active integration:** AN’s reviewed memory improvement is merged at `6cc0b79`; AL is wiring its actual Linux qualification. AO is actively profiling predictor CPU cost in isolated chat `01a19a86-1e28-7962-b3ff-d81c5cd16ad8`, under [handoff 41](handoffs/41-predictor-cpu-optimization.md). Central retains publication and acceptance; full migration remains open.
+**Active integration:** AN's memory improvement and AO's predictor scalar transport are merged at `6cc0b79` / `a44bda2`. [0124](decisions/0124-predictor-transport-review-and-evaluator-release.md) accepts the bounded macOS predictor result and releases [handoff 42](handoffs/42-predictor-evaluator-allocation.md) to the same isolated AO chat for the next measured allocation/evaluator improvement. AL owns the single compatibility stream and prepares both frozen pairs plus the combined Linux candidate. Central retains publication and acceptance; full migration remains open.
 
 **Performance checkpoint, 2 November 2026:** [0123](decisions/0123-memory-review-and-predictor-performance-release.md) accepts AN’s measured macOS allocation improvement for integration; Linux remains due. [Assignment AO](handoffs/41-predictor-cpu-optimization.md) is released for measured predictor CPU optimization in an isolated clone while AL continues compatibility/qualification. Bounded M2 remains accepted under 0122.
 
