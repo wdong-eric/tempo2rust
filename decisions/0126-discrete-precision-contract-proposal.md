@@ -1,5 +1,7 @@
 # Proposed contract for demonstrated discrete precision boundaries
 
+The user subsequently adopted this proposal in [0127](0127-user-adopted-rug128-discrete-contract.md). The text below retains the reviewed proposal and its then-pending status.
+
 **Proposed, awaiting the user's decision.** Central review, 2 November 2026.
 No production precision, selection rule, comparison gate or accepted oracle is
 changed. Running Linux candidate `9991e80` remains frozen. Independent AO
