@@ -1,5 +1,9 @@
 # Assignment AN: covariance allocation and memory optimization
 
+**Delivery update, 2 November 2026:** Central 0123 accepts the measured macOS
+change and merged AN through `6cc0b79`; implementation ownership is closed.
+AL owns actual Linux follow-through. This does not claim two-platform acceptance.
+
 **Released under decision 0121, 2 November 2026.** The user asked central to
 prioritize substantial migration progress and put small differences in one chat.
 AL continues compatibility/qualification work; AN now owns this independent

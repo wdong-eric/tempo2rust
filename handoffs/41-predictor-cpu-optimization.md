@@ -1,5 +1,8 @@
 # Assignment AO: predictor CPU optimization
 
+Active chat: **Assignment AO: Predictor CPU optimization**, local thread
+`01a19a86-1e28-7962-b3ff-d81c5cd16ad8`. Central verified its active first turn.
+
 Released by central decision 0123, 2 November 2026. Work only in isolated clone
 `/private/tmp/tempo2-ao-predictor-20261102`, initially clean at
 `68973d669af0e1180ad8532bb8b364452ca203d7`. Read this current handoff, 0123 and

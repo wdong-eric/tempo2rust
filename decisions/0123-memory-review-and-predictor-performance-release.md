@@ -82,3 +82,32 @@ remaining Linux timing differences. Minor diagnostics do not block AO. Central
 coordinates integration, affected checks, quiet timing windows, publication and
 all milestone acceptance. The next Linux run should batch reviewed changes;
 there is no full migration or production-cutover approval here.
+
+
+## Integration and dispatch completed
+
+AN final verification/recipe commit `497168b4fc6dfed02046d8eecb1055cb4f055585`
+is integrated with its original production and observer commits through merge
+`6cc0b79b1836ace952c7c25b3cfaf5651adff1dd`. Central freshly passed the real Cargo
+build-path control under an inherited shared target. AN's implementation ownership
+is closed; AL owns the integrated Linux follow-through. No Linux improvement is
+claimed before that execution.
+
+Central copied and independently hashed 2068 evidence files (74521716 bytes) to
+ignored `validation/allocation_profile/build/macos-reviewed-20261102/`, excluding
+rebuildable target/source trees and dependency caches. The copy manifest retains
+original paths and does not relabel executions. Original Git source revisions
+remain reachable in main, and the isolated clone remains intact.
+
+AO is active as **Assignment AO: Predictor CPU optimization**, thread
+`01a19a86-1e28-7962-b3ff-d81c5cd16ad8` on the local host. Its isolated baseline
+contains the reviewed allocator; central verified its active profiling turn.
+This startup does not imply delivery or acceptance of a predictor improvement.
+
+Central also accepts AL `febb650` as diagnostic preparation: 229 bound inputs and
+recipes, seven actual-object disassemblies, five neutral source histories and
+28 exact intermediate rows were independently verified; four focused harness
+tests pass. Actual Linux behavior remains untested. The proof packet and independent
+Cargo routing check are retained in `an-central-20261102/integration-closure.json`.
+AL is now adding AN's source-bound before/after execution and existing scientific
+checks to the full Linux matrix, keeping inherited native failures explicit.
