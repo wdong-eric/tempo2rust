@@ -311,6 +311,11 @@ mod tests {
     #[ignore = "requires pinned runtime and a graphics adapter for the rendered viewer check"]
     fn load_inspect_and_render() {
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+        let out = std::env::var_os("TEMPO2_GUI_TEST_OUTPUT")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| root.join(format!("gui/build/rendered-{}", std::process::id())));
+        std::fs::create_dir_all(out.parent().unwrap()).unwrap();
+        std::fs::create_dir(&out).expect("render evidence directory must be fresh");
         let mut viewer = Viewer::new();
         viewer.par = root
             .join("validation/fitting/inputs/f0.par")
@@ -320,8 +325,9 @@ mod tests {
             .join("validation/fitting/inputs/bary_unsorted.tim")
             .display()
             .to_string();
-        viewer.runtime = root
-            .join("validation/reference/build/source/T2runtime")
+        viewer.runtime = std::env::var_os("TEMPO2")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| root.join("validation/reference/build/source/T2runtime"))
             .display()
             .to_string();
         let mut harness = Harness::builder()
@@ -382,8 +388,6 @@ mod tests {
             before,
             serde_json::to_vec(harness.state().session.as_ref().unwrap().timing()).unwrap()
         );
-        let out = root.join("gui/build/session-viewer-20261104");
-        std::fs::create_dir_all(&out).unwrap();
         harness
             .render()
             .unwrap()
@@ -500,10 +504,7 @@ mod tests {
         );
 
         // A failed new load must report the error and clear the prior snapshot.
-        harness.state_mut().par = root
-            .join("gui/build/missing-input.par")
-            .display()
-            .to_string();
+        harness.state_mut().par = out.join("missing-input.par").display().to_string();
         harness.get_by_label("Load and evaluate").click();
         finish_job(&mut harness);
         assert!(harness.state().session.is_none());

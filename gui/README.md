@@ -55,9 +55,32 @@ version/checksum. Building requires Rust 1.95 or newer as declared by eframe;
 the engine still has its documented GMP/MPFR, SOFA Fortran and optional backend
 dependencies. The viewer does not add a timing model or a C scientific kernel.
 
-Native Linux windowing/graphics dependencies and installed GUI launch on both
-platforms still need release qualification. This package is not yet part of the
-engine's private-prefix installer.
+For Linux, the [pinned eframe build instructions](https://github.com/emilk/egui/blob/0.37.0/crates/eframe/README.md)
+list `libxcb-render0-dev`, `libxcb-shape0-dev`, `libxcb-xfixes0-dev`,
+`libxkbcommon-dev` and `libssl-dev` on Debian/Ubuntu. A working X11/Wayland session
+and OpenGL driver are needed for the native window. The test-only WGPU renderer
+also needs an available graphics adapter. Actual Linux build, runtime library
+inventory and window/render checks remain release qualification work.
+
+## Private installation
+
+Use [Cargo's standard installer](https://doc.rust-lang.org/cargo/commands/cargo-install.html)
+from this checkout; no GUI packaging wrapper is required:
+
+```sh
+cargo install --path gui --root /absolute/path/to/fresh/gui-prefix \
+  --locked --bin tempo2-gui
+TEMPO2=/absolute/path/to/T2runtime /absolute/path/to/fresh/gui-prefix/bin/tempo2-gui
+```
+
+This builds the release profile and installs `bin/tempo2-gui` plus Cargo's
+tracking metadata. Use a fresh private prefix for qualification and retain the
+checkout revision and lockfile. Add `--offline` after preparing the dependency
+cache. The GUI links the same engine source through its existing path dependency;
+it does not load a separate predictor shared library. Supply the TEMPO2 resource
+directory separately, as for the core installer. This is a command-line
+installation, not a signed macOS application bundle or Linux desktop package.
+Native launch on both platforms remains pending.
 
 ## Focused verification
 
@@ -88,6 +111,8 @@ runtime to check that a real no-fit-data failure preserves model/result state.
 With the pinned reference runtime and a graphics adapter available:
 
 ```sh
+export TEMPO2=/absolute/path/to/pinned/T2runtime
+export TEMPO2_GUI_TEST_OUTPUT=/absolute/path/to/fresh/render-evidence
 cargo test --manifest-path gui/Cargo.toml --locked --bin tempo2-gui \
   load_inspect_and_render -- --ignored --nocapture
 ```
@@ -96,8 +121,11 @@ The `egui_kittest` check exercises loading, list/point selection, zoom/reset,
 exclusion, refit, save, existing-folder rejection and reinclusion. It checks
 input identity and the engine result at each relevant boundary, and verifies a
 failed new load clears the previous result. Its test-only WGPU renderer writes
-normal, excluded, fitted, saved and error PNGs under
-`gui/build/session-viewer-20261104/` for visual inspection. This verifies widget
+normal, excluded, fitted, saved and error PNGs to `TEMPO2_GUI_TEST_OUTPUT` for
+visual inspection. The directory must be fresh; partial outputs stay available
+after a failure. Without this variable, it uses `gui/build/rendered-PID/`.
+Both runtime-dependent tests use `TEMPO2` when set, otherwise the local pinned
+reference path shown in the parity command. This verifies widget
 behavior and rendering; it does not verify the native OpenGL window or
 operating-system integration. Native desktop verification is deferred while the
 Mac is locked; Linux GUI build/launch is also pending. Generated evidence and

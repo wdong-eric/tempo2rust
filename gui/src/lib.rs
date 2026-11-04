@@ -215,6 +215,7 @@ fn display_number(value: &bats::Number) -> Result<f64, String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::PathBuf;
 
     #[test]
     fn invalid_display_values_are_reported_instead_of_dropped() {
@@ -232,10 +233,13 @@ mod tests {
     fn failed_fit_keeps_the_current_model_and_result() {
         use tempo2_rust::tempo2::Label::{param_finish, param_start};
         let root = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+        let runtime = std::env::var_os("TEMPO2")
+            .map(PathBuf::from)
+            .unwrap_or_else(|| root.join("validation/reference/build/source/T2runtime"));
         let mut session = load(
             &root.join("validation/fitting/inputs/f0.par"),
             &root.join("validation/fitting/inputs/bary_unsorted.tim"),
-            &root.join("validation/reference/build/source/T2runtime"),
+            &runtime,
         )
         .unwrap();
         let indices: Vec<_> = session.timing().pulsars[0]
