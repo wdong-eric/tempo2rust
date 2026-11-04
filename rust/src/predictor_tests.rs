@@ -58,6 +58,25 @@ fn predictor_owned_operations_preserve_rounding_and_classes() {
         let x = N::parse_number(text).unwrap();
         values.extend([x.clone(), -x]);
     }
+    let neighbors = if NATIVE_BITS == 53 {
+        [
+            "0x1p-1073",
+            "0x0.fffffffffffffp-1022",
+            "0x1.0000000000001p-1022",
+            "0x1p1022",
+        ]
+    } else {
+        [
+            "0x1p-16444",
+            "0x0.fffffffffffffffep-16382",
+            "0x1.0000000000000002p-16382",
+            "0x1p16382",
+        ]
+    };
+    for text in neighbors {
+        let x = N::parse_number(text).unwrap();
+        values.extend([x.clone(), -x]);
+    }
     macro_rules! compare_ownership {
         ($a:expr, $b:expr, $op:tt) => {{
             // The borrowed operation is the unchanged fresh-result path.
@@ -86,14 +105,31 @@ fn predictor_owned_operations_preserve_rounding_and_classes() {
                 same_number(signed_copy(a).source_mul_add_owned(b, &c), &expected);
             }
         }
+        let live = a.as_float();
+        let original = signed_copy(a);
         for b in [
             0.,
             -0.,
             1.,
             -1.,
+            2.,
+            -2.,
+            0.5,
+            -0.5,
             f64::from_bits(1),
+            -f64::from_bits(1),
+            f64::from_bits(2),
+            -f64::from_bits(2),
             f64::MIN_POSITIVE,
+            -f64::MIN_POSITIVE,
+            f64::from_bits(f64::MIN_POSITIVE.to_bits() - 1),
+            -f64::from_bits(f64::MIN_POSITIVE.to_bits() - 1),
+            f64::from_bits(f64::MIN_POSITIVE.to_bits() + 1),
+            -f64::from_bits(f64::MIN_POSITIVE.to_bits() + 1),
+            f64::from_bits(1.0f64.to_bits() - 1),
+            f64::from_bits(1.0f64.to_bits() + 1),
             f64::MAX,
+            -f64::MAX,
             f64::INFINITY,
             f64::NEG_INFINITY,
             f64::NAN,
@@ -111,6 +147,8 @@ fn predictor_owned_operations_preserve_rounding_and_classes() {
             mixed!(*);
             mixed!(/);
         }
+        assert!(std::ptr::eq(live, a.as_float()));
+        same_number(signed_copy(a), &original);
     }
     // Detect the actual aliasing trap, rather than assume MPFR clears NaN sign.
     use rug::{Float, float::Round, ops::MulAssignRound};
@@ -136,7 +174,23 @@ fn predictor_owned_subnormal_midpoint_keeps_first_rounding_direction() {
     // intermediate is exactly that midpoint. Dropping direction returns zero.
     same_number(a.clone() * &b, &tiny);
     same_number(&a * b.clone(), &tiny);
-    same_number((-a) * b, &(-tiny));
+    same_number((-a) * b, &(-tiny.clone()));
+
+    // With e=2^-22, (1-e+e^2)(1+e)=1+e^3. Both inputs fit p=53/64,
+    // while the exact mixed product lies just above the half-tiny midpoint.
+    let a = (Float::with_val(wide, 1) - (Float::with_val(wide, 1) >> 22)
+        + (Float::with_val(wide, 1) >> 44))
+        << normal_exp;
+    let a = N::from_float(&a);
+    let b = (1. + 2.0f64.powi(-22)) * 2.0f64.powi(-(p as i32));
+    let (midpoint, direction) =
+        Float::with_val_round(p, a.as_float() * b, rug::float::Round::Nearest);
+    assert_eq!(direction, std::cmp::Ordering::Less);
+    assert_eq!(midpoint, Float::with_val(p, 1) << (normal_exp - p as i32));
+    same_number(&a * b, &tiny);
+    same_number(a.clone() * b, &tiny);
+    same_number(&a * -b, &(-tiny.clone()));
+    same_number(a * -b, &(-tiny));
 }
 
 fn model(start: f64, end: f64) -> ChebyModel {
@@ -189,6 +243,24 @@ fn predictor_selection_ties_endpoints_gaps_keep() {
     assert_eq!(c.segments[1].mjd_start, n(5.));
     c.keep(&[]);
     assert!(T2Predictor::Cheby(c).metadata().is_err());
+    // Source selection uses a strict 1e6 sentinel, even for an inclusive range.
+    for (start, end, time, expected) in [
+        (0., 2e6, 0., None),
+        (0., 2e6, 2e6, None),
+        (0., 2e6, 1., Some(0)),
+        (f64::NAN, 2., 1., None),
+        (0., f64::NAN, 1., None),
+        (0., f64::INFINITY, 1., None),
+        (f64::NEG_INFINITY, 2., 1., None),
+        (0., 2., f64::NAN, None),
+        (0., 2., f64::INFINITY, None),
+        (0., 2., f64::NEG_INFINITY, None),
+    ] {
+        let set = ChebyModelSet {
+            segments: vec![model(start, end)],
+        };
+        assert_eq!(set.nearest_index(&n(time)), expected);
+    }
 }
 #[test]
 fn predictor_plan_short_final_and_gap_status() {

@@ -442,7 +442,7 @@ pub(crate) fn nearest_index<'a>(
             continue;
         }
         let offset = (start + end)
-            .source_mul_add(&n(0.5), &(-mjd.clone()))
+            .source_mul_add_owned(&n(0.5), &(-mjd.clone()))
             .abs_double();
         if offset < best {
             best = offset;
