@@ -15,3 +15,7 @@ serde_json = "=1.0.151"
 
 [dev-dependencies]
 egui_kittest = { version = "=0.37.0", features = ["eframe", "wgpu"] }
+
+[target.'cfg(target_os = "linux")'.dev-dependencies]
+image = { version = "=0.25.10", default-features = false, features = ["png"] }
+winit = { version = "=0.30.13", default-features = false, features = ["x11"] }

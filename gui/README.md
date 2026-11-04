@@ -130,3 +130,24 @@ behavior and rendering; it does not verify the native OpenGL window or
 operating-system integration. Native desktop verification is deferred while the
 Mac is locked; Linux GUI build/launch is also pending. Generated evidence and
 build products stay outside Git.
+
+The Linux-only native check uses the normal eframe OpenGL window/event loop and
+the same `Viewer`. With Xvfb and a working Mesa OpenGL driver, prebuild the test,
+then run it with a fresh output directory:
+
+```sh
+cargo test --manifest-path gui/Cargo.toml --locked --bin tempo2-gui --no-run
+export TEMPO2_GUI_TEST_OUTPUT=/absolute/path/to/fresh/native-evidence
+timeout 60s xvfb-run -a -s "-screen 0 1280x900x24" \
+  env LIBGL_ALWAYS_SOFTWARE=1 cargo test --manifest-path gui/Cargo.toml --locked \
+  --bin tempo2-gui native_x11_load_render_close -- --ignored --nocapture
+```
+
+It loads the 16-TOA fixture, captures the rendered native frame through egui's
+screenshot callback, records the OpenGL vendor/renderer/version and full timing
+JSON, then closes the window and checks that the capture completed. Compare
+`native-timing.json` with the same run's `bary-unsorted-cli.stdout` and inspect
+`native.png`. Its `image` and `winit` test dependencies reuse versions already
+present in the lockfile. This check is prepared but has not executed on Linux.
+It qualifies X11/OpenGL startup, frame capture and shutdown when run; it does
+not claim a Wayland session or replace the separate widget/fit/save tests.

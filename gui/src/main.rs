@@ -9,6 +9,9 @@ use tempo2_rust::bats::Number;
 const ACTIVE: Color32 = Color32::from_rgb(72, 160, 225);
 const EXCLUDED: Color32 = Color32::from_rgb(231, 153, 69);
 
+#[cfg(all(test, target_os = "linux"))]
+mod native_test;
+
 enum Action {
     Load,
     Exclude(usize, bool),

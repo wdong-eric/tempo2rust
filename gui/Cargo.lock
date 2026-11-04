@@ -2939,8 +2939,10 @@ dependencies = [
  "eframe",
  "egui_kittest",
  "egui_plot",
+ "image",
  "serde_json",
  "tempo2-rust",
+ "winit",
 ]
 
 [[package]]
