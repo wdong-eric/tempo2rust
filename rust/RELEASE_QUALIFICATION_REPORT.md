@@ -1,6 +1,25 @@
 # AL release qualification handover
 
-## Current checkpoint — 4 November 2026
+## Local Q/Z successor — 4 November 2026
+
+Decision [0133](../decisions/0133-linux-baseline-and-q-z-correction-release.md)
+is implemented in `6f151b4` (Q adaptation inheritance/composition) and `e37ebbb`
+(Z platform-specific telescope interpolation); `35d0f29` corrects the `nlong`
+report wording. Local macOS Q→S native record/coverage passes, followed by actual
+Q comparison staging: 14 compiled mutation controls and all 121 Rust cases
+pass, with zero state/diagnostic differences or source mismatches. Actual staged
+source-corruption controls reject both adapted and untouched-file changes and
+a broken identity chain. Z's debug/release c076 bit tests and all 82 release
+driver histories pass. Focused Python and failed-preparation controls also pass.
+
+The [Q/Z report and Linux follow-through](../validation/release/QZ_0133_CORRECTIONS.md)
+bind the separate candidate snapshots, complete local evidence and outstanding
+actual Linux checks, including the portable AO recurrence wide-range and
+installed-borrow consumer requirements. Linux's 16 Gaussian records and all
+other unresolved gates remain explicit. Central owns the combined candidate
+including GUI, dispatch, budgets and acceptance; no Linux successor ran here.
+
+## Completed Linux baseline — 4 November 2026
 
 The completed Linux run `41392963741`, attempt 1 / job `125108130146`, executed
 `9991e804d0e230248e5fb20974b7e63384d4efeb`: **86 stages pass, 11 fail, none
