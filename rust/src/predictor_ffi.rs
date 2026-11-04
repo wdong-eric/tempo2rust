@@ -31,8 +31,8 @@ type Callback =
     unsafe extern "C" fn(*mut c_void, *mut c_void, c_int, c_int, *mut c_void, *mut c_void);
 
 // Private adapter helpers may only be called after the exported shim established
-// the documented C extent/lifetime preconditions. Rust never dereferences the
-// foreign scalar layout or aliases its storage as a Rust numeric type.
+// the documented C extent/lifetime preconditions. Only the macOS evaluation
+// accessor below views native binary64 storage; other reads construct N owners.
 fn read(p: *const c_void, i: usize) -> Result<N, String> {
     if p.is_null() {
         return Err("null native scalar backing".into());
@@ -94,6 +94,35 @@ fn shape(nx: c_int, ny: c_int) -> Result<(usize, usize), String> {
 fn polynomial(p: *const c_void, nx: c_int, ny: c_int) -> Result<Cheby2D, String> {
     let (x, y) = shape(nx, ny)?;
     Cheby2D::from_coefficients(x, y, values(p, x * y)?)
+}
+
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+fn native_coefficient(value: f64) -> f64 {
+    // t2r_ld_parts preserves Darwin's positive, quiet NaN input convention.
+    if value.is_nan() { f64::NAN } else { value }
+}
+
+fn evaluator(p: *const c_void, nx: c_int, ny: c_int) -> Result<impl FnOnce(&N, &N) -> N, String> {
+    #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+    {
+        let (nx, ny) = shape(nx, ny)?;
+        if p.is_null() {
+            return Err("null native scalar backing".into());
+        }
+        Ok(move |x: &N, y: &N| {
+            // The C ABI guards establish binary64 size/alignment. The caller
+            // supplies initialized, aligned, single-allocation backing without
+            // mutation for this call; checked c_int extent fits isize bytes.
+            // This slice ends here, before output publication or any callback.
+            let coeff = unsafe { std::slice::from_raw_parts(p.cast::<f64>(), nx * ny) };
+            cheby2d::evaluate(nx, ny, |i| native_coefficient(coeff[i]), x, y)
+        })
+    }
+    #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+    {
+        let poly = polynomial(p, nx, ny)?;
+        Ok(move |x: &N, y: &N| poly.evaluate(x, y))
+    }
 }
 // tempo2pred.c/cheby2d.c/t1polyco.c counterparts acquire an extra Rust/Rug
 // lifetime here: foreign pthread exit retained 544 bytes in 16 MPFR cache
@@ -184,11 +213,8 @@ extern "C" fn t2r_evaluate(
     out: *mut c_void,
 ) -> c_int {
     finish(|| {
-        write(
-            out,
-            0,
-            &polynomial(p, nx, ny)?.evaluate(&read(x, 0)?, &read(y, 0)?),
-        )
+        let value = evaluator(p, nx, ny)?(&read(x, 0)?, &read(y, 0)?);
+        write(out, 0, &value)
     })
 }
 #[unsafe(no_mangle)]
@@ -248,18 +274,15 @@ extern "C" fn t2r_model(
 ) -> c_int {
     finish(|| {
         let a = values(v, 7)?;
-        let poly = polynomial(p, nx, ny)?;
+        let evaluate = evaluator(p, nx, ny)?;
         let time = [&a[0], &a[1]];
         let band = [&a[2], &a[3]];
-        write(
-            out,
-            0,
-            &if frequency != 0 {
-                cheby2d::model_frequency(&poly, time, band, &a[5], &a[6])
-            } else {
-                cheby2d::model_phase(&poly, time, band, &a[4], &a[5], &a[6])
-            },
-        )
+        let value = if frequency != 0 {
+            cheby2d::model_frequency(evaluate, time, band, &a[5], &a[6])
+        } else {
+            cheby2d::model_phase(evaluate, time, band, &a[4], &a[5], &a[6])
+        };
+        write(out, 0, &value)
     })
 }
 fn count(n: c_int) -> Result<usize, String> {
@@ -417,6 +440,62 @@ mod tests {
             .to_str()
             .unwrap()
             .into()
+    }
+
+    #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+    #[test]
+    fn predictor_native_coefficient_matches_c_parts() {
+        assert_eq!(std::mem::size_of::<f64>(), 8);
+        assert_eq!(std::mem::align_of::<f64>(), 8);
+        let mut patterns = Vec::new();
+        for bits in [
+            0,
+            1,
+            2,
+            0x000f_ffff_ffff_fffe,
+            0x000f_ffff_ffff_ffff,
+            0x0010_0000_0000_0000,
+            0x0010_0000_0000_0001,
+            0x3fef_ffff_ffff_ffff,
+            0x3ff0_0000_0000_0000,
+            0x3ff0_0000_0000_0001,
+            0x7fef_ffff_ffff_fffe,
+            0x7fef_ffff_ffff_ffff,
+            0x7ff0_0000_0000_0000,
+            0x7ff0_0000_0000_0001,
+            0x7ff7_ffff_ffff_ffff,
+            0x7ff8_0000_0000_0000,
+            0x7fff_ffff_ffff_ffff,
+        ] {
+            patterns.extend([bits, bits | (1 << 63)]);
+        }
+        let mut bits = 0xa076_1d64_78bd_642fu64;
+        for _ in 0..256 {
+            bits ^= bits << 13;
+            bits ^= bits >> 7;
+            bits ^= bits << 17;
+            patterns.push(bits);
+        }
+        let backing = NativeBuffer::new(1).unwrap();
+        for bits in patterns {
+            // Native malloc owns an aligned eight-byte cell. Initialize its
+            // representation, then compare the Rust view with C's typed read.
+            unsafe { backing.0.as_ptr().cast::<u64>().write(bits) };
+            let expected = read(backing.0.as_ptr(), 0).unwrap().to_f64();
+            let actual = native_coefficient(unsafe { backing.0.as_ptr().cast::<f64>().read() });
+            assert_eq!(actual.is_nan(), expected.is_nan(), "{bits:016x}");
+            assert_eq!(
+                actual.is_sign_negative(),
+                expected.is_sign_negative(),
+                "{bits:016x}"
+            );
+            if actual.is_nan() {
+                assert_ne!(actual.to_bits() & (1 << 51), 0, "quiet NaN");
+            } else {
+                assert_eq!(actual.to_bits(), expected.to_bits(), "{bits:016x}");
+            }
+            assert_eq!(unsafe { backing.0.as_ptr().cast::<u64>().read() }, bits);
+        }
     }
 
     #[test]

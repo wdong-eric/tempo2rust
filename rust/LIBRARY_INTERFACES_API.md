@@ -62,14 +62,21 @@ ChebyModel_Construct/Test and ChebyModelSet_Construct/Test are Rust
 `cheby2d_int::{construct_model,test_model,construct_set,test_set}`; they are not
 standalone C library symbols. Disabled main is not an interface.
 
-Ordinary native long double crosses pointers through exact hexadecimal text
-and sufficient-digit decimal text, never binary64. Private conversion uses an
-explicit C numeric locale and the complete-token Rust parser; source file
-scanners/formatters retain their locale conventions. Rust's existing
-PredictorNumber owns arithmetic; timing remains Rug128. Conversion allocates
-and copies; AK measures performance. Initial measured target is macOS arm64
-(53-bit native significand, size/alignment 8/8). Linux x86_64 marshalling must
-retain its 64-bit significand, but actual qualification remains AL work.
+Ordinary native scalar transport uses exact binary significand/exponent parts
+and explicit class/sign handling. On macOS arm64, synchronous Cheby evaluation
+and model calls borrow their selected coefficient array as binary64 only for
+the recurrence; the slice ends before output publication. Compile-time native
+size/alignment/format guards and the existing caller extent/lifetime obligations
+support this view. Each call sees current backing, with Darwin's positive-NaN
+input convention. No slice or pointer is retained. Callback tests and derivatives
+keep owned coefficient snapshots. Linux x86_64 retains owned Rug64 reconstruction
+and its wider exponent range; no native Linux value passes through binary64.
+
+Public PredictorNumber/Float owners and borrows remain unchanged, and timing
+remains Rug128. Retained event-libm text conversion uses an explicit C numeric
+locale; source file scanners/formatters retain their locale conventions.
+Performance and platform qualification are recorded separately in the predictor
+validation recipes and delivery reports.
 
 T1's declared 0/1 counts retain fixed coeff[32] backing. Phase reads C0/C1,
 frequency reads C1 and subsequent active coefficients only. Owned Rust file

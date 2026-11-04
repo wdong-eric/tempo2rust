@@ -22,6 +22,11 @@
 
 #if defined(__APPLE__) && defined(__aarch64__)
 _Static_assert(LDBL_MANT_DIG == 53 && sizeof(long double) == 8, "native long double profile");
+_Static_assert(sizeof(double) == 8 && _Alignof(double) == 8 && _Alignof(long double) == 8
+    && FLT_RADIX == 2 && DBL_MANT_DIG == 53
+    && DBL_MIN_EXP == -1021 && LDBL_MIN_EXP == DBL_MIN_EXP
+    && DBL_MAX_EXP == 1024 && LDBL_MAX_EXP == DBL_MAX_EXP,
+    "macOS coefficient view requires native binary64 storage");
 #elif defined(__linux__) && defined(__x86_64__)
 _Static_assert(LDBL_MANT_DIG == 64 && sizeof(long double) == 16, "native long double profile");
 #else
@@ -30,8 +35,9 @@ _Static_assert(LDBL_MANT_DIG == 64 && sizeof(long double) == 16, "native long do
 _Static_assert(sizeof(int) == 4, "source int ABI");
 
 /* tempo2pred.c/cheby2d.c/t1polyco.c expose mutable native scalar storage.
- * Copy its current value on every call, without a pointer cache. A finite
- * value is exactly significand * 2^exponent; frexpl/ldexpl retain all 53/64
+ * Read its current value on every call, without a pointer cache. macOS
+ * evaluation borrows coefficient storage directly; other reads use these parts.
+ * A finite value is exactly significand * 2^exponent; frexpl/ldexpl retain all 53/64
  * bits, including subnormals, without inspecting native padding or MPFR layout.
  * Signed kinds: +/-1 finite (including zero), +/-2 infinity, +/-3 NaN.
  * All pointers are live, aligned synchronous borrows; outputs are exclusive. */
