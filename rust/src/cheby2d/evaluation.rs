@@ -32,10 +32,10 @@ mod platform {
             Self::from(self.0 + rhs.0)
         }
     }
-    impl Add<&N> for Number {
+    impl Add<f64> for Number {
         type Output = Self;
-        fn add(self, rhs: &N) -> Self {
-            Self::from(self.0 + rhs.to_f64())
+        fn add(self, rhs: f64) -> Self {
+            Self::from(self.0 + rhs)
         }
     }
     impl Neg for Number {
@@ -130,7 +130,7 @@ mod platform {
                 for (b, nb) in &values {
                     let expected = na + nb;
                     same(*a + *b, &expected);
-                    same(*a + nb, &expected);
+                    same(*a + input(nb), &expected);
                     for (c, nc) in [
                         (Number::from(0.), N::from(0.)),
                         (Number::from(-0.), N::from(-0.)),
@@ -224,4 +224,4 @@ mod platform {
     }
 }
 
-pub(super) use platform::{Number, input, input_mul_add, output, twice};
+pub(super) use platform::{Input, Number, input, input_mul_add, output, twice};

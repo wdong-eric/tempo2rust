@@ -16,6 +16,42 @@ pub struct ErrorSummary {
     pub rms_turn: N,
     pub mav_turn: N,
 }
+
+// Validated owners and the synchronous native view supply the same ordered
+// coefficients. Keep one recurrence and every source FMA/separate boundary.
+pub(crate) fn evaluate<'a>(
+    nx: usize,
+    ny: usize,
+    coefficient: impl Fn(usize) -> evaluation::Input<'a>,
+    x: &N,
+    y: &N,
+) -> N {
+    use evaluation::{Number, input, input_mul_add, output, twice};
+    let (x, y) = (input(x), input(y));
+    let (mut dj, mut dj1) = (Number::from(0.), Number::from(0.));
+    for j in (0..ny).rev() {
+        let (mut di, mut di1) = (Number::from(0.), Number::from(0.));
+        for i in (1..nx).rev() {
+            let di2 = di1;
+            di1 = di;
+            di = twice(x).source_mul_add_owned(&di1, &(-di2)) + coefficient(j * nx + i);
+        }
+        di = input_mul_add(
+            coefficient(j * nx),
+            &Number::from(0.5),
+            &input_mul_add(x, &di, &(-di1)),
+        );
+        let dj2 = dj1;
+        dj1 = dj;
+        dj = if j > 0 {
+            twice(y).source_mul_add_owned(&dj1, &(-dj2)) + di
+        } else {
+            di.source_mul_add_owned(&Number::from(0.5), &input_mul_add(y, &dj1, &(-dj2)))
+        };
+    }
+    output(dj)
+}
+
 impl Cheby2D {
     pub fn new(nx: usize, ny: usize) -> Result<Self, String> {
         Self::from_coefficients(
@@ -113,34 +149,13 @@ impl Cheby2D {
         Ok(d)
     }
     pub fn evaluate(&self, x: &N, y: &N) -> N {
-        use evaluation::{Number, input, input_mul_add, output, twice};
-        // cheby2d.c Clenshaw recurrence, decision 0131: macOS binary64
-        // temporaries remove measured MPFR/conversion cost. Linux retains
-        // borrowed N inputs and Rug64 operations. Keep this one recurrence,
-        // its ordered operations and every source FMA/separate boundary.
-        let (x, y) = (input(x), input(y));
-        let (mut dj, mut dj1) = (Number::from(0.), Number::from(0.));
-        for j in (0..self.ny).rev() {
-            let (mut di, mut di1) = (Number::from(0.), Number::from(0.));
-            for i in (1..self.nx).rev() {
-                let di2 = di1;
-                di1 = di;
-                di = twice(x).source_mul_add_owned(&di1, &(-di2)) + &self.coeff[j * self.nx + i];
-            }
-            di = input_mul_add(
-                input(&self.coeff[j * self.nx]),
-                &Number::from(0.5),
-                &input_mul_add(x, &di, &(-di1)),
-            );
-            let dj2 = dj1;
-            dj1 = dj;
-            dj = if j > 0 {
-                twice(y).source_mul_add_owned(&dj1, &(-dj2)) + di
-            } else {
-                di.source_mul_add_owned(&Number::from(0.5), &input_mul_add(y, &dj1, &(-dj2)))
-            };
-        }
-        output(dj)
+        evaluate(
+            self.nx,
+            self.ny,
+            |i| evaluation::input(&self.coeff[i]),
+            x,
+            y,
+        )
     }
     pub fn test(
         &self,
@@ -193,7 +208,7 @@ pub struct ChebyModel {
 impl ChebyModel {
     pub fn phase(&self, mjd: &N, freq: &N) -> N {
         model_phase(
-            &self.cheby,
+            |x, y| self.cheby.evaluate(x, y),
             [&self.mjd_start, &self.mjd_end],
             [&self.freq_start, &self.freq_end],
             &self.dispersion_constant,
@@ -203,7 +218,7 @@ impl ChebyModel {
     }
     pub fn frequency(&self, mjd: &N, freq: &N) -> N {
         model_frequency(
-            &self.frequency_cheby,
+            |x, y| self.frequency_cheby.evaluate(x, y),
             [&self.mjd_start, &self.mjd_end],
             [&self.freq_start, &self.freq_end],
             mjd,
@@ -450,28 +465,34 @@ pub fn test_function(x: &N, y: &N) -> N {
 
 // cheby2d.c:398-424: each native call borrows only its selected polynomial.
 // The shared leaves avoid constructing unrelated metadata or derivative backing.
-fn model_evaluate(poly: &Cheby2D, time: [&N; 2], band: [&N; 2], mjd: &N, freq: &N) -> N {
-    poly.evaluate(
+fn model_evaluate(
+    evaluate: impl FnOnce(&N, &N) -> N,
+    time: [&N; 2],
+    band: [&N; 2],
+    mjd: &N,
+    freq: &N,
+) -> N {
+    evaluate(
         &(n(-1.) + (mjd - time[0]) * 2. / (time[1] - time[0])),
         &(n(-1.) + (freq - band[0]) * 2. / (band[1] - band[0])),
     )
 }
 pub(crate) fn model_phase(
-    poly: &Cheby2D,
+    evaluate: impl FnOnce(&N, &N) -> N,
     time: [&N; 2],
     band: [&N; 2],
     dm: &N,
     mjd: &N,
     freq: &N,
 ) -> N {
-    model_evaluate(poly, time, band, mjd, freq) + dm / (freq * freq)
+    model_evaluate(evaluate, time, band, mjd, freq) + dm / (freq * freq)
 }
 pub(crate) fn model_frequency(
-    poly: &Cheby2D,
+    evaluate: impl FnOnce(&N, &N) -> N,
     time: [&N; 2],
     band: [&N; 2],
     mjd: &N,
     freq: &N,
 ) -> N {
-    model_evaluate(poly, time, band, mjd, freq) * 2. / (time[1] - time[0]) / 86400.
+    model_evaluate(evaluate, time, band, mjd, freq) * 2. / (time[1] - time[0]) / 86400.
 }
