@@ -16,7 +16,9 @@ reviewed. Accepted local predictor improvements and six U source corrections
 are integrated. AL's final Linux pair/GUI wiring at **afaee9f** is accepted as
 preparation, and the evidence-isolated Gaussian radius correction is released
 before the next combined candidate. AO continues its bounded read-only cost
-assessment. Native macOS GUI verification waits for the user's unlock notice.
+assessment, accepted under [0147](decisions/0147-private-model-arithmetic-release.md),
+which releases bounded private model arithmetic in its isolated clone. Native
+macOS GUI verification waits for the user's unlock notice.
 Actual corrected Linux execution, remaining scientific discrepancies, numerical
 performance budgets, general fitting, AL and full migration remain open.
 
