@@ -57,11 +57,36 @@ def precision_profile(macros):
     return values
 
 
+def record_adaptation(adaptations, name, before, after):
+    """Compose observed staging edits, requiring a continuous identity chain."""
+    if name in adaptations:
+        record=adaptations[name]
+        assert record['adapted']==before,('broken adaptation chain',name)
+        if before!=after:
+            record.setdefault('intermediates',[]).append(before)
+            record['adapted']=after
+    elif before!=after:
+        adaptations[name]={'original':before,'adapted':after}
+
+
+def inherit_adaptations(root, native):
+    """Bind preparation edits to their copied originals and current staged bytes."""
+    adaptations={}
+    for name,record in native['source_adaptations'].items():
+        assert record['original']==native['sources'][name],('adaptation source differs',name)
+        current=hashlib.sha256((root/name).read_bytes()).hexdigest()
+        assert current==record['adapted'],('adapted source differs',name)
+        adaptations[name]={**record,'intermediates':list(record.get('intermediates',[]))}
+    return adaptations
+
+
 def preservation_expected(original, adaptations):
     """Bind named staging edits without rewriting the historical manifest."""
     expected=dict(original)
     for name,record in adaptations.items():
         if name in expected:
-            assert expected[name]==record['original'],('adaptation original differs from freeze',name)
+            # A native freeze may precede or follow a preparation edit. Accept
+            # only an identity observed in the continuous preparation/port chain.
+            assert expected[name] in [record['original'],*record.get('intermediates',[]),record['adapted']],('adaptation identity differs from freeze',name)
             expected[name]=record['adapted']
     return expected

@@ -3,6 +3,7 @@
 import argparse
 import ast
 import difflib
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,7 @@ import shutil
 import sys
 import tempfile
 from common import ROOT, Run, sha
+from native_metadata import record_adaptation
 
 STAGES=['jpl','clocks','parameters','numeric_toolkit','tim_io','preprocessing','par_specialized',
         'pulsar_lifecycle','time_ephemeris','terrestrial_resources','observer_coordinates',
@@ -74,7 +76,7 @@ def build(args):
     assert compiler,'Selected NATIVE_CXX is unavailable'
     cc=shutil.which(os.environ.get('NATIVE_CC','gcc'));fc=shutil.which(os.environ.get('FC','gfortran'))
     gcov=shutil.which(os.environ.get('NATIVE_GCOV','gcov'))
-    changes=[];sources={'validation/release/native_metadata.py':sha(metadata/'native_metadata.py')};stages={}
+    changes=[];sources={'validation/release/native_metadata.py':sha(metadata/'native_metadata.py')};stages={};adaptations={}
     # These snapshots contain the original JPL defect witness and Q's accepted
     # parser projection. Fetch just their pinned commits, never all history.
     history=sorted({pin for stage in args.stages for pin in HISTORY.get(stage,[])})
@@ -84,11 +86,17 @@ def build(args):
         names=run.run(['git','-C',ROOT,'ls-files','-z','--','validation/'+stage],stage+'-sources').decode().split('\0')
         for name in filter(None,names):
             src=ROOT/name;dest=root/name;dest.parent.mkdir(parents=True,exist_ok=True)
+            if name in adaptations:
+                # Some prerequisites are copied again when their own stage runs.
+                # Record that source reset before any subsequent platform edit.
+                record_adaptation(adaptations,name,sha(dest),sha(src))
             shutil.copyfile(src,dest);sources[name]=sha(src)
         return directory
 
     def write_adapter(path,updated):
-        original=path.read_text();path.write_text(updated)
+        original=path.read_text()
+        record_adaptation(adaptations,str(path.relative_to(root)),sha(path),hashlib.sha256(updated.encode()).hexdigest())
+        path.write_text(updated)
         changes.extend(difflib.unified_diff(original.splitlines(True),updated.splitlines(True),fromfile='original/'+str(path.relative_to(root)),tofile='portable/'+str(path.relative_to(root))))
         (run.out/'platform-adaptations.patch').write_text(''.join(changes))
 
@@ -242,14 +250,14 @@ def build(args):
                 run.run([sys.executable,directory/script,*flags],stage+'-'+script,cwd=root,expected=None)
                 stages[stage][script]=run.commands[-1]['status']
                 if run.commands[-1]['status']:stages[stage]['exit']=run.commands[-1]['status']
-        run.save({'status':'running','stages':stages,'sources':sources})
+        run.save({'status':'running','stages':stages,'sources':sources,'source_adaptations':adaptations})
         print(stage,stages[stage]['exit'],flush=True)
     assert sha(a2/'source/config.h')==receipt['source']['config.h']
     assert sha(a2/'libtempo2-reference.a')==receipt['library']
     (run.out/'platform-adaptations.patch').write_text(''.join(changes))
     failed=[name for name,row in stages.items() if row['exit']]
     run.save({'status':'failure' if failed else 'pass','stages':stages,'failed':failed,
-              'sources':sources,'a2_receipt':sha(a2/'receipt.json'),'compiler':compiler,
+              'sources':sources,'source_adaptations':adaptations,'a2_receipt':sha(a2/'receipt.json'),'compiler':compiler,
               'short_path_alias':str(alias),
               'adaptations':sha(run.out/'platform-adaptations.patch'),'producer':sha(run.out/'producer.py'),
               'scope':'Fresh complete authored native corpora; Rust comparison is a separate gate'})

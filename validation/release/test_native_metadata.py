@@ -1,10 +1,12 @@
 """Reject non-metadata differences at the measured Linux failure boundaries."""
 from pathlib import Path
 import ast
+import copy
+import hashlib
 import json
 import tempfile
 import unittest
-from native_metadata import assertion_emitter, cheby_assertion, loader_identity, precision_profile, preservation_expected
+from native_metadata import assertion_emitter, cheby_assertion, loader_identity, precision_profile, preservation_expected, inherit_adaptations, record_adaptation
 from common import ROOT
 from corpus_compare import stage_preservation
 
@@ -79,6 +81,48 @@ class NativeMetadata(unittest.TestCase):
                 protected.write_text(json.dumps({'catalog.py':'unexpected'}))
                 with self.assertRaises(AssertionError):eval(code,namespace)
                 protected.write_text(json.dumps({'catalog.py':'old','fixture.par':'unchanged'}))
+
+    def test_real_gcov_preparation_composes_with_comparison_staging(self):
+        name='validation/pulsar_lifecycle/coverage.py'
+        original=(ROOT/name).read_bytes()
+        adapted=original.replace(b'/opt/homebrew/bin/gcov-16',b'/usr/bin/gcov-13')
+        before=hashlib.sha256(original).hexdigest();after=hashlib.sha256(adapted).hexdigest()
+        self.assertEqual(before,'0503677bda9e2f0be0d1cfcd25b81edae0a651247b6a6a547a0c1756339d5acf')
+        self.assertEqual(after,'31f740859cd98c230fada2eadea7ee320171470f4ae910940a755ef6039da0ff')
+        native={'sources':{name:before},'source_adaptations':{}}
+        record_adaptation(native['source_adaptations'],name,before,after)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);path=root/name;path.parent.mkdir(parents=True);path.write_bytes(adapted)
+            ledger=inherit_adaptations(root,native)
+            frozen={name:before,'unrelated.py':'unchanged'}
+            self.assertEqual(preservation_expected(frozen,ledger)[name],after)
+            # Exercise the same subsequent edit composition used by write().
+            updated=adapted.replace(b'/usr/bin/gcov-13',b'/bound/gcov-13')
+            current=hashlib.sha256(updated).hexdigest()
+            record_adaptation(ledger,name,after,current);path.write_bytes(updated)
+            self.assertEqual(ledger[name]['intermediates'],[after])
+            self.assertEqual(native['source_adaptations'][name]['adapted'],after)
+            for frozen_identity in [before,after,current]:
+                self.assertEqual(preservation_expected({name:frozen_identity},ledger),{name:current})
+            self.assertEqual(preservation_expected(frozen,ledger)['unrelated.py'],'unchanged')
+            self.assertEqual(frozen[name],before)
+            with self.assertRaises(AssertionError):record_adaptation(ledger,name,after,'unexpected')
+            with self.assertRaises(AssertionError):preservation_expected({name:'unrelated corruption'},ledger)
+            # Current-byte corruption and a false source origin both fail at
+            # inheritance, before any staged historical validator can run.
+            with self.assertRaises(AssertionError):inherit_adaptations(root,native)
+            path.write_bytes(adapted+b'\n# unrelated corruption\n')
+            with self.assertRaises(AssertionError):inherit_adaptations(root,native)
+            path.write_bytes(adapted)
+            broken=copy.deepcopy(native);broken['source_adaptations'][name]['original']='wrong source'
+            with self.assertRaises(AssertionError):inherit_adaptations(root,broken)
+
+    def test_repeated_prerequisite_copy_keeps_the_identity_chain(self):
+        ledger={}
+        for before,after in [('source','portable'),('portable','source'),('source','final')]:
+            record_adaptation(ledger,'profile.py',before,after)
+        self.assertEqual(ledger['profile.py'],{'original':'source','adapted':'final','intermediates':['portable','source']})
+        self.assertEqual(preservation_expected({'profile.py':'portable'},ledger),{'profile.py':'final'})
 
 
 if __name__=='__main__':unittest.main()

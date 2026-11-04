@@ -3,6 +3,7 @@
 import argparse
 import ast
 import difflib
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,7 @@ import sys
 import tempfile
 from common import ROOT, Run, sha, identities
 from native_corpora import HISTORY, stage_history
+from native_metadata import inherit_adaptations, record_adaptation
 
 PORTS=['jpl_port','clocks_port','parameter_storage_port','observation_storage_port',
        'pulsar_lifecycle_port','time_ephemeris_port','terrestrial_resources_port',
@@ -116,16 +118,14 @@ def execute(args):
     # A short pathname is essential for N's native 100-byte deleteFileName.
     # The alias points into retained output; it does not copy or truncate inputs.
     alias=Path(tempfile.mkdtemp(prefix='al-corpus-',dir='/tmp'))/'root';alias.symlink_to(root,target_is_directory=True)
-    changes=[];scripts={};adaptations={}
+    changes=[];scripts={};adaptations=inherit_adaptations(root,native)
     shutil.copyfile(ROOT/'validation/release/diagnostic_attribution.py',root/'validation/release/diagnostic_attribution.py')
     cxx=shutil.which(os.environ.get('NATIVE_CXX','g++'));assert cxx
     cc=shutil.which(os.environ.get('NATIVE_CC','gcc'));assert cc
     def write(path,text):
         before=path.read_text();original=sha(path);name=str(path.relative_to(root))
-        if name in adaptations:assert adaptations[name]['adapted']==original,name
+        record_adaptation(adaptations,name,original,hashlib.sha256(text.encode()).hexdigest())
         path.write_text(text)
-        if text!=before:
-            adaptations.setdefault(name,{'original':original})['adapted']=sha(path)
         changes.extend(difflib.unified_diff(before.splitlines(True),text.splitlines(True),fromfile='historical/'+str(path.relative_to(root)),tofile='AL/'+str(path.relative_to(root))))
         (run.out/'adaptations.patch').write_text(''.join(changes))
     def function(path,name,body):
