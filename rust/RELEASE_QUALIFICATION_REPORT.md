@@ -1,6 +1,30 @@
 # AL release qualification handover
 
-## Current checkpoint — 2 November 2026
+## Current checkpoint — 4 November 2026
+
+The completed Linux run `41392963741`, attempt 1 / job `125108130146`, executed
+`9991e804d0e230248e5fb20974b7e63384d4efeb`: **86 stages pass, 11 fail, none
+blocked**. AL independently verified the complete artifact's 53,208 files,
+preserved 207 case-distinct path groups, and matched all 2,103 exported candidate
+files against Git. The current delivery/acceptance matrix, failure ledger,
+matched native/Rust runtime/RSS observations and native dependency inventory are
+in [the completed-run review](../validation/release/LINUX_41392963741_REVIEW.md).
+Stage counts are not defect counts.
+
+[0130](../decisions/0130-continuation-baseline-bounded-review.md) accepts the
+bounded 0127 implementation and `483ced4` as Linux preparation. Saved replay of
+this newly collected run independently accounts for the four utility failures
+and exactly 32 SIMUL records; the other 128 P records remain unresolved. M2's
+50 records and the 130-case timing suite pass in the actual Linux execution.
+Q has a proven inherited gcov-adaptation ledger omission; Z's saved native
+interpolation trace proves a Linux separate-operation versus Rust forced-FMA
+discrepancy. Other fitting, DDH, U/AB, predictor and output gates remain as
+classified in the review. Allocation/transport measurements preserve their
+independent native failures. The later evaluator owner reuse and GUI did not
+execute in this candidate. Central owns Linux acceptance, budgets and successor
+release; no production correction or new campaign is claimed by this review.
+
+## Prepared checkpoint — 2 November 2026
 
 Decision [0127](../decisions/0127-user-adopted-rug128-discrete-contract.md)
 records the user's bounded Rug128 contract for four 0049 utility witnesses and
