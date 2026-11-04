@@ -1,9 +1,12 @@
 # Proposed workload-specific release budgets
 
-Central baseline proposal, 4 November 2026. **Pending user choice**: 0129
-approved setting explicit budgets but deliberately left their numerical values
-unagreed. These proposed engineering acceptance limits do not change scientific
-precision, conventions or tolerances. The qualified release still needs both.
+Central baseline proposal, 4 November 2026. **Choice resolved:** the user adopted
+the stricter **2× for all three runtime limits** alternative, with the same RSS
+caps and protocol, in [0148](0148-user-adopted-release-performance-budgets.md).
+The recommended limits below record the original proposal, not the adopted
+acceptance criteria. Scientific precision, conventions and tolerances are
+unchanged; the qualified release still needs both scientific and performance
+acceptance.
 
 ## Recommended limits
 

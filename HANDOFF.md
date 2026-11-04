@@ -19,8 +19,11 @@ before the next combined candidate. AO continues its bounded read-only cost
 assessment, accepted under [0147](decisions/0147-private-model-arithmetic-release.md),
 which releases bounded private model arithmetic in its isolated clone. Native
 macOS GUI verification waits for the user's unlock notice.
-Actual corrected Linux execution, remaining scientific discrepancies, numerical
-performance budgets, general fitting, AL and full migration remain open.
+The user adopted [0148](decisions/0148-user-adopted-release-performance-budgets.md):
+all three fixed workloads must take at most 2× native runtime on each platform,
+with the proposed 16/128/128 MiB peak RSS caps. Actual corrected Linux execution,
+remaining scientific discrepancies, performance acceptance, general fitting,
+AL and full migration remain open.
 
 The successor chat inherits coordination, design and milestone acceptance for
 this approved goal. The following earlier checkpoints are historical; their
