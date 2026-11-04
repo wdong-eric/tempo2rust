@@ -1,5 +1,33 @@
 # AL release qualification handover
 
+## U corrections and integrated preparation — 4 November 2026
+
+Decision [0142](../decisions/0142-u-platform-correction-and-linux-candidate-preparation.md)
+is implemented in `af6639a` (six U platform expressions and actual-operand
+witnesses) and `b59300b` (U disassembly, coefficient-view pair and Linux GUI
+plumbing). The [0142 handover](../validation/release/U_0142_CORRECTIONS.md)
+records the source scope and remaining Linux obligations.
+
+Both macOS U unit selections pass eight tests; a fresh release replay matches
+all 97 saved corrected-native histories with the existing complete comparator.
+Eight shared-caller checks pass across the two profiles. Actual native/Rust U
+disassembly capture also executes locally. Forty-three final plumbing controls
+pass, including central's two event-capture controls and exact archive retention.
+These results do not close Linux's 30 U histories or 300 differing leaves.
+
+The accepted `e24622d` → `a1851c5` coefficient-view pair reuses the recurrence
+endpoint and canonical installed borrow runner. Root's existing GUI checks are
+wired with locked dependency fetch, Cargo release installation, linked-library
+inventory, control/session parity and the prepared X11 native test. No GUI
+source changed. GUI compilation, native rendering and scientific execution on
+Linux remain unrun; image review is central's separate acceptance step.
+
+The local delivery is
+`decisions/evidence/release-qualification/build/u-0142-20261104/delivery.json`.
+The original Linux matrix remains 86 passing / 11 failing. This AL slice is
+ready for review; the combined Linux freeze awaits central's AO coordination.
+AO's newer endpoint is not wired here. No push or dispatch was performed.
+
 ## U diagnosis and recurrence preparation — 4 November 2026
 
 Decision [0137](../decisions/0137-q-z-local-acceptance-and-u-diagnosis.md)
