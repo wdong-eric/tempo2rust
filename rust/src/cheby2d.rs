@@ -3,6 +3,8 @@ use crate::predictor_number::{N, n};
 use serde::Serialize;
 use std::io::{BufRead, Write};
 
+mod evaluation;
+
 #[derive(Clone, Debug, Serialize)]
 pub struct Cheby2D {
     nx: usize,
@@ -111,27 +113,34 @@ impl Cheby2D {
         Ok(d)
     }
     pub fn evaluate(&self, x: &N, y: &N) -> N {
-        // cheby2d.c Clenshaw recurrence: the former numeric owners allocated
-        // 236 times per 8x4 leaf on macOS. Consume only dead temporaries here;
-        // keep every multiply, source FMA/separate operation and add in order.
-        let (mut dj, mut dj1) = (n(0.), n(0.));
+        use evaluation::{Number, input, input_mul_add, output, twice};
+        // cheby2d.c Clenshaw recurrence, decision 0131: macOS binary64
+        // temporaries remove measured MPFR/conversion cost. Linux retains
+        // borrowed N inputs and Rug64 operations. Keep this one recurrence,
+        // its ordered operations and every source FMA/separate boundary.
+        let (x, y) = (input(x), input(y));
+        let (mut dj, mut dj1) = (Number::from(0.), Number::from(0.));
         for j in (0..self.ny).rev() {
-            let (mut di, mut di1) = (n(0.), n(0.));
+            let (mut di, mut di1) = (Number::from(0.), Number::from(0.));
             for i in (1..self.nx).rev() {
                 let di2 = di1;
                 di1 = di;
-                di = (x * 2.).source_mul_add_owned(&di1, &(-di2)) + &self.coeff[j * self.nx + i];
+                di = twice(x).source_mul_add_owned(&di1, &(-di2)) + &self.coeff[j * self.nx + i];
             }
-            di = self.coeff[j * self.nx].source_mul_add(&n(0.5), &x.source_mul_add(&di, &(-di1)));
+            di = input_mul_add(
+                input(&self.coeff[j * self.nx]),
+                &Number::from(0.5),
+                &input_mul_add(x, &di, &(-di1)),
+            );
             let dj2 = dj1;
             dj1 = dj;
             dj = if j > 0 {
-                (y * 2.).source_mul_add_owned(&dj1, &(-dj2)) + di
+                twice(y).source_mul_add_owned(&dj1, &(-dj2)) + di
             } else {
-                di.source_mul_add_owned(&n(0.5), &y.source_mul_add(&dj1, &(-dj2)))
+                di.source_mul_add_owned(&Number::from(0.5), &input_mul_add(y, &dj1, &(-dj2)))
             };
         }
-        dj
+        output(dj)
     }
     pub fn test(
         &self,
