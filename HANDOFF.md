@@ -1,5 +1,28 @@
 # TEMPO2 Rust implementation handoff
 
+## Current continuation — 4 November 2026
+
+The user approved a new goal: a qualified macOS arm64/Linux x86_64 release,
+prioritizing measured performance and scientific qualification, with documented
+native dependencies and a minimal GUI using the Rust engine. Start with
+[decision 0129](decisions/0129-qualified-release-continuation.md) and the complete
+[continuation handoff 44](handoffs/44-qualified-release-continuation.md).
+
+The previous central goal and monitor remain paused. Linux run **41392963741**
+at **9991e80** has **completed with failure**; the saved log has 86 passing /
+11 failing stages, none blocked. Its artifact/scientific review remains due.
+Main's implementation baseline is **483ced4**. The 0127 central checks passed
+before the pause, but their formal bounded acceptance entry is still due;
+483ced4's successor Linux preparation and AO assessment **50d1b06** also await
+central review/release. Bounded M2 and the reviewed macOS optimizations remain
+accepted. General fitting, AL and full migration remain open.
+
+The successor chat inherits coordination, design and milestone acceptance for
+this approved goal. The following earlier checkpoints are historical; their
+running/monitor/pending statements do not override this current handoff.
+
+## Historical checkpoints through 2 November 2026
+
 **Active integration:** [0125](decisions/0125-integrated-performance-linux-qualification.md) publishes `9991e80` and dispatches full Linux [run 41392963741](https://github.com/wdong-eric/tempo2rust/actions/runs/41392963741), now executing with AN's memory and AO's predictor-transport improvements. The fifteen-minute monitor is active. AL owns compatibility/qualification; AO's handoff 42 is accepted under [0128](decisions/0128-predictor-evaluator-review-and-cpu-assessment.md), and its [next CPU assessment](handoffs/43-predictor-cpu-next-assessment.md) proceeds independently. Central retains decisions and acceptance; full migration remains open.
 
 **Predictor evaluator accepted, 2 November 2026:** [0128](decisions/0128-predictor-evaluator-review-and-cpu-assessment.md) integrates owner reuse at `9b7a185`: the measured macOS C loop is 1.6234x faster, with exact before/after outputs and 15 fresh tests passing. Linux execution of this continuation remains due; current run `41392963741` still tests frozen `9991e80`. Native remains about 238x faster in the measured loop, so substantial CPU work continues.
