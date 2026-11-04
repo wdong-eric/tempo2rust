@@ -6,9 +6,42 @@ import json
 import os
 from pathlib import Path
 import platform
+import tarfile
 from common import ROOT,Run,sha
 from af_compare import round_binary
 from spin_profile import equal as binary_equal
+
+
+def machine_code(run, a2, binaries):
+    """Bind the inspected callback object to the archive used by this probe."""
+    reference=json.loads((a2/'receipt.json').read_text())
+    library=a2/'libtempo2-reference.a';source=a2/'source/t2fit_glitch.C'
+    assert sha(library)==reference['library'], 'event reference archive changed'
+    assert sha(source)==reference['source']['t2fit_glitch.C'], 'event callback source changed'
+    callback=a2/'t2fit_glitch.C.o'
+    run.run(['ar','p',library,callback.name],'native-callback-archive-member')
+    member=run.out/'native-callback-archive-member.stdout'
+    assert sha(callback)==sha(member), 'event callback object differs from linked archive'
+    compile_command=next(c for c in reference['commands'] if c['label']=='compile-t2fit_glitch.C')
+    assert compile_command['status']==0
+    argv=compile_command['argv']
+    assert Path(argv[argv.index('-c')+1])==source and Path(argv[argv.index('-o')+1])==callback
+    binaries={**binaries,'native-callback.o':(callback,sha(member))}
+    products={};bundle=run.out/'machine-code.tar.gz'
+    with tarfile.open(bundle,'w:gz') as archive:
+        for name,(path,expected) in binaries.items():
+            assert sha(path)==expected, name+' changed since execution/build'
+            command=(['otool','-tvV',path] if platform.system()=='Darwin' else ['objdump','-drwC',path])
+            dump=run.out/(name+'.s')
+            dump.write_bytes(run.run(command,name+'-disassembly'))
+            archive.add(path,arcname=name,recursive=False)
+            assert sha(path)==expected, name+' changed during inspection'
+            products[name]={'path':str(path),'sha256':expected,'bytes':path.stat().st_size,
+                            'disassembly':str(dump),'disassembly_sha256':sha(dump)}
+    return {'bundle':str(bundle),'bundle_sha256':sha(bundle),'products':products,
+            'a2_receipt_sha256':sha(a2/'receipt.json'),'archive_sha256':sha(library),
+            'callback_source_sha256':sha(source),'compile_command':compile_command,
+            'scope':'Actual executed binaries and linked callback object; inspection does not change arithmetic or acceptance.'}
 
 
 def comparison(native, rust):
@@ -48,6 +81,7 @@ if __name__=='__main__':
     run.run([compiler,'-std=gnu++17','-O2','-DHAVE_CONFIG_H',
         '-I'+str(a2/'source'),'-I'+str(ROOT/'validation/release/a2'),source,
         a2/'libtempo2-reference.a','-lquadmath','-lgfortran','-o',run.out/'native'],'native-build')
+    native_identity=sha(run.out/'native')
     (run.out/'native.tsv').write_bytes(run.run([run.out/'native',cases],'native'))
     command=['cargo','test','--offline','--locked','--release','--message-format=json','--manifest-path',candidate/'rust/Cargo.toml',
         '--target-dir',a.target.resolve(),'--lib','event_profile_tests::'+('nan_arithmetic_profile' if a.nan_trace else 'source_profile'),'--','--ignored','--exact']
@@ -57,9 +91,13 @@ if __name__=='__main__':
         and m.get('profile',{}).get('test') and m.get('executable') and m['target']['name']=='tempo2_rust'))
     native_object=Path(next(m['out_dir'] for m in messages if m.get('reason')=='build-script-executed'
         and '#tempo2-rust@' in m['package_id']))/'predictor.o'
+    rust_identity=sha(executable);adapter_identity=sha(native_object)
     for name,path in [('native',run.out/'native'),('rust',executable)]:
         run.run(['otool','-L',path] if platform.system()=='Darwin' else ['ldd',path],name+'-libraries')
     run.run(['nm','-u',native_object],'adapter-symbols')
+    code=machine_code(run,a2,{'native-event':(run.out/'native',native_identity),
+                             'rust-event-tests':(executable,rust_identity),
+                             'rust-adapter.o':(native_object,adapter_identity)})
     rows=comparison(run.out/'native.tsv',run.out/'rust.tsv');failed=[r for r in rows if not r['equal']]
     callbacks={(r['case'],r['field']):r for r in rows if r['field'].startswith('callback_')}
     traced_returns=[]
@@ -86,7 +124,8 @@ if __name__=='__main__':
     run.save({'status':'failure' if failed else 'pass','rows':rows,'failed':failed,
         'callback_return_observations':returns,'callback_return_file':sha(return_path),
         'return_observation_scope':'Actual computed ordinary returns before/after f64 conversion; the twelve literal-zero branches have no ordinary intermediate.',
-        'native_executable':sha(run.out/'native'),'rust_executable':sha(executable),'adapter_object':sha(native_object),
+        'native_executable':native_identity,'rust_executable':rust_identity,'adapter_object':adapter_identity,
+        'machine_code':code,
         'native_library_observation':sha(run.out/'native-libraries.stdout'),
         'rust_library_observation':sha(run.out/'rust-libraries.stdout'),
         'adapter_symbols':sha(run.out/'adapter-symbols.stdout'),
