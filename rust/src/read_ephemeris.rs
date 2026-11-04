@@ -19,6 +19,21 @@ mod corpus_tests;
 // Preserve an initialization and its global status query as a sequential pair.
 static JPL_INIT_LOCK: Mutex<()> = Mutex::new(());
 
+fn telescope_offset(t0: f64, t1: f64, v0: f64, v1: f64, sat: f64) -> f64 {
+    let m = (v0 - v1) / (t0 - t1);
+    // readEphemeris.C:420–422,440–442,460–462. Z's macOS GCC16/O2
+    // object contracts the intercept/offset to fmsub/fmadd; Linux GCC13
+    // uses separate mulsd/subsd/addsd. Decision 0133 and the bound Linux
+    // run 41392963741 c076 witness require the platform operation order.
+    if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        let c = (-m).mul_add(t0, v0);
+        m.mul_add(sat, c)
+    } else {
+        let c = v0 - m * t0;
+        m * sat + c
+    }
+}
+
 pub(crate) struct JplEphemeris {
     handle: Ephemeris,
     path: PathBuf,
@@ -281,11 +296,7 @@ pub(crate) fn driver(
                         if sat >= t0 && sat < t1 {
                             let v0 = *read(&v[k], "telD_v")?;
                             let v1 = *read(&v[k + 1], "telD_v")?;
-                            let m = (v0 - v1) / (t0 - t1);
-                            // Z's pinned GCC16/O2 object contracts both source
-                            // interpolation expressions to fmsub/fmadd.
-                            let c = (-m).mul_add(t0, v0);
-                            offset = m.mul_add(sat, c);
+                            offset = telescope_offset(t0, t1, v0, v1, sat);
                             break;
                         }
                     }
@@ -428,6 +439,23 @@ pub fn gasdev(seed: &mut i64) -> Result<f64, TimingError> {
 mod tests {
     use super::*;
     use serde_json::{Value, json};
+    #[test]
+    fn telescope_offset_c076_platform_witness() {
+        let offset = telescope_offset(
+            f64::from_bits(0x40e86a0000000000),
+            f64::from_bits(0x40e86c8000000000),
+            f64::from_bits(0x4008000000000000),
+            f64::from_bits(0x401c000000000000),
+            f64::from_bits(0x40e86b4800000000),
+        );
+        let expected = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+            0x40143333333335a4
+        } else {
+            0x4014333333333800
+        };
+        assert_eq!(offset.to_bits(), expected);
+    }
+
     fn number(x: f64) -> Value {
         json!({"class":"finite","bits":format!("{:016x}",x.to_bits())})
     }
