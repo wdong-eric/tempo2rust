@@ -1,23 +1,38 @@
 use eframe::egui::{self, Color32};
 use egui_plot::{Line, MarkerShape, Plot, PlotPoint, Points};
 use std::{
-    path::Path,
+    path::{Path, PathBuf},
     sync::mpsc::{self, Receiver, TryRecvError},
 };
-use tempo2_rust::{bats::Number, timing::TimingResult};
+use tempo2_rust::bats::Number;
 
 const ACTIVE: Color32 = Color32::from_rgb(72, 160, 225);
 const EXCLUDED: Color32 = Color32::from_rgb(231, 153, 69);
+
+enum Action {
+    Load,
+    Exclude(usize, bool),
+    Refit,
+    Save(PathBuf),
+}
+
+struct WorkerReply {
+    session: Option<tempo2_gui::Session>,
+    message: Result<Option<String>, String>,
+}
 
 struct Viewer {
     par: String,
     tim: String,
     runtime: String,
-    pending: Option<Receiver<Result<TimingResult, String>>>,
-    result: Option<TimingResult>,
+    pending: Option<Receiver<WorkerReply>>,
+    session: Option<tempo2_gui::Session>,
     rows: Result<Vec<tempo2_gui::PlotToa>, String>,
     selected: Option<usize>,
+    selected_input: Option<usize>,
     error: Option<String>,
+    message: Option<String>,
+    save_directory: String,
     reset_plot: bool,
 }
 
@@ -28,46 +43,108 @@ impl Viewer {
             tim: String::new(),
             runtime: std::env::var("TEMPO2").unwrap_or_default(),
             pending: None,
-            result: None,
+            session: None,
             rows: Ok(vec![]),
             selected: None,
+            selected_input: None,
             error: None,
+            message: None,
+            save_directory: String::new(),
             reset_plot: false,
         }
     }
 
-    fn start_load(&mut self, ctx: &egui::Context) {
+    fn start(&mut self, action: Action, ctx: &egui::Context) {
         let (par, tim, runtime) = (self.par.clone(), self.tim.clone(), self.runtime.clone());
         let (sender, receiver) = mpsc::channel();
         let ctx = ctx.clone();
         self.pending = Some(receiver);
-        self.result = None;
+        self.selected_input = if matches!(action, Action::Load) {
+            None
+        } else {
+            self.session
+                .as_ref()
+                .and_then(|s| {
+                    self.selected
+                        .and_then(|i| s.timing().pulsars[0].observations.get(i))
+                })
+                .and_then(|row| row.input_index)
+        };
+        let session = self.session.take();
         self.selected = None;
         self.error = None;
+        self.message = None;
         std::thread::spawn(move || {
-            let result = tempo2_gui::load(Path::new(&par), Path::new(&tim), Path::new(&runtime))
-                .map_err(|e| e.to_string());
-            let _ = sender.send(result); // The user may have closed the window.
+            let reply = match action {
+                Action::Load => {
+                    match tempo2_gui::load(Path::new(&par), Path::new(&tim), Path::new(&runtime)) {
+                        Ok(session) => WorkerReply {
+                            session: Some(session),
+                            message: Ok(None),
+                        },
+                        Err(e) => WorkerReply {
+                            session: None,
+                            message: Err(e.to_string()),
+                        },
+                    }
+                }
+                action => {
+                    let mut session = session.expect("operation enabled for a loaded session");
+                    let message = match action {
+                        Action::Exclude(index, excluded) => session
+                            .set_excluded(index, excluded)
+                            .map(|()| Some("Selection updated. Refit before saving.".into())),
+                        Action::Refit => session.refit().map_err(|e| e.to_string()).map(|()| {
+                            let count = session.fit_result().unwrap().cycles.len();
+                            Some(if count == 0 {
+                                "No fit cycles returned (NITS is zero).".into()
+                            } else {
+                                format!("Fit completed: {count} cycle(s).")
+                            })
+                        }),
+                        Action::Save(path) => session
+                            .save(&path)
+                            .map(|()| Some(format!("Saved session to {}", path.display()))),
+                        Action::Load => unreachable!(),
+                    };
+                    WorkerReply {
+                        session: Some(session),
+                        message,
+                    }
+                }
+            };
+            let _ = sender.send(reply); // The user may have closed the window.
             ctx.request_repaint();
         });
     }
 
     fn receive(&mut self) {
         let received = match self.pending.as_ref().map(Receiver::try_recv) {
-            Some(Ok(result)) => result,
-            Some(Err(TryRecvError::Disconnected)) => {
-                Err("Timing worker stopped before returning a result".into())
-            }
+            Some(Ok(reply)) => reply,
+            Some(Err(TryRecvError::Disconnected)) => WorkerReply {
+                session: None,
+                message: Err("Timing worker stopped before returning a result".into()),
+            },
             _ => return,
         };
         self.pending = None;
-        match received {
-            Ok(result) => {
-                self.rows = tempo2_gui::plot_toas(&result.pulsars[0]);
-                self.selected = (!result.pulsars[0].observations.is_empty()).then_some(0);
-                self.result = Some(result);
-                self.reset_plot = true;
-            }
+        if let Some(session) = received.session {
+            let pulsar = &session.timing().pulsars[0];
+            self.rows = tempo2_gui::plot_toas(pulsar);
+            self.selected = self
+                .selected_input
+                .and_then(|index| {
+                    pulsar
+                        .observations
+                        .iter()
+                        .position(|row| row.input_index == Some(index))
+                })
+                .or_else(|| (!pulsar.observations.is_empty()).then_some(0));
+            self.session = Some(session);
+            self.reset_plot = true;
+        }
+        match received.message {
+            Ok(message) => self.message = message,
             Err(error) => self.error = Some(error),
         }
     }
@@ -76,9 +153,10 @@ impl Viewer {
 impl eframe::App for Viewer {
     fn ui(&mut self, ui: &mut egui::Ui, _: &mut eframe::Frame) {
         self.receive();
+        let mut action = None;
         egui::CentralPanel::default().show(ui, |ui| {
-            ui.heading("TEMPO2-Rust · Timing viewer");
-            ui.label("Load PAR/TIM, inspect residuals and arrival times. Evaluation removes the residual mean; it does not fit.");
+            ui.heading("TEMPO2-Rust · Timing");
+            ui.label("Loading evaluates with mean removal. Refit uses loaded file fit flags/NITS and enables error rescaling.");
             ui.add_enabled_ui(self.pending.is_none(), |ui| {
                 egui::Grid::new("inputs").num_columns(2).show(ui, |ui| {
                     for (label, value) in [("PAR file", &mut self.par), ("TIM file", &mut self.tim), ("TEMPO2 resources", &mut self.runtime)] {
@@ -87,12 +165,22 @@ impl eframe::App for Viewer {
                         ui.end_row();
                     }
                 });
-                if ui.button("Load and evaluate").clicked() { self.start_load(ui.ctx()); }
+                if ui.button("Load and evaluate").clicked() { action = Some(Action::Load); }
             });
-            if self.pending.is_some() { ui.horizontal(|ui| { ui.spinner(); ui.label("Computing timing results…"); }); }
+            if self.pending.is_some() { ui.horizontal(|ui| { ui.spinner(); ui.label("Working…"); }); }
             if let Some(error) = &self.error { ui.colored_label(Color32::LIGHT_RED, error); }
-            let Some(result) = &self.result else { return; };
+            if let Some(message) = &self.message { ui.label(message); }
+            let Some(session) = &self.session else { return; };
+            let result = session.timing();
             let pulsar = &result.pulsars[0];
+            ui.horizontal(|ui| {
+                if ui.button("Refit").clicked() { action = Some(Action::Refit); }
+                let label = ui.label("New save folder");
+                ui.text_edit_singleline(&mut self.save_directory).labelled_by(label.id);
+                if ui.add_enabled(session.can_save() && !self.save_directory.is_empty(), egui::Button::new("Save session")).clicked() {
+                    action = Some(Action::Save(PathBuf::from(&self.save_directory)));
+                }
+            });
             ui.separator();
             ui.horizontal(|ui| {
                 ui.strong(pulsar.name.text.as_deref().unwrap_or("Non-UTF8 pulsar name"));
@@ -144,6 +232,12 @@ impl eframe::App for Viewer {
                             ui.selectable_value(&mut self.selected, Some(index), format!("{} · {name}", index + 1));
                         }
                     }).response.labelled_by(label.id);
+                if let Some(row) = self.selected.and_then(|i| pulsar.observations.get(i)) {
+                    let excluded = row.barycentric.deleted != 0;
+                    if ui.add_enabled(row.input_index.is_some(), egui::Button::new(if excluded { "Include TOA" } else { "Exclude TOA" })).clicked() {
+                        action = Some(Action::Exclude(row.input_index.unwrap(), !excluded));
+                    }
+                }
             });
             egui::ScrollArea::vertical().id_salt("details").show(ui, |ui| {
                 if let Some(row) = self.selected.and_then(|i| pulsar.observations.get(i)) {
@@ -160,12 +254,18 @@ impl eframe::App for Viewer {
                 ui.collapsing(format!("Engine diagnostics ({})", result.diagnostics.len()), |ui| {
                     ui.monospace(serde_json::to_string_pretty(&result.diagnostics).expect("serializable diagnostics"));
                 });
+                if let Some(fit) = session.fit_result() {
+                    ui.collapsing("Fit result", |ui| { ui.monospace(serde_json::to_string_pretty(fit).expect("serializable fit result")); });
+                }
                 ui.collapsing("Loaded inputs and resources", |ui| {
                     for input in &result.inputs { ui.label(format!("{} · {}", input.role, input.path.text.as_deref().unwrap_or("Non-UTF8 path"))); }
                     ui.label(format!("{} consumed resource records", result.resources.len()));
                 });
             });
         });
+        if let Some(action) = action {
+            self.start(action, ui.ctx());
+        }
     }
 }
 
@@ -193,6 +293,20 @@ mod tests {
     use super::*;
     use egui_kittest::{Harness, kittest::Queryable};
 
+    fn finish_job(harness: &mut Harness<'_, Viewer>) {
+        harness.run_steps(1);
+        let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
+        while harness.state().pending.is_some() {
+            assert!(
+                std::time::Instant::now() < deadline,
+                "timing worker did not finish"
+            );
+            std::thread::sleep(std::time::Duration::from_millis(10));
+            harness.run_steps(1);
+        }
+        harness.run();
+    }
+
     #[test]
     #[ignore = "requires pinned runtime and a graphics adapter for the rendered viewer check"]
     fn load_inspect_and_render() {
@@ -214,23 +328,13 @@ mod tests {
             .with_size([1100., 800.])
             .build_eframe(|_| viewer);
         harness.get_by_label("Load and evaluate").click();
-        harness.run_steps(1);
-        let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
-        while harness.state().pending.is_some() {
-            assert!(
-                std::time::Instant::now() < deadline,
-                "timing worker did not finish"
-            );
-            std::thread::sleep(std::time::Duration::from_millis(10));
-            harness.run_steps(1);
-        }
-        harness.run();
+        finish_job(&mut harness);
         assert!(
             harness.state().error.is_none(),
             "{:?}",
             harness.state().error
         );
-        let result = harness.state().result.as_ref().unwrap();
+        let result = harness.state().session.as_ref().unwrap().timing();
         assert_eq!(result.pulsars[0].observations.len(), 16);
         let before = serde_json::to_vec(result).unwrap();
         let name = result.pulsars[0].observations[3]
@@ -276,9 +380,9 @@ mod tests {
         assert_eq!(harness.state().selected, Some(7));
         assert_eq!(
             before,
-            serde_json::to_vec(harness.state().result.as_ref().unwrap()).unwrap()
+            serde_json::to_vec(harness.state().session.as_ref().unwrap().timing()).unwrap()
         );
-        let out = root.join("gui/build/first-viewer-20261104");
+        let out = root.join("gui/build/session-viewer-20261104");
         std::fs::create_dir_all(&out).unwrap();
         harness
             .render()
@@ -286,24 +390,123 @@ mod tests {
             .save(out.join("viewer.png"))
             .unwrap();
 
+        let input_index = harness.state().session.as_ref().unwrap().timing().pulsars[0]
+            .observations[7]
+            .input_index
+            .unwrap();
+        harness.get_by_label("Exclude TOA").click();
+        finish_job(&mut harness);
+        assert!(
+            harness.state().error.is_none(),
+            "{:?}",
+            harness.state().error
+        );
+        let selected = harness.state().selected.unwrap();
+        let row =
+            &harness.state().session.as_ref().unwrap().timing().pulsars[0].observations[selected];
+        assert_eq!(row.input_index, Some(input_index));
+        assert_eq!(row.barycentric.deleted, 1);
+        harness
+            .render()
+            .unwrap()
+            .save(out.join("excluded.png"))
+            .unwrap();
+        harness.get_by_label("Refit").click();
+        finish_job(&mut harness);
+        assert!(
+            harness.state().error.is_none(),
+            "{:?}",
+            harness.state().error
+        );
+        let session = harness.state().session.as_ref().unwrap();
+        assert!(session.can_save());
+        for system in &session.fit_result().unwrap().cycles.last().unwrap().systems {
+            assert!(
+                system
+                    .rows
+                    .iter()
+                    .all(|row| row.input_index != Some(input_index))
+            );
+        }
+        harness
+            .render()
+            .unwrap()
+            .save(out.join("fitted.png"))
+            .unwrap();
+        let destination = out.join(format!("saved-{}", std::process::id()));
+        harness.get_by_label("New save folder").focus();
+        harness.run();
+        harness
+            .get_by_label("New save folder")
+            .type_text(destination.to_str().unwrap());
+        harness.run();
+        assert_eq!(
+            harness.state().save_directory,
+            destination.to_str().unwrap()
+        );
+        let before_save =
+            serde_json::to_vec(harness.state().session.as_ref().unwrap().timing()).unwrap();
+        harness.get_by_label("Save session").click();
+        finish_job(&mut harness);
+        assert!(
+            harness.state().error.is_none(),
+            "{:?}",
+            harness.state().error
+        );
+        assert!(destination.join("session.par").is_file());
+        assert!(destination.join("session.tim").is_file());
+        assert!(destination.join("session.json").is_file());
+        assert_eq!(
+            before_save,
+            serde_json::to_vec(harness.state().session.as_ref().unwrap().timing()).unwrap()
+        );
+        harness
+            .render()
+            .unwrap()
+            .save(out.join("saved.png"))
+            .unwrap();
+        harness.get_by_label("Save session").click();
+        finish_job(&mut harness);
+        assert!(
+            harness
+                .state()
+                .error
+                .as_ref()
+                .is_some_and(|error| error.contains("Cannot create"))
+        );
+        assert_eq!(
+            before_save,
+            serde_json::to_vec(harness.state().session.as_ref().unwrap().timing()).unwrap()
+        );
+        harness
+            .render()
+            .unwrap()
+            .save(out.join("save-error.png"))
+            .unwrap();
+        harness.get_by_label("Include TOA").click();
+        finish_job(&mut harness);
+        assert!(
+            harness.state().error.is_none(),
+            "{:?}",
+            harness.state().error
+        );
+        assert!(!harness.state().session.as_ref().unwrap().can_save());
+        assert_eq!(
+            harness.state().session.as_ref().unwrap().timing().pulsars[0].observations
+                [harness.state().selected.unwrap()]
+            .barycentric
+            .deleted,
+            0
+        );
+
         // A failed new load must report the error and clear the prior snapshot.
         harness.state_mut().par = root
             .join("gui/build/missing-input.par")
             .display()
             .to_string();
         harness.get_by_label("Load and evaluate").click();
-        harness.run_steps(1);
-        let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
-        while harness.state().pending.is_some() {
-            assert!(
-                std::time::Instant::now() < deadline,
-                "timing worker did not finish"
-            );
-            std::thread::sleep(std::time::Duration::from_millis(10));
-            harness.run_steps(1);
-        }
-        harness.run();
-        assert!(harness.state().result.is_none());
+        finish_job(&mut harness);
+        assert!(harness.state().session.is_none());
         assert!(
             harness
                 .state()

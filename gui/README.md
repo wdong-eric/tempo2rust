@@ -1,10 +1,9 @@
 # TEMPO2-Rust timing viewer
 
-A first interactive viewer for one PAR/TIM pair: residuals with TOA uncertainty
-bars, zoom/pan/reset, point or list selection, and exact TOA values. Loading runs
-the existing Rust load/preprocess/timing workflow with residual mean removal.
-It does not perform a fit or write input files. Selection/exclusion, refitting
-and saving are the next stage of decision 0129.
+An interactive timing workflow for one PAR/TIM pair: residuals with TOA
+uncertainty bars, zoom/pan/reset, exact TOA inspection, exclusion/reinclusion,
+refitting and saving. Loading runs the existing Rust load/preprocess/timing
+workflow with residual mean removal; fitting runs only when **Refit** is clicked.
 
 From the repository root, with the engine's [native build prerequisites](../rust/README.md)
 installed:
@@ -19,6 +18,26 @@ runs on a worker thread; errors and diagnostics remain visible in the viewer.
 Scroll or pinch to zoom, drag to pan, and double-click or **Reset view** to reset.
 Click a point or use **Inspect TOA** to read its exact values and original input
 identity. Active TOAs are blue circles; deleted TOAs are orange crosses.
+
+**Exclude TOA** / **Include TOA** updates the selected original TOA and
+reevaluates the current model. **Refit** uses the loaded files' fit flags, mode
+and NITS with the general Rust fitter's default options, including error
+rescaling. This first interface has no covariance selector or parameter editor.
+The **Fit result** panel exposes the complete engine report. A failed edit/fit
+keeps the last valid model and result; the engine's owner-aware snapshot supplies
+that isolation at the cost of a temporary model copy.
+
+After a successful fit, enter a **New save folder** and click **Save session**.
+The directory must not exist. The existing engine writers create `session.par`
+and `session.tim`; `session.json` retains exact timing/fit output and provenance.
+Engine stdout/stderr and any additional writer products stay in the same folder.
+Saving uses a snapshot because the PAR writer derives reporting/phase-reference
+fields such as TZRMJD. It leaves the live fitted model unchanged. Native TIM
+format preserves excluded TOAs as `C` comments, which the reader skips on reload.
+The PAR/TIM exports use native text precision; they are not lossless engine-state
+serialization. If a save fails, the error identifies the retained partial folder.
+Another selection edit requires a new fit before saving. NITS zero returns no
+fit cycles and does not enable saving.
 
 The plot answers how the evaluated residual and its reported uncertainty vary
 with site arrival time. The screen uses binary64 MJD and microsecond coordinates;
@@ -46,11 +65,13 @@ engine's private-prefix installer.
 cargo fmt --manifest-path gui/Cargo.toml --check
 cargo clippy --manifest-path gui/Cargo.toml --locked --all-targets -- -D warnings
 cargo test --manifest-path gui/Cargo.toml --locked
+cargo test --manifest-path gui/Cargo.toml --locked --lib -- --include-ignored
 cargo build --manifest-path gui/Cargo.toml --locked --examples
 cargo build --manifest-path rust/Cargo.toml --locked --bin tempo2-rust
 python3 gui/verify.py \
   --cli rust/target/debug/tempo2-rust \
   --viewer-export gui/target/debug/examples/export_timing \
+  --session-workflow gui/target/debug/examples/session_workflow \
   --runtime validation/reference/build/source/T2runtime \
   --out gui/build/parity
 ```
@@ -58,7 +79,11 @@ python3 gui/verify.py \
 Use fresh output directories; adjust executable paths if `CARGO_TARGET_DIR` is
 set. The parity check compares complete JSON bytes in fresh CLI/viewer processes
 for 16 barycentric and 7 terrestrial TOAs, including original input identities.
-It also verifies preserved engine dependency versions/checksums.
+It compares complete edit/repeated-fit histories and every saved file with
+direct engine calls in separate processes, verifies fit-row exclusion and
+reinclusion, and parses both saved PAR/TIM pairs. It also verifies preserved
+engine dependency versions/checksums. The ignored library test uses the pinned
+runtime to check that a real no-fit-data failure preserves model/result state.
 
 With the pinned reference runtime and a graphics adapter available:
 
@@ -67,10 +92,13 @@ cargo test --manifest-path gui/Cargo.toml --locked --bin tempo2-gui \
   load_inspect_and_render -- --ignored --nocapture
 ```
 
-The `egui_kittest` check loads through the visible button, selects through the
-list and plot, zooms and resets, checks that interaction preserves complete
-engine output, and verifies a failed new load clears the previous result. Its
-test-only WGPU renderer writes `gui/build/first-viewer-20261104/viewer.png` and
-`input-error.png` for visual inspection. This verifies widget behavior and
-rendering; it does not verify the native OpenGL window or operating-system
-integration. Generated evidence and build products stay outside Git.
+The `egui_kittest` check exercises loading, list/point selection, zoom/reset,
+exclusion, refit, save, existing-folder rejection and reinclusion. It checks
+input identity and the engine result at each relevant boundary, and verifies a
+failed new load clears the previous result. Its test-only WGPU renderer writes
+normal, excluded, fitted, saved and error PNGs under
+`gui/build/session-viewer-20261104/` for visual inspection. This verifies widget
+behavior and rendering; it does not verify the native OpenGL window or
+operating-system integration. Native desktop verification is deferred while the
+Mac is locked; Linux GUI build/launch is also pending. Generated evidence and
+build products stay outside Git.
