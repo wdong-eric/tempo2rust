@@ -1,5 +1,34 @@
 # AL release qualification handover
 
+## U diagnosis and recurrence preparation — 4 November 2026
+
+Decision [0137](../decisions/0137-q-z-local-acceptance-and-u-diagnosis.md)
+accepts the Q/Z corrections below locally and releases saved-data U diagnosis.
+The [U diagnosis report](../validation/release/U_0137_DIAGNOSIS.md) reconstructs
+all 30 first differing saved histories exactly: ten IFTE recurrence witnesses,
+three FB recurrence/accumulation witnesses, eleven IFTE accumulation effects on
+TT corrections and six source dot-product effects. Counterfactuals retain
+Rug128 timing arithmetic and isolate the required operation choices. The replay
+binds 393 archive members, inputs, source/compiler identities and recorded
+executable identities. U executable/object bytes were not retained, so actual
+instruction inspection remains a precise Linux follow-up.
+
+U production code is unchanged. This diagnosis explains first observed
+boundaries; it does not close the original 300 differing leaves or any other
+scientific gate. The original Linux matrix remains 86 passing / 11 failing.
+The report proposes source-ordered Linux operations at the six demonstrated
+sites, with macOS fused controls and existing shared-dot-product caller gates,
+for central review before implementation.
+
+Commit `2c13094` wires the accepted `8716d1d` → `e24622d` recurrence pair into
+the existing integrated workflow, reusing its before endpoint. Installed borrow
+consumers, Linux wide-range test execution and library disassembly retention
+are included. Twenty-five focused routing, rejection and retention tests pass;
+actual Linux scientific checks and measurements remain due. The coefficient-
+view pair is a separate future addition. The delivery receipt is
+`decisions/evidence/release-qualification/build/u-0137-20261104/delivery.json`.
+No Linux successor, push or dispatch was performed.
+
 ## Local Q/Z successor — 4 November 2026
 
 Decision [0133](../decisions/0133-linux-baseline-and-q-z-correction-release.md)
