@@ -1,5 +1,27 @@
 # AL release qualification handover
 
+## Z Gaussian radius correction — 4 November 2026
+
+Decision [0146](../decisions/0146-linux-wiring-review-and-gaussian-radius-correction.md)
+is implemented in the radius expression of `RandomState::gaussian`: Linux
+x86_64 uses the separately rounded native products and sum; macOS retains its
+fused radius. RNG, seed, table, cache, rejection and libm operations are
+unchanged. The [0146 report](../validation/release/Z_0146_CORRECTION.md) binds
+the four affected pair constructions and their cached-call regression to the
+accepted Linux diagnostic and original macOS observer.
+
+Both macOS debug/release selections pass two focused tests. All fifteen
+complete original random histories also pass in each profile: 934 events,
+107 Gaussian calls and zero differences. Four process-boundary controls
+confirm that the existing exact random-history check remains independently
+dispatched, even after a planetary-driver failure. No comparator or wiring
+changed. Evidence is retained at
+`decisions/evidence/release-qualification/build/z-0146-20261104/delivery.json`.
+
+Corrected Linux execution remains pending; no new Linux closure, general libm
+equivalence, performance or GUI acceptance is claimed. GUI/event and AO
+predictor sources were preserved. No push or dispatch occurred.
+
 ## Final temporary-reuse wiring — 4 November 2026
 
 Decision [0145](../decisions/0145-temporary-reuse-acceptance-and-final-linux-wiring.md)

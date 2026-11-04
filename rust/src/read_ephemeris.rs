@@ -417,7 +417,13 @@ impl RandomState {
             // GCC16 O2 contracts these expressions in the accepted Z profile.
             let v1 = self.random(seed)?.mul_add(2.0, -1.0);
             let v2 = self.random(seed)?.mul_add(2.0, -1.0);
-            let rsq = v1.mul_add(v1, v2 * v2);
+            // readEphemeris.C::gasdev: the qualified Linux GCC13 object has
+            // two mulsd then addsd; retain the macOS GCC16 fused radius.
+            let rsq = if cfg!(all(target_os = "linux", target_arch = "x86_64")) {
+                v1 * v1 + v2 * v2
+            } else {
+                v1.mul_add(v1, v2 * v2)
+            };
             if rsq >= 1.0 || rsq == 0.0 {
                 continue;
             }
@@ -439,6 +445,77 @@ pub fn gasdev(seed: &mut i64) -> Result<f64, TimingError> {
 mod tests {
     use super::*;
     use serde_json::{Value, json};
+    #[test]
+    fn gaussian_platform_histories_preserve_cached_calls() {
+        // The four differing pair constructions in Linux run 41392963741,
+        // with macOS expectations from the original complete Z observer.
+        // Each output distinguishes the separate/fused radius rounding.
+        for (initial_seed, call, linux, macos) in [
+            (
+                -12345,
+                7,
+                [0x3ff7ff435f15e805, 0x3ff84f4b6b6802d4],
+                [0x3ff7ff435f15e804, 0x3ff84f4b6b6802d3],
+            ),
+            (
+                0,
+                19,
+                [0xbfc357b1d2ad3c24, 0x3fc9060afae68108],
+                [0xbfc357b1d2ad3c1a, 0x3fc9060afae680fc],
+            ),
+            (
+                1,
+                11,
+                [0xbfe3d9427cd27e22, 0xbff5b93effe24a93],
+                [0xbfe3d9427cd27e23, 0xbff5b93effe24a94],
+            ),
+            (
+                1,
+                19,
+                [0xbfcf7f78088a896e, 0xbfc060d9e5b9e2f4],
+                [0xbfcf7f78088a897c, 0xbfc060d9e5b9e2fb],
+            ),
+        ] {
+            let expected = if cfg!(all(target_os = "linux", target_arch = "x86_64")) {
+                linux
+            } else {
+                macos
+            };
+            let mut state = RandomState::default();
+            let mut seed = initial_seed;
+            for _ in 1..call {
+                state.gaussian(&mut seed).unwrap();
+            }
+            assert_eq!(state.gaussian(&mut seed).unwrap().to_bits(), expected[0]);
+            assert_eq!(seed, 1);
+            assert!(state.has_gaussian);
+            assert_eq!(state.gaussian.to_bits(), expected[1]);
+            let random_before = (
+                state.ix1,
+                state.ix2,
+                state.ix3,
+                state.initialized,
+                state.result.clone(),
+                state.table.clone(),
+            );
+            assert_eq!(state.gaussian(&mut seed).unwrap().to_bits(), expected[1]);
+            assert_eq!(seed, 1);
+            assert!(!state.has_gaussian);
+            assert_eq!(state.gaussian.to_bits(), expected[1]);
+            assert_eq!(
+                (
+                    state.ix1,
+                    state.ix2,
+                    state.ix3,
+                    state.initialized,
+                    state.result,
+                    state.table,
+                ),
+                random_before,
+            );
+        }
+    }
+
     #[test]
     fn telescope_offset_c076_platform_witness() {
         let offset = telescope_offset(
