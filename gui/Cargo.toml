@@ -1,0 +1,17 @@
+[package]
+name = "tempo2-gui"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+publish = false
+license = "GPL-3.0-or-later"
+description = "Minimal timing viewer for the TEMPO2-Rust engine"
+
+[dependencies]
+tempo2-rust = { path = "../rust" }
+eframe = { version = "=0.37.0", default-features = false, features = ["accesskit", "clipboard", "default_fonts", "glow", "wayland", "x11"] }
+egui_plot = "=0.38.0"
+serde_json = "=1.0.151"
+
+[dev-dependencies]
+egui_kittest = { version = "=0.37.0", features = ["eframe", "wgpu"] }
