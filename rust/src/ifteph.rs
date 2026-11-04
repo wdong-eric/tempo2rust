@@ -149,16 +149,26 @@ impl InterpolationInfo {
         }
         if self.np < ncf {
             for i in self.np as usize..nc {
-                // ifteph.C:433 GCC16 O2 fnmsub; bounded witness in Y arithmetic.py.
-                self.pc[i] = self.twot.mul_add(self.pc[i - 1], -self.pc[i - 2]);
+                // ifteph.C:433: macOS GCC16 contracts; Linux U/0137 pc witnesses
+                // require a separately rounded product (decision 0142).
+                self.pc[i] = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                    self.twot.mul_add(self.pc[i - 1], -self.pc[i - 2])
+                } else {
+                    self.twot * self.pc[i - 1] - self.pc[i - 2]
+                };
             }
             self.np = ncf;
         }
         for i in 0..cm {
             posvel[i] = 0.0;
             for j in (0..nc).rev() {
-                // ifteph.C:442 O2 fmadd; retain this reverse accumulation.
-                posvel[i] = self.pc[j].mul_add(coefficients[i * nc + j], posvel[i]);
+                // ifteph.C:442: U/0137 tt_zero_vectors isolates Linux's separate
+                // reverse sum; preserve macOS's measured FMA (0142).
+                posvel[i] = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                    self.pc[j].mul_add(coefficients[i * nc + j], posvel[i])
+                } else {
+                    posvel[i] + self.pc[j] * coefficients[i * nc + j]
+                };
             }
         }
         if ifl <= 1 {
@@ -168,9 +178,15 @@ impl InterpolationInfo {
         self.vc[2] = self.twot + self.twot;
         if self.nv < ncf {
             for i in self.nv as usize..nc {
-                // ifteph.C:459 contracts only the first product/add (Y arithmetic.py).
-                self.vc[i] = self.twot.mul_add(self.vc[i - 1], self.pc[i - 1]) + self.pc[i - 1]
-                    - self.vc[i - 2];
+                // ifteph.C:459: only macOS contracts the first product/add;
+                // U/0137 vc witnesses retain Linux's ordered operations (0142).
+                self.vc[i] = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                    self.twot.mul_add(self.vc[i - 1], self.pc[i - 1]) + self.pc[i - 1]
+                        - self.vc[i - 2]
+                } else {
+                    ((self.twot * self.vc[i - 1] + self.pc[i - 1]) + self.pc[i - 1])
+                        - self.vc[i - 2]
+                };
             }
             self.nv = ncf;
         }

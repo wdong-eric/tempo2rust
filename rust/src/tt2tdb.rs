@@ -142,13 +142,25 @@ pub fn fb_delta_t(session: &mut ClockSession, mjd: &Float) -> Result<f64, Timing
             return Err(boundary("FB_coefficient_storage"));
         }
         for k in 3..=count {
-            let k = k as usize; // tt2tdb.C:299 GCC16 O2 fnmsub; Y arithmetic.py recurrence witness.
-            pc[k - 1] = twot.mul_add(pc[k - 2], -pc[k - 3]);
+            let k = k as usize;
+            // tt2tdb.C:299: U/0137 counts 3/8/16 isolate Linux's separate
+            // recurrence; retain macOS's measured fnmsub order (0142).
+            pc[k - 1] = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                twot.mul_add(pc[k - 2], -pc[k - 3])
+            } else {
+                twot * pc[k - 2] - pc[k - 3]
+            };
         }
         let mut ctatv = 0.0;
         for j in (1..=count).rev() {
-            let j = j as usize; // tt2tdb.C:304 O2 fmadd; Y arithmetic.py reverse-sum witness.
-            ctatv = pc[j - 1].mul_add(buf[j - 1], ctatv);
+            let j = j as usize;
+            // tt2tdb.C:304: U/0137 count 16 also requires separate accumulation;
+            // macOS retains its measured reverse FMA sum (0142).
+            ctatv = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                pc[j - 1].mul_add(buf[j - 1], ctatv)
+            } else {
+                ctatv + pc[j - 1] * buf[j - 1]
+            };
         }
         session.fb = FbCache {
             content: Some(key),

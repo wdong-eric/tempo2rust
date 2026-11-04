@@ -5,10 +5,14 @@ use crate::longdouble::normalized_decimal;
 use rug::Float;
 
 pub fn dot_product(a: [f64; 3], b: [f64; 3]) -> f64 {
-    // tempo2Util.C::dotproduct at fda6ad4: GCC16 O2 contracts in this
-    // operand order (second product rounded first). Y arithmetic.py records
-    // actual assembly and 100 bounded native/Rust expression comparisons.
-    a[2].mul_add(b[2], a[0].mul_add(b[0], a[1] * b[1]))
+    // tempo2Util.C:43 at fda6ad4: Y arithmetic.py binds macOS GCC16's
+    // nested FMAs. U/0137 zero-deltaT witnesses require Linux's separately
+    // rounded products and left-to-right sum (decision 0142).
+    if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        a[2].mul_add(b[2], a[0].mul_add(b[0], a[1] * b[1]))
+    } else {
+        (a[0] * b[0] + a[1] * b[1]) + a[2] * b[2]
+    }
 }
 
 pub(crate) fn parse_binary64(token: &str) -> Result<f64, String> {

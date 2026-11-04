@@ -614,6 +614,136 @@ fn fb_fixture(value: f64) -> Vec<u8> {
     }
     b
 }
+
+#[test]
+fn platform_ifte_recurrence_witnesses() {
+    // U/0137 ifte_big pc[3] and tt_e2_u0 vc[3]: the saved operands
+    // distinguish the two measured platform orders at the production boundary.
+    let macos = cfg!(all(target_os = "macos", target_arch = "aarch64"));
+    for (time, pc, vc) in [
+        (
+            0x3feff7ced916872c,
+            Some((0x3fef6cefdc353973, 0x3fef6cefdc353974)),
+            None,
+        ),
+        (
+            0x3fd000247e88f8b0,
+            None,
+            Some((0xbf2b5ec783859000, 0xbf2b5ec78385b000)),
+        ),
+    ] {
+        let mut cache = InterpolationInfo::default();
+        cache.pc[0] = 1.0;
+        cache.vc[1] = 1.0;
+        let mut output = [0.0; 2];
+        cache
+            .interpolate(
+                &[0.0; 4],
+                [f64::from_bits(time), 4.0],
+                4,
+                1,
+                1,
+                2,
+                &mut output,
+            )
+            .unwrap();
+        for (value, expected) in [(cache.pc[3], pc), (cache.vc[3], vc)] {
+            if let Some((fused, separate)) = expected {
+                assert_eq!(value.to_bits(), if macos { fused } else { separate });
+            }
+        }
+    }
+}
+
+#[test]
+fn platform_ifte_reverse_sum_witness() {
+    // U/0137 tt_zero_vectors isolates the reverse sum even though its
+    // recurrence cells differ too. These are its decoded coefficient/time bits.
+    let coefficients = [
+        0x3e62000000000000,
+        0x3e52000000000000,
+        0x3e42000000000000,
+        0x3e32000000000000,
+    ]
+    .map(f64::from_bits);
+    let mut cache = InterpolationInfo::default();
+    cache.pc[0] = 1.0;
+    let mut output = [0.0];
+    cache
+        .interpolate(
+            &coefficients,
+            [f64::from_bits(0x3ee23456789c0000), 4.0],
+            4,
+            1,
+            1,
+            1,
+            &mut output,
+        )
+        .unwrap();
+    let expected = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        0x3e568019996aff3f
+    } else {
+        0x3e568019996aff40
+    };
+    assert_eq!(output[0].to_bits(), expected);
+}
+
+#[test]
+fn platform_fb_recurrence_and_sum_witnesses() {
+    // Authored U fb_count_3/8/16 bytes; count 16 independently needs both
+    // source recurrence and reverse accumulation (0137 counterfactuals).
+    let root = std::env::temp_dir().join(format!("fb-platform-{}", std::process::id()));
+    fs::create_dir_all(root.join("ephemeris")).unwrap();
+    for (count, fused, separate) in [
+        (3i32, 0xbf1f1a86940357c0, 0xbf1f1a86940357b0),
+        (8, 0xbf65263b1914ac3e, 0xbf65263b1914ac41),
+        (16, 0xbf56566934295e1e, 0xbf56566934295e28),
+    ] {
+        let mut bytes = fb_fixture(0.0)[..64].to_vec();
+        bytes[20..24].copy_from_slice(&count.to_be_bytes());
+        for record in 0..8 {
+            for k in 0..count {
+                bytes.extend_from_slice(
+                    &((record + 1) as f64 * (k + 1) as f64 / 1024.0).to_be_bytes(),
+                );
+            }
+        }
+        fs::write(root.join("ephemeris/TDB.1950.2050"), bytes).unwrap();
+        let mut session = ClockSession {
+            root: Some(root.clone()),
+            ..Default::default()
+        };
+        crate::tt2tdb::fb_delta_t(&mut session, &parse("50000")).unwrap();
+        let value = crate::tt2tdb::fb_delta_t(&mut session, &parse("50000.499")).unwrap();
+        assert_eq!(
+            value.to_bits(),
+            if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+                fused
+            } else {
+                separate
+            }
+        );
+        assert!(session.fortran.stream.is_none());
+    }
+    fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
+fn platform_dot_product_zero_delta_witness() {
+    // U/0137 tt_e0_u0's first earth-velocity/site-position dot product.
+    let earth = [0x3f40624dd2f1a9fc, 0x3f447ae147ae147b, 0x3f489374bc6a7efa].map(f64::from_bits);
+    let site = [0x3f8999999999999a, 0x3f9999999999999a, 0x3fa3333333333334].map(f64::from_bits);
+    let expected = if cfg!(all(target_os = "macos", target_arch = "aarch64")) {
+        0x3f0a36e2eb1c432d
+    } else {
+        0x3f0a36e2eb1c432e
+    };
+    assert_eq!(
+        crate::tempo2_util::dot_product(earth, site).to_bits(),
+        expected
+    );
+}
+
 #[test]
 fn fb_incomplete_reads_reject_fabricated_eof_corrections() {
     // 0065's original-native witness: these prefixes return 2^-10, +0,
