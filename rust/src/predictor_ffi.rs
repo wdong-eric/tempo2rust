@@ -273,7 +273,15 @@ extern "C" fn t2r_model(
     out: *mut c_void,
 ) -> c_int {
     finish(|| {
-        let a = values(v, 7)?;
+        let a = [
+            read(v, 0)?,
+            read(v, 1)?,
+            read(v, 2)?,
+            read(v, 3)?,
+            read(v, 4)?,
+            read(v, 5)?,
+            read(v, 6)?,
+        ];
         let evaluate = evaluator(p, nx, ny)?;
         let time = [&a[0], &a[1]];
         let band = [&a[2], &a[3]];

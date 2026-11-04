@@ -168,8 +168,8 @@ macro_rules! arithmetic {
         impl ops::$trait<N> for N { type Output=N; fn $method(self,rhs:N)->N { self $op &rhs } }
         impl ops::$trait<&N> for N { type Output=N; fn $method(mut self,rhs:&N)->N { let clear_nan = $clear_invalid_nan || self.0.is_nan() || rhs.0.is_nan(); let direction = self.0.$assign(&rhs.0, Round::Nearest); N::rounded_reused(self.0, direction, clear_nan) } }
         impl ops::$trait<N> for &N { type Output=N; fn $method(self,mut rhs:N)->N { let clear_nan = $clear_invalid_nan || self.0.is_nan() || rhs.0.is_nan(); let direction = rhs.0.$from(&self.0, Round::Nearest); N::rounded_reused(rhs.0, direction, clear_nan) } }
-        impl ops::$trait<f64> for N { type Output=N; fn $method(self,rhs:f64)->N { self $op &n(rhs) } }
-        impl ops::$trait<f64> for &N { type Output=N; fn $method(self,rhs:f64)->N { self $op n(rhs) } }
+        impl ops::$trait<f64> for N { type Output=N; fn $method(mut self,rhs:f64)->N { let clear_nan = $clear_invalid_nan || self.0.is_nan() || rhs.is_nan(); let direction = self.0.$assign(rhs, Round::Nearest); N::rounded_reused(self.0, direction, clear_nan) } }
+        impl ops::$trait<f64> for &N { type Output=N; fn $method(self,rhs:f64)->N { let (v, direction) = Float::with_val_round(NATIVE_BITS, &self.0 $op rhs, Round::Nearest); N::rounded(v, direction) } }
     }
 }
 arithmetic!(Add,add,add_assign_round,add_from_round,true,+);
