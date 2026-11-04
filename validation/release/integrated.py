@@ -24,6 +24,10 @@ RECURRENCE_REVISIONS={
     "before":"8716d1dc026641f3a51c2ba88850c5599293cbdd",
     "after":"e24622d5210fdfc8abe10f9f58a21b7e4a2a1aca",
 }
+COEFFICIENT_REVISIONS={
+    "before":"e24622d5210fdfc8abe10f9f58a21b7e4a2a1aca",
+    "after":"a1851c55fcc0b1ac733b064e631bfbbd2e0118d5",
+}
 
 
 def qualify(args):
@@ -294,6 +298,79 @@ def qualify(args):
     step('recurrence-object',(['otool','-tvV',recurrence_after/'lib/libtempo2pred_rust.dylib']
          if platform.system()=='Darwin' else ['objdump','-Cd',recurrence_after/'lib/libtempo2pred_rust.so']),
          ['recurrence-build-after'])
+    # 0142 reuses the accepted recurrence endpoint for the C coefficient view.
+    coefficient=predictor/'coefficient-view';coefficient.mkdir()
+    coefficient_before=recurrence_after;coefficient_after=coefficient/'after/prefix'
+    step('coefficient-source-after',['git','-C',ROOT,'cat-file','-e',COEFFICIENT_REVISIONS['after']+'^{commit}'])
+    step('coefficient-build-after',[python,ROOT/'validation/predictor_performance/build.py',
+         '--revision',COEFFICIENT_REVISIONS['after'],'--out',coefficient/'after','--cargo-home',cargo_home],
+         ['dependencies','coefficient-source-after'])
+    step('coefficient-qualify-after',script('qualify_predictor.py','--prefix',coefficient_after,
+         '--out',coefficient/'qualify-after','--native-repository',repo),['coefficient-build-after'])
+    step('coefficient-pair-verify',[python,ao/'verify.py','--before',coefficient_before,'--after',coefficient_after,
+         '--before-qualification',recurrence/'qualify-after','--after-qualification',coefficient/'qualify-after',
+         '--predictor',prediction,'--out',coefficient/'verify'],
+         ['recurrence-qualify-after','coefficient-qualify-after','predictor-workload','candidate'])
+    step('coefficient-pair-native-gate',script('predictor_performance_gate.py',
+         '--verification',coefficient/'verify/receipt.json','--out',coefficient/'native-gate'),['coefficient-pair-verify'])
+    step('coefficient-witness',[python,ao/'coefficient_verify.py','--before',coefficient_before,
+         '--after',coefficient_after,'--out',coefficient/'coefficient-verify'],
+         ['recurrence-build-after','coefficient-build-after','candidate'])
+    step('coefficient-direct-build-after',[python,ao/'evaluator_build.py','--prefix',coefficient_after,
+         '--out',coefficient/'after-direct','--cargo-home',cargo_home],['coefficient-build-after','candidate'])
+    step('coefficient-direct-verify',[python,ao/'evaluator_verify.py','--before',recurrence/'after-direct',
+         '--after',coefficient/'after-direct','--predictor',prediction,'--out',coefficient/'direct-verify'],
+         ['recurrence-direct-build-after','coefficient-direct-build-after','predictor-workload','candidate'])
+    step('coefficient-pair-concurrency',script('c_concurrency.py','--prefix',coefficient_after,
+         '--out',coefficient/'concurrency'),['coefficient-build-after'])
+    step('coefficient-pair-consumers',[python,ao/'consumers.py','--before',coefficient_before,
+         '--after',coefficient_after,'--out',coefficient/'consumers','--cargo-home',cargo_home],
+         ['recurrence-build-after','coefficient-build-after','candidate'])
+    for profile in ['debug','release']:
+        step('coefficient-pair-tests-'+profile,['cargo','test','--offline','--locked',
+             '--manifest-path',coefficient/'after/source/rust/Cargo.toml',
+             '--target-dir',coefficient/'predictor-tests',*(['--release'] if profile=='release' else []),
+             '--lib','predictor','--','--test-threads=1'],['coefficient-build-after'])
+        if platform.system()=='Linux':
+            # A successful Cargo invocation with zero matching tests is not a
+            # Linux significand/exponent-range witness.
+            step('coefficient-wide-range-'+profile,[python,'-c',
+                 "from pathlib import Path; import sys; lines=Path(sys.argv[1]).read_text().splitlines(); required=['cheby2d::evaluation::platform::tests::predictor_recurrence_linux_keeps_wide_inputs','predictor_tests::predictor_owned_operations_preserve_rounding_and_classes','predictor_tests::predictor_native_subnormal_single_rounding']; assert all('test '+name+' ... ok' in lines for name in required), 'Linux range test absent or failed'",
+                 out/('coefficient-pair-tests-'+profile+'.stdout')],['coefficient-pair-tests-'+profile])
+    step('coefficient-object',(['otool','-tvV',coefficient_after/'lib/libtempo2pred_rust.dylib']
+         if platform.system()=='Darwin' else ['objdump','-Cd',coefficient_after/'lib/libtempo2pred_rust.so']),
+         ['coefficient-build-after'])
+    if platform.system()=='Linux':
+        # Root owns the GUI; use its existing control, parity and native tests
+        # against this export. All graphics work precedes predictor measurement.
+        gui=out/'gui';gui.mkdir();(gui/'xdg-runtime').mkdir(mode=0o700)
+        gui_manifest=candidate/'gui/Cargo.toml'
+        gui_env={'CARGO_TARGET_DIR':str(gui/'target'),'TEMPO2':str(a2/'runtime'),
+                 'XDG_RUNTIME_DIR':str(gui/'xdg-runtime')}
+        gui_cargo=['cargo','test','--offline','--locked','--manifest-path',gui_manifest]
+        step('gui-dependencies',['cargo','fetch','--locked','--manifest-path',gui_manifest],['candidate'])
+        step('gui-install',['cargo','install','--offline','--locked','--path',candidate/'gui',
+             '--root',gui/'prefix','--bin','tempo2-gui'],['gui-dependencies'],extra_env=gui_env)
+        step('gui-libraries',['ldd',gui/'prefix/bin/tempo2-gui'],['gui-install'])
+        step('gui-tests-build',[*gui_cargo,'--lib','--bin','tempo2-gui','--no-run','--message-format=json'],
+             ['gui-dependencies'],extra_env=gui_env)
+        step('gui-library-tests',[*gui_cargo,'--lib','--','--include-ignored','--test-threads=1'],
+             ['gui-tests-build'],extra_env=gui_env)
+        step('gui-examples-build',['cargo','build','--offline','--locked','--manifest-path',gui_manifest,
+             '--examples'],['gui-dependencies'],extra_env=gui_env)
+        step('gui-control-render',['timeout','180s',*gui_cargo,'--bin','tempo2-gui',
+             'tests::load_inspect_and_render','--','--ignored','--exact','--test-threads=1'],
+             ['gui-tests-build'],extra_env={**gui_env,'TEMPO2_GUI_TEST_OUTPUT':str(gui/'render')})
+        step('gui-parity',[python,candidate/'gui/verify.py','--cli',out/'install-default/bin/tempo2-rust',
+             '--viewer-export',gui/'target/debug/examples/export_timing',
+             '--session-workflow',gui/'target/debug/examples/session_workflow',
+             '--runtime',a2/'runtime','--out',gui/'parity'],['gui-examples-build','install-default'])
+        step('gui-native',['timeout','60s','xvfb-run','-a','-s','-screen 0 1280x900x24',
+             *gui_cargo,'--bin','tempo2-gui','native_test::native_x11_load_render_close',
+             '--','--ignored','--exact','--test-threads=1'],['gui-tests-build'],
+             extra_env={**gui_env,'TEMPO2_GUI_TEST_OUTPUT':str(gui/'native'),'LIBGL_ALWAYS_SOFTWARE':'1'})
+        step('gui-evidence',script('gui_evidence.py','--out',gui/'evidence','--gui',gui,
+             '--candidate',candidate),['gui-libraries','gui-library-tests','gui-control-render','gui-parity','gui-native'])
     # All comparison compilation precedes these shuffled fresh processes.
     # A supplemental native failure remains a gate failure, not a timing veto.
     step('predictor-pair-measure',[python,ao/'measure.py',
@@ -322,6 +399,16 @@ def qualify(args):
          '--after-period',recurrence_after/'bin/getPeriod-rust','--native-period',evaluator/'qualify-after/native-getPeriod',
          '--predictor',prediction,'--out',recurrence/'measure','--iterations','100000','--samples','7'],
          ['recurrence-pair-verify','candidate'])
+    step('coefficient-direct-measure',[python,ao/'evaluator_measure.py',
+         '--before',recurrence/'after-direct/plain','--after',coefficient/'after-direct/plain',
+         '--predictor',prediction,'--out',coefficient/'direct-measure','--iterations','100000','--samples','7'],
+         ['coefficient-direct-verify','candidate'])
+    step('coefficient-pair-measure',[python,ao/'measure.py',
+         '--before',coefficient/'verify/before-evaluation','--after',coefficient/'verify/after-evaluation',
+         '--native',coefficient/'verify/native-evaluation','--before-period',coefficient_before/'bin/getPeriod-rust',
+         '--after-period',coefficient_after/'bin/getPeriod-rust','--native-period',recurrence/'qualify-after/native-getPeriod',
+         '--predictor',prediction,'--out',coefficient/'measure','--iterations','100000','--samples','7'],
+         ['coefficient-pair-verify','coefficient-witness','candidate'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -350,6 +437,12 @@ def qualify(args):
             'before_qualification':str(evaluator/'qualify-after'),'before_direct':str(evaluator/'after-direct'),
             'predictor':str(prediction),
             'scope':'0137 recurrence; installed borrow and platform range checks; supplemental native failures retained'},
+        'coefficient_performance':{'revisions':COEFFICIENT_REVISIONS,'before_install':str(coefficient_before),
+            'before_qualification':str(recurrence/'qualify-after'),'before_direct':str(recurrence/'after-direct'),
+            'predictor':str(prediction),
+            'scope':'0142 coefficient view; exact C witness, installed borrows and platform range; inherited native failures retained'},
+        'gui':{'scope':'0142 Linux X11/OpenGL and control/session checks; native image inspection remains central',
+            'enabled':platform.system()=='Linux','runtime':str(a2/'runtime'),'outputs':str(out/'gui')},
         'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',
             'cargo_home':env.get('CARGO_HOME','Cargo default'),'gmp_cache':env['GMP_MPFR_SYS_CACHE'],
             'allocator_environment':{k:v for k,v in env.items() if k in ['LD_PRELOAD','DYLD_INSERT_LIBRARIES','GLIBC_TUNABLES']

@@ -72,23 +72,15 @@ python3 validation/predictor_performance/consumers.py \
   --before "$AO_OUT/before/prefix" --after "$AO_OUT/after/prefix" \
   --out "$AO_OUT/consumers" --cargo-home "$CARGO_HOME"
 
-for side in before after; do
-  cp validation/predictor_performance/recurrence_consumer.rs \
-    "$AO_OUT/consumers/$side/src/bin/recurrence_consumer.rs"
-  cargo run --offline --release \
-    --manifest-path "$AO_OUT/consumers/$side/Cargo.toml" \
-    --target-dir "$AO_OUT/consumers/$side/target" --bin recurrence_consumer \
-    > "$AO_OUT/consumers/$side/recurrence_consumer.stdout" \
-    2> "$AO_OUT/consumers/$side/recurrence_consumer.stderr"
-done
-cmp "$AO_OUT/consumers/before/recurrence_consumer.stdout" \
-    "$AO_OUT/consumers/after/recurrence_consumer.stdout"
 cargo test --offline --locked --manifest-path "$AO_OUT/after/source/rust/Cargo.toml" \
   --target-dir "$AO_OUT/predictor-tests" --lib predictor -- --test-threads=1
 cargo test --offline --locked --release \
   --manifest-path "$AO_OUT/after/source/rust/Cargo.toml" \
   --target-dir "$AO_OUT/predictor-tests" --lib predictor -- --test-threads=1
 ```
+
+The canonical `consumers.py` command also builds the public `&Float` borrow
+witness and compares both stdout and stderr for the installed endpoints.
 
 The new witness compares all output/class/sign lines and exact diagnostics
 across C11/C++17 shared/static clients, plus a C ASan/UBSan client and ABI shim,
@@ -130,3 +122,15 @@ all raw samples and startup outliers, and save process snapshots before/after.
 1 and 1,001 iterations; requested bytes are not RSS. Report direct and full-C
 workloads independently, including every executable/input identity and peak RSS.
 Neither the earlier profile percentages nor source owner counts predict speedup.
+
+## Integrated Linux preparation
+
+Decision 0142 wires this exact pair into `validation/release/integrated.py`.
+The recurrence after installation, native qualifier and direct clients are
+reused as the before endpoint. The new after source is fetched explicitly.
+The C coefficient witness, direct/full-C/legacy comparisons, consumers,
+concurrency, both library profiles, named Linux range tests and disassembly
+precede the sequential measurements. A coefficient-witness failure blocks its
+full-C measurement; the direct public-owner measurement remains independent.
+Inherited native discrepancies remain separate failures. This wiring is
+preparation; actual Linux execution and central acceptance remain required.

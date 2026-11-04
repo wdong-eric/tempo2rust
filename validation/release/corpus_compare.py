@@ -403,6 +403,13 @@ def execute(args):
             flags=['--profile',profile]
             if stage in ['time_ephemeris','terrestrial_resources']:flags+=['--continue']
             call(stage,script(port,'run.py',*flags))
+            if stage=='time_ephemeris':
+                # Capture before later corpus builds can replace the shared
+                # Rust test artifact; numerical failures still permit inspection.
+                call('time-objects',[sys.executable,ROOT/'validation/release/time_ephemeris_objects.py',
+                    '--native-receipt',root/'validation/time_ephemeris_port/outputs/native/receipt.json',
+                    '--rust-receipt',root/'validation/time_ephemeris_port/outputs'/profile/'direct.json',
+                    '--out',run.out/'time-ephemeris-objects'])
             if stage=='parameter_storage':
                 passed=call('parameter-storage-unwritten',['cargo','test','--manifest-path',rust/'Cargo.toml',
                      '--locked','--offline',*release,'--lib',

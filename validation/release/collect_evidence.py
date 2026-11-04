@@ -28,7 +28,10 @@ if __name__=='__main__':
             'constraints.matrix','cov.matrix','design.matrix','param.labels','param.vals',
             'postfit.res','prefit.res','fitted.par_1','fitted.par_2','global_covar.cvm'}
         predictor_usage='predictor-performance' in relative.parts and path.suffix=='.usage'
-        if (not allocation_product and not predictor_usage and path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
+        gui_product=len(relative.parts)>=3 and relative.parts[1]=='gui' and path.suffix in {'.png','.par','.tim'}
+        event_machine_code=relative.parts[1:]==('event-source-profile','machine-code.tar.gz')
+        if (not allocation_product and not predictor_usage and not gui_product and not event_machine_code
+                and path.suffix not in {'.json','.jsonl','.tsv','.stdout','.stderr','.log','.txt','.patch','.s','.diff'}
                 and not path.name.endswith(('.json.gz','.jsonl.gz'))
                 and not path.name.endswith(('polyco_new.dat','newpolyco.dat','polyco.tim','t2pred.dat','pred.tim'))
                 and path.name not in {'stdout','stderr','producer.py','polyco_new.dat','newpolyco.dat',
