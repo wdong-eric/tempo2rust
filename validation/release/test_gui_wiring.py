@@ -41,7 +41,8 @@ class GuiWiring(unittest.TestCase):
                 self.assertIn(str(path),parity)
             self.assertTrue(run.saved['gui']['enabled'])
             for name in ['predictor-pair-measure','evaluator-direct-measure','evaluator-pair-measure',
-                         'recurrence-direct-measure','recurrence-pair-measure','coefficient-direct-measure','coefficient-pair-measure']:
+                         'recurrence-direct-measure','recurrence-pair-measure','coefficient-direct-measure','coefficient-pair-measure',
+                         'temporary-direct-measure','temporary-pair-measure']:
                 self.assertGreater(names.index(name),names.index('gui-evidence'))
 
     def test_gui_failure_blocks_only_dependent_checks(self):

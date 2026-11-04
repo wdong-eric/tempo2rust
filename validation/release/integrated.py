@@ -29,6 +29,11 @@ COEFFICIENT_REVISIONS={
     "after":"a1851c55fcc0b1ac733b064e631bfbbd2e0118d5",
 }
 
+TEMPORARY_REVISIONS={
+    "before":"a1851c55fcc0b1ac733b064e631bfbbd2e0118d5",
+    "after":"e1d34d835377451dcc7822161afce96a87948005",
+}
+
 
 def qualify(args):
     run=Run(args.out);out=run.out;records={};python=sys.executable
@@ -340,6 +345,49 @@ def qualify(args):
     step('coefficient-object',(['otool','-tvV',coefficient_after/'lib/libtempo2pred_rust.dylib']
          if platform.system()=='Darwin' else ['objdump','-Cd',coefficient_after/'lib/libtempo2pred_rust.so']),
          ['coefficient-build-after'])
+    # 0145 reuses the coefficient-view endpoint; midpoint/range execution is
+    # required on actual Linux in both profiles, with live public borrows.
+    temporary=predictor/'temporary-reuse';temporary.mkdir()
+    temporary_before=coefficient_after;temporary_after=temporary/'after/prefix'
+    step('temporary-source-after',['git','-C',ROOT,'cat-file','-e',TEMPORARY_REVISIONS['after']+'^{commit}'])
+    step('temporary-build-after',[python,ROOT/'validation/predictor_performance/build.py',
+         '--revision',TEMPORARY_REVISIONS['after'],'--out',temporary/'after','--cargo-home',cargo_home],
+         ['dependencies','temporary-source-after'])
+    step('temporary-qualify-after',script('qualify_predictor.py','--prefix',temporary_after,
+         '--out',temporary/'qualify-after','--native-repository',repo),['temporary-build-after'])
+    step('temporary-pair-verify',[python,ao/'verify.py','--before',temporary_before,'--after',temporary_after,
+         '--before-qualification',coefficient/'qualify-after','--after-qualification',temporary/'qualify-after',
+         '--predictor',prediction,'--out',temporary/'verify'],
+         ['coefficient-qualify-after','temporary-qualify-after','predictor-workload','candidate'])
+    step('temporary-pair-native-gate',script('predictor_performance_gate.py',
+         '--verification',temporary/'verify/receipt.json','--out',temporary/'native-gate'),['temporary-pair-verify'])
+    step('temporary-witness',[python,ao/'coefficient_verify.py','--before',temporary_before,
+         '--after',temporary_after,'--out',temporary/'coefficient-verify'],
+         ['coefficient-build-after','temporary-build-after','candidate'])
+    step('temporary-direct-build-after',[python,ao/'evaluator_build.py','--prefix',temporary_after,
+         '--out',temporary/'after-direct','--cargo-home',cargo_home],['temporary-build-after','candidate'])
+    step('temporary-direct-verify',[python,ao/'evaluator_verify.py','--before',coefficient/'after-direct',
+         '--after',temporary/'after-direct','--predictor',prediction,'--out',temporary/'direct-verify'],
+         ['coefficient-direct-build-after','temporary-direct-build-after','predictor-workload','candidate'])
+    step('temporary-pair-concurrency',script('c_concurrency.py','--prefix',temporary_after,
+         '--out',temporary/'concurrency'),['temporary-build-after'])
+    step('temporary-pair-consumers',[python,ao/'consumers.py','--before',temporary_before,
+         '--after',temporary_after,'--out',temporary/'consumers','--cargo-home',cargo_home],
+         ['coefficient-build-after','temporary-build-after','candidate'])
+    for profile in ['debug','release']:
+        step('temporary-pair-tests-'+profile,['cargo','test','--offline','--locked',
+             '--manifest-path',temporary/'after/source/rust/Cargo.toml',
+             '--target-dir',temporary/'predictor-tests',*(['--release'] if profile=='release' else []),
+             '--lib','predictor','--','--test-threads=1'],['temporary-build-after'])
+        if platform.system()=='Linux':
+            # A successful Cargo invocation with zero matching tests is not a
+            # Linux significand/exponent-range witness.
+            step('temporary-wide-range-'+profile,[python,'-c',
+                 "from pathlib import Path; import sys; lines=Path(sys.argv[1]).read_text().splitlines(); required=['cheby2d::evaluation::platform::tests::predictor_recurrence_linux_keeps_wide_inputs','predictor_tests::predictor_owned_operations_preserve_rounding_and_classes','predictor_tests::predictor_native_subnormal_single_rounding','predictor_tests::predictor_owned_subnormal_midpoint_keeps_first_rounding_direction']; assert all('test '+name+' ... ok' in lines for name in required), 'Linux range/midpoint test absent or failed'",
+                 out/('temporary-pair-tests-'+profile+'.stdout')],['temporary-pair-tests-'+profile])
+    step('temporary-object',(['otool','-tvV',temporary_after/'lib/libtempo2pred_rust.dylib']
+         if platform.system()=='Darwin' else ['objdump','-Cd',temporary_after/'lib/libtempo2pred_rust.so']),
+         ['temporary-build-after'])
     if platform.system()=='Linux':
         # Root owns the GUI; use its existing control, parity and native tests
         # against this export. All graphics work precedes predictor measurement.
@@ -409,6 +457,16 @@ def qualify(args):
          '--after-period',coefficient_after/'bin/getPeriod-rust','--native-period',recurrence/'qualify-after/native-getPeriod',
          '--predictor',prediction,'--out',coefficient/'measure','--iterations','100000','--samples','7'],
          ['coefficient-pair-verify','coefficient-witness','candidate'])
+    step('temporary-direct-measure',[python,ao/'evaluator_measure.py',
+         '--before',coefficient/'after-direct/plain','--after',temporary/'after-direct/plain',
+         '--predictor',prediction,'--out',temporary/'direct-measure','--iterations','100000','--samples','7'],
+         ['temporary-direct-verify','candidate'])
+    step('temporary-pair-measure',[python,ao/'measure.py',
+         '--before',temporary/'verify/before-evaluation','--after',temporary/'verify/after-evaluation',
+         '--native',temporary/'verify/native-evaluation','--before-period',temporary_before/'bin/getPeriod-rust',
+         '--after-period',temporary_after/'bin/getPeriod-rust','--native-period',coefficient/'qualify-after/native-getPeriod',
+         '--predictor',prediction,'--out',temporary/'measure','--iterations','100000','--samples','7'],
+         ['temporary-pair-verify','temporary-witness','candidate'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -441,6 +499,10 @@ def qualify(args):
             'before_qualification':str(recurrence/'qualify-after'),'before_direct':str(recurrence/'after-direct'),
             'predictor':str(prediction),
             'scope':'0142 coefficient view; exact C witness, installed borrows and platform range; inherited native failures retained'},
+        'temporary_performance':{'revisions':TEMPORARY_REVISIONS,'before_install':str(temporary_before),
+            'before_qualification':str(coefficient/'qualify-after'),'before_direct':str(coefficient/'after-direct'),
+            'predictor':str(prediction),
+            'scope':'0145 temporary reuse; coefficient/borrow contracts and actual Linux midpoint/range; inherited native failures retained'},
         'gui':{'scope':'0142 Linux X11/OpenGL and control/session checks; native image inspection remains central',
             'enabled':platform.system()=='Linux','runtime':str(a2/'runtime'),'outputs':str(out/'gui')},
         'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',

@@ -1,5 +1,32 @@
 # AL release qualification handover
 
+## Final temporary-reuse wiring — 4 November 2026
+
+Decision [0145](../decisions/0145-temporary-reuse-acceptance-and-final-linux-wiring.md)
+accepts the preceding AL slice and AO's temporary-reuse implementation, merged
+at `941a2f3`. The integrated runner now includes the frozen `a1851c5` → `e1d34d8`
+pair, reusing the coefficient-view after install, qualifier and direct clients.
+Its direct/C/legacy and coefficient witnesses, native gate, concurrency/cleanup,
+canonical installed borrows, debug/release tests and disassembly use the
+existing runners. The [portable recipe](../validation/predictor_performance/TEMPORARY_REUSE.md)
+records the concrete wiring and its platform limits.
+
+Linux gates require passing executions of the wide-input, ordinary-operation/
+live-borrow, native-subnormal and mixed-input midpoint tests in both profiles.
+Missing, zero-test, ignored and failed selections are rejected. All pair builds
+and GUI stages precede the nine sequential predictor measurement stages, which
+retain seven samples and 100,000 pairs. Native and range-gate failures remain
+explicit; independent evidence is retained. No performance budget changed.
+
+Fifteen focused routing, execution-gate, consumer-process and retention tests
+pass. The workflow's actual frozen-fetch list also evaluates successfully, and
+the before/after/combined engine lockfiles match. These are wiring controls;
+no new Rust, Linux, GUI or timing campaign was run for this step. Production,
+GUI and event sources are unchanged by this wiring. Evidence is retained at
+`decisions/evidence/release-qualification/build/temporary-0145-20261104/delivery.json`.
+Central owns remote/publication preflight, dispatch and acceptance. The original
+Linux 86 passing / 11 failing result remains open; no push or dispatch occurred.
+
 ## U corrections and integrated preparation — 4 November 2026
 
 Decision [0142](../decisions/0142-u-platform-correction-and-linux-candidate-preparation.md)

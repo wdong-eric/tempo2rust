@@ -78,3 +78,33 @@ sufficient; no measured contribution is assigned to an individual edit.
 Native T1 NaN-sign and polyco log10RMS discrepancies remain separate failures.
 The sanitizer scope is C clients and shim, not Rust/MPFR/Fortran. This recipe is
 portable procedure, not evidence of Linux execution or performance-budget approval.
+
+## Integrated Linux preparation (decision 0145)
+
+`validation/release/integrated.py` fetches the exact after revision above and
+reuses the coefficient-view after install, qualifier and direct clients as the
+before endpoint. It does not rebuild those baseline artifacts. The existing
+full-C/native/legacy and direct comparisons, C coefficient/ordered-diagnostic
+witness, concurrency/cleanup and installed consumers remain separate stages.
+`consumers.py` includes the public-borrow consumer in its canonical invocation.
+
+Both library profiles run the predictor tests. Each actual Linux log must
+contain passing executions of:
+
+- `cheby2d::evaluation::platform::tests::predictor_recurrence_linux_keeps_wide_inputs`
+- `predictor_tests::predictor_owned_operations_preserve_rounding_and_classes`
+- `predictor_tests::predictor_native_subnormal_single_rounding`
+- `predictor_tests::predictor_owned_subnormal_midpoint_keeps_first_rounding_direction`
+
+A zero-test, ignored, failed or missing selection is a failure, not a range or
+mixed-input/live-borrow witness. The installed optimized library is disassembled.
+Every pair build, check and GUI stage precedes the existing sequential timing
+block. Direct and full-C measurements retain 100,000 pairs and seven samples,
+with the same 8-by-4 predictor. A coefficient-witness failure blocks the full-C
+measurement; direct measurements keep their own verification dependency.
+Inherited native discrepancies remain explicit failures without suppressing
+independent evidence. No tolerance, precision or performance budget changes.
+
+The integrated recipe and focused routing/retention controls are preparation.
+Actual Linux execution, scientific and image review, remote preflight and
+publication/dispatch remain central responsibilities.
