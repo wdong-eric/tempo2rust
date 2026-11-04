@@ -8,14 +8,17 @@ native dependencies and a minimal GUI using the Rust engine. Start with
 [decision 0129](decisions/0129-qualified-release-continuation.md) and the complete
 [continuation handoff 44](handoffs/44-qualified-release-continuation.md).
 
-The previous central goal and monitor remain paused. Linux run **41392963741**
-at **9991e80** has **completed with failure**; the saved log has 86 passing /
-11 failing stages, none blocked. Its artifact/scientific review remains due.
-Main's implementation baseline is **483ced4**. The 0127 central checks passed
-before the pause, but their formal bounded acceptance entry is still due;
-483ced4's successor Linux preparation and AO assessment **50d1b06** also await
-central review/release. Bounded M2 and the reviewed macOS optimizations remain
-accepted. General fitting, AL and full migration remain open.
+The previous central goal and monitor remain paused. The successor's current
+checkpoint is [0146](decisions/0146-linux-wiring-review-and-gaussian-radius-correction.md).
+Linux run **41392963741** at **9991e80** completed with 86 passing / 11 failing
+stages, none blocked; its artifact and scientific failure ledger have been
+reviewed. Accepted local predictor improvements and six U source corrections
+are integrated. AL's final Linux pair/GUI wiring at **afaee9f** is accepted as
+preparation, and the evidence-isolated Gaussian radius correction is released
+before the next combined candidate. AO continues its bounded read-only cost
+assessment. Native macOS GUI verification waits for the user's unlock notice.
+Actual corrected Linux execution, remaining scientific discrepancies, numerical
+performance budgets, general fitting, AL and full migration remain open.
 
 The successor chat inherits coordination, design and milestone acceptance for
 this approved goal. The following earlier checkpoints are historical; their
