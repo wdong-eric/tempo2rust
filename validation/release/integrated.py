@@ -20,6 +20,10 @@ EVALUATOR_REVISIONS={
     "before":"0bd8e2cf2ef54e9da6feace122acd8aa96aa3fbe",
     "after":"8716d1dc026641f3a51c2ba88850c5599293cbdd",
 }
+RECURRENCE_REVISIONS={
+    "before":"8716d1dc026641f3a51c2ba88850c5599293cbdd",
+    "after":"e24622d5210fdfc8abe10f9f58a21b7e4a2a1aca",
+}
 
 
 def qualify(args):
@@ -250,6 +254,46 @@ def qualify(args):
              '--manifest-path',evaluator/'after/source/rust/Cargo.toml',
              '--target-dir',evaluator/'predictor-tests',*(['--release'] if profile=='release' else []),
              '--lib','predictor','--','--test-threads=1'],['evaluator-build-after'])
+    # 0137 reuses the owner-reuse install, qualifier and direct clients as the
+    # recurrence baseline; the combined candidate remains a separate contract.
+    recurrence=predictor/'recurrence';recurrence.mkdir()
+    recurrence_before=after;recurrence_after=recurrence/'after/prefix'
+    step('recurrence-source-after',['git','-C',ROOT,'cat-file','-e',RECURRENCE_REVISIONS['after']+'^{commit}'])
+    step('recurrence-build-after',[python,ROOT/'validation/predictor_performance/build.py',
+         '--revision',RECURRENCE_REVISIONS['after'],'--out',recurrence/'after','--cargo-home',cargo_home],
+         ['dependencies','recurrence-source-after'])
+    step('recurrence-qualify-after',script('qualify_predictor.py','--prefix',recurrence_after,
+         '--out',recurrence/'qualify-after','--native-repository',repo),['recurrence-build-after'])
+    step('recurrence-pair-verify',[python,ao/'verify.py','--before',recurrence_before,'--after',recurrence_after,
+         '--before-qualification',evaluator/'qualify-after','--after-qualification',recurrence/'qualify-after',
+         '--predictor',prediction,'--out',recurrence/'verify'],
+         ['evaluator-qualify-after','recurrence-qualify-after','predictor-workload','candidate'])
+    step('recurrence-pair-native-gate',script('predictor_performance_gate.py',
+         '--verification',recurrence/'verify/receipt.json','--out',recurrence/'native-gate'),['recurrence-pair-verify'])
+    step('recurrence-direct-build-after',[python,ao/'evaluator_build.py','--prefix',recurrence_after,
+         '--out',recurrence/'after-direct','--cargo-home',cargo_home],['recurrence-build-after','candidate'])
+    step('recurrence-direct-verify',[python,ao/'evaluator_verify.py','--before',evaluator/'after-direct',
+         '--after',recurrence/'after-direct','--predictor',prediction,'--out',recurrence/'direct-verify'],
+         ['evaluator-direct-build-after','recurrence-direct-build-after','predictor-workload','candidate'])
+    step('recurrence-pair-concurrency',script('c_concurrency.py','--prefix',recurrence_after,
+         '--out',recurrence/'concurrency'),['recurrence-build-after'])
+    step('recurrence-pair-consumers',[python,ao/'consumers.py','--before',recurrence_before,
+         '--after',recurrence_after,'--out',recurrence/'consumers','--cargo-home',cargo_home],
+         ['evaluator-build-after','recurrence-build-after','candidate'])
+    for profile in ['debug','release']:
+        step('recurrence-pair-tests-'+profile,['cargo','test','--offline','--locked',
+             '--manifest-path',recurrence/'after/source/rust/Cargo.toml',
+             '--target-dir',recurrence/'predictor-tests',*(['--release'] if profile=='release' else []),
+             '--lib','predictor','--','--test-threads=1'],['recurrence-build-after'])
+        if platform.system()=='Linux':
+            # A successful Cargo invocation with zero matching tests is not a
+            # Linux significand/exponent-range witness.
+            step('recurrence-wide-range-'+profile,[python,'-c',
+                 "from pathlib import Path; import sys; assert 'test cheby2d::evaluation::platform::tests::predictor_recurrence_linux_keeps_wide_inputs ... ok' in Path(sys.argv[1]).read_text().splitlines(), 'Linux wide-range test absent or failed'",
+                 out/('recurrence-pair-tests-'+profile+'.stdout')],['recurrence-pair-tests-'+profile])
+    step('recurrence-object',(['otool','-tvV',recurrence_after/'lib/libtempo2pred_rust.dylib']
+         if platform.system()=='Darwin' else ['objdump','-Cd',recurrence_after/'lib/libtempo2pred_rust.so']),
+         ['recurrence-build-after'])
     # All comparison compilation precedes these shuffled fresh processes.
     # A supplemental native failure remains a gate failure, not a timing veto.
     step('predictor-pair-measure',[python,ao/'measure.py',
@@ -268,6 +312,16 @@ def qualify(args):
          '--after-period',after/'bin/getPeriod-rust','--native-period',predictor/'qualify-after/native-getPeriod',
          '--predictor',prediction,'--out',evaluator/'measure','--iterations','100000','--samples','7'],
          ['evaluator-pair-verify','candidate'])
+    step('recurrence-direct-measure',[python,ao/'evaluator_measure.py',
+         '--before',evaluator/'after-direct/plain','--after',recurrence/'after-direct/plain',
+         '--predictor',prediction,'--out',recurrence/'direct-measure','--iterations','100000','--samples','7'],
+         ['recurrence-direct-verify','candidate'])
+    step('recurrence-pair-measure',[python,ao/'measure.py',
+         '--before',recurrence/'verify/before-evaluation','--after',recurrence/'verify/after-evaluation',
+         '--native',recurrence/'verify/native-evaluation','--before-period',recurrence_before/'bin/getPeriod-rust',
+         '--after-period',recurrence_after/'bin/getPeriod-rust','--native-period',evaluator/'qualify-after/native-getPeriod',
+         '--predictor',prediction,'--out',recurrence/'measure','--iterations','100000','--samples','7'],
+         ['recurrence-pair-verify','candidate'])
     from native_corpora import STAGES
     closure=script('evidence_closure.py','--out',out/'evidence-closure','--audit',out/'source-audit/receipt.json',
                    '--matrix',out/'receipt.json')
@@ -292,6 +346,10 @@ def qualify(args):
         'evaluator_performance':{'revisions':EVALUATOR_REVISIONS,'before_install':str(before),
             'before_qualification':str(predictor/'qualify-after'),'predictor':str(prediction),
             'scope':'0128 owner reuse; direct and complete C timings separate; supplemental native failures retained'},
+        'recurrence_performance':{'revisions':RECURRENCE_REVISIONS,'before_install':str(recurrence_before),
+            'before_qualification':str(evaluator/'qualify-after'),'before_direct':str(evaluator/'after-direct'),
+            'predictor':str(prediction),
+            'scope':'0137 recurrence; installed borrow and platform range checks; supplemental native failures retained'},
         'allocation':{'revisions':ALLOCATION_REVISIONS,'scope':'Frozen allocator-only pair; combined candidate uses the ordinary matrix',
             'cargo_home':env.get('CARGO_HOME','Cargo default'),'gmp_cache':env['GMP_MPFR_SYS_CACHE'],
             'allocator_environment':{k:v for k,v in env.items() if k in ['LD_PRELOAD','DYLD_INSERT_LIBRARIES','GLIBC_TUNABLES']

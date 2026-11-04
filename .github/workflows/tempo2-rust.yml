@@ -72,7 +72,7 @@ jobs:
               fetch_status=$?
             fi
             printf '%s\n' "$fetch_status" > "/tmp/t2/host/$group-$label-fetch-status.txt"
-          done < <(PYTHONPATH=validation/release python3 -c 'from integrated import ALLOCATION_REVISIONS, PREDICTOR_REVISIONS, EVALUATOR_REVISIONS; print("\n".join(group+" "+k+" "+v for group, pair in [("allocation", ALLOCATION_REVISIONS), ("predictor-performance", PREDICTOR_REVISIONS), ("evaluator-performance", EVALUATOR_REVISIONS)] for k,v in pair.items()))')
+          done < <(PYTHONPATH=validation/release python3 -c 'from integrated import ALLOCATION_REVISIONS, PREDICTOR_REVISIONS, EVALUATOR_REVISIONS, RECURRENCE_REVISIONS; print("\n".join(group+" "+k+" "+v for group, pair in [("allocation", ALLOCATION_REVISIONS), ("predictor-performance", PREDICTOR_REVISIONS), ("evaluator-performance", EVALUATOR_REVISIONS), ("recurrence-performance", RECURRENCE_REVISIONS)] for k,v in pair.items()))')
       - name: Execute clean native and installed candidate matrix
         if: inputs.scope != 'corrections-0117'
         run: python3 validation/release/integrated.py --out /tmp/t2/linux --revision "$REVIEWED_CANDIDATE"

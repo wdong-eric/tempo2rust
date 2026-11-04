@@ -58,19 +58,8 @@ python3 validation/predictor_performance/consumers.py \
   --before "$AO_OUT/before/prefix" --after "$AO_OUT/after/prefix" \
   --out "$AO_OUT/consumers" --cargo-home "$CARGO_HOME"
 
-# Add the public-borrow witness to each already isolated consumer package.
-for side in before after; do
-  cp validation/predictor_performance/recurrence_consumer.rs \
-    "$AO_OUT/consumers/$side/src/bin/recurrence_consumer.rs"
-  cargo run --offline --release \
-    --manifest-path "$AO_OUT/consumers/$side/Cargo.toml" \
-    --target-dir "$AO_OUT/consumers/$side/target" \
-    --bin recurrence_consumer \
-    > "$AO_OUT/consumers/$side/recurrence_consumer.stdout" \
-    2> "$AO_OUT/consumers/$side/recurrence_consumer.stderr"
-done
-cmp "$AO_OUT/consumers/before/recurrence_consumer.stdout" \
-    "$AO_OUT/consumers/after/recurrence_consumer.stdout"
+# consumers.py now builds and compares recurrence_consumer alongside the
+# existing component/subnormal clients, retaining both output streams.
 
 cargo test --offline --locked --manifest-path "$AO_OUT/after/source/rust/Cargo.toml" \
   --target-dir "$AO_OUT/predictor-tests" --lib predictor -- --test-threads=1
@@ -92,6 +81,16 @@ requiring 64 significand bits, `2^-16445` and `2^16382`; all three must survive
 without binary64 conversion. Existing source-separate and subnormal tests also
 remain required. Run on actual Linux x86_64; do not substitute a changed cfg on
 macOS. Timing precision stays Rug128 on both platforms.
+
+Decision 0137 wires this sequence into `validation/release/integrated.py`.
+The `recurrence-*` stages reuse the owner-reuse pair's after install, native
+qualification and direct clients as their before endpoint. Both pair revisions
+are fetched explicitly by the Linux workflow. Separate Linux range gates
+require the named test's passing output in debug and release, so an empty test
+selection cannot count as evidence. The installed-library disassembly, borrow
+consumer outputs, native failures and raw measurements survive collection.
+All pair compilation precedes the existing sequential measurement block.
+This wiring is preparation; actual Linux execution remains pending.
 
 Inspect the actual optimized installed library (`otool -tvV` on macOS,
 `objdump -Cd` on Linux). On macOS, source FMA sites must remain fused and the

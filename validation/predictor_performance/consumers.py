@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reuse AJ's two affected, runtime-independent installed Rust consumers."""
+"""Compare installed component, subnormal and public-borrow consumers exactly."""
 import argparse
 import hashlib
 import json
@@ -20,6 +20,9 @@ if __name__ == '__main__':
     env.pop('CARGO_TARGET_DIR', None)
     records = []
     sha = lambda path: hashlib.sha256(path.read_bytes()).hexdigest()
+    sources = {name: ROOT/f'rust/examples/{name}.rs'
+               for name in ['predictor_components', 'predictor_subnormal']}
+    sources['recurrence_consumer'] = Path(__file__).with_name('recurrence_consumer.rs')
     for engine, prefix in [('before', a.before.resolve()), ('after', a.after.resolve())]:
         work = out/engine; (work/'src/bin').mkdir(parents=True)
         installed = prefix/'share/tempo2-rust/rust'
@@ -27,13 +30,13 @@ if __name__ == '__main__':
         manifest = ('[package]\nname = "ao-predictor-consumers"\nversion = "0.1.0"\nedition = "2024"\n'
                     '[dependencies]\n'+dependencies+f'tempo2-rust = {{path = {json.dumps(str(installed))}}}\n')
         (work/'Cargo.toml').write_text(manifest)
-        for name in ['predictor_components', 'predictor_subnormal']:
-            shutil.copy2(ROOT/f'rust/examples/{name}.rs', work/f'src/bin/{name}.rs')
+        for name, source in sources.items():
+            shutil.copy2(source, work/f'src/bin/{name}.rs')
         build = ['cargo', 'build', '--offline', '--release', '--manifest-path', str(work/'Cargo.toml'), '--target-dir', str(work/'target')]
         r = subprocess.run(build, capture_output=True, env=env)
         (work/'build.stdout').write_bytes(r.stdout); (work/'build.stderr').write_bytes(r.stderr)
         assert r.returncode == 0, r.stderr
-        for name, arguments in [('predictor_components', ['polynomial']), ('predictor_subnormal', [])]:
+        for name, arguments in [('predictor_components', ['polynomial']), ('predictor_subnormal', []), ('recurrence_consumer', [])]:
             exe = work/'target/release'/name
             r = subprocess.run([exe, *arguments], capture_output=True, env=env)
             (work/(name+'.stdout')).write_bytes(r.stdout); (work/(name+'.stderr')).write_bytes(r.stderr)
@@ -41,8 +44,8 @@ if __name__ == '__main__':
             if engine == 'after':
                 assert r.stdout == (out/'before'/(name+'.stdout')).read_bytes()
                 assert r.stderr == (out/'before'/(name+'.stderr')).read_bytes()
-            records.append(dict(engine=engine, consumer=name, executable_sha256=sha(exe), stdout_sha256=sha(work/(name+'.stdout'))))
+            records.append(dict(engine=engine, consumer=name, executable_sha256=sha(exe),
+                                stdout_sha256=sha(work/(name+'.stdout')),stderr_sha256=sha(work/(name+'.stderr'))))
     (out/'receipt.json').write_text(json.dumps(dict(exact=True, records=records,
-        inputs={str(ROOT/f'rust/examples/{name}.rs'): sha(ROOT/f'rust/examples/{name}.rs')
-                for name in ['predictor_components', 'predictor_subnormal']}), indent=2)+'\n')
-    print('Both installed Rust consumers agree exactly before/after')
+        inputs={str(source): sha(source) for source in sources.values()}), indent=2)+'\n')
+    print('All three installed Rust consumers agree exactly before/after')
